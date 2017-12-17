@@ -13000,9 +13000,9 @@ Source: www.kingbright.com</description>
 <sheet>
 <plain>
 <wire x1="-35.56" y1="330.2" x2="406.4" y2="330.2" width="0.1524" layer="90"/>
-<wire x1="406.4" y1="330.2" x2="406.4" y2="76.2" width="0.1524" layer="90"/>
-<wire x1="406.4" y1="76.2" x2="-35.56" y2="76.2" width="0.1524" layer="90"/>
-<wire x1="-35.56" y1="76.2" x2="-35.56" y2="330.2" width="0.1524" layer="90"/>
+<wire x1="406.4" y1="330.2" x2="406.4" y2="101.6" width="0.1524" layer="90"/>
+<wire x1="406.4" y1="101.6" x2="-35.56" y2="101.6" width="0.1524" layer="90"/>
+<wire x1="-35.56" y1="101.6" x2="-35.56" y2="330.2" width="0.1524" layer="90"/>
 </plain>
 <instances>
 <instance part="R10" gate="G$1" x="233.68" y="190.5" rot="R270"/>
