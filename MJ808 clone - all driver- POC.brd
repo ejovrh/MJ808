@@ -2043,11 +2043,11 @@ design rules under a new name.</description>
 <attribute name="NAME" x="13.75" y="7.25" size="1" layer="26" font="vector" rot="MR270" align="center"/>
 <attribute name="VALUE" x="14.405" y="7.885" size="1.27" layer="28" rot="MR270"/>
 </element>
-<element name="LED1" library="led" library_urn="urn:adsk.eagle:library:259" package="CHIP-LED0805" package3d_urn="urn:adsk.eagle:package:15818/1" value="XMLBWT-00-0000-0000U20E2 " x="10.25" y="7.25" smashed="yes">
+<element name="LED1" library="led" library_urn="urn:adsk.eagle:library:259" package="CHIP-LED0805" package3d_urn="urn:adsk.eagle:package:15818/1" value="LTST-C281KRKT" x="10.25" y="7.25" smashed="yes">
 <attribute name="NAME" x="8.75" y="7.25" size="1" layer="25" font="vector" rot="R90" align="center"/>
 <attribute name="VALUE" x="12.79" y="5.98" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="LED2" library="led" library_urn="urn:adsk.eagle:library:259" package="CHIP-LED0805" package3d_urn="urn:adsk.eagle:package:15818/1" value="XMLBWT-00-0000-0000U20E2 " x="18.75" y="7.25" smashed="yes">
+<element name="LED2" library="led" library_urn="urn:adsk.eagle:library:259" package="CHIP-LED0805" package3d_urn="urn:adsk.eagle:package:15818/1" value="LTST-C281KGKT" x="18.75" y="7.25" smashed="yes">
 <attribute name="NAME" x="20.25" y="7.5" size="1" layer="25" font="vector" rot="R90" align="center"/>
 <attribute name="VALUE" x="21.29" y="5.98" size="1.27" layer="27" rot="R90"/>
 </element>
@@ -2733,8 +2733,8 @@ design rules under a new name.</description>
 <approved hash="5 16 0a54281587b52f08"/>
 <approved hash="5 1 fee31fce6fd178e1"/>
 <approved hash="5 16 0a54281587b52f08"/>
-<approved hash="5,1,fee31fce6fd178e1"/>
 <approved hash="5,16,0a54281587b52f08"/>
+<approved hash="5,1,fee31fce6fd178e1"/>
 </errors>
 </board>
 </drawing>
