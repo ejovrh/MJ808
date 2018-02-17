@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="8.5.0">
+<eagle version="8.6.1">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -9633,7 +9633,7 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <library name="MCP2515-I-ML - Standalonce CAN Controller with SPI Interface">
 <packages>
 <package name="QFN20">
-<smd name="GND" x="0" y="0" dx="2.5" dy="2.5" layer="1"/>
+<smd name="GND" x="0" y="0" dx="2" dy="2" layer="1"/>
 <smd name="RXCAN" x="-1" y="2" dx="0.3" dy="0.75" layer="1"/>
 <smd name="TXCAN" x="-0.5" y="2" dx="0.3" dy="0.75" layer="1"/>
 <smd name="VDD" x="0" y="2" dx="0.3" dy="0.75" layer="1"/>
@@ -9662,10 +9662,15 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <wire x1="2" y1="-2" x2="2" y2="-1.5" width="0.1016" layer="21"/>
 <wire x1="1.5" y1="2" x2="2" y2="2" width="0.1016" layer="21"/>
 <wire x1="2" y1="2" x2="2" y2="1.5" width="0.1016" layer="21"/>
-<smd name="GND1" x="0" y="0" dx="2.5" dy="2.5" layer="1"/>
 <circle x="-2.5" y="2.5" radius="0.1" width="0.3" layer="21"/>
 <text x="0" y="3.5" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="-3.5" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
+<polygon width="0.127" layer="41">
+<vertex x="-1.6" y="1.6"/>
+<vertex x="1.6" y="1.6"/>
+<vertex x="1.6" y="-1.6"/>
+<vertex x="-1.6" y="-1.6"/>
+</polygon>
 </package>
 </packages>
 <symbols>
@@ -9714,7 +9719,7 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <connect gate="G$1" pin="!TX1RTS!" pad="!TX1RTS!"/>
 <connect gate="G$1" pin="!TX2RTS!" pad="!TX2RTS!"/>
 <connect gate="G$1" pin="CLKOUT" pad="CLKOUT"/>
-<connect gate="G$1" pin="GND" pad="GND GND1 GND6"/>
+<connect gate="G$1" pin="GND" pad="GND GND6"/>
 <connect gate="G$1" pin="NC" pad="NC1 NC2"/>
 <connect gate="G$1" pin="OSC1" pad="OSC1"/>
 <connect gate="G$1" pin="OSC2" pad="OSC2"/>
@@ -9736,7 +9741,7 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <library name="MCP2561-2 - High-Speed CAN Transceiver">
 <packages>
 <package name="DFN10">
-<smd name="GND" x="0" y="0" dx="1.55" dy="2.4" layer="1" rot="R90"/>
+<smd name="GND" x="0" y="0" dx="1" dy="2.4" layer="1" rot="R90"/>
 <smd name="TXD" x="-0.975" y="-1.55" dx="0.65" dy="0.35" layer="1" rot="R90"/>
 <smd name="VSS" x="-0.325" y="-1.55" dx="0.65" dy="0.35" layer="1" rot="R90"/>
 <smd name="VDD" x="0.325" y="-1.55" dx="0.65" dy="0.35" layer="1" rot="R90"/>
@@ -9745,15 +9750,21 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <smd name="CANH" x="-0.325" y="1.55" dx="0.65" dy="0.35" layer="1" rot="R90"/>
 <smd name="CANL" x="0.325" y="1.55" dx="0.65" dy="0.35" layer="1" rot="R90"/>
 <smd name="SPLIT" x="0.975" y="1.55" dx="0.65" dy="0.35" layer="1" rot="R90"/>
-<wire x1="1.25" y1="1.5" x2="1.5" y2="1.5" width="0.1016" layer="21"/>
-<wire x1="-1.25" y1="1.5" x2="-1.5" y2="1.5" width="0.1016" layer="21"/>
-<wire x1="-1.25" y1="-1.5" x2="-1.5" y2="-1.5" width="0.1016" layer="21"/>
-<wire x1="1.25" y1="-1.5" x2="1.5" y2="-1.5" width="0.1016" layer="21"/>
 <wire x1="1.5" y1="-1.5" x2="1.5" y2="1.5" width="0.1016" layer="21"/>
 <wire x1="-1.5" y1="1.5" x2="-1.5" y2="-1.5" width="0.1016" layer="21"/>
 <circle x="-1.75" y="-1.75" radius="0.1" width="0.3" layer="21"/>
 <text x="-3" y="0" size="1" layer="25" font="vector" rot="R90" align="center">&gt;NAME</text>
 <text x="2.75" y="-0.25" size="1" layer="27" font="vector" rot="R90" align="center">&gt;VALUE</text>
+<polygon width="0.127" layer="41">
+<vertex x="-1.25" y="1"/>
+<vertex x="1.25" y="1"/>
+<vertex x="1.25" y="-1"/>
+<vertex x="-1.25" y="-1"/>
+</polygon>
+<wire x1="1.5" y1="1.5" x2="1.8" y2="1.5" width="0.1016" layer="21"/>
+<wire x1="-1.5" y1="1.5" x2="-1.8" y2="1.5" width="0.1016" layer="21"/>
+<wire x1="-1.5" y1="-1.5" x2="-1.8" y2="-1.5" width="0.1016" layer="21"/>
+<wire x1="1.5" y1="-1.5" x2="1.8" y2="-1.5" width="0.1016" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -9865,7 +9876,7 @@ drill 1.0 mm</description>
 <library name="MAX16820 LED Driver, constant current">
 <packages>
 <package name="TDFN-6-EP">
-<smd name="GND" x="0" y="0" dx="1.5" dy="2.3" layer="1"/>
+<smd name="GND" x="0" y="0" dx="1" dy="2.3" layer="1"/>
 <smd name="IN" x="-1.48" y="0.94" dx="0.71" dy="0.46" layer="1"/>
 <smd name="CSN" x="-1.48" y="0" dx="0.71" dy="0.46" layer="1"/>
 <smd name="DIM" x="-1.48" y="-0.94" dx="0.71" dy="0.46" layer="1"/>
@@ -9874,13 +9885,19 @@ drill 1.0 mm</description>
 <smd name="VCC" x="1.48" y="0.95" dx="0.71" dy="0.46" layer="1" rot="R180"/>
 <wire x1="1.5" y1="1.5" x2="-1.5" y2="1.5" width="0.127" layer="21"/>
 <wire x1="-1.5" y1="-1.5" x2="1.5" y2="-1.5" width="0.127" layer="21"/>
-<wire x1="-1.5" y1="1.25" x2="-1.5" y2="1.5" width="0.127" layer="21"/>
-<wire x1="-1.5" y1="-1.5" x2="-1.5" y2="-1.25" width="0.127" layer="21"/>
-<wire x1="1.5" y1="-1.5" x2="1.5" y2="-1.25" width="0.127" layer="21"/>
-<wire x1="1.5" y1="1.5" x2="1.5" y2="1.25" width="0.127" layer="21"/>
 <circle x="-2" y="2" radius="0.1" width="0.3" layer="21"/>
 <text x="-0.25" y="3.25" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="-2.5" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
+<wire x1="-1.5" y1="1.5" x2="-1.5" y2="1.8" width="0.127" layer="21"/>
+<wire x1="1.5" y1="1.5" x2="1.5" y2="1.8" width="0.127" layer="21"/>
+<wire x1="-1.5" y1="-1.5" x2="-1.5" y2="-1.8" width="0.127" layer="21"/>
+<wire x1="1.5" y1="-1.5" x2="1.5" y2="-1.8" width="0.127" layer="21"/>
+<polygon width="0.127" layer="41">
+<vertex x="-1.1" y="1.3"/>
+<vertex x="-1.1" y="-1.3"/>
+<vertex x="1.1" y="-1.3"/>
+<vertex x="1.1" y="1.3"/>
+</polygon>
 </package>
 </packages>
 <symbols>
@@ -10704,7 +10721,7 @@ molded</description>
 <library name="ATtiny4313 microcontroller">
 <packages>
 <package name="VQFN-20">
-<smd name="GND" x="0" y="0" dx="1.3" dy="1.3" layer="1"/>
+<smd name="GND" x="0" y="0" dx="1.1" dy="1.1" layer="1"/>
 <smd name="PB4" x="1.4" y="0.45" dx="0.25" dy="0.8" layer="1" rot="R90"/>
 <smd name="PB3" x="1.4" y="0" dx="0.25" dy="0.8" layer="1" rot="R90"/>
 <smd name="PB2" x="1.4" y="-0.45" dx="0.25" dy="0.8" layer="1" rot="R90"/>
@@ -11009,7 +11026,7 @@ molded</description>
 <library name="TPS709-q1 5V LDO">
 <packages>
 <package name="WSON6">
-<smd name="GND1" x="0" y="0" dx="1.6" dy="1" layer="1"/>
+<smd name="GND1" x="0" y="0" dx="1.6" dy="0.5" layer="1"/>
 <smd name="IN" x="-0.65" y="1.05" dx="0.65" dy="0.25" layer="1" rot="R90"/>
 <smd name="P$3" x="0" y="1.05" dx="0.65" dy="0.25" layer="1" rot="R90"/>
 <smd name="EN" x="0.65" y="1.05" dx="0.65" dy="0.25" layer="1" rot="R90"/>
@@ -11021,6 +11038,16 @@ molded</description>
 <text x="0" y="-2" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="2" size="1" layer="21" font="vector" align="center">&gt;VALUE</text>
 <circle x="-1.4" y="-1" radius="0.1" width="0.3" layer="21"/>
+<wire x1="-1" y1="1" x2="-1.2" y2="1" width="0.127" layer="21"/>
+<wire x1="1" y1="1" x2="1.2" y2="1" width="0.127" layer="21"/>
+<wire x1="-1" y1="-1" x2="-1.2" y2="-1" width="0.127" layer="21"/>
+<wire x1="1" y1="-1" x2="1.2" y2="-1" width="0.127" layer="21"/>
+<polygon width="0.127" layer="39">
+<vertex x="-1" y="0.8"/>
+<vertex x="1" y="0.8"/>
+<vertex x="1" y="-0.8"/>
+<vertex x="-1" y="-0.8"/>
+</polygon>
 </package>
 </packages>
 <symbols>
