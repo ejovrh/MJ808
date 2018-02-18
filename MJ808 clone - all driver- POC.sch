@@ -13915,7 +13915,7 @@ Source: www.kingbright.com</description>
 <wire x1="91.44" y1="215.9" x2="96.52" y2="215.9" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="LED1" class="0">
+<net name="RED_LED" class="0">
 <segment>
 <pinref part="R3" gate="G$1" pin="1"/>
 <wire x1="106.68" y1="226.06" x2="116.84" y2="226.06" width="0.1524" layer="91"/>
@@ -13927,7 +13927,7 @@ Source: www.kingbright.com</description>
 <label x="147.32" y="284.48" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="LED2" class="0">
+<net name="GREEN_LED" class="0">
 <segment>
 <pinref part="R4" gate="G$1" pin="1"/>
 <wire x1="106.68" y1="215.9" x2="116.84" y2="215.9" width="0.1524" layer="91"/>
