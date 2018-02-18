@@ -8,8 +8,7 @@
 
 #include "mcp2515.h"
 
-#define REAR_OCR0A 0x80 // count to hex value
-#define BRAKE_OCR1A 0x40 // count to hex value
+#define FRONT_OCR1A 0x40 // count to hex value
 #define LOW_SPEED_THRESHOLD_FREQ 20 // dynamo frequency below which we consider the bike to move too slow for power generation -> dim light
 
 uint8_t can_msg[11]; // holds the received CAN message
@@ -34,17 +33,8 @@ int main(void)
 	MCUCR = _BV(ISC10); // any logical change generates an IRQ
 	GIMSK = _BV(INT1);	// enable INT1
 
-	// setup of rear light PWM
-	// default state - no CAN bus, thus hardcoded PWM duty cycle
-	//	this will run without any logic control - i.e. it will resemble a dumb light
-	//TODO - check rear light (OC0A) PWM with scope
-	OCR0A = REAR_OCR0A;	// count to 128
-	TCCR0A = ( _BV(COM0A0)| // toggle OC0A on compare match - aka. direct waveform generation on pin
-	_BV(WGM01));	// CTC mode
-	TCCR0B = _BV(CS02);		// clock prescaler: clk/256
-
-	//TODO - check brake light (OC1A) PWM with scope
-	OCR1A = BRAKE_OCR1A;	// count to 64
+	//TODO - check front light (OC1A) PWM with scope
+	OCR1A = FRONT_OCR1A;	// count to 64
 	TCCR1A = _BV(COM1A0); // toggle OC1A on compare match - aka. direct waveform generation on pin
 	TCCR1B = (_BV(WGM12)|	// CTC mode
 	_BV(CS11) | _BV(CS10)); // clock prescaler: clk/256
@@ -75,7 +65,6 @@ ISR(INT1_vect)
 
 	if (dynamo_freq < LOW_SPEED_THRESHOLD_FREQ) //TODO - calculate min. speed for light to get brighter
 	{
-		OCR0A /= 4;	// reduce intensity
-		OCR1A /= 4;	// reduce intensity
+		//OCR1A /= 4;	// reduce intensity
 	}
 }
