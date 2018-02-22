@@ -8,7 +8,23 @@
 
 #include "mcp2515.h"
 
-#define FRONT_OCR1A 0x40 // count to hex value
+	/*
+		timer/counter 0 and timer/counter 1 both operate in 8bit mode
+		hex val. - duty cycle
+		0x00 - 0% (off)
+		0x10 - 6.26%
+		0x20 - 12.5%
+		0x40 - 25.05%
+		0x80 - 50.1%
+		0xA0 - 62.6%
+		0xC0 - 75.15%
+		0xE0 - 87.84%
+		0xF0 - 94.12%
+		0xFF - 100% (max)
+*/
+
+
+#define FRONT_OCR1A 0x10 // count to hex value
 #define LOW_SPEED_THRESHOLD_FREQ 20 // dynamo frequency below which we consider the bike to move too slow for power generation -> dim light
 
 uint8_t can_msg[11]; // holds the received CAN message
@@ -22,28 +38,38 @@ int main(void)
 
 	PRR = _BV(PRUSART);	// turn off USART, we don't need it
 
-	mcp2515_init(); // initialize & configure the MCP2515
+//	mcp2515_init(); // initialize & configure the MCP2515
 
 	//TODO - active CAN bus device discovery
 
 
 	cli();	// clear interrupts globally
 
-	// setup of INT1
-	MCUCR = _BV(ISC10); // any logical change generates an IRQ
-	GIMSK = _BV(INT1);	// enable INT1
 
-	//TODO - check front light (OC1A) PWM with scope
-	OCR1A = FRONT_OCR1A;	// count to 64
-	TCCR1A = _BV(COM1A0); // toggle OC1A on compare match - aka. direct waveform generation on pin
-	TCCR1B = (_BV(WGM12)|	// CTC mode
-	_BV(CS11) | _BV(CS10)); // clock prescaler: clk/256
+	// setup of INT1 and PCINT1(pin B1) - handled via PCINT0_vect ISR
+	MCUCR = _BV(ISC10); // any logical change generates an IRQ
+	GIMSK = _BV(INT1) | _BV(PCIE0);	// enable INT1 and PCIE0
+	PCMSK = _BV(PCINT1); // turn on PCINT1 (pin B1)
+
+	// setup of interrupt-driven timer - fires every ~65ms
+	OCR0A = 0xFC;
+	TCCR0A = _BV(WGM01); // CTC mode
+	TIFR |= _BV(OCF0A); // clear interrupt flag
+	TIMSK = _BV(OCIE0A); // TCO compare match IRQ enable
+	TCCR0B = ( _BV(CS02) | _BV(CS00) ); // clkIO/1024 (from prescaler)
+
+	//// setup of front light PWM
+	OCR1A = FRONT_OCR1A;	// count to this hex value
+	TCCR1A = (_BV(COM1A1) | // clear OC1A on compare match, set OC1A at TOP
+						_BV(WGM10)); // phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
+	TCCR1B = _BV(CS10); // clock prescaler: clk/8
 
 	sei();	// enable interrupts globally
 
 	while (1) // forever loop
 	{
 		// keep as empty as possible !!
+		;
 	}
 }
 
@@ -65,6 +91,48 @@ ISR(INT1_vect)
 
 	if (dynamo_freq < LOW_SPEED_THRESHOLD_FREQ) //TODO - calculate min. speed for light to get brighter
 	{
-		//OCR1A /= 4;	// reduce intensity
+		OCR1A /= 4;	// reduce intensity
+	}
+}
+
+
+// ISR for PCINT1 - pushbutton
+ISR(PCINT0_vect)
+{
+	//TODO - write code which handles the button
+
+		static char toggle = 0;
+
+		// toggle the LED on each interrupt
+		if (toggle)
+		{
+			toggle = 0;
+			gpio_conf(RED_LED_pin, OUTPUT, LOW);
+
+		}
+		else
+		{
+			toggle = 1;
+			gpio_conf(RED_LED_pin, OUTPUT, HIGH);
+		}
+}
+
+// interrupt service routine (ISR) for timer 0 A compare match
+ISR(TIMER0_COMPA_vect)
+{
+	// dummy code to be executed every 65ms
+
+	static char toggle = 0;
+
+	// toggle the LED on each interrupt
+	if (toggle)
+	{
+		toggle = 0;
+		gpio_conf(GREEN_LED_pin, OUTPUT, LOW);
+	}
+	else
+	{
+		toggle = 1;
+		gpio_conf(GREEN_LED_pin, OUTPUT, HIGH);
 	}
 }
