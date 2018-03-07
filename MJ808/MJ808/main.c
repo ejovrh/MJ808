@@ -10,17 +10,17 @@
 
 	/*
 		timer/counter 0 and timer/counter 1 both operate in 8bit mode
-		hex val. - duty cycle
-		0x00 - 0% (off)
-		0x10 - 6.26%
-		0x20 - 12.5%
-		0x40 - 25.05%
-		0x80 - 50.1%
-		0xA0 - 62.6%
-		0xC0 - 75.15%
-		0xE0 - 87.84%
-		0xF0 - 94.12%
-		0xFF - 100% (max)
+		hex val. - duty cycle - current front light
+		0x00 - 0% (off)				-	20 mA
+		0x10 - 6.26%					-	20 mA
+		0x20 - 12.5%					-	30 mA
+		0x40 - 25.05%					-	60 mA
+		0x80 - 50.1%					-	100 mA
+		0xA0 - 62.6%					-	120 mA
+		0xC0 - 75.15%					-	150 mA
+		0xE0 - 87.84%					-	170 mA
+		0xF0 - 94.12%					-	180 mA
+		0xFF - 100% (max)			-	200 mA
 */
 
 
