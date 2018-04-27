@@ -2247,7 +2247,6 @@ design rules under a new name.</description>
 <wire x1="29.75" y1="25.0485" x2="29.75" y2="25.26" width="0.25" layer="1"/>
 <via x="29.75" y="23.2" extent="1-16" drill="0.35"/>
 <via x="26.05" y="24.45" extent="1-16" drill="0.35"/>
-<wire x1="29.75" y1="23.2" x2="29.7" y2="23.25" width="0.25" layer="16"/>
 <wire x1="29.7" y1="23.25" x2="29.7" y2="23.8" width="0.25" layer="16"/>
 <contactref element="C2" pad="2"/>
 <contactref element="C3" pad="1"/>
@@ -2264,6 +2263,7 @@ design rules under a new name.</description>
 <wire x1="17.8" y1="13.52" x2="17.8" y2="14.369" width="0.25" layer="16"/>
 <wire x1="15.9" y1="15.15" x2="17.15" y2="15.15" width="0.25" layer="16"/>
 <wire x1="17.15" y1="15.15" x2="17.8" y2="15.8" width="0.25" layer="16"/>
+<wire x1="29.75" y1="23.2" x2="29.7" y2="23.25" width="0.25" layer="16"/>
 <wire x1="29.7" y1="23.25" x2="29.75" y2="23.26" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="DIM_FRONT">
@@ -2624,6 +2624,8 @@ design rules under a new name.</description>
 <wire x1="27.25" y1="17.5" x2="27.25" y2="18.75" width="0.25" layer="16"/>
 <wire x1="30.75" y1="16" x2="30.75" y2="17.046" width="0.25" layer="16"/>
 <wire x1="30.75" y1="17.046" x2="31.319" y2="17.046" width="0.25" layer="16"/>
+<contactref element="IC5" pad="5-SNS"/>
+<wire x1="31.319" y1="17.046" x2="31.319" y2="18" width="0.25" layer="16"/>
 </signal>
 <signal name="EN">
 <contactref element="IC5" pad="3-EN"/>
@@ -2694,10 +2696,10 @@ design rules under a new name.</description>
 <approved hash="6,1,3e7306d11648486a"/>
 <approved hash="6,1,3f1f428a2199aee9"/>
 <approved hash="6,1,427c180606185c62"/>
-<approved hash="21,19,3a953969c7683b6b"/>
 <approved hash="19,1,243c240082788244"/>
 <approved hash="19,1,246038dd72a56e18"/>
 <approved hash="6,1,3c7bf848f43e0879"/>
+<approved hash="21,19,3a953969c7683b6b"/>
 </errors>
 </board>
 </drawing>
