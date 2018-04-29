@@ -13305,7 +13305,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="353.06" y="160.02" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_MISO" class="0">
+<net name="ICSP_MISO" class="0">
 <segment>
 <label x="182.88" y="63.5" size="1.778" layer="95"/>
 <pinref part="R9" gate="G$1" pin="2"/>
@@ -13322,7 +13322,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="40.64" y="78.74" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_MOSI" class="0">
+<net name="ICSP_MOSI" class="0">
 <segment>
 <label x="182.88" y="60.96" size="1.778" layer="95"/>
 <pinref part="R7" gate="G$1" pin="2"/>
@@ -13339,7 +13339,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="40.64" y="83.82" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_SCK" class="0">
+<net name="ICSP_SCK" class="0">
 <segment>
 <wire x1="147.32" y1="165.1" x2="152.4" y2="165.1" width="0.1524" layer="91"/>
 <label x="152.4" y="165.1" size="1.778" layer="95"/>
@@ -13543,15 +13543,11 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="152.4" y="187.96" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SO" class="0">
+<net name="SPI_MISO" class="0">
 <segment>
 <pinref part="IC5" gate="G$1" pin="SO"/>
 <pinref part="R9" gate="G$1" pin="1"/>
-<wire x1="218.44" y1="63.5" x2="226.06" y2="63.5" width="0.1524" layer="91"/>
-<wire x1="226.06" y1="63.5" x2="228.6" y2="63.5" width="0.1524" layer="91"/>
-<wire x1="226.06" y1="63.5" x2="226.06" y2="76.2" width="0.1524" layer="91"/>
-<junction x="226.06" y="63.5"/>
-<label x="226.06" y="76.2" size="1.778" layer="95" rot="R90"/>
+<wire x1="218.44" y1="63.5" x2="228.6" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <wire x1="33.02" y1="203.2" x2="45.72" y2="203.2" width="0.1524" layer="91"/>
@@ -13559,15 +13555,11 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="CONN1" gate="G$1" pin="SPI_MISO"/>
 </segment>
 </net>
-<net name="SI" class="0">
+<net name="SPI_MOSI" class="0">
 <segment>
 <pinref part="IC5" gate="G$1" pin="SI"/>
-<wire x1="228.6" y1="60.96" x2="223.52" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="R7" gate="G$1" pin="1"/>
-<wire x1="223.52" y1="60.96" x2="210.82" y2="60.96" width="0.1524" layer="91"/>
-<wire x1="223.52" y1="60.96" x2="223.52" y2="76.2" width="0.1524" layer="91"/>
-<junction x="223.52" y="60.96"/>
-<label x="223.52" y="76.2" size="1.778" layer="95" rot="R90"/>
+<wire x1="228.6" y1="60.96" x2="210.82" y2="60.96" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <wire x1="33.02" y1="205.74" x2="45.72" y2="205.74" width="0.1524" layer="91"/>
@@ -13575,15 +13567,11 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="CONN1" gate="G$1" pin="SPI_MOSI"/>
 </segment>
 </net>
-<net name="SCK" class="0">
+<net name="SPI_SCK" class="0">
 <segment>
 <pinref part="IC5" gate="G$1" pin="SCK"/>
-<wire x1="228.6" y1="58.42" x2="220.98" y2="58.42" width="0.1524" layer="91"/>
 <pinref part="R6" gate="G$1" pin="1"/>
-<wire x1="220.98" y1="58.42" x2="203.2" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="220.98" y1="58.42" x2="220.98" y2="76.2" width="0.1524" layer="91"/>
-<junction x="220.98" y="58.42"/>
-<label x="220.98" y="76.2" size="1.778" layer="95" rot="R90"/>
+<wire x1="228.6" y1="58.42" x2="203.2" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <wire x1="33.02" y1="208.28" x2="45.72" y2="208.28" width="0.1524" layer="91"/>

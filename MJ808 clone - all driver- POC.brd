@@ -2336,7 +2336,7 @@ design rules under a new name.</description>
 <wire x1="9.65" y1="16" x2="9.65" y2="18.306" width="0.6" layer="16"/>
 <wire x1="9.65" y1="18.306" x2="9.672" y2="18.328" width="0.6" layer="16"/>
 </signal>
-<signal name="SPI_MISO">
+<signal name="ICSP_MISO">
 <contactref element="IC1" pad="PB6"/>
 <contactref element="R9" pad="2"/>
 <contactref element="TP4" pad="TP$1"/>
@@ -2350,7 +2350,7 @@ design rules under a new name.</description>
 <wire x1="22.94435625" y1="27.25" x2="21.75" y2="27.25" width="0.25" layer="1"/>
 <wire x1="23.85" y1="28.15564375" x2="22.94435625" y2="27.25" width="0.25" layer="1"/>
 </signal>
-<signal name="SPI_MOSI">
+<signal name="ICSP_MOSI">
 <contactref element="IC1" pad="PB5"/>
 <contactref element="R7" pad="2"/>
 <contactref element="TP3" pad="TP$1"/>
@@ -2359,7 +2359,7 @@ design rules under a new name.</description>
 <wire x1="19.75" y1="24.5" x2="19.75" y2="27" width="0.25" layer="16"/>
 <wire x1="19.75" y1="27" x2="21.75" y2="29" width="0.25" layer="16"/>
 </signal>
-<signal name="SPI_SCK">
+<signal name="ICSP_SCK">
 <contactref element="IC1" pad="PB7"/>
 <contactref element="TP1" pad="TP$1"/>
 <contactref element="R6" pad="2"/>
@@ -2541,7 +2541,7 @@ design rules under a new name.</description>
 <wire x1="33.8153875" y1="28.321025" x2="33.8153875" y2="15.31538125" width="0.25" layer="1"/>
 <wire x1="29.1864125" y1="32.95" x2="25.45" y2="32.95" width="0.25" layer="1"/>
 </signal>
-<signal name="SO">
+<signal name="SPI_MISO">
 <contactref element="IC5" pad="SO"/>
 <contactref element="R9" pad="1"/>
 <contactref element="CONN1" pad="3_SPI_MISO"/>
@@ -2553,7 +2553,7 @@ design rules under a new name.</description>
 <wire x1="22" y1="22.26" x2="22" y2="20.75" width="0.25" layer="1"/>
 <wire x1="27.75" y1="22.26" x2="22" y2="22.26" width="0.25" layer="1"/>
 </signal>
-<signal name="SI">
+<signal name="SPI_MOSI">
 <contactref element="IC5" pad="SI"/>
 <contactref element="R7" pad="1"/>
 <contactref element="CONN1" pad="9_SPI_MOSI"/>
@@ -2565,7 +2565,7 @@ design rules under a new name.</description>
 <wire x1="22" y1="22.75" x2="22" y2="24.54" width="0.25" layer="1"/>
 <wire x1="27.74" y1="22.75" x2="22" y2="22.75" width="0.25" layer="1"/>
 </signal>
-<signal name="SCK">
+<signal name="SPI_SCK">
 <contactref element="IC5" pad="SCK"/>
 <contactref element="R6" pad="1"/>
 <contactref element="CONN1" pad="1_SPI_SCK"/>
