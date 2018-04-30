@@ -11760,9 +11760,9 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <junction x="368.3" y="53.34"/>
 </segment>
 <segment>
-<pinref part="IC1" gate="G$1" pin="OC0A/PCINT2-PB2"/>
-<wire x1="157.48" y1="177.8" x2="162.56" y2="177.8" width="0.1524" layer="91"/>
-<label x="162.56" y="177.8" size="1.778" layer="95"/>
+<pinref part="IC1" gate="G$1" pin="AIN1/PCINT1-PB1"/>
+<wire x1="157.48" y1="180.34" x2="162.56" y2="180.34" width="0.1524" layer="91"/>
+<label x="162.56" y="180.34" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SPI_MISO" class="2">
@@ -11899,18 +11899,18 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="162.56" y="185.42" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$3" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="AIN1/PCINT1-PB1"/>
-<wire x1="157.48" y1="180.34" x2="162.56" y2="180.34" width="0.1524" layer="91"/>
-<label x="162.56" y="180.34" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="N$2" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PCINT16/OC0B/T1-PD5"/>
 <wire x1="157.48" y1="187.96" x2="162.56" y2="187.96" width="0.1524" layer="91"/>
 <label x="162.56" y="187.96" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$3" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="OC0A/PCINT2-PB2"/>
+<wire x1="157.48" y1="177.8" x2="162.56" y2="177.8" width="0.1524" layer="91"/>
+<label x="162.56" y="177.8" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
@@ -11919,8 +11919,11 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <errors>
 <approved hash="104,1,228.6,38.1,IC5,VDD,5V0_CAN,,,"/>
 <approved hash="104,1,325.12,53.34,IC6,VCC,5V0_CAN,,,"/>
-<approved hash="104,1,353.06,182.88,IC7,IN,VBAT,,,"/>
+<approved hash="104,1,353.06,182.88,IC7,IN,BAT+,,,"/>
 <approved hash="204,1,353.06,190.5,IC7,VCC,,,,"/>
+<approved hash="106,1,157.48,185.42,N$1,,,,,"/>
+<approved hash="106,1,157.48,187.96,N$2,,,,,"/>
+<approved hash="106,1,157.48,177.8,N$3,,,,,"/>
 </errors>
 </schematic>
 </drawing>

@@ -11560,9 +11560,9 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <junction x="368.3" y="53.34"/>
 </segment>
 <segment>
-<pinref part="IC1" gate="G$1" pin="OC0A/PCINT2-PB2"/>
-<wire x1="170.18" y1="165.1" x2="175.26" y2="165.1" width="0.1524" layer="91"/>
-<label x="175.26" y="165.1" size="1.778" layer="95"/>
+<pinref part="IC1" gate="G$1" pin="AIN1/PCINT1-PB1"/>
+<wire x1="170.18" y1="167.64" x2="175.26" y2="167.64" width="0.1524" layer="91"/>
+<label x="175.26" y="167.64" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="ICSP_MOSI" class="2">
@@ -11797,13 +11797,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="175.26" y="172.72" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$3" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="AIN1/PCINT1-PB1"/>
-<wire x1="170.18" y1="167.64" x2="175.26" y2="167.64" width="0.1524" layer="91"/>
-<label x="175.26" y="167.64" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="N$2" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PCINT16/OC0B/T1-PD5"/>
@@ -11811,17 +11804,24 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="175.26" y="175.26" size="1.778" layer="95"/>
 </segment>
 </net>
+<net name="N$3" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="OC0A/PCINT2-PB2"/>
+<wire x1="170.18" y1="165.1" x2="175.26" y2="165.1" width="0.1524" layer="91"/>
+<label x="175.26" y="165.1" size="1.778" layer="95"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
 <errors>
-<approved hash="104,1,228.6,38.1,IC5,VDD,5V0_REG,,,"/>
-<approved hash="104,1,325.12,53.34,IC6,VCC,5V0_REG,,,"/>
+<approved hash="104,1,228.6,38.1,IC5,VDD,5V0_CAN,,,"/>
+<approved hash="104,1,325.12,53.34,IC6,VCC,5V0_CAN,,,"/>
 <approved hash="104,1,337.82,190.5,IC7,IN,BAT+,,,"/>
 <approved hash="204,1,337.82,198.12,IC7,VCC,,,,"/>
-<approved hash="106,1,160.02,180.34,N$1,,,,,"/>
-<approved hash="106,1,160.02,182.88,N$2,,,,,"/>
-<approved hash="106,1,160.02,185.42,N$3,,,,,"/>
+<approved hash="106,1,170.18,172.72,N$1,,,,,"/>
+<approved hash="106,1,170.18,175.26,N$2,,,,,"/>
+<approved hash="106,1,170.18,165.1,N$3,,,,,"/>
 </errors>
 </schematic>
 </drawing>

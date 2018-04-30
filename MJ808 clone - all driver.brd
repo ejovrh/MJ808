@@ -9,7 +9,7 @@
 <grid distance="0.25" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="mm" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
-<layer number="2" name="Route2" color="1" fill="3" visible="yes" active="yes"/>
+<layer number="2" name="Route2" color="1" fill="3" visible="no" active="yes"/>
 <layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
 <layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
 <layer number="5" name="Route5" color="4" fill="4" visible="no" active="no"/>
@@ -22,7 +22,7 @@
 <layer number="12" name="Route12" color="1" fill="5" visible="no" active="no"/>
 <layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
 <layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
-<layer number="15" name="Route15" color="4" fill="6" visible="yes" active="yes"/>
+<layer number="15" name="Route15" color="4" fill="6" visible="no" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
@@ -2302,24 +2302,24 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <signal name="STBY" class="2">
 <contactref element="IC6" pad="STBY"/>
 <contactref element="R11" pad="2"/>
-<contactref element="IC1" pad="PB2"/>
 <via x="3.25" y="8.25" extent="1-16" drill="0.254"/>
-<wire x1="3.25" y1="8.25" x2="3.25" y2="4.5" width="0.254" layer="15"/>
-<wire x1="3.25" y1="4.5" x2="-5.290875" y2="-4.040875" width="0.254" layer="15"/>
+<wire x1="3.25" y1="8.25" x2="3.25" y2="5.25" width="0.254" layer="15"/>
 <wire x1="-7.975" y1="-4.8" x2="-7.975" y2="-5.975" width="0.127" layer="16"/>
 <via x="-7.375" y="-6.875" extent="1-16" drill="0.254"/>
 <wire x1="-5.207" y1="-5.207" x2="-6.875" y2="-6.875" width="0.127" layer="1"/>
 <wire x1="-7.975" y1="-4.8" x2="-7.975" y2="-6.275" width="0.127" layer="16"/>
 <wire x1="-7.975" y1="-6.275" x2="-7.375" y2="-6.875" width="0.127" layer="16"/>
-<wire x1="-5.290875" y1="-5.25" x2="-5.290875" y2="-4.040875" width="0.254" layer="15"/>
+<wire x1="-5.290875" y1="-5.25" x2="-5.290875" y2="-3.290875" width="0.254" layer="15"/>
 <wire x1="-7.375" y1="-6.875" x2="-6.915875" y2="-6.875" width="0.254" layer="15"/>
 <wire x1="-6.915875" y1="-6.875" x2="-5.290875" y2="-5.25" width="0.254" layer="15"/>
 <wire x1="-7.375" y1="-6.875" x2="-6.875" y2="-6.875" width="0.127" layer="1"/>
 <wire x1="-4.5" y1="-5.207" x2="-5.207" y2="-5.207" width="0.127" layer="1"/>
 <wire x1="-3.5" y1="-4" x2="-3.5" y2="-4.207" width="0.127" layer="1"/>
 <wire x1="-3.5" y1="-4.207" x2="-4.5" y2="-5.207" width="0.127" layer="1"/>
-<wire x1="3.2" y1="7.15" x2="3.2" y2="8.2" width="0.127" layer="1"/>
-<wire x1="3.2" y1="8.2" x2="3.25" y2="8.25" width="0.127" layer="1"/>
+<contactref element="IC1" pad="PB1"/>
+<wire x1="3.65" y1="7.27" x2="3.65" y2="7.85" width="0.127" layer="1"/>
+<wire x1="3.65" y1="7.85" x2="3.25" y2="8.25" width="0.127" layer="1"/>
+<wire x1="-5.290875" y1="-3.290875" x2="3.25" y2="5.25" width="0.254" layer="15"/>
 </signal>
 <signal name="ICSP_MOSI" class="2">
 <contactref element="IC1" pad="PB5"/>
@@ -2520,11 +2520,11 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <signal name="N$1">
 <contactref element="IC1" pad="PD6"/>
 </signal>
-<signal name="N$3">
-<contactref element="IC1" pad="PB1"/>
-</signal>
 <signal name="N$2">
 <contactref element="IC1" pad="PD5"/>
+</signal>
+<signal name="N$3">
+<contactref element="IC1" pad="PB2"/>
 </signal>
 </signals>
 <errors>
@@ -2549,6 +2549,23 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="7,40,b5ac2d47b0923c9d"/>
 <approved hash="7,40,704aec598c6ec083"/>
 <approved hash="4,2,c32e9cbe5cba73a0"/>
+<approved hash="21,19,7c1e7e1c7e1c7c1e"/>
+<approved hash="5,15,7b70aa2438b216d2"/>
+<approved hash="19,16,2c6cddb258d24930"/>
+<approved hash="19,1,55829ce1bd3b0d0d"/>
+<approved hash="19,1,12920c362a0834ac"/>
+<approved hash="7,40,e85e7a06e3f0142c"/>
+<approved hash="7,40,0fb50341df0f8c8b"/>
+<approved hash="7,40,0e4902bde3ed8c8f"/>
+<approved hash="7,40,6e59e510f7137f3e"/>
+<approved hash="7,40,ba5536fdf2b4478c"/>
+<approved hash="3,1,c008f830f8f0c0c8"/>
+<approved hash="3,1,fd4ac572c6f6fece"/>
+<approved hash="3,1,fd4ac572c6f6fece"/>
+<approved hash="4,1,bc4688c608052b41"/>
+<approved hash="4,1,678a597b78662551"/>
+<approved hash="4,16,678a597b78662551"/>
+<approved hash="4,16,bc4688c608052b41"/>
 </errors>
 </board>
 </drawing>
