@@ -11343,9 +11343,9 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <junction x="368.3" y="198.12"/>
 </segment>
 <segment>
-<pinref part="IC1" gate="G$1" pin="PCINT16/OC0B/T1-PD5"/>
-<wire x1="170.18" y1="175.26" x2="175.26" y2="175.26" width="0.1524" layer="91"/>
-<label x="175.26" y="175.26" size="1.778" layer="95"/>
+<pinref part="IC1" gate="G$1" pin="OC1A/PCINT3-PB3"/>
+<wire x1="170.18" y1="162.56" x2="175.26" y2="162.56" width="0.1524" layer="91"/>
+<label x="175.26" y="162.56" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V0_μC" class="1">
@@ -11644,9 +11644,9 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <junction x="154.94" y="48.26"/>
 </segment>
 <segment>
-<pinref part="IC1" gate="G$1" pin="OC1A/PCINT3-PB3"/>
-<wire x1="170.18" y1="162.56" x2="175.26" y2="162.56" width="0.1524" layer="91"/>
-<label x="175.26" y="162.56" size="1.778" layer="95"/>
+<pinref part="IC1" gate="G$1" pin="AIN0/PCINT0-PB0"/>
+<wire x1="170.18" y1="170.18" x2="175.26" y2="170.18" width="0.1524" layer="91"/>
+<label x="175.26" y="170.18" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SWITCH" class="2">
@@ -11788,6 +11788,27 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="R2" gate="G$1" pin="1"/>
 <label x="203.2" y="129.54" size="1.778" layer="95" rot="R180"/>
 <pinref part="LED1" gate="G$1" pin="1"/>
+</segment>
+</net>
+<net name="N$1" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="PCINT17/ICPI-PD6"/>
+<wire x1="170.18" y1="172.72" x2="175.26" y2="172.72" width="0.1524" layer="91"/>
+<label x="175.26" y="172.72" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$3" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="AIN1/PCINT1-PB1"/>
+<wire x1="170.18" y1="167.64" x2="175.26" y2="167.64" width="0.1524" layer="91"/>
+<label x="175.26" y="167.64" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$2" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="PCINT16/OC0B/T1-PD5"/>
+<wire x1="170.18" y1="175.26" x2="175.26" y2="175.26" width="0.1524" layer="91"/>
+<label x="175.26" y="175.26" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
