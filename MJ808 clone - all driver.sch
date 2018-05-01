@@ -11117,32 +11117,29 @@ These vary by manufacturer, but we used the NPIS54LS footprint from here.</descr
 </class>
 </classes>
 <parts>
-<part name="R10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R1210" package3d_urn="urn:adsk.eagle:package:23554/2" value="0.15 / 1W"/>
-<part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="47μF / 15V+"/>
+<part name="R9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R1210" package3d_urn="urn:adsk.eagle:package:23554/2" value="0.15 / 1W"/>
+<part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="47μF"/>
 <part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD123" package3d_urn="urn:adsk.eagle:package:43420/1" value="PMEG2010ER,115"/>
 <part name="L1" library="SparkFun-Coils" library_urn="urn:adsk.eagle:library:512" deviceset="INDUCTOR" device="-SRN6045-33UH" package3d_urn="urn:adsk.eagle:package:37576/1" value="VLS6045EX-150M-CA "/>
 <part name="Q1" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="MOSFET-N" device="REFLOW" value="PMV213SN,215"/>
-<part name="IC5" library="MCP2515-I-ML - Standalonce CAN Controller with SPI Interface" deviceset="MCP2515-I-ML" device="" value="MCP2515"/>
-<part name="IC6" library="MCP2561-2 - High-Speed CAN Transceiver" deviceset="MCP2561-2" device="" value="MCP2561-2"/>
-<part name="R12" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="120"/>
-<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/1" value="0.1μF"/>
+<part name="IC3" library="MCP2515-I-ML - Standalonce CAN Controller with SPI Interface" deviceset="MCP2515-I-ML" device="" value="MCP2515"/>
+<part name="IC5" library="MCP2561-2 - High-Speed CAN Transceiver" deviceset="MCP2561-2" device="" value="MCP2561-2"/>
+<part name="R11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="120"/>
+<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/1" value="1μF"/>
+<part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
+<part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
 <part name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
-<part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
-<part name="R9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
-<part name="IC7" library="MAX16820 LED Driver, constant current" deviceset="MAX16820" device="" value="MAX16820"/>
+<part name="IC6" library="MAX16820 LED Driver, constant current" deviceset="MAX16820" device="" value="MAX16820"/>
 <part name="IC1" library="ATtiny4313 microcontroller" deviceset="ATTINY4313" device="VQFN-20" value="ATTINY4313-MMH">
 <attribute name="SPICEPREFIX" value="X"/>
 </part>
-<part name="IC2" library="PRQV8.00CR1510Y00L - 8MHz resonator" deviceset="PRQV" device="" value=" PRQV8.00CR1510Y00L"/>
-<part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="330"/>
+<part name="IC2" library="PRQV8.00CR1510Y00L - 8MHz resonator" deviceset="PRQV" device="" value="PRQV8.00CR1510Y00L"/>
+<part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="330"/>
 <part name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="330"/>
-<part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="330"/>
-<part name="R11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
-<part name="IC3" library="LP38693 5V LDO" deviceset="LP38693" device="" value="LP38693SD-5.0/NOPB"/>
+<part name="R3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="330"/>
+<part name="R10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
 <part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
-<part name="R3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
 <part name="IC4" library="LP38693 5V LDO" deviceset="LP38693" device="" value="LP38693SD-5.0/NOPB"/>
-<part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="22μF"/>
 <part name="SW1" library="TL3305-844809 SPST-NO Tact Switch" deviceset="TL3305-844809" device="" value="TL3305-844809"/>
 <part name="ICSP" library="5034800600 FPC Connector" deviceset="5034800600" device="" value="5034800600 "/>
 <part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
@@ -11152,8 +11149,11 @@ These vary by manufacturer, but we used the NPIS54LS footprint from here.</descr
 <part name="BAT+" library="signal testpoint" deviceset="TP" device="" value="LiIon + Terminal"/>
 <part name="LED+" library="signal testpoint" deviceset="TP" device="" value="LED anode"/>
 <part name="LED-" library="signal testpoint" deviceset="TP" device="" value="LED cathode"/>
-<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="22μF"/>
+<part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="100μF"/>
 <part name="LED1" library="APHBM2012LSURKZGKC" deviceset="APHBM2012LSURKZGKC" device="" value="APHBM2012LSURKZGKC"/>
+<part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="47μF"/>
+<part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/1" value="1μF"/>
+<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/1" value="1μF"/>
 </parts>
 <sheets>
 <sheet>
@@ -11171,7 +11171,6 @@ These vary by manufacturer, but we used the NPIS54LS footprint from here.</descr
 <wire x1="436.88" y1="101.6" x2="307.34" y2="101.6" width="0.1524" layer="90"/>
 <wire x1="307.34" y1="101.6" x2="307.34" y2="228.6" width="0.1524" layer="90"/>
 <wire x1="81.28" y1="101.6" x2="81.28" y2="228.6" width="0.1524" layer="90"/>
-<text x="119.38" y="78.74" size="1.778" layer="90">power supply for CAN infrastructure</text>
 <text x="261.62" y="78.74" size="1.778" layer="90">CAN infrastructure</text>
 <text x="241.3" y="182.88" size="1.778" layer="90">power supply for microcontroller</text>
 <text x="330.2" y="213.36" size="1.778" layer="90">white LED driver</text>
@@ -11199,33 +11198,30 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <text x="15.24" y="210.82" size="1.778" layer="90">ICSP connector</text>
 </plain>
 <instances>
-<instance part="R10" gate="G$1" x="368.3" y="182.88" rot="R270"/>
-<instance part="C4" gate="G$1" x="327.66" y="187.96"/>
+<instance part="R9" gate="G$1" x="368.3" y="182.88" rot="R270"/>
+<instance part="C6" gate="G$1" x="327.66" y="187.96"/>
 <instance part="D1" gate="G$1" x="370.84" y="137.16"/>
 <instance part="L1" gate="G$1" x="355.6" y="137.16" smashed="yes" rot="R270">
 <attribute name="NAME" x="355.6" y="139.7" size="1.778" layer="95"/>
 <attribute name="VALUE" x="355.6" y="134.62" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="Q1" gate="G$1" x="363.22" y="127"/>
-<instance part="IC5" gate="G$1" x="248.92" y="50.8"/>
-<instance part="IC6" gate="G$1" x="342.9" y="58.42"/>
-<instance part="R12" gate="G$1" x="411.48" y="55.88" rot="R90"/>
+<instance part="IC3" gate="G$1" x="248.92" y="50.8"/>
+<instance part="IC5" gate="G$1" x="342.9" y="58.42"/>
+<instance part="R11" gate="G$1" x="411.48" y="55.88" rot="R90"/>
 <instance part="C1" gate="G$1" x="116.84" y="175.26" rot="R180"/>
-<instance part="R8" gate="G$1" x="353.06" y="124.46"/>
-<instance part="R6" gate="G$1" x="198.12" y="50.8" rot="R90"/>
-<instance part="R9" gate="G$1" x="368.3" y="203.2" rot="R90"/>
-<instance part="IC7" gate="G$1" x="350.52" y="193.04"/>
+<instance part="R7" gate="G$1" x="353.06" y="124.46"/>
+<instance part="R4" gate="G$1" x="198.12" y="50.8" rot="R90"/>
+<instance part="R8" gate="G$1" x="368.3" y="203.2" rot="R90"/>
+<instance part="IC6" gate="G$1" x="350.52" y="193.04"/>
 <instance part="IC1" gate="G$1" x="137.16" y="175.26"/>
 <instance part="IC2" gate="G$1" x="142.24" y="134.62"/>
-<instance part="R7" gate="G$1" x="213.36" y="63.5" rot="R180"/>
+<instance part="R6" gate="G$1" x="213.36" y="63.5" rot="R180"/>
 <instance part="R5" gate="G$1" x="205.74" y="60.96" rot="R180"/>
-<instance part="R4" gate="G$1" x="198.12" y="58.42" rot="R180"/>
-<instance part="R11" gate="G$1" x="368.3" y="48.26" rot="R90"/>
-<instance part="IC3" gate="G$1" x="137.16" y="48.26"/>
+<instance part="R3" gate="G$1" x="198.12" y="58.42" rot="R180"/>
+<instance part="R10" gate="G$1" x="368.3" y="48.26" rot="R90"/>
 <instance part="R1" gate="G$1" x="48.26" y="99.06" rot="R270"/>
-<instance part="R3" gate="G$1" x="154.94" y="43.18" rot="R90"/>
 <instance part="IC4" gate="G$1" x="256.54" y="157.48"/>
-<instance part="C2" gate="G$1" x="119.38" y="53.34" rot="R180"/>
 <instance part="SW1" gate="G$1" x="38.1" y="104.14"/>
 <instance part="ICSP" gate="G$1" x="25.4" y="195.58"/>
 <instance part="R2" gate="G$1" x="193.04" y="134.62" rot="R180"/>
@@ -11235,8 +11231,11 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <instance part="BAT+" gate="G$1" x="43.18" y="137.16" rot="R90"/>
 <instance part="LED+" gate="G$1" x="43.18" y="147.32" rot="R90"/>
 <instance part="LED-" gate="G$1" x="43.18" y="154.94" rot="R90"/>
-<instance part="C5" gate="G$1" x="231.14" y="165.1"/>
+<instance part="C3" gate="G$1" x="231.14" y="165.1"/>
 <instance part="LED1" gate="G$1" x="210.82" y="132.08" rot="R180"/>
+<instance part="C4" gate="G$1" x="271.78" y="165.1"/>
+<instance part="C2" gate="G$1" x="208.28" y="35.56"/>
+<instance part="C5" gate="G$1" x="314.96" y="50.8"/>
 </instances>
 <busses>
 </busses>
@@ -11248,22 +11247,22 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="365.76" y="116.84" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC5" gate="G$1" pin="GND"/>
+<pinref part="IC3" gate="G$1" pin="GND"/>
 <wire x1="228.6" y1="35.56" x2="218.44" y2="35.56" width="0.1524" layer="91"/>
 <label x="218.44" y="35.56" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC6" gate="G$1" pin="GND"/>
-<wire x1="325.12" y1="50.8" x2="317.5" y2="50.8" width="0.1524" layer="91"/>
-<label x="317.5" y="50.8" size="1.778" layer="95" rot="R180"/>
+<pinref part="IC5" gate="G$1" pin="GND"/>
+<wire x1="325.12" y1="50.8" x2="325.12" y2="43.18" width="0.1524" layer="91"/>
+<label x="325.12" y="43.18" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="C4" gate="G$1" pin="2"/>
+<pinref part="C6" gate="G$1" pin="2"/>
 <wire x1="327.66" y1="182.88" x2="327.66" y2="180.34" width="0.1524" layer="91"/>
 <label x="327.66" y="180.34" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC7" gate="G$1" pin="GND"/>
+<pinref part="IC6" gate="G$1" pin="GND"/>
 <wire x1="337.82" y1="187.96" x2="337.82" y2="180.34" width="0.1524" layer="91"/>
 <label x="337.82" y="180.34" size="1.778" layer="95"/>
 </segment>
@@ -11283,29 +11282,14 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="137.16" y="124.46" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="G$1" pin="GND"/>
-<wire x1="124.46" y1="48.26" x2="99.06" y2="48.26" width="0.1524" layer="91"/>
-<label x="99.06" y="48.26" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="R1" gate="G$1" pin="2"/>
 <wire x1="48.26" y1="93.98" x2="48.26" y2="91.44" width="0.1524" layer="91"/>
 <label x="48.26" y="91.44" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R3" gate="G$1" pin="1"/>
-<wire x1="154.94" y1="38.1" x2="154.94" y2="33.02" width="0.1524" layer="91"/>
-<label x="154.94" y="33.02" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="IC4" gate="G$1" pin="GND"/>
 <wire x1="243.84" y1="157.48" x2="220.98" y2="157.48" width="0.1524" layer="91"/>
 <label x="220.98" y="157.48" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="C2" gate="G$1" pin="2"/>
-<wire x1="119.38" y1="58.42" x2="119.38" y2="63.5" width="0.1524" layer="91"/>
-<label x="119.38" y="63.5" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="ICSP" gate="G$1" pin="GND"/>
@@ -11318,7 +11302,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="43.18" y="203.2" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R9" gate="G$1" pin="2"/>
+<pinref part="R8" gate="G$1" pin="2"/>
 <wire x1="368.3" y1="208.28" x2="368.3" y2="210.82" width="0.1524" layer="91"/>
 <label x="368.3" y="210.82" size="1.778" layer="95"/>
 </segment>
@@ -11328,17 +11312,32 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="GND" gate="G$1" pin="TP$1"/>
 </segment>
 <segment>
-<pinref part="C5" gate="G$1" pin="1"/>
+<pinref part="C3" gate="G$1" pin="1"/>
 <wire x1="231.14" y1="167.64" x2="231.14" y2="172.72" width="0.1524" layer="91"/>
 <label x="231.14" y="172.72" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="C4" gate="G$1" pin="1"/>
+<wire x1="271.78" y1="167.64" x2="271.78" y2="172.72" width="0.1524" layer="91"/>
+<label x="271.78" y="172.72" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="C5" gate="G$1" pin="2"/>
+<wire x1="314.96" y1="45.72" x2="314.96" y2="43.18" width="0.1524" layer="91"/>
+<label x="314.96" y="43.18" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<pinref part="C2" gate="G$1" pin="2"/>
+<wire x1="208.28" y1="30.48" x2="208.28" y2="27.94" width="0.1524" layer="91"/>
+<label x="208.28" y="27.94" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="DIM_FRONT" class="2">
 <segment>
-<pinref part="IC7" gate="G$1" pin="DIM"/>
+<pinref part="IC6" gate="G$1" pin="DIM"/>
 <label x="378.46" y="198.12" size="1.778" layer="95"/>
 <wire x1="363.22" y1="198.12" x2="368.3" y2="198.12" width="0.1524" layer="91"/>
-<pinref part="R9" gate="G$1" pin="1"/>
+<pinref part="R8" gate="G$1" pin="1"/>
 <wire x1="368.3" y1="198.12" x2="378.46" y2="198.12" width="0.1524" layer="91"/>
 <junction x="368.3" y="198.12"/>
 </segment>
@@ -11348,7 +11347,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="175.26" y="162.56" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="5V0_μC" class="1">
+<net name="5V0" class="1">
 <segment>
 <pinref part="IC1" gate="G$1" pin="VCC"/>
 <wire x1="121.92" y1="172.72" x2="116.84" y2="172.72" width="0.1524" layer="91"/>
@@ -11361,7 +11360,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="220.98" y="160.02" size="1.778" layer="95"/>
 <wire x1="243.84" y1="160.02" x2="231.14" y2="160.02" width="0.1524" layer="91"/>
 <pinref part="IC4" gate="G$1" pin="OUT"/>
-<pinref part="C5" gate="G$1" pin="2"/>
+<pinref part="C3" gate="G$1" pin="2"/>
 <wire x1="231.14" y1="160.02" x2="220.98" y2="160.02" width="0.1524" layer="91"/>
 <junction x="231.14" y="160.02"/>
 </segment>
@@ -11380,27 +11379,53 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="187.96" y1="134.62" x2="182.88" y2="134.62" width="0.1524" layer="91"/>
 <label x="182.88" y="134.62" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="IC5" gate="G$1" pin="VCC"/>
+<wire x1="325.12" y1="53.34" x2="314.96" y2="53.34" width="0.1524" layer="91"/>
+<label x="307.34" y="53.34" size="1.778" layer="95" rot="R180"/>
+<pinref part="C5" gate="G$1" pin="1"/>
+<wire x1="314.96" y1="53.34" x2="307.34" y2="53.34" width="0.1524" layer="91"/>
+<junction x="314.96" y="53.34"/>
+</segment>
+<segment>
+<pinref part="IC3" gate="G$1" pin="VDD"/>
+<wire x1="228.6" y1="38.1" x2="208.28" y2="38.1" width="0.1524" layer="91"/>
+<label x="195.58" y="38.1" size="1.778" layer="95"/>
+<pinref part="C2" gate="G$1" pin="1"/>
+<wire x1="208.28" y1="38.1" x2="195.58" y2="38.1" width="0.1524" layer="91"/>
+<junction x="208.28" y="38.1"/>
+</segment>
+<segment>
+<pinref part="R4" gate="G$1" pin="1"/>
+<wire x1="198.12" y1="45.72" x2="185.42" y2="45.72" width="0.1524" layer="91"/>
+<label x="182.88" y="45.72" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R10" gate="G$1" pin="1"/>
+<wire x1="368.3" y1="43.18" x2="368.3" y2="38.1" width="0.1524" layer="91"/>
+<label x="368.3" y="38.1" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="SPI_MISO" class="2">
 <segment>
-<pinref part="IC5" gate="G$1" pin="SO"/>
-<pinref part="R7" gate="G$1" pin="1"/>
+<pinref part="IC3" gate="G$1" pin="SO"/>
+<pinref part="R6" gate="G$1" pin="1"/>
 <wire x1="218.44" y1="63.5" x2="228.6" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SPI_SCK" class="2">
 <segment>
-<pinref part="IC5" gate="G$1" pin="SCK"/>
-<pinref part="R4" gate="G$1" pin="1"/>
+<pinref part="IC3" gate="G$1" pin="SCK"/>
+<pinref part="R3" gate="G$1" pin="1"/>
 <wire x1="228.6" y1="58.42" x2="203.2" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SPI_SS" class="2">
 <segment>
-<pinref part="IC5" gate="G$1" pin="!CS!"/>
+<pinref part="IC3" gate="G$1" pin="!CS!"/>
 <wire x1="228.6" y1="55.88" x2="198.12" y2="55.88" width="0.1524" layer="91"/>
 <label x="182.88" y="55.88" size="1.778" layer="95"/>
-<pinref part="R6" gate="G$1" pin="2"/>
+<pinref part="R4" gate="G$1" pin="2"/>
 <wire x1="198.12" y1="55.88" x2="182.88" y2="55.88" width="0.1524" layer="91"/>
 <junction x="198.12" y="55.88"/>
 </segment>
@@ -11412,12 +11437,12 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 </net>
 <net name="CANH" class="2">
 <segment>
-<pinref part="IC6" gate="G$1" pin="CANH"/>
+<pinref part="IC5" gate="G$1" pin="CANH"/>
 <wire x1="358.14" y1="63.5" x2="381" y2="63.5" width="0.1524" layer="91"/>
 <label x="381" y="63.5" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R12" gate="G$1" pin="2"/>
+<pinref part="R11" gate="G$1" pin="2"/>
 <wire x1="411.48" y1="60.96" x2="411.48" y2="66.04" width="0.1524" layer="91"/>
 <label x="411.48" y="66.04" size="1.778" layer="95"/>
 </segment>
@@ -11429,14 +11454,14 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 </net>
 <net name="CANL" class="2">
 <segment>
-<pinref part="IC6" gate="G$1" pin="CANL"/>
+<pinref part="IC5" gate="G$1" pin="CANL"/>
 <wire x1="358.14" y1="60.96" x2="381" y2="60.96" width="0.1524" layer="91"/>
 <label x="381" y="60.96" size="1.778" layer="95"/>
 </segment>
 <segment>
 <wire x1="411.48" y1="50.8" x2="411.48" y2="45.72" width="0.1524" layer="91"/>
 <label x="411.48" y="45.72" size="1.778" layer="95"/>
-<pinref part="R12" gate="G$1" pin="1"/>
+<pinref part="R11" gate="G$1" pin="1"/>
 </segment>
 <segment>
 <wire x1="43.18" y1="167.64" x2="45.72" y2="167.64" width="0.1524" layer="91"/>
@@ -11446,16 +11471,16 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 </net>
 <net name="TXCAN" class="0">
 <segment>
-<pinref part="IC6" gate="G$1" pin="TXD"/>
-<pinref part="IC5" gate="G$1" pin="TXCAN"/>
+<pinref part="IC5" gate="G$1" pin="TXD"/>
+<pinref part="IC3" gate="G$1" pin="TXCAN"/>
 <wire x1="325.12" y1="63.5" x2="269.24" y2="63.5" width="0.1524" layer="91"/>
 <label x="289.56" y="63.5" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="RXCAN" class="0">
 <segment>
-<pinref part="IC5" gate="G$1" pin="RXCAN"/>
-<pinref part="IC6" gate="G$1" pin="RXD"/>
+<pinref part="IC3" gate="G$1" pin="RXCAN"/>
+<pinref part="IC5" gate="G$1" pin="RXD"/>
 <wire x1="269.24" y1="60.96" x2="325.12" y2="60.96" width="0.1524" layer="91"/>
 <label x="289.56" y="58.42" size="1.778" layer="95"/>
 </segment>
@@ -11463,7 +11488,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <net name="GATE" class="2">
 <segment>
 <pinref part="Q1" gate="G$1" pin="G"/>
-<pinref part="R8" gate="G$1" pin="2"/>
+<pinref part="R7" gate="G$1" pin="2"/>
 <wire x1="358.14" y1="124.46" x2="360.68" y2="124.46" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -11480,12 +11505,12 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 </net>
 <net name="DIM_FRONT_GATE" class="2">
 <segment>
-<pinref part="R8" gate="G$1" pin="1"/>
+<pinref part="R7" gate="G$1" pin="1"/>
 <wire x1="347.98" y1="124.46" x2="345.44" y2="124.46" width="0.1524" layer="91"/>
 <label x="345.44" y="124.46" size="1.778" layer="95" rot="MR0"/>
 </segment>
 <segment>
-<pinref part="IC7" gate="G$1" pin="DRV"/>
+<pinref part="IC6" gate="G$1" pin="DRV"/>
 <wire x1="363.22" y1="195.58" x2="378.46" y2="195.58" width="0.1524" layer="91"/>
 <label x="378.46" y="195.58" size="1.778" layer="95"/>
 </segment>
@@ -11504,7 +11529,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 </net>
 <net name="INT" class="2">
 <segment>
-<pinref part="IC5" gate="G$1" pin="!INT!"/>
+<pinref part="IC3" gate="G$1" pin="!INT!"/>
 <wire x1="269.24" y1="38.1" x2="281.94" y2="38.1" width="0.1524" layer="91"/>
 <label x="281.94" y="38.1" size="1.778" layer="95"/>
 </segment>
@@ -11521,7 +11546,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="IC1" gate="G$1" pin="PCINT13/CKOUT/XCK/INT0-PD2"/>
 </segment>
 <segment>
-<pinref part="IC5" gate="G$1" pin="OSC1"/>
+<pinref part="IC3" gate="G$1" pin="OSC1"/>
 <wire x1="228.6" y1="48.26" x2="220.98" y2="48.26" width="0.1524" layer="91"/>
 <label x="220.98" y="48.26" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -11552,10 +11577,10 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 </net>
 <net name="STBY" class="2">
 <segment>
-<pinref part="IC6" gate="G$1" pin="STBY"/>
+<pinref part="IC5" gate="G$1" pin="STBY"/>
 <wire x1="358.14" y1="53.34" x2="368.3" y2="53.34" width="0.1524" layer="91"/>
 <label x="381" y="53.34" size="1.778" layer="95"/>
-<pinref part="R11" gate="G$1" pin="2"/>
+<pinref part="R10" gate="G$1" pin="2"/>
 <wire x1="368.3" y1="53.34" x2="381" y2="53.34" width="0.1524" layer="91"/>
 <junction x="368.3" y="53.34"/>
 </segment>
@@ -11589,7 +11614,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="IC1" gate="G$1" pin="USCK/SCL/SCK/PCINT7-PB7"/>
 </segment>
 <segment>
-<pinref part="R4" gate="G$1" pin="2"/>
+<pinref part="R3" gate="G$1" pin="2"/>
 <wire x1="193.04" y1="58.42" x2="182.88" y2="58.42" width="0.1524" layer="91"/>
 <label x="182.88" y="58.42" size="1.778" layer="95"/>
 </segment>
@@ -11597,56 +11622,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="ICSP" gate="G$1" pin="4"/>
 <wire x1="35.56" y1="195.58" x2="43.18" y2="195.58" width="0.1524" layer="91"/>
 <label x="43.18" y="195.58" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="5V0_CAN" class="0">
-<segment>
-<pinref part="IC3" gate="G$1" pin="OUT"/>
-<wire x1="124.46" y1="50.8" x2="119.38" y2="50.8" width="0.1524" layer="91"/>
-<label x="99.06" y="50.8" size="1.778" layer="95"/>
-<pinref part="C2" gate="G$1" pin="1"/>
-<wire x1="119.38" y1="50.8" x2="99.06" y2="50.8" width="0.1524" layer="91"/>
-<junction x="119.38" y="50.8"/>
-</segment>
-<segment>
-<pinref part="IC6" gate="G$1" pin="VCC"/>
-<wire x1="325.12" y1="53.34" x2="317.5" y2="53.34" width="0.1524" layer="91"/>
-<label x="317.5" y="53.34" size="1.778" layer="95" rot="R180"/>
-</segment>
-<segment>
-<pinref part="IC5" gate="G$1" pin="VDD"/>
-<wire x1="228.6" y1="38.1" x2="195.58" y2="38.1" width="0.1524" layer="91"/>
-<label x="195.58" y="38.1" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="R6" gate="G$1" pin="1"/>
-<wire x1="198.12" y1="45.72" x2="185.42" y2="45.72" width="0.1524" layer="91"/>
-<label x="182.88" y="45.72" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="R11" gate="G$1" pin="1"/>
-<wire x1="368.3" y1="43.18" x2="368.3" y2="38.1" width="0.1524" layer="91"/>
-<label x="368.3" y="38.1" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="IC3" gate="G$1" pin="SNS"/>
-<wire x1="149.86" y1="45.72" x2="149.86" y2="33.02" width="0.1524" layer="91"/>
-<label x="149.86" y="33.02" size="1.778" layer="95" rot="R180"/>
-</segment>
-</net>
-<net name="EN" class="2">
-<segment>
-<pinref part="IC3" gate="G$1" pin="EN"/>
-<wire x1="149.86" y1="48.26" x2="154.94" y2="48.26" width="0.1524" layer="91"/>
-<label x="160.02" y="48.26" size="1.778" layer="95"/>
-<pinref part="R3" gate="G$1" pin="2"/>
-<wire x1="154.94" y1="48.26" x2="160.02" y2="48.26" width="0.1524" layer="91"/>
-<junction x="154.94" y="48.26"/>
-</segment>
-<segment>
-<pinref part="IC1" gate="G$1" pin="AIN0/PCINT0-PB0"/>
-<wire x1="170.18" y1="170.18" x2="175.26" y2="170.18" width="0.1524" layer="91"/>
-<label x="175.26" y="170.18" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SWITCH" class="2">
@@ -11691,7 +11666,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <net name="ICSP_MISO" class="2">
 <segment>
 <label x="182.88" y="63.5" size="1.778" layer="95"/>
-<pinref part="R7" gate="G$1" pin="2"/>
+<pinref part="R6" gate="G$1" pin="2"/>
 <wire x1="208.28" y1="63.5" x2="182.88" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -11707,7 +11682,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 </net>
 <net name="SPI_MOSI" class="2">
 <segment>
-<pinref part="IC5" gate="G$1" pin="SI"/>
+<pinref part="IC3" gate="G$1" pin="SI"/>
 <pinref part="R5" gate="G$1" pin="1"/>
 <wire x1="228.6" y1="60.96" x2="210.82" y2="60.96" width="0.1524" layer="91"/>
 </segment>
@@ -11731,7 +11706,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="BAT+" gate="G$1" pin="TP$1"/>
 </segment>
 <segment>
-<pinref part="R10" gate="G$1" pin="2"/>
+<pinref part="R9" gate="G$1" pin="2"/>
 <wire x1="368.3" y1="177.8" x2="368.3" y2="172.72" width="0.1524" layer="91"/>
 <label x="368.3" y="172.72" size="1.778" layer="95"/>
 </segment>
@@ -11741,17 +11716,12 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="386.08" y="137.16" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC7" gate="G$1" pin="IN"/>
+<pinref part="IC6" gate="G$1" pin="IN"/>
 <wire x1="337.82" y1="190.5" x2="327.66" y2="190.5" width="0.1524" layer="91"/>
 <label x="325.12" y="190.5" size="1.778" layer="95"/>
-<pinref part="C4" gate="G$1" pin="1"/>
+<pinref part="C6" gate="G$1" pin="1"/>
 <wire x1="327.66" y1="190.5" x2="325.12" y2="190.5" width="0.1524" layer="91"/>
 <junction x="327.66" y="190.5"/>
-</segment>
-<segment>
-<pinref part="IC3" gate="G$1" pin="IN"/>
-<label x="160.02" y="50.8" size="1.778" layer="95"/>
-<wire x1="149.86" y1="50.8" x2="160.02" y2="50.8" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="IC4" gate="G$1" pin="IN"/>
@@ -11762,6 +11732,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="271.78" y1="157.48" x2="271.78" y2="160.02" width="0.1524" layer="91"/>
 <junction x="271.78" y="160.02"/>
 <label x="279.4" y="160.02" size="1.778" layer="95"/>
+<pinref part="C4" gate="G$1" pin="2"/>
 </segment>
 </net>
 <net name="LED_AN" class="0">
@@ -11771,10 +11742,10 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="LED+" gate="G$1" pin="TP$1"/>
 </segment>
 <segment>
-<pinref part="IC7" gate="G$1" pin="CS"/>
+<pinref part="IC6" gate="G$1" pin="CS"/>
 <wire x1="363.22" y1="187.96" x2="368.3" y2="187.96" width="0.1524" layer="91"/>
 <label x="378.46" y="187.96" size="1.778" layer="95"/>
-<pinref part="R10" gate="G$1" pin="1"/>
+<pinref part="R9" gate="G$1" pin="1"/>
 <wire x1="368.3" y1="187.96" x2="378.46" y2="187.96" width="0.1524" layer="91"/>
 <junction x="368.3" y="187.96"/>
 </segment>
@@ -11811,17 +11782,25 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="175.26" y="165.1" size="1.778" layer="95"/>
 </segment>
 </net>
+<net name="N$4" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="AIN0/PCINT0-PB0"/>
+<wire x1="170.18" y1="170.18" x2="175.26" y2="170.18" width="0.1524" layer="91"/>
+<label x="175.26" y="170.18" size="1.778" layer="95"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
 <errors>
-<approved hash="104,1,228.6,38.1,IC5,VDD,5V0_CAN,,,"/>
-<approved hash="104,1,325.12,53.34,IC6,VCC,5V0_CAN,,,"/>
-<approved hash="104,1,337.82,190.5,IC7,IN,BAT+,,,"/>
-<approved hash="204,1,337.82,198.12,IC7,VCC,,,,"/>
+<approved hash="104,1,228.6,38.1,IC3,VDD,5V0,,,"/>
+<approved hash="104,1,325.12,53.34,IC5,VCC,5V0,,,"/>
+<approved hash="104,1,337.82,190.5,IC6,IN,BAT+,,,"/>
+<approved hash="204,1,337.82,198.12,IC6,VCC,,,,"/>
 <approved hash="106,1,170.18,172.72,N$1,,,,,"/>
 <approved hash="106,1,170.18,175.26,N$2,,,,,"/>
 <approved hash="106,1,170.18,165.1,N$3,,,,,"/>
+<approved hash="106,1,170.18,170.18,N$4,,,,,"/>
 </errors>
 </schematic>
 </drawing>
