@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.0.0">
+<eagle version="9.0.1">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -12376,6 +12376,10 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <junction x="271.78" y="172.72"/>
 <pinref part="C4" gate="G$1" pin="2"/>
 <label x="279.4" y="172.72" size="1.778" layer="95"/>
+<pinref part="IC4" gate="G$1" pin="SNS"/>
+<wire x1="269.24" y1="167.64" x2="271.78" y2="167.64" width="0.1524" layer="91"/>
+<wire x1="271.78" y1="167.64" x2="271.78" y2="170.18" width="0.1524" layer="91"/>
+<junction x="271.78" y="170.18"/>
 </segment>
 </net>
 <net name="GND" class="0">
