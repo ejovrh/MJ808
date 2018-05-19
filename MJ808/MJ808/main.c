@@ -24,7 +24,7 @@
 */
 
 
-#define FRONT_OCR1A 0x10 // count to hex value
+#define FRONT_OCR1A 0x80 // count to hex value
 #define LOW_SPEED_THRESHOLD_FREQ 20 // dynamo frequency below which we consider the bike to move too slow for power generation -> dim light
 
 uint8_t can_msg[11]; // holds the received CAN message
@@ -48,8 +48,9 @@ int main(void)
 
 	// setup of INT1 and PCINT1(pin B1) - handled via PCINT0_vect ISR
 	MCUCR = _BV(ISC10); // any logical change generates an IRQ
-	GIMSK = _BV(INT1) | _BV(PCIE0);	// enable INT1 and PCIE0
-	PCMSK = _BV(PCINT1); // turn on PCINT1 (pin B1)
+	GIMSK = _BV(INT1) | _BV(PCIE2);	// enable INT1 and PCIE2
+	PCMSK2 = _BV(PCINT15); // turn on PCINT1 (pin D4)
+	//PCMSK = _BV(PCINT15)
 
 	// setup of interrupt-driven timer - fires every ~65ms
 	OCR0A = 0xFC;
@@ -96,8 +97,8 @@ ISR(INT1_vect)
 }
 
 
-// ISR for PCINT1 - pushbutton
-ISR(PCINT0_vect)
+// ISR for PCINT2 - pushbutton
+ISR(PCINT2_vect)
 {
 	//TODO - write code which handles the button
 

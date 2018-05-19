@@ -3,7 +3,6 @@
 
 gpio_conf(MCP2515_INT_pin, INPUT, LOW);
 gpio_conf(MCP2561_standby_pin, OUTPUT, HIGH);						// low (on), high (off)
-gpio_conf(LDO_EN_pin, OUTPUT, LOW);											// low (one state), high (other state)
 
 gpio_conf(SPI_MISO_pin, INPUT, LOW);
 gpio_conf(SPI_MOSI_pin, OUTPUT, LOW);
