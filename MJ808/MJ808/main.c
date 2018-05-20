@@ -23,7 +23,7 @@
 		0xFF - 100% (max)			-	200 mA
 */
 
-
+// 0x80 MAX. SAFE COUNT WITH REV2 BOARD
 #define FRONT_OCR1A 0x80 // count to hex value
 #define LOW_SPEED_THRESHOLD_FREQ 20 // dynamo frequency below which we consider the bike to move too slow for power generation -> dim light
 
