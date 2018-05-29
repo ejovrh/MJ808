@@ -12297,6 +12297,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="12.7" y1="220.98" x2="73.66" y2="220.98" width="0.1524" layer="90"/>
 <wire x1="73.66" y1="220.98" x2="73.66" y2="180.34" width="0.1524" layer="90"/>
 <text x="15.24" y="215.9" size="1.778" layer="90">ICSP connector</text>
+<text x="177.8" y="68.58" size="1.778" layer="91">swap pins!!</text>
 </plain>
 <instances>
 <instance part="R10" gate="G$1" x="383.54" y="175.26" rot="R270"/>
@@ -12563,12 +12564,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="40.64" y="152.4" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="ICSP_MISO" class="2">
-<segment>
-<label x="182.88" y="63.5" size="1.778" layer="95"/>
-<pinref part="R6" gate="G$1" pin="2"/>
-<wire x1="208.28" y1="63.5" x2="182.88" y2="63.5" width="0.1524" layer="91"/>
-</segment>
+<net name="ICSP_DO/MOSI" class="2">
 <segment>
 <wire x1="157.48" y1="167.64" x2="162.56" y2="167.64" width="0.1524" layer="91"/>
 <label x="162.56" y="167.64" size="1.778" layer="95"/>
@@ -12579,13 +12575,13 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="38.1" y1="200.66" x2="45.72" y2="200.66" width="0.1524" layer="91"/>
 <label x="45.72" y="200.66" size="1.778" layer="95"/>
 </segment>
-</net>
-<net name="ICSP_MOSI" class="2">
 <segment>
 <label x="182.88" y="60.96" size="1.778" layer="95"/>
 <pinref part="R4" gate="G$1" pin="2"/>
 <wire x1="200.66" y1="60.96" x2="182.88" y2="60.96" width="0.1524" layer="91"/>
 </segment>
+</net>
+<net name="ICSP_DI/MISO" class="2">
 <segment>
 <wire x1="157.48" y1="170.18" x2="162.56" y2="170.18" width="0.1524" layer="91"/>
 <label x="162.56" y="170.18" size="1.778" layer="95"/>
@@ -12595,6 +12591,11 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="ICSP" gate="G$1" pin="2"/>
 <wire x1="38.1" y1="203.2" x2="45.72" y2="203.2" width="0.1524" layer="91"/>
 <label x="45.72" y="203.2" size="1.778" layer="95"/>
+</segment>
+<segment>
+<label x="182.88" y="63.5" size="1.778" layer="95"/>
+<pinref part="R6" gate="G$1" pin="2"/>
+<wire x1="208.28" y1="63.5" x2="182.88" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="ICSP_SCK" class="2">
