@@ -12255,6 +12255,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="LED1" library="APHBM2012LSURKZGKC" deviceset="APHBM2012LSURKZGKC" device="" value="APHBM2012LSURKZGKC"/>
 <part name="ICSP" library="5034800600 FPC Connector" deviceset="5034800600" device="" value="5034800600"/>
 <part name="SPLIT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TP" device="B2,54" package3d_urn="urn:adsk.eagle:package:27948/1"/>
+<part name="R12" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
 </parts>
 <sheets>
 <sheet>
@@ -12297,7 +12298,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="12.7" y1="220.98" x2="73.66" y2="220.98" width="0.1524" layer="90"/>
 <wire x1="73.66" y1="220.98" x2="73.66" y2="180.34" width="0.1524" layer="90"/>
 <text x="15.24" y="215.9" size="1.778" layer="90">ICSP connector</text>
-<text x="177.8" y="68.58" size="1.778" layer="91">swap pins!!</text>
 </plain>
 <instances>
 <instance part="R10" gate="G$1" x="383.54" y="175.26" rot="R270"/>
@@ -12339,6 +12339,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <instance part="LED1" gate="G$1" x="139.7" y="121.92" rot="R180"/>
 <instance part="ICSP" gate="G$1" x="27.94" y="198.12"/>
 <instance part="SPLIT" gate="G$1" x="358.14" y="38.1" rot="R180"/>
+<instance part="R12" gate="G$1" x="276.86" y="30.48" rot="R270"/>
 </instances>
 <busses>
 </busses>
@@ -12547,6 +12548,11 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="R8" gate="G$1" pin="1"/>
 <wire x1="368.3" y1="43.18" x2="368.3" y2="38.1" width="0.1524" layer="91"/>
 <label x="368.3" y="38.1" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R12" gate="G$1" pin="2"/>
+<wire x1="276.86" y1="25.4" x2="276.86" y2="22.86" width="0.1524" layer="91"/>
+<label x="276.86" y="22.86" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="LED_AN" class="5">
@@ -12901,6 +12907,15 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="IC5" gate="G$1" pin="SPLIT"/>
 <wire x1="358.14" y1="50.8" x2="358.14" y2="40.64" width="0.1524" layer="91"/>
 <pinref part="SPLIT" gate="G$1" pin="TP"/>
+</segment>
+</net>
+<net name="RESET" class="0">
+<segment>
+<pinref part="IC3" gate="G$1" pin="!RESET!"/>
+<wire x1="269.24" y1="35.56" x2="276.86" y2="35.56" width="0.1524" layer="91"/>
+<label x="276.86" y="35.56" size="1.778" layer="95"/>
+<pinref part="R12" gate="G$1" pin="1"/>
+<junction x="276.86" y="35.56"/>
 </segment>
 </net>
 </nets>
