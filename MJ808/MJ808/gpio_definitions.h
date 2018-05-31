@@ -10,8 +10,8 @@
 #define    PWM_front_light_pin   		B,   3,   3	// PWM - front light
 
 #define    SPI_SS_MCP2515_pin   		B,   4,   4	// SPI - SS
-#define    SPI_MISO_pin   					B,   5,   5	// SPI - MISO; aka. DI; if run in master mode this is ... MISO
-#define    SPI_MOSI_pin   					B,   6,   6	// SPI - MOSI; aka. DO; ditto
+#define    ICSP_DI_MISO   					B,   5,   5	// SPI - MISO; aka. DI; if run in master mode this is ... MISO
+#define    ICSP_DO_MOSI   					B,   6,   6	// SPI - MOSI; aka. DO; ditto
 #define    SPI_SCK_pin   						B,   7,   7	// SPI - SCK
 
 #endif /* GPIO_DEFINITIONS_H_ */
