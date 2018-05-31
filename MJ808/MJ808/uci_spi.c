@@ -10,14 +10,24 @@
  * see: https://github.com/tessel/avr-usi-spi/blob/master/spi_via_usi_driver.c
  * http://srcpro.pl/more.php?lang=ENG&pg=1&article=13
  * http://www.avrfreaks.net/forum/how-attiny2313-usi-spi-slavemaster-c-code
- * http://www.avrfreaks.net/forum/attiny2313-spi-master
+ * http://www.avrfreaks.net/forum/attiny2313-spi-master - that last one is especially interesting.
  *
+ * observe DI and DO pins - they are not unnecessarily the same as MISO/MOSI.
+ *	e.g. PB6 is labeled as MISO but is in reality DO
+ *
+ */
 
- * NOTE:
- *	MCP2515
- *		SPI 0 and 3
- *		SCK <10MHz
- *		MSB first
+/*
+ * SPI modes
+ *	read: http://dlnware.com/theory/SPI-Transfer-Modes
+ * mode 0:
+ *		CPOL 0 - clock idle is low
+ *		CPHA 0 - sample on the leading (first) edge of clock signal
+ *
+ * mode 3:
+ *		CPOL 1 - clock idle is high
+ *		CPHA 1 - sample on the trailing (second) edge of the clock signal
+ *
  */
 
 // sends (and receives) data from the SPI bus
@@ -26,15 +36,16 @@ uint8_t spi_uci_transfer(const uint8_t data)
 {
 	USIDR = data;									// put the payload into the USI data register
 
-	USISR |= 1 << USIOIF;					// counter overflow interrupt, indicates counter overflow
+	USISR = _BV(USIOIF);					// counter overflow interrupt, indicates counter overflow
 
-	while ((USISR & (1 << USIOIF)) == 0 ) // this loop provides the software defined clock; this all is SW SPI...
+	do
 	{
-		USICR = ( _BV(USIWM0)|	// select three wire mode; USIWM1 is 0 - the inital value
-							_BV(USICS1)|	// SPI mode: USICS1 == 1 && USICS0 == 0 <=> SPI mode 3
-							_BV(USICLK)|	// clock strobe
-							_BV(USITC));		// toggles the clock
-	}	// by clocking the USIDR is shifted into the slave (and data received)
+		USICR = ( _BV(USIWM0)	// select three wire mode
+						 |_BV(USICS1)	// positive edge - CPHA0
+						 |_BV(USICLK)	// clock strobe
+						 |_BV(USITC));		// generates the clock by toggling the SCK pin
+	}	// due to clocking the USIDR is shifted into the slave (and data received)
+	while ((USISR & _BV( USIOIF) ) == 0 ); // this loop provides the software defined clock; this all is SW SPI...
 
 	return USIDR;									// hopefully have something useful here...
 }
