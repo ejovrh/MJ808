@@ -1,16 +1,18 @@
 #ifndef MCP2515_H_
 #define MCP2515_H_
 
-// instruction bytes, see datasheet p. 66, table 12.1
-#define MCP2515_RESET						0xC0	// software reset instruction
-#define MCP2515_READ						0x03	// read instruction
-#define MCP2515_READ_RX_BUFFER	0x90	//TODO - add bit fields
-#define MCP2515_WRITE						0x02	// write instruction
-#define MCP2515_LOAD_TX_BUFFER	0x40	// load TX buffer + bit fields
-#define MCP2515_RTS							0x80	// RTS command + bit fields
-#define MCP2515_READ_STATUS			0xA0	// single instruction read of status bits
-#define MCP2515_RX_STATUS				0xB0	// determines received message filter and type
-#define MCP2515_BIT_MODIFY			0x05	// instruction for modification of single bits in selected registers: shaded fields in table 11.1
+#define CAN_MAX_MSG_LEN		8 // 8 bytes are the max. length of a CAN message
+
+// low-level device instructions, see datasheet p. 66, table 12.1
+#define MCP2515_OPCODE_RESET						0xC0	// software reset instruction
+#define MCP2515_OPCODE_READ							0x03	// read instruction
+#define MCP2515_OPCODE_READ_RX_BUFFER		0x90	//TODO - add bit fields
+#define MCP2515_OPCODE_WRITE						0x02	// write instruction
+#define MCP2515_OPCODE_LOAD_TX_BUFFER		0x40	// load TX buffer + bit fields
+#define MCP2515_OPCODE_RTS							0x80	// RTS command + bit fields; p. 65 chap 12.7 & figure 12.6 on p. 68
+#define MCP2515_OPCODE_READ_STATUS			0xA0	// single instruction read of status bits
+#define MCP2515_OPCODE_RX_STATUS				0xB0	// determines received message filter and type
+#define MCP2515_OPCODE_BIT_MODIFY				0x05	// instruction for modification of single bits in selected registers: shaded fields in table 11.1
 
 // read status result byte
 #define STAT_CANINTF_TX2IF		7
@@ -78,23 +80,23 @@
 
 // CANSTAT register, datasheet p. 61
 #define CANSTAT	0x0E
-#define OPMOD2		7
-#define	OPMOD1		6
-#define	OPMOD0		5
-#define	ICOD2			3
-#define ICOD1			2
-#define ICOD0			1
+#define OPMOD2		7 // OPMOD2:0 - Operation mode
+#define	OPMOD1		6 //
+#define	OPMOD0		5 //
+#define	ICOD2			3 // ICOD2:0 - Interrupt Flag Code
+#define ICOD1			2	//
+#define ICOD0			1 //
 
 // CANCTRL register, datasheet p. 60
 #define CANCTRL	0x0F
-#define REQOP2		7
-#define REQOP1		6
-#define REQOP0		5
-#define ABAT			4
-#define OSM				3
-#define CLKEN			2
-#define CLKPRE1		1
-#define CLKPRE0		0
+#define REQOP2		7	// REQOPQ2:0 - operational mode
+#define REQOP1		6	//
+#define REQOP0		5	//
+#define ABAT			4	// Abort All Pending Transmissions
+#define OSM				3	// One-Shot mode
+#define CLKEN			2	// CLKOUT Pin Enable
+#define CLKPRE1		1	// CLKPRE1:0 - CLKOUT Pin Prescaler
+#define CLKPRE0		0	//
 
 // TEC – TRANSMIT ERROR COUNTER
 #define TEC 0x1C // datasheet p.48
@@ -295,44 +297,22 @@
 #define RXB1DM 0x76 // datasheet p.31 - 0x76 up to 0x6C / 6 bytes
 
 
+typedef struct can_message
+{
+	uint8_t		sidh;			// Standard Identifier High Byte
+	uint8_t		sidl;			// Standard Identifier Low Byte
+	uint8_t   dlc;			// Data Length Code and others
+	uint8_t   data[8];	// Data, length identified by DLC
+} can_message;
 
 
 // initialization & configuration after power on
 void mcp2515_init(void);
 
-// reads one byte at addr and returns it
-uint8_t mcp2515_register_read(const uint8_t addr);
-
-// writes one byte of data into addr
-void mcp2515_register_write_bytes(const uint8_t addr, const uint8_t *data, const uint8_t len);
-
 // fetches a received CAN message from the MCP2515, triggered by RX interrupt
-void mcp2515_can_msg_receive(uint8_t *data);
+void mcp2515_can_msg_receive(can_message *msg);
 
 // sends a CAN message onto the bus
-void mcp2515_can_msg_send(const uint8_t *data, const uint8_t len);
-
-// sets or clears individual bits (defined by byte) via mask at addr
-void mcp2515_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte);
-
-// read message status bits
-uint8_t mcp2515_read_status(void);
-
-// read message rx status bits
-uint8_t mcp2515_read_rx_status(void);
-
-// TODO - create CAN message struct
-typedef struct can_message
-{
-	union
-	{
-		uint16_t val;
-		uint8_t bytes[2];
-	} identifier;			// CAN identifier
-
-	uint8_t *payload[4]; // up to 4 bytes of payload data
-	uint8_t dlc;	// length of payload
-
-} can_message;
+void mcp2515_can_msg_send(can_message *msg);
 
 #endif /* MCP2515_H_ */
