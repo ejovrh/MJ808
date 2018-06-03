@@ -11,16 +11,18 @@
  */
 
 static void mcp2515_opcode_reset(void); // reset - opcode 0xC0 - resets the MCP2515 (ch. 12.2, p 65)
-static void mcp2515_opcode_read(const uint8_t addr, uint8_t *data, const uint8_t len); // read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
+void mcp2515_opcode_read(const uint8_t addr, uint8_t *data, const uint8_t len); // read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
+/*
 //TODO - rewrite mcp2515_opcode_read_rx_buffer
 static void mcp2515_opcode_read_rx_buffer(const uint8_t buffer, uint8_t *data); // read RX buffer - opcode 0x90 - loads a RX buffer identified by the bit mask 'buffer' into '*data', ch. 12.4, p 65
+*/
 void mcp2515_opcode_write_byte(const uint8_t addr, const uint8_t value); // write - opcode 0x02 - writes single byte to addr
 void mcp2515_opcode_write_bytes(const uint8_t addr, const uint8_t *value, const uint8_t len); // write - opcode 0x02 - writes len-1 bytes to addr
 static void mcp2515_opcode_load_tx_buffer(const uint8_t buffer, const uint8_t *data, const uint8_t len); // load TX buffer - opcode 0x40 - loads '*data' into TX buffer identified by the bit mask 'buffer'
 void mcp2515_opcode_rts(const uint8_t buffer); // RTS - opcode 0x80 - sends RTS for 'buffer', table ch. 12.7 & 12.1
 static uint8_t mcp2515_opcode_read_status(void); // read status - opcode 0xA0 - returns byte with status bits for msg RX & TX, ch. 12.8 & table 12.9
 static uint8_t mcp2515_opcode_rx_status(void); // rx status - opcode 0xB0 - returns byte with received message RX filter and type info, ch. 12.9
-static void mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte); //bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
+void mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte); //bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
 
 /* endianness and byte order are a problem on AVR
  *	say, we put word = 0x12af
@@ -42,7 +44,7 @@ void mcp2515_init(void)
 	 * oscillator frequency: 8MHz, desired bandwidth: 500kbps
 	 * datasheet pp. 39
 	 */
-	//TODO: verify correct write
+	// set bit timing
 	mcp2515_opcode_bit_modify(CNF1, 0xFF, 0x00); // 1 x Tq sampling, 2 x ( 0 + 1) / 8 MHz prescaler
 	mcp2515_opcode_bit_modify(CNF2, 0xFF, _BV(BTLMODE) | _BV(SAM) |_BV(PHSEG11) ); // Length of PS2 determined by PHSEG22:PHSEG20 bits of CNF3; PS1 Length (PHSEG1 + 1) x TQ
 	mcp2515_opcode_bit_modify(CNF3, 0xFF, _BV(WAKFIL) | _BV(PHSEG21) ); // PS2 Length bits (PHSEG2 + 1) x TQ
@@ -50,9 +52,17 @@ void mcp2515_init(void)
 	// TXRTSCTRL device settings
 	mcp2515_opcode_bit_modify(TXRTSCTRL, 0x07, 0x00); // zero out & set B2RTSM, B1RTSM, B0RTSM to digital input (turn off RTS functionality on pins)
 
-	// misc stuff
-	mcp2515_opcode_bit_modify(CANINTE, ( _BV(WAKIE) | _BV(RX1IE) | _BV(RX0IE) ), ( _BV(RX1IE) | _BV(RX0IE) )); // enable wake, RX interrupts on INT pin
+	// interrupts
+	mcp2515_opcode_bit_modify(CANINTE, ( _BV(WAKIE) | _BV(ERRIE) | _BV(RX1IE) | _BV(RX0IE) ), _BV(WAKIE) | _BV(ERRIE) | ( _BV(RX1IE) | _BV(RX0IE) )); // enable wake, RX interrupts on INT pin
+
+	// pins
 	mcp2515_opcode_bit_modify(BFPCTRL, _BV(B1BFE) | _BV(B0BFE), 0x00); // disable RX0BF and RX1BF Pins, ch. 4.4 p 24
+
+	// clear TXBnCTRL registers
+	// TODO: for now for development only
+	mcp2515_opcode_bit_modify(TXB0CTRL, _BV(TXREQ), 0x00);
+	mcp2515_opcode_bit_modify(TXB1CTRL, _BV(TXREQ), 0x00);
+	mcp2515_opcode_bit_modify(TXB2CTRL, _BV(TXREQ), 0x00);
 
 	// set up RX buffer control registers
 	mcp2515_opcode_bit_modify(RXB0CTRL,  _BV(RXM0) | _BV(BUKT), _BV(RXM0) | _BV(BUKT)); // enable rollover, ch. 4.2 p 23, RX all messages & receive only standard identifiers for RXB0
@@ -78,6 +88,7 @@ void mcp2515_init(void)
 	 */
 
 // TODO: filter bytes in uint16_t format will need <<5 to match registers, additionally union byte order is a problem
+	/*
 	word = 0x01FF;
 	mcp2515_opcode_write_byte(RXM0SIDL, *word_ptr);
 	mcp2515_opcode_write_byte(RXM0SIDH, *(++word_ptr));
@@ -109,7 +120,7 @@ void mcp2515_init(void)
 	word = 0x00F0;
 	mcp2515_opcode_write_byte(RXF5SIDL, *word_ptr);
 	mcp2515_opcode_write_byte(RXF5SIDH, *++word_ptr);
-
+*/
 	mcp2515_opcode_bit_modify(CANCTRL, 0xE0, 0x00); // put into normal mode
 	//mcp2515_opcode_bit_modify(CANCTRL, 0xE0, 0x40); // put into loopback mode
 };
@@ -118,83 +129,111 @@ void mcp2515_init(void)
 //	provide not more than 4 bytes of data and len !!!
 void mcp2515_can_msg_send(can_message *msg)
 {
-	/* mode of operation
+	/* mode of operation - see figure 3.1 on p.17
 	 *	1. find an empty TX buffer
-	 *	2.	select the buffer
-	 *	3. issue load_tx_buffer for the selected buffer
-	 *	4.	load register
+	 *	2.	select that buffer
+	 *	3. load SIDH register
+	 *	4. load SIDL register
 	 *	5. if data is to be sent, again send load_tx_buffer (buffer incremented by one)
 	 *	6.	load register
-	 *	7. determine message priority
-	 *	8. load message priority into register
-	 *	9. set data length code
+	 *	7. set data length code
+	 *	8. determine message priority (not implemented)
+	 *	9. load message priority into register (not implemented)
 	 *	10. set RTS
 	 */
 
-/*
- *
- mcp2515_opcode_write_byte(TXB0SIDH, can_msg.sidh);
- mcp2515_opcode_write_byte(TXB0SIDL, can_msg.sidl);
- mcp2515_opcode_write_byte(TXB0DLC, can_msg.dlc);
- mcp2515_opcode_write_bytes(TXB0Dm, *can_msg.data, 2);
- mcp2515_opcode_rts(0x01);
- *
- */
+ 	uint8_t rts_mask;
+	uint8_t *msg_ptr = (uint8_t *) &msg;
+	uint8_t tx_buffer_addr = 0x00;
 
-	uint8_t buffer;
-	uint8_t priority;
-
-	// step 1 & 2
-	// FIXME - this is ugly as hell, doesnt work and only a one-time shot; it needs to be looped
-	buffer = mcp2515_opcode_read_status(); // TXB0CNTRL.TXREQ, TXB1CNTRL.TXREQ, TXB2CNTRL.TXREQ are of interest
-
-	if (buffer & 0x04)
+	do 	// step 1 & 2
 	{
-		buffer = 0;
-		mcp2515_opcode_write_byte(TXB0DLC, 1);
-	}
+		msg->status = mcp2515_opcode_read_status(); // TXB0CNTRL.TXREQ (3rd bit), TXB1CNTRL.TXREQ (5th bit), TXB2CNTRL.TXREQ (7th bit) are of interest
 
-	if (buffer & 0x16)
-	{
-		buffer = 2;
-		mcp2515_opcode_write_byte(TXB1DLC, 1);
-	}
+		if ( (msg->status & 0x04) == 0 ) // TXB0CNTRL.TXREQ is cleared - i.e. find a buffer with no pending transmissions
+		{
+			tx_buffer_addr = TXB0CTRL; // select the TXB0CTRL buffer; we will use this as a base address for TX register loads and address relative to that base
+			rts_mask = 0x01;
+			break;
+		}
 
-	if (buffer & 0x64)
-	{
-		buffer = 4;
-		mcp2515_opcode_write_byte(TXB2DLC, 1);
-	}
-return;
-	// step 3 and 4
-	mcp2515_opcode_load_tx_buffer(buffer, msg, 2); //	send the load_tx_buffer command for TXBnSIDH and TXBnSIDL, datasheet p. 66, table 12.1
+		if ( (msg->status & 0x10) == 0 ) // TXB1CNTRL.TXREQ is cleared
+		{
+			tx_buffer_addr = TXB1CTRL;
+			rts_mask = 0x02;
+			break;
+		}
 
-	buffer +=1;
-	// step 5 and 6
-	mcp2515_opcode_load_tx_buffer(buffer, msg, msg->dlc); //	send the load_tx_buffer command for TXBnDm (data - if applicable), datasheet p. 66, table 12.1
+		if ( (msg->status & 0x40) == 0 ) // TXB2CNTRL.TXREQ is cleared
+		{
+			tx_buffer_addr = TXB2CTRL;
+			rts_mask = 0x04;
+			break;
+		}
 
-	// step 7
-	priority = msg->dlc; // the identifier high byte has only 3 bits - the leftmost 3...
-	priority = msg->dlc;
+		if (msg->status == 0x54) // all the buffers are full
+			return; // error state
+			//TODO - bus recovery on grave TX error
 
-	// step 8
-	mcp2515_opcode_bit_modify(TXB0CTRL, ( _BV(TXP1) | _BV(TXP0) ), priority); // set message priority into TXBnCTRL.TXP1:0
+	} while (tx_buffer_addr); // some TXREQ bit must be clear before we continue (figure 12.8, p69)
 
-	// step 9
-	//TODO - set TXBnDLC.DLC3:0 - data length in bytes
+	mcp2515_opcode_write_byte(++tx_buffer_addr, msg->sidh); // step 3 - load SIDH into TXBnSIDH; e.g. 0x31
+	mcp2515_opcode_write_byte(++tx_buffer_addr, msg->sidl); // step 4 - load SIDL into TXBnSIDL; e.g. 0x32
+
+	tx_buffer_addr += 2; // jump over the extended identifier registers; e.g. 0x33 and 0x34
+
+	mcp2515_opcode_write_byte(++tx_buffer_addr, msg->dlc); // step 7 - load DLC  into TXBnDLC, 3.g. 0x35
+
+	if (msg->dlc) // step 5 - if there is data to send - i.e. length is > 0
+		mcp2515_opcode_write_bytes(++tx_buffer_addr, msg->data, msg->dlc); // step 6 - load data byte(s) into data registers, start at e.g. 0x36
+
+	// step 8 - not implemented
+	// step 9 - not implemented
 
 	// step 10
-	mcp2515_opcode_rts(buffer); // send RTS - flag the buffer for TX
-	mcp2515_opcode_rts(buffer-1);
-	// check TXBnCTRL.TXREQ for successful TX
+	mcp2515_opcode_rts(rts_mask); // send RTS - flag the buffer for TX
 };
 
 // fetches a received CAN message from the MCP2515, triggered by RX interrupt
 void mcp2515_can_msg_receive(can_message *msg)
 {
-	uint8_t buffer = mcp2515_opcode_read_status(); // figure out in which RX buffer the incoming message is stored
-	buffer = (buffer >> 5); //  datasheet p.69, table 12.9 and 12.3
-	mcp2515_opcode_read_rx_buffer(buffer, msg );	// pass the buffer and message container further on
+	uint8_t rx_buffer_addr;
+	uint8_t RXnIF;
+
+	msg->status = mcp2515_opcode_rx_status(); // figure out in which RX buffer the incoming message is stored
+
+	if ( !(msg->status & 0xC0) ) // bits 7 and 6 == 0 --> no RX message, nothing to do
+		return;
+
+	do // loop over the buffers
+	{
+		if (msg->status & 0x40) // if RXB0 is set - containing a message (bit 6), figure 12.9, p. 69
+		{
+			rx_buffer_addr = RXB0SIDH;	// mark that address
+			msg->status &= ~0x40; // clear bit6
+			RXnIF = RX0IF; //TODO
+		}
+
+		if (msg->status & 0x80) // if RXB1 is set - containing a message (bit 7), figure 12.9, p. 69
+		{
+			rx_buffer_addr = RXB1SIDH;
+			msg->status &= ~0x80; // clear bit7
+			RXnIF = RX1IF; //TODO
+		}
+
+		//TODO: try to optimize by using a uint8_t pointer to the struct
+		mcp2515_opcode_read(rx_buffer_addr, msg->sidh, 1);
+		mcp2515_opcode_read(++rx_buffer_addr, msg->sidl, 1);
+
+		mcp2515_opcode_read(++rx_buffer_addr, msg->dlc, 1); // update the DLC
+
+		if (msg->dlc) // if the data payload is more than zero
+			mcp2515_opcode_read(++rx_buffer_addr, msg->data, msg->dlc);
+
+		// clear CANINTF.RXnIF
+		mcp2515_opcode_bit_modify(CANINTF, _BV(RXnIF), 0x00);
+
+	} while (msg->status & 0xC0); // while we have flags telling us that in some buffer there is a message
 };
 
 // read message rx status bits
@@ -232,7 +271,7 @@ static void mcp2515_opcode_reset(void)
 }
 
 // read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
-static void mcp2515_opcode_read(const uint8_t addr, uint8_t *data, const uint8_t len)
+void mcp2515_opcode_read(const uint8_t addr, uint8_t *data, const uint8_t len)
 {
 	uint8_t i = 0;
 
@@ -246,58 +285,26 @@ static void mcp2515_opcode_read(const uint8_t addr, uint8_t *data, const uint8_t
 	gpio_set(SPI_SS_MCP2515_pin);	// de-select the slave
 };
 
+/*
 // read RX buffer - opcode 0x90 - loads a RX buffer identified by the bit mask 'buffer' into '*data', ch. 12.4, p 65
 // datasheet p.66 and table 12.3
 //TODO - rewrite mcp2515_opcode_read_rx_buffer
-void mcp2515_opcode_read_rx_buffer(const uint8_t buffer, uint8_t *data)
+void mcp2515_opcode_read_rx_buffer(const uint8_t buffer, can_message *msg)
 {
-	uint8_t i;
+	if (buffer == 0x00)
+		address = RXB0SIDH;
+
+	if (buffer == 0x02)
+		address = RXB1SIDH;
+
 	gpio_clr(SPI_SS_MCP2515_pin);	// select the slave
-	// the complete message can be max. 8 bytes long - 4 bytes for identifiers and 4 bytes for the payload
-	// however, we need to read in 9 bytes: 4 identifier, one data length code, 4 actual data
+
 	spi_uci_transfer(MCP2515_OPCODE_READ_RX_BUFFER | buffer); // send command along with bit mask
 
-	for(i=0; i<10; i++)
-		*(data+i) = spi_uci_transfer(0xFF); // read the whole byte stream for that RX buffer into data[]
-
-	/*
-	 *	now the data container holds:
-	 *	data[0]		RXBnSIDH
-	 *	data[1]		RXBnSIDL
-	 *	data[2]		RXBnEID8
-	 *	data[3]		RXBnEID0
-	 *	data[4]		RXBnDLC
-	 *	data[5]		RXBnD1
-	 *	data[6]		RXBnD2
-	 *	data[7]		RXBnD3
-	 *	data[8]		RXBnD4
-	 *	data[9]		RXBnD5
-	 *	data[10]	RXBnD6
-	 */
-
-
-	// now get rid of the extended identifiers; the useful data lenght is saved in RXBnDLC
-	*(data+2) = ( *(data+4) & ~0xF0); // clear the leftmost 4 bits of the DLC and save in data[2]
-
-//FIXME -  i<*(data+2) seems to contain crap; loop does not work
-//	for(i=0; i< (uint8_t) *(data+2); i++)
-	for(i=0; i< 4; i++) // loop to 4 is incorrect and put there to barely work
-		*(data+2+i) = *(data+5+i); // move bytes to the position of the extended identifier
-
-	/* now we have in data:
-	 *	data[0]		RXBnSIDH
-	 *	data[1]		RXBnSIDL
-	 *	data[2]		message length in bytes
-	 *	data[3]		RXBnD1
-	 *	data[4]		RXBnD2
-	 *	data[5]		RXBnD3
-	 *	data[6]		RXBnD4
-	 *	data[7]		RXBnD5
-	 *	data[8]		RXBnD6
-	 */
 
 	gpio_set(SPI_SS_MCP2515_pin);	// de-select the slave
 };
+*/
 
 // write - opcode 0x02 - writes single byte to addr
 void mcp2515_opcode_write_byte(const uint8_t addr, const uint8_t value)
@@ -319,7 +326,7 @@ void mcp2515_opcode_write_bytes(const uint8_t addr, const uint8_t *value, const 
 	spi_uci_transfer(addr); // set the register address
 
 	for(i=0; i<len; ++i)
-		spi_uci_transfer(*value+i); // write the byte
+		spi_uci_transfer( *(value+i) ); // write the byte(s)
 
 	gpio_set(SPI_SS_MCP2515_pin);	// de-select the slave
 }
@@ -339,13 +346,13 @@ static void mcp2515_opcode_load_tx_buffer(const uint8_t buffer, const uint8_t *d
 };
 
 // RTS - opcode 0x80 - sends RTS for 'buffer', table ch. 12.7 & 12.1
-void mcp2515_opcode_rts(const uint8_t buffer)
+void mcp2515_opcode_rts(const uint8_t mask)
 {
-	if (buffer == 0) // we didn't specify any buffer to do a RTS on
+	if (mask == 0) // we didn't specify any buffer to do a RTS on
 	return;	// hence, do nothing
 
 	gpio_clr(SPI_SS_MCP2515_pin);	// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_RTS | buffer); // send RTS command & the buffer (bit mask)
+	spi_uci_transfer(MCP2515_OPCODE_RTS | mask); // send RTS command & the buffer (bit mask)
 	gpio_set(SPI_SS_MCP2515_pin);	// de-select the slave
 };
 
