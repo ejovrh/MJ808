@@ -24,8 +24,6 @@
 #define STAT_RX1IF						1
 #define STAT_RX0IF						0
 
-
-
 // register address definitions
 #define RXF0SIDH 0x00 // RXF0SIDH – FILTER 0 STANDARD IDENTIFIER HIGH	datasheet p.34
 #define RXF0SIDL 0x01 // RXF0SIDL – FILTER 0 STANDARD IDENTIFIER LOW	datasheet p.34
@@ -302,17 +300,14 @@ typedef struct can_message
 	uint8_t		sidh;			// Standard Identifier High Byte
 	uint8_t		sidl;			// Standard Identifier Low Byte
 	uint8_t   dlc;			// Data Length Code and others
-	uint8_t   data[8];	// Data, length identified by DLC
+	uint8_t   data[CAN_MAX_MSG_LEN] __attribute__((aligned(8)));	// Data, length identified by DLC
+	uint8_t		status; // holds rx and tx status metadata
 } can_message;
 
-
-// initialization & configuration after power on
-void mcp2515_init(void);
-
-// fetches a received CAN message from the MCP2515, triggered by RX interrupt
-void mcp2515_can_msg_receive(can_message *msg);
-
-// sends a CAN message onto the bus
-void mcp2515_can_msg_send(can_message *msg);
+	void mcp2515_init(void); // initialization & configuration after power on
+	void mcp2515_can_msg_send(can_message *msg); // sends a CAN message onto the bus
+	void mcp2515_can_msg_receive(can_message *msg); // fetches a received CAN message from the MCP2515, triggered by RX interrupt
+	void mcp2515_opcode_read(const uint8_t addr, uint8_t *data, const uint8_t len); // read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
+	void mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte); //bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
 
 #endif /* MCP2515_H_ */
