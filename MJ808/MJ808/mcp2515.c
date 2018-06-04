@@ -11,7 +11,7 @@
  */
 
 static void mcp2515_opcode_reset(void); // reset - opcode 0xC0 - resets the MCP2515 (ch. 12.2, p 65)
-void mcp2515_opcode_read(const uint8_t addr, uint8_t *data, const uint8_t len); // read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
+void mcp2515_opcode_read_bytes(const uint8_t addr, uint8_t *data, const uint8_t len); // read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
 /*
 //TODO - rewrite mcp2515_opcode_read_rx_buffer
 static void mcp2515_opcode_read_rx_buffer(const uint8_t buffer, uint8_t *data); // read RX buffer - opcode 0x90 - loads a RX buffer identified by the bit mask 'buffer' into '*data', ch. 12.4, p 65
@@ -142,8 +142,7 @@ void mcp2515_can_msg_send(can_message *msg)
 	 *	10. set RTS
 	 */
 
- 	uint8_t rts_mask;
-	uint8_t *msg_ptr = (uint8_t *) &msg;
+ 	uint8_t rts_mask = 0;
 	uint8_t tx_buffer_addr = 0x00;
 
 	do 	// step 1 & 2
@@ -197,40 +196,50 @@ void mcp2515_can_msg_send(can_message *msg)
 // fetches a received CAN message from the MCP2515, triggered by RX interrupt
 void mcp2515_can_msg_receive(can_message *msg)
 {
-	uint8_t rx_buffer_addr;
-	uint8_t RXnIF;
+	/* mode of operation - see figure 4.2 on p.26
+	 *	1. identify RX buffer
+	 *	2.	select the appropriate buffer(s) in a loop
+	 *	3.	select appropriate RXnIF
+	 *	4. fetch various message bytes from the various registers
+	 *	5. clear CANINTF.RXnIF
+	 */
 
-	msg->status = mcp2515_opcode_rx_status(); // figure out in which RX buffer the incoming message is stored
+	uint8_t rx_buffer_addr = 0; // holds the RX buffer address
+	uint8_t RXnIF; // holds the IRQ flag for message RX in the CANINTF register
+
+	msg->status = mcp2515_opcode_rx_status(); // step 1: figure out in which RX buffer the incoming message is stored
 
 	if ( !(msg->status & 0xC0) ) // bits 7 and 6 == 0 --> no RX message, nothing to do
 		return;
 
+	// step 2: select the appropriate buffer
 	do // loop over the buffers
 	{
 		if (msg->status & 0x40) // if RXB0 is set - containing a message (bit 6), figure 12.9, p. 69
 		{
 			rx_buffer_addr = RXB0SIDH;	// mark that address
 			msg->status &= ~0x40; // clear bit6
-			RXnIF = RX0IF; //TODO
+			RXnIF = RX0IF; // step 3: select appropriate RXnIF
 		}
 
 		if (msg->status & 0x80) // if RXB1 is set - containing a message (bit 7), figure 12.9, p. 69
 		{
 			rx_buffer_addr = RXB1SIDH;
 			msg->status &= ~0x80; // clear bit7
-			RXnIF = RX1IF; //TODO
+			RXnIF = RX1IF;
 		}
 
-		//TODO: try to optimize by using a uint8_t pointer to the struct
-		mcp2515_opcode_read(rx_buffer_addr, msg->sidh, 1);
-		mcp2515_opcode_read(++rx_buffer_addr, msg->sidl, 1);
-
-		mcp2515_opcode_read(++rx_buffer_addr, msg->dlc, 1); // update the DLC
+		// step 4: fetch various message bytes from the various registers
+		//FIXME--SIDH&L don't quite come across
+		mcp2515_opcode_read_bytes(rx_buffer_addr, &(msg->sidh), 1); // RXBnSIDH
+		mcp2515_opcode_read_bytes(++rx_buffer_addr, &(msg->sidl), 1); // RXBnSIDL
+		rx_buffer_addr +=2;
+		mcp2515_opcode_read_bytes(++rx_buffer_addr, &(msg->dlc), 1); // RXBnDLC
 
 		if (msg->dlc) // if the data payload is more than zero
-			mcp2515_opcode_read(++rx_buffer_addr, msg->data, msg->dlc);
+			mcp2515_opcode_read_bytes(++rx_buffer_addr, msg->data, msg->dlc); // RXBnDM
 
-		// clear CANINTF.RXnIF
+		// step 5: clear CANINTF.RXnIF
 		mcp2515_opcode_bit_modify(CANINTF, _BV(RXnIF), 0x00);
 
 	} while (msg->status & 0xC0); // while we have flags telling us that in some buffer there is a message
@@ -271,15 +280,15 @@ static void mcp2515_opcode_reset(void)
 }
 
 // read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
-void mcp2515_opcode_read(const uint8_t addr, uint8_t *data, const uint8_t len)
+void mcp2515_opcode_read_bytes(const uint8_t addr, uint8_t *data, const uint8_t len)
 {
-	uint8_t i = 0;
+	uint8_t i;
 
 	gpio_clr(SPI_SS_MCP2515_pin);	// select the slave
 	spi_uci_transfer(MCP2515_OPCODE_READ); // send read command
 	spi_uci_transfer(addr); // send the address
 
-	for (i = 0; i<len && i < CAN_MAX_MSG_LEN; ++i) // while the SS is held, the address is auto-incremented, thus multiple bytes can be read
+	for (i = 0; i<len; ++i) // while the SS is held, the address is auto-incremented, thus multiple bytes can be read
 		*(data+i) = spi_uci_transfer(0xff);	// get the result
 
 	gpio_set(SPI_SS_MCP2515_pin);	// de-select the slave
@@ -319,8 +328,8 @@ void mcp2515_opcode_write_byte(const uint8_t addr, const uint8_t value)
 // write - opcode 0x02 - writes len-1 bytes to addr
 void mcp2515_opcode_write_bytes(const uint8_t addr, const uint8_t *value, const uint8_t len)
 {
-	uint8_t i = len;
-	--i;
+	uint8_t i;
+
 	gpio_clr(SPI_SS_MCP2515_pin);	// select the slave
 	spi_uci_transfer(MCP2515_OPCODE_WRITE); // send the write command
 	spi_uci_transfer(addr); // set the register address
