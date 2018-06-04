@@ -307,7 +307,7 @@ typedef struct can_message
 	void mcp2515_init(void); // initialization & configuration after power on
 	void mcp2515_can_msg_send(can_message *msg); // sends a CAN message onto the bus
 	void mcp2515_can_msg_receive(can_message *msg); // fetches a received CAN message from the MCP2515, triggered by RX interrupt
-	void mcp2515_opcode_read(const uint8_t addr, uint8_t *data, const uint8_t len); // read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
+	void mcp2515_opcode_read_bytes(const uint8_t addr, uint8_t *data, const uint8_t len); // read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
 	void mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte); //bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
 
 #endif /* MCP2515_H_ */
