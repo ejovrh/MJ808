@@ -1,4 +1,5 @@
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include "uci_spi.h"
 
 /* now, how does the bloody thing work ?!?
@@ -34,6 +35,7 @@
 // slave select must happen outside of this function
 uint8_t spi_uci_transfer(const uint8_t data)
 {
+	cli(); // lets call it paranoia but i want the SPI transaction to be atomic - i.e. no IRQ shall be able to abort it
 	USIDR = data;									// put the payload into the USI data register
 
 	USISR = _BV(USIOIF);					// counter overflow interrupt, indicates counter overflow
@@ -47,5 +49,6 @@ uint8_t spi_uci_transfer(const uint8_t data)
 	}	// due to clocking the USIDR is shifted into the slave (and data received)
 	while ((USISR & _BV( USIOIF) ) == 0 ); // this loop provides the software defined clock; this all is SW SPI...
 
+	sei();
 	return USIDR;									// hopefully have something useful here...
 }
