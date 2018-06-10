@@ -127,7 +127,7 @@ void mcp2515_init(void)
 
 // provide data to MCP2515 and flag for TX over the CAN bus
 //	provide not more than 4 bytes of data and len !!!
-void mcp2515_can_msg_send(can_message *msg)
+void mcp2515_can_msg_send(can_message_t *msg)
 {
 	/* mode of operation - see figure 3.1 on p.17
 	 *	1. find an empty TX buffer
@@ -194,7 +194,7 @@ void mcp2515_can_msg_send(can_message *msg)
 };
 
 // fetches a received CAN message from the MCP2515, triggered by RX interrupt
-void mcp2515_can_msg_receive(can_message *msg)
+void mcp2515_can_msg_receive(can_message_t *msg)
 {
 	/* mode of operation - see figure 4.2 on p.26
 	 *	1. identify RX buffer

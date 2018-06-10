@@ -295,18 +295,18 @@
 #define RXB1DM 0x76 // datasheet p.31 - 0x76 up to 0x6C / 6 bytes
 
 
-typedef struct can_message
+typedef struct can_message_t
 {
 	uint8_t		sidh;			// Standard Identifier High Byte
 	uint8_t		sidl;			// Standard Identifier Low Byte
 	uint8_t   dlc;			// Data Length Code and others
 	uint8_t   data[CAN_MAX_MSG_LEN] __attribute__((aligned(8)));	// Data, length identified by DLC
 	uint8_t		status; // holds rx and tx status metadata
-} can_message;
+} can_message_t;
 
 	void mcp2515_init(void); // initialization & configuration after power on
-	void mcp2515_can_msg_send(can_message *msg); // sends a CAN message onto the bus
-	void mcp2515_can_msg_receive(can_message *msg); // fetches a received CAN message from the MCP2515, triggered by RX interrupt
+	void mcp2515_can_msg_send(can_message_t *msg); // sends a CAN message onto the bus
+	void mcp2515_can_msg_receive(can_message_t *msg); // fetches a received CAN message from the MCP2515, triggered by RX interrupt
 	void mcp2515_opcode_read_bytes(const uint8_t addr, uint8_t *data, const uint8_t len); // read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
 	void mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte); //bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
 
