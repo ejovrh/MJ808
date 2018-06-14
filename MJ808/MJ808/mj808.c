@@ -7,13 +7,31 @@
 
 #include "mj808.h"
 
-void blink_red(uint8_t led, uint8_t count)
+// controls utility LED (red, green, on, off, blink)
+void util_led(uint8_t in_val)
 {
-	do
+	uint8_t led = 0; // holds the pin of the LED: D0 - green (default), D1 - red
+
+	if (in_val & _BV(B3)) // determine B3 value: red or green (default)
+		led = 1; // red
+
+	in_val &= 7; // clear everything except B2:0, which is the blink count (1-6)
+
+	if (in_val == 0x00) // B3:B0 is 0 - turn off
 	{
-		gpio_toggle(RED_LED_pin);
-		_delay_ms(BLINK_DELAY);
-		gpio_toggle(RED_LED_pin);
-		_delay_ms(BLINK_DELAY);
-	} while (--count);
+		PORTD |= (1<<led); // clear bit
+		return;
+	}
+
+	if (in_val == 0x07) // B3:B0 is 7 - turn on
+	{
+		PORTD &= ~(1<<led); // set bit
+		return;
+	}
+
+	while (in_val--) // blink loop
+	{
+		_delay_ms(BLINK_DELAY); //TODO: replace with timer
+		PORTD ^= (1<<led); // toggle the led pin
+	}
 }
