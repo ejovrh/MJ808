@@ -6,7 +6,7 @@
 #include "gpio_definitions.h"
 
 #include "mcp2515.h"
-#include "mj808.h"
+#include "mj8x8.h"
 
 // private function - fades *ocr to value (or ocr_max) - up to OCR_MAX or down to 0x00
 void fade(uint8_t value, volatile uint16_t *ocr, uint8_t ocr_max)

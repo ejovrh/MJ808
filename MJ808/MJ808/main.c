@@ -2,35 +2,25 @@
 #include <avr/io.h>
 #include <inttypes.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
 #include "gpio.h"
 #include "gpio_definitions.h"
 
 #include "mcp2515.h"
+#include "mj8x8.h"
 
-	/*
-		timer/counter 0 and timer/counter 1 both operate in 8bit mode
-		hex val. - duty cycle - current front light
-		0x00 - 0% (off)				-	20 mA
-		0x10 - 6.26%					-	20 mA
-		0x20 - 12.5%					-	30 mA
-		0x40 - 25.05%					-	60 mA
-		0x80 - 50.1%					-	100 mA
-		0xA0 - 62.6%					-	120 mA
-		0xC0 - 75.15%					-	150 mA
-		0xE0 - 87.84%					-	170 mA
-		0xF0 - 94.12%					-	180 mA
-		0xFF - 100% (max)			-	200 mA
-*/
+// global variables
 
-// 0x80 MAX. SAFE COUNT WITH REV2 BOARD
-#define FRONT_OCR1A 0x80 // count to hex value
-#define LOW_SPEED_THRESHOLD_FREQ 20 // dynamo frequency below which we consider the bike to move too slow for power generation -> dim light
+uint8_t flag_lamp_is_on = 0; // flag - indicates if button turned the device on, used for pushbutton handling
+uint8_t counter_button_press_time = 0; // holds the counter value at button press, used for pushbutton debouncing
 
-uint8_t can_msg[11]; // holds the received CAN message
-volatile uint8_t can_msg_status; // holds message status metadata
-volatile uint8_t dynamo_available = 0;	// boolean: 0 - dynamo absent, 1 - dynamo detected
-volatile uint8_t dynamo_freq = 0; // dynamo frequency (is NOT wheel frequency)
+// variables populated in INT1_vect() ISR by means of CAN interrupts
+uint8_t *canintf; // interrupt flag register
+
+can_message_t CAN_OUT; // structure holding an outgoing CAN message
+can_message_t CAN_IN; // structure holding an incoming CAN message
+
 
 int main(void)
 {
@@ -38,102 +28,153 @@ int main(void)
 
 	PRR = _BV(PRUSART);	// turn off USART, we don't need it
 
-//	mcp2515_init(); // initialize & configure the MCP2515
-
-	//TODO - active CAN bus device discovery
-
-
 	cli();	// clear interrupts globally
 
+	// setup of INT1  - handled via INT1_vect ISR
+	MCUCR = _BV(ISC11); // a falling edge generates an IRQ
+	GIMSK = _BV(INT1);	// enable INT1
 
-	// setup of INT1 and PCINT1(pin B1) - handled via PCINT0_vect ISR
-	MCUCR = _BV(ISC10); // any logical change generates an IRQ
-	GIMSK = _BV(INT1) | _BV(PCIE2);	// enable INT1 and PCIE2
-	PCMSK2 = _BV(PCINT15); // turn on PCINT1 (pin D4)
-	//PCMSK = _BV(PCINT15)
-
-	// setup of interrupt-driven timer - fires every ~65ms
-	OCR0A = 0xFC;
+	// setup of interrupt-driven timer
+	OCR0A = 0xFC; // fires every ~32.5ms
 	TCCR0A = _BV(WGM01); // CTC mode
 	TIFR |= _BV(OCF0A); // clear interrupt flag
 	TIMSK = _BV(OCIE0A); // TCO compare match IRQ enable
 	TCCR0B = ( _BV(CS02) | _BV(CS00) ); // clkIO/1024 (from prescaler)
 
-	//// setup of front light PWM
-	OCR1A = FRONT_OCR1A;	// count to this hex value
-	TCCR1A = (_BV(COM1A1) | // clear OC1A on compare match, set OC1A at TOP
+	// setup of front light PWM
+	//TODO - test with 16bit value
+	OCR1A = 0x00;	// hex value PWM counter - start with light turned off by default
+	TCCR1A = (_BV(COM1A1) | // Clear OC1A/OC1B on Compare Match when up counting
 						_BV(WGM10)); // phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
 	TCCR1B = _BV(CS10); // clock prescaler: clk/8
 
 	sei();	// enable interrupts globally
 
+	mcp2515_init(); // initialize & configure the MCP2515
+	//TODO - active CAN bus device discovery
+
+	CAN_OUT.sidh=0x0f;
+	CAN_OUT.sidl=0xf1;
+	CAN_OUT.dlc=2; // valid range: 0-8
+	CAN_OUT.COMMAND = 0x23; // command
+	CAN_OUT.ARGUMENT = 0x80; // 1st argument
+
+	util_led(UTIL_LED_GREEN_BLINK_2X); // startup indicator - blinks green 2 times
+
+
 	while (1) // forever loop
 	{
-		// keep as empty as possible !!
-		;
+		; // keep as empty as possible !!
 	}
 }
 
-// ISR for INT1
+// ISR for INT1 - triggered by CAN message reception of the MCP2515
 ISR(INT1_vect)
 {
 	// assumption: an incoming message is of interest for this unit
 	//	'being of interest' is defined in the filters
 
-	mcp2515_can_msg_receive(can_msg); // load the can message
-	can_msg_status = mcp2515_read_rx_status(); // load can message metadata
+	mcp2515_opcode_read_bytes(CANINTF, canintf, 1); // download the interrupt flag register
 
-	//TODO - write code that deals with the incoming INT1
-
-	if (dynamo_available) // if we have a dynamo
+	if (*canintf & _BV(WAKIF)) // if we detect a wake interrupt
 	{
-		; // TODO - implement dynamo available
+		//TODO: device handling immediately after message wakes up controller
+		mcp2515_opcode_bit_modify(CANCTRL, 0xE0, 0x00); // put into normal mode
+		mcp2515_opcode_bit_modify(CANINTF, _BV(WAKIF), 0x00); // simply clear the flag
+		return;
 	}
 
-	if (dynamo_freq < LOW_SPEED_THRESHOLD_FREQ) //TODO - calculate min. speed for light to get brighter
+	if ( *canintf & (_BV(RX1IF) | _BV(RX0IF)) ) // if we received a message
 	{
-		OCR1A /= 4;	// reduce intensity
+		mcp2515_can_msg_receive(&CAN_IN); // load the CAN message into its structure
+
+
+		if (CAN_IN.COMMAND & CMND_DEVICE) //  we received a command for some device...
+		{
+			CAN_IN.COMMAND &= 0x0F; // clear B7:B4
+			// what's now left are B3:B0
+
+			if ((CAN_IN.COMMAND & DEV_SENSOR) == DEV_SENSOR) // ...a sensor
+			{
+				dev_sensor(&CAN_IN); // deal with it
+				return;
+			}
+
+			if ((CAN_IN.COMMAND & DEV_LIGHT) == DEV_LIGHT) // ...a LED device
+			{
+				dev_light(&CAN_IN); // deal with it
+				return;
+			}
+
+			if ((CAN_IN.COMMAND & DEV_PWR_SRC) == DEV_PWR_SRC) // ...a power source
+			{
+				dev_pwr_src(&CAN_IN); // deal with it
+				return;
+			}
+
+			if ((CAN_IN.COMMAND & DEV_LU) == DEV_LU) // ...a logic unit
+			{
+				dev_logic_unit(&CAN_IN); // deal with it
+				return;
+			}
+		}
+
+		if ( (CAN_IN.COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED) // utility LED command
+		{
+			util_led(CAN_IN.COMMAND); // blinky thingy
+			return;
+		}
+	}
+
+	if (*canintf & (_BV(MERRF) )) //TODO - implement message error handling
+	{
+		mcp2515_opcode_bit_modify(CANINTF, _BV(MERRF), 0x00); // clear the flag
+		return;
+	}
+
+	if (*canintf & (_BV(ERRIF) )) //TODO - implement general error handling
+	{
+		mcp2515_opcode_bit_modify(CANINTF, _BV(ERRIF), 0x00); // clear the flag
+		return;
 	}
 }
 
-
-// ISR for PCINT2 - pushbutton
-ISR(PCINT2_vect)
-{
-	//TODO - write code which handles the button
-
-		static char toggle = 0;
-
-		// toggle the LED on each interrupt
-		if (toggle)
-		{
-			toggle = 0;
-			gpio_conf(RED_LED_pin, OUTPUT, LOW);
-
-		}
-		else
-		{
-			toggle = 1;
-			gpio_conf(RED_LED_pin, OUTPUT, HIGH);
-		}
-}
-
-// interrupt service routine (ISR) for timer 0 A compare match
+// ISR for timer 0 A compare match
 ISR(TIMER0_COMPA_vect)
 {
-	// dummy code to be executed every 65ms
+	// code to be executed every 32.5ms
 
-	static char toggle = 0;
-
-	// toggle the LED on each interrupt
-	if (toggle)
+	// pushbutton debounce in software. yuk! implemented via counters in a timer interrupt
+	if (gpio_tst(PUSHBUTTON_pin)) // if button is pressed
 	{
-		toggle = 0;
-		gpio_conf(GREEN_LED_pin, OUTPUT, LOW);
+		counter_button_press_time++; // start the counter
+
+		if (flag_lamp_is_on && counter_button_press_time > 50) // longer press - turn off
+		{
+			gpio_conf(GREEN_LED_pin, OUTPUT, HIGH); // power off green LED
+
+			CAN_OUT.COMMAND = (MSG_BUTTON_EVENT | BUTTON0_OFF); // send the button "off" command
+			CAN_OUT.dlc = 1;
+			mcp2515_can_msg_send(&CAN_OUT); // send CAN message
+
+			counter_button_press_time = 0; // reset the counter
+			flag_lamp_is_on = 0;
+		}
+
+		if (!flag_lamp_is_on && counter_button_press_time > 20) // shorter press - turn on
+		{
+			gpio_conf(GREEN_LED_pin, OUTPUT, LOW); // power on green LED
+
+			CAN_OUT.COMMAND = (MSG_BUTTON_EVENT | BUTTON0_ON) ; // send the button "on" command
+			CAN_OUT.dlc = 1;
+			mcp2515_can_msg_send(&CAN_OUT); // send CAN message
+
+			counter_button_press_time = 0; // reset the counter
+			flag_lamp_is_on = 1;
+		}
 	}
-	else
+	else // not long enough press - bounce
 	{
-		toggle = 1;
-		gpio_conf(GREEN_LED_pin, OUTPUT, HIGH);
+		counter_button_press_time = 0; // reset the counter
 	}
 }

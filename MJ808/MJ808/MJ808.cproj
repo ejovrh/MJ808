@@ -171,19 +171,16 @@
     <Compile Include="mcp2515.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj808.c">
+    <Compile Include="mj8x8.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj808.h">
+    <Compile Include="mj8x8.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="uci_spi.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="uci_spi.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="utils.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
