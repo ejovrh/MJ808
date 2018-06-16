@@ -11,9 +11,10 @@
 #include "mj8x8.h"
 
 // global variables
-
+#if defined(MJ808_)
 uint8_t flag_lamp_is_on = 0; // flag - indicates if button turned the device on, used for pushbutton handling
 uint8_t counter_button_press_time = 0; // holds the counter value at button press, used for pushbutton debouncing
+#endif
 
 // variables populated in INT1_vect() ISR by means of CAN interrupts
 uint8_t *canintf; // interrupt flag register
@@ -34,6 +35,7 @@ int main(void)
 	MCUCR = _BV(ISC11); // a falling edge generates an IRQ
 	GIMSK = _BV(INT1);	// enable INT1
 
+	#if defined(MJ808_)
 	// setup of interrupt-driven timer
 	OCR0A = 0xFC; // fires every ~32.5ms
 	TCCR0A = _BV(WGM01); // CTC mode
@@ -47,20 +49,38 @@ int main(void)
 	TCCR1A = (_BV(COM1A1) | // Clear OC1A/OC1B on Compare Match when up counting
 						_BV(WGM10)); // phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
 	TCCR1B = _BV(CS10); // clock prescaler: clk/8
+	#endif
+
+	#if defined(MJ818_)
+	// setup of rear light PWM
+	OCR0A = 0x00;	// hex value PWM counter - start with light turned off by default
+	TCCR0A = ( _BV(COM0A1)| // Clear OC1A/OC1B on Compare Match when up counting
+	_BV(WGM00) );	// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
+	TCCR0B = _BV(CS01);		// clock prescaler: clk/8
+
+	// setup of brake light PWM
+	OCR1A = 0x00;	// hex value PWM counter - start with light turned off by default
+	TCCR1A = (_BV(COM1A1) | // Clear OC1A/OC1B on Compare Match when up counting
+	_BV(WGM10)); // phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
+	TCCR1B = _BV(CS10); // clock prescaler: clk/8
+	#endif
 
 	sei();	// enable interrupts globally
 
 	mcp2515_init(); // initialize & configure the MCP2515
 	//TODO - active CAN bus device discovery
 
+	#if defined(MJ808_)
 	CAN_OUT.sidh=0x0f;
 	CAN_OUT.sidl=0xf1;
 	CAN_OUT.dlc=2; // valid range: 0-8
 	CAN_OUT.COMMAND = 0x23; // command
 	CAN_OUT.ARGUMENT = 0x80; // 1st argument
 
-	util_led(UTIL_LED_GREEN_BLINK_2X); // startup indicator - blinks green 2 times
-
+	util_led(UTIL_LED_RED_BLINK_1X); // startup indicator - blinks green 2 times
+	util_led(UTIL_LED_GREEN_BLINK_1X); // startup indicator - blinks green 2 times
+	util_led(UTIL_LED_RED_BLINK_1X); // startup indicator - blinks green 2 times
+	#endif
 
 	while (1) // forever loop
 	{
@@ -88,42 +108,48 @@ ISR(INT1_vect)
 	{
 		mcp2515_can_msg_receive(&CAN_IN); // load the CAN message into its structure
 
-
 		if (CAN_IN.COMMAND & CMND_DEVICE) //  we received a command for some device...
 		{
-			CAN_IN.COMMAND &= 0x0F; // clear B7:B4
-			// what's now left are B3:B0
-
+			#if defined(SENSOR)
 			if ((CAN_IN.COMMAND & DEV_SENSOR) == DEV_SENSOR) // ...a sensor
 			{
 				dev_sensor(&CAN_IN); // deal with it
 				return;
 			}
+			#endif
 
-			if ((CAN_IN.COMMAND & DEV_LIGHT) == DEV_LIGHT) // ...a LED device
+			#if defined(MJ808_) || defined(MJ818_)
+			if (CAN_IN.COMMAND & ( CMND_DEVICE | DEV_LIGHT ) ) // ...a LED device
 			{
 				dev_light(&CAN_IN); // deal with it
 				return;
 			}
+			#endif
 
+			#if defined(PWR_SRC)
 			if ((CAN_IN.COMMAND & DEV_PWR_SRC) == DEV_PWR_SRC) // ...a power source
 			{
 				dev_pwr_src(&CAN_IN); // deal with it
 				return;
 			}
+			#endif
 
+			#if defined(LOGIC_UNIT)
 			if ((CAN_IN.COMMAND & DEV_LU) == DEV_LU) // ...a logic unit
 			{
 				dev_logic_unit(&CAN_IN); // deal with it
 				return;
 			}
+			#endif
 		}
 
+		#if defined(MJ808_)
 		if ( (CAN_IN.COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED) // utility LED command
 		{
 			util_led(CAN_IN.COMMAND); // blinky thingy
 			return;
 		}
+		#endif
 	}
 
 	if (*canintf & (_BV(MERRF) )) //TODO - implement message error handling
@@ -139,6 +165,7 @@ ISR(INT1_vect)
 	}
 }
 
+#if defined(MJ808_)
 // ISR for timer 0 A compare match
 ISR(TIMER0_COMPA_vect)
 {
@@ -178,3 +205,4 @@ ISR(TIMER0_COMPA_vect)
 		counter_button_press_time = 0; // reset the counter
 	}
 }
+#endif

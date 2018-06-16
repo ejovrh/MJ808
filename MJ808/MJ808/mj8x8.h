@@ -1,6 +1,9 @@
 #ifndef MJ8x8_H_
 #define MJ8x8_H_
 
+// what device to compile for?
+#define  MJ808_
+
 // OCR defines
 #define OCR_FRONT_LIGHT OCR1A // Output Compare Register for PWM of front light
 #define OCR_REAR_LIGHT OCR0A // Output Compare Register for PWM of rear light
