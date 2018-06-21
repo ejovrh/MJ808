@@ -60,7 +60,9 @@
 
 // command byte structure
 #define CMND_UTIL_LED 0x10 // command for utility LED operation (color, on, off, blink)
-	#define UTIL_LED_GREEN_OFF 0x00 // utility LED - off
+	#define GREEN 0x00
+	#define RED 0x08
+	#define UTIL_LED_GREEN_OFF 0x10 // utility LED - off
 	#define UTIL_LED_GREEN_ON 0x17 // utility LED - on
 	#define UTIL_LED_GREEN_BLINK_1X 0x11 // utility LED - blink
 	#define UTIL_LED_GREEN_BLINK_2X 0x12 // utility LED - blink
