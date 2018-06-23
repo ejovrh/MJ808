@@ -12486,9 +12486,9 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <junction x="383.54" y="190.5"/>
 </segment>
 <segment>
-<pinref part="IC1" gate="G$1" pin="OC1A/PCINT3-PB3"/>
-<wire x1="157.48" y1="175.26" x2="162.56" y2="175.26" width="0.1524" layer="91"/>
-<label x="162.56" y="175.26" size="1.778" layer="95"/>
+<pinref part="IC1" gate="G$1" pin="OC0A/PCINT2-PB2"/>
+<wire x1="157.48" y1="177.8" x2="162.56" y2="177.8" width="0.1524" layer="91"/>
+<label x="162.56" y="177.8" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V0" class="4">
@@ -12888,13 +12888,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="162.56" y="187.96" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$3" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="OC0A/PCINT2-PB2"/>
-<wire x1="157.48" y1="177.8" x2="162.56" y2="177.8" width="0.1524" layer="91"/>
-<label x="162.56" y="177.8" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="N$4" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="AIN0/PCINT0-PB0"/>
@@ -12909,13 +12902,20 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="SPLIT" gate="G$1" pin="TP"/>
 </segment>
 </net>
-<net name="RESET" class="0">
+<net name="RESET" class="2">
 <segment>
 <pinref part="IC3" gate="G$1" pin="!RESET!"/>
 <wire x1="269.24" y1="35.56" x2="276.86" y2="35.56" width="0.1524" layer="91"/>
 <label x="276.86" y="35.56" size="1.778" layer="95"/>
 <pinref part="R12" gate="G$1" pin="1"/>
 <junction x="276.86" y="35.56"/>
+</segment>
+</net>
+<net name="N$3" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="OC1A/PCINT3-PB3"/>
+<wire x1="157.48" y1="175.26" x2="162.56" y2="175.26" width="0.1524" layer="91"/>
+<label x="162.56" y="175.26" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
@@ -12928,7 +12928,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <approved hash="204,1,353.06,190.5,IC6,VCC,,,,"/>
 <approved hash="106,1,157.48,185.42,N$1,,,,,"/>
 <approved hash="106,1,157.48,187.96,N$2,,,,,"/>
-<approved hash="106,1,157.48,177.8,N$3,,,,,"/>
+<approved hash="106,1,157.48,175.26,N$3,,,,,"/>
 <approved hash="106,1,157.48,182.88,N$4,,,,,"/>
 </errors>
 </schematic>
