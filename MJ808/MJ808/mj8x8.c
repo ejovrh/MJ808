@@ -152,8 +152,10 @@ void dev_light(can_message_t *msg)
 }
 #endif
 
-// interprets MSG_BUTTON_EVENT message
-void msg_button(can_message_t *msg)
+// conveys button press event to the CAN bus
+void msg_button(can_message_t *msg, uint8_t button)
 {
-	;
+	msg->COMMAND = (MSG_BUTTON_EVENT | button);
+	msg->dlc = 1;
+	mcp2515_can_msg_send(msg);
 }

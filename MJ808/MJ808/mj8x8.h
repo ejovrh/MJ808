@@ -122,6 +122,7 @@
 #define MJ818_SIDL 0x20
 #define MJ808_SIDH 0x10
 #define MJ808_SIDL 0x00
+
 #define LU_SIDH 0x00
 #define LU_SIDL 0x00
 
@@ -132,5 +133,5 @@ void dev_sensor(can_message_t *msg);			// interprets CMND_DEVICE-DEV_SENSOR comm
 void dev_pwr_src(can_message_t *msg);			// interprets CMND_DEVICE-DEV_PWR_SRC command - TODO - power source related stuff
 void dev_logic_unit(can_message_t *msg);	// interprets CMND_DEVICE-DEV_LU command - TODO - logic unit related stuff
 void dev_light(can_message_t *msg);				// interprets CMND_DEVICE-DEV_LIGHT command - positional light control
-
+void msg_button(can_message_t *msg, uint8_t button); // conveys button press event to the CAN bus
 #endif /* MJ8x8_H_ */

@@ -186,24 +186,17 @@ ISR(TIMER0_COMPA_vect)
 
 		if (flag_lamp_is_on && counter_button_press_time > 50) // longer press - turn off
 		{
-			gpio_conf(GREEN_LED_pin, OUTPUT, HIGH); // power off green LED
-
-			CAN_OUT.COMMAND = (MSG_BUTTON_EVENT | BUTTON0_OFF); // send the button "off" command
-			CAN_OUT.dlc = 1;
-			mcp2515_can_msg_send(&CAN_OUT); // send CAN message
-
+			util_led(UTIL_LED_GREEN_OFF); // power off green LED
+			msg_button(&CAN_OUT, BUTTON0_OFF); // convey button release via CAN
 			counter_button_press_time = 0; // reset the counter
 			flag_lamp_is_on = 0;
 		}
 
 		if (!flag_lamp_is_on && counter_button_press_time > 20) // shorter press - turn on
 		{
-			gpio_conf(GREEN_LED_pin, OUTPUT, LOW); // power on green LED
-
-			CAN_OUT.COMMAND = (MSG_BUTTON_EVENT | BUTTON0_ON) ; // send the button "on" command
-			CAN_OUT.dlc = 1;
-			mcp2515_can_msg_send(&CAN_OUT); // send CAN message
-
+			//gpio_conf(GREEN_LED_pin, OUTPUT, LOW); // power on green LED
+			util_led(UTIL_LED_GREEN_ON); // power on green LED
+			msg_button(&CAN_OUT, BUTTON0_ON); // convey button press via CAN
 			counter_button_press_time = 0; // reset the counter
 			flag_lamp_is_on = 1;
 		}
