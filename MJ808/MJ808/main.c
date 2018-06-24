@@ -4,6 +4,8 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
+#define  MJ808_ // what device to compile for?
+
 #include "gpio.h"
 #include "gpio_definitions.h"
 
@@ -19,9 +21,15 @@ uint8_t counter_button_press_time = 0; // holds the counter value at button pres
 // variables populated in INT1_vect() ISR by means of CAN interrupts
 uint8_t *canintf; // interrupt flag register
 
-can_message_t CAN_OUT; // structure holding an outgoing CAN message
-can_message_t CAN_IN; // structure holding an incoming CAN message
+#if defined(MJ808_) // structure holding an outgoing CAN message; SID intialized to device
+can_message_t CAN_OUT = {.sidh = MJ808_SIDH, .sidl = MJ808_SIDL};
+#endif
 
+#if defined(MJ818_)
+can_message_t CAN_OUT = {.sidh = MJ818_SIDH, .sidl = MJ818_SIDL};
+#endif
+
+can_message_t CAN_IN; // structure holding an incoming CAN message
 
 int main(void)
 {

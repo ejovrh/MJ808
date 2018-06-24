@@ -1,9 +1,6 @@
 #ifndef MJ8x8_H_
 #define MJ8x8_H_
 
-// what device to compile for?
-#define  MJ808_
-
 // OCR defines
 #define OCR_FRONT_LIGHT OCR1A // Output Compare Register for PWM of front light
 #define OCR_REAR_LIGHT OCR0A // Output Compare Register for PWM of rear light
@@ -120,12 +117,13 @@
 #define B1 1
 #define B0 0
 
-#define MJ818_SIDH 0x12;
-#define MJ818_SIDL 0x12;
-#define MJ808_SIDH 0x12;
-#define MJ808_SIDL 0x12;
-#define LU_SIDH 0x12;
-#define LU_SIDL 0x12;
+// SID for devices, manually left shifted by 5 (MCP2515 datasheet, p.29 & 30)
+#define MJ818_SIDH 0x10
+#define MJ818_SIDL 0x20
+#define MJ808_SIDH 0x10
+#define MJ808_SIDL 0x00
+#define LU_SIDH 0x00
+#define LU_SIDL 0x00
 
 
 
