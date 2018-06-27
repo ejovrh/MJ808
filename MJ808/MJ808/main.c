@@ -4,7 +4,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#define  MJ808_ // what device to compile for?
+#define MJ808_ // what device to compile for?
 
 #include "gpio.h"
 #include "gpio_definitions.h"
@@ -14,19 +14,34 @@
 
 // global variables
 #if defined(MJ808_)
-uint8_t flag_lamp_is_on = 0; // flag - indicates if button turned the device on, used for pushbutton handling
-uint8_t counter_button_press_time = 0; // holds the counter value at button press, used for pushbutton debouncing
+volatile uint8_t flag_lamp_is_on = 0; // flag - indicates if button turned the device on, used for pushbutton handling
+volatile uint8_t counter_button_press_time = 0; // holds the counter value at button press, used for pushbutton debouncing
 #endif
 
 // variables populated in INT1_vect() ISR by means of CAN interrupts
-uint8_t *canintf; // interrupt flag register
 
-#if defined(MJ808_) // structure holding an outgoing CAN message; SID intialized to device
-can_message_t CAN_OUT = {.sidh = MJ808_SIDH, .sidl = MJ808_SIDL};
+
+#if defined(MJ808_)
+/*
+ * self, template of an outgoing CAN message; SID intialized to this device
+ * NOTE:
+ *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
+ *	for clarity see the datasheet and a description of any RX0 or TX or filter register
+ */
+
+can_message_t CAN_OUT =
+{
+	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A), // high byte
+	.sidl = ( RCPT_DEV_BLANK | BLANK) // low byte
+};
 #endif
 
 #if defined(MJ818_)
-can_message_t CAN_OUT = {.sidh = MJ818_SIDH, .sidl = MJ818_SIDL};
+can_message_t CAN_OUT =
+{
+	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B), // high byte
+	.sidl = ( RCPT_DEV_BLANK | BLANK) // low byte
+};
 #endif
 
 can_message_t CAN_IN; // structure holding an incoming CAN message
@@ -55,7 +70,7 @@ int main(void)
 	//TODO - test with 16bit value
 	OCR1A = 0x00;	// hex value PWM counter - start with light turned off by default
 	TCCR1A = (_BV(COM1A1) | // Clear OC1A/OC1B on Compare Match when up counting
-						_BV(WGM10)); // phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
+	_BV(WGM10)); // phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
 	TCCR1B = _BV(CS10); // clock prescaler: clk/8
 	#endif
 
@@ -76,35 +91,32 @@ int main(void)
 	sei();	// enable interrupts globally
 
 	mcp2515_init(); // initialize & configure the MCP2515
-	//TODO - active CAN bus device discovery
+	//TODO - state machine - active CAN bus device discovery & default operation on empty bus
 
-	#if defined(MJ808_)
-	CAN_OUT.sidh=0x0f;
-	CAN_OUT.sidl=0xf1;
-	CAN_OUT.dlc=2; // valid range: 0-8
-	CAN_OUT.COMMAND = 0x23; // command
-	CAN_OUT.ARGUMENT = 0x80; // 1st argument
-
+#if defined(MJ808_)
 	util_led(UTIL_LED_RED_BLINK_1X); // startup indicator - blinks green 2 times
 	util_led(UTIL_LED_GREEN_BLINK_1X); // startup indicator - blinks green 2 times
 	util_led(UTIL_LED_RED_BLINK_1X); // startup indicator - blinks green 2 times
-	#endif
+#endif
 
 	while (1) // forever loop
 	{
-		; // keep as empty as possible !!
+		// on purpose kept as empty as possible !!
+		//asm("nop");
 	}
 }
 
 // ISR for INT1 - triggered by CAN message reception of the MCP2515
 ISR(INT1_vect)
 {
+	uint8_t canintf; // interrupt flag register
+
 	// assumption: an incoming message is of interest for this unit
 	//	'being of interest' is defined in the filters
 
-	mcp2515_opcode_read_bytes(CANINTF, canintf, 1); // download the interrupt flag register
+	mcp2515_opcode_read_bytes(CANINTF, &canintf, 1); // download the interrupt flag register
 
-	if (*canintf & _BV(WAKIF)) // if we detect a wake interrupt
+	if (canintf & _BV(WAKIF)) // if we detect a wake interrupt
 	{
 		//TODO: device handling immediately after message wakes up controller
 		mcp2515_opcode_bit_modify(CANCTRL, 0xE0, 0x00); // put into normal mode
@@ -112,7 +124,26 @@ ISR(INT1_vect)
 		return;
 	}
 
-	if ( *canintf & (_BV(RX1IF) | _BV(RX0IF)) ) // if we received a message
+	if (canintf & (_BV(ERRIF) )) //TODO - implement general error handling
+	{
+		uint8_t errflag;
+		mcp2515_opcode_read_bytes(EFLG, &errflag, 1); // read EFLG register
+
+		if (errflag & _BV(RX0OVR)) // RXB0 overflow - datasheet figure 4.3, p. 26
+			mcp2515_opcode_bit_modify(EFLG, _BV(RX0OVR), 0x00); // clear the bit
+
+		if (errflag & _BV(RX1OVR)) // RXB1 overflow - datasheet figure 4.3, p. 26
+			mcp2515_opcode_bit_modify(EFLG, _BV(RX1OVR), 0x00); // clear the bit
+
+		mcp2515_opcode_bit_modify(CANINTF, _BV(ERRIF), 0x00); // clear the flag
+	}
+
+	if (canintf & (_BV(MERRF) )) //TODO - implement message error handling
+	{
+		mcp2515_opcode_bit_modify(CANINTF, _BV(MERRF), 0x00); // clear the flag
+	}
+
+	if ( canintf & (_BV(RX1IF) | _BV(RX0IF)) ) // if we received a message
 	{
 		mcp2515_can_msg_receive(&CAN_IN); // load the CAN message into its structure
 
@@ -158,18 +189,6 @@ ISR(INT1_vect)
 			return;
 		}
 		#endif
-	}
-
-	if (*canintf & (_BV(MERRF) )) //TODO - implement message error handling
-	{
-		mcp2515_opcode_bit_modify(CANINTF, _BV(MERRF), 0x00); // clear the flag
-		return;
-	}
-
-	if (*canintf & (_BV(ERRIF) )) //TODO - implement general error handling
-	{
-		mcp2515_opcode_bit_modify(CANINTF, _BV(ERRIF), 0x00); // clear the flag
-		return;
 	}
 }
 

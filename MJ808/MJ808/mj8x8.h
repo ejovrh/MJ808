@@ -117,14 +117,39 @@
 #define B1 1
 #define B0 0
 
-// SID for devices, manually left shifted by 5 (MCP2515 datasheet, p.29 & 30)
-#define MJ818_SIDH 0x10
-#define MJ818_SIDL 0x20
-#define MJ808_SIDH 0x10
-#define MJ808_SIDL 0x00
-
-#define LU_SIDH 0x00
-#define LU_SIDL 0x00
+// SID defines, must be manually left shifted by 5 (MCP2515 datasheet, p.29 & 30)
+// b7
+#define PRIORITY_LOW 0x80 // default 0, used by the sender, leave zero on self, except with logic unit 0A (defaults to 1)
+#define PRIORITY_HIGH 0x00
+// b6
+#define BROADCAST 0x40 // default 0, used by the sender
+#define UNICAST 0x00
+// b5:4
+#define SENDER_DEV_CLASS_SENSOR 0x30 // identifies sender, populate on self
+#define SENDER_DEV_CLASS_LIGHT 0x20
+#define SENDER_DEV_CLASS_PWR_SRC 0x10
+#define SENDER_DEV_CLASS_LU 0x00
+#define SENDER_DEV_CLASS_BLANK 0x00
+// b3:2
+#define RCPT_DEV_CLASS_SENSOR 0x0C // identifies recipient, populate when sending, on self use RCPT_DEV_CLASS_BLANK
+#define RCPT_DEV_CLASS_LIGHT 0x08
+#define RCPT_DEV_CLASS_PWR_SRC 0x04
+#define RCPT_DEV_CLASS_LU 0x00
+#define RCPT_DEV_CLASS_BLANK 0x00
+// b1:0
+#define SENDER_DEV_D 0x03 // identifies sender, populate on self
+#define SENDER_DEV_C 0x02
+#define SENDER_DEV_B 0x01
+#define SENDER_DEV_A 0x00
+#define SENDER_DEV_BLANK 0x00
+// b7:6
+#define RCPT_DEV_D 0xC0 // identifies recipient, populate when sending, on self use RCPT_DEV_BLANK
+#define RCPT_DEV_C 0x80
+#define RCPT_DEV_B 0x40
+#define RCPT_DEV_A 0x00
+#define RCPT_DEV_BLANK 0x00
+// b5
+#define BLANK 0x00
 
 
 

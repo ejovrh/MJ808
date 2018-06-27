@@ -1,4 +1,5 @@
 #include <avr/io.h>
+#include <util/delay.h>
 #include "gpio.h"
 #include "gpio_definitions.h"
 
@@ -123,7 +124,7 @@ void mcp2515_init(void)
 */
 	mcp2515_opcode_bit_modify(CANCTRL, 0xE0, 0x00); // put into normal mode
 	//mcp2515_opcode_bit_modify(CANCTRL, 0xE0, 0x40); // put into loopback mode
-};
+}
 
 // provide data to MCP2515 and flag for TX over the CAN bus
 //	provide not more than 4 bytes of data and len !!!
@@ -191,7 +192,8 @@ void mcp2515_can_msg_send(can_message_t *msg)
 
 	// step 10
 	mcp2515_opcode_rts(rts_mask); // send RTS - flag the buffer for TX
-};
+	_delay_ms(5); // CHECKME: give other mj8x8s time to digest the new message, in case they are recieving
+}
 
 // fetches a received CAN message from the MCP2515, triggered by RX interrupt
 void mcp2515_can_msg_receive(can_message_t *msg)
@@ -213,8 +215,6 @@ void mcp2515_can_msg_receive(can_message_t *msg)
 		return;
 
 	// step 2: select the appropriate buffer
-	do // loop over the buffers
-	{
 		if (msg->status & 0x40) // if RXB0 is set - containing a message (bit 6), figure 12.9, p. 69
 		{
 			rx_buffer_addr = RXB0SIDH;	// mark that address
@@ -222,7 +222,7 @@ void mcp2515_can_msg_receive(can_message_t *msg)
 			RXnIF = RX0IF; // step 3: select appropriate RXnIF
 		}
 
-		if (msg->status & 0x80) // if RXB1 is set - containing a message (bit 7), figure 12.9, p. 69
+		else if (msg->status & 0x80) // if RXB1 is set - containing a message (bit 7), figure 12.9, p. 69
 		{
 			rx_buffer_addr = RXB1SIDH;
 			msg->status &= ~0x80; // clear bit7
@@ -230,9 +230,9 @@ void mcp2515_can_msg_receive(can_message_t *msg)
 		}
 
 		// step 4: fetch various message bytes from the various registers
-		//FIXME--SIDH&L don't quite come across
 		mcp2515_opcode_read_bytes(rx_buffer_addr, &(msg->sidh), 1); // RXBnSIDH
 		mcp2515_opcode_read_bytes(++rx_buffer_addr, &(msg->sidl), 1); // RXBnSIDL
+
 		rx_buffer_addr +=2;
 		mcp2515_opcode_read_bytes(++rx_buffer_addr, &(msg->dlc), 1); // RXBnDLC
 
@@ -241,9 +241,7 @@ void mcp2515_can_msg_receive(can_message_t *msg)
 
 		// step 5: clear CANINTF.RXnIF
 		mcp2515_opcode_bit_modify(CANINTF, _BV(RXnIF), 0x00);
-
-	} while (msg->status & 0xC0); // while we have flags telling us that in some buffer there is a message
-};
+}
 
 // read message rx status bits
 // datasheet p.69, table 12.9
@@ -254,7 +252,7 @@ uint8_t mcp2515_read_rx_status(void)
 	retval = spi_uci_transfer(MCP2515_OPCODE_RX_STATUS); // send the rx status command
 	gpio_set(SPI_SS_MCP2515_pin);	// de-select the slave
 	return retval; // return the status
-};
+}
 
 
 
@@ -292,7 +290,7 @@ void mcp2515_opcode_read_bytes(const uint8_t addr, uint8_t *data, const uint8_t 
 		*(data+i) = spi_uci_transfer(0xff);	// get the result
 
 	gpio_set(SPI_SS_MCP2515_pin);	// de-select the slave
-};
+}
 
 /*
 // read RX buffer - opcode 0x90 - loads a RX buffer identified by the bit mask 'buffer' into '*data', ch. 12.4, p 65
@@ -352,7 +350,7 @@ static void mcp2515_opcode_load_tx_buffer(const uint8_t buffer, const uint8_t *d
 		spi_uci_transfer(*(data+i)); // write single byte or stream
 
 	gpio_set(SPI_SS_MCP2515_pin);	// de-select the slave
-};
+}
 
 // RTS - opcode 0x80 - sends RTS for 'buffer', table ch. 12.7 & 12.1
 void mcp2515_opcode_rts(const uint8_t mask)
@@ -363,7 +361,7 @@ void mcp2515_opcode_rts(const uint8_t mask)
 	gpio_clr(SPI_SS_MCP2515_pin);	// select the slave
 	spi_uci_transfer(MCP2515_OPCODE_RTS | mask); // send RTS command & the buffer (bit mask)
 	gpio_set(SPI_SS_MCP2515_pin);	// de-select the slave
-};
+}
 
 // read status - opcode 0xA0 - returns byte with status bits for msg RX & TX, ch. 12.8 & table 12.9
 static uint8_t mcp2515_opcode_read_status(void)
@@ -374,7 +372,7 @@ static uint8_t mcp2515_opcode_read_status(void)
 	retval = spi_uci_transfer(0xFF);	//  and get data
 	gpio_set(SPI_SS_MCP2515_pin);	// de-select the slave
 	return retval;
-};
+}
 
 // rx status - opcode 0xB0 - returns byte with received message RX filter and type info, ch. 12.9
 static uint8_t mcp2515_opcode_rx_status(void)
@@ -396,4 +394,4 @@ void mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uin
 	spi_uci_transfer(mask); // set the mask byte - i.e. what is 1'ed can change, otherwise not
 	spi_uci_transfer(byte); // set the data byte - i.e. 1'ed becomes 1, 0 becomes 0
 	gpio_set(SPI_SS_MCP2515_pin);	// de-select the slave
-};
+}

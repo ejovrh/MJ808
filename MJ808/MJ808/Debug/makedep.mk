@@ -6,5 +6,7 @@ main.c
 
 mcp2515.c
 
+mj8x8.c
+
 uci_spi.c
 
