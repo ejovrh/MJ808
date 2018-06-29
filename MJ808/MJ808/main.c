@@ -18,9 +18,6 @@ volatile uint8_t flag_lamp_is_on = 0; // flag - indicates if button turned the d
 volatile uint8_t counter_button_press_time = 0; // holds the counter value at button press, used for pushbutton debouncing
 #endif
 
-// variables populated in INT1_vect() ISR by means of CAN interrupts
-
-
 #if defined(MJ808_)
 /*
  * self, template of an outgoing CAN message; SID intialized to this device
@@ -45,64 +42,84 @@ can_message_t CAN_OUT =
 #endif
 
 can_message_t CAN_IN; // structure holding an incoming CAN message
+uint8_t canbus_status = 0xf0; // bit-wise info about CAN bus status
 
 int main(void)
 {
 	#include "gpio_modes.h"
 
 	PRR = _BV(PRUSART);	// turn off USART, we don't need it
+	ACSR = _BV(ACD); // turn off ADC, we don't need it either
 
 	cli();	// clear interrupts globally
 
-	// setup of INT1  - handled via INT1_vect ISR
-	MCUCR = _BV(ISC11); // a falling edge generates an IRQ
-	GIMSK = _BV(INT1);	// enable INT1
+	 //preset of OCRs; we will use them later one way or the other
+#if defined(MJ808_)
+	 OCR_FRONT_LIGHT = 0x00;
+#endif
+#if defined(MJ818_)
+	 OCR_REAR_LIGHT = 0x00;
+	 OCR_BRAKE_LIGHT = 0x00;
+#endif
 
-	#if defined(MJ808_)
-	// setup of interrupt-driven timer
+#if defined(MJ808_)
+	// OCR0A - setup of interrupt-driven timer
 	OCR0A = 0xFC; // fires every ~32.5ms
 	TCCR0A = _BV(WGM01); // CTC mode
 	TIFR |= _BV(OCF0A); // clear interrupt flag
 	TIMSK = _BV(OCIE0A); // TCO compare match IRQ enable
 	TCCR0B = ( _BV(CS02) | _BV(CS00) ); // clkIO/1024 (from prescaler)
 
-	// setup of front light PWM
-	//TODO - test with 16bit value
-	OCR1A = 0x00;	// hex value PWM counter - start with light turned off by default
+	// OCR1A - setup of front light PWM
 	TCCR1A = (_BV(COM1A1) | // Clear OC1A/OC1B on Compare Match when up counting
 	_BV(WGM10)); // phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
 	TCCR1B = _BV(CS10); // clock prescaler: clk/8
-	#endif
+#endif
 
-	#if defined(MJ818_)
-	// setup of rear light PWM
-	OCR0A = 0x00;	// hex value PWM counter - start with light turned off by default
+#if defined(MJ818_)
+	// OCR0A - setup of rear light PWM
 	TCCR0A = ( _BV(COM0A1)| // Clear OC1A/OC1B on Compare Match when up counting
 	_BV(WGM00) );	// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
 	TCCR0B = _BV(CS01);		// clock prescaler: clk/8
+#endif
 
-	// setup of brake light PWM
-	OCR1A = 0x00;	// hex value PWM counter - start with light turned off by default
-	TCCR1A = (_BV(COM1A1) | // Clear OC1A/OC1B on Compare Match when up counting
-	_BV(WGM10)); // phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
-	TCCR1B = _BV(CS10); // clock prescaler: clk/8
-	#endif
+	if(MCUSR & _BV(WDRF)) // power-up - if we got reset by the watchdog...
+	{
+		MCUSR &= ~_BV(WDRF); // clear the reset flag
+		WDTCR |= (_BV(WDCE) | _BV(WDE)); // WDT change enable sequence
+		WDTCR = 0x00; // disable the thing completely
+	}
+
+	// setup of INT1  - handled via INT1_vect ISR
+	MCUCR = _BV(ISC11); // a falling edge generates an IRQ
+	GIMSK = _BV(INT1);	// enable INT1
+
+	WDTCR |= (_BV(WDCE) | _BV(WDE)); // WDT change enable sequence
+	//WDTCR |= ( _BV(WDIE) | _BV(WDP2) | _BV(WDP1) ); // watchdog timer set to 1s ?
+	WDTCR |= ( _BV(WDIE) | _BV(WDP3)); // watchdog timer set to 8s
 
 	sei();	// enable interrupts globally
 
 	mcp2515_init(); // initialize & configure the MCP2515
-	//TODO - state machine - active CAN bus device discovery & default operation on empty bus
 
+// TODO - move blinking into startup routine and indicate CAN bus discovery by blinking
 #if defined(MJ808_)
 	util_led(UTIL_LED_RED_BLINK_1X); // startup indicator - blinks green 2 times
 	util_led(UTIL_LED_GREEN_BLINK_1X); // startup indicator - blinks green 2 times
 	util_led(UTIL_LED_RED_BLINK_1X); // startup indicator - blinks green 2 times
 #endif
 
+	//set_sleep_mode(SLEEP_MODE_IDLE);
+	//sleep_enable();
+	//sleep_cpu();
+
 	while (1) // forever loop
 	{
 		// on purpose kept as empty as possible !!
 		//asm("nop");
+
+		//if (MCUCR & _BV(SE)) // if sleep is enabled
+			//sleep_cpu(); // ...sleep
 	}
 }
 
@@ -205,6 +222,7 @@ ISR(TIMER0_COMPA_vect)
 
 		if (flag_lamp_is_on && counter_button_press_time > 50) // longer press - turn off
 		{
+			// TODO - discern between smart and dumb light
 			util_led(UTIL_LED_GREEN_OFF); // power off green LED
 			msg_button(&CAN_OUT, BUTTON0_OFF); // convey button release via CAN
 			counter_button_press_time = 0; // reset the counter
@@ -213,7 +231,7 @@ ISR(TIMER0_COMPA_vect)
 
 		if (!flag_lamp_is_on && counter_button_press_time > 20) // shorter press - turn on
 		{
-			//gpio_conf(GREEN_LED_pin, OUTPUT, LOW); // power on green LED
+			// TODO - discern between smart and dumb light
 			util_led(UTIL_LED_GREEN_ON); // power on green LED
 			msg_button(&CAN_OUT, BUTTON0_ON); // convey button press via CAN
 			counter_button_press_time = 0; // reset the counter
@@ -226,3 +244,26 @@ ISR(TIMER0_COMPA_vect)
 	}
 }
 #endif
+
+ISR(WDT_OVERFLOW_vect) //TODO - state machine - active CAN bus device discovery & default operation on empty bus
+{
+	//FIXME: CAN bus sleeps until the WD ISR triggers
+
+	//sleep_disable(); // wakey wakey
+	WDTCR |= _BV(WDIE); // setting the bit prevents a reset when the timer expires
+
+	if (gpio_tst(MCP2561_standby_pin)) // if MCP2561_standby_pin is high - MCP2561 is off
+	{
+		//TODO - verify pin states & sleep mode with scope
+		gpio_clr(MCP2561_standby_pin); // put pin to low - wakeup of MCP2561
+		mcp2515_opcode_bit_modify(CANINTF, _BV(WAKIF), _BV(WAKIF)); // wakeup - put into normal mode
+
+		CAN_OUT.COMMAND = CMND_UTIL_LED | UTIL_LED_RED_BLINK_1X;
+		CAN_OUT.dlc = 1;
+		//mcp2515_can_msg_send(&CAN_OUT);
+	}
+
+
+	canbus_discover(&canbus_status); // discover what lives on the CAN bus and act upon it
+	//sleep_enable(); // back to sleep
+}

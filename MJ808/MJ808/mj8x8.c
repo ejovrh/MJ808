@@ -159,3 +159,55 @@ void msg_button(can_message_t *msg, uint8_t button)
 	msg->dlc = 1;
 	mcp2515_can_msg_send(msg);
 }
+
+// discover what lives on the CAN bus and act upon it
+void canbus_discover(uint8_t *canbus_status)
+{
+	// TODO active discovery
+
+
+	// act on what we have discovered
+	if (*canbus_status == 0x00) // dumb light
+	{
+		#if defined(MJ808_)
+		if (OCR_FRONT_LIGHT == 0x00)
+		{
+			// setup of front light PWM - permanent on
+			TCCR1A = (_BV(COM1A1) | // Clear OC1A/OC1B on Compare Match when up counting
+			_BV(WGM10)); // phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
+			TCCR1B = _BV(CS10); // clock prescaler: clk/8
+			fade(0x10, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);
+		}
+		#endif
+
+		#if defined(MJ818_)
+		if (OCR_REAR_LIGHT == 0x00)
+		{
+			// setup of rear light PWM - permanent on
+
+			fade(0x10, &OCR_REAR_LIGHT, OCR_MAX_REAR_LIGHT);
+		}
+		#endif
+
+		mcp2515_opcode_bit_modify(CANCTRL, 0x20, 0x20); // sleep - put into sleep mode
+		gpio_set(MCP2561_standby_pin); // sleep of mcp2561
+
+		//set_sleep_mode(SLEEP_MODE_IDLE);
+		////cli();
+		//sleep_enable();
+		////sei();
+		////sleep_cpu();
+	}
+
+	if (*canbus_status == 0xf0) // smart light
+	{
+		*canbus_status |= 0x0f;
+
+		#if defined(MJ818_)
+		// OCR1A - setup of brake light PWM
+		TCCR1A = (_BV(COM1A1) | // Clear OC1A/OC1B on Compare Match when up counting
+		_BV(WGM10)); // phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
+		TCCR1B = _BV(CS10); // clock prescaler: clk/8
+		#endif
+	}
+}

@@ -152,11 +152,15 @@
 #define BLANK 0x00
 
 
-
+// command handling functions
 void util_led(uint8_t in_val);						// interprets CMND_UTIL_LED command - utility LED (red, green, on, off, blink)
 void dev_sensor(can_message_t *msg);			// interprets CMND_DEVICE-DEV_SENSOR command - TODO - sensor related stuff
 void dev_pwr_src(can_message_t *msg);			// interprets CMND_DEVICE-DEV_PWR_SRC command - TODO - power source related stuff
 void dev_logic_unit(can_message_t *msg);	// interprets CMND_DEVICE-DEV_LU command - TODO - logic unit related stuff
 void dev_light(can_message_t *msg);				// interprets CMND_DEVICE-DEV_LIGHT command - positional light control
 void msg_button(can_message_t *msg, uint8_t button); // conveys button press event to the CAN bus
+
+
+// bus handling functions
+void canbus_discover(uint8_t *canbus_status); // discover what lives on the CAN bus and act upon it
 #endif /* MJ8x8_H_ */
