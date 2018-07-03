@@ -18,14 +18,13 @@ volatile uint8_t flag_lamp_is_on = 0; // flag - indicates if button turned the d
 volatile uint8_t counter_button_press_time = 0; // holds the counter value at button press, used for pushbutton debouncing
 #endif
 
-#if defined(MJ808_)
 /*
  * self, template of an outgoing CAN message; SID intialized to this device
  * NOTE:
  *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
  *	for clarity see the datasheet and a description of any RX0 or TX or filter register
  */
-
+#if defined(MJ808_)
 can_message_t CAN_OUT =
 {
 	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A), // high byte
@@ -95,8 +94,8 @@ int main(void)
 	GIMSK = _BV(INT1);	// enable INT1
 
 	WDTCR |= (_BV(WDCE) | _BV(WDE)); // WDT change enable sequence
-	//WDTCR |= ( _BV(WDIE) | _BV(WDP2) | _BV(WDP1) ); // watchdog timer set to 1s ?
-	WDTCR |= ( _BV(WDIE) | _BV(WDP3)); // watchdog timer set to 8s
+	WDTCR |= ( _BV(WDIE) | _BV(WDP2) | _BV(WDP1) ); // watchdog timer set to 1s ?
+	//WDTCR |= ( _BV(WDIE) | _BV(WDP3)); // watchdog timer set to 8s
 
 	sei();	// enable interrupts globally
 
@@ -133,7 +132,8 @@ ISR(INT1_vect)
 
 	mcp2515_opcode_read_bytes(CANINTF, &canintf, 1); // download the interrupt flag register
 
-	if (canintf & _BV(WAKIF)) // if we detect a wake interrupt
+	// wake interrupt
+	if (canintf & _BV(WAKIF))
 	{
 		//TODO: device handling immediately after message wakes up controller
 		mcp2515_opcode_bit_modify(CANCTRL, 0xE0, 0x00); // put into normal mode
@@ -141,6 +141,7 @@ ISR(INT1_vect)
 		return;
 	}
 
+	// general error interrupt
 	if (canintf & (_BV(ERRIF) )) //TODO - implement general error handling
 	{
 		uint8_t errflag;
@@ -155,15 +156,18 @@ ISR(INT1_vect)
 		mcp2515_opcode_bit_modify(CANINTF, _BV(ERRIF), 0x00); // clear the flag
 	}
 
+	// message error interrupt
 	if (canintf & (_BV(MERRF) )) //TODO - implement message error handling
 	{
 		mcp2515_opcode_bit_modify(CANINTF, _BV(MERRF), 0x00); // clear the flag
 	}
 
+	// general message handling
 	if ( canintf & (_BV(RX1IF) | _BV(RX0IF)) ) // if we received a message
 	{
 		mcp2515_can_msg_receive(&CAN_IN); // load the CAN message into its structure
 
+		// command for device
 		if (CAN_IN.COMMAND & CMND_DEVICE) //  we received a command for some device...
 		{
 			#if defined(SENSOR)
