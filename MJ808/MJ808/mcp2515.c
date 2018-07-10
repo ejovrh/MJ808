@@ -31,8 +31,6 @@ void mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uin
  *
  *	the solution is elegant:
  */
-uint16_t word; // the 2byte value
-uint8_t *word_ptr = (uint8_t *) &word; // a 1byte pointer to the address of the 2byte value; the pointer gets incremented by 1 byte, not 2!
 
 // initialization & configuration after power on
 void mcp2515_init(void)
@@ -88,7 +86,6 @@ void mcp2515_init(void)
 	 - RXF5: 0x00F0 - self towards own device class (rear)
 	 */
 
-// TODO: filter bytes in uint16_t format will need <<5 to match registers, additionally union byte order is a problem
 	/*
 	word = 0x01FF;
 	mcp2515_opcode_write_byte(RXM0SIDL, *word_ptr);

@@ -56,6 +56,29 @@
 #define ARGUMENT data[1]
 
 // command byte structure
+#define CMND_ANNOUNCE 0x00 // command to register self on other devices (announce-like broadcast)
+	#define DEV_0A 0 // main (1st) logic unit
+		#define LU 0
+	#define DEV_0B 1 //	2nd logic unit
+	#define DEV_0C 2 //	3rd logic unit
+	#define DEV_0D 3 //	4th logic unit
+	#define DEV_1A 4 //	dynamo1
+		#define DYN1 4
+	#define DEV_1B 5 //	dynamo2
+		#define DYN2 5
+	#define DEV_1C 6 //	battery
+		#define BATT 6
+	#define DEV_1D 7 //	solar cell
+	#define DEV_2A 8 //	mj808
+		#define MJ808 8
+	#define DEV_2B 9 //	mj818
+		#define MJ818 9
+	#define DEV_2C 10 //	??
+	#define DEV_2D 11 //	??
+	#define DEV_3A 12 //	cadence
+	#define DEV_3B 13 //	radar
+	#define DEV_3C 14 //	??
+	#define DEV_3D 15 //	??
 #define CMND_UTIL_LED 0x10 // command for utility LED operation (color, on, off, blink)
 	#define GREEN 0x00
 	#define RED 0x08
@@ -152,6 +175,14 @@
 // b5
 #define BLANK 0x00
 
+typedef struct canbus
+{
+	uint8_t status; // status info
+	uint8_t count : 4; // counter for discovery
+	uint16_t devices; // indicator of devices discovered, 16 in total; B0 - 1st device (0A), B1 - 2nd device (0B), ..., B15 - 16th device (3D)
+	uint8_t n ; // ordered device number - A0 (0th device) until 3C (15th device)
+	uint8_t sleep_iteration : 3; // how many times did we wakeup, sleep and wakeup again
+} canbus;
 
 // command handling functions
 void util_led(uint8_t in_val);						// interprets CMND_UTIL_LED command - utility LED (red, green, on, off, blink)
@@ -163,5 +194,6 @@ void msg_button(can_message_t *msg, uint8_t button); // conveys button press eve
 
 
 // bus handling functions
-void canbus_discover(uint8_t *canbus_status); // discover what lives on the CAN bus and act upon it
+void discovery_announce(volatile canbus *canbus_status, can_message_t *msg); //
+void discovery_behave(volatile canbus *canbus_status); //
 #endif /* MJ8x8_H_ */
