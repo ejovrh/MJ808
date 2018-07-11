@@ -106,7 +106,7 @@ int main(void)
 	GIMSK = _BV(INT1);	// enable INT1
 
 	WDTCR |= (_BV(WDCE) | _BV(WDE)); // WDT change enable sequence
-	WDTCR |= ( _BV(WDIE) | _BV(WDP2) | _BV(WDP0) ); // watchdog timer set to 0.5
+	WDTCR = ( _BV(WDIE) | _BV(WDP2)  ); // watchdog timer set to 0.5
 
 	sei();	// enable interrupts globally
 

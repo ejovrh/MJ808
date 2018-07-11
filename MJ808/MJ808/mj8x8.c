@@ -51,7 +51,7 @@ void fade(uint8_t value, volatile uint8_t *ocr, uint8_t ocr_max)
 #endif
 
 #if defined(MJ808_) // interprets CMND_UTIL_LED command - utility LED (red, green, on, off, blink)
-void util_led(uint8_t in_val) //TODO - convert to pointer-type argument
+void util_led(uint8_t in_val)
 {
 	uint8_t led = 0; // holds the pin of the LED: D0 - green (default), D1 - red
 
@@ -74,9 +74,9 @@ void util_led(uint8_t in_val) //TODO - convert to pointer-type argument
 
 	while (in_val--) // blink loop
 	{
-		_delay_ms(BLINK_DELAY); //TODO: replace with timer
+		_delay_ms(BLINK_DELAY); // waste a few cycles (non-blocking)
 		PORTD ^= (1<<led); // toggle the led pin
-		_delay_ms(BLINK_DELAY); //TODO: replace with timer
+		_delay_ms(BLINK_DELAY); // waste a few cycles (non-blocking)
 		PORTD ^= (1<<led); // toggle the led pin
 	}
 }
@@ -124,7 +124,7 @@ void dev_light(can_message_t *msg)
 			util_led(UTIL_LED_RED_BLINK_2X); // CHECKME: something drives this OCR dangerously up
 		}
 		else
-		OCR_FRONT_LIGHT = msg->ARGUMENT;
+			OCR_FRONT_LIGHT = msg->ARGUMENT;
 
 		return;
 	}
@@ -140,14 +140,9 @@ void dev_light(can_message_t *msg)
 	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT) ) // brake light
 	{
 		if (msg->ARGUMENT > OCR_MAX_BRAKE_LIGHT)
-		{
 			OCR_BRAKE_LIGHT = OCR_MAX_BRAKE_LIGHT;
-			#if defined (MJ808_)
-			util_led(UTIL_LED_GREEN_BLINK_2X); // CHECKME: something drives this OCR dangerously up
-			#endif
-		}
 		else
-		OCR_BRAKE_LIGHT = msg->ARGUMENT;
+			OCR_BRAKE_LIGHT = msg->ARGUMENT;
 	}
 	#endif
 }
@@ -169,7 +164,7 @@ void discovery_announce(volatile canbus *canbus_status, can_message_t *msg)
 	 *	after that time, canbus_status->devices	holds a bitwise representation of what is alive on the bus
 	 */
 
-	if (canbus_status->count == canbus_status->n) // compare counter with decimal self-id, if we match
+	if (canbus_status->count == canbus_status->n) // compare device counter with decimal self-id
 	{	// broadcast self-id to everyone
 		msg->sidh |= BROADCAST; // set the broadcast flag
 		msg->COMMAND = (CMND_ANNOUNCE); // "mark" it as an announce command (doesn't really do a thing since the announce is 0x00)
@@ -181,7 +176,7 @@ void discovery_announce(volatile canbus *canbus_status, can_message_t *msg)
 		canbus_status->sleep_iteration = 0;
 
 		WDTCR |= (_BV(WDCE) | _BV(WDE)); // WDT change enable sequence
-		WDTCR |= ( _BV(WDIE) | _BV(WDP3)); // set watchdog timer set to 8s
+		WDTCR = ( _BV(WDIE) | _BV(WDP3) | _BV(WDP0)); // set watchdog timer set to 8s
 
 		// from here on we act upon the bus status directly in this iteration of the ISR
 	}
@@ -232,13 +227,14 @@ void discovery_behave(volatile canbus *canbus_status)
 			//mcp2515_opcode_bit_modify(CANCTRL, 0x20, 0x20); // sleep - put into sleep mode
 			//gpio_set(MCP2561_standby_pin); // sleep of mcp2561
 
-			//if (canbus_status->sleep_iteration > 3)
-			//{
-			//WDTCR |= (_BV(WDCE) | _BV(WDE)); // WDT change enable sequence
-			//WDTCR |= ( _BV(WDIE) | _BV(WDP2) | _BV(WDP0)); // watchdog timer set to 0.5
-			//canbus_status->count = 0;
-			//canbus_status->status &= ~0x80; // unset i-was-here bit and let it rescan again
-			//}
+			if (canbus_status->sleep_iteration > REDISCOVER_ITERATION) // initiate re-broadcast
+			{
+				WDTCR |= (_BV(WDCE) | _BV(WDE)); // WDT change enable sequence
+				WDTCR = ( _BV(WDIE) | _BV(WDP2)  ); // watchdog timer set to 0.25
+
+				canbus_status->count = 0; // reset the device counter
+				canbus_status->status |= 0x80; // unset i-was-here bit and let it rescan again
+			}
 
 			return;
 		}

@@ -1,6 +1,16 @@
 #ifndef MJ8x8_H_
 #define MJ8x8_H_
 
+/* TODO - CAN bootloader
+ * http://www.kreatives-chaos.com/artikel/can-bootloader
+ *
+ *
+ *
+ *
+ *
+ */
+
+
 // OCR defines
 #define OCR_FRONT_LIGHT OCR1A // Output Compare Register for PWM of front light
 #define OCR_REAR_LIGHT OCR0A // Output Compare Register for PWM of rear light
@@ -48,7 +58,9 @@
 #define OCR_MAX_BRAKE_LIGHT 0x80 // max. OCR1A count limit for brake light PWM
 
 #define LED_OFF 0x00 // off value for any OCR
-#define BLINK_DELAY 125
+#define BLINK_DELAY 125 // delay used in the util_led() function
+#define REDISCOVER_ITERATION 4 // every (value * 8s) the CAN device will do a re-broadcast
+
 
 #define CAN_IN can_msg_incoming
 #define CAN_OUT can_msg_outgoing
@@ -178,7 +190,7 @@
 typedef struct canbus
 {
 	uint8_t status; // status info
-	uint8_t count : 4; // counter for discovery
+	uint8_t count : 4; // device counter for discovery
 	uint16_t devices; // indicator of devices discovered, 16 in total; B0 - 1st device (0A), B1 - 2nd device (0B), ..., B15 - 16th device (3D)
 	uint8_t n ; // ordered device number - A0 (0th device) until 3C (15th device)
 	uint8_t sleep_iteration : 3; // how many times did we wakeup, sleep and wakeup again
