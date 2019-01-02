@@ -1,2 +1,32 @@
 [Eagle]
-Version="08 05 00"
+Version="09 02 02"
+Platform="Windows"
+Globals="Globals"
+Desktop="Desktop"
+
+[Globals]
+AutoSaveProject=1
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/EECS5R5H155 Supercap.lbr"
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/micro joystick.lbr"
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/DS1031-14 - IDC socket.lbr"
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/1.27mm 10pin header.lbr"
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/JTAG 1.27mm 10pin header.lbr"
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/ORG1510-MK4 GPS module.lbr"
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/SIM800 GPRS Module.lbr"
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/LTC4425 Supercap Charger.lbr"
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/DJNR3015-1R5 Inductor.lbr"
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/115Q-BCA0 Micro-SIM Socket.lbr"
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/ADXL345 Accelerometer.lbr"
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/Molex SD-47309 SD Card Slot.lbr"
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/DJNR6045-100S Power Inductor.lbr"
+UsedLibrary="C:/Users/hivanic/Documents/vsite/misko/eagle libraries/FM25W256 FERAM.lbr"
+UsedLibrary="APHBM2012LSURKZGKC.lbr"
+UsedLibrary="TL3305-844809 SPST-NO Tact Switch.lbr"
+
+[Win_1]
+Type="Control Panel"
+Number=0
+
+[Desktop]
+Screen="1366 768"
+Window="Win_1"
