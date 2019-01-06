@@ -2085,7 +2085,7 @@ design rules under a new name.</description>
 <element name="LED1" library="APHBM2012LSURKZGKC" package="SMD" value="APHBM2012LSURKZGKC" x="18.25" y="11.75" smashed="yes" rot="R180">
 <attribute name="NAME" x="18.25" y="10.25" size="1" layer="25" font="vector" rot="R180" align="center"/>
 </element>
-<element name="ICSP" library="5034800600 FPC Connector" package="SMT" value="5034800600" x="17.5" y="16" smashed="yes" rot="R270">
+<element name="SPI" library="5034800600 FPC Connector" package="SMT" value="5034800600" x="17.5" y="16" smashed="yes" rot="R270">
 <attribute name="NAME" x="20" y="16" size="1" layer="21" font="vector" rot="R90" align="center"/>
 </element>
 <element name="SPLIT" library="testpad" library_urn="urn:adsk.eagle:library:385" package="B2,54" package3d_urn="urn:adsk.eagle:package:27948/1" value="TPB2,54" x="3.5" y="27.25" smashed="yes" rot="MR0">
@@ -2157,9 +2157,9 @@ design rules under a new name.</description>
 <contactref element="R1" pad="2"/>
 <contactref element="C3" pad="2"/>
 <contactref element="C4" pad="1"/>
-<contactref element="ICSP" pad="GND2"/>
-<contactref element="ICSP" pad="GND1"/>
-<contactref element="ICSP" pad="1"/>
+<contactref element="SPI" pad="GND2"/>
+<contactref element="SPI" pad="GND1"/>
+<contactref element="SPI" pad="1"/>
 <polygon width="0.25" layer="1">
 <vertex x="0" y="35"/>
 <vertex x="35" y="35"/>
@@ -2222,7 +2222,7 @@ design rules under a new name.</description>
 <contactref element="C1" pad="1"/>
 <contactref element="K1" pad="3"/>
 <contactref element="R2" pad="2"/>
-<contactref element="ICSP" pad="5"/>
+<contactref element="SPI" pad="5"/>
 <wire x1="18.77" y1="15.25" x2="21.35" y2="15.25" width="0.25" layer="1"/>
 <wire x1="17.895" y1="14.97575625" x2="18.16924375" y2="15.25" width="0.25" layer="1"/>
 <wire x1="18.16924375" y1="15.25" x2="18.77" y2="15.25" width="0.25" layer="1"/>
@@ -2299,7 +2299,7 @@ design rules under a new name.</description>
 </signal>
 <signal name="ICSP_DO/MOSI" class="2">
 <contactref element="IC1" pad="PB6"/>
-<contactref element="ICSP" pad="3"/>
+<contactref element="SPI" pad="3"/>
 <wire x1="20.5" y1="16.15" x2="21.23" y2="16.15" width="0.25" layer="1"/>
 <wire x1="18.77" y1="16.25" x2="17" y2="16.25" width="0.25" layer="1"/>
 <via x="17" y="16.25" extent="1-16" drill="0.35"/>
@@ -2311,7 +2311,7 @@ design rules under a new name.</description>
 </signal>
 <signal name="ICSP_DI/MISO" class="2">
 <contactref element="IC1" pad="PB5"/>
-<contactref element="ICSP" pad="2"/>
+<contactref element="SPI" pad="2"/>
 <wire x1="21.83" y1="16.75" x2="21.85" y2="16.77" width="0.25" layer="1"/>
 <wire x1="18.77" y1="16.75" x2="21.83" y2="16.75" width="0.25" layer="1"/>
 <via x="17" y="17.5" extent="1-16" drill="0.35"/>
@@ -2324,7 +2324,7 @@ design rules under a new name.</description>
 </signal>
 <signal name="ICSP_SCK" class="2">
 <contactref element="IC1" pad="PB7"/>
-<contactref element="ICSP" pad="4"/>
+<contactref element="SPI" pad="4"/>
 <wire x1="20.25" y1="15.7" x2="21.35" y2="15.7" width="0.25" layer="1"/>
 <via x="17" y="15" extent="1-16" drill="0.35"/>
 <wire x1="17" y1="15" x2="17.75" y2="15.75" width="0.25" layer="1"/>
@@ -2420,7 +2420,7 @@ design rules under a new name.</description>
 </signal>
 <signal name="DEBUGWIRE/RESET" class="2">
 <contactref element="IC1" pad="PA2"/>
-<contactref element="ICSP" pad="6"/>
+<contactref element="SPI" pad="6"/>
 <wire x1="18.77" y1="14.75" x2="19.93075625" y2="14.75" width="0.25" layer="1"/>
 <wire x1="19.93075625" y1="14.75" x2="19.98075625" y2="14.8" width="0.25" layer="1"/>
 <wire x1="19.98075625" y1="14.8" x2="21.35" y2="14.8" width="0.25" layer="1"/>

@@ -12260,7 +12260,7 @@ by R. Vogg  15.March.2002</description>
 <part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="47μF"/>
 <part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
 <part name="LED1" library="APHBM2012LSURKZGKC" deviceset="APHBM2012LSURKZGKC" device="" value="APHBM2012LSURKZGKC"/>
-<part name="ICSP" library="5034800600 FPC Connector" deviceset="5034800600" device="" value="5034800600"/>
+<part name="SPI" library="5034800600 FPC Connector" deviceset="5034800600" device="" value="5034800600"/>
 <part name="SPLIT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TP" device="B2,54" package3d_urn="urn:adsk.eagle:package:27948/1"/>
 <part name="R13" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083331JP 330R"/>
 <part name="R14" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083103JP 10k"/>
@@ -12417,7 +12417,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <attribute name="NAME" x="140.97" y="116.84" size="1.27" layer="95" rot="R180"/>
 <attribute name="VALUE" x="140.97" y="128.27" size="1.27" layer="95" rot="R180"/>
 </instance>
-<instance part="ICSP" gate="G$1" x="27.94" y="198.12" smashed="yes">
+<instance part="SPI" gate="G$1" x="27.94" y="198.12" smashed="yes">
 <attribute name="NAME" x="25.4" y="210.82" size="1.27" layer="95"/>
 <attribute name="VALUE" x="25.4" y="182.88" size="1.27" layer="95"/>
 </instance>
@@ -12545,12 +12545,12 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="269.24" y="124.46" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="ICSP" gate="G$1" pin="GND"/>
+<pinref part="SPI" gate="G$1" pin="GND"/>
 <wire x1="38.1" y1="187.96" x2="45.72" y2="187.96" width="0.1524" layer="91"/>
 <label x="45.72" y="187.96" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="ICSP" gate="G$1" pin="1"/>
+<pinref part="SPI" gate="G$1" pin="1"/>
 <wire x1="38.1" y1="205.74" x2="45.72" y2="205.74" width="0.1524" layer="91"/>
 <label x="45.72" y="205.74" size="1.778" layer="95"/>
 </segment>
@@ -12602,7 +12602,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="111.76" y="124.46" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="ICSP" gate="G$1" pin="5"/>
+<pinref part="SPI" gate="G$1" pin="5"/>
 <wire x1="38.1" y1="195.58" x2="45.72" y2="195.58" width="0.1524" layer="91"/>
 <label x="45.72" y="195.58" size="1.778" layer="95"/>
 </segment>
@@ -12666,7 +12666,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="IC1" gate="G$1" pin="MISO/DO/PCINT6-PB6"/>
 </segment>
 <segment>
-<pinref part="ICSP" gate="G$1" pin="3"/>
+<pinref part="SPI" gate="G$1" pin="3"/>
 <wire x1="38.1" y1="200.66" x2="45.72" y2="200.66" width="0.1524" layer="91"/>
 <label x="45.72" y="200.66" size="1.778" layer="95"/>
 </segment>
@@ -12683,7 +12683,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="IC1" gate="G$1" pin="MOSI/DI/SDA/PCINT5-PB5"/>
 </segment>
 <segment>
-<pinref part="ICSP" gate="G$1" pin="2"/>
+<pinref part="SPI" gate="G$1" pin="2"/>
 <wire x1="38.1" y1="203.2" x2="45.72" y2="203.2" width="0.1524" layer="91"/>
 <label x="45.72" y="203.2" size="1.778" layer="95"/>
 </segment>
@@ -12705,7 +12705,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="R13" gate="G$1" pin="1"/>
 </segment>
 <segment>
-<pinref part="ICSP" gate="G$1" pin="4"/>
+<pinref part="SPI" gate="G$1" pin="4"/>
 <wire x1="38.1" y1="198.12" x2="45.72" y2="198.12" width="0.1524" layer="91"/>
 <label x="45.72" y="198.12" size="1.778" layer="95"/>
 </segment>
@@ -12826,7 +12826,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="IC1" gate="G$1" pin="!RESET!/DW/PCINT10-PA2"/>
 </segment>
 <segment>
-<pinref part="ICSP" gate="G$1" pin="6"/>
+<pinref part="SPI" gate="G$1" pin="6"/>
 <wire x1="38.1" y1="193.04" x2="45.72" y2="193.04" width="0.1524" layer="91"/>
 <label x="45.72" y="193.04" size="1.778" layer="95"/>
 </segment>
