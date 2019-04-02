@@ -12255,16 +12255,16 @@ by R. Vogg  15.March.2002</description>
 <part name="IC2" library="PRQV8.00CR1510Y00L - 8MHz resonator" deviceset="PRQV" device="" value="PRQV8.00CR1510Y00L"/>
 <part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
 <part name="K1" library="Seeed-Switch" library_urn="urn:adsk.eagle:library:476" deviceset="SMD-SWITCH-TACTILE-SPST-NO(4P-D6.0MM)" device="" package3d_urn="urn:adsk.eagle:package:32987/1" value="CRTL"/>
-<part name="LED" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="22-23-2021" device="" value="LED"/>
+<part name="LED1" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="22-23-2021" device="" value="LEDXMLBWT-00-0000-0000U20E2 "/>
 <part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="100μF"/>
 <part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="47μF"/>
 <part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
-<part name="LED1" library="APHBM2012LSURKZGKC" deviceset="APHBM2012LSURKZGKC" device="" value="APHBM2012LSURKZGKC"/>
+<part name="LED2" library="APHBM2012LSURKZGKC" deviceset="APHBM2012LSURKZGKC" device="" value="APHBM2012LSURKZGKC"/>
 <part name="SPI" library="5034800600 FPC Connector" deviceset="5034800600" device="" value="5034800600"/>
 <part name="SPLIT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TP" device="B2,54" package3d_urn="urn:adsk.eagle:package:27948/1"/>
 <part name="R13" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083331JP 330R"/>
 <part name="R14" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083103JP 10k"/>
-<part name="IC7" library="LDO SOT-89" deviceset="LDO" device="" value="  LDK320ADU50R"/>
+<part name="IC7" library="LDO SOT-89" deviceset="LDO" device="" value="LDK320ADU50R"/>
 </parts>
 <sheets>
 <sheet>
@@ -12394,11 +12394,11 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <attribute name="NAME" x="27.94" y="104.14" size="1.27" layer="95" ratio="10"/>
 <attribute name="VALUE" x="27.94" y="92.71" size="1.27" layer="96" ratio="10"/>
 </instance>
-<instance part="LED" gate="-1" x="33.02" y="149.86" smashed="yes" rot="R180">
+<instance part="LED1" gate="-1" x="33.02" y="149.86" smashed="yes" rot="R180">
 <attribute name="NAME" x="30.48" y="150.622" size="1.524" layer="95" rot="R180"/>
-<attribute name="VALUE" x="33.782" y="148.463" size="1.778" layer="96" rot="R180"/>
+<attribute name="VALUE" x="24.638" y="146.177" size="1.778" layer="96"/>
 </instance>
-<instance part="LED" gate="-2" x="33.02" y="152.4" smashed="yes" rot="R180">
+<instance part="LED1" gate="-2" x="33.02" y="152.4" smashed="yes" rot="R180">
 <attribute name="NAME" x="30.48" y="153.162" size="1.524" layer="95" rot="R180"/>
 </instance>
 <instance part="C3" gate="G$1" x="238.76" y="139.7" smashed="yes">
@@ -12413,7 +12413,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <attribute name="NAME" x="128.27" y="122.9614" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="128.27" y="127.762" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="LED1" gate="G$1" x="139.7" y="121.92" smashed="yes" rot="R180">
+<instance part="LED2" gate="G$1" x="139.7" y="121.92" smashed="yes" rot="R180">
 <attribute name="NAME" x="140.97" y="116.84" size="1.27" layer="95" rot="R180"/>
 <attribute name="VALUE" x="140.97" y="128.27" size="1.27" layer="95" rot="R180"/>
 </instance>
@@ -12654,7 +12654,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <junction x="383.54" y="180.34"/>
 </segment>
 <segment>
-<pinref part="LED" gate="-2" pin="S"/>
+<pinref part="LED1" gate="-2" pin="S"/>
 <wire x1="35.56" y1="152.4" x2="40.64" y2="152.4" width="0.1524" layer="91"/>
 <label x="40.64" y="152.4" size="1.778" layer="95"/>
 </segment>
@@ -12814,7 +12814,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="358.14" y="129.54" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="LED" gate="-1" pin="S"/>
+<pinref part="LED1" gate="-1" pin="S"/>
 <wire x1="35.56" y1="149.86" x2="40.64" y2="149.86" width="0.1524" layer="91"/>
 <label x="40.64" y="149.86" size="1.778" layer="95"/>
 </segment>
@@ -12940,7 +12940,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 </segment>
 <segment>
 <label x="147.32" y="119.38" size="1.778" layer="95"/>
-<pinref part="LED1" gate="G$1" pin="2"/>
+<pinref part="LED2" gate="G$1" pin="2"/>
 <wire x1="143.51" y1="119.38" x2="147.32" y2="119.38" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -12952,19 +12952,19 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 </segment>
 <segment>
 <label x="147.32" y="124.46" size="1.778" layer="95"/>
-<pinref part="LED1" gate="G$1" pin="3"/>
+<pinref part="LED2" gate="G$1" pin="3"/>
 <wire x1="143.51" y1="124.46" x2="147.32" y2="124.46" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="LED" class="2">
+<net name="LED1" class="2">
 <segment>
 <pinref part="R2" gate="G$1" pin="1"/>
-<pinref part="LED1" gate="G$1" pin="4"/>
+<pinref part="LED2" gate="G$1" pin="4"/>
 <wire x1="129.54" y1="124.46" x2="133.35" y2="124.46" width="0.1524" layer="91"/>
-<pinref part="LED1" gate="G$1" pin="1"/>
+<pinref part="LED2" gate="G$1" pin="1"/>
 <wire x1="133.35" y1="124.46" x2="133.35" y2="119.38" width="0.1524" layer="91"/>
 <junction x="133.35" y="124.46"/>
-<label x="132.08" y="119.38" size="1.778" layer="95" rot="R180"/>
+<label x="134.62" y="111.76" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$1" class="0">

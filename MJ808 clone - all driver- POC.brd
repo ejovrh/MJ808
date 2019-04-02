@@ -8,7 +8,7 @@
 </settings>
 <grid distance="0.25" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.25" altunitdist="mm" altunit="mm"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
 <layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
 <layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
@@ -23,17 +23,17 @@
 <layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
 <layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
 <layer number="15" name="Route15" color="4" fill="6" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
@@ -46,10 +46,10 @@
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
-<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
-<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
@@ -58,8 +58,8 @@
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -2060,7 +2060,7 @@ design rules under a new name.</description>
 <attribute name="MPN" value="DTSM-62K-S-V-T/R(SN431)" x="22.5" y="6" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="19.96" y="5.365" size="0.889" layer="27" ratio="11"/>
 </element>
-<element name="LED" library="con-molex" library_urn="urn:adsk.eagle:library:165" package="22-23-2021" value="LED" x="20.25" y="27.25" smashed="yes" rot="R180">
+<element name="LED1" library="con-molex" library_urn="urn:adsk.eagle:library:165" package="22-23-2021" value="LEDXMLBWT-00-0000-0000U20E2 " x="20.25" y="27.25" smashed="yes" rot="R180">
 <attribute name="MF" value="MOLEX" x="20.25" y="27.25" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MPN" value="22-23-2021" x="20.25" y="27.25" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="OC_FARNELL" value="1462926" x="20.25" y="27.25" size="1.778" layer="27" rot="R180" display="off"/>
@@ -2082,7 +2082,7 @@ design rules under a new name.</description>
 <attribute name="SPICEPREFIX" value="R" x="17.75" y="13" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="VALUE" x="17.115" y="14.905" size="1.27" layer="28" rot="MR180"/>
 </element>
-<element name="LED1" library="APHBM2012LSURKZGKC" package="SMD" value="APHBM2012LSURKZGKC" x="18.25" y="11.75" smashed="yes" rot="R180">
+<element name="LED2" library="APHBM2012LSURKZGKC" package="SMD" value="APHBM2012LSURKZGKC" x="18.25" y="11.75" smashed="yes" rot="R180">
 <attribute name="NAME" x="18.25" y="10.25" size="1" layer="25" font="vector" rot="R180" align="center"/>
 </element>
 <element name="SPI" library="5034800600 FPC Connector" package="SMT" value="5034800600" x="17.5" y="16" smashed="yes" rot="R270">
@@ -2101,7 +2101,7 @@ design rules under a new name.</description>
 <attribute name="NAME" x="11" y="18" size="1" layer="26" font="vector" rot="MR180" align="center"/>
 <attribute name="VALUE" x="11" y="22" size="1" layer="28" font="vector" rot="MR180" align="center"/>
 </element>
-<element name="IC7" library="LDO SOT-89" package="SOT-89" value="  LDK320ADU50R" x="24.5" y="20.25" smashed="yes" rot="MR90">
+<element name="IC7" library="LDO SOT-89" package="SOT-89" value="LDK320ADU50R" x="24.5" y="20.25" smashed="yes" rot="MR90">
 <attribute name="NAME" x="29.58" y="20.25" size="1" layer="26" font="vector" rot="MR90" align="center"/>
 <attribute name="VALUE" x="23.23" y="20.25" size="1" layer="28" font="vector" rot="MR90" align="center"/>
 </element>
@@ -2285,7 +2285,7 @@ design rules under a new name.</description>
 <signal name="LED_AN" class="5">
 <contactref element="IC6" pad="CSN"/>
 <contactref element="R10" pad="1"/>
-<contactref element="LED" pad="2"/>
+<contactref element="LED1" pad="2"/>
 <wire x1="18.77" y1="22.5" x2="17.5" y2="22.5" width="0.45" layer="1"/>
 <via x="17.5" y="22.5" extent="1-16" drill="0.5"/>
 <wire x1="15.65" y1="23.5" x2="17.25" y2="23.5" width="1.016" layer="16"/>
@@ -2415,7 +2415,7 @@ design rules under a new name.</description>
 </signal>
 <signal name="LED_CA">
 <contactref element="L1" pad="2"/>
-<contactref element="LED" pad="1"/>
+<contactref element="LED1" pad="1"/>
 <wire x1="21.52" y1="27.25" x2="24.625" y2="27.25" width="1.4" layer="1"/>
 </signal>
 <signal name="DEBUGWIRE/RESET" class="2">
@@ -2539,13 +2539,13 @@ design rules under a new name.</description>
 <signal name="RED_LED" class="2">
 <contactref element="IC1" pad="PD1"/>
 <wire x1="21.85" y1="13.1" x2="21.85" y2="13.73" width="0.25" layer="1"/>
-<contactref element="LED1" pad="2"/>
+<contactref element="LED2" pad="2"/>
 <wire x1="19.15" y1="11.27" x2="20.02" y2="11.27" width="0.25" layer="1"/>
 <wire x1="20.02" y1="11.27" x2="21.85" y2="13.1" width="0.25" layer="1"/>
 </signal>
 <signal name="GREEN_LED" class="2">
 <contactref element="IC1" pad="PD0"/>
-<contactref element="LED1" pad="3"/>
+<contactref element="LED2" pad="3"/>
 <wire x1="19.15" y1="12.23" x2="19.98" y2="12.23" width="0.25" layer="1"/>
 <wire x1="19.98" y1="12.23" x2="20.5" y2="12.75" width="0.25" layer="1"/>
 <wire x1="20.5" y1="14" x2="20.5" y2="12.75" width="0.25" layer="1"/>
@@ -2555,10 +2555,10 @@ design rules under a new name.</description>
 <signal name="VCC">
 <contactref element="IC6" pad="VCC"/>
 </signal>
-<signal name="LED" class="2">
+<signal name="LED1" class="2">
 <contactref element="R2" pad="1"/>
-<contactref element="LED1" pad="4"/>
-<contactref element="LED1" pad="1"/>
+<contactref element="LED2" pad="4"/>
+<contactref element="LED2" pad="1"/>
 <wire x1="17.35" y1="12.23" x2="17.35" y2="11.27" width="0.25" layer="1"/>
 <via x="17.5" y="14" extent="1-16" drill="0.35"/>
 <wire x1="17.35" y1="12.23" x2="17.35" y2="13.85" width="0.25" layer="1"/>
