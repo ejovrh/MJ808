@@ -53,7 +53,7 @@
 */
 
 // maximum safe values for light OCRs
-#define OCR_MAX_FRONT_LIGHT 0x80 // max. OCR1A count limit for front light PWM
+#define OCR_MAX_FRONT_LIGHT 0x40 // max. OCR1A count limit for front light PWM
 #define OCR_MAX_REAR_LIGHT 0xFF // max. OCR0A count limit for rear light PWM - the sky is the limit
 #define OCR_MAX_BRAKE_LIGHT 0x40 // max. OCR1A count limit for brake light PWM
 
@@ -74,6 +74,7 @@
 	#define DEV_0B 1 //	2nd logic unit
 	#define DEV_0C 2 //	3rd logic unit
 	#define DEV_0D 3 //	4th logic unit
+		#define MJ828 3	// dashboard
 	#define DEV_1A 4 //	dynamo1
 		#define DYN1 4
 	#define DEV_1B 5 //	dynamo2
