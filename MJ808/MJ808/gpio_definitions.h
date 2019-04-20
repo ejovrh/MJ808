@@ -7,7 +7,7 @@
 #define		 PUSHBUTTON_pin						D,	 4,		4 // tactile pushbutton
 
 #define    MCP2561_standby_pin			B,   1,   1	// MCP2561 standby
-#define    PWM_front_light_pin   		B,   3,   3	// PWM - front light
+#define    PWM_front_light_pin   		B,   2,   2	// PWM - front light
 
 #define    SPI_SS_MCP2515_pin   		B,   4,   4	// SPI - SS
 #define    ICSP_DI_MISO   					B,   5,   5	// SPI - MISO; aka. DI; if run in master mode this is ... MISO
