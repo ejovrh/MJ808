@@ -14,7 +14,7 @@
 #include "mj8x8.h"
 
 // global variables
-#if defined(MJ808_) // flags for front light
+#if ( defined(MJ808_) | defined(MJ828_) ) // flags for front light
 volatile uint8_t flag_lamp_is_on = 0; // flag - indicates if button turned the device on, used for pushbutton handling
 volatile uint8_t counter_button_press_time = 0; // holds the counter value at button press, used for pushbutton debouncing
 #endif
@@ -28,7 +28,7 @@ volatile uint8_t counter_button_press_time = 0; // holds the counter value at bu
 #if defined(MJ808_) // CAN_OUT SID for front light
 can_message_t CAN_OUT =
 {
-	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A), // high byte
+	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | MJ808), // high byte
 	.sidl = ( RCPT_DEV_BLANK | BLANK) // low byte
 };
 #endif
@@ -36,7 +36,15 @@ can_message_t CAN_OUT =
 #if defined(MJ818_) // CAN_OUT SID for rear light
 can_message_t CAN_OUT =
 {
-	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B), // high byte
+	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | MJ818), // high byte
+	.sidl = ( RCPT_DEV_BLANK | BLANK) // low byte
+};
+#endif
+
+#if defined(MJ828_) // CAN_OUT SID for dashboard
+can_message_t CAN_OUT =
+{
+	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | MJ828), // high byte
 	.sidl = ( RCPT_DEV_BLANK | BLANK) // low byte
 };
 #endif
@@ -56,6 +64,7 @@ int main(void)
 {
 	#include "gpio_modes.h"
 
+	//FIXME - not really needed and is not turned on on power-on
 	#if defined(MJ808_) // crude power indicator
 	util_led(UTIL_LED_GREEN_ON);
 	#endif
@@ -73,26 +82,28 @@ int main(void)
 	OCR_BRAKE_LIGHT = 0x00;
 	#endif
 
-	#if defined(MJ808_) // OCR0A & OCR1A setup
-	// OCR0A - setup of interrupt-driven timer
-	OCR0A = 0xFC; // fires every ~32.5ms
-	TCCR0A = _BV(WGM01); // CTC mode
-	TIFR |= _BV(OCF0A); // clear interrupt flag
-	TIMSK = _BV(OCIE0A); // TCO compare match IRQ enable
-	TCCR0B = ( _BV(CS02) | _BV(CS00) ); // clkIO/1024 (from prescaler)
+	#if ( defined(MJ808_) | defined(MJ828_) ) // OCR0A & OCR1A setup
+	// OCR1A - setup of timer-driven interrupt
+	OCR1A = 0x6180; // fires every 50ms
+	TIFR |= _BV(OCF1A); // clear interrupt flag
+	TIMSK = _BV(OCIE1A); // TCO compare match IRQ enable
+	TCCR1B = ( _BV(WGM12) | _BV(CS11)  ); // CTC mode & clkIO/8 (from prescaler), start timer
 	#endif
 
-	// OCR1A - setup of front (brake) light PWM
+	#if defined(MJ818_)
+	// timer/counter 1 - 16bit
+	// PB3 - brake light
 	TCCR1A = (_BV(COM1A1) | // Clear OC1A/OC1B on Compare Match when up counting
-						_BV(WGM10)); // phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
-	TCCR1B = _BV(CS10); // clock prescaler: clk/8
-
-	#if defined(MJ818_) // OCR0A setup
-	// rear light PWM
-	TCCR0A = ( _BV(COM0A1)| // Clear OC1A/OC1B on Compare Match when up counting
-	_BV(WGM00) );	// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
-	TCCR0B = _BV(CS01);		// clock prescaler: clk/8
+			  _BV(WGM10)); // phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
+	TCCR1B = _BV(CS10); // clock prescaler: clk/1 (no prescaling)
 	#endif
+
+	// timer/counter 0 - 8bit
+	// PB2 - rear light / front light PWM
+	TCCR0A = ( _BV(COM0A1)| // Clear OC1A/OC1B on Compare Match when up counting
+			   _BV(WGM00) );	// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
+	TCCR0B = _BV(CS01);		// clock prescaler: clk/8
+
 
 	if(MCUSR & _BV(WDRF)) // power-up - if we got reset by the watchdog...
 	{
@@ -225,8 +236,8 @@ ISR(INT1_vect)
 	}
 }
 
-#if defined(MJ808_) // ISR for timer 0 A compare match
-ISR(TIMER0_COMPA_vect)
+#if ( defined(MJ808_) | defined(MJ828_) ) // ISR for timer 0 A compare match - button handling
+ISR(TIMER1_COMPA_vect)
 {
 	// code to be executed every 32.5ms
 
@@ -238,7 +249,7 @@ ISR(TIMER0_COMPA_vect)
 		if (flag_lamp_is_on && counter_button_press_time > 50) // longer press - turn off
 		{
 			#if defined(MJ808_) // button handling if we are a dumb front light
-			if (canbus_status.devices == _BV(MJ818)) // only the rear and fron lights are on the bus
+			if (canbus_status.devices == _BV(MJ818)) // only the rear and front lights are on the bus
 			{
 				CAN_OUT.COMMAND = (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT); // assemble appropriate command
 				CAN_OUT.ARGUMENT = 0x00; // argument to turn off
@@ -262,7 +273,7 @@ ISR(TIMER0_COMPA_vect)
 		if (!flag_lamp_is_on && counter_button_press_time > 20) // shorter press - turn on
 		{
 			#if defined(MJ808_) // button handling if we are a dumb front light
-			if (canbus_status.devices == _BV(MJ818)) // only the rear and fron lights are on the bus
+			if (canbus_status.devices == _BV(MJ818)) // only the rear and front lights are on the bus
 			{
 				CAN_OUT.COMMAND = (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT); // assemble appropriate command
 				CAN_OUT.ARGUMENT = 0xFF; // argument to turn on
