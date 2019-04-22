@@ -7,11 +7,11 @@
 
 #define MJ808_ // what device to compile for?
 
-#include "gpio.h"
-#include "gpio_definitions.h"
+#include "gpio.h"	// macros for pin definitions
+#include "gpio_definitions.h" // pin layout
 
-#include "mcp2515.h"
-#include "mj8x8.h"
+#include "mcp2515.h"	// CAN driver
+#include "mj8x8.h"	// MJ-specific functions
 
 // global variables
 #if ( defined(MJ808_) | defined(MJ828_) ) // flags for front light
@@ -62,62 +62,53 @@ canbus canbus_status = // bit-wise info about CAN bus status
 
 int main(void)
 {
-	#include "gpio_modes.h"
-
-	//FIXME - not really needed and is not turned on on power-on
-	#if defined(MJ808_) // crude power indicator
-	util_led(UTIL_LED_GREEN_ON);
-	#endif
+	#include "gpio_modes.h" // GPIO state definitions
 
 	PRR = _BV(PRUSART);	// turn off USART, we don't need it
 	ACSR = _BV(ACD); // turn off ADC, we don't need it either
 
 	cli();	// clear interrupts globally
 
-	#if defined(MJ808_) // OCR init to know value for rear light
+	#if defined(MJ808_) // OCR init for rear light - have light off
 	OCR_FRONT_LIGHT = 0x00;
 	#endif
-	#if defined(MJ818_) // OCR init to know value for front light
+	#if defined(MJ818_) // OCR init for rear light - have light off
 	OCR_REAR_LIGHT = 0x00;
 	OCR_BRAKE_LIGHT = 0x00;
 	#endif
 
-	#if ( defined(MJ808_) | defined(MJ828_) ) // OCR0A & OCR1A setup
-	// OCR1A - setup of timer-driven interrupt
-	OCR1A = 0x6180; // fires every 50ms
-	TIFR |= _BV(OCF1A); // clear interrupt flag
-	TIMSK = _BV(OCIE1A); // TCO compare match IRQ enable
-	TCCR1B = ( _BV(WGM12) | _BV(CS11)  ); // CTC mode & clkIO/8 (from prescaler), start timer
+	#if ( defined(MJ808_) | defined(MJ828_) ) // OCR1A setup of timer-driven interrupt, mostly for SW button debouncing
+	OCR1A = 0x6180;			// counter increment up to this value, at which CTC's MAX is reached - corresponds to 50ms w. prescaler at clkIO/8
+	TIFR |= _BV(OCF1A);		// clear interrupt flag
+	TIMSK = _BV(OCIE1A);	// TCO compare match IRQ enable
+	TCCR1B = ( _BV(WGM12) |	// CTC mode w. TOP = OCR1A, TOV1 set to MAX
+			   _BV(CS11)  ); // clkIO/8 (from prescaler), start timer
 	#endif
 
-	#if defined(MJ818_)
-	// timer/counter 1 - 16bit
-	// PB3 - brake light
-	TCCR1A = (_BV(COM1A1) | // Clear OC1A/OC1B on Compare Match when up counting
-			  _BV(WGM10)); // phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
-	TCCR1B = _BV(CS10); // clock prescaler: clk/1 (no prescaling)
+	#if defined(MJ818_)	// timer/counter 1 - 16bit - PB3 - brake light PWM
+	TCCR1A = (_BV(COM1A1) |	// Clear OC1A/OC1B on Compare Match when up counting
+			  _BV(WGM10));	// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
+	TCCR1B = _BV(CS10);		// clock prescaler: clk/1 (no pre-scaling)
 	#endif
 
-	// timer/counter 0 - 8bit
-	// PB2 - rear light / front light PWM
-	TCCR0A = ( _BV(COM0A1)| // Clear OC1A/OC1B on Compare Match when up counting
+	// timer/counter 0 - 8bit - PB2 - rear light / front light PWM
+	TCCR0A = ( _BV(COM0A1)|		// Clear OC1A/OC1B on Compare Match when up counting
 			   _BV(WGM00) );	// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
-	TCCR0B = _BV(CS01);		// clock prescaler: clk/8
-
+	TCCR0B = _BV(CS01);			// clock prescaler: clk/8
 
 	if(MCUSR & _BV(WDRF)) // power-up - if we got reset by the watchdog...
 	{
-		MCUSR &= ~_BV(WDRF); // clear the reset flag
-		WDTCR |= (_BV(WDCE) | _BV(WDE)); // WDT change enable sequence
-		WDTCR = 0x00; // disable the thing completely
+		MCUSR &= ~_BV(WDRF);				// clear the reset flag
+		WDTCR |= (_BV(WDCE) | _BV(WDE));	// WDT change enable sequence
+		WDTCR = 0x00;						// disable the thing completely
 	}
 
 	// setup of INT1  - handled via INT1_vect ISR
 	MCUCR = _BV(ISC11); // a falling edge generates an IRQ
 	GIMSK = _BV(INT1);	// enable INT1
 
-	WDTCR |= (_BV(WDCE) | _BV(WDE)); // WDT change enable sequence
-	WDTCR = ( _BV(WDIE) | _BV(WDP2)  ); // watchdog timer set to 0.5
+	WDTCR |= (_BV(WDCE) | _BV(WDE));		// WDT change enable sequence
+	WDTCR = ( _BV(WDIE) | _BV(WDP2)  );		// watchdog timer set to 0.5
 
 	sei();	// enable interrupts globally
 
@@ -129,22 +120,22 @@ int main(void)
 	//sleep_enable();
 	//sleep_cpu();
 
-	#if defined(MJ808_) // crude power indicator
-	util_led(UTIL_LED_GREEN_OFF);
+	#if defined(MJ808_) // crude power indicator - blink green LED once
+	util_led(UTIL_LED_GREEN_BLINK_1X);
 	#endif
 
 	while (1) // forever loop
 	{
 		// on purpose kept as empty as possible !!
-		//asm("nop");
+		asm("nop");
 
 		//if (MCUCR & _BV(SE)) // if sleep is enabled
 			//sleep_cpu(); // ...sleep
 	}
 }
 
-// ISR for INT1 - triggered by CAN message reception of the MCP2515
-ISR(INT1_vect)
+
+ISR(INT1_vect) // ISR for INT1 - triggered by CAN message reception of the MCP2515
 {
 	uint8_t canintf; // interrupt flag register
 
@@ -301,7 +292,7 @@ ISR(TIMER1_COMPA_vect)
 }
 #endif
 
-ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK) //TODO - state machine - active CAN bus device discovery & default operation on empty bus
+ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK) // TODO - state machine - active CAN bus device discovery & default operation on empty bus
 {
 	// TODO - implement sleep cycles for processor and CAN bus hardware
 	//sleep_disable(); // wakey wakey
