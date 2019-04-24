@@ -12308,7 +12308,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="73.66" y1="220.98" x2="73.66" y2="180.34" width="0.1524" layer="90"/>
 <text x="15.24" y="215.9" size="1.778" layer="90">ICSP connector</text>
 <text x="391.16" y="106.68" size="6.4516" layer="91">FIXME</text>
-<text x="243.84" y="152.4" size="6.4516" layer="91">FIXME</text>
 <text x="363.22" y="137.16" size="1.778" layer="91">test with: SRN6045-3R3Y (3.3uH)</text>
 </plain>
 <instances>
