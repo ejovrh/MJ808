@@ -111,6 +111,7 @@
 	#define UTIL_LED_RED_BLINK_4X 0x1C // utility LED - blink
 	#define UTIL_LED_RED_BLINK_5X 0x1D // utility LED - blink
 	#define UTIL_LED_RED_BLINK_6X 0x1E // utility LED - blink
+// TODO - define MJ828 LED & switch commands
 #define CMND_DEVICE 0x40 // command for device (00 - logic unit, 01 - power sources, 02 - lights, 03 sensors)
 	#define DEV_LU 0x00 // logic unit device
 	#define DEV_PWR_SRC 0x04 // power source device
@@ -188,12 +189,36 @@
 // b5
 #define BLANK 0x00
 
-typedef struct canbus
+typedef union		// union of bit fields and uint16_t - representation discovered devices on bus
+{
+	struct			// bit fields - one bit for each device on the bus
+	{
+		uint8_t _LU :1;		//
+		uint8_t _DEV_0B :1;	//
+		uint8_t _DEV_0C :1;	//
+		uint8_t _MJ828 :1;	//
+		uint8_t _DEV_1A :1;	//
+		uint8_t _DEV_1B :1;	//
+		uint8_t _DEV_1C :1;	//
+		uint8_t _DEV_1D :1;	//
+		uint8_t _MJ808 :1;	//
+		uint8_t _MJ818 :1;	//
+		uint8_t _DEV_2C :1;	//
+		uint8_t _DEV_2D :1;	//
+		uint8_t _DEV_3A :1;	//
+		uint8_t _DEV_3B :1;	//
+		uint8_t _DEV_3C :1;	//
+		uint8_t _DEV_3D :1;	//
+	};
+	uint16_t all;	// the bit field as one uint16_t
+} u_devices;
+
+typedef struct
 {
 	uint8_t status; // status info
-	uint8_t count : 4; // device counter for discovery
-	uint16_t devices; // indicator of devices discovered, 16 in total; B0 - 1st device (0A), B1 - 2nd device (0B), ..., B15 - 16th device (3D)
-	uint8_t n ; // ordered device number - A0 (0th device) until 3C (15th device)
+	uint8_t broadcast_iteration_count : 4; // device counter for discovery
+	u_devices devices; // indicator of devices discovered, 16 in total; B0 - 1st device (0A), B1 - 2nd device (0B), ..., B15 - 16th device (3D)
+	uint8_t numerical_self_id ; // ordered device number - A0 (0th device) until 3C (15th device)
 	uint8_t sleep_iteration : 3; // how many times did we wakeup, sleep and wakeup again
 } canbus;
 

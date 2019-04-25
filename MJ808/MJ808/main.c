@@ -28,7 +28,7 @@ volatile uint8_t counter_button_press_time = 0; // holds the counter value at bu
 #if defined(MJ808_) // CAN_OUT SID for front light
 can_message_t CAN_OUT =
 {
-	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | MJ808), // high byte
+	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A), // high byte
 	.sidl = ( RCPT_DEV_BLANK | BLANK) // low byte
 };
 #endif
@@ -36,7 +36,7 @@ can_message_t CAN_OUT =
 #if defined(MJ818_) // CAN_OUT SID for rear light
 can_message_t CAN_OUT =
 {
-	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | MJ818), // high byte
+	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B), // high byte
 	.sidl = ( RCPT_DEV_BLANK | BLANK) // low byte
 };
 #endif
@@ -44,7 +44,7 @@ can_message_t CAN_OUT =
 #if defined(MJ828_) // CAN_OUT SID for dashboard
 can_message_t CAN_OUT =
 {
-	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | MJ828), // high byte
+	.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D), // high byte
 	.sidl = ( RCPT_DEV_BLANK | BLANK) // low byte
 };
 #endif
@@ -54,9 +54,9 @@ can_message_t CAN_IN; // structure holding an incoming CAN message
 canbus canbus_status = // bit-wise info about CAN bus status
 {
 	.status = 0x80, // bitwise representation of CAN bus status, start with discovery mode on
-	.devices = 0x0000 , // bitwise representation of devices discovered, see #defines below CMND_ANNOUNCE
-	.count = 0, // counter
-	.n = 0, //
+	.devices.all = 0x0000 , // bitwise representation of devices discovered, see #defines below CMND_ANNOUNCE
+	.broadcast_iteration_count = 0, // counter
+	.numerical_self_id = 0, //
 	.sleep_iteration = 0
 };
 
@@ -64,8 +64,8 @@ int main(void)
 {
 	#include "gpio_modes.h" // GPIO state definitions
 
-	PRR = _BV(PRUSART);	// turn off USART, we don't need it
-	ACSR = _BV(ACD); // turn off ADC, we don't need it either
+	PRR = _BV(PRUSART);		// turn off USART, we don't need it
+	ACSR = _BV(ACD);		// turn off ADC, we don't need it either
 
 	cli();	// clear interrupts globally
 
@@ -91,10 +91,11 @@ int main(void)
 	TCCR1B = _BV(CS10);		// clock prescaler: clk/1 (no pre-scaling)
 	#endif
 
-	// timer/counter 0 - 8bit - PB2 - rear light / front light PWM
+	#if ( defined(MJ808_) | defined(MJ818_) ) // timer/counter 0 - 8bit - PB2 - rear light / front light PWM
 	TCCR0A = ( _BV(COM0A1)|		// Clear OC1A/OC1B on Compare Match when up counting
 			   _BV(WGM00) );	// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
 	TCCR0B = _BV(CS01);			// clock prescaler: clk/8
+	#endif
 
 	if(MCUSR & _BV(WDRF)) // power-up - if we got reset by the watchdog...
 	{
@@ -108,14 +109,15 @@ int main(void)
 	GIMSK = _BV(INT1);	// enable INT1
 
 	WDTCR |= (_BV(WDCE) | _BV(WDE));		// WDT change enable sequence
-	WDTCR = ( _BV(WDIE) | _BV(WDP2)  );		// watchdog timer set to 0.5
+	WDTCR = ( _BV(WDIE) | _BV(WDP2)  );		// watchdog timer set to 0.25s
 
 	sei();	// enable interrupts globally
 
 	mcp2515_init(); // initialize & configure the MCP2515
 
-	canbus_status.n = (uint8_t) ( (CAN_OUT.sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
+	canbus_status.numerical_self_id = (uint8_t) ( (CAN_OUT.sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
 
+	// TODO - implement micro controller sleep cycles
 	//set_sleep_mode(SLEEP_MODE_IDLE);
 	//sleep_enable();
 	//sleep_cpu();
@@ -170,6 +172,9 @@ ISR(INT1_vect) // ISR for INT1 - triggered by CAN message reception of the MCP25
 	// message error interrupt
 	if (canintf & (_BV(MERRF) )) //TODO - implement message error handling
 	{
+		#if defined(MJ808_)
+		util_led(UTIL_LED_RED_BLINK_1X); // FIXME - implement bus error handling
+		#endif
 		mcp2515_opcode_bit_modify(CANINTF, _BV(MERRF), 0x00); // clear the flag
 	}
 
@@ -179,7 +184,7 @@ ISR(INT1_vect) // ISR for INT1 - triggered by CAN message reception of the MCP25
 		mcp2515_can_msg_receive(&CAN_IN); // load the CAN message into its structure
 
 		// update the CAN BUS status structure; if we get a message from SID foo, then _BV(foo) shall be marked as "on the bus"
-		canbus_status.devices = ( 1 << ( (CAN_IN.sidh >> 2) & 0x0F ) ); // shift as many bits as the originating SID is in decimal
+		canbus_status.devices.all |= ( 1 << ( (CAN_IN.sidh >> 2) & 0x0F ) ); // shift as many bits as the originating SID is in decimal
 
 		// command for device
 		if (CAN_IN.COMMAND & CMND_DEVICE) //  we received a command for some device...
@@ -233,14 +238,19 @@ ISR(TIMER1_COMPA_vect)
 	// code to be executed every 32.5ms
 
 	// pushbutton debounce in software. yuk! implemented via counters in a timer interrupt
+	#if defined(MJ808_)
 	if (gpio_tst(PUSHBUTTON_pin)) // if button is pressed
+	#endif
+	#if defined(MJ828_)
+	if (!gpio_tst(PUSHBUTTON1_pin)) // if button is pressed
+	#endif
 	{
 		counter_button_press_time++; // start the counter
 
 		if (flag_lamp_is_on && counter_button_press_time > 50) // longer press - turn off
 		{
 			#if defined(MJ808_) // button handling if we are a dumb front light
-			if (canbus_status.devices == _BV(MJ818)) // only the rear and front lights are on the bus
+			if (canbus_status.devices._MJ818) // only the rear and front lights are on the bus
 			{
 				CAN_OUT.COMMAND = (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT); // assemble appropriate command
 				CAN_OUT.ARGUMENT = 0x00; // argument to turn off
@@ -249,13 +259,13 @@ ISR(TIMER1_COMPA_vect)
 				fade(0x00, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);
 			}
 
-			if (canbus_status.devices == 0x00) // only the front light is on the bus
+			if (canbus_status.devices.all == 0x00) // only the front light is on the bus
 			{
 				fade(0x00, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT); // turn off
 			}
+			util_led(UTIL_LED_GREEN_OFF); // power off green LED
 			#endif
 
-			util_led(UTIL_LED_GREEN_OFF); // power off green LED
 			msg_button(&CAN_OUT, BUTTON0_OFF); // convey button release via CAN
 			counter_button_press_time = 0; // reset the counter
 			flag_lamp_is_on = 0;
@@ -264,7 +274,7 @@ ISR(TIMER1_COMPA_vect)
 		if (!flag_lamp_is_on && counter_button_press_time > 20) // shorter press - turn on
 		{
 			#if defined(MJ808_) // button handling if we are a dumb front light
-			if (canbus_status.devices == _BV(MJ818)) // only the rear and front lights are on the bus
+			if (canbus_status.devices._MJ818) // only the rear and front lights are on the bus
 			{
 				CAN_OUT.COMMAND = (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT); // assemble appropriate command
 				CAN_OUT.ARGUMENT = 0xFF; // argument to turn on
@@ -273,13 +283,13 @@ ISR(TIMER1_COMPA_vect)
 				fade(0x40, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);
 			}
 
-			if (canbus_status.devices == 0x00) // only the front light is on the bus
+			if (canbus_status.devices.all == 0x00) // only the front light is on the bus
 			{
 				fade(0x40, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT); // turn on
 			}
+			util_led(UTIL_LED_GREEN_ON); // power on green LED
 			#endif
 
-			util_led(UTIL_LED_GREEN_ON); // power on green LED
 			msg_button(&CAN_OUT, BUTTON0_ON); // convey button press via CAN
 			counter_button_press_time = 0; // reset the counter
 			flag_lamp_is_on = 1;
@@ -304,9 +314,9 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK) // TODO - state machine - active CAN bus dev
 		//mcp2515_opcode_bit_modify(CANINTF, _BV(WAKIF), _BV(WAKIF)); // wakeup - put into normal mode
 	//}
 
-	if (canbus_status.status & 0x80) // discovery mode, once on power up
+	if (canbus_status.status & 0x80) // discovery mode, once on power up and 2s-periodic
 		discovery_announce(&canbus_status, &CAN_OUT);
-	else // not discovery mode
+	else // not discovery mode - every 2s
 		discovery_behave(&canbus_status); // behave according to what was announced
 
 	++canbus_status.sleep_iteration;

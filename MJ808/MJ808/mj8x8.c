@@ -9,15 +9,7 @@
 #include "mj8x8.h"
 
 #if defined(MJ808_) || defined(MJ818_) // private function - fades *ocr to value (or ocr_max) - up to OCR_MAX or down to 0x00
-
-#if defined(MJ808_)
-void fade(uint8_t value, volatile uint16_t *ocr, uint8_t ocr_max)
-#endif
-
-#if defined(MJ818_)
 void fade(uint8_t value, volatile uint8_t *ocr, uint8_t ocr_max)
-#endif
-
 {
 	if (value > *ocr) // we need to get brighter
 	{
@@ -156,15 +148,15 @@ void msg_button(can_message_t *msg, uint8_t button)
 	mcp2515_can_msg_send(msg);
 }
 
-void discovery_announce(volatile canbus *canbus_status, can_message_t *msg)
+void discovery_announce(volatile canbus *canbus_status, can_message_t *msg) // announce ourselves to the bus - once on power-up and then 2s-periodic
 {
-	/* time-slot based broadcast of self; timer is the watchdog, set to 500ms on inital init in main()
+	/* time-slot based broadcast of self; timer is the watchdog, set to 250ms on inital init in main()
 	 * after 2s this loop is done and everyone in the bus (if alive) has broadcasted their SID
 	 *	in its time slot (provided power up was at the same time)
 	 *	after that time, canbus_status->devices	holds a bitwise representation of what is alive on the bus
 	 */
 
-	if (canbus_status->count == canbus_status->n) // compare device counter with decimal self-id
+	if (canbus_status->broadcast_iteration_count == canbus_status->numerical_self_id) // compare device counter with decimal self-id
 	{	// broadcast self-id to everyone
 		msg->sidh |= BROADCAST; // set the broadcast flag
 		msg->COMMAND = (CMND_ANNOUNCE); // "mark" it as an announce command (doesn't really do a thing since the announce is 0x00)
@@ -172,16 +164,17 @@ void discovery_announce(volatile canbus *canbus_status, can_message_t *msg)
 		mcp2515_can_msg_send(msg);
 		msg->sidh &= ~BROADCAST; // unset the broadcast flag
 		canbus_status->status &= ~0x80; // unset the "i-was-here" bit
-		canbus_status->status |= 0x40;
-		canbus_status->sleep_iteration = 0;
+		canbus_status->status |= 0x40; // FIXME - what is this flag used for??
+		canbus_status->sleep_iteration = 0;	// reset the cycle and start over
+		canbus_status->broadcast_iteration_count = 0;	// reset the cycle and start over
 
 		WDTCR |= (_BV(WDCE) | _BV(WDE)); // WDT change enable sequence
-		WDTCR = ( _BV(WDIE) | _BV(WDP3) | _BV(WDP0)); // set watchdog timer set to 8s
+		WDTCR = ( _BV(WDIE) | _BV(WDP2) | _BV(WDP1) | _BV(WDP0)); // set watchdog timer set to 2s
 
 		// from here on we act upon the bus status directly in this iteration of the ISR
 	}
 
-	++canbus_status->count; // counter, incremented by the WDT ISR; counts from the 0th up to the 15th device
+	++canbus_status->broadcast_iteration_count; // counter, incremented by the WDT ISR; counts from the 0th up to the 15th device
 }
 
 // discover what lives on the CAN bus and act upon it
@@ -189,33 +182,35 @@ void discovery_behave(volatile canbus *canbus_status)
 {
 		// front light present
 		#if defined(MJ818_) // rear light behavior
-		if (canbus_status->devices & _BV(MJ808)) // the front light is on the bus
+		if (canbus_status->devices._MJ808) // the front light is on the bus
 		{
 			return; // do nothing, the front light will tell me what to do
 		}
 		#endif
 
 		// logic unit present
-		if (canbus_status->devices & _BV(LU)) // the logic unit is on the bus
+		if (canbus_status->devices._LU) // the logic unit is on the bus
+		// TODO - check if the if is properly evaluated after the union/struct was introduced
 		{
 			#if defined(MJ808_) // indicate through utility LED
-			util_led(UTIL_LED_GREEN_BLINK_1X);
+			//util_led(UTIL_LED_GREEN_BLINK_1X);
 			#endif
 			return; // do nothing, the logic unit will tell me what to do
 		}
 
 		// rear light present
-		if (canbus_status->devices & _BV(MJ818))
+		if (canbus_status->devices._MJ818)
 		{
 			#if defined(MJ808_) // indicate through utility LED
-			util_led(UTIL_LED_RED_BLINK_2X);
+			//util_led(UTIL_LED_RED_BLINK_2X);
 			#endif
 			return;
 		}
 
-		if (canbus_status->devices == 0x00) // we are alone on the bus -> go dumb, glow, rescan periodically and be happy...
+		if (canbus_status->devices.all == 0x00) // we are alone on the bus -> go dumb, glow, rescan periodically and be happy...
 		{
 			#if defined(MJ808_) // setup of front light PWM - permanent on
+			// FIXME - mj808 thinks the bus is empty
 			util_led(UTIL_LED_RED_BLINK_1X); // indicate bus empty
 			#endif
 
@@ -232,7 +227,7 @@ void discovery_behave(volatile canbus *canbus_status)
 				WDTCR |= (_BV(WDCE) | _BV(WDE)); // WDT change enable sequence
 				WDTCR = ( _BV(WDIE) | _BV(WDP2)  ); // watchdog timer set to 0.25
 
-				canbus_status->count = 0; // reset the device counter
+				canbus_status->broadcast_iteration_count = 0; // reset the device counter
 				canbus_status->status |= 0x80; // unset i-was-here bit and let it rescan again
 			}
 
