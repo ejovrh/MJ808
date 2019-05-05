@@ -190,12 +190,8 @@ void discovery_behave(volatile canbus *canbus_status)
 
 		// logic unit present
 		if (canbus_status->devices._LU) // the logic unit is on the bus
-		// TODO - check if the if is properly evaluated after the union/struct was introduced
 		{
-			#if defined(MJ808_) // indicate through utility LED
-			//util_led(UTIL_LED_GREEN_BLINK_1X);
-			#endif
-			return; // do nothing, the logic unit will tell me what to do
+			return;
 		}
 
 		// rear light present
@@ -210,7 +206,6 @@ void discovery_behave(volatile canbus *canbus_status)
 		if (canbus_status->devices.all == 0x00) // we are alone on the bus -> go dumb, glow, rescan periodically and be happy...
 		{
 			#if defined(MJ808_) // setup of front light PWM - permanent on
-			// FIXME - mj808 thinks the bus is empty
 			util_led(UTIL_LED_RED_BLINK_1X); // indicate bus empty
 			#endif
 
@@ -234,3 +229,201 @@ void discovery_behave(volatile canbus *canbus_status)
 			return;
 		}
 }
+
+#if defined(MJ808_) || defined (MJ828_)
+void button_debounce(volatile button_t *in_button)	// marks a button as pressed if it was pressed for the duration of 2X ISR iterations
+	{
+	inline void local_advance_counter(void)	// local helper function which advances the debounce "timer"
+	{
+		++in_button->hold_counter;	// start to count (used to determine long button press; not used for debouncing)
+
+		// debouncing by means of bit shifting
+		in_button->state ^ 0x03;	// XOR what we currently have in state
+		in_button->state <<= 1;		// left shift so that if we have 0x01 this becomes 0x02
+		in_button->state |= 0x01;	// OR what we have with 0x01 so that 0x02 becomes 0x03
+	}
+
+	/*	rationale of debouncing:
+	 *		- the ISR fires every 25ms, which means the sample rate of a button press is once per 25ms
+	 *		- if the button is held for only one iteration (bounce state) we have 0x01 and on the next iteration state is reset to 0x00 [1st 25ms]
+	 *		- if the button is held for two iterations, state is on the first iteration 0x01 and 0x03 on the second [2nd 25ms]
+	 *		- after 2 iterations 50ms have passed -> stable state
+	 *
+	 *		the debouncer does only that - it debounces
+	 *
+	 *		the state marker marks the button state for external code to make sense of it
+	 *		valid states:
+	 *			- "is_pressed" - key is pressed (and held)
+	 *			- "toggle" - toggled on/off state, once per key press
+	 *			- "hold_temp" - held for e.g 1s to turn something on/off
+	 *			- "hold_constant" - held constantly (e.g. by error) - to be ignored
+	 */
+	// CHECKME - random spikes (not true button press events) every 25ms might be an issue
+	#if defined(MJ828_) // inverted
+	if (	!	( *(in_button->PIN) & (1<<in_button->pin_number))		)	// if in the given PIN register the given button is pressed
+	#endif
+	#if defined(MJ808_)	// non-inverted
+	if (		( *(in_button->PIN) & (1<<in_button->pin_number))		)	// if in the given PIN register the given button is pressed
+	#endif
+	{									// button is pressed
+		local_advance_counter();		// debouncing happens here
+
+		if (in_button->hold_counter >= BUTTON_MAX_PRESS_TIME)	// too long button press -> error state
+		{										// turn everything off
+			in_button->state = 0;				// reset state
+			in_button->is_pressed = 0;			// mark as currently not pressed
+			in_button->was_pressed = 1;			// mark button as "was pressed" - this is the previous state in the next iteration
+			in_button->hold_error = 1;			// mark as error state
+
+			in_button->toggle = 0;				// toggled due to error state -> reset to default value
+			in_button->hold_temp = 0;			// mark as hold_temp off
+			return;								// get out
+		}
+	}
+	else
+	{
+		if (in_button->is_at_default)	// if we are in zero state
+			return;							// no need to do anything
+
+									// button is released
+										// button is not pressed - reset everything to default values
+		in_button->state = 0;			// reset state
+		in_button->is_pressed = 0;		// mark as currently not pressed
+
+		in_button->was_pressed = 1;		// mark button as "was pressed" - this is the previous state in the next iteration
+		in_button->hold_error = 0;		// release error flag, since button is now released
+		in_button->hold_counter = 0;	// set counter back to 0
+		in_button->is_pressed = 0;		// mark as currently not pressed
+		in_button->is_at_default = 1;
+		return;							// finish
+	}
+
+	// state markers
+	if (in_button->state == 0x03 && !in_button->hold_error)		// if we have a non-error steady state
+	{
+		if (in_button->hold_counter >= BUTTON_MIN_PRESS_TIME)		// pressed for a valid amount of time
+		{
+			if (!in_button->was_pressed)								// previous state (prevent flapping on/off)
+				in_button->hold_temp = !in_button->hold_temp;				// set "hold_temp" state
+
+			in_button->was_pressed = 1;									// mark the button as being pressed
+			return;
+		}
+
+		if (in_button->was_pressed)								// previous state (prevent flapping on/off)
+			in_button->toggle = !in_button->toggle;					// set "toggle" state
+
+		in_button->is_pressed = 1;								// set "is_pressed" state
+		in_button->was_pressed = 0;								// mark the button as being pressed
+		in_button->is_at_default = 0;
+	}
+}
+#endif
+
+#if defined(MJ828_)
+static void glow(uint8_t led, uint8_t state, uint8_t blink) // private function, used only by the charlieplexing_handler() function
+{
+	// FIXME - blinking is passed by value, hence never decremented where it should be: in the struct
+	//	task: put code in glow() into the charlieplex-handler
+
+	// set LED pins to initial state
+	gpio_conf(LED_CP1_pin, INPUT, LOW);				// Charlie-plexed pin1
+	gpio_conf(LED_CP2_pin, INPUT, LOW);				// Charlie-plexed pin2
+	gpio_conf(LED_CP3_pin, INPUT, LOW);				// Charlie-plexed pin3
+	gpio_conf(LED_CP4_pin, INPUT, LOW);				// Charlie-plexed pin4
+
+	static uint8_t counter;
+	counter++;
+
+	if (! (state || blink) )	// if we get 0x00 (off argument) - do nothing and get out
+		return;
+
+
+
+	switch (led)
+	{
+		case 0x00:	//red led
+			gpio_conf(LED_CP2_pin, OUTPUT, HIGH); // b1 - anode
+
+			if ( (state) || (blink && counter <= 128) )  // on
+				gpio_conf(LED_CP1_pin, OUTPUT, LOW); // b2 - cathode
+			else
+				gpio_conf(LED_CP1_pin, OUTPUT, HIGH); // b2 - cathode
+		break;
+
+		case 0x01:	// green led
+			gpio_conf(LED_CP1_pin, OUTPUT, HIGH); // b2 - anode
+
+			if ( (state) || (blink && counter <= 128) )  // on
+				gpio_conf(LED_CP2_pin, OUTPUT, LOW); // b1 - cathode
+			else
+				gpio_conf(LED_CP2_pin, OUTPUT, HIGH); // b1 - cathode
+		break;
+
+		case 0x02:	// blue1 led
+			gpio_conf(LED_CP2_pin, OUTPUT, HIGH); // b1 - anode
+
+			if ( (state) || (blink && counter <= 128) )  // on
+				gpio_conf(LED_CP3_pin, OUTPUT, LOW); // b0 - cathode
+			else
+				gpio_conf(LED_CP3_pin, OUTPUT, HIGH); // b0 - cathode
+		break;
+
+		case 0x03:	// yellow led
+			gpio_conf(LED_CP3_pin, OUTPUT, HIGH); // b2 - anode
+
+			if ( (state) || (blink && counter <= 128) )  // on
+				gpio_conf(LED_CP2_pin, OUTPUT, LOW); // b1 - cathode
+			else
+				gpio_conf(LED_CP2_pin, OUTPUT, HIGH); // b1 - cathode
+		break;
+
+		case 0x04:	// blue2 LED (battery indicator 1)
+			gpio_conf(LED_CP4_pin, OUTPUT, HIGH); // d6 - anode
+
+			if ( (state) || (blink && counter <= 128) )  // on
+				gpio_conf(LED_CP3_pin, OUTPUT, LOW); // b0 - cathode
+			else
+				gpio_conf(LED_CP3_pin, OUTPUT, HIGH); // b0 - cathode
+		break;
+
+		case 0x05:	// blue3 LED (battery indicator 2)
+			gpio_conf(LED_CP3_pin, OUTPUT, HIGH); // b0 - anode
+
+			if ( (state) || (blink && counter <= 128) )  // on
+				gpio_conf(LED_CP4_pin, OUTPUT, LOW); // d6 - cathode
+			else
+				gpio_conf(LED_CP4_pin, OUTPUT, HIGH); // d6 - cathode
+		break;
+
+		case 0x06:	// blue4 LED (battery indicator 3)
+			gpio_conf(LED_CP1_pin, OUTPUT, HIGH); // b2 - anode
+
+			if ( (state) || (blink && counter <= 128) )  // on
+				gpio_conf(LED_CP4_pin, OUTPUT, LOW); // d6 - cathode
+			else
+				gpio_conf(LED_CP4_pin, OUTPUT, HIGH); // d6 - cathode
+		break;
+
+		case 0x07:	// blue5 LED (battery indicator 4)
+			gpio_conf(LED_CP4_pin, OUTPUT, HIGH); // d6 - anode
+
+			if ( (state) || (blink && counter <= 128) )  // on
+				gpio_conf(LED_CP1_pin, OUTPUT, LOW); // b2 - cathode
+			else
+				gpio_conf(LED_CP1_pin, OUTPUT, HIGH); // b2 - cathode
+		break;
+	}
+
+};
+
+void charlieplexing_handler(volatile leds_t *in_led)
+{
+	static uint8_t i = 0;	// iterator to loop over all LEDs on device
+
+	glow(i, in_led->leds[i].on, in_led->leds[i].blink_count); // e.g. command = 0x00 (red), arg = 0x01 (on)
+
+	// !!!!
+	(i == in_led->led_count) ? i = 0 : ++i; // count up to led_count and then start from zero
+}
+#endif
