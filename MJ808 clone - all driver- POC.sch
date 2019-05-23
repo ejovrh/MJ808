@@ -12235,7 +12235,7 @@ by R. Vogg  15.March.2002</description>
 </classes>
 <parts>
 <part name="R10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R1210" package3d_urn="urn:adsk.eagle:package:23554/2" value="0.15 / 1W"/>
-<part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="47μF"/>
+<part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="1μF / 10V"/>
 <part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD123" package3d_urn="urn:adsk.eagle:package:43420/1" value="PMEG2010ER,115"/>
 <part name="L1" library="SparkFun-Coils" library_urn="urn:adsk.eagle:library:512" deviceset="INDUCTOR" device="-SRN6045-33UH" package3d_urn="urn:adsk.eagle:package:37576/1" value="VLS6045EX-150M-CA - 15uH"/>
 <part name="Q1" library="SIA456DJ-T1-GE3  N-Fet" deviceset="SIA456DJ" device="" value="SiA456DJ"/>
@@ -12245,7 +12245,6 @@ by R. Vogg  15.March.2002</description>
 <part name="R11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="120"/>
 <part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/1" value="0.1μF"/>
 <part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/1" value="0.1μF"/>
-<part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
 <part name="IC6" library="MAX16820 LED Driver, constant current" deviceset="MAX16820" device="" value="MAX16820"/>
 <part name="X3" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="22-23-2021" device="" value="BAT"/>
 <part name="CAN" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="22-23-2021" device="" value="CAN"/>
@@ -12307,7 +12306,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="12.7" y1="220.98" x2="73.66" y2="220.98" width="0.1524" layer="90"/>
 <wire x1="73.66" y1="220.98" x2="73.66" y2="180.34" width="0.1524" layer="90"/>
 <text x="15.24" y="215.9" size="1.778" layer="90">ICSP connector</text>
-<text x="391.16" y="106.68" size="6.4516" layer="91">FIXME</text>
 <text x="363.22" y="137.16" size="1.778" layer="91">test with: SRN6045-3R3Y (3.3uH)</text>
 </plain>
 <instances>
@@ -12317,7 +12315,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 </instance>
 <instance part="C6" gate="G$1" x="342.9" y="180.34" smashed="yes">
 <attribute name="NAME" x="344.424" y="180.721" size="1.778" layer="95"/>
-<attribute name="VALUE" x="344.424" y="175.641" size="1.778" layer="96"/>
+<attribute name="VALUE" x="341.376" y="177.419" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="D1" gate="G$1" x="386.08" y="129.54" smashed="yes">
 <attribute name="NAME" x="388.62" y="130.0226" size="1.778" layer="95"/>
@@ -12354,10 +12352,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <instance part="C1" gate="G$1" x="106.68" y="187.96" smashed="yes" rot="R180">
 <attribute name="NAME" x="105.156" y="187.579" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="105.156" y="192.659" size="1.778" layer="96" rot="R180"/>
-</instance>
-<instance part="R7" gate="G$1" x="368.3" y="116.84" smashed="yes">
-<attribute name="NAME" x="364.49" y="118.3386" size="1.778" layer="95"/>
-<attribute name="VALUE" x="364.49" y="113.538" size="1.778" layer="96"/>
 </instance>
 <instance part="IC6" gate="G$1" x="365.76" y="185.42" smashed="yes">
 <attribute name="NAME" x="360.68" y="195.58" size="1.27" layer="95"/>
@@ -12776,13 +12770,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="289.56" y="58.42" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GATE" class="2">
-<segment>
-<pinref part="Q1" gate="G$1" pin="G"/>
-<pinref part="R7" gate="G$1" pin="2"/>
-<wire x1="373.38" y1="116.84" x2="375.92" y2="116.84" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="DIM_BRAKE_DRAIN" class="0">
 <segment>
 <pinref part="Q1" gate="G$1" pin="D"/>
@@ -12796,9 +12783,9 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 </net>
 <net name="DIM_FRONT_GATE" class="2">
 <segment>
-<pinref part="R7" gate="G$1" pin="1"/>
-<wire x1="363.22" y1="116.84" x2="340.36" y2="116.84" width="0.1524" layer="91"/>
-<label x="340.36" y="116.84" size="1.778" layer="95"/>
+<wire x1="375.92" y1="116.84" x2="353.06" y2="116.84" width="0.1524" layer="91"/>
+<label x="353.06" y="116.84" size="1.778" layer="95"/>
+<pinref part="Q1" gate="G$1" pin="G"/>
 </segment>
 <segment>
 <pinref part="IC6" gate="G$1" pin="DRV"/>
@@ -12809,8 +12796,8 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <net name="LED_CA" class="0">
 <segment>
 <pinref part="L1" gate="G$1" pin="2"/>
-<wire x1="358.14" y1="129.54" x2="365.76" y2="129.54" width="0.1524" layer="91"/>
-<label x="358.14" y="129.54" size="1.778" layer="95"/>
+<wire x1="353.06" y1="129.54" x2="365.76" y2="129.54" width="0.1524" layer="91"/>
+<label x="353.06" y="129.54" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="LED1" gate="-1" pin="S"/>

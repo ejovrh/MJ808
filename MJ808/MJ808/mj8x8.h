@@ -53,9 +53,9 @@
 */
 
 // maximum safe values for light OCRs
-#define OCR_MAX_FRONT_LIGHT 0x40										// max. OCR1A count limit for front light PWM
+#define OCR_MAX_FRONT_LIGHT 0xE0										// max. OCR1A count limit for front light PWM
 #define OCR_MAX_REAR_LIGHT 0xFF											// max. OCR0A count limit for rear light PWM - the sky is the limit
-#define OCR_MAX_BRAKE_LIGHT 0x40										// max. OCR1A count limit for brake light PWM
+#define OCR_MAX_BRAKE_LIGHT 0xF8										// max. OCR1A count limit for brake light PWM
 
 #define LED_OFF 0x00													// off value for any OCR
 #define BLINK_DELAY 125													// delay used in the util_led() function
