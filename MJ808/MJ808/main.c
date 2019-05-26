@@ -68,7 +68,7 @@ int main(void)
 	#include "gpio_modes.h"												// GPIO state definitions
 
 	PRR = _BV(PRUSART);													// turn off USART, we don't need it
-	ACSR = _BV(ACD);													// turn off ADC, we don't need it either
+	ACSR = _BV(ACD);													// turn off the analog comparator, we don't need it either
 
 	cli();																// clear interrupts globally
 
@@ -179,9 +179,11 @@ int main(void)
 	#endif
 
 	// TODO - implement micro controller sleep cycles
-	//set_sleep_mode(SLEEP_MODE_IDLE);
-	//sleep_enable();
-	//sleep_cpu();
+	set_sleep_mode(SLEEP_MODE_IDLE);									// 11mA
+	//set_sleep_mode(SLEEP_MODE_STANDBY);									// 10mA
+	//set_sleep_mode(SLEEP_MODE_PWR_DOWN);								// 10mA
+	sleep_enable();
+	sleep_cpu();
 
 	#if defined(MJ808_) // crude power indicator - blink green LED once
 	util_led(UTIL_LED_GREEN_BLINK_1X);
@@ -198,14 +200,16 @@ int main(void)
 		mcp2515_opcode_read_bytes(REC, &rec, 1);
 		mcp2515_opcode_read_bytes(TEC, &tec, 1);
 
-		//if (MCUCR & _BV(SE))											// if sleep is enabled
-			//sleep_cpu();												// ...sleep
+		if (MCUCR & _BV(SE))											// if sleep is enabled
+			sleep_cpu();												// ...sleep
 	}
 }
 
 
 ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message reception of the MCP2515
 {
+	sleep_disable();													// wakey wakey
+
 	// assumption: an incoming message is of interest for this unit
 	//	'being of interest' is defined in the filters
 
@@ -443,10 +447,14 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 	#if defined(MJ828_)
 	} while (mj828.can->icod);
 	#endif
+
+	sleep_enable();														// back to sleep
 }
 
 ISR(PCINT2_vect)														// ISR for pushbuttons
 {
+	sleep_disable();													// wakey wakey
+
 	;
 	//button_debounce(&mj808.button[0]);								// from here on the button is debounced and states can be consumed
 	//button_debounce(&mj828.button[1]);								// ditto
@@ -456,11 +464,15 @@ ISR(PCINT2_vect)														// ISR for pushbuttons
 	//mj828.led->leds[red].blink_count = (mj828.button[0].hold_error || mj828.button[1].hold_error);
 	//mj828.led->leds[battery_led1].on = mj828.button[0].hold_temp;
 	//mj828.led->leds[battery_led2].on = mj828.button[1].hold_temp;
+
+	sleep_enable();														// back to sleep
 }
 
 #if ( defined(MJ808_) | defined(MJ828_) )								// ISR for timers 1 A compare match - button handling
 ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - foo ms
 {
+	sleep_disable();													// wakey wakey
+
 	// code to be executed every 25ms
 
 	#if defined(MJ808_)													// pushbutton code for mj808
@@ -526,6 +538,8 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - foo ms
 	mj828.led->leds[battery_led1].on = mj828.button[0].hold_temp;
 	mj828.led->leds[battery_led2].on = mj828.button[1].hold_temp;
 	#endif
+
+	sleep_enable();														// back to sleep
 }
 
 #if defined(MJ828_)														// ISR for timer0 - 16.25ms - charlieplexing timer
@@ -542,7 +556,8 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// TODO - state machine - active CA
 {
 
 	// TODO - implement sleep cycles for processor and CAN bus hardware
-	//sleep_disable();													// wakey wakey
+	sleep_disable();													// wakey wakey
+
 	WDTCR |= _BV(WDIE);													// setting the bit prevents a reset when the timer expires
 
 	//if (gpio_tst(MCP2561_standby_pin))								// if in sleep...
@@ -557,5 +572,6 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// TODO - state machine - active CA
 		discovery_behave(&canbus_status);								// behave according to what was announced
 
 	++canbus_status.sleep_iteration;
-	//sleep_enable();													// back to sleep
+
+	sleep_enable();														// back to sleep
 }
