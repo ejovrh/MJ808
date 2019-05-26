@@ -1,4 +1,5 @@
 #include <inttypes.h>
+#include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -11,9 +12,12 @@
 #if defined(MJ808_) || defined(MJ818_)									// private function - fades *ocr to value (or ocr_max) - up to OCR_MAX or down to 0x00
 void fade(uint8_t value, volatile uint8_t *ocr, uint8_t ocr_max)
 {
+	cli();																// if without cli(), *ocr gets corrupted; im suspecting an ISR while ocr is incrementin/decrementing
+																		//	hence an atomic fade()
+
 	if (value > *ocr)													// we need to get brighter
 	{
-		while (*ocr < value)											// loop until we match the OCR with the requested value
+		while (++*ocr < value)											// loop until we match the OCR with the requested value & increment the OCR
 		{
 			if (*ocr >= ocr_max)										// safeguard against too high a CAN command argument (OCR_MAX is a function of schematic & PCB design)
 			{
@@ -23,23 +27,29 @@ void fade(uint8_t value, volatile uint8_t *ocr, uint8_t ocr_max)
 				break;
 			}
 
-			++*ocr;														// increment the OCR
 			_delay_ms(5);												// delay it a bit for visual stimulus ...
 		}
+
+		sei();															// enable interrupts
 		return;
 	}
 
-	if (value < *ocr)													// we need to get dimmer
+	if (value < *ocr)													// we need to get dimmer & decrement the OCR
 	{
-		while (*ocr > value)											// loop until we match the OCR with the requested value
+		while (--*ocr > value)											// loop until we match the OCR with the requested value
 		{
-			--*ocr;														// decrement the OCR
+			#if defined(MJ808_)
 			_delay_ms(2.5);												// delay it a bit for visual stimulus ...
+			#endif
+			#if defined(MJ818_)
+			_delay_ms(1);												// delay it a bit for visual stimulus ...
+			#endif
 		}
+
+		sei();															// enable interrupts
 		return;
 	}
 }
-
 #endif
 
 #if defined(MJ808_)														// interprets CMND_UTIL_LED command - utility LED (red, green, on, off, blink)
@@ -178,7 +188,7 @@ void discovery_announce(volatile canbus_t *canbus_status, can_message_t *msg)
 		msg->dlc = 1;
 		mcp2515_can_msg_send(msg);
 			#if defined(MJ808_)											// setup of front light PWM - permanent on
-			util_led(UTIL_LED_RED_BLINK_1X);							// indicate bus empty
+			//util_led(UTIL_LED_RED_BLINK_1X);							// indicate bus empty
 			#endif
 		msg->sidh &= ~BROADCAST;										// unset the broadcast flag
 		canbus_status->status &= ~0x80;									// unset the "i-was-here" bit
