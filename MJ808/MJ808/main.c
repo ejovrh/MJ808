@@ -143,13 +143,13 @@ int main(void)
 
 	sei();																// enable interrupts globally
 
-	mcp2515_init();														// initialize & configure the MCP2515
+	can_t CAN;															// declare CAN object - its address will be used soon in the constructor ...
 
 	canbus_status.numerical_self_id = (uint8_t) ( (CAN_OUT.sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
 
 	#if defined(MJ808_)													// device init for MJ808
 	mj808.led = &LED;													// pass reference to LED struct
-	mj808.can = &CAN;													// pass reference to CAN struct
+	mj808.can = can_ctor(&CAN);											// pass CAN address into constructor, returns basically itself
 
 	LED.led_count = 2;
 
@@ -159,14 +159,14 @@ int main(void)
 
 	#if defined(MJ818_)													// device init for MJ818
 	mj818.led = &LED;													// pass reference to LED struct
-	mj818.can = &CAN;													// pass reference to CAN struct
+	mj818.can = can_ctor(&CAN);											// pass CAN address into constructor, returns basically itself
 
 	LED.led_count = 2;
 	#endif
 
 	#if defined(MJ828_)													// device init for MJ828
 	mj828.led = &LED;													// pass reference to LED struct
-	mj828.can = &CAN;
+	mj828.can = can_ctor(&CAN);											// pass CAN address into constructor, returns basically itself
 
 	LED.led_count = 7;
 	LED.flag_any_glow = 1;
@@ -178,9 +178,11 @@ int main(void)
 	mj828.button[1].PIN = (uint8_t *) 0x30;								// ditto
 	#endif
 
+
+
 	// TODO - implement micro controller sleep cycles
 	set_sleep_mode(SLEEP_MODE_IDLE);									// 11mA
-	//set_sleep_mode(SLEEP_MODE_STANDBY);									// 10mA
+	//set_sleep_mode(SLEEP_MODE_STANDBY);								// 10mA
 	//set_sleep_mode(SLEEP_MODE_PWR_DOWN);								// 10mA
 	sleep_enable();
 	sleep_cpu();
@@ -192,14 +194,34 @@ int main(void)
 	while (1)															// forever loop
 	{
 		asm("nop");														// on purpose kept as empty as possible !!
+		// FIXME - refactor away
 
-		mcp2515_opcode_read_bytes(CANINTF, &canintf, 1); // download the interrupt flag register
-		mcp2515_opcode_read_bytes(CANSTAT, &canstat, 1);
-		mcp2515_opcode_read_bytes(CANSTAT, &canctrl, 1);
-		mcp2515_opcode_read_bytes(EFLG, &eflg, 1);
-		mcp2515_opcode_read_bytes(REC, &rec, 1);
-		mcp2515_opcode_read_bytes(TEC, &tec, 1);
+		#if defined(MJ808_)
+		mj808.can->ReadBytes(CANINTF, &canintf, 1);						// download the interrupt flag register
+		mj808.can->ReadBytes(CANSTAT, &canstat, 1);
+		mj808.can->ReadBytes(CANSTAT, &canctrl, 1);
+		mj808.can->ReadBytes(EFLG, &eflg, 1);
+		mj808.can->ReadBytes(REC, &rec, 1);
+		mj808.can->ReadBytes(TEC, &tec, 1);
+		#endif
 
+		#if defined(MJ818_)
+		mj818.can->ReadBytes(CANINTF, &canintf, 1);						// download the interrupt flag register
+		mj818.can->ReadBytes(CANSTAT, &canstat, 1);
+		mj818.can->ReadBytes(CANSTAT, &canctrl, 1);
+		mj818.can->ReadBytes(EFLG, &eflg, 1);
+		mj818.can->ReadBytes(REC, &rec, 1);
+		mj818.can->ReadBytes(TEC, &tec, 1);
+		#endif
+
+		#if defined(MJ828_)
+		mj828.can->ReadBytes(CANINTF, &canintf, 1);						// download the interrupt flag register
+		mj828.can->ReadBytes(CANSTAT, &canstat, 1);
+		mj828.can->ReadBytes(CANSTAT, &canctrl, 1);
+		mj828.can->ReadBytes(EFLG, &eflg, 1);
+		mj828.can->ReadBytes(REC, &rec, 1);
+		mj828.can->ReadBytes(TEC, &tec, 1);
+		#endif
 		if (MCUCR & _BV(SE))											// if sleep is enabled
 			sleep_cpu();												// ...sleep
 	}
@@ -213,14 +235,14 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 	// assumption: an incoming message is of interest for this unit
 	//	'being of interest' is defined in the filters
 
-	void handle_message_error(void)										// handles message error interrupts
+	void handle_message_error(volatile can_t *in_can)					// handles message error interrupts
 	{
-		mcp2515_opcode_bit_modify(CANINTF, _BV(MERRF), 0x00);			// clear the flag
+		in_can->BitModify(CANINTF, _BV(MERRF), 0x00);					// clear the flag
 	};
 
-	void helper_handle_rx(const uint8_t in)								// handles incoming message interrupts
+	void helper_handle_rx(volatile can_t *in_can)						// handles incoming message interrupts
 	{
-		mcp2515_can_msg_receive(&CAN_IN);								// load the CAN message into its structure & clear the RX int flag
+		in_can->ReceiveMessage(&CAN_IN);								// load the CAN message into its structure & clear the RX int flag
 
 		// update the CAN BUS status structure; if we get a message from SID foo, then _BV(foo) shall be marked as "on the bus"
 		canbus_status.devices.uint16_val |= ( 1 << ( (CAN_IN.sidh >> 2) & 0x0F ) ); // shift as many bits as the originating SID is in decimal
@@ -291,86 +313,79 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 	{
 		if (in_can->eflg & _BV(TXBO))									// TODO - handle bus off situation
 		{
-			mcp2515_opcode_bit_modify(CANINTF, _BV(ERRIF), 0x00);		// clear the error interrupt flag
+			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
 		}
 
 		if (in_can->eflg & _BV(TXEP))									// handle TX error-passive situation
 		{
-			mcp2515_opcode_bit_modify(CANINTF, _BV(ERRIF), 0x00);		// clear the error interrupt flag
+			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
 			can_sleep(in_can, 1);										// put to sleep
 		}
 
 		if (in_can->eflg & _BV(RXEP))									// TODO - handle RX error-passive situation
 		{
-			mcp2515_opcode_bit_modify(CANINTF, _BV(ERRIF), 0x00);		// clear the error interrupt flag
+			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
 		}
 
 		if (in_can->eflg & _BV(TXWAR))									// TODO - handle TX waring situation
 		{
 			// TODO - log it
-			mcp2515_opcode_bit_modify(CANINTF, _BV(ERRIF), 0x00);		// clear the error interrupt flag
+			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
 		}
 
 		if (in_can->eflg & _BV(RXWAR))									// TODO - handle RX warning situation
 		{
 			// TODO - log it
-			mcp2515_opcode_bit_modify(CANINTF, _BV(ERRIF), 0x00);		// clear the error interrupt flag
+			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
 		}
 
 		if (in_can->eflg & _BV(RX0OVR))									// RXB0 overflow - datasheet figure 4.3, p. 26
 		{
-			helper_handle_rx(0);										// handle the message
-			mcp2515_opcode_bit_modify(EFLG, _BV(RX0OVR), 0x00);			// clear the overflow bit
-			mcp2515_opcode_bit_modify(CANINTF, _BV(ERRIF), 0x00);		// clear the error interrupt flag
+			// FIXME - check for correct RX buffer clearing
+			helper_handle_rx(in_can);									// handle the message
+			in_can->BitModify(EFLG, _BV(RX0OVR), 0x00);					// clear the overflow bit
+			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
 			return;
 		}
 
 		if (in_can->eflg & _BV(RX1OVR))									// RXB1 overflow - datasheet figure 4.3, p. 26
 		{
-			helper_handle_rx(1);										// handle the message
-			mcp2515_opcode_bit_modify(EFLG, _BV(RX1OVR), 0x00);			// clear the overflow bit
-			mcp2515_opcode_bit_modify(CANINTF, _BV(ERRIF), 0x00);		// clear the error interrupt flag
+			helper_handle_rx(in_can);									// handle the message
+			in_can->BitModify(EFLG, _BV(RX1OVR), 0x00);					// clear the overflow bit
+			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
 			return;
 		}
 
 		//mcp2515_opcode_bit_modify(CANINTF, _BV(ERRIF), 0x00);			// clear the error interrupt flag
 	};
 
-	void helper_handle_wakeup(void)										// handles wakeup interrupts
+	void helper_handle_wakeup(volatile can_t *in_can)					// handles wakeup interrupts
 	{
 		// functionally, this fucntion is similar to can_sleep(), but still different in one aspect:
 			// can_sleep(foo_can, 0) wakes up by triggering a wake up interrupt, which helper_handle_wakeup() handles
 			// helper_handle_wakeup() can be triggered by any external event while can_sleep(foo_can, 0) is called from within this program
 
-		mcp2515_change_opmode(REQOP_CONFIG);							// put into config mode -> clears all error counters; other settings appear to remain consistent
-		mcp2515_change_opmode(REQOP_NORMAL);							// put back into normal mode
+		in_can->ChangeOpMode(REQOP_CONFIG);								// put into config mode -> clears all error counters; other settings appear to remain consistent
+		in_can->ChangeOpMode(REQOP_NORMAL);								// put back into normal mode
 
-		mcp2515_opcode_bit_modify(CANINTF, _BV(WAKIF), _BV(WAKIF));		// clear the wakeup flag
-		mcp2515_opcode_bit_modify(CANINTF, 0xFF, 0x00);					// clear the wakeup flag
+		in_can->BitModify(CANINTF, _BV(WAKIF), _BV(WAKIF));				// clear the wakeup flag
+		in_can->BitModify(CANINTF, 0xFF, 0x00);							// clear the wakeup flag
 		gpio_conf(MCP2561_standby_pin, OUTPUT, LOW);					// wake up MCP2561
 
-		#if defined(MJ808_)
-		mj808.can->in_sleep = 0;
-		#endif
-		#if defined(MJ818_)
-		mj818.can->in_sleep = 0;
-		#endif
-		#if defined(MJ828_)
-		mj828.can->in_sleep = 0;
-		#endif
+		in_can->in_sleep = 0;
 	};
 
-	void helper_handle_tx(void)
+	void helper_handle_tx(volatile can_t *in_can)
 	{
-		mcp2515_opcode_bit_modify(CANINTF, 0x1C, 0x00);
+		in_can->BitModify(CANINTF, 0x1C, 0x00);
 	};
 
 	do		// ICOD loop handler - runs while ICOD != 0
 	{
 		#if defined(MJ808_)												// read in of CAN registers for MJ808
-		mcp2515_opcode_read_bytes(TEC, &mj808.can->tec, 2);				// read in TEC and REC
-		mcp2515_opcode_read_bytes(CANINTF, &mj808.can->canintf, 3);		// read in CANINTF and EFLG
-		mcp2515_opcode_read_bytes(CANCTRL, &mj808.can->canctrl, 1);
+		mj808.can->ReadBytes(TEC, &mj808.can->tec, 2);					// read in TEC and REC
+		mj808.can->ReadBytes(CANINTF, &mj808.can->canintf, 3);			// read in CANINTF and EFLG
+		mj808.can->ReadBytes(CANCTRL, &mj808.can->canctrl, 1);
 
 		mj808.can->icod =  ((mj808.can->canstat & 0x0E) >> 1);			// right shift so that CANSTAT.U0 cant interfere
 
@@ -378,9 +393,9 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		#endif
 
 		#if defined(MJ818_)												// read in of CAN registers for MJ818
-		mcp2515_opcode_read_bytes(TEC, &mj818.can->tec, 2);				// read in TEC and REC
-		mcp2515_opcode_read_bytes(CANINTF, &mj818.can->canintf, 3);		// read in CANINTF and EFLG
-		mcp2515_opcode_read_bytes(CANCTRL, &mj818.can->canctrl, 1);
+		mj818.can->ReadBytes(TEC, &mj818.can->tec, 2);					// read in TEC and REC
+		mj818.can->ReadBytes(CANINTF, &mj818.can->canintf, 3);			// read in CANINTF and EFLG
+		mj818.can->ReadBytes(CANCTRL, &mj818.can->canctrl, 1);
 
 		mj818.can->icod =  ((mj818.can->canstat & 0x0E) >> 1);			// right shift so that CANSTAT.U0 cant interfere
 
@@ -402,6 +417,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 				break;
 
 			case 1:														// error interrupt
+				// FIXME - refactor away
 				#if defined(MJ808_)
 				helper_handle_error(mj808.can);
 				#endif
@@ -414,27 +430,75 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 				break;
 
 			case 2:														// wake-up interrupt
-				helper_handle_wakeup();
+				#if defined(MJ808_)
+				helper_handle_wakeup(mj808.can);
+				#endif
+				#if defined(MJ818_)
+				helper_handle_wakeup(mj818.can);
+				#endif
+				#if defined(MJ828_)
+				helper_handle_wakeup(mj828.can);
+				#endif
 				break;
 
 			case 3:														// TXB0 interrupt
-				helper_handle_tx();
+				#if defined(MJ808_)
+				helper_handle_tx(mj808.can);
+				#endif
+				#if defined(MJ818_)
+				helper_handle_tx(mj818.can);
+				#endif
+				#if defined(MJ828_)
+				helper_handle_tx(mj828.can);
+				#endif
 				break;
 
 			case 4:														// TXB1 interrupt
-				helper_handle_tx();
+				#if defined(MJ808_)
+				helper_handle_tx(mj808.can);
+				#endif
+				#if defined(MJ818_)
+				helper_handle_tx(mj818.can);
+				#endif
+				#if defined(MJ828_)
+				helper_handle_tx(mj828.can);
+				#endif
 				break;
 
 			case 5:														// TXB2 interrupt
-				helper_handle_tx();
+				#if defined(MJ808_)
+				helper_handle_tx(mj808.can);
+				#endif
+				#if defined(MJ818_)
+				helper_handle_tx(mj818.can);
+				#endif
+				#if defined(MJ828_)
+				helper_handle_tx(mj828.can);
+				#endif
 				break;
 
 			case 6:														// RXB0 interrupt
-				helper_handle_rx(0);
+				#if defined(MJ808_)
+				helper_handle_rx(mj808.can);
+				#endif
+				#if defined(MJ818_)
+				helper_handle_rx(mj818.can);
+				#endif
+				#if defined(MJ828_)
+				helper_handle_rx(mj828.can);
+				#endif
 				break;
 
 			case 7:														// RXB1 interrupt
-				helper_handle_rx(1);
+				#if defined(MJ808_)
+				helper_handle_rx(mj808.can);
+				#endif
+				#if defined(MJ818_)
+				helper_handle_rx(mj818.can);
+				#endif
+				#if defined(MJ828_)
+				helper_handle_rx(mj828.can);
+				#endif
 				break;
 		};
 
@@ -489,7 +553,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - foo ms
 			CAN_OUT.COMMAND = (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT);	// assemble appropriate command
 			CAN_OUT.ARGUMENT = 0xFF;									// argument to turn on
 			CAN_OUT.dlc = 2;
-			mcp2515_can_msg_send(&CAN_OUT);
+			mj808.can->SendMessage(&CAN_OUT);
 		}
 
 		if (canbus_status.devices._MJ828)								// dashboard is present
@@ -517,7 +581,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - foo ms
 			CAN_OUT.COMMAND = (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT);	// assemble appropriate command
 			CAN_OUT.ARGUMENT = 0x00;									// argument to turn off
 			CAN_OUT.dlc = 2;
-			mcp2515_can_msg_send(&CAN_OUT);
+			mj808.can->SendMessage(&CAN_OUT);
 		}
 
 		fade(0x00, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);				// turn off

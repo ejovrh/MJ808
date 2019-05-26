@@ -19,13 +19,13 @@ void fade(uint8_t value, volatile uint8_t *ocr, uint8_t ocr_max)
 	{
 		while (++*ocr < value)											// loop until we match the OCR with the requested value & increment the OCR
 		{
-			if (*ocr >= ocr_max)										// safeguard against too high a CAN command argument (OCR_MAX is a function of schematic & PCB design)
-			{
-				#if defined(MJ808_)
-				util_led(UTIL_LED_RED_BLINK_2X);						// CHECKME: something drives this OCR dangerously up
-				#endif
-				break;
-			}
+			//if (*ocr >= ocr_max)										// safeguard against too high a CAN command argument (OCR_MAX is a function of schematic & PCB design)
+			//{
+				//#if defined(MJ808_)
+				//util_led(UTIL_LED_RED_BLINK_2X);						// CHECKME: something drives this OCR dangerously up
+				//#endif
+				//break;
+			//}
 
 			_delay_ms(5);												// delay it a bit for visual stimulus ...
 		}
@@ -155,7 +155,17 @@ void msg_button(can_message_t *msg, uint8_t button)
 {
 	msg->COMMAND = (MSG_BUTTON_EVENT | button);
 	msg->dlc = 1;
-	mcp2515_can_msg_send(msg);
+	// FIXME - refactor away - check caller
+
+	#if defined(MJ808_)
+	mj808.can->SendMessage(msg);
+	#endif
+	#if defined(MJ818_)
+	mj818.can->SendMessage(msg);
+	#endif
+	#if defined(MJ828_)
+	mj828.can->SendMessage(msg);
+	#endif
 }
 
 // announce ourselves to the bus - once on power-up and then 2s-periodic
@@ -186,10 +196,19 @@ void discovery_announce(volatile canbus_t *canbus_status, can_message_t *msg)
 		msg->sidh |= BROADCAST;											// set the broadcast flag
 		msg->COMMAND = (CMND_ANNOUNCE);									// "mark" it as an announce command (doesn't really do a thing since the announce is 0x00)
 		msg->dlc = 1;
-		mcp2515_can_msg_send(msg);
-			#if defined(MJ808_)											// setup of front light PWM - permanent on
-			//util_led(UTIL_LED_RED_BLINK_1X);							// indicate bus empty
-			#endif
+
+		// FIXME - refactor away
+		#if defined(MJ808_)												// setup of front light PWM - permanent on
+		mj808.can->SendMessage(msg);
+		util_led(UTIL_LED_RED_BLINK_1X);								// indicate bus empty
+		#endif
+		#if defined(MJ818_)
+		mj818.can->SendMessage(msg);
+		#endif
+		#if defined(MJ828_)
+		mj828.can->SendMessage(msg);
+		#endif
+
 		msg->sidh &= ~BROADCAST;										// unset the broadcast flag
 		canbus_status->status &= ~0x80;									// unset the "i-was-here" bit
 		canbus_status->status |= 0x40;									// FIXME - what is this flag used for??

@@ -9,41 +9,79 @@
 /* the basic building blocks of interaction with the MCP2515:
  * opcodes -low level instructions- which the hardware executes
  *	they are meant to be "private" and not be used in main() directly
- */
-
-static void mcp2515_opcode_reset(void); // reset - opcode 0xC0 - resets the MCP2515 (ch. 12.2, p 65)
-void mcp2515_opcode_read_bytes(const uint8_t addr, volatile uint8_t *data, const uint8_t len); // read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
-static void mcp2515_opcode_read_rx_buffer(const uint8_t buffer, uint8_t *data, const uint8_t len); // read RX buffer - opcode 0x90 - loads a RX buffer identified by the bit mask 'buffer' into '*data', ch. 12.4, p 65
-void mcp2515_opcode_write_byte(const uint8_t addr, const uint8_t value); // write - opcode 0x02 - writes single byte to addr
-void mcp2515_opcode_write_bytes(const uint8_t addr, const uint8_t *value, const uint8_t len); // write - opcode 0x02 - writes len-1 bytes to addr
-static void mcp2515_opcode_load_tx_buffer(const uint8_t buffer, const uint8_t *data, const uint8_t len); // load TX buffer - opcode 0x40 - loads '*data' into TX buffer identified by the bit mask 'buffer'
-static void mcp2515_opcode_rts(const uint8_t buffer); // RTS - opcode 0x80 - sends RTS for 'buffer', table ch. 12.7 & 12.1
-static uint8_t mcp2515_opcode_read_status(void); // read status - opcode 0xA0 - returns byte with status bits for msg RX & TX, ch. 12.8 & table 12.9
-static uint8_t mcp2515_opcode_rx_status(void); // rx status - opcode 0xB0 - returns byte with received message RX filter and type info, ch. 12.9
-void mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte); //bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
-
-/* endianness and byte order are a problem on AVR
- *	say, we put word = 0x12af
- *	when reading, *(word+1) will hold the higher byte (12), while *(word) will hold the lower byte (af)
  *
- *	the solution is elegant:
+ * internal functions to this translation unit, aka. "private"
+ *	low-level instruction set: reset, read, read RX buffer, write, load TX buffer, RTS, read status, RX status, bit modify
+ *	they are all described in the datasheet in chapter 12 - SPI interface
  */
 
-// puts the whole CAN infrastructure to sleep; 1 - sleep, 0 - awake
-void can_sleep(volatile can_t *in_can, const uint8_t in_val)
-{
-	if ( !(in_can->in_sleep) && in_val)									// if is awake and set to sleep
-	{
-		mcp2515_change_opmode(REQOP_SLEEP);								// sleep MCP2515
-		gpio_conf(MCP2561_standby_pin, OUTPUT, HIGH);					// sleep MCP2561
-		in_can->in_sleep = 1;											// mark as sleeping
-	}
+// private functions here, object constructor at the end
 
-	if (in_can->in_sleep && !in_val)									// if is sleeping and set to wake up
+//bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
+void mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte)
+{
+	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
+	spi_uci_transfer(MCP2515_OPCODE_BIT_MODIFY);						// send the bit modify command
+	spi_uci_transfer(addr);												// set the register address
+	spi_uci_transfer(mask);												// set the mask byte - i.e. what is 1'ed can change, otherwise not
+	spi_uci_transfer(byte);												// set the data byte - i.e. 1'ed becomes 1, 0 becomes 0
+	_delay_us(1);														// delay a little bit for the transfer to complete
+	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
+}
+
+// read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
+void mcp2515_opcode_read_bytes(const uint8_t addr, volatile uint8_t *data, const uint8_t len)
+{
+	uint8_t i;
+
+	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
+	spi_uci_transfer(MCP2515_OPCODE_READ);								// send read command
+	spi_uci_transfer(addr);												// send the address
+
+	for (i = 0; i<len; ++i)												// while the SS is held, the address is auto-incremented, thus multiple bytes can be read
 	{
-		mcp2515_opcode_bit_modify(CANINTF, 0xFF, 0x00);					// clear out all interrupt flags so that a wakeup can be asserted (if there are not handled interrupts, a wakeup interrupt will never occur)
-		mcp2515_opcode_bit_modify(CANINTF, _BV(WAKIF), _BV(WAKIF));		// create a wake up interrupt event -- the sucker will actually go and create a real one and go on to service it
+		*(data+i) = spi_uci_transfer(0xff);								// get the result
+		_delay_us(1);													// delay a little bit for the transfer to complete
 	}
+	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
+}
+
+// wrapper for single byte-read
+uint8_t mcp2515_opcode_read_byte(const uint8_t addr)
+{
+	uint8_t retval;
+
+	mcp2515_opcode_read_bytes( addr, &retval, 1);
+
+	return retval;
+}
+
+// changes MCP2515 operation modes (and flushes any pending transmissions)
+void mcp2515_change_opmode(const uint8_t mode)
+{
+	do
+	{
+		mcp2515_opcode_bit_modify(CANCTRL, _BV(ABAT), _BV(ABAT));		// set abort flag
+		mcp2515_opcode_bit_modify(CANCTRL, 0xE0, mode);					// set REQOP2:0 bits into CANCTRL, datasheet p. 60
+	} while ( (mcp2515_opcode_read_byte(CANSTAT) & 0xE0) != mode);		// loop if OPMOD2:0 bits from CANSTAT differ from the requested mode bits
+
+	mcp2515_opcode_bit_modify(CANCTRL, _BV(ABAT), 0x00);				// unset abort flag
+}
+
+// reset - opcode 0xC0 - resets the MCP2515 (ch. 12.2, p 65)
+void mcp2515_opcode_reset(void)
+{
+	mcp2515_opcode_bit_modify(EFLG, 0xC0, 0x00);						// set RX1OVR and RX0OVR to 0
+	mcp2515_opcode_bit_modify(CANINTF, 0xFF, 0x00);						// set all interrupt flags to 0
+
+	_delay_us(5);														// wait a while to begin
+
+	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
+	spi_uci_transfer(MCP2515_OPCODE_RESET);								// after a reset the device is in configuration mode (datasheet p. 59, para. 10.1)
+	_delay_us(5);														// delay a little bit for the transfer to complete
+	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
+
+	_delay_us(5);														// wait a while for the reset to take effect
 }
 
 // initialization & configuration after power on
@@ -138,6 +176,121 @@ void mcp2515_init(void)
 	//mcp2515_opcode_bit_modify(CANCTRL, 0xE0, 0x40); // put into loopback mode
 }
 
+// read RX buffer - opcode 0x90 - loads a RX buffer identified by the bit mask 'buffer' into '*data', ch. 12.4, p 65
+// datasheet p.66 and table 12.3
+void mcp2515_opcode_read_rx_buffer(const uint8_t buffer, uint8_t *data, const uint8_t len)
+{
+	uint8_t i = 0;
+
+	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
+
+	if (buffer == RXB0SIDH)												//	select buffer
+	spi_uci_transfer(MCP2515_OPCODE_READ_RX_BUFFER | MCP2515_OPCODE_READ_RX_BUFFER_RXB0SIDH);	// select RXB0 - send command along with bit mask
+
+	if (buffer == RXB1SIDH)
+	spi_uci_transfer(MCP2515_OPCODE_READ_RX_BUFFER | MCP2515_OPCODE_READ_RX_BUFFER_RXB1SIDH);	// select RXB1
+
+	for (i = 0; i<len; ++i)												// while the SS is held, the address is auto-incremented, thus multiple bytes can be read
+	*(data+i) = spi_uci_transfer(0xff);									// get the result
+
+	_delay_us(1);														// delay a little bit for the transfer to complete
+	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
+};
+
+// rx status - opcode 0xB0 - returns byte with received message RX filter and type info, ch. 12.9
+uint8_t mcp2515_opcode_rx_status(void)
+{
+	uint8_t retval;
+	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
+	spi_uci_transfer(MCP2515_OPCODE_RX_STATUS);							// send the RX status command
+	retval = spi_uci_transfer(0xFF);									// and get data
+	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
+	_delay_us(1);														// delay a little bit for the transfer to complete
+	return retval;
+}
+
+// read status - opcode 0xA0 - returns byte with status bits for msg RX & TX, ch. 12.8 & table 12.9
+uint8_t mcp2515_opcode_read_status(void)
+{
+	uint8_t retval;
+	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
+	spi_uci_transfer(MCP2515_OPCODE_READ_STATUS);						// send the read status command
+	retval = spi_uci_transfer(0xFF);									//  and get data
+	_delay_us(1);														// delay a little bit for the transfer to complete
+	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
+	return retval;
+}
+
+// RTS - opcode 0x80 - sends RTS for 'buffer', table ch. 12.7 & 12.1
+void mcp2515_opcode_rts(const uint8_t buffer)
+{
+	if (buffer == 0)													// we didn't specify any buffer to do a RTS on
+	return;																// hence, do nothing
+
+	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
+	spi_uci_transfer(MCP2515_OPCODE_RTS | buffer);						// send RTS command & the buffer (bit mask)
+	_delay_us(1);														// delay a little bit for the transfer to complete
+	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
+}
+
+// load TX buffer - opcode 0x40 - loads '*data' into TX buffer identified by the bit mask 'buffer'
+// ch12.6 & table 12.5
+static void mcp2515_opcode_load_tx_buffer(const uint8_t buffer, const uint8_t *data, const uint8_t len)
+{
+	uint8_t i;
+	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
+
+	if (buffer == TXB0CTRL)
+	spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB0SIDH); // send load TX buffer command & buffer
+
+	if (buffer == TXB1CTRL)
+	spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB1SIDH); // send load TX buffer command & buffer
+
+	if (buffer == TXB2CTRL)
+	spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB2SIDH); // send load TX buffer command & buffer
+
+	for(i=0; i<len; i++)
+	spi_uci_transfer(*(data+i));										// write single byte or stream
+
+	_delay_us(1);														// delay a little bit for the transfer to complete
+	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
+}
+
+// fetches a received CAN message from the MCP2515, triggered by RX interrupt
+void mcp2515_can_msg_receive(can_message_t *msg)
+{
+	/* mode of operation - see figure 4.2 on p.26
+	 *	1. identify RX buffer
+	 *	2.	select the appropriate buffer(s) in a loop
+	 *	3.	select appropriate RXnIF
+	 *	4. fetch message bytes from the RXBn registers
+	 */
+
+	uint8_t rx_buffer_addr = 0;											// holds the RX buffer address
+
+	msg->rx_status = mcp2515_opcode_rx_status();						// step 1: figure out in which RX buffer the incoming message is stored
+
+	if ( !(msg->rx_status & 0xC0) )										// bits 7 and 6 == 0 --> no RX message, nothing to do
+		return;
+
+	// step 2: select the appropriate buffer
+		if (msg->rx_status & 0x40)										// if RXB0 is set - containing a message (bit 6), figure 12.9, p. 69
+		{
+			rx_buffer_addr = RXB0SIDH;									// step 3: select appropriate buffer
+			msg->rx_status &= ~0x40;									// clear bit6
+		}
+
+		if (msg->rx_status & 0x80)										// if RXB1 is set - containing a message (bit 7), figure 12.9, p. 69
+		{
+			rx_buffer_addr = RXB1SIDH;
+			msg->rx_status &= ~0x80;									// clear bit7
+		}
+
+		// step 4: fetch message bytes from the RXBn registers
+			// for convenience, all bytes are fetched - the unused extended identifier and all possibly unused data bytes
+		mcp2515_opcode_read_rx_buffer(rx_buffer_addr, &(msg->sidh), 13);
+}
+
 // provide data to MCP2515 and flag for TX over the CAN bus
 //	provide not more than 4 bytes of data and len !!!
 void mcp2515_can_msg_send(can_message_t *msg)
@@ -195,226 +348,33 @@ void mcp2515_can_msg_send(can_message_t *msg)
 	_delay_us(5); // CHECKME: give other mj8x8s time to digest the new message, in case they are receiving
 }
 
-// fetches a received CAN message from the MCP2515, triggered by RX interrupt
-void mcp2515_can_msg_receive(can_message_t *msg)
+// puts the whole CAN infrastructure to sleep; 1 - sleep, 0 - awake
+void can_sleep(volatile can_t *in_can, const uint8_t in_val)
 {
-	/* mode of operation - see figure 4.2 on p.26
-	 *	1. identify RX buffer
-	 *	2.	select the appropriate buffer(s) in a loop
-	 *	3.	select appropriate RXnIF
-	 *	4. fetch message bytes from the RXBn registers
-	 */
-
-	uint8_t rx_buffer_addr = 0;											// holds the RX buffer address
-
-	msg->rx_status = mcp2515_opcode_rx_status();						// step 1: figure out in which RX buffer the incoming message is stored
-
-	if ( !(msg->rx_status & 0xC0) )										// bits 7 and 6 == 0 --> no RX message, nothing to do
-		return;
-
-	// step 2: select the appropriate buffer
-		if (msg->rx_status & 0x40)										// if RXB0 is set - containing a message (bit 6), figure 12.9, p. 69
-		{
-			rx_buffer_addr = RXB0SIDH;									// step 3: select appropriate buffer
-			msg->rx_status &= ~0x40;									// clear bit6
-		}
-
-		if (msg->rx_status & 0x80)										// if RXB1 is set - containing a message (bit 7), figure 12.9, p. 69
-		{
-			rx_buffer_addr = RXB1SIDH;
-			msg->rx_status &= ~0x80;									// clear bit7
-		}
-
-		// step 4: fetch message bytes from the RXBn registers
-			// for convenience, all bytes are fetched - the unused extended identifier and all possibly unused data bytes
-		mcp2515_opcode_read_rx_buffer(rx_buffer_addr, &(msg->sidh), 13);
-}
-
-// changes MCP2515 operation modes (and flushes any pending transmissions)
-void mcp2515_change_opmode(const uint8_t mode)
-{
-	do
+	if ( !(in_can->in_sleep) && in_val)									// if is awake and set to sleep
 	{
-		mcp2515_opcode_bit_modify(CANCTRL, _BV(ABAT), _BV(ABAT));		// set abort flag
-		mcp2515_opcode_bit_modify(CANCTRL, 0xE0, mode);					// set REQOP2:0 bits into CANCTRL, datasheet p. 60
-	} while ( (mcp2515_opcode_read_byte(CANSTAT) & 0xE0) != mode);		// loop if OPMOD2:0 bits from CANSTAT differ from the requested mode bits
-
-	mcp2515_opcode_bit_modify(CANCTRL, _BV(ABAT), 0x00);				// unset abort flag
-}
-
-//// private functions
-
-/* internal functions to this translation unit, aka. "private"
- *	low-level instruction set: reset, read, read RX buffer, write, load TX buffer, RTS, read status, RX status, bit modify
- *	they are all described in the datasheet in chapter 12 - SPI interface
- */
-
-// reset - opcode 0xC0 - resets the MCP2515 (ch. 12.2, p 65)
-static void mcp2515_opcode_reset(void)
-{
-	mcp2515_opcode_bit_modify(EFLG, 0xC0, 0x00);						// set RX1OVR and RX0OVR to 0
-	mcp2515_opcode_bit_modify(CANINTF, 0xFF, 0x00);						// set all interrupt flags to 0
-
-	_delay_us(5);														// wait a while to begin
-
-	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_RESET);								// after a reset the device is in configuration mode (datasheet p. 59, para. 10.1)
-	_delay_us(5);														// delay a little bit for the transfer to complete
-	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-
-	_delay_us(5);														// wait a while for the reset to take effect
-}
-
-// read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
-void mcp2515_opcode_read_bytes(const uint8_t addr, volatile uint8_t *data, const uint8_t len)
-{
-	uint8_t i;
-
-	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_READ);								// send read command
-	spi_uci_transfer(addr);												// send the address
-
-	for (i = 0; i<len; ++i)												// while the SS is held, the address is auto-incremented, thus multiple bytes can be read
-	{
-		*(data+i) = spi_uci_transfer(0xff);								// get the result
-		_delay_us(1);													// delay a little bit for the transfer to complete
+		mcp2515_change_opmode(REQOP_SLEEP);								// sleep MCP2515
+		gpio_conf(MCP2561_standby_pin, OUTPUT, HIGH);					// sleep MCP2561
+		in_can->in_sleep = 1;											// mark as sleeping
 	}
-	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
+
+	if (in_can->in_sleep && !in_val)									// if is sleeping and set to wake up
+	{
+		mcp2515_opcode_bit_modify(CANINTF, 0xFF, 0x00);					// clear out all interrupt flags so that a wakeup can be asserted (if there are not handled interrupts, a wakeup interrupt will never occur)
+		mcp2515_opcode_bit_modify(CANINTF, _BV(WAKIF), _BV(WAKIF));		// create a wake up interrupt event -- the sucker will actually go and create a real one and go on to service it
+	}
 }
 
-uint8_t mcp2515_opcode_read_byte(const uint8_t addr)
+// object constructor
+volatile can_t *can_ctor(volatile can_t *inval)
 {
-	uint8_t retval;
+	inval->Sleep = &can_sleep;											// set up function pointer for public methods
+	inval->SendMessage = &mcp2515_can_msg_send;							// ditto
+	inval->ReceiveMessage = &mcp2515_can_msg_receive;					// ditto
+	inval->ChangeOpMode = &mcp2515_change_opmode;						// ditto
+	inval->ReadBytes = &mcp2515_opcode_read_bytes;						// ditto
+	inval->BitModify = &mcp2515_opcode_bit_modify;						// ditto
+	mcp2515_init();														// initialize & configure the MCP2515
 
-	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_READ);								// send read command
-	spi_uci_transfer(addr);												// send the address
-
-	retval = spi_uci_transfer(0xff);									// get the result
-
-	_delay_us(1);														// delay a little bit for the transfer to complete
-	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-	return retval;
-}
-
-// read RX buffer - opcode 0x90 - loads a RX buffer identified by the bit mask 'buffer' into '*data', ch. 12.4, p 65
-// datasheet p.66 and table 12.3
-static void mcp2515_opcode_read_rx_buffer(const uint8_t buffer, uint8_t *data, const uint8_t len)
-{
-	uint8_t i = 0;
-
-	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-
-	if (buffer == RXB0SIDH)												//	select buffer
-		spi_uci_transfer(MCP2515_OPCODE_READ_RX_BUFFER | MCP2515_OPCODE_READ_RX_BUFFER_RXB0SIDH);	// select RXB0 - send command along with bit mask
-
-	if (buffer == RXB1SIDH)
-		spi_uci_transfer(MCP2515_OPCODE_READ_RX_BUFFER | MCP2515_OPCODE_READ_RX_BUFFER_RXB1SIDH);	// select RXB1
-
-	for (i = 0; i<len; ++i)												// while the SS is held, the address is auto-incremented, thus multiple bytes can be read
-		*(data+i) = spi_uci_transfer(0xff);								// get the result
-
-	_delay_us(1);														// delay a little bit for the transfer to complete
-	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
+	return inval;														// hmm... - gets itself as a parameter and then returns itself. i smell bullshit in the making.
 };
-
-// TODO - make private
-// write - opcode 0x02 - writes single byte to addr
-void mcp2515_opcode_write_byte(const uint8_t addr, const uint8_t value)
-{
-	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_WRITE);								// send the write command
-	spi_uci_transfer(addr);												// set the register address
-	spi_uci_transfer(value);											// write the byte
-	_delay_us(1);														// delay a little bit for the transfer to complete
-	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-}
-
-// TODO - make private
-// write - opcode 0x02 - writes len-1 bytes to addr
-void mcp2515_opcode_write_bytes(const uint8_t addr, const uint8_t *value, const uint8_t len)
-{
-	uint8_t i;
-
-	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_WRITE);								// send the write command
-	spi_uci_transfer(addr);												// set the register address
-
-	for(i=0; i<len; ++i)
-		spi_uci_transfer( *(value+i) );									// write the byte(s)
-
-	_delay_us(1);														// delay a little bit for the transfer to complete
-	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-}
-
-// load TX buffer - opcode 0x40 - loads '*data' into TX buffer identified by the bit mask 'buffer'
-// ch12.6 & table 12.5
-static void mcp2515_opcode_load_tx_buffer(const uint8_t buffer, const uint8_t *data, const uint8_t len)
-{
-	uint8_t i;
-	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-
-	if (buffer == TXB0CTRL)
-		spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB0SIDH); // send load TX buffer command & buffer
-
-	if (buffer == TXB1CTRL)
-		spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB1SIDH); // send load TX buffer command & buffer
-
-	if (buffer == TXB2CTRL)
-		spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB2SIDH); // send load TX buffer command & buffer
-
-	for(i=0; i<len; i++)
-		spi_uci_transfer(*(data+i));									// write single byte or stream
-
-	_delay_us(1);														// delay a little bit for the transfer to complete
-	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-}
-
-// RTS - opcode 0x80 - sends RTS for 'buffer', table ch. 12.7 & 12.1
-static void mcp2515_opcode_rts(const uint8_t buffer)
-{
-	if (buffer == 0)													// we didn't specify any buffer to do a RTS on
-	return;																// hence, do nothing
-
-	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_RTS | buffer);						// send RTS command & the buffer (bit mask)
-	_delay_us(1);														// delay a little bit for the transfer to complete
-	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-}
-
-// read status - opcode 0xA0 - returns byte with status bits for msg RX & TX, ch. 12.8 & table 12.9
-static uint8_t mcp2515_opcode_read_status(void)
-{
-	uint8_t retval;
-	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_READ_STATUS);						// send the read status command
-	retval = spi_uci_transfer(0xFF);									//  and get data
-	_delay_us(1);														// delay a little bit for the transfer to complete
-	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-	return retval;
-}
-
-// rx status - opcode 0xB0 - returns byte with received message RX filter and type info, ch. 12.9
-static uint8_t mcp2515_opcode_rx_status(void)
-{
-	uint8_t retval;
-	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_RX_STATUS);							// send the RX status command
-	retval = spi_uci_transfer(0xFF);									// and get data
-	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-	_delay_us(1);														// delay a little bit for the transfer to complete
-	return retval;
-}
-
-// TODO - make private
-//bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
-void mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte)
-{
-	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_BIT_MODIFY);						// send the bit modify command
-	spi_uci_transfer(addr);												// set the register address
-	spi_uci_transfer(mask);												// set the mask byte - i.e. what is 1'ed can change, otherwise not
-	spi_uci_transfer(byte);												// set the data byte - i.e. 1'ed becomes 1, 0 becomes 0
-	_delay_us(1);														// delay a little bit for the transfer to complete
-	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-}

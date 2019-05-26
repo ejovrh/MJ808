@@ -209,7 +209,7 @@
 
 
 
-
+// TODO - get rid of unions
 typedef union															// union of bit fields and uint16_t - representation discovered devices on bus
 {
 	struct																// bit fields - one bit for each device on the bus
@@ -299,7 +299,7 @@ typedef struct															// struct describing a generic pushbutton
 } button_t;
 
 #if defined (MJ808_)													// mj808_t struct for mj808
-typedef struct															// struct describing devices on MJ808
+typedef  struct															// struct describing devices on MJ808
 {
 	//volatile uint8_t timer_counter[2];								// timer counter array
 	volatile button_t button[1];										// array of button_t - one buttons
@@ -308,7 +308,7 @@ typedef struct															// struct describing devices on MJ808
 	volatile can_t *can;												// pointer to the CAN structure
 } mj808_t;
 
-mj808_t mj808;															// forward declaration of mj828_t struct for mj828
+volatile mj808_t mj808;													// forward declaration of mj828_t struct for mj828
 #endif
 
 #if defined (MJ818_)													// mj808_t struct for mj818
@@ -319,7 +319,7 @@ typedef struct															// struct describing devices on MJ818
 	volatile can_t *can;												// pointer to the CAN structure
 } mj818_t;
 
-mj818_t mj818;															// forward declaration of mj828_t struct for mj828
+volatile mj818_t mj818;															// forward declaration of mj828_t struct for mj828
 #endif
 
 #if defined (MJ828_)													// mj828_t struct for mj828
@@ -331,7 +331,7 @@ typedef struct															// struct describing devices on MJ828
 	volatile can_t *can;												// pointer to the CAN structure
 } mj828_t;
 
-mj828_t mj828;															// forward declaration of mj828_t struct for mj828
+volatile mj828_t mj828;															// forward declaration of mj828_t struct for mj828
 #endif
 
 // command handling functions
