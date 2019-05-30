@@ -4,10 +4,25 @@
 #include <util/delay.h>
 
 #include "gpio.h"
-#include "gpio_definitions.h"
+//#include "gpio_definitions.h"
 
 #include "mcp2515.h"
 #include "mj8x8.h"
+
+#if defined(MJ808_)
+#include "mj808.h"
+#endif
+#if defined(MJ828_)
+#include "mj828.h"
+#endif
+
+volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu)
+{
+	self->mcu = attiny_ctor(mcu);										// pass MCU address into constructor
+	self->can = can_ctor(can);										// pass CAN address into constructor
+	return self;
+}
+
 
 #if defined(MJ808_) || defined(MJ818_)									// private function - fades *ocr to value (or ocr_max) - up to OCR_MAX or down to 0x00
 void fade(uint8_t value, volatile uint8_t *ocr, uint8_t ocr_max)
@@ -158,13 +173,7 @@ void msg_button(can_message_t *msg, uint8_t button)
 	// FIXME - refactor away - check caller
 
 	#if defined(MJ808_)
-	mj808.can->SendMessage(msg);
-	#endif
-	#if defined(MJ818_)
-	mj818.can->SendMessage(msg);
-	#endif
-	#if defined(MJ828_)
-	mj828.can->SendMessage(msg);
+	device.mj8x8->can->SendMessage(msg);
 	#endif
 }
 
@@ -179,42 +188,27 @@ void discovery_announce(volatile canbus_t *canbus_status, can_message_t *msg)
 
 	if (canbus_status->broadcast_iteration_count == canbus_status->numerical_self_id) // compare device counter with decimal self-id
 	{																	// broadcast self-id to everyone
-
-		#if defined(MJ808_)
-		if (mj808.can->in_sleep)										// if the CAN infra. is sleeping
-			can_sleep(mj808.can, 0);									// wake it up
-		#endif
-		#if defined(MJ818_)
-		if (mj818.can->in_sleep)										// if the CAN infra. is sleeping
-			can_sleep(mj818.can, 0);									// wake it up
-		#endif
-		#if defined(MJ828_)
-		if (mj828.can->in_sleep)										// if the CAN infra. is sleeping
-			can_sleep(mj828.can, 0);									// wake it up
-		#endif
+		if (device.mj8x8->can->in_sleep)										// if the CAN infra. is sleeping
+			can_sleep(device.mj8x8->can, 0);									// wake it up
 
 		msg->sidh |= BROADCAST;											// set the broadcast flag
 		msg->COMMAND = (CMND_ANNOUNCE);									// "mark" it as an announce command (doesn't really do a thing since the announce is 0x00)
 		msg->dlc = 1;
 
-		// FIXME - refactor away
+		device.mj8x8->can->SendMessage(msg);
+
 		#if defined(MJ808_)												// setup of front light PWM - permanent on
-		mj808.can->SendMessage(msg);
 		util_led(UTIL_LED_RED_BLINK_1X);								// indicate bus empty
-		#endif
-		#if defined(MJ818_)
-		mj818.can->SendMessage(msg);
-		#endif
-		#if defined(MJ828_)
-		mj828.can->SendMessage(msg);
 		#endif
 
 		msg->sidh &= ~BROADCAST;										// unset the broadcast flag
 		canbus_status->status &= ~0x80;									// unset the "i-was-here" bit
-		canbus_status->status |= 0x40;									// FIXME - what is this flag used for??
+		//canbus_status->status |= 0x40;									// FIXME - what is this flag used for??
 		canbus_status->sleep_iteration = 0;								// reset the cycle and start over
 		canbus_status->broadcast_iteration_count = 0;					// reset the cycle and start over
 
+		//*(device.mcu->wdtcr) |= (_BV(WDCE) | _BV(WDE));					// WDT change enable sequence
+		//*(device.mcu->wdtcr) = ( _BV(WDIE) | _BV(WDP2) | _BV(WDP1) );	// set watchdog timer set to 1s
 		WDTCR |= (_BV(WDCE) | _BV(WDE));								// WDT change enable sequence
 		WDTCR = ( _BV(WDIE) | _BV(WDP2) | _BV(WDP1) );					// set watchdog timer set to 1s
 

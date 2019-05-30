@@ -1,6 +1,10 @@
 #ifndef MJ8x8_H_
 #define MJ8x8_H_
 
+#include "attiny4313.h"
+#include "mcp2515.h"
+#include "led.h"
+
 /* TODO - CAN bootloader
  * http://www.kreatives-chaos.com/artikel/can-bootloader
  *
@@ -18,7 +22,7 @@
 
 	/* MJ818 - rear & brake light
 		timer/counter 0 and timer/counter 1 both operate in 8bit mode
-		hex val. - duty cycle - current backlight - current brake light
+		hex val. - duty cycle - current back light - current brake light
 		0x00 - 0% (off)				-	20 mA -	20 mA
 		0x10 - 6.26%					-	20 mA - 20 mA
 		0x20 - 12.5%					-	20 mA -	30
@@ -63,10 +67,7 @@
 #define BUTTON_MIN_PRESS_TIME 20										// number times 25ms duration: 500ms
 #define BUTTON_MAX_PRESS_TIME 120										// number times 25ms duration: 3s
 
-#define CAN_IN can_msg_incoming
-#define CAN_OUT can_msg_outgoing
-#define COMMAND data[0]
-#define ARGUMENT data[1]
+
 
 // command byte structure
 #define CMND_ANNOUNCE 0x00												// command to register self on other devices (announce-like broadcast)
@@ -119,7 +120,7 @@
 	#define UTIL_LED_RED_BLINK_2X 0x1A									// utility LED - blink
 	#define UTIL_LED_RED_BLINK_3X 0x1B									// utility LED - blink
 	#define UTIL_LED_RED_BLINK_4X 0x1C									// utility LED - blink
-	#define UTIL_LED_RED_BLINK_5X 0x1D										// utility LED - blink
+	#define UTIL_LED_RED_BLINK_5X 0x1D									// utility LED - blink
 	#define UTIL_LED_RED_BLINK_6X 0x1E									// utility LED - blink
 	#define LED_STATE_ON 0x01
 	#define LED_STATE_OFF 0x00
@@ -208,82 +209,6 @@
 #define BLANK 0x00
 
 
-
-// TODO - get rid of unions
-typedef union															// union of bit fields and uint16_t - representation discovered devices on bus
-{
-	struct																// bit fields - one bit for each device on the bus
-	{
-		uint8_t _LU :1;													// 1 indicates device present, 0 otherwise
-		uint8_t _DEV_0B :1;												//	ditto
-		uint8_t _DEV_0C :1;												//	ditto
-		uint8_t _MJ828 :1;												//	ditto
-		uint8_t _DEV_1A :1;												//	ditto
-		uint8_t _DEV_1B :1;												//	ditto
-		uint8_t _DEV_1C :1;												//	ditto
-		uint8_t _DEV_1D :1;												//	ditto
-		uint8_t _MJ808 :1;												//	ditto
-		uint8_t _MJ818 :1;												//	ditto
-		uint8_t _DEV_2C :1;												//	ditto
-		uint8_t _DEV_2D :1;												//	ditto
-		uint8_t _DEV_3A :1;												//	ditto
-		uint8_t _DEV_3B :1;												//	ditto
-		uint8_t _DEV_3C :1;												//	ditto
-		uint8_t _DEV_3D :1;												//	ditto
-	};
-	uint16_t uint16_val;												// the bit field as one uint16_t
-} u_devices;
-
-typedef struct															// struct describing the CAN bus state
-{
-	uint8_t status;														// status info
-	uint8_t broadcast_iteration_count : 4;								// device counter for discovery
-	u_devices devices;													// indicator of devices discovered, 16 in total; B0 - 1st device (0A), B1 - 2nd device (0B), ..., B15 - 16th device (3D)
-	uint8_t numerical_self_id ;											// ordered device number - A0 (0th device) until 3C (15th device)
-	uint8_t sleep_iteration : 3;										// how many times did we wakeup, sleep and wakeup again
-} canbus_t;
-
-typedef struct															// struct describing a single generic LED
-{
-	uint8_t on : 1;														// 0 - off, 1 - on
-	uint8_t blink_count : 3;											// 000 - no blink, 001 - blink 1x, 010 - blink 2x, 011 - blink 3x, 100 - blink forever
-} led_t;
-
-#if defined(MJ808_)	|| defined(MJ818_)									// leds_t struct for mj808/mj818
-typedef struct															// struct describing LEDs on device MJ828
-{
-	led_t leds[2];														// array of led_t - one for each LED
-	uint8_t led_count : 3;												// number of LEDs on device, max 8
-
-	uint8_t flag_any_glow : 1;											// flag indicating if anything at all shall glow
-} leds_t;
-#endif
-
-#if defined(MJ828_)														// leds_t struct for mj828
-typedef struct															// struct describing LEDs on device MJ828
-{
-	led_t leds[8];														// array of led_t - one for each LED
-	uint8_t led_count : 3;												// number of LEDs on device, max 8
-
-	uint8_t flag_any_glow : 1;											// flag indicating if anything at all shall glow
-} leds_t;
-#endif
-
-
-enum led_enum															// TODO - investigate if enum actually has move value over defines
-{
-	red,
-	green,
-	blue,
-	yellow,
-	battery_led1,
-	battery_led2,
-	battery_led3,
-	battery_led4
-} ;
-
-volatile leds_t LED;													// forward declaration of LED instance
-
 typedef struct															// struct describing a generic pushbutton
 {
 	uint8_t state : 2;													// something akin to a "counter" used for debouncing
@@ -298,41 +223,13 @@ typedef struct															// struct describing a generic pushbutton
 	uint8_t is_at_default :1;											// 1 - default values, 0 otherwise
 } button_t;
 
-#if defined (MJ808_)													// mj808_t struct for mj808
-typedef  struct															// struct describing devices on MJ808
+typedef struct															// "base class" struct for mj8x8 devices
 {
-	//volatile uint8_t timer_counter[2];								// timer counter array
-	volatile button_t button[1];										// array of button_t - one buttons
-	volatile uint8_t button_count : 2;									// max. 4 buttons
-	volatile leds_t	*led;												// pointer to LED structure
 	volatile can_t *can;												// pointer to the CAN structure
-} mj808_t;
+	volatile attiny4313_t *mcu;											// pointer to MCU structure
+} mj8x8_t;
 
-volatile mj808_t mj808;													// forward declaration of mj828_t struct for mj828
-#endif
 
-#if defined (MJ818_)													// mj808_t struct for mj818
-typedef struct															// struct describing devices on MJ818
-{
-	//volatile uint8_t timer_counter[2];								// timer counter array
-	volatile leds_t	*led;												// pointer to LED structure
-	volatile can_t *can;												// pointer to the CAN structure
-} mj818_t;
-
-volatile mj818_t mj818;															// forward declaration of mj828_t struct for mj828
-#endif
-
-#if defined (MJ828_)													// mj828_t struct for mj828
-typedef struct															// struct describing devices on MJ828
-{
-	//volatile uint8_t timer_counter[2];								// timer counter array
-	volatile button_t button[2];										// array of button_t - two buttons
-	volatile leds_t	*led;												// pointer to LED structure
-	volatile can_t *can;												// pointer to the CAN structure
-} mj828_t;
-
-volatile mj828_t mj828;															// forward declaration of mj828_t struct for mj828
-#endif
 
 // command handling functions
 void util_led(uint8_t in_val);											// interprets CMND_UTIL_LED command - utility LED (red, green, on, off, blink)
@@ -350,5 +247,9 @@ void charlieplexing_handler(volatile leds_t *in_led);					// handles LEDs in cha
 // bus handling functions
 void discovery_announce(volatile canbus_t *canbus_status, can_message_t *msg); //
 void discovery_behave(volatile canbus_t *canbus_status); //
+
+
+volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu);
+
 
 #endif /* MJ8x8_H_ */

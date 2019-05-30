@@ -366,15 +366,18 @@ void can_sleep(volatile can_t *in_can, const uint8_t in_val)
 }
 
 // object constructor
-volatile can_t *can_ctor(volatile can_t *inval)
+volatile can_t *can_ctor(volatile can_t *self)
 {
-	inval->Sleep = &can_sleep;											// set up function pointer for public methods
-	inval->SendMessage = &mcp2515_can_msg_send;							// ditto
-	inval->ReceiveMessage = &mcp2515_can_msg_receive;					// ditto
-	inval->ChangeOpMode = &mcp2515_change_opmode;						// ditto
-	inval->ReadBytes = &mcp2515_opcode_read_bytes;						// ditto
-	inval->BitModify = &mcp2515_opcode_bit_modify;						// ditto
+	// populate self
+	self->Sleep = &can_sleep;											// set up function pointer for public methods
+	self->SendMessage = &mcp2515_can_msg_send;							// ditto
+	self->ReceiveMessage = &mcp2515_can_msg_receive;					// ditto
+	self->ChangeOpMode = &mcp2515_change_opmode;						// ditto
+	self->ReadBytes = &mcp2515_opcode_read_bytes;						// ditto
+	self->BitModify = &mcp2515_opcode_bit_modify;						// ditto
+
+
 	mcp2515_init();														// initialize & configure the MCP2515
 
-	return inval;														// hmm... - gets itself as a parameter and then returns itself. i smell bullshit in the making.
+	return self;														// hmm... - gets itself as a parameter and then returns itself. i smell bullshit in the making.
 };

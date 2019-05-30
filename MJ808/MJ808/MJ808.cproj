@@ -153,13 +153,28 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="attiny4313.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="attiny4313.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="gpio.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="gpio_definitions.h">
+    <Compile Include="gpio_modes_mj808.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="gpio_modes.h">
+    <Compile Include="gpio_modes_mj818.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="gpio_modes_mj828.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="led.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="led.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
@@ -169,6 +184,24 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="mcp2515.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj808.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj808.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj818.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj818.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj828.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj828.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="mj8x8.c">

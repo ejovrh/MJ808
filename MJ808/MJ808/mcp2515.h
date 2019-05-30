@@ -8,7 +8,7 @@
 // low-level device instructions, see datasheet p. 66, table 12.1
 #define MCP2515_OPCODE_RESET			0xC0							// software reset instruction, datasheet p. 65
 #define MCP2515_OPCODE_READ				0x03							// read instruction, datasheet p. 65
-#define MCP2515_OPCODE_READ_RX_BUFFER	0x90							//	read rx buffer, datasheet p. 65 & 67
+#define MCP2515_OPCODE_READ_RX_BUFFER	0x90							// read rx buffer, datasheet p. 65 & 67
 #define MCP2515_OPCODE_READ_RX_BUFFER_RXB0SIDH	0x00					// receive buffer 0, start at RXB0SIDH, datasheet p. 67
 #define MCP2515_OPCODE_READ_RX_BUFFER_RXB0D0	0x02					// receive buffer 0, start at RXBB0D0, datasheet p. 67
 #define MCP2515_OPCODE_READ_RX_BUFFER_RXB1SIDH	0x04					// receive buffer 0, start at RXB1SIDH, datasheet p. 67
@@ -311,8 +311,50 @@
 // RXB1DM – RECEIVE BUFFER 1 DATA BYTE M
 #define RXB1DM 0x76  // datasheet p.31 - 0x76 up to 0x6C / 6 bytes
 
+////////////////////////////////////////////////////////////////////////
 
-typedef struct			// struct describing a generic CAN message
+//#define CAN_IN can_msg_incoming
+//#define CAN_OUT can_msg_outgoing
+#define COMMAND data[0]
+#define ARGUMENT data[1]
+
+
+
+// TODO - get rid of unions
+typedef union															// u_devices union of bit fields and uint16_t - representation discovered devices on bus
+{
+	struct																// bit fields - one bit for each device on the bus
+	{
+		uint8_t _LU :1;													// 1 indicates device present, 0 otherwise
+		uint8_t _DEV_0B :1;												//	ditto
+		uint8_t _DEV_0C :1;												//	ditto
+		uint8_t _MJ828 :1;												//	ditto
+		uint8_t _DEV_1A :1;												//	ditto
+		uint8_t _DEV_1B :1;												//	ditto
+		uint8_t _DEV_1C :1;												//	ditto
+		uint8_t _DEV_1D :1;												//	ditto
+		uint8_t _MJ808 :1;												//	ditto
+		uint8_t _MJ818 :1;												//	ditto
+		uint8_t _DEV_2C :1;												//	ditto
+		uint8_t _DEV_2D :1;												//	ditto
+		uint8_t _DEV_3A :1;												//	ditto
+		uint8_t _DEV_3B :1;												//	ditto
+		uint8_t _DEV_3C :1;												//	ditto
+		uint8_t _DEV_3D :1;												//	ditto
+	};
+	uint16_t uint16_val;												// the bit field as one uint16_t
+} u_devices;
+
+typedef struct															// canbus_t struct describing the CAN bus state
+{
+	uint8_t status;														// status info
+	uint8_t broadcast_iteration_count : 4;								// device counter for discovery
+	u_devices devices;													// indicator of devices discovered, 16 in total; B0 - 1st device (0A), B1 - 2nd device (0B), ..., B15 - 16th device (3D)
+	uint8_t numerical_self_id ;											// ordered device number - A0 (0th device) until 3C (15th device)
+	uint8_t sleep_iteration : 3;										// how many times did we wakeup, sleep and wakeup again
+} canbus_t;
+
+typedef struct															// can_message_t struct describing a generic CAN message
 {
 // preserve byte order for sequential reads/writes
 	uint8_t		sidh;													// Standard Identifier High Byte
@@ -325,26 +367,7 @@ typedef struct			// struct describing a generic CAN message
 // preserve byte order for sequential reads/writes
 } can_message_t __attribute__((aligned(8))) ;
 
-/* typedef struct														// TODO - define RX buffer
-{
-	;
-} rxbuffer_t; */
-
-// FIXME - in the long run, get rid of bitfields in combination with unions and structs
-
-/*typedef struct														// struct describing a generic transmit buffer - datasheet p.5 and 15
-{
-	uint8_t	txreq : 1;													// transmit request bit
-	uint8_t txp : 2;													// transmit priority
-	uint8_t abtf : 1;													// abort transmission flag
-	uint8_t txerr : 1;													// transmit error
-	uint8_t mloa : 1;													// message lost on arbitration bit
-	can_message_t *message;												// pointer to message struct
-} txbuffer_t;
-
-txbuffer_t txb[3];														// the whole TX buffer on the device */
-
-typedef struct															// struct describing the CAN device as a whole
+typedef struct															// can_t struct describing the CAN device as a whole
 {
 // preserve byte order for sequential reads/writes
 	uint8_t canintf;													// contents of CANINTF register, datasheet p. 53
@@ -359,6 +382,7 @@ typedef struct															// struct describing the CAN device as a whole
 	uint8_t foo:4;														// placeholder
 
 // public methods
+
 	void (*Sleep)(const uint8_t in_val);								// puts the MCP2515 to sleep (and wakes it up)
 	void (*SendMessage)(can_message_t *msg);							// sends message to the CAN bus
 	void (*ReceiveMessage)(can_message_t *msg);							// fetches received message from some RX buffer
@@ -367,10 +391,9 @@ typedef struct															// struct describing the CAN device as a whole
 	void (*BitModify)(const uint8_t addr, const uint8_t mask, const uint8_t byte);			// modifies bit identified by "byte" according to "mask" in some register
 } can_t __attribute__((aligned(8)));
 
-volatile can_t *can_ctor(volatile can_t * inval);											// CAN object constructor - does function pointer & hardware initialization
 
 
-
+volatile can_t *can_ctor(volatile can_t * self);											// CAN object constructor - does function pointer & hardware initialization
 
 // TODO - move to public method
 void can_sleep(volatile can_t *in_can, const uint8_t in_val);			// puts the whole CAN infrastructure to sleep; 1 - sleep, 0 - awake
