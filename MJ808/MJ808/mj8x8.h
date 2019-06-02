@@ -3,7 +3,6 @@
 
 #include "attiny4313.h"
 #include "mcp2515.h"
-#include "led.h"
 
 /* TODO - CAN bootloader
  * http://www.kreatives-chaos.com/artikel/can-bootloader
@@ -77,6 +76,7 @@
 	#define DEV_0C 2 													//	3rd logic unit
 	#define DEV_0D 3													//	4th logic unit
 		#define MJ828 3													// dashboard
+		#define DASHBOARD 3
 	#define DEV_1A 4													//	dynamo1
 		#define DYN1 4
 	#define DEV_1B 5 													//	dynamo2
@@ -208,7 +208,7 @@
 // b5
 #define BLANK 0x00
 
-
+// TODO - move out of this file
 typedef struct															// struct describing a generic pushbutton
 {
 	uint8_t state : 2;													// something akin to a "counter" used for debouncing
@@ -223,33 +223,71 @@ typedef struct															// struct describing a generic pushbutton
 	uint8_t is_at_default :1;											// 1 - default values, 0 otherwise
 } button_t;
 
+// definitions of device/PCB layout-independent hardware pins
+#define SPI_SS_MCP2515_pin		B,	4,	4								// SPI - SS
+#define ICSP_DI_MISO			B,	5,	5								// SPI - MISO; aka. DI; if run in master mode this is ... MISO
+#define ICSP_DO_MOSI			B,	6,	6								// SPI - MOSI; aka. DO; ditto
+#define SPI_SCK_pin				B,	7,	7								// SPI - SCK
+
+#define MCP2515_INT_pin			D,	3,	3								// INT1
+// definitions of device/PCB layout-independent hardware pins
+
+// TODO - get rid of unions
+typedef union															// u_devices union of bit fields and uint16_t - representation discovered devices on bus
+{
+	struct																// bit fields - one bit for each device on the bus
+	{
+		uint8_t _LU :1;													// 1 indicates device present, 0 otherwise
+		uint8_t _DEV_0B :1;												//	ditto
+		uint8_t _DEV_0C :1;												//	ditto
+		uint8_t _MJ828 :1;												//	ditto
+		uint8_t _DEV_1A :1;												//	ditto
+		uint8_t _DEV_1B :1;												//	ditto
+		uint8_t _DEV_1C :1;												//	ditto
+		uint8_t _DEV_1D :1;												//	ditto
+		uint8_t _MJ808 :1;												//	ditto
+		uint8_t _MJ818 :1;												//	ditto
+		uint8_t _DEV_2C :1;												//	ditto
+		uint8_t _DEV_2D :1;												//	ditto
+		uint8_t _DEV_3A :1;												//	ditto
+		uint8_t _DEV_3B :1;												//	ditto
+		uint8_t _DEV_3C :1;												//	ditto
+		uint8_t _DEV_3D :1;												//	ditto
+	};
+	uint16_t uint16_val;												// the bit field as one uint16_t
+} u_devices;
+
+typedef struct															// canbus_t struct describing the CAN bus state
+{
+	u_devices devices;													// indicator of devices discovered, 16 in total; B0 - 1st device (0A), B1 - 2nd device (0B), ..., B15 - 16th device (3D)
+	uint8_t NumericalCAN_ID ;											// ordered device number - A0 (0th device) until 3C (15th device)
+	uint8_t BeatIterationCount : 4;										// how many times did we wakeup, sleep and wakeup again
+	uint8_t FlagDoHeartbeat : 1;
+	uint8_t FlagDoDefaultOperation : 2;
+} canbus_t;
+
+static volatile can_message_t can_msg_outgoing;
+static volatile can_message_t can_msg_incoming;
+
 typedef struct															// "base class" struct for mj8x8 devices
 {
 	volatile can_t *can;												// pointer to the CAN structure
 	volatile attiny4313_t *mcu;											// pointer to MCU structure
+	volatile canbus_t *bus;												// pointer to struct holding meta info about the bus
+	void (*HeartBeat)(volatile canbus_t *bus, volatile can_message_t *msg);		// default periodic heartbeat for all devices
+	void (*EmptyBusOperation)(void);									// device's default operation on empty bus, implemented in derived class
+	void (*PopulatedBusOperation)(can_message_t *msg);					// device operation on populated bus
 } mj8x8_t;
-
-
 
 // command handling functions
 void util_led(uint8_t in_val);											// interprets CMND_UTIL_LED command - utility LED (red, green, on, off, blink)
 void dev_sensor(can_message_t *msg);									// interprets CMND_DEVICE-DEV_SENSOR command - TODO - sensor related stuff
 void dev_pwr_src(can_message_t *msg);									// interprets CMND_DEVICE-DEV_PWR_SRC command - TODO - power source related stuff
 void dev_logic_unit(can_message_t *msg);								// interprets CMND_DEVICE-DEV_LU command - TODO - logic unit related stuff
-void dev_light(can_message_t *msg);										// interprets CMND_DEVICE-DEV_LIGHT command - positional light control
-void msg_button(can_message_t *msg, uint8_t button);					// conveys button press event to the CAN bus
+void dev_light(volatile can_message_t *msg);							// interprets CMND_DEVICE-DEV_LIGHT command - positional light control
+void msg_button(volatile mj8x8_t *dev, volatile can_message_t *msg, uint8_t button);					// conveys button press event to the CAN bus
 void button_debounce(volatile button_t *in_button);						// marks a button as pressed if it was pressed for the duration of 2X ISR iterations
 
-#if defined(MJ828_)
-void charlieplexing_handler(volatile leds_t *in_led);					// handles LEDs in charlieplexed configuration
-#endif
-
-// bus handling functions
-void discovery_announce(volatile canbus_t *canbus_status, can_message_t *msg); //
-void discovery_behave(volatile canbus_t *canbus_status); //
-
-
-volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu);
-
+volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu, volatile canbus_t *bus);
 
 #endif /* MJ8x8_H_ */

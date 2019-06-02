@@ -41,7 +41,4 @@ typedef struct															// struct describing LEDs on device MJ828
 } leds_t;
 #endif
 
-volatile leds_t LED;													// forward declaration of LED instance
-
-
 #endif /* LED_H_ */

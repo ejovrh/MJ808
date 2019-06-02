@@ -319,41 +319,6 @@
 #define ARGUMENT data[1]
 
 
-
-// TODO - get rid of unions
-typedef union															// u_devices union of bit fields and uint16_t - representation discovered devices on bus
-{
-	struct																// bit fields - one bit for each device on the bus
-	{
-		uint8_t _LU :1;													// 1 indicates device present, 0 otherwise
-		uint8_t _DEV_0B :1;												//	ditto
-		uint8_t _DEV_0C :1;												//	ditto
-		uint8_t _MJ828 :1;												//	ditto
-		uint8_t _DEV_1A :1;												//	ditto
-		uint8_t _DEV_1B :1;												//	ditto
-		uint8_t _DEV_1C :1;												//	ditto
-		uint8_t _DEV_1D :1;												//	ditto
-		uint8_t _MJ808 :1;												//	ditto
-		uint8_t _MJ818 :1;												//	ditto
-		uint8_t _DEV_2C :1;												//	ditto
-		uint8_t _DEV_2D :1;												//	ditto
-		uint8_t _DEV_3A :1;												//	ditto
-		uint8_t _DEV_3B :1;												//	ditto
-		uint8_t _DEV_3C :1;												//	ditto
-		uint8_t _DEV_3D :1;												//	ditto
-	};
-	uint16_t uint16_val;												// the bit field as one uint16_t
-} u_devices;
-
-typedef struct															// canbus_t struct describing the CAN bus state
-{
-	uint8_t status;														// status info
-	uint8_t broadcast_iteration_count : 4;								// device counter for discovery
-	u_devices devices;													// indicator of devices discovered, 16 in total; B0 - 1st device (0A), B1 - 2nd device (0B), ..., B15 - 16th device (3D)
-	uint8_t numerical_self_id ;											// ordered device number - A0 (0th device) until 3C (15th device)
-	uint8_t sleep_iteration : 3;										// how many times did we wakeup, sleep and wakeup again
-} canbus_t;
-
 typedef struct															// can_message_t struct describing a generic CAN message
 {
 // preserve byte order for sequential reads/writes
@@ -367,7 +332,7 @@ typedef struct															// can_message_t struct describing a generic CAN me
 // preserve byte order for sequential reads/writes
 } can_message_t __attribute__((aligned(8))) ;
 
-typedef struct															// can_t struct describing the CAN device as a whole
+typedef struct can_t													// can_t struct describing the CAN device as a whole
 {
 // preserve byte order for sequential reads/writes
 	uint8_t canintf;													// contents of CANINTF register, datasheet p. 53
@@ -383,18 +348,15 @@ typedef struct															// can_t struct describing the CAN device as a whol
 
 // public methods
 
-	void (*Sleep)(const uint8_t in_val);								// puts the MCP2515 to sleep (and wakes it up)
-	void (*SendMessage)(can_message_t *msg);							// sends message to the CAN bus
-	void (*ReceiveMessage)(can_message_t *msg);							// fetches received message from some RX buffer
+	void (*Sleep)(volatile struct can_t *in_can, const uint8_t in_val);	// puts the MCP2515 to sleep (and wakes it up)
+	void (*RequestToSend)(volatile can_message_t *msg);					// requests message to be sent to the CAN bus
+	void (*FetchMessage)(volatile can_message_t *msg);					// fetches received message from some RX buffer
 	void (*ChangeOpMode)(const uint8_t mode);							// changes the operational mode of the MCP2515
 	void (*ReadBytes)(const uint8_t addr, volatile uint8_t *data, const uint8_t len);	// reads len bytes from some register in the MCP2515
 	void (*BitModify)(const uint8_t addr, const uint8_t mask, const uint8_t byte);			// modifies bit identified by "byte" according to "mask" in some register
 } can_t __attribute__((aligned(8)));
 
 
+volatile can_t *can_ctor(volatile can_t * self);						// CAN object constructor - does function pointer & hardware initialization
 
-volatile can_t *can_ctor(volatile can_t * self);											// CAN object constructor - does function pointer & hardware initialization
-
-// TODO - move to public method
-void can_sleep(volatile can_t *in_can, const uint8_t in_val);			// puts the whole CAN infrastructure to sleep; 1 - sleep, 0 - awake
 #endif /* MCP2515_H_ */

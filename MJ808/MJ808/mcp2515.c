@@ -1,10 +1,20 @@
 #include <avr/io.h>
 #include <util/delay.h>
-#include "gpio.h"
-#include "gpio_definitions.h"
 
+#include "gpio.h"
 #include "uci_spi.h"
 #include "mcp2515.h"
+
+// TODO - move pin definitions out of here
+#define	SPI_SS_MCP2515_pin		B,	4,	4								// SPI - SS
+
+#if defined(MJ828_)
+#define MCP2561_standby_pin		B,	3,	3								// MCP2561 standby
+#endif
+#if defined(MJ808_) || defined(MJ818_)
+#define	MCP2561_standby_pin		B,	1,	1								// MCP2561 standby
+#endif
+
 
 /* the basic building blocks of interaction with the MCP2515:
  * opcodes -low level instructions- which the hardware executes
@@ -178,7 +188,7 @@ void mcp2515_init(void)
 
 // read RX buffer - opcode 0x90 - loads a RX buffer identified by the bit mask 'buffer' into '*data', ch. 12.4, p 65
 // datasheet p.66 and table 12.3
-void mcp2515_opcode_read_rx_buffer(const uint8_t buffer, uint8_t *data, const uint8_t len)
+void mcp2515_opcode_read_rx_buffer(const uint8_t buffer, volatile uint8_t *data, const uint8_t len)
 {
 	uint8_t i = 0;
 
@@ -235,7 +245,7 @@ void mcp2515_opcode_rts(const uint8_t buffer)
 
 // load TX buffer - opcode 0x40 - loads '*data' into TX buffer identified by the bit mask 'buffer'
 // ch12.6 & table 12.5
-static void mcp2515_opcode_load_tx_buffer(const uint8_t buffer, const uint8_t *data, const uint8_t len)
+static void mcp2515_opcode_load_tx_buffer(const uint8_t buffer, volatile const uint8_t *data, const uint8_t len)
 {
 	uint8_t i;
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
@@ -257,7 +267,7 @@ static void mcp2515_opcode_load_tx_buffer(const uint8_t buffer, const uint8_t *d
 }
 
 // fetches a received CAN message from the MCP2515, triggered by RX interrupt
-void mcp2515_can_msg_receive(can_message_t *msg)
+void mcp2515_can_msg_receive(volatile can_message_t *msg)
 {
 	/* mode of operation - see figure 4.2 on p.26
 	 *	1. identify RX buffer
@@ -293,7 +303,7 @@ void mcp2515_can_msg_receive(can_message_t *msg)
 
 // provide data to MCP2515 and flag for TX over the CAN bus
 //	provide not more than 4 bytes of data and len !!!
-void mcp2515_can_msg_send(can_message_t *msg)
+void mcp2515_can_msg_send(volatile can_message_t *msg)
 {
 	/* mode of operation - see figure 3.1 on p.17
 	 *	1. find an empty TX buffer
@@ -370,8 +380,8 @@ volatile can_t *can_ctor(volatile can_t *self)
 {
 	// populate self
 	self->Sleep = &can_sleep;											// set up function pointer for public methods
-	self->SendMessage = &mcp2515_can_msg_send;							// ditto
-	self->ReceiveMessage = &mcp2515_can_msg_receive;					// ditto
+	self->RequestToSend = &mcp2515_can_msg_send;						// ditto
+	self->FetchMessage = &mcp2515_can_msg_receive;						// ditto
 	self->ChangeOpMode = &mcp2515_change_opmode;						// ditto
 	self->ReadBytes = &mcp2515_opcode_read_bytes;						// ditto
 	self->BitModify = &mcp2515_opcode_bit_modify;						// ditto

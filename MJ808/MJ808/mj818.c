@@ -5,11 +5,27 @@
 
 #include "mj818.h"
 #include "mj8x8.h"
-#include "mcp2515.h"
+//#include "mcp2515.h" // TODO - should not be here
+#include "gpio.h"
+
+void EmptyBusOperationMJ818(void)										// device default operation on empty bus
+{
+	if (OCR_REAR_LIGHT == 0x00)											// run once
+		fade(0x10, &OCR_REAR_LIGHT, OCR_MAX_REAR_LIGHT);				// turn on rear light
+};
+
+void PopulatedBusOperationMJ818(can_message_t *in_msg)					// device operation on populated (not empty) bus
+{
+	;
+};
 
 volatile mj818_t *mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base)
 {
-	//#include "gpio_modes_mj818.h"										// device specific state definitions
+// state initialization of device-specific pins
+	gpio_conf(PWM_rear_light_pin, OUTPUT, LOW);							// low (off), high (on)
+	gpio_conf(PWM_brake_light_pin, OUTPUT, LOW);						// low (off), high on
+	gpio_conf(MCP2561_standby_pin, OUTPUT, LOW);						// low (on), high (off)
+// state initialization of device-specific pins
 
 	cli();
 
@@ -45,12 +61,13 @@ volatile mj818_t *mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base)
 	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
 	 */
+	can_msg_outgoing.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B);
+	can_msg_outgoing.sidl = ( RCPT_DEV_BLANK | BLANK);
 
-	can_message_t can_msg_outgoing =
-	{
-		.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B), // high byte
-		.sidl = ( RCPT_DEV_BLANK | BLANK)								// low byte
-	};
+	self->mj8x8->EmptyBusOperation = &EmptyBusOperationMJ818;			// implement device-specific default operation
+	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
+
+	self->mj8x8->bus->NumericalCAN_ID = (uint8_t) ( (can_msg_outgoing.sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
 
 	return self;
 }

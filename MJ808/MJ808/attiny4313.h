@@ -3,7 +3,7 @@
 
 typedef struct
 {
-	volatile uint8_t *wdtcr;
+	//volatile uint8_t *wdtcr;
 
 } attiny4313_t;
 

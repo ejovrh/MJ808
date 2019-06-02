@@ -4,24 +4,7 @@
 #include <util/delay.h>
 
 #include "gpio.h"
-//#include "gpio_definitions.h"
-
-#include "mcp2515.h"
 #include "mj8x8.h"
-
-#if defined(MJ808_)
-#include "mj808.h"
-#endif
-#if defined(MJ828_)
-#include "mj828.h"
-#endif
-
-volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu)
-{
-	self->mcu = attiny_ctor(mcu);										// pass MCU address into constructor
-	self->can = can_ctor(can);										// pass CAN address into constructor
-	return self;
-}
 
 
 #if defined(MJ808_) || defined(MJ818_)									// private function - fades *ocr to value (or ocr_max) - up to OCR_MAX or down to 0x00
@@ -124,7 +107,7 @@ void dev_logic_unit(can_message_t *msg)
 #endif
 
 #if defined(MJ808_) || defined (MJ818_)									// interprets CMND_DEVICE-DEV_LIGHT command - positional light control
-void dev_light(can_message_t *msg)
+void dev_light(volatile can_message_t *msg)
 {
 	#if defined (MJ808_)
 	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT) )		// front positional light - low beam
@@ -164,105 +147,6 @@ void dev_light(can_message_t *msg)
 	#endif
 }
 #endif
-
-// conveys button press event to the CAN bus
-void msg_button(can_message_t *msg, uint8_t button)
-{
-	msg->COMMAND = (MSG_BUTTON_EVENT | button);
-	msg->dlc = 1;
-	// FIXME - refactor away - check caller
-
-	#if defined(MJ808_)
-	device.mj8x8->can->SendMessage(msg);
-	#endif
-}
-
-// announce ourselves to the bus - once on power-up and then 2s-periodic
-void discovery_announce(volatile canbus_t *canbus_status, can_message_t *msg)
-{
-	/* time-slot based broadcast of self; timer is the watchdog, set to 250ms on inital init in main()
-	 * after 1s this loop is done and everyone in the bus (if alive) has broadcasted their SID
-	 *	in its time slot (provided power up was at the same time)
-	 *	after that time, canbus_status->devices	holds a bitwise representation of what is alive on the bus
-	 */
-
-	if (canbus_status->broadcast_iteration_count == canbus_status->numerical_self_id) // compare device counter with decimal self-id
-	{																	// broadcast self-id to everyone
-		if (device.mj8x8->can->in_sleep)										// if the CAN infra. is sleeping
-			can_sleep(device.mj8x8->can, 0);									// wake it up
-
-		msg->sidh |= BROADCAST;											// set the broadcast flag
-		msg->COMMAND = (CMND_ANNOUNCE);									// "mark" it as an announce command (doesn't really do a thing since the announce is 0x00)
-		msg->dlc = 1;
-
-		device.mj8x8->can->SendMessage(msg);
-
-		#if defined(MJ808_)												// setup of front light PWM - permanent on
-		util_led(UTIL_LED_RED_BLINK_1X);								// indicate bus empty
-		#endif
-
-		msg->sidh &= ~BROADCAST;										// unset the broadcast flag
-		canbus_status->status &= ~0x80;									// unset the "i-was-here" bit
-		//canbus_status->status |= 0x40;									// FIXME - what is this flag used for??
-		canbus_status->sleep_iteration = 0;								// reset the cycle and start over
-		canbus_status->broadcast_iteration_count = 0;					// reset the cycle and start over
-
-		//*(device.mcu->wdtcr) |= (_BV(WDCE) | _BV(WDE));					// WDT change enable sequence
-		//*(device.mcu->wdtcr) = ( _BV(WDIE) | _BV(WDP2) | _BV(WDP1) );	// set watchdog timer set to 1s
-		WDTCR |= (_BV(WDCE) | _BV(WDE));								// WDT change enable sequence
-		WDTCR = ( _BV(WDIE) | _BV(WDP2) | _BV(WDP1) );					// set watchdog timer set to 1s
-
-		// from here on we act upon the bus status directly in this iteration of the ISR
-	}
-
-	++canbus_status->broadcast_iteration_count;							// counter, incremented by the WDT ISR; counts from the 0th up to the 15th device
-}
-
-// discover what lives on the CAN bus and act upon it
-void discovery_behave(volatile canbus_t *canbus_status)
-{
-		if (canbus_status->sleep_iteration > REDISCOVER_ITERATION)		// initiate re-broadcast
-		{
-			WDTCR |= (_BV(WDCE) | _BV(WDE));							// WDT change enable sequence
-			WDTCR = ( _BV(WDIE) | _BV(WDP2)  );							// watchdog timer set to 0.25
-
-			canbus_status->broadcast_iteration_count = 0;				// reset the device counter
-			canbus_status->status |= 0x80;								// unset i-was-here bit and let it rescan again
-		}
-
-		// front light present
-		#if defined(MJ818_)												// rear light behavior
-		if (canbus_status->devices._MJ808)								// the front light is on the bus
-		{
-			return;														// do nothing, the front light will tell me what to do
-		}
-		#endif
-
-		// logic unit present
-		if (canbus_status->devices._LU)									// the logic unit is on the bus
-		{
-			return;
-		}
-
-		// rear light present
-		if (canbus_status->devices._MJ818)
-		{
-			#if defined(MJ808_)											// indicate through utility LED
-			//util_led(UTIL_LED_RED_BLINK_2X);
-			#endif
-			return;
-		}
-
-		if (canbus_status->devices.uint16_val == 0x00)					// we are alone on the bus -> go dumb, glow, rescan periodically and be happy...
-		{
-			#if defined(MJ818_)											// setup of rear light PWM - permanent on
-			if (OCR_REAR_LIGHT == 0x00)									// run once
-			fade(0x10, &OCR_REAR_LIGHT, OCR_MAX_REAR_LIGHT);
-			#endif
-
-			return;
-		}
-}
 
 #if defined(MJ808_) || defined (MJ828_)									// button debouncer for devices with buttons
 void button_debounce(volatile button_t *in_button)						// marks a button as pressed if it was pressed for the duration of 2X ISR iterations
@@ -355,111 +239,56 @@ void button_debounce(volatile button_t *in_button)						// marks a button as pre
 }
 #endif
 
-#if defined(MJ828_)														// charlieplexing handler for mj828
-// private function, used only by the charlieplexing_handler() function
-static void glow(uint8_t led, uint8_t state, uint8_t blink)
+void Heartbeat(volatile canbus_t *bus, volatile can_message_t *msg)
 {
-	// FIXME - blinking is passed by value, hence never decremented where it should be: in the struct
-	//	task: put code in glow() into the charlieplex-handler
-
-	// set LED pins to initial state
-	gpio_conf(LED_CP1_pin, INPUT, LOW);									// Charlie-plexed pin1
-	gpio_conf(LED_CP2_pin, INPUT, LOW);									// Charlie-plexed pin2
-	gpio_conf(LED_CP3_pin, INPUT, LOW);									// Charlie-plexed pin3
-	gpio_conf(LED_CP4_pin, INPUT, LOW);									// Charlie-plexed pin4
-
-	static uint8_t counter;
-	counter++;
-
-	if (! (state || blink) )											// if we get 0x00 (off argument) - do nothing and get out
-		return;
-
-
-
-	switch (led)
+	if (bus->FlagDoHeartbeat)											// if we are in heartbeat mode
 	{
-		case 0x00:														//red led
-			gpio_conf(LED_CP2_pin, OUTPUT, HIGH);						// b1 - anode
+		if (bus->BeatIterationCount == bus->NumericalCAN_ID)			// see if this counter iteration is our turn
+		{
+			SendMessage(CMND_ANNOUNCE, 0x00, 1);						// broadcast CAN heartbeat message
 
-			if ( (state) || (blink && counter <= 128) )					// on
-				gpio_conf(LED_CP1_pin, OUTPUT, LOW);					// b2 - cathode
-			else
-				gpio_conf(LED_CP1_pin, OUTPUT, HIGH);					// b2 - cathode
-		break;
+			bus->FlagDoHeartbeat = 0;									// heartbeat mode of for the remaining counter iterations
+			WDTCR |= (_BV(WDCE) | _BV(WDE));							// WDT change enable sequence
+			WDTCR = ( _BV(WDIE) | _BV(WDP2) | _BV(WDP1) );				// set watchdog timer set to 1s
 
-		case 0x01:														// green led
-			gpio_conf(LED_CP1_pin, OUTPUT, HIGH);						// b2 - anode
-
-			if ( (state) || (blink && counter <= 128) )					// on
-				gpio_conf(LED_CP2_pin, OUTPUT, LOW);					// b1 - cathode
-			else
-				gpio_conf(LED_CP2_pin, OUTPUT, HIGH);					// b1 - cathode
-		break;
-
-		case 0x02:														// blue1 led
-			gpio_conf(LED_CP2_pin, OUTPUT, HIGH);						// b1 - anode
-
-			if ( (state) || (blink && counter <= 128) )					// on
-				gpio_conf(LED_CP3_pin, OUTPUT, LOW);					// b0 - cathode
-			else
-				gpio_conf(LED_CP3_pin, OUTPUT, HIGH);					// b0 - cathode
-		break;
-
-		case 0x03:														// yellow led
-			gpio_conf(LED_CP3_pin, OUTPUT, HIGH);						// b2 - anode
-
-			if ( (state) || (blink && counter <= 128) )					// on
-				gpio_conf(LED_CP2_pin, OUTPUT, LOW);					// b1 - cathode
-			else
-				gpio_conf(LED_CP2_pin, OUTPUT, HIGH);					// b1 - cathode
-		break;
-
-		case 0x04:														// blue2 LED (battery indicator 1)
-			gpio_conf(LED_CP4_pin, OUTPUT, HIGH);						// d6 - anode
-
-			if ( (state) || (blink && counter <= 128) )					// on
-				gpio_conf(LED_CP3_pin, OUTPUT, LOW);					// b0 - cathode
-			else
-				gpio_conf(LED_CP3_pin, OUTPUT, HIGH);					// b0 - cathode
-		break;
-
-		case 0x05:														// blue3 LED (battery indicator 2)
-			gpio_conf(LED_CP3_pin, OUTPUT, HIGH);						// b0 - anode
-
-			if ( (state) || (blink && counter <= 128) )					// on
-				gpio_conf(LED_CP4_pin, OUTPUT, LOW);					// d6 - cathode
-			else
-				gpio_conf(LED_CP4_pin, OUTPUT, HIGH);					// d6 - cathode
-		break;
-
-		case 0x06:														// blue4 LED (battery indicator 3)
-			gpio_conf(LED_CP1_pin, OUTPUT, HIGH);						// b2 - anode
-
-			if ( (state) || (blink && counter <= 128) )					// on
-				gpio_conf(LED_CP4_pin, OUTPUT, LOW);					// d6 - cathode
-			else
-				gpio_conf(LED_CP4_pin, OUTPUT, HIGH);					// d6 - cathode
-		break;
-
-		case 0x07:														// blue5 LED (battery indicator 4)
-			gpio_conf(LED_CP4_pin, OUTPUT, HIGH);						// d6 - anode
-
-			if ( (state) || (blink && counter <= 128) )					// on
-				gpio_conf(LED_CP1_pin, OUTPUT, LOW);					// b2 - cathode
-			else
-				gpio_conf(LED_CP1_pin, OUTPUT, HIGH);					// b2 - cathode
-		break;
+			#if defined(MJ808_)
+			util_led(UTIL_LED_RED_BLINK_1X);
+			#endif
+		}
 	}
 
-};
+	if ( (! bus->BeatIterationCount) && (! bus->FlagDoHeartbeat) )		// counter roll-over, change from slow to fast
+	{
+		bus->FlagDoHeartbeat = 1;										// set heartbeat mode on
+		++bus->FlagDoDefaultOperation;									// essentially count how many times we are in non-heartbeat count mode
 
-void charlieplexing_handler(volatile leds_t *in_led)
-{
-	static uint8_t i = 0;												// iterator to loop over all LEDs on device
+		WDTCR |= (_BV(WDCE) | _BV(WDE));								// WDT change enable sequence
+		WDTCR = ( _BV(WDIE) | _BV(WDP2)  );								// watchdog timer set to 0.25
+	}
 
-	glow(i, in_led->leds[i].on, in_led->leds[i].blink_count);			// e.g. command = 0x00 (red), arg = 0x01 (on)
-
-	// !!!!
-	(i == in_led->led_count) ? i = 0 : ++i;								// count up to led_count and then start from zero
+	++bus->BeatIterationCount;											// increment the iteration counter
 }
-#endif
+
+
+volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu, volatile canbus_t *bus)
+{
+	// state initialization of device-unspecific pins
+	gpio_conf(MCP2515_INT_pin, INPUT, HIGH);							// INT1, active low
+
+	gpio_conf(ICSP_DO_MOSI, OUTPUT, LOW);								// data out - output pin
+	gpio_conf(ICSP_DI_MISO, INPUT, LOW);								// data in - input pin
+	gpio_conf(SPI_SCK_pin, OUTPUT, LOW);								// low for proper CPOL = 0 waveform
+	gpio_conf(SPI_SS_MCP2515_pin, OUTPUT, HIGH);						// //high (device inert), low (device selected)
+	// state initialization of device-unspecific pins
+
+	self->HeartBeat = &Heartbeat;
+	self->mcu = attiny_ctor(mcu);										// pass MCU address into constructor
+	self->can = can_ctor(can);											// pass CAN address into constructor
+	self->bus = bus;
+	self->bus->devices.uint16_val = 0x0000;
+	self->bus->NumericalCAN_ID = 0;
+	self->bus->FlagDoHeartbeat = 1;										// start with discovery mode
+	self->bus->FlagDoDefaultOperation = 0;
+
+	return self;
+}

@@ -7,28 +7,26 @@
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"
+static volatile mj808_t device;
 #endif
 #if defined(MJ818_)														// mj818 header include
 #include "mj818.h"
+static volatile mj818_t device;
 #endif
 #if defined(MJ828_)														// mj828 header include
 #include "mj828.h"
+static volatile mj828_t device;
 #endif
+
+static volatile mj8x8_t MJ8X8;											// declare MJ8X8 object
+static volatile attiny4313_t MCU;										// declare MCU object
+static volatile can_t CAN;												// declare CAN object
+static volatile canbus_t BUS;											// declare canbus object
+static volatile leds_t LED;												// declare LED object
+
 
 // TODO - refactor away
 volatile uint8_t flag_lamp_is_on = 0;									// flag - indicates if button turned the device on, used for pushbutton handling
-can_message_t can_msg_outgoing;
-can_message_t can_msg_incoming;
-
-volatile canbus_t canbus_status =										// bit-wise info about CAN bus status
-{
-	.status = 0x80,														// bitwise representation of CAN bus status, start with discovery mode on
-	.devices.uint16_val = 0x0000 ,										// bitwise representation of devices discovered, see #defines below CMND_ANNOUNCE
-	.broadcast_iteration_count = 0, 									// counter
-	.numerical_self_id = 0,												// decimal representation of SID
-	.sleep_iteration = 0												// counter for sleep iterations, incremented by WDT_OVERFLOW_vect() ISR
-};
-
 
 volatile	uint8_t canintf;											// CAN debug variables for MCP2515 status readout from main()
 volatile	uint8_t canstat;
@@ -37,43 +35,32 @@ volatile	uint8_t eflg;
 volatile	uint8_t rec;
 volatile	uint8_t tec;
 
+void SendMessage(const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
+{
+	if (in_command == CMND_ANNOUNCE)									// set the broadcast flag
+		can_msg_outgoing.sidh |= BROADCAST;								// set the broadcast flag
+
+	can_msg_outgoing.COMMAND = in_command;								// set command into message
+	can_msg_outgoing.ARGUMENT = in_argument;							// set argument into message
+	can_msg_outgoing.dlc = in_len;										// set DLC
+
+	device.mj8x8->can->RequestToSend(&can_msg_outgoing);
+}
+
 
 int main(void)
 {
-	#if defined(MJ808_)													// MJ808 GPIO state definitions
-	#include "gpio_modes_mj808.h"
-	#endif
-	#if defined(MJ818_)													// MJ818 GPIO state definitions
-	#include "gpio_modes_mj818.h"
-	#endif
-	#if defined(MJ828_)													// MJ828 GPIO state definitions
-	#include "gpio_modes_mj828.h"
-	#endif
+	mj8x8_ctor(&MJ8X8, &CAN, &MCU, &BUS);								// call base class constructor & tie in associated object addresses
 
-	// instantiate the base class & call its constructor
-	mj8x8_t MJ8X8;														// declare MJ8X8 object
-	attiny4313_t MCU;													// declare MCU object
-	can_t CAN;															// declare CAN object - its address will be used soon in the constructor ...
-
-	mj8x8_ctor(&MJ8X8, &CAN, &MCU);
-
-	// instantiate the derived class & tie to base class
-	// instantiation of mj808_t is for now global in its header file
-	// call mj808_t constructor
-	#if defined(MJ808_)
+	#if defined(MJ808_)													// MJ808 - call derived class constructor and tie in base class
 	mj808_ctor(&device, &MJ8X8);
 	#endif
-	#if defined(MJ818_)
+	#if defined(MJ818_)													// MJ818 - call derived class constructor and tie in base class
 	mj818_ctor(&device, &MJ8X8);
 	#endif
-	#if defined(MJ828_)
+	#if defined(MJ828_)													// MJ828 - call derived class constructor and tie in base class
 	mj828_ctor(&device, &MJ8X8);
 	#endif
-
-
-// TODO - refactor away
-	canbus_status.numerical_self_id = (uint8_t) ( (can_msg_outgoing.sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
-
 
 // TODO - put into constructors
 	#if defined(MJ808_)													// device init for MJ808
@@ -116,7 +103,6 @@ int main(void)
 	while (1)															// forever loop
 	{
 		asm("nop");														// on purpose kept as empty as possible !!
-		// FIXME - refactor away
 
 		device.mj8x8->can->ReadBytes(CANINTF, &canintf, 1);				// download the interrupt flag register
 		device.mj8x8->can->ReadBytes(CANSTAT, &canstat, 1);
@@ -134,7 +120,7 @@ int main(void)
 ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message reception of the MCP2515
 {
 	sleep_disable();													// wakey wakey
-	can_t *can = device.mj8x8->can;										// get pointer to CAN instance
+	volatile can_t *can = device.mj8x8->can;							// get pointer to CAN instance
 
 	// assumption: an incoming message is of interest for this unit
 	//	'being of interest' is defined in the filters
@@ -146,10 +132,12 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 
 	void helper_handle_rx(volatile can_t *in_can)						// handles incoming message interrupts
 	{
-		in_can->ReceiveMessage(&can_msg_incoming);								// load the CAN message into its structure & clear the RX int flag
+		// TODO - refactor away into message handler (RX)
+		in_can->FetchMessage(&can_msg_incoming);						// load the CAN message into its structure & clear the RX int flag
 
+		// TODO - refactor away into message handler (RX)
 		// update the CAN BUS status structure; if we get a message from SID foo, then _BV(foo) shall be marked as "on the bus"
-		canbus_status.devices.uint16_val |= ( 1 << ( (can_msg_incoming.sidh >> 2) & 0x0F ) ); // shift as many bits as the originating SID is in decimal
+		device.mj8x8->bus->devices.uint16_val |= ( 1 << ( (can_msg_incoming.sidh >> 2) & 0x0F ) ); // shift as many bits as the originating SID is in decimal
 
 		// command for device
 		if (can_msg_incoming.COMMAND & CMND_DEVICE)						//  we received a command for some device...
@@ -223,7 +211,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		if (in_can->eflg & _BV(TXEP))									// handle TX error-passive situation
 		{
 			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
-			can_sleep(in_can, 1);										// put to sleep
+			device.mj8x8->can->Sleep(in_can, 1);						// put to sleep
 		}
 
 		if (in_can->eflg & _BV(RXEP))									// TODO - handle RX error-passive situation
@@ -299,7 +287,6 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 				break;
 
 			case 1:														// error interrupt
-				// FIXME - refactor away
 				helper_handle_error(can);
 				break;
 
@@ -340,7 +327,7 @@ ISR(PCINT2_vect)														// ISR for pushbuttons
 	;
 	//button_debounce(&mj808.button[0]);								// from here on the button is debounced and states can be consumed
 	//button_debounce(&mj828.button[1]);								// ditto
-//
+
 	//mj828.led->leds[blue].on = mj828.button[0].toggle;
 	//mj828.led->leds[yellow].on = mj828.button[1].is_pressed;
 	//mj828.led->leds[red].blink_count = (mj828.button[0].hold_error || mj828.button[1].hold_error);
@@ -354,7 +341,7 @@ ISR(PCINT2_vect)														// ISR for pushbuttons
 ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - foo ms
 {
 	sleep_disable();													// wakey wakey
-
+	volatile mj8x8_t *dev = device.mj8x8;
 	// code to be executed every 25ms
 
 	#if defined(MJ808_)													// pushbutton code for mj808
@@ -366,46 +353,34 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - foo ms
 	// FIXME - on really long button press (far beyond hold error) something writes crap into memory, i.e. the address of PIND in button struct gets overwritten, as does the adders of the led struct
 	if (!flag_lamp_is_on && device.button[0].hold_temp)					// turn front light on
 	{
-		if (canbus_status.devices._MJ818)								// if rear light is present
-		{
-			can_msg_outgoing.COMMAND = (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT);	// assemble appropriate command
-			can_msg_outgoing.ARGUMENT = 0xFF;							// argument to turn on
-			can_msg_outgoing.dlc = 2;
-			device.mj8x8->can->SendMessage(&can_msg_outgoing);
-		}
+		if (dev->bus->devices._MJ818)									// if rear light is present
+			// TODO - refactor away into message handler (TX)
+			SendMessage( (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);	// turn on rear light
 
-		if (canbus_status.devices._MJ828)								// dashboard is present
-		{
-			// TODO - write dashboard code
-			;
-
-			//CAN_OUT.COMMAND = (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT); // assemble appropriate command
-			//CAN_OUT.ARGUMENT = 0xFF;									// argument to turn on
-			//CAN_OUT.dlc = 2;
-			//mcp2515_can_msg_send(&CAN_OUT);
-		}
+		if (dev->bus->devices._MJ828)									// dashboard is present
+			// TODO - refactor away into message handler (TX)
+			SendMessage( (CMND_DEVICE | DEV_LU | DASHBOARD), 0x00, 1);	// dummy command to dashboard
 
 		fade(0x20, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);
 
 		util_led(UTIL_LED_GREEN_ON);									// power on green LED
-		msg_button(&can_msg_outgoing, BUTTON0_ON);						// convey button press via CAN
+		// TODO - refactor away into message handler (TX)
+		SendMessage( (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);			// convey button press via CAN
+
 		flag_lamp_is_on = 1;
 	}
 
 	if ((flag_lamp_is_on && !device.button[0].hold_temp) || device.button->hold_error)	// turn front light off
 	{
-		if (canbus_status.devices._MJ818)								// if rear light is present
-		{
-			can_msg_outgoing.COMMAND = (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT);	// assemble appropriate command
-			can_msg_outgoing.ARGUMENT = 0x00;							// argument to turn off
-			can_msg_outgoing.dlc = 2;
-			device.mj8x8->can->SendMessage(&can_msg_outgoing);
-		}
+		if (dev->bus->devices._MJ818)									// if rear light is present
+			// TODO - refactor away into message handler (TX)
+			SendMessage( (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);	// turn off rear light
 
 		fade(0x00, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);				// turn off
 
 		util_led(UTIL_LED_GREEN_OFF);									// power off green LED
-		msg_button(&can_msg_outgoing, BUTTON0_OFF);						// convey button release via CAN
+		// TODO - refactor away into message handler (TX)
+		SendMessage( (MSG_BUTTON_EVENT | BUTTON0_OFF), 0x00, 1);		// convey button release via CAN
 		flag_lamp_is_on = 0;
 	}
 	#endif
@@ -434,27 +409,45 @@ ISR(TIMER0_COMPA_vect)													// timer/counter0 - 16.25ms - charlieplexed b
 
 #endif
 
-ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// TODO - state machine - active CAN bus device discovery & default operation on empty bus
+ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka. active CAN bus device discovery
 {
+	/* method of operation:
+	 *	- on the CAN bus there is room for max. 16 devices - in numeric form devices #0 up to #15
+	 *	- each device has its own unique NumericalCAN_ID, which is derived from its unique CAN bus ID
+	 *
+	 *	- on each watchdog timer iteration, BeatIterationCount is incremented (it is able to roll over from 0xf to 0x0)
+	 *	- when BeatIterationCount is equal to the device's NumericalCAN_ID, a heartbeat message is sent, otherwise nothing is done
+	 *
+	 *	- there are two modes: fast count and slow count - each set via WDTCR, the WatchDog Timer Control Register
+	 *		- fast count is performed when a heartbeat is supposed to be sent
+	 *			this mode speeds up the heartbeat procedure itself
+	 *
+	 *		- slow count is performed when no heartbeat is supposed to be sent
+	 *			this mode acts as a delay for heartbeat messages themselves
+	 *
+	 *	i.e. start in heartbeat mode, count fast to one's own ID, send the message and then exit heartbeat mode,
+	 *		continue counting slow until a counter rollover occurs and enter heartbeat mode again.
+	 *
+	 *	each device on the bus does this procedure.
+	 *	after one complete iteration each device should have received some other device's heartbeat message.
+	 *	on each and every message reception the senders ID is recorded in the canbus_t struct. thereby one device keeps track of its neighbors on the bus.
+	 *
+	 *	if there are no devices on the bus, a device-specific default operation is executed.
+	 */
 
 	// TODO - implement sleep cycles for processor and CAN bus hardware
 	sleep_disable();													// wakey wakey
 
-	//*(device.mcu->wdtcr) |= _BV(WDIE);								// setting the bit prevents a reset when the timer expires
+	// TODO - refactor into message handler - where the message gets transmitted
+	if (device.mj8x8->can->in_sleep)									// if the CAN infra. is sleeping
+		device.mj8x8->can->Sleep(device.mj8x8->can, 0);					// wake it up
+
 	WDTCR |= _BV(WDIE);													// setting the bit prevents a reset when the timer expires
 
-	//if (gpio_tst(MCP2561_standby_pin))								// if in sleep...
-	//{
-		//gpio_clr(MCP2561_standby_pin);								// put pin to low -> ...wakeup of MCP2561
-		//mcp2515_opcode_bit_modify(CANINTF, _BV(WAKIF), _BV(WAKIF));	// wakeup - put into normal mode
-	//}
+	device.mj8x8->HeartBeat(device.mj8x8->bus, &can_msg_outgoing);
 
-	if (canbus_status.status & 0x80)									// discovery mode, once on power up and 1s-periodic
-		discovery_announce(&canbus_status, &can_msg_outgoing);
-	else																// not discovery mode - every 1s
-		discovery_behave(&canbus_status);								// behave according to what was announced
-
-	++canbus_status.sleep_iteration;
+	if ( (! device.mj8x8->bus->devices.uint16_val) && (device.mj8x8->bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
+		device.mj8x8->EmptyBusOperation();								// perform the device-specific default operation
 
 	sleep_enable();														// back to sleep
 }
