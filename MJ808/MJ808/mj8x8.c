@@ -6,7 +6,6 @@
 #include "gpio.h"
 #include "mj8x8.h"
 
-
 #if defined(MJ808_) || defined(MJ818_)									// private function - fades *ocr to value (or ocr_max) - up to OCR_MAX or down to 0x00
 void fade(uint8_t value, volatile uint8_t *ocr, uint8_t ocr_max)
 {
@@ -47,7 +46,7 @@ void fade(uint8_t value, volatile uint8_t *ocr, uint8_t ocr_max)
 		sei();															// enable interrupts
 		return;
 	}
-}
+};
 #endif
 
 #if defined(MJ808_)														// interprets CMND_UTIL_LED command - utility LED (red, green, on, off, blink)
@@ -79,35 +78,11 @@ void util_led(uint8_t in_val)
 		_delay_ms(BLINK_DELAY);											// waste a few cycles (non-blocking)
 		PORTD ^= (1<<led);												// toggle the led pin
 	}
-}
-#endif
-
-#if defined(SENSOR)														// interprets CMND_DEVICE-DEV_SENSOR command - TODO - sensor related stuff
-void dev_sensor(can_message_t *msg)
-{
-	util_led(UTIL_LED_GREEN_BLINK_4X);									// debug indicator
-	return;
-}
-#endif
-
-#if defined(PWR_SRC)													// interprets CMND_DEVICE-DEV_PWR_SRC command - TODO - power source related stuff
-void dev_pwr_src(can_message_t *msg)
-{
-	util_led(UTIL_LED_GREEN_BLINK_2X);									// debug indicator
-	return;
-}
-#endif
-
-#if defined(LOGIC_UNIT)													// interprets CMND_DEVICE-DEV_LU command - TODO - logic unit related stuff
-void dev_logic_unit(can_message_t *msg)
-{
-	util_led(UTIL_LED_GREEN_BLINK_1X);									// debug indicator
-	return;
-}
+};
 #endif
 
 #if defined(MJ808_) || defined (MJ818_)									// interprets CMND_DEVICE-DEV_LIGHT command - positional light control
-void dev_light(volatile can_message_t *msg)
+void dev_light(volatile can_msg_t *msg)
 {
 	#if defined (MJ808_)
 	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT) )		// front positional light - low beam
@@ -145,7 +120,7 @@ void dev_light(volatile can_message_t *msg)
 			OCR_BRAKE_LIGHT = msg->ARGUMENT;
 	}
 	#endif
-}
+};
 #endif
 
 #if defined(MJ808_) || defined (MJ828_)									// button debouncer for devices with buttons
@@ -236,18 +211,18 @@ void button_debounce(volatile button_t *in_button)						// marks a button as pre
 		in_button->was_pressed = 0;										// mark the button as being pressed
 		in_button->is_at_default = 0;
 	}
-}
+};
 #endif
 
-void Heartbeat(volatile canbus_t *bus, volatile can_message_t *msg)
+void Heartbeat(volatile message_handler_t *msg)
 {
-	if (bus->FlagDoHeartbeat)											// if we are in heartbeat mode
+	if (msg->bus->FlagDoHeartbeat)										// if we are in heartbeat mode
 	{
-		if (bus->BeatIterationCount == bus->NumericalCAN_ID)			// see if this counter iteration is our turn
+		if (msg->bus->BeatIterationCount == msg->bus->NumericalCAN_ID)	// see if this counter iteration is our turn
 		{
-			SendMessage(CMND_ANNOUNCE, 0x00, 1);						// broadcast CAN heartbeat message
+			msg->SendMessage(msg, CMND_ANNOUNCE, 0x00, 1);				// broadcast CAN heartbeat message
 
-			bus->FlagDoHeartbeat = 0;									// heartbeat mode of for the remaining counter iterations
+			msg->bus->FlagDoHeartbeat = 0;								// heartbeat mode of for the remaining counter iterations
 			WDTCR |= (_BV(WDCE) | _BV(WDE));							// WDT change enable sequence
 			WDTCR = ( _BV(WDIE) | _BV(WDP2) | _BV(WDP1) );				// set watchdog timer set to 1s
 
@@ -257,17 +232,17 @@ void Heartbeat(volatile canbus_t *bus, volatile can_message_t *msg)
 		}
 	}
 
-	if ( (! bus->BeatIterationCount) && (! bus->FlagDoHeartbeat) )		// counter roll-over, change from slow to fast
+	if ( (! msg->bus->BeatIterationCount) && (! msg->bus->FlagDoHeartbeat) )		// counter roll-over, change from slow to fast
 	{
-		bus->FlagDoHeartbeat = 1;										// set heartbeat mode on
-		++bus->FlagDoDefaultOperation;									// essentially count how many times we are in non-heartbeat count mode
+		msg->bus->FlagDoHeartbeat = 1;									// set heartbeat mode on
+		++msg->bus->FlagDoDefaultOperation;								// essentially count how many times we are in non-heartbeat count mode
 
 		WDTCR |= (_BV(WDCE) | _BV(WDE));								// WDT change enable sequence
 		WDTCR = ( _BV(WDIE) | _BV(WDP2)  );								// watchdog timer set to 0.25
 	}
 
-	++bus->BeatIterationCount;											// increment the iteration counter
-}
+	++msg->bus->BeatIterationCount;										// increment the iteration counter
+};
 
 
 volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu, volatile canbus_t *bus)
@@ -291,4 +266,4 @@ volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volat
 	self->bus->FlagDoDefaultOperation = 0;
 
 	return self;
-}
+};

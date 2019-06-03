@@ -24,6 +24,9 @@ static volatile can_t CAN;												// declare CAN object
 static volatile canbus_t BUS;											// declare canbus object
 static volatile leds_t LED;												// declare LED object
 
+static volatile message_handler_t message;								// declare message handler object
+static volatile can_msg_t msg_out;										// message object for outbound messages
+static volatile can_msg_t msg_in;										// message object for inbound messages
 
 // TODO - refactor away
 volatile uint8_t flag_lamp_is_on = 0;									// flag - indicates if button turned the device on, used for pushbutton handling
@@ -35,31 +38,20 @@ volatile	uint8_t eflg;
 volatile	uint8_t rec;
 volatile	uint8_t tec;
 
-void SendMessage(const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
-{
-	if (in_command == CMND_ANNOUNCE)									// set the broadcast flag
-		can_msg_outgoing.sidh |= BROADCAST;								// set the broadcast flag
-
-	can_msg_outgoing.COMMAND = in_command;								// set command into message
-	can_msg_outgoing.ARGUMENT = in_argument;							// set argument into message
-	can_msg_outgoing.dlc = in_len;										// set DLC
-
-	device.mj8x8->can->RequestToSend(&can_msg_outgoing);
-}
-
 
 int main(void)
 {
 	mj8x8_ctor(&MJ8X8, &CAN, &MCU, &BUS);								// call base class constructor & tie in associated object addresses
+	message_handler_ctor(&message, &CAN, &BUS, &msg_in, &msg_out);
 
 	#if defined(MJ808_)													// MJ808 - call derived class constructor and tie in base class
-	mj808_ctor(&device, &MJ8X8);
+	mj808_ctor(&device, &MJ8X8, &message);
 	#endif
 	#if defined(MJ818_)													// MJ818 - call derived class constructor and tie in base class
-	mj818_ctor(&device, &MJ8X8);
+	mj818_ctor(&device, &MJ8X8, &message);
 	#endif
 	#if defined(MJ828_)													// MJ828 - call derived class constructor and tie in base class
-	mj828_ctor(&device, &MJ8X8);
+	mj828_ctor(&device, &MJ8X8, &message);
 	#endif
 
 // TODO - put into constructors
@@ -130,72 +122,43 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		in_can->BitModify(CANINTF, _BV(MERRF), 0x00);					// clear the flag
 	};
 
-	void helper_handle_rx(volatile can_t *in_can)						// handles incoming message interrupts
+	void helper_handle_rx(void)											// handles incoming message interrupts
 	{
-		// TODO - refactor away into message handler (RX)
-		in_can->FetchMessage(&can_msg_incoming);						// load the CAN message into its structure & clear the RX int flag
-
-		// TODO - refactor away into message handler (RX)
-		// update the CAN BUS status structure; if we get a message from SID foo, then _BV(foo) shall be marked as "on the bus"
-		device.mj8x8->bus->devices.uint16_val |= ( 1 << ( (can_msg_incoming.sidh >> 2) & 0x0F ) ); // shift as many bits as the originating SID is in decimal
+		message.ReceiveMessage(&message);
 
 		// command for device
-		if (can_msg_incoming.COMMAND & CMND_DEVICE)						//  we received a command for some device...
+		if (message.in->COMMAND & CMND_DEVICE)							//  we received a command for some device...
 		{
-			#if defined(SENSOR)
-			if ((can_msg_incoming.COMMAND & DEV_SENSOR) == DEV_SENSOR)	// ...a sensor
-			{
-				dev_sensor(&can_msg_incoming);							// deal with it
-				return;
-			}
-			#endif
-
 			#if defined(MJ808_) || defined(MJ818_)
-			if (can_msg_incoming.COMMAND & ( CMND_DEVICE | DEV_LIGHT ) )// ...a LED device
+			if (message.in->COMMAND & ( CMND_DEVICE | DEV_LIGHT ) )		// ...a LED device
 			{
-				dev_light(&can_msg_incoming);							// deal with it
-				return;
-			}
-			#endif
-
-			#if defined(PWR_SRC)
-			if ((can_msg_incoming.COMMAND & DEV_PWR_SRC) == DEV_PWR_SRC)// ...a power source
-			{
-				dev_pwr_src(&can_msg_incoming);							// deal with it
-				return;
-			}
-			#endif
-
-			#if defined(LOGIC_UNIT)
-			if ((can_msg_incoming.COMMAND & DEV_LU) == DEV_LU)			// ...a logic unit
-			{
-				dev_logic_unit(&can_msg_incoming);						// deal with it
+				dev_light(message.in);									// deal with it
 				return;
 			}
 			#endif
 		}
 
 		#if defined(MJ808_)
-		if ( (can_msg_incoming.COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)// utility LED command
+		if ( (message.in->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)// utility LED command
 		{
-			util_led(can_msg_incoming.COMMAND);							// blinky thingy
+			util_led(message.in->COMMAND);								// blinky thingy
 			return;
 		}
 		#endif
 
 		#if defined(MJ828_)
-		if ( (can_msg_incoming.COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)// utility LED command
+		if ( (message.in->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)// utility LED command
 		{
 			return;														// HACK - can be removed once CMND_UTIL_LED is of new command structure
 
-			if (can_msg_incoming.ARGUMENT == 0)
+			if (message.in->ARGUMENT == 0)
 			return;
 
-			LED.flag_any_glow = (can_msg_incoming.ARGUMENT & ( LED_STATE_MASK | LED_BLINK_MASK) ); // figure out if anything shall glow at all
+			LED.flag_any_glow = (message.in->ARGUMENT & ( LED_STATE_MASK | LED_BLINK_MASK) ); // figure out if anything shall glow at all
 
-			uint8_t n = (uint8_t) ( (can_msg_incoming.COMMAND & CMND_UTIL_LED) & LEDS);			// translate numeric LED ID from command to LED on device
-			LED.leds[n].on = (can_msg_incoming.ARGUMENT & LED_STATE_MASK);						// set the state command for that particular LED
-			LED.leds[n].blink_count = (can_msg_incoming.ARGUMENT & LED_BLINK_MASK);				// set the blink command for that particular LED
+			uint8_t n = (uint8_t) ( (message.in->COMMAND & CMND_UTIL_LED) & LEDS);			// translate numeric LED ID from command to LED on device
+			LED.leds[n].on = (message.in->ARGUMENT & LED_STATE_MASK);						// set the state command for that particular LED
+			LED.leds[n].blink_count = (message.in->ARGUMENT & LED_BLINK_MASK);				// set the blink command for that particular LED
 			return;
 		}
 		#endif
@@ -234,7 +197,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		if (in_can->eflg & _BV(RX0OVR))									// RXB0 overflow - datasheet figure 4.3, p. 26
 		{
 			// FIXME - check for correct RX buffer clearing
-			helper_handle_rx(in_can);									// handle the message
+			helper_handle_rx();											// handle the message
 			in_can->BitModify(EFLG, _BV(RX0OVR), 0x00);					// clear the overflow bit
 			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
 			return;
@@ -242,7 +205,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 
 		if (in_can->eflg & _BV(RX1OVR))									// RXB1 overflow - datasheet figure 4.3, p. 26
 		{
-			helper_handle_rx(in_can);									// handle the message
+			helper_handle_rx();											// handle the message
 			in_can->BitModify(EFLG, _BV(RX1OVR), 0x00);					// clear the overflow bit
 			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
 			return;
@@ -307,11 +270,11 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 				break;
 
 			case 6:														// RXB0 interrupt
-				helper_handle_rx(can);
+				helper_handle_rx();
 				break;
 
 			case 7:														// RXB1 interrupt
-				helper_handle_rx(can);
+				helper_handle_rx();
 				break;
 		};
 
@@ -354,18 +317,15 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - foo ms
 	if (!flag_lamp_is_on && device.button[0].hold_temp)					// turn front light on
 	{
 		if (dev->bus->devices._MJ818)									// if rear light is present
-			// TODO - refactor away into message handler (TX)
-			SendMessage( (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);	// turn on rear light
+			message.SendMessage(&message, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);	// turn on rear light
 
 		if (dev->bus->devices._MJ828)									// dashboard is present
-			// TODO - refactor away into message handler (TX)
-			SendMessage( (CMND_DEVICE | DEV_LU | DASHBOARD), 0x00, 1);	// dummy command to dashboard
+			message.SendMessage(&message, (CMND_DEVICE | DEV_LU | DASHBOARD), 0x00, 1);	// dummy command to dashboard
 
 		fade(0x20, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);
 
 		util_led(UTIL_LED_GREEN_ON);									// power on green LED
-		// TODO - refactor away into message handler (TX)
-		SendMessage( (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);			// convey button press via CAN
+		message.SendMessage(&message, (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);			// convey button press via CAN
 
 		flag_lamp_is_on = 1;
 	}
@@ -373,14 +333,12 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - foo ms
 	if ((flag_lamp_is_on && !device.button[0].hold_temp) || device.button->hold_error)	// turn front light off
 	{
 		if (dev->bus->devices._MJ818)									// if rear light is present
-			// TODO - refactor away into message handler (TX)
-			SendMessage( (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);	// turn off rear light
+			message.SendMessage(&message, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);	// turn off rear light
 
 		fade(0x00, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);				// turn off
 
 		util_led(UTIL_LED_GREEN_OFF);									// power off green LED
-		// TODO - refactor away into message handler (TX)
-		SendMessage( (MSG_BUTTON_EVENT | BUTTON0_OFF), 0x00, 1);		// convey button release via CAN
+		message.SendMessage(&message, (MSG_BUTTON_EVENT | BUTTON0_OFF), 0x00, 1);		// convey button release via CAN
 		flag_lamp_is_on = 0;
 	}
 	#endif
@@ -444,7 +402,7 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka
 
 	WDTCR |= _BV(WDIE);													// setting the bit prevents a reset when the timer expires
 
-	device.mj8x8->HeartBeat(device.mj8x8->bus, &can_msg_outgoing);
+	device.mj8x8->HeartBeat(&message);
 
 	if ( (! device.mj8x8->bus->devices.uint16_val) && (device.mj8x8->bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
 		device.mj8x8->EmptyBusOperation();								// perform the device-specific default operation

@@ -4,8 +4,6 @@
 #include <avr/interrupt.h>
 
 #include "mj828.h"
-#include "mj8x8.h"
-//#include "mcp2515.h" // TODO - should not be here
 #include "gpio.h"
 
 void EmptyBusOperationMj828(void)										// device default operation on empty bus
@@ -13,12 +11,12 @@ void EmptyBusOperationMj828(void)										// device default operation on empty 
 	;
 };
 
-void PopulatedBusOperationMJ828(can_message_t *in_msg)					// device operation on populated (not empty) bus
+void PopulatedBusOperationMJ828(can_msg_t *in_msg)						// device operation on populated (not empty) bus
 {
 	;
 };
 
-volatile mj828_t *mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base)
+volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile message_handler_t *msg)
 {
 // state initialization of device-specific pins
 
@@ -72,16 +70,16 @@ volatile mj828_t *mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base)
 	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
 	 */
-	can_msg_outgoing.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D);
-	can_msg_outgoing.sidl = ( RCPT_DEV_BLANK | BLANK);
+	msg->out->sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D);
+	msg->out->sidl = ( RCPT_DEV_BLANK | BLANK);
 
-	self->mj8x8->bus->NumericalCAN_ID = (uint8_t) ( (can_msg_outgoing.sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
+	self->mj8x8->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
 
 	self->mj8x8->EmptyBusOperation = &EmptyBusOperationMj828;			// implements device-specific default operation
 	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
 
 	return self;
-}
+};
 
 // private function, used only by the charlieplexing_handler() function
 static void glow(uint8_t led, uint8_t state, uint8_t blink)
@@ -188,4 +186,4 @@ void charlieplexing_handler(volatile leds_t *in_led)
 
 	// !!!!
 	(i == in_led->led_count) ? i = 0 : ++i;								// count up to led_count and then start from zero
-}
+};

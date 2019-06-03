@@ -4,8 +4,6 @@
 #include <avr/interrupt.h>
 
 #include "mj818.h"
-#include "mj8x8.h"
-//#include "mcp2515.h" // TODO - should not be here
 #include "gpio.h"
 
 void EmptyBusOperationMJ818(void)										// device default operation on empty bus
@@ -14,12 +12,12 @@ void EmptyBusOperationMJ818(void)										// device default operation on empty 
 		fade(0x10, &OCR_REAR_LIGHT, OCR_MAX_REAR_LIGHT);				// turn on rear light
 };
 
-void PopulatedBusOperationMJ818(can_message_t *in_msg)					// device operation on populated (not empty) bus
+void PopulatedBusOperationMJ818(can_msg_t *in_msg)						// device operation on populated (not empty) bus
 {
 	;
 };
 
-volatile mj818_t *mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base)
+volatile mj818_t * mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile message_handler_t *msg)
 {
 // state initialization of device-specific pins
 	gpio_conf(PWM_rear_light_pin, OUTPUT, LOW);							// low (off), high (on)
@@ -61,13 +59,13 @@ volatile mj818_t *mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base)
 	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
 	 */
-	can_msg_outgoing.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B);
-	can_msg_outgoing.sidl = ( RCPT_DEV_BLANK | BLANK);
+	msg->out->sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B);
+	msg->out->sidl = ( RCPT_DEV_BLANK | BLANK);
 
 	self->mj8x8->EmptyBusOperation = &EmptyBusOperationMJ818;			// implement device-specific default operation
 	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
 
-	self->mj8x8->bus->NumericalCAN_ID = (uint8_t) ( (can_msg_outgoing.sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
+	self->mj8x8->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
 
 	return self;
-}
+};

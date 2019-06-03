@@ -313,24 +313,21 @@
 
 ////////////////////////////////////////////////////////////////////////
 
-//#define CAN_IN can_msg_incoming
-//#define CAN_OUT can_msg_outgoing
 #define COMMAND data[0]
 #define ARGUMENT data[1]
 
-
-typedef struct															// can_message_t struct describing a generic CAN message
+typedef struct	 														// can_message_t struct describing a generic CAN message
 {
-// preserve byte order for sequential reads/writes
+	// preserve byte order for sequential reads/writes
 	uint8_t		sidh;													// Standard Identifier High Byte
 	uint8_t		sidl;													// Standard Identifier Low Byte
 	uint8_t		eid8;													// Extended Identifier - not used here; just for padding so that read_rx_buffer() can read 13 bytes in one row
 	uint8_t		eid0;													// Extended Identifier - not used here
 	uint8_t		dlc;													// Data Length Code
-	uint8_t		data[CAN_MAX_MSG_LEN] ;									// Data, length identified by DLC
+	uint8_t		data[CAN_MAX_MSG_LEN];									// Data, length identified by DLC
 	uint8_t		rx_status;												// holds RX and TX status metadata
-// preserve byte order for sequential reads/writes
-} can_message_t __attribute__((aligned(8))) ;
+	// preserve byte order for sequential reads/writes
+} can_msg_t __attribute__((aligned(8))) ;
 
 typedef struct can_t													// can_t struct describing the CAN device as a whole
 {
@@ -349,10 +346,10 @@ typedef struct can_t													// can_t struct describing the CAN device as a 
 // public methods
 
 	void (*Sleep)(volatile struct can_t *in_can, const uint8_t in_val);	// puts the MCP2515 to sleep (and wakes it up)
-	void (*RequestToSend)(volatile can_message_t *msg);					// requests message to be sent to the CAN bus
-	void (*FetchMessage)(volatile can_message_t *msg);					// fetches received message from some RX buffer
+	void (*RequestToSend)(volatile can_msg_t *msg);						// requests message to be sent to the CAN bus
+	void (*FetchMessage)(volatile can_msg_t *msg);						// fetches received message from some RX buffer
 	void (*ChangeOpMode)(const uint8_t mode);							// changes the operational mode of the MCP2515
-	void (*ReadBytes)(const uint8_t addr, volatile uint8_t *data, const uint8_t len);	// reads len bytes from some register in the MCP2515
+	void (*ReadBytes)(const uint8_t addr, volatile uint8_t *data, const uint8_t len);		// reads len bytes from some register in the MCP2515
 	void (*BitModify)(const uint8_t addr, const uint8_t mask, const uint8_t byte);			// modifies bit identified by "byte" according to "mask" in some register
 } can_t __attribute__((aligned(8)));
 

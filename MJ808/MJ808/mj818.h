@@ -1,10 +1,9 @@
-#ifndef MJ808_H_
-#define MJ808_H_
-
-#include <inttypes.h>
+#ifndef MJ818_H_
+#define MJ818_H_
 
 #include "mj8x8.h"
 #include "led.h"
+#include "message.h"
 
 // definitions of device/PCB layout-dependent hardware pins
 #define MCP2561_standby_pin		B,	1,	1								// MCP2561 standby
@@ -22,6 +21,6 @@ typedef struct															// struct describing devices on MJ818
 	volatile mj8x8_t *mj8x8;											// pointer to the base class
 } mj818_t;
 
-volatile mj818_t *mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base);
+volatile mj818_t *mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile message_handler_t *msg);
 
-#endif /* MJ808_H_ */
+#endif /* MJ818_H_ */

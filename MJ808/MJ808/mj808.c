@@ -4,7 +4,6 @@
 #include <avr/interrupt.h>
 
 #include "mj808.h"
-#include "mj8x8.h"
 #include "gpio.h"
 
 void EmptyBusOperationMJ808(void)										// device default operation on empty bus
@@ -12,12 +11,12 @@ void EmptyBusOperationMJ808(void)										// device default operation on empty 
 	;
 };
 
-void PopulatedBusOperationMJ808(can_message_t *in_msg)					// device operation on populated (not empty) bus
+void PopulatedBusOperationMJ808(can_msg_t *in_msg)						// device operation on populated (not empty) bus
 {
 	;
 };
 
-volatile mj808_t *mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base)
+volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile message_handler_t *msg)
 {
 // state initialization of device-specific pins
 	gpio_conf(PWM_front_light_pin, OUTPUT, LOW);						// low (off), high (on)
@@ -70,10 +69,10 @@ volatile mj808_t *mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base)
 	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
 	 */
-	can_msg_outgoing.sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);
-	can_msg_outgoing.sidl = ( RCPT_DEV_BLANK | BLANK);
+	msg->out->sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);
+	msg->out->sidl = ( RCPT_DEV_BLANK | BLANK);
 
-	self->mj8x8->bus->NumericalCAN_ID = (uint8_t) ( (can_msg_outgoing.sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
+	self->mj8x8->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
 
 	// EmptyBusOperation() is so far not needed
 	//self->mj8x8->EmptyBusOperation = &EmptyBusOperationMJ808;			// implement device-specific default operation
@@ -82,4 +81,4 @@ volatile mj808_t *mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base)
 	util_led(UTIL_LED_GREEN_BLINK_1X);									// crude "im finished" indicator
 
 	return self;
-}
+};

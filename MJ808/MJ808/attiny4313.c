@@ -3,7 +3,6 @@
 #include <inttypes.h>
 #include <avr/interrupt.h>
 
-#include "mj8x8.h"
 #include "attiny4313.h"
 
 volatile attiny4313_t *attiny_ctor(volatile attiny4313_t * self)

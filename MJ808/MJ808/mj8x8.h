@@ -1,16 +1,13 @@
 #ifndef MJ8x8_H_
 #define MJ8x8_H_
 
+#include <inttypes.h>
+
 #include "attiny4313.h"
 #include "mcp2515.h"
 
 /* TODO - CAN bootloader
  * http://www.kreatives-chaos.com/artikel/can-bootloader
- *
- *
- *
- *
- *
  */
 
 
@@ -266,26 +263,31 @@ typedef struct															// canbus_t struct describing the CAN bus state
 	uint8_t FlagDoDefaultOperation : 2;
 } canbus_t;
 
-static volatile can_message_t can_msg_outgoing;
-static volatile can_message_t can_msg_incoming;
+// FIXME - should be in message.h and not here
+typedef struct message_handler_t
+{
+	volatile can_msg_t *in;
+	volatile can_msg_t *out;
+	volatile can_t *can;
+	volatile canbus_t *bus;
+
+	void (*SendMessage)(volatile struct message_handler_t *self, const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len);
+	void (*ReceiveMessage)(volatile struct message_handler_t *self);
+} message_handler_t;
 
 typedef struct															// "base class" struct for mj8x8 devices
 {
 	volatile can_t *can;												// pointer to the CAN structure
 	volatile attiny4313_t *mcu;											// pointer to MCU structure
 	volatile canbus_t *bus;												// pointer to struct holding meta info about the bus
-	void (*HeartBeat)(volatile canbus_t *bus, volatile can_message_t *msg);		// default periodic heartbeat for all devices
+	void (*HeartBeat)(volatile message_handler_t *msg);					// default periodic heartbeat for all devices
 	void (*EmptyBusOperation)(void);									// device's default operation on empty bus, implemented in derived class
-	void (*PopulatedBusOperation)(can_message_t *msg);					// device operation on populated bus
-} mj8x8_t;
+	void (*PopulatedBusOperation)(can_msg_t *msg);						// device operation on populated bus
+} mj8x8_t ;
 
 // command handling functions
 void util_led(uint8_t in_val);											// interprets CMND_UTIL_LED command - utility LED (red, green, on, off, blink)
-void dev_sensor(can_message_t *msg);									// interprets CMND_DEVICE-DEV_SENSOR command - TODO - sensor related stuff
-void dev_pwr_src(can_message_t *msg);									// interprets CMND_DEVICE-DEV_PWR_SRC command - TODO - power source related stuff
-void dev_logic_unit(can_message_t *msg);								// interprets CMND_DEVICE-DEV_LU command - TODO - logic unit related stuff
-void dev_light(volatile can_message_t *msg);							// interprets CMND_DEVICE-DEV_LIGHT command - positional light control
-void msg_button(volatile mj8x8_t *dev, volatile can_message_t *msg, uint8_t button);					// conveys button press event to the CAN bus
+void dev_light(volatile can_msg_t *msg);								// interprets CMND_DEVICE-DEV_LIGHT command - positional light control
 void button_debounce(volatile button_t *in_button);						// marks a button as pressed if it was pressed for the duration of 2X ISR iterations
 
 volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu, volatile canbus_t *bus);
