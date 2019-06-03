@@ -272,7 +272,7 @@ typedef struct message_handler_t
 	volatile canbus_t *bus;
 
 	void (*SendMessage)(volatile struct message_handler_t *self, const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len);
-	void (*ReceiveMessage)(volatile struct message_handler_t *self);
+	volatile can_msg_t* (*ReceiveMessage)(volatile struct message_handler_t *self);
 } message_handler_t;
 
 typedef struct															// "base class" struct for mj8x8 devices
@@ -282,7 +282,7 @@ typedef struct															// "base class" struct for mj8x8 devices
 	volatile canbus_t *bus;												// pointer to struct holding meta info about the bus
 	void (*HeartBeat)(volatile message_handler_t *msg);					// default periodic heartbeat for all devices
 	void (*EmptyBusOperation)(void);									// device's default operation on empty bus, implemented in derived class
-	void (*PopulatedBusOperation)(can_msg_t *msg);						// device operation on populated bus
+	void (*PopulatedBusOperation)(volatile can_msg_t *msg);				// device operation on populated bus
 } mj8x8_t ;
 
 // command handling functions

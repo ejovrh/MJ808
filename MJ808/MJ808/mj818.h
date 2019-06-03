@@ -11,7 +11,6 @@
 #define PWM_brake_light_pin		B,	3,	3								// PWM - brake light
 // definitions of device/PCB layout-dependent hardware pins
 
-
 typedef struct															// struct describing devices on MJ818
 {
 	//volatile uint8_t timer_counter[2];								// timer counter array

@@ -11,9 +11,22 @@ void EmptyBusOperationMj828(void)										// device default operation on empty 
 	;
 };
 
-void PopulatedBusOperationMJ828(can_msg_t *in_msg)						// device operation on populated (not empty) bus
+void PopulatedBusOperationMJ828(volatile can_msg_t *in_msg)						// device operation on populated (not empty) bus
 {
-	;
+	if ( (in_msg->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)			// utility LED command
+	{
+		return;															// HACK - can be removed once CMND_UTIL_LED is of new command structure
+
+		if (in_msg->ARGUMENT == 0)
+		return;
+
+		//LED.flag_any_glow = (in_msg->ARGUMENT & ( LED_STATE_MASK | LED_BLINK_MASK) ); // figure out if anything shall glow at all
+//
+		//uint8_t n = (uint8_t) ( (in_msg>COMMAND & CMND_UTIL_LED) & LEDS);			// translate numeric LED ID from command to LED on device
+		//LED.leds[n].on = (in_msg->ARGUMENT & LED_STATE_MASK);						// set the state command for that particular LED
+		//LED.leds[n].blink_count = (in_msg->ARGUMENT & LED_BLINK_MASK);				// set the blink command for that particular LED
+		return;
+	}
 };
 
 volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile message_handler_t *msg)
@@ -61,8 +74,7 @@ volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, vo
 
 	sei();
 
-
-	self->mj8x8 = base;
+	self->mj8x8 = base;													// remember own object address
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -70,8 +82,8 @@ volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, vo
 	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
 	 */
-	msg->out->sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D);
-	msg->out->sidl = ( RCPT_DEV_BLANK | BLANK);
+	msg->out->sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D);		// high byte
+	msg->out->sidl = ( RCPT_DEV_BLANK | BLANK);																	// low byte
 
 	self->mj8x8->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
 

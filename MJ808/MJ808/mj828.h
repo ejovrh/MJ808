@@ -19,7 +19,6 @@
 
 void charlieplexing_handler(volatile leds_t *in_led);					// handles LEDs in charlieplexed configuration
 
-
 typedef struct															// struct describing devices on MJ828
 {
 	//volatile uint8_t timer_counter[2];								// timer counter array

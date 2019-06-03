@@ -21,7 +21,7 @@ static volatile mj828_t device;
 static volatile mj8x8_t MJ8X8;											// declare MJ8X8 object
 static volatile attiny4313_t MCU;										// declare MCU object
 static volatile can_t CAN;												// declare CAN object
-static volatile canbus_t BUS;											// declare canbus object
+static volatile canbus_t BUS;											// declare canbus_t object
 static volatile leds_t LED;												// declare LED object
 
 static volatile message_handler_t message;								// declare message handler object
@@ -122,46 +122,9 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		in_can->BitModify(CANINTF, _BV(MERRF), 0x00);					// clear the flag
 	};
 
-	void helper_handle_rx(void)											// handles incoming message interrupts
+	inline void helper_handle_rx(void)									// handles incoming message interrupts
 	{
-		message.ReceiveMessage(&message);
-
-		// command for device
-		if (message.in->COMMAND & CMND_DEVICE)							//  we received a command for some device...
-		{
-			#if defined(MJ808_) || defined(MJ818_)
-			if (message.in->COMMAND & ( CMND_DEVICE | DEV_LIGHT ) )		// ...a LED device
-			{
-				dev_light(message.in);									// deal with it
-				return;
-			}
-			#endif
-		}
-
-		#if defined(MJ808_)
-		if ( (message.in->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)// utility LED command
-		{
-			util_led(message.in->COMMAND);								// blinky thingy
-			return;
-		}
-		#endif
-
-		#if defined(MJ828_)
-		if ( (message.in->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)// utility LED command
-		{
-			return;														// HACK - can be removed once CMND_UTIL_LED is of new command structure
-
-			if (message.in->ARGUMENT == 0)
-			return;
-
-			LED.flag_any_glow = (message.in->ARGUMENT & ( LED_STATE_MASK | LED_BLINK_MASK) ); // figure out if anything shall glow at all
-
-			uint8_t n = (uint8_t) ( (message.in->COMMAND & CMND_UTIL_LED) & LEDS);			// translate numeric LED ID from command to LED on device
-			LED.leds[n].on = (message.in->ARGUMENT & LED_STATE_MASK);						// set the state command for that particular LED
-			LED.leds[n].blink_count = (message.in->ARGUMENT & LED_BLINK_MASK);				// set the blink command for that particular LED
-			return;
-		}
-		#endif
+		device.mj8x8->PopulatedBusOperation(message.ReceiveMessage(&message));
 	};
 
 	void helper_handle_error(volatile can_t *in_can)					// handles RXBn overflow interrupts
@@ -330,7 +293,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - foo ms
 		flag_lamp_is_on = 1;
 	}
 
-	if ((flag_lamp_is_on && !device.button[0].hold_temp) || device.button->hold_error)	// turn front light off
+	if ((flag_lamp_is_on && !device.button[0].hold_temp) || device.button->hold_error)		// turn front light off
 	{
 		if (dev->bus->devices._MJ818)									// if rear light is present
 			message.SendMessage(&message, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);	// turn off rear light
@@ -338,7 +301,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - foo ms
 		fade(0x00, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);				// turn off
 
 		util_led(UTIL_LED_GREEN_OFF);									// power off green LED
-		message.SendMessage(&message, (MSG_BUTTON_EVENT | BUTTON0_OFF), 0x00, 1);		// convey button release via CAN
+		message.SendMessage(&message, (MSG_BUTTON_EVENT | BUTTON0_OFF), 0x00, 1);			// convey button release via CAN
 		flag_lamp_is_on = 0;
 	}
 	#endif
@@ -396,11 +359,11 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka
 	// TODO - implement sleep cycles for processor and CAN bus hardware
 	sleep_disable();													// wakey wakey
 
+	WDTCR |= _BV(WDIE);													// setting the bit prevents a reset when the timer expires
+
 	// TODO - refactor into message handler - where the message gets transmitted
 	if (device.mj8x8->can->in_sleep)									// if the CAN infra. is sleeping
 		device.mj8x8->can->Sleep(device.mj8x8->can, 0);					// wake it up
-
-	WDTCR |= _BV(WDIE);													// setting the bit prevents a reset when the timer expires
 
 	device.mj8x8->HeartBeat(&message);
 
