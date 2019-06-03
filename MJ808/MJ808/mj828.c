@@ -6,12 +6,7 @@
 #include "mj828.h"
 #include "gpio.h"
 
-void EmptyBusOperationMj828(void)										// device default operation on empty bus
-{
-	;
-};
-
-void PopulatedBusOperationMJ828(volatile can_msg_t *in_msg)						// device operation on populated (not empty) bus
+void digestMJ828(volatile can_msg_t *in_msg)
 {
 	if ( (in_msg->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)			// utility LED command
 	{
@@ -21,7 +16,7 @@ void PopulatedBusOperationMJ828(volatile can_msg_t *in_msg)						// device opera
 		return;
 
 		//LED.flag_any_glow = (in_msg->ARGUMENT & ( LED_STATE_MASK | LED_BLINK_MASK) ); // figure out if anything shall glow at all
-//
+		//
 		//uint8_t n = (uint8_t) ( (in_msg>COMMAND & CMND_UTIL_LED) & LEDS);			// translate numeric LED ID from command to LED on device
 		//LED.leds[n].on = (in_msg->ARGUMENT & LED_STATE_MASK);						// set the state command for that particular LED
 		//LED.leds[n].blink_count = (in_msg->ARGUMENT & LED_BLINK_MASK);				// set the blink command for that particular LED
@@ -29,9 +24,22 @@ void PopulatedBusOperationMJ828(volatile can_msg_t *in_msg)						// device opera
 	}
 };
 
-volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile message_handler_t *msg)
+void EmptyBusOperationMj828(void)										// device default operation on empty bus
 {
-// state initialization of device-specific pins
+	;
+};
+
+void PopulatedBusOperationMJ828(volatile can_msg_t *in_msg, volatile void *self)				// device-specific operation on populated (not empty) bus
+{
+	mj828_t *ptr = (mj828_t *) self;									// pointer cast to avoid compiler warnings
+	ptr->led->digest(in_msg);											// let the LED object deal wit it
+};
+
+volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg)
+{
+	// GPIO state definitions
+	{
+	// state initialization of device-specific pins
 
 	gpio_conf(PUSHBUTTON1_pin, INPUT, LOW);								// SPST-NO - high on press, low on release
 	gpio_conf(PUSHBUTTON2_pin, INPUT, LOW);								// SPST-NO - high on press, low on release
@@ -41,8 +49,11 @@ volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, vo
 	gpio_conf(LED_CP3_pin, INPUT, LOW);									// Charlie-plexed pin3
 	gpio_conf(LED_CP4_pin, OUTPUT, LOW);								// Charlie-plexed pin4
 	gpio_conf(MCP2561_standby_pin, OUTPUT, LOW);						// low (on), high (off)
-// state initialization of device-specific pins
+	// state initialization of device-specific pins
+	}
 
+	// hardware initialization
+	{
 	cli();
 
 	// timer/counter1 - 16bit (and timer/counter0 - 8bit) - pushbutton timing (charlieplexed timing)
@@ -73,8 +84,11 @@ volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, vo
 	_BV(PCINT12));														// enable pin change for sw2 @ pin D1
 
 	sei();
+	}
 
 	self->mj8x8 = base;													// remember own object address
+	self->led = led;													// remember the LED object address
+	self->led->digest = &digestMJ828;
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -85,7 +99,7 @@ volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, vo
 	msg->out->sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D);		// high byte
 	msg->out->sidl = ( RCPT_DEV_BLANK | BLANK);																	// low byte
 
-	self->mj8x8->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
+	msg->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
 
 	self->mj8x8->EmptyBusOperation = &EmptyBusOperationMj828;			// implements device-specific default operation
 	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity

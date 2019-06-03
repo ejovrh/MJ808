@@ -128,8 +128,10 @@ void Heartbeat(volatile message_handler_t *msg)
 };
 
 
-volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu, volatile canbus_t *bus)
+volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu)
 {
+	// GPIO state definitions
+	{
 	// state initialization of device-unspecific pins
 	gpio_conf(MCP2515_INT_pin, INPUT, HIGH);							// INT1, active low
 
@@ -138,15 +140,11 @@ volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volat
 	gpio_conf(SPI_SCK_pin, OUTPUT, LOW);								// low for proper CPOL = 0 waveform
 	gpio_conf(SPI_SS_MCP2515_pin, OUTPUT, HIGH);						// //high (device inert), low (device selected)
 	// state initialization of device-unspecific pins
+	}
 
 	self->HeartBeat = &Heartbeat;
 	self->mcu = attiny_ctor(mcu);										// pass MCU address into constructor
 	self->can = can_ctor(can);											// pass CAN address into constructor
-	self->bus = bus;
-	self->bus->devices.uint16_val = 0x0000;
-	self->bus->NumericalCAN_ID = 0;
-	self->bus->FlagDoHeartbeat = 1;										// start with discovery mode
-	self->bus->FlagDoDefaultOperation = 0;
 
 	return self;
 };

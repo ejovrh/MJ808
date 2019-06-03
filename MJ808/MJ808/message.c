@@ -30,6 +30,11 @@ void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_c
 	self->in = in_msg;													// set address of inbound message struct
 	self->out = out_msg;												// set address of outbound message struct
 
+	self->bus->devices.uint16_val = 0x0000;
+	self->bus->NumericalCAN_ID = 0;
+	self->bus->FlagDoHeartbeat = 1;										// start with discovery mode
+	self->bus->FlagDoDefaultOperation = 0;
+
 	self->ReceiveMessage = &_ReceiveMessage;							// set up function pointer
 	self->SendMessage = &_SendMessage;									//	ditto
 };

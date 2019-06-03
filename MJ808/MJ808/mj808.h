@@ -22,6 +22,6 @@ typedef struct															// struct describing devices on MJ808
 	volatile leds_t	*led;												// pointer to LED structure
 } mj808_t;
 
-volatile mj808_t *mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile message_handler_t *msg);
+volatile mj808_t *mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg);
 
 #endif /* MJ808_H_ */

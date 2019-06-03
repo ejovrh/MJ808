@@ -20,6 +20,6 @@ typedef struct															// struct describing devices on MJ818
 	volatile mj8x8_t *mj8x8;											// pointer to the base class
 } mj818_t;
 
-volatile mj818_t *mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile message_handler_t *msg);
+volatile mj818_t *mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg);
 
 #endif /* MJ818_H_ */

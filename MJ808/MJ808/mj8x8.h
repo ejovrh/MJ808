@@ -126,7 +126,7 @@
 
 // TODO - define MJ828 LED & switch commands
 
-#define CMND_DB 0x20
+#define CMND_DB 0x20													// dashboard ?
 
 #define CMND_DEVICE 0x40												// command for device (00 - logic unit, 01 - power sources, 02 - lights, 03 sensors)
 	#define DEV_LU 0x00													// logic unit device
@@ -264,12 +264,12 @@ typedef struct															// canbus_t struct describing the CAN bus state
 } canbus_t;
 
 // FIXME - should be in message.h and not here
-typedef struct message_handler_t
-{
-	volatile can_msg_t *in;
-	volatile can_msg_t *out;
-	volatile can_t *can;
-	volatile canbus_t *bus;
+typedef struct message_handler_t										// sends and receives (stores) CAN messages, keeps track of bus status
+{																		//	is message-agnostic -> the actual device has to know what to do with a message (via PopulatedBusOperation() )
+	volatile can_msg_t *in;												// container for inbound messages
+	volatile can_msg_t *out;											// container for outbound messages
+	volatile can_t *can;												// pointer to CAN infrastructure
+	volatile canbus_t *bus;												// prime candidate for a private data member
 
 	void (*SendMessage)(volatile struct message_handler_t *self, const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len);
 	volatile can_msg_t* (*ReceiveMessage)(volatile struct message_handler_t *self);
@@ -279,10 +279,9 @@ typedef struct															// "base class" struct for mj8x8 devices
 {
 	volatile can_t *can;												// pointer to the CAN structure
 	volatile attiny4313_t *mcu;											// pointer to MCU structure
-	volatile canbus_t *bus;												// pointer to struct holding meta info about the bus
 	void (*HeartBeat)(volatile message_handler_t *msg);					// default periodic heartbeat for all devices
 	void (*EmptyBusOperation)(void);									// device's default operation on empty bus, implemented in derived class
-	void (*PopulatedBusOperation)(volatile can_msg_t *msg);				// device operation on populated bus
+	void (*PopulatedBusOperation)(volatile can_msg_t *msg, volatile void *unspecified_device);				// device operation on populated bus
 } mj8x8_t ;
 
 // command handling functions
@@ -290,6 +289,6 @@ void util_led(uint8_t in_val);											// interprets CMND_UTIL_LED command - u
 void dev_light(volatile can_msg_t *msg);								// interprets CMND_DEVICE-DEV_LIGHT command - positional light control
 void button_debounce(volatile button_t *in_button);						// marks a button as pressed if it was pressed for the duration of 2X ISR iterations
 
-volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu, volatile canbus_t *bus);
+volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu);
 
 #endif /* MJ8x8_H_ */

@@ -31,44 +31,37 @@ static volatile can_msg_t msg_in;										// message object for inbound message
 // TODO - refactor away
 volatile uint8_t flag_lamp_is_on = 0;									// flag - indicates if button turned the device on, used for pushbutton handling
 
-volatile	uint8_t canintf;											// CAN debug variables for MCP2515 status readout from main()
-volatile	uint8_t canstat;
-volatile	uint8_t canctrl;
-volatile	uint8_t eflg;
-volatile	uint8_t rec;
-volatile	uint8_t tec;
+//volatile	uint8_t canintf;											// CAN debug variables for MCP2515 status readout from main()
+//volatile	uint8_t canstat;
+//volatile	uint8_t canctrl;
+//volatile	uint8_t eflg;
+//volatile	uint8_t rec;
+//volatile	uint8_t tec;
 
 
 int main(void)
 {
-	mj8x8_ctor(&MJ8X8, &CAN, &MCU, &BUS);								// call base class constructor & tie in associated object addresses
-	message_handler_ctor(&message, &CAN, &BUS, &msg_in, &msg_out);
+	mj8x8_ctor(&MJ8X8, &CAN, &MCU);										// call base class constructor & tie in associated object addresses
+
+	message_handler_ctor(&message, &CAN, &BUS, &msg_in, &msg_out);		// call message handler constructor
 
 	#if defined(MJ808_)													// MJ808 - call derived class constructor and tie in base class
-	mj808_ctor(&device, &MJ8X8, &message);
+	mj808_ctor(&device, &MJ8X8, &LED, &message);
 	#endif
 	#if defined(MJ818_)													// MJ818 - call derived class constructor and tie in base class
-	mj818_ctor(&device, &MJ8X8, &message);
+	mj818_ctor(&device, &MJ8X8, &LED, &message);
 	#endif
 	#if defined(MJ828_)													// MJ828 - call derived class constructor and tie in base class
-	mj828_ctor(&device, &MJ8X8, &message);
+	mj828_ctor(&device, &MJ8X8, &LED, &message);
 	#endif
+
+
 
 // TODO - put into constructors
 	#if defined(MJ808_)													// device init for MJ808
 
-	device.led = &LED;													// pass reference to LED struct
-
-	LED.led_count = 2;
-
 	device.button[0].PIN = (uint8_t *) 0x30; 							// 0x020 offset plus address - PIND register
 	device.button[0].pin_number = 4;									// sw2 is connected to pin D0
-	#endif
-
-	#if defined(MJ818_)													// device init for MJ818
-	device.led = &LED;													// pass reference to LED struct
-
-	LED.led_count = 2;
 	#endif
 
 	#if defined(MJ828_)													// device init for MJ828
@@ -96,12 +89,12 @@ int main(void)
 	{
 		asm("nop");														// on purpose kept as empty as possible !!
 
-		device.mj8x8->can->ReadBytes(CANINTF, &canintf, 1);				// download the interrupt flag register
-		device.mj8x8->can->ReadBytes(CANSTAT, &canstat, 1);
-		device.mj8x8->can->ReadBytes(CANSTAT, &canctrl, 1);
-		device.mj8x8->can->ReadBytes(EFLG, &eflg, 1);
-		device.mj8x8->can->ReadBytes(REC, &rec, 1);
-		device.mj8x8->can->ReadBytes(TEC, &tec, 1);
+		//device.mj8x8->can->ReadBytes(CANINTF, &canintf, 1);			// download the interrupt flag register
+		//device.mj8x8->can->ReadBytes(CANSTAT, &canstat, 1);
+		//device.mj8x8->can->ReadBytes(CANSTAT, &canctrl, 1);
+		//device.mj8x8->can->ReadBytes(EFLG, &eflg, 1);
+		//device.mj8x8->can->ReadBytes(REC, &rec, 1);
+		//device.mj8x8->can->ReadBytes(TEC, &tec, 1);
 
 		if (MCUCR & _BV(SE))											// if sleep is enabled
 			sleep_cpu();												// ...sleep
@@ -124,7 +117,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 
 	inline void helper_handle_rx(void)									// handles incoming message interrupts
 	{
-		device.mj8x8->PopulatedBusOperation(message.ReceiveMessage(&message));
+		device.mj8x8->PopulatedBusOperation(message.ReceiveMessage(&message), &device);	// let the device deal with the message
 	};
 
 	void helper_handle_error(volatile can_t *in_can)					// handles RXBn overflow interrupts
@@ -206,6 +199,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 
 		can->icod =  ((can->canstat & 0x0E) >> 1);						// right shift so that CANSTAT.U0 cant interfere
 
+		// TODO - implement something like a vpointer lookup table or branch table instead of this shit:
 		switch (can->icod)												// handling of cases depending on ICOD value - sort of priority-style
 
 		{																// while loops over ICOD bit values, each case handles an ICOD situation
@@ -279,23 +273,23 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - foo ms
 	// FIXME - on really long button press (far beyond hold error) something writes crap into memory, i.e. the address of PIND in button struct gets overwritten, as does the adders of the led struct
 	if (!flag_lamp_is_on && device.button[0].hold_temp)					// turn front light on
 	{
-		if (dev->bus->devices._MJ818)									// if rear light is present
+		if (message.bus->devices._MJ818)								// if rear light is present
 			message.SendMessage(&message, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);	// turn on rear light
 
-		if (dev->bus->devices._MJ828)									// dashboard is present
+		if (message.bus->devices._MJ828)								// dashboard is present
 			message.SendMessage(&message, (CMND_DEVICE | DEV_LU | DASHBOARD), 0x00, 1);	// dummy command to dashboard
 
 		fade(0x20, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);
 
 		util_led(UTIL_LED_GREEN_ON);									// power on green LED
-		message.SendMessage(&message, (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);			// convey button press via CAN
+		message.SendMessage(&message, (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);		// convey button press via CAN
 
 		flag_lamp_is_on = 1;
 	}
 
 	if ((flag_lamp_is_on && !device.button[0].hold_temp) || device.button->hold_error)		// turn front light off
 	{
-		if (dev->bus->devices._MJ818)									// if rear light is present
+		if (message.bus->devices._MJ818)								// if rear light is present
 			message.SendMessage(&message, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);	// turn off rear light
 
 		fade(0x00, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);				// turn off
@@ -367,7 +361,7 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka
 
 	device.mj8x8->HeartBeat(&message);
 
-	if ( (! device.mj8x8->bus->devices.uint16_val) && (device.mj8x8->bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
+	if ( (! message.bus->devices.uint16_val) && (message.bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
 		device.mj8x8->EmptyBusOperation();								// perform the device-specific default operation
 
 	sleep_enable();														// back to sleep

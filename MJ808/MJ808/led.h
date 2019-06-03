@@ -26,8 +26,9 @@ typedef struct															// struct describing LEDs on device MJ828
 {
 	led_t leds[2];														// array of led_t - one for each LED
 	uint8_t led_count : 3;												// number of LEDs on device, max 8
-
 	uint8_t flag_any_glow : 1;											// flag indicating if anything at all shall glow
+
+	void (*digest)(volatile can_msg_t *in_msg);
 } leds_t;
 #endif
 
@@ -38,7 +39,11 @@ typedef struct															// struct describing LEDs on device MJ828
 	uint8_t led_count : 3;												// number of LEDs on device, max 8
 
 	uint8_t flag_any_glow : 1;											// flag indicating if anything at all shall glow
+
+	void (*digest)(volatile can_msg_t *in_msg);
 } leds_t;
 #endif
+
+void led_ctor(volatile leds_t *self);									// not really needed for now
 
 #endif /* LED_H_ */

@@ -316,7 +316,7 @@
 #define COMMAND data[0]
 #define ARGUMENT data[1]
 
-typedef struct	 														// can_message_t struct describing a generic CAN message
+typedef struct	 														// can_msg_t struct describing a generic CAN message
 {
 	// preserve byte order for sequential reads/writes
 	uint8_t		sidh;													// Standard Identifier High Byte
