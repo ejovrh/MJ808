@@ -7,26 +7,13 @@
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"
-static volatile mj808_t device;
 #endif
 #if defined(MJ818_)														// mj818 header include
 #include "mj818.h"
-static volatile mj818_t device;
 #endif
 #if defined(MJ828_)														// mj828 header include
 #include "mj828.h"
-static volatile mj828_t device;
 #endif
-
-static volatile mj8x8_t MJ8X8;											// declare MJ8X8 object
-static volatile attiny4313_t MCU;										// declare MCU object
-static volatile can_t CAN;												// declare CAN object
-static volatile canbus_t BUS;											// declare canbus_t object
-static volatile leds_t LED;												// declare LED object
-
-static volatile message_handler_t message;								// declare message handler object
-static volatile can_msg_t msg_out;										// message object for outbound messages
-static volatile can_msg_t msg_in;										// message object for inbound messages
 
 // TODO - refactor away
 volatile uint8_t flag_lamp_is_on = 0;									// flag - indicates if button turned the device on, used for pushbutton handling
@@ -46,37 +33,14 @@ int main(void)
 	message_handler_ctor(&message, &CAN, &BUS, &msg_in, &msg_out);		// call message handler constructor
 
 	#if defined(MJ808_)													// MJ808 - call derived class constructor and tie in base class
-	mj808_ctor(&device, &MJ8X8, &LED, &message);
+	mj808_ctor(&device, &MJ8X8, &LED, &BUTTON, &message);
 	#endif
 	#if defined(MJ818_)													// MJ818 - call derived class constructor and tie in base class
 	mj818_ctor(&device, &MJ8X8, &LED, &message);
 	#endif
 	#if defined(MJ828_)													// MJ828 - call derived class constructor and tie in base class
-	mj828_ctor(&device, &MJ8X8, &LED, &message);
+	mj828_ctor(&device, &MJ8X8, &LED, &BUTTON, &message);
 	#endif
-
-
-
-// TODO - put into constructors
-	#if defined(MJ808_)													// device init for MJ808
-
-	device.button[0].PIN = (uint8_t *) 0x30; 							// 0x020 offset plus address - PIND register
-	device.button[0].pin_number = 4;									// sw2 is connected to pin D0
-	#endif
-
-	#if defined(MJ828_)													// device init for MJ828
-	device.led = &LED;													// pass reference to LED struct
-
-	LED.led_count = 7;
-	LED.flag_any_glow = 1;
-	LED.leds[green].on = 1;
-
-	device.button[0].pin_number = 0;									// sw2 is connected to pin D0
-	device.button[0].pin_number = 1;									// sw2 is connected to pin D1
-	device.button[0].PIN = (uint8_t *) 0x30;							// 0x020 offset plus address - PIND register
-	device.button[1].PIN = (uint8_t *) 0x30;							// ditto
-	#endif
-// TODO - put into constructors
 
 	// TODO - implement micro controller sleep cycles
 	set_sleep_mode(SLEEP_MODE_IDLE);									// 11mA
@@ -105,6 +69,7 @@ int main(void)
 ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message reception of the MCP2515
 {
 	sleep_disable();													// wakey wakey
+
 	volatile can_t *can = device.mj8x8->can;							// get pointer to CAN instance
 
 	// assumption: an incoming message is of interest for this unit
@@ -258,11 +223,10 @@ ISR(PCINT2_vect)														// ISR for pushbuttons
 }
 
 #if ( defined(MJ808_) | defined(MJ828_) )								// ISR for timers 1 A compare match - button handling
-ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - foo ms
-{
+ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
+{	// code to be executed every 25ms
+
 	sleep_disable();													// wakey wakey
-	volatile mj8x8_t *dev = device.mj8x8;
-	// code to be executed every 25ms
 
 	#if defined(MJ808_)													// pushbutton code for mj808
 	button_debounce(&device.button[0]);									// from here on the button is debounced and states can be consumed
@@ -277,12 +241,12 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - foo ms
 			message.SendMessage(&message, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);	// turn on rear light
 
 		if (message.bus->devices._MJ828)								// dashboard is present
-			message.SendMessage(&message, (CMND_DEVICE | DEV_LU | DASHBOARD), 0x00, 1);	// dummy command to dashboard
+			message.SendMessage(&message, (CMND_DEVICE | DEV_LU | DASHBOARD), 0x00, 1);		// dummy command to dashboard
 
 		fade(0x20, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);
 
 		util_led(UTIL_LED_GREEN_ON);									// power on green LED
-		message.SendMessage(&message, (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);		// convey button press via CAN
+		message.SendMessage(&message, (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);			// convey button press via CAN
 
 		flag_lamp_is_on = 1;
 	}

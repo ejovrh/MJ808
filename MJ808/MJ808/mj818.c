@@ -7,6 +7,7 @@
 #include "mj818.h"
 #include "gpio.h"
 
+// interprets LED commands for this device
 void digestMJ818(volatile can_msg_t *in_msg)
 {
 	// command for device
@@ -20,13 +21,21 @@ void digestMJ818(volatile can_msg_t *in_msg)
 	}
 };
 
-void EmptyBusOperationMJ818(void)										// device default operation on empty bus
+// implementation of virtual constructor for LEDs
+void virtual_led_ctorMJ818(volatile leds_t *self)
+{
+	;
+};
+
+// defines device operation on empty bus
+void EmptyBusOperationMJ818(void)
 {
 	if (OCR_REAR_LIGHT == 0x00)											// run once
 		fade(0x10, &OCR_REAR_LIGHT, OCR_MAX_REAR_LIGHT);				// turn on rear light
 };
 
-void PopulatedBusOperationMJ818(volatile can_msg_t *in_msg, volatile void *self)				// device-specific operation on populated (not empty) bus
+// dispatches CAN messages to appropriate sub-component on device
+void PopulatedBusOperationMJ818(volatile can_msg_t *in_msg, volatile void *self)
 {
 	mj818_t *ptr = (mj818_t *) self;									// pointer cast to avoid compiler warnings
 	ptr->led->digest(in_msg);											// let the LED object deal wit it
@@ -74,6 +83,7 @@ volatile mj818_t * mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, vo
 	self->mj8x8 = base;													// remember own object address
 	self->led = led;													// remember the LED object address
 	self->led->digest = &digestMJ818;
+	self->led->virtual_led_ctor = &virtual_led_ctorMJ818;
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -88,6 +98,8 @@ volatile mj818_t * mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, vo
 	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
 
 	msg->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
+
+	self->led->virtual_led_ctor(self->led);								// call virtual constructor
 
 	return self;
 };

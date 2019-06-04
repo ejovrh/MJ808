@@ -22,28 +22,34 @@ typedef struct															// struct describing a single generic LED
 } led_t;
 
 #if defined(MJ808_)	|| defined(MJ818_)									// leds_t struct for mj808/mj818
-typedef struct															// struct describing LEDs on device MJ828
+typedef struct	leds_t													// struct describing LEDs on device MJ828
 {
 	led_t leds[2];														// array of led_t - one for each LED
 	uint8_t led_count : 3;												// number of LEDs on device, max 8
 	uint8_t flag_any_glow : 1;											// flag indicating if anything at all shall glow
 
-	void (*digest)(volatile can_msg_t *in_msg);
+	void (*digest)(volatile can_msg_t *in_msg);							// function pointer for LED message interpreter
+	void (*virtual_led_ctor)(volatile struct leds_t *self);				// virtual constructor
 } leds_t;
 #endif
 
 #if defined(MJ828_)														// leds_t struct for mj828
-typedef struct															// struct describing LEDs on device MJ828
+typedef struct	leds_t													// struct describing LEDs on device MJ828
 {
 	led_t leds[8];														// array of led_t - one for each LED
 	uint8_t led_count : 3;												// number of LEDs on device, max 8
 
 	uint8_t flag_any_glow : 1;											// flag indicating if anything at all shall glow
 
-	void (*digest)(volatile can_msg_t *in_msg);
+	void (*digest)(volatile can_msg_t *in_msg);							// function pointer for LED message interpreter
+	void (*virtual_led_ctor)(volatile struct leds_t *self);				// virtual constructor
 } leds_t;
 #endif
 
-void led_ctor(volatile leds_t *self);									// not really needed for now
+// command handling functions
+void util_led(uint8_t in_val);											// interprets CMND_UTIL_LED command - utility LED (red, green, on, off, blink)
+void dev_light(volatile can_msg_t *msg);								// interprets CMND_DEVICE-DEV_LIGHT command - positional light control
+
+static volatile leds_t LED;												// declare LED object
 
 #endif /* LED_H_ */

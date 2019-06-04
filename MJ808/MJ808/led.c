@@ -119,8 +119,3 @@ void dev_light(volatile can_msg_t *msg)
 	}
 	#endif
 };
-
-void led_ctor(volatile leds_t *self)
-{
-	//self->digest = &digest;
-};

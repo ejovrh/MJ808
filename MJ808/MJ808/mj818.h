@@ -3,7 +3,6 @@
 
 #include "mj8x8.h"
 #include "led.h"
-#include "message.h"
 
 // definitions of device/PCB layout-dependent hardware pins
 #define MCP2561_standby_pin		B,	1,	1								// MCP2561 standby
@@ -13,7 +12,6 @@
 
 typedef struct															// struct describing devices on MJ818
 {
-	//volatile uint8_t timer_counter[2];								// timer counter array
 	volatile leds_t	*led;												// pointer to LED structure
 	volatile can_t *can;												// pointer to the CAN structure
 	volatile attiny4313_t *mcu;											// pointer to MCU structure
@@ -21,5 +19,7 @@ typedef struct															// struct describing devices on MJ818
 } mj818_t;
 
 volatile mj818_t *mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg);
+
+static volatile mj818_t device;
 
 #endif /* MJ818_H_ */

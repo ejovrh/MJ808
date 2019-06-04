@@ -6,6 +6,7 @@
 #include "mj828.h"
 #include "gpio.h"
 
+// interprets LED commands for this device
 void digestMJ828(volatile can_msg_t *in_msg)
 {
 	if ( (in_msg->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)			// utility LED command
@@ -24,18 +25,38 @@ void digestMJ828(volatile can_msg_t *in_msg)
 	}
 };
 
-void EmptyBusOperationMj828(void)										// device default operation on empty bus
+// implementation of virtual constructor for buttons
+void virtual_button_ctorMJ828(volatile button_t *self)
+{
+
+	self[0].pin_number = 0;									// sw2 is connected to pin D0
+	self[1].pin_number = 1;									// sw2 is connected to pin D1
+	self[0].PIN = (uint8_t *) 0x30;							// 0x020 offset plus address - PIND register
+	self[1].PIN = (uint8_t *) 0x30;							// ditto
+};
+
+// implementation of virtual constructor for LEDs
+void virtual_led_ctorMJ828(volatile leds_t *self)
+{
+	self->led_count = 7;
+	self->flag_any_glow = 1;
+	self->leds[green].on = 1;
+};
+
+// defines device operation on empty bus
+void EmptyBusOperationMj828(void)
 {
 	;
 };
 
-void PopulatedBusOperationMJ828(volatile can_msg_t *in_msg, volatile void *self)				// device-specific operation on populated (not empty) bus
+// dispatches CAN messages to appropriate sub-component on device
+void PopulatedBusOperationMJ828(volatile can_msg_t *in_msg, volatile void *self)
 {
 	mj828_t *ptr = (mj828_t *) self;									// pointer cast to avoid compiler warnings
 	ptr->led->digest(in_msg);											// let the LED object deal wit it
 };
 
-volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg)
+volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg)
 {
 	// GPIO state definitions
 	{
@@ -89,6 +110,9 @@ volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, vo
 	self->mj8x8 = base;													// remember own object address
 	self->led = led;													// remember the LED object address
 	self->led->digest = &digestMJ828;
+	self->led->virtual_led_ctor = &virtual_led_ctorMJ828;
+	self->button->virtual_button_ctor = &virtual_button_ctorMJ828;
+	//self->button = &button;
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -103,6 +127,9 @@ volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, vo
 
 	self->mj8x8->EmptyBusOperation = &EmptyBusOperationMj828;			// implements device-specific default operation
 	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
+
+	self->led->virtual_led_ctor(self->led);								// call virtual constructor
+	self->button->virtual_button_ctor(self->button);					// call virtual constructor
 
 	return self;
 };

@@ -3,7 +3,7 @@
 
 #include "mj8x8.h"
 #include "led.h"
-#include "message.h"
+#include "button.h"
 
 // definitions of device/PCB layout-specific hardware pins
 #define MCP2561_standby_pin		B,	3,	3								// MCP2561 standby
@@ -21,7 +21,6 @@ void charlieplexing_handler(volatile leds_t *in_led);					// handles LEDs in cha
 
 typedef struct															// struct describing devices on MJ828
 {
-	//volatile uint8_t timer_counter[2];								// timer counter array
 	volatile button_t button[2];										// array of button_t - two buttons
 	volatile leds_t	*led;												// pointer to LED structure
 	volatile can_t *can;												// pointer to the CAN structure
@@ -29,6 +28,8 @@ typedef struct															// struct describing devices on MJ828
 	volatile mj8x8_t *mj8x8;											// pointer to the base class
 } mj828_t;
 
-volatile mj828_t *mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg);
+volatile mj828_t *mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg);
+
+static volatile mj828_t device;
 
 #endif /* MJ828_H_ */

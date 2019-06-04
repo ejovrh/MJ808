@@ -160,6 +160,12 @@
     <Compile Include="attiny4313.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="button.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="button.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="message.c">
       <SubType>compile</SubType>
     </Compile>

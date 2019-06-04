@@ -7,6 +7,7 @@
 #include "led.h"
 #include "gpio.h"
 
+// interprets LED commands for this device
 void digestMJ808(volatile can_msg_t *in_msg)
 {
 	// in here have mechanism that based on message does something
@@ -30,18 +31,33 @@ void digestMJ808(volatile can_msg_t *in_msg)
 	}
 };
 
-void EmptyBusOperationMJ808(void)										// device default operation on empty bus
+// implementation of virtual constructor for buttons
+void virtual_button_ctorMJ808(volatile button_t *self)
+{
+	self[0].PIN = (uint8_t *) 0x30; 							// 0x020 offset plus address - PIND register
+	self[0].pin_number = 4;									// sw2 is connected to pin D0
+};
+
+// implementation of virtual constructor for LEDs
+void virtual_led_ctorMJ808(volatile leds_t *self)
 {
 	;
 };
 
-void PopulatedBusOperationMJ808(volatile can_msg_t *in_msg, volatile void *self)				// device-specific operation on populated (not empty) bus
+// device default operation on empty bus
+void EmptyBusOperationMJ808(void)
+{
+	;
+};
+
+// dispatches CAN messages to appropriate sub-component on device
+void PopulatedBusOperationMJ808(volatile can_msg_t *in_msg, volatile void *self)
 {
 	mj808_t *ptr = (mj808_t *) self;									// pointer cast to avoid compiler warnings
 	ptr->led->digest(in_msg);											// let the LED object deal wit it
 };
 
-volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg)
+volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg)
 {
 	// GPIO state definitions
 	{
@@ -94,6 +110,9 @@ volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, vo
 	self->mj8x8 = base;													// remember own object address
 	self->led = led;													// remember the LED object address
 	self->led->digest = &digestMJ808;
+	self->led->virtual_led_ctor = &virtual_led_ctorMJ808;
+	self->button->virtual_button_ctor = &virtual_button_ctorMJ808;
+	//self->button = &button;
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -106,11 +125,14 @@ volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, vo
 
 	msg->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
 
-	// EmptyBusOperation() is so far not needed
+	// EmptyBusOperation() on front light is so far not needed since we have a button
 	//self->mj8x8->EmptyBusOperation = &EmptyBusOperationMJ808;			// implement device-specific default operation
 	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ808;	// implements device-specific operation depending on bus activity
 
-	util_led(UTIL_LED_GREEN_BLINK_1X);									// crude "im finished" indicator
+	self->led->virtual_led_ctor(self->led);								// call virtual constructor
+	self->button->virtual_button_ctor(self->button);					// call virtual constructor
+
+	util_led(UTIL_LED_GREEN_BLINK_1X);									// crude "I'm finished" indicator
 
 	return self;
 };

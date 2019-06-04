@@ -3,7 +3,7 @@
 
 #include "mj8x8.h"
 #include "led.h"
-#include "message.h"
+#include "button.h"
 
 // definitions of device/PCB layout-dependent hardware pins
 #define	GREEN_LED_pin			D,	0,	0								// green LED
@@ -22,6 +22,8 @@ typedef struct															// struct describing devices on MJ808
 	volatile leds_t	*led;												// pointer to LED structure
 } mj808_t;
 
-volatile mj808_t *mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg);
+volatile mj808_t *mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg);
+
+static volatile mj808_t device;
 
 #endif /* MJ808_H_ */

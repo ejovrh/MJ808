@@ -5,6 +5,7 @@
 
 #include "attiny4313.h"
 #include "mcp2515.h"
+#include "message.h"
 
 /* TODO - CAN bootloader
  * http://www.kreatives-chaos.com/artikel/can-bootloader
@@ -60,8 +61,7 @@
 #define LED_OFF 0x00													// off value for any OCR
 #define BLINK_DELAY 125													// delay used in the util_led() function
 #define REDISCOVER_ITERATION 2											// every (value * 1s) the CAN device will do a re-broadcast
-#define BUTTON_MIN_PRESS_TIME 20										// number times 25ms duration: 500ms
-#define BUTTON_MAX_PRESS_TIME 120										// number times 25ms duration: 3s
+
 
 
 
@@ -205,21 +205,6 @@
 // b5
 #define BLANK 0x00
 
-// TODO - move out of this file
-typedef struct															// struct describing a generic pushbutton
-{
-	uint8_t state : 2;													// something akin to a "counter" used for debouncing
-	uint8_t *PIN;														// PIN register address of button pin
-	uint8_t pin_number;													// pin number (0, 1...6) to which the button is connected
-	uint8_t is_pressed :1;												// flag indicating if button is pressed right now
-	uint8_t was_pressed :1;												// flag indicating if button was released after a stable state (used to remember previous state)
-	uint8_t toggle :1;													// flag indicating the toggle state
-	uint8_t hold_temp :1;												// flag indicating a button press for a duration of BUTTON_MIN_PRESS_TIME (up to BUTTON_MAX_PRESS_TIME) seconds, followed by button release
-	uint8_t hold_error :1;												// flag indicating constant button press (by error, object leaning on pushbutton, etc.)
-	uint8_t hold_counter;												// counter to count button press duration for hold_X states
-	uint8_t is_at_default :1;											// 1 - default values, 0 otherwise
-} button_t;
-
 // definitions of device/PCB layout-independent hardware pins
 #define SPI_SS_MCP2515_pin		B,	4,	4								// SPI - SS
 #define ICSP_DI_MISO			B,	5,	5								// SPI - MISO; aka. DI; if run in master mode this is ... MISO
@@ -229,66 +214,18 @@ typedef struct															// struct describing a generic pushbutton
 #define MCP2515_INT_pin			D,	3,	3								// INT1
 // definitions of device/PCB layout-independent hardware pins
 
-// TODO - get rid of unions
-typedef union															// u_devices union of bit fields and uint16_t - representation discovered devices on bus
-{
-	struct																// bit fields - one bit for each device on the bus
-	{
-		uint8_t _LU :1;													// 1 indicates device present, 0 otherwise
-		uint8_t _DEV_0B :1;												//	ditto
-		uint8_t _DEV_0C :1;												//	ditto
-		uint8_t _MJ828 :1;												//	ditto
-		uint8_t _DEV_1A :1;												//	ditto
-		uint8_t _DEV_1B :1;												//	ditto
-		uint8_t _DEV_1C :1;												//	ditto
-		uint8_t _DEV_1D :1;												//	ditto
-		uint8_t _MJ808 :1;												//	ditto
-		uint8_t _MJ818 :1;												//	ditto
-		uint8_t _DEV_2C :1;												//	ditto
-		uint8_t _DEV_2D :1;												//	ditto
-		uint8_t _DEV_3A :1;												//	ditto
-		uint8_t _DEV_3B :1;												//	ditto
-		uint8_t _DEV_3C :1;												//	ditto
-		uint8_t _DEV_3D :1;												//	ditto
-	};
-	uint16_t uint16_val;												// the bit field as one uint16_t
-} u_devices;
-
-typedef struct															// canbus_t struct describing the CAN bus state
-{
-	u_devices devices;													// indicator of devices discovered, 16 in total; B0 - 1st device (0A), B1 - 2nd device (0B), ..., B15 - 16th device (3D)
-	uint8_t NumericalCAN_ID ;											// ordered device number - A0 (0th device) until 3C (15th device)
-	uint8_t BeatIterationCount : 4;										// how many times did we wakeup, sleep and wakeup again
-	uint8_t FlagDoHeartbeat : 1;
-	uint8_t FlagDoDefaultOperation : 2;
-} canbus_t;
-
-// FIXME - should be in message.h and not here
-typedef struct message_handler_t										// sends and receives (stores) CAN messages, keeps track of bus status
-{																		//	is message-agnostic -> the actual device has to know what to do with a message (via PopulatedBusOperation() )
-	volatile can_msg_t *in;												// container for inbound messages
-	volatile can_msg_t *out;											// container for outbound messages
-	volatile can_t *can;												// pointer to CAN infrastructure
-	volatile canbus_t *bus;												// prime candidate for a private data member
-
-	void (*SendMessage)(volatile struct message_handler_t *self, const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len);
-	volatile can_msg_t* (*ReceiveMessage)(volatile struct message_handler_t *self);
-} message_handler_t;
-
 typedef struct															// "base class" struct for mj8x8 devices
 {
 	volatile can_t *can;												// pointer to the CAN structure
 	volatile attiny4313_t *mcu;											// pointer to MCU structure
-	void (*HeartBeat)(volatile message_handler_t *msg);					// default periodic heartbeat for all devices
+	void (*HeartBeat)(volatile void *msg);								// default periodic heartbeat for all devices
 	void (*EmptyBusOperation)(void);									// device's default operation on empty bus, implemented in derived class
 	void (*PopulatedBusOperation)(volatile can_msg_t *msg, volatile void *unspecified_device);				// device operation on populated bus
 } mj8x8_t ;
 
-// command handling functions
-void util_led(uint8_t in_val);											// interprets CMND_UTIL_LED command - utility LED (red, green, on, off, blink)
-void dev_light(volatile can_msg_t *msg);								// interprets CMND_DEVICE-DEV_LIGHT command - positional light control
-void button_debounce(volatile button_t *in_button);						// marks a button as pressed if it was pressed for the duration of 2X ISR iterations
 
 volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu);
+
+static volatile mj8x8_t MJ8X8;											// declare MJ8X8 object
 
 #endif /* MJ8x8_H_ */
