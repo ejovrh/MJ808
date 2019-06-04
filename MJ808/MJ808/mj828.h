@@ -21,11 +21,9 @@ void charlieplexing_handler(volatile leds_t *in_led);					// handles LEDs in cha
 
 typedef struct															// struct describing devices on MJ828
 {
-	volatile button_t button[2];										// array of button_t - two buttons
-	volatile leds_t	*led;												// pointer to LED structure
-	volatile can_t *can;												// pointer to the CAN structure
-	volatile attiny4313_t *mcu;											// pointer to MCU structure
 	volatile mj8x8_t *mj8x8;											// pointer to the base class
+	volatile leds_t	*led;												// pointer to LED structure
+	volatile button_t button[2];										// array of button_t - two buttons
 } mj828_t;
 
 volatile mj828_t *mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg);

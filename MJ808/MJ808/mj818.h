@@ -12,10 +12,8 @@
 
 typedef struct															// struct describing devices on MJ818
 {
-	volatile leds_t	*led;												// pointer to LED structure
-	volatile can_t *can;												// pointer to the CAN structure
-	volatile attiny4313_t *mcu;											// pointer to MCU structure
 	volatile mj8x8_t *mj8x8;											// pointer to the base class
+	volatile leds_t	*led;												// pointer to LED structure
 } mj818_t;
 
 volatile mj818_t *mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg);
