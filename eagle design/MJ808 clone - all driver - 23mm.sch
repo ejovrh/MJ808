@@ -10894,64 +10894,6 @@ These vary by manufacturer, but we used the NPIS54LS footprint from here.</descr
 </deviceset>
 </devicesets>
 </library>
-<library name="LDO SOT-89">
-<packages>
-<package name="SOT-89">
-<smd name="GND" x="-1.5" y="0.685" dx="1.4" dy="0.57" layer="1" rot="R90"/>
-<smd name="VOUT" x="1.5" y="0.685" dx="1.4" dy="0.57" layer="1" rot="R90"/>
-<smd name="VIN" x="0" y="0.685" dx="1.4" dy="0.65" layer="1" rot="R90"/>
-<polygon width="0.127" layer="1">
-<vertex x="-1" y="4.25"/>
-<vertex x="1" y="4.25"/>
-<vertex x="1" y="2"/>
-<vertex x="0.25" y="1.25"/>
-<vertex x="0.25" y="0"/>
-<vertex x="-0.25" y="0"/>
-<vertex x="-0.25" y="1.25"/>
-<vertex x="-1" y="2"/>
-</polygon>
-<text x="0" y="5.08" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="-1.27" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
-<wire x1="-2.2" y1="4.4" x2="-2.2" y2="2.2" width="0.127" layer="21"/>
-<wire x1="2.2" y1="4.4" x2="2.2" y2="2.2" width="0.127" layer="21"/>
-<wire x1="-2.2" y1="4.4" x2="2.2" y2="4.4" width="0.127" layer="21"/>
-<wire x1="-2.2" y1="2.2" x2="-1.2" y2="2.2" width="0.127" layer="21"/>
-<wire x1="2.2" y1="2.2" x2="1.2" y2="2.2" width="0.127" layer="21"/>
-</package>
-</packages>
-<symbols>
-<symbol name="LDO">
-<pin name="GND" x="0" y="-12.7" visible="pin" length="middle" rot="R90"/>
-<pin name="VIN" x="-15.24" y="0" visible="pin" length="middle"/>
-<pin name="VOUT" x="15.24" y="0" visible="pin" length="middle" rot="R180"/>
-<wire x1="-10.16" y1="-7.62" x2="10.16" y2="-7.62" width="0.254" layer="94"/>
-<wire x1="10.16" y1="-7.62" x2="10.16" y2="2.54" width="0.254" layer="94"/>
-<wire x1="10.16" y1="2.54" x2="-10.16" y2="2.54" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="2.54" x2="-10.16" y2="-7.62" width="0.254" layer="94"/>
-<text x="0" y="7.62" size="1.27" layer="95" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="5.08" size="1.27" layer="96" font="vector" align="center">&gt;VALUE</text>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="LDO" prefix="IC" uservalue="yes">
-<gates>
-<gate name="G$1" symbol="LDO" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="SOT-89">
-<connects>
-<connect gate="G$1" pin="GND" pad="GND"/>
-<connect gate="G$1" pin="VIN" pad="VIN"/>
-<connect gate="G$1" pin="VOUT" pad="VOUT"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="SIA456DJ-T1-GE3  N-Fet">
 <description>&lt;b&gt;Field Effect Transistors&lt;/b&gt;&lt;p&gt;
 &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;&lt;p&gt;
@@ -11114,6 +11056,85 @@ by R. Vogg  15.March.2002</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="LDK320 5V LDO">
+<packages>
+<package name="SOT-23-5L">
+<smd name="GND" x="0" y="1.15" dx="1.2" dy="0.6" layer="1" rot="R90"/>
+<smd name="IN" x="0.95" y="1.15" dx="1.2" dy="0.6" layer="1" rot="R90"/>
+<smd name="EN" x="-0.95" y="1.15" dx="1.2" dy="0.6" layer="1" rot="R90"/>
+<smd name="ADJ/NC" x="-0.95" y="-1.15" dx="1.2" dy="0.6" layer="1" rot="R90"/>
+<smd name="OUT" x="0.95" y="-1.15" dx="1.2" dy="0.6" layer="1" rot="R90"/>
+<wire x1="-1.6" y1="0.8" x2="-1.6" y2="-0.8" width="0.127" layer="21"/>
+<wire x1="1.6" y1="0.8" x2="1.6" y2="-0.8" width="0.127" layer="21"/>
+<text x="0" y="2.5" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-2.5" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
+</package>
+<package name="SOT-89">
+<smd name="GND" x="-1.5" y="0.685" dx="1.4" dy="0.57" layer="1" rot="R90"/>
+<smd name="VOUT" x="1.5" y="0.685" dx="1.4" dy="0.57" layer="1" rot="R90"/>
+<smd name="VIN" x="0" y="0.685" dx="1.4" dy="0.65" layer="1" rot="R90"/>
+<polygon width="0.127" layer="1">
+<vertex x="-1" y="4.25"/>
+<vertex x="1" y="4.25"/>
+<vertex x="1" y="2"/>
+<vertex x="0.25" y="1.25"/>
+<vertex x="0.25" y="0"/>
+<vertex x="-0.25" y="0"/>
+<vertex x="-0.25" y="1.25"/>
+<vertex x="-1" y="2"/>
+</polygon>
+<text x="0" y="5.08" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-1.27" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
+<wire x1="-2.2" y1="4.4" x2="-2.2" y2="2.2" width="0.127" layer="21"/>
+<wire x1="2.2" y1="4.4" x2="2.2" y2="2.2" width="0.127" layer="21"/>
+<wire x1="-2.2" y1="4.4" x2="2.2" y2="4.4" width="0.127" layer="21"/>
+<wire x1="-2.2" y1="2.2" x2="-1.2" y2="2.2" width="0.127" layer="21"/>
+<wire x1="2.2" y1="2.2" x2="1.2" y2="2.2" width="0.127" layer="21"/>
+</package>
+</packages>
+<symbols>
+<symbol name="LDO">
+<pin name="GND" x="0" y="-12.7" visible="pin" length="middle" rot="R90"/>
+<pin name="VIN" x="-15.24" y="0" visible="pin" length="middle"/>
+<pin name="VOUT" x="15.24" y="0" visible="pin" length="middle" rot="R180"/>
+<wire x1="-10.16" y1="-7.62" x2="10.16" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-7.62" x2="10.16" y2="2.54" width="0.254" layer="94"/>
+<wire x1="10.16" y1="2.54" x2="-10.16" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="2.54" x2="-10.16" y2="-7.62" width="0.254" layer="94"/>
+<text x="0" y="7.62" size="1.27" layer="95" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="5.08" size="1.27" layer="96" font="vector" align="center">&gt;VALUE</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="LDK320" prefix="IC" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="LDO" x="0" y="0"/>
+</gates>
+<devices>
+<device name="SOT-89" package="SOT-89">
+<connects>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="VIN" pad="VIN"/>
+<connect gate="G$1" pin="VOUT" pad="VOUT"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="SOT-23-5L" package="SOT-23-5L">
+<connects>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="VIN" pad="IN"/>
+<connect gate="G$1" pin="VOUT" pad="OUT"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -11138,7 +11159,7 @@ by R. Vogg  15.March.2002</description>
 </classes>
 <parts>
 <part name="R9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R1210" package3d_urn="urn:adsk.eagle:package:23554/2" value="0.15 / 1W"/>
-<part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="1μF / 10V"/>
+<part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/1" value="1μF / 10V"/>
 <part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD123" package3d_urn="urn:adsk.eagle:package:43420/1" value="PMEG2010ER,115"/>
 <part name="L1" library="SparkFun-Coils" library_urn="urn:adsk.eagle:library:512" deviceset="INDUCTOR" device="-SRN6045-33UH" package3d_urn="urn:adsk.eagle:package:37576/1" value="VLS6045EX-150M-CA - 15uH"/>
 <part name="IC3" library="MCP2515-I-ML - Standalonce CAN Controller with SPI Interface" deviceset="MCP2515-I-ML" device="" value="MCP2515"/>
@@ -11165,9 +11186,9 @@ by R. Vogg  15.March.2002</description>
 <part name="LED1" library="APHBM2012LSURKZGKC" deviceset="APHBM2012LSURKZGKC" device="" value="APHBM2012LSURKZGKC"/>
 <part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/1" value="0.1μF"/>
 <part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/1" value="0.1μF"/>
-<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/1" value="1μF"/>
+<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/1" value="1μF / 10V"/>
 <part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/1" value="1μF"/>
-<part name="IC7" library="LDO SOT-89" deviceset="LDO" device="" value="LDK320ADU50R"/>
+<part name="IC7" library="LDK320 5V LDO" deviceset="LDK320" device="SOT-23-5L" value="LDK320ADU50R"/>
 <part name="Q2" library="SIA456DJ-T1-GE3  N-Fet" deviceset="SIA456DJ" device="" value="SiA456DJ"/>
 <part name="R13" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083331JP 330R"/>
 </parts>
@@ -11223,8 +11244,8 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <attribute name="VALUE" x="322.58" y="185.42" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="D1" gate="G$1" x="375.92" y="137.16" smashed="yes">
-<attribute name="NAME" x="375.92" y="139.7" size="1.778" layer="95"/>
-<attribute name="VALUE" x="375.92" y="132.08" size="1.778" layer="96"/>
+<attribute name="NAME" x="375.92" y="142.24" size="1.778" layer="95"/>
+<attribute name="VALUE" x="375.92" y="139.7" size="1.778" layer="96"/>
 </instance>
 <instance part="L1" gate="G$1" x="355.6" y="137.16" smashed="yes" rot="R270">
 <attribute name="NAME" x="355.6" y="139.7" size="1.778" layer="95"/>
@@ -11239,12 +11260,12 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <attribute name="VALUE" x="330.2" y="40.64" size="2.54" layer="96"/>
 </instance>
 <instance part="R11" gate="G$1" x="411.48" y="55.88" smashed="yes" rot="R90">
-<attribute name="NAME" x="409.9814" y="52.07" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="414.782" y="52.07" size="1.778" layer="96" rot="R90"/>
+<attribute name="NAME" x="414.02" y="58.42" size="1.778" layer="95"/>
+<attribute name="VALUE" x="414.02" y="55.88" size="1.778" layer="96"/>
 </instance>
 <instance part="C1" gate="G$1" x="116.84" y="175.26" smashed="yes" rot="R180">
-<attribute name="NAME" x="115.316" y="174.879" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="115.316" y="179.959" size="1.778" layer="96" rot="R180"/>
+<attribute name="NAME" x="114.3" y="177.8" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="114.3" y="175.26" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="R8" gate="G$1" x="368.3" y="203.2" smashed="yes" rot="R90">
 <attribute name="NAME" x="365.76" y="203.2" size="1.778" layer="95" rot="R90"/>
@@ -11263,12 +11284,12 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <attribute name="VALUE" x="143.51" y="130.175" size="1.27" layer="96" font="vector" align="center"/>
 </instance>
 <instance part="R10" gate="G$1" x="368.3" y="48.26" smashed="yes" rot="R90">
-<attribute name="NAME" x="366.8014" y="44.45" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="371.602" y="44.45" size="1.778" layer="96" rot="R90"/>
+<attribute name="NAME" x="370.84" y="48.26" size="1.778" layer="95"/>
+<attribute name="VALUE" x="370.84" y="45.72" size="1.778" layer="96"/>
 </instance>
 <instance part="R1" gate="G$1" x="48.26" y="99.06" smashed="yes" rot="R270">
-<attribute name="NAME" x="49.7586" y="102.87" size="1.778" layer="95" rot="R270"/>
-<attribute name="VALUE" x="44.958" y="102.87" size="1.778" layer="96" rot="R270"/>
+<attribute name="NAME" x="50.8" y="99.06" size="1.778" layer="95"/>
+<attribute name="VALUE" x="50.8" y="96.52" size="1.778" layer="96"/>
 </instance>
 <instance part="SW1" gate="G$1" x="38.1" y="104.14" smashed="yes">
 <attribute name="NAME" x="35.56" y="111.76" size="1.27" layer="95"/>
@@ -11279,7 +11300,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <attribute name="VALUE" x="22.86" y="180.34" size="1.27" layer="95"/>
 </instance>
 <instance part="R2" gate="G$1" x="193.04" y="134.62" smashed="yes" rot="R180">
-<attribute name="NAME" x="193.04" y="129.54" size="1.778" layer="95"/>
+<attribute name="NAME" x="193.04" y="139.7" size="1.778" layer="95"/>
 <attribute name="VALUE" x="193.04" y="137.16" size="1.778" layer="96"/>
 </instance>
 <instance part="GND" gate="G$1" x="43.18" y="129.54" smashed="yes" rot="R90">
@@ -11305,28 +11326,28 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <attribute name="VALUE" x="210.82" y="139.7" size="1.27" layer="95"/>
 </instance>
 <instance part="C2" gate="G$1" x="208.28" y="35.56" smashed="yes">
-<attribute name="NAME" x="209.804" y="35.941" size="1.778" layer="95"/>
-<attribute name="VALUE" x="209.804" y="30.861" size="1.778" layer="96"/>
+<attribute name="NAME" x="205.74" y="35.56" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="205.74" y="33.02" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="C5" gate="G$1" x="314.96" y="50.8" smashed="yes">
-<attribute name="NAME" x="316.484" y="51.181" size="1.778" layer="95"/>
-<attribute name="VALUE" x="316.484" y="46.101" size="1.778" layer="96"/>
+<attribute name="NAME" x="312.42" y="50.8" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="312.42" y="48.26" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="C7" gate="G$1" x="241.3" y="180.34" smashed="yes">
-<attribute name="NAME" x="242.824" y="180.721" size="1.778" layer="95"/>
-<attribute name="VALUE" x="242.824" y="175.641" size="1.778" layer="96"/>
+<attribute name="NAME" x="238.76" y="180.34" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="238.76" y="177.8" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="C8" gate="G$1" x="271.78" y="177.8" smashed="yes" rot="R180">
-<attribute name="NAME" x="270.256" y="177.419" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="270.256" y="182.499" size="1.778" layer="96" rot="R180"/>
+<attribute name="NAME" x="274.32" y="180.34" size="1.778" layer="95"/>
+<attribute name="VALUE" x="274.32" y="177.8" size="1.778" layer="96"/>
 </instance>
 <instance part="IC7" gate="G$1" x="256.54" y="182.88" smashed="yes">
 <attribute name="NAME" x="256.54" y="190.5" size="1.27" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="256.54" y="187.96" size="1.27" layer="96" font="vector" align="center"/>
 </instance>
 <instance part="Q2" gate="G$1" x="363.22" y="127" smashed="yes">
-<attribute name="NAME" x="370.84" y="127" size="1.27" layer="95"/>
-<attribute name="VALUE" x="370.84" y="124.46" size="1.27" layer="96"/>
+<attribute name="NAME" x="368.3" y="129.54" size="1.27" layer="95"/>
+<attribute name="VALUE" x="368.3" y="127" size="1.27" layer="96"/>
 </instance>
 <instance part="R13" gate="G$1" x="205.74" y="82.55" smashed="yes">
 <attribute name="NAME" x="205.74" y="92.71" size="1.778" layer="95"/>
