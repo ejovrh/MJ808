@@ -11169,7 +11169,6 @@ by R. Vogg  15.March.2002</description>
 <part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/1" value="1μF"/>
 <part name="IC7" library="LDO SOT-89" deviceset="LDO" device="" value="LDK320ADU50R"/>
 <part name="Q2" library="SIA456DJ-T1-GE3  N-Fet" deviceset="SIA456DJ" device="" value="SiA456DJ"/>
-<part name="R14" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083103JP 10k"/>
 <part name="R13" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083331JP 330R"/>
 </parts>
 <sheets>
@@ -11329,10 +11328,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <attribute name="NAME" x="370.84" y="127" size="1.27" layer="95"/>
 <attribute name="VALUE" x="370.84" y="124.46" size="1.27" layer="96"/>
 </instance>
-<instance part="R14" gate="G$1" x="124.46" y="62.23" smashed="yes">
-<attribute name="NAME" x="119.38" y="74.93" size="1.778" layer="95"/>
-<attribute name="VALUE" x="119.38" y="71.12" size="1.778" layer="96"/>
-</instance>
 <instance part="R13" gate="G$1" x="205.74" y="82.55" smashed="yes">
 <attribute name="NAME" x="205.74" y="92.71" size="1.778" layer="95"/>
 <attribute name="VALUE" x="205.74" y="88.9" size="1.778" layer="96"/>
@@ -11432,11 +11427,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="256.54" y1="170.18" x2="256.54" y2="165.1" width="0.1524" layer="91"/>
 <label x="256.54" y="165.1" size="1.778" layer="95"/>
 </segment>
-<segment>
-<pinref part="R14" gate="G$1" pin="5"/>
-<wire x1="116.84" y1="63.5" x2="111.76" y2="63.5" width="0.1524" layer="91"/>
-<label x="111.76" y="63.5" size="1.778" layer="95"/>
-</segment>
 </net>
 <net name="DIM_FRONT" class="2">
 <segment>
@@ -11446,11 +11436,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="R8" gate="G$1" pin="1"/>
 <wire x1="368.3" y1="198.12" x2="378.46" y2="198.12" width="0.1524" layer="91"/>
 <junction x="368.3" y="198.12"/>
-</segment>
-<segment>
-<pinref part="R14" gate="G$1" pin="6"/>
-<wire x1="132.08" y1="63.5" x2="144.78" y2="63.5" width="0.1524" layer="91"/>
-<label x="144.78" y="63.5" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC1" gate="G$1" pin="OC1A/PCINT3-PB3"/>
@@ -11511,20 +11496,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <junction x="271.78" y="182.88"/>
 </segment>
 <segment>
-<pinref part="R14" gate="G$1" pin="7"/>
-<wire x1="116.84" y1="66.04" x2="106.68" y2="66.04" width="0.1524" layer="91"/>
-<label x="101.6" y="66.04" size="1.778" layer="95"/>
-<pinref part="R14" gate="G$1" pin="3"/>
-<wire x1="106.68" y1="66.04" x2="101.6" y2="66.04" width="0.1524" layer="91"/>
-<wire x1="116.84" y1="60.96" x2="106.68" y2="60.96" width="0.1524" layer="91"/>
-<wire x1="106.68" y1="60.96" x2="106.68" y2="66.04" width="0.1524" layer="91"/>
-<junction x="106.68" y="66.04"/>
-<pinref part="R14" gate="G$1" pin="1"/>
-<wire x1="116.84" y1="58.42" x2="106.68" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="106.68" y1="58.42" x2="106.68" y2="60.96" width="0.1524" layer="91"/>
-<junction x="106.68" y="60.96"/>
-</segment>
-<segment>
 <pinref part="R13" gate="G$1" pin="8"/>
 <wire x1="213.36" y1="86.36" x2="231.14" y2="86.36" width="0.1524" layer="91"/>
 <label x="231.14" y="86.36" size="1.778" layer="95"/>
@@ -11540,11 +11511,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="170.18" y1="160.02" x2="175.26" y2="160.02" width="0.1524" layer="91"/>
 <label x="175.26" y="160.02" size="1.778" layer="95"/>
 <pinref part="IC1" gate="G$1" pin="OC1B/PCINT4-PB4"/>
-</segment>
-<segment>
-<pinref part="R14" gate="G$1" pin="8"/>
-<wire x1="132.08" y1="66.04" x2="144.78" y2="66.04" width="0.1524" layer="91"/>
-<label x="144.78" y="66.04" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="R13" gate="G$1" pin="7"/>
@@ -11699,11 +11665,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <pinref part="IC1" gate="G$1" pin="AIN1/PCINT1-PB1"/>
 <wire x1="170.18" y1="167.64" x2="175.26" y2="167.64" width="0.1524" layer="91"/>
 <label x="175.26" y="167.64" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="R14" gate="G$1" pin="2"/>
-<wire x1="132.08" y1="58.42" x2="144.78" y2="58.42" width="0.1524" layer="91"/>
-<label x="144.78" y="58.42" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="ICSP_SCK" class="2">
@@ -11861,11 +11822,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 </segment>
 </net>
 <net name="RESET" class="2">
-<segment>
-<pinref part="R14" gate="G$1" pin="4"/>
-<wire x1="132.08" y1="60.96" x2="144.78" y2="60.96" width="0.1524" layer="91"/>
-<label x="144.78" y="60.96" size="1.778" layer="95"/>
-</segment>
 <segment>
 <pinref part="IC3" gate="G$1" pin="!RESET!"/>
 <wire x1="269.24" y1="35.56" x2="281.94" y2="35.56" width="0.1524" layer="91"/>
