@@ -11943,6 +11943,7 @@ by R. Vogg  15.March.2002</description>
 <wire x1="-10.16" y1="2.54" x2="-10.16" y2="-7.62" width="0.254" layer="94"/>
 <text x="0" y="7.62" size="1.27" layer="95" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="5.08" size="1.27" layer="96" font="vector" align="center">&gt;VALUE</text>
+<pin name="EN" x="-15.24" y="-5.08" length="middle"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -11963,6 +11964,7 @@ by R. Vogg  15.March.2002</description>
 </device>
 <device name="SOT-23-5L" package="SOT-23-5L">
 <connects>
+<connect gate="G$1" pin="EN" pad="EN"/>
 <connect gate="G$1" pin="GND" pad="GND"/>
 <connect gate="G$1" pin="VIN" pad="IN"/>
 <connect gate="G$1" pin="VOUT" pad="OUT"/>
@@ -12227,9 +12229,9 @@ Cree XPERED-L1-R250-00401</text>
 <attribute name="NAME" x="39.37" y="135.89" size="1.778" layer="95"/>
 <attribute name="TP_SIGNAL_NAME" x="41.91" y="133.35" size="1.778" layer="97"/>
 </instance>
-<instance part="C8" gate="G$1" x="238.76" y="170.18" smashed="yes">
-<attribute name="NAME" x="236.22" y="170.18" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="236.22" y="167.64" size="1.778" layer="96" rot="R180"/>
+<instance part="C8" gate="G$1" x="233.68" y="170.18" smashed="yes">
+<attribute name="NAME" x="231.14" y="170.18" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="231.14" y="167.64" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="C9" gate="G$1" x="269.24" y="167.64" smashed="yes" rot="R180">
 <attribute name="NAME" x="271.78" y="167.64" size="1.778" layer="95"/>
@@ -12300,9 +12302,13 @@ Cree XPERED-L1-R250-00401</text>
 </segment>
 <segment>
 <pinref part="IC8" gate="G$1" pin="VIN"/>
-<wire x1="238.76" y1="172.72" x2="231.14" y2="172.72" width="0.1524" layer="91"/>
-<label x="231.14" y="172.72" size="1.778" layer="95"/>
+<wire x1="233.68" y1="172.72" x2="226.06" y2="172.72" width="0.1524" layer="91"/>
+<label x="226.06" y="172.72" size="1.778" layer="95"/>
 <pinref part="C8" gate="G$1" pin="1"/>
+<junction x="233.68" y="172.72"/>
+<wire x1="233.68" y1="172.72" x2="238.76" y2="172.72" width="0.1524" layer="91"/>
+<pinref part="IC8" gate="G$1" pin="EN"/>
+<wire x1="238.76" y1="167.64" x2="238.76" y2="172.72" width="0.1524" layer="91"/>
 <junction x="238.76" y="172.72"/>
 </segment>
 </net>
@@ -12399,8 +12405,8 @@ Cree XPERED-L1-R250-00401</text>
 </segment>
 <segment>
 <pinref part="C8" gate="G$1" pin="2"/>
-<wire x1="238.76" y1="165.1" x2="238.76" y2="154.94" width="0.1524" layer="91"/>
-<label x="238.76" y="154.94" size="1.778" layer="95"/>
+<wire x1="233.68" y1="165.1" x2="233.68" y2="154.94" width="0.1524" layer="91"/>
+<label x="233.68" y="154.94" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="C9" gate="G$1" pin="1"/>
