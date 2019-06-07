@@ -12044,8 +12044,8 @@ by R. Vogg  15.March.2002</description>
 <part name="C9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1μF"/>
 <part name="IC8" library="LDK320 5V LDO" deviceset="LDK320" device="SOT-23-5L" value="LDK320ADU50R"/>
 <part name="R7" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083331JP 330R"/>
-<part name="R3" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083103JP 10k"/>
 <part name="Q2" library="SIA456DJ-T1-GE3  N-Fet" deviceset="SIA456DJ" device="" value="SiA456DJ"/>
+<part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10k"/>
 </parts>
 <sheets>
 <sheet>
@@ -12245,13 +12245,13 @@ Cree XPERED-L1-R250-00401</text>
 <attribute name="NAME" x="208.28" y="90.17" size="1.778" layer="95"/>
 <attribute name="VALUE" x="208.28" y="73.66" size="1.778" layer="96"/>
 </instance>
-<instance part="R3" gate="G$1" x="127" y="77.47" smashed="yes">
-<attribute name="NAME" x="121.92" y="85.09" size="1.778" layer="95"/>
-<attribute name="VALUE" x="121.92" y="68.58" size="1.778" layer="96"/>
-</instance>
 <instance part="Q2" gate="G$1" x="378.46" y="119.38" smashed="yes">
 <attribute name="NAME" x="383.54" y="120.015" size="1.27" layer="95"/>
 <attribute name="VALUE" x="383.54" y="118.11" size="1.27" layer="96"/>
+</instance>
+<instance part="R4" gate="G$1" x="203.2" y="50.8" smashed="yes" rot="R270">
+<attribute name="NAME" x="204.6986" y="54.61" size="1.778" layer="95" rot="R270"/>
+<attribute name="VALUE" x="199.898" y="54.61" size="1.778" layer="96" rot="R270"/>
 </instance>
 </instances>
 <busses>
@@ -12418,11 +12418,6 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="254" y1="160.02" x2="254" y2="154.94" width="0.1524" layer="91"/>
 <label x="254" y="154.94" size="1.778" layer="95"/>
 </segment>
-<segment>
-<pinref part="R3" gate="G$1" pin="5"/>
-<wire x1="119.38" y1="78.74" x2="114.3" y2="78.74" width="0.1524" layer="91"/>
-<label x="111.76" y="78.74" size="1.778" layer="95"/>
-</segment>
 </net>
 <net name="DIM_BRAKE" class="2">
 <segment>
@@ -12437,11 +12432,6 @@ Cree XPERED-L1-R250-00401</text>
 <pinref part="IC2" gate="G$1" pin="OC1A/PCINT3-PB3"/>
 <wire x1="157.48" y1="175.26" x2="162.56" y2="175.26" width="0.1524" layer="91"/>
 <label x="162.56" y="175.26" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="R3" gate="G$1" pin="6"/>
-<wire x1="134.62" y1="78.74" x2="142.24" y2="78.74" width="0.1524" layer="91"/>
-<label x="142.24" y="78.74" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="LED_AN" class="5">
@@ -12470,6 +12460,11 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="38.1" y1="200.66" x2="45.72" y2="200.66" width="0.1524" layer="91"/>
 <label x="45.72" y="200.66" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="R7" gate="G$1" pin="5"/>
+<wire x1="205.74" y1="83.82" x2="185.42" y2="83.82" width="0.1524" layer="91"/>
+<label x="185.42" y="83.82" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="ICSP_DI/MISO" class="2">
 <segment>
@@ -12481,6 +12476,11 @@ Cree XPERED-L1-R250-00401</text>
 <pinref part="ICSP" gate="G$1" pin="2"/>
 <wire x1="38.1" y1="203.2" x2="45.72" y2="203.2" width="0.1524" layer="91"/>
 <label x="45.72" y="203.2" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R7" gate="G$1" pin="3"/>
+<wire x1="205.74" y1="81.28" x2="185.42" y2="81.28" width="0.1524" layer="91"/>
+<label x="185.42" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="ICSP_SCK" class="2">
@@ -12494,22 +12494,23 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="38.1" y1="198.12" x2="45.72" y2="198.12" width="0.1524" layer="91"/>
 <label x="45.72" y="198.12" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="R7" gate="G$1" pin="7"/>
+<wire x1="205.74" y1="86.36" x2="185.42" y2="86.36" width="0.1524" layer="91"/>
+<label x="185.42" y="86.36" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="SPI_SS" class="2">
 <segment>
 <pinref part="IC4" gate="G$1" pin="!CS!"/>
 <label x="210.82" y="55.88" size="1.778" layer="95"/>
-<wire x1="228.6" y1="55.88" x2="210.82" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="228.6" y1="55.88" x2="203.2" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="R4" gate="G$1" pin="1"/>
 </segment>
 <segment>
 <wire x1="157.48" y1="172.72" x2="162.56" y2="172.72" width="0.1524" layer="91"/>
 <label x="162.56" y="172.72" size="1.778" layer="95"/>
 <pinref part="IC2" gate="G$1" pin="OC1B/PCINT4-PB4"/>
-</segment>
-<segment>
-<pinref part="R3" gate="G$1" pin="8"/>
-<wire x1="134.62" y1="81.28" x2="142.24" y2="81.28" width="0.1524" layer="91"/>
-<label x="142.24" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="CANH" class="2">
@@ -12671,17 +12672,17 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="157.48" y1="180.34" x2="162.56" y2="180.34" width="0.1524" layer="91"/>
 <label x="162.56" y="180.34" size="1.778" layer="95"/>
 </segment>
-<segment>
-<pinref part="R3" gate="G$1" pin="2"/>
-<wire x1="134.62" y1="73.66" x2="142.24" y2="73.66" width="0.1524" layer="91"/>
-<label x="142.24" y="73.66" size="1.778" layer="95"/>
-</segment>
 </net>
 <net name="SPI_MISO" class="2">
 <segment>
 <pinref part="IC4" gate="G$1" pin="SO"/>
 <wire x1="210.82" y1="63.5" x2="228.6" y2="63.5" width="0.1524" layer="91"/>
 <label x="210.82" y="63.5" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R7" gate="G$1" pin="4"/>
+<wire x1="220.98" y1="81.28" x2="238.76" y2="81.28" width="0.1524" layer="91"/>
+<label x="238.76" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SPI_MOSI" class="2">
@@ -12690,12 +12691,22 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="228.6" y1="60.96" x2="210.82" y2="60.96" width="0.1524" layer="91"/>
 <label x="210.82" y="60.96" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="R7" gate="G$1" pin="6"/>
+<wire x1="220.98" y1="83.82" x2="238.76" y2="83.82" width="0.1524" layer="91"/>
+<label x="238.76" y="83.82" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="SPI_SCK" class="2">
 <segment>
 <pinref part="IC4" gate="G$1" pin="SCK"/>
 <wire x1="228.6" y1="58.42" x2="210.82" y2="58.42" width="0.1524" layer="91"/>
 <label x="210.82" y="58.42" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R7" gate="G$1" pin="8"/>
+<wire x1="220.98" y1="86.36" x2="238.76" y2="86.36" width="0.1524" layer="91"/>
+<label x="238.76" y="86.36" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -12878,26 +12889,12 @@ Cree XPERED-L1-R250-00401</text>
 <label x="368.3" y="38.1" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R3" gate="G$1" pin="1"/>
-<wire x1="119.38" y1="73.66" x2="106.68" y2="73.66" width="0.1524" layer="91"/>
-<wire x1="106.68" y1="73.66" x2="106.68" y2="76.2" width="0.1524" layer="91"/>
-<wire x1="106.68" y1="76.2" x2="106.68" y2="81.28" width="0.1524" layer="91"/>
-<wire x1="106.68" y1="81.28" x2="104.14" y2="81.28" width="0.1524" layer="91"/>
-<pinref part="R3" gate="G$1" pin="7"/>
-<wire x1="119.38" y1="81.28" x2="106.68" y2="81.28" width="0.1524" layer="91"/>
-<junction x="106.68" y="81.28"/>
-<pinref part="R3" gate="G$1" pin="3"/>
-<wire x1="119.38" y1="76.2" x2="106.68" y2="76.2" width="0.1524" layer="91"/>
-<junction x="106.68" y="76.2"/>
-<label x="104.14" y="81.28" size="1.778" layer="95"/>
+<pinref part="R4" gate="G$1" pin="2"/>
+<wire x1="203.2" y1="45.72" x2="195.58" y2="45.72" width="0.1524" layer="91"/>
+<label x="195.58" y="45.72" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="RESET" class="2">
-<segment>
-<pinref part="R3" gate="G$1" pin="4"/>
-<wire x1="134.62" y1="76.2" x2="142.24" y2="76.2" width="0.1524" layer="91"/>
-<label x="142.24" y="76.2" size="1.778" layer="95"/>
-</segment>
 <segment>
 <pinref part="IC4" gate="G$1" pin="!RESET!"/>
 <wire x1="269.24" y1="35.56" x2="287.02" y2="35.56" width="0.1524" layer="91"/>
