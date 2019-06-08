@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="8.3.2">
+<eagle version="9.4.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -76,6 +76,12 @@
 <circle x="0" y="0" radius="0.7" width="0.3" layer="21"/>
 <text x="0" y="3" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
 </package>
+<package name="SMT">
+<smd name="P$1" x="0" y="0" dx="1" dy="1" layer="1" roundness="100"/>
+<text x="0" y="2" size="1.27" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-2" size="1.27" layer="27" font="vector" align="center">&gt;VALUE</text>
+<circle x="0" y="0" radius="0.7" width="0.3" layer="21"/>
+</package>
 </packages>
 <symbols>
 <symbol name="TP">
@@ -90,9 +96,17 @@
 <gate name="G$1" symbol="TP" x="0" y="-7.62"/>
 </gates>
 <devices>
-<device name="" package="TH">
+<device name="TH" package="TH">
 <connects>
 <connect gate="G$1" pin="TP$1" pad="TP$1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="SMT" package="SMT">
+<connects>
+<connect gate="G$1" pin="TP$1" pad="P$1"/>
 </connects>
 <technologies>
 <technology name=""/>
