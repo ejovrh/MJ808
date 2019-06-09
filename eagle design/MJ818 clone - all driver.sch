@@ -12506,9 +12506,9 @@ by R. Vogg  15.March.2002</description>
 <part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD123" package3d_urn="urn:adsk.eagle:package:43420/1" value="PMEG2010ER,115"/>
 <part name="IC5" library="MCP2515-I-ML - Standalonce CAN Controller with SPI Interface" deviceset="MCP2515-I-ML" device="" value="MCP2515"/>
 <part name="IC6" library="MCP2561-2 - High-Speed CAN Transceiver" deviceset="MCP2561-2" device="" value="MCP2561-2"/>
-<part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="0.1μF"/>
+<part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="0.1μF"/>
 <part name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="120"/>
-<part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="0.1μF"/>
+<part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="0.1μF"/>
 <part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
 <part name="IC2" library="ATtiny4313 microcontroller" deviceset="ATTINY4313" device="VQFN-20" value="ATTINY4313-MMH">
 <attribute name="SPICEPREFIX" value="X"/>
@@ -12538,7 +12538,7 @@ by R. Vogg  15.March.2002</description>
 <part name="R3" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083331JP 330R"/>
 <part name="IC7" library="SIA456DJ-T1-GE3  N-Fet" deviceset="SIA456DJ" device="" value="SiA456DJ"/>
 <part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R1206" package3d_urn="urn:adsk.eagle:package:23540/2" value="30R/0.5W"/>
-<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="47μF"/>
+<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="47μF"/>
 <part name="IC8" library="MAX16820 LED Driver, constant current" deviceset="MAX16820" device="" value="MAX16820"/>
 <part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
 <part name="5V0_N" library="signal testpoint" deviceset="TP" device="TH"/>
@@ -13306,7 +13306,7 @@ Cree XPERED-L1-R250-00401</text>
 <label x="193.04" y="129.54" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="1.4" class="0">
+<net name="1.4" class="5">
 <segment>
 <pinref part="LED1" gate="G$1" pin="C"/>
 <pinref part="LED4" gate="G$1" pin="A"/>
@@ -13314,7 +13314,7 @@ Cree XPERED-L1-R250-00401</text>
 <label x="27.94" y="109.22" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="4.7" class="0">
+<net name="4.7" class="5">
 <segment>
 <pinref part="LED4" gate="G$1" pin="C"/>
 <pinref part="LED7" gate="G$1" pin="A"/>
@@ -13322,7 +13322,7 @@ Cree XPERED-L1-R250-00401</text>
 <label x="45.72" y="109.22" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="2.5" class="0">
+<net name="2.5" class="5">
 <segment>
 <pinref part="LED2" gate="G$1" pin="C"/>
 <pinref part="LED5" gate="G$1" pin="A"/>
@@ -13330,7 +13330,7 @@ Cree XPERED-L1-R250-00401</text>
 <label x="27.94" y="91.44" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="5.8" class="0">
+<net name="5.8" class="5">
 <segment>
 <pinref part="LED5" gate="G$1" pin="C"/>
 <pinref part="LED8" gate="G$1" pin="A"/>
@@ -13346,7 +13346,7 @@ Cree XPERED-L1-R250-00401</text>
 <label x="27.94" y="76.2" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="6.9" class="0">
+<net name="6.9" class="5">
 <segment>
 <pinref part="LED6" gate="G$1" pin="C"/>
 <pinref part="LED9" gate="G$1" pin="A"/>
@@ -13354,7 +13354,7 @@ Cree XPERED-L1-R250-00401</text>
 <label x="45.72" y="76.2" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SINK" class="2">
+<net name="SINK" class="5">
 <segment>
 <pinref part="LED9" gate="G$1" pin="C"/>
 <pinref part="LED8" gate="G$1" pin="C"/>
