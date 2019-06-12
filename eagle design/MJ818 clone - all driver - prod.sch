@@ -10736,20 +10736,20 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <library name="ATtiny4313 microcontroller">
 <packages>
 <package name="VQFN-20">
-<smd name="GND" x="0" y="0" dx="1.5" dy="1.5" layer="1"/>
-<smd name="14" x="1.4" y="0.45" dx="0.25" dy="0.8" layer="1" rot="R90"/>
-<smd name="13" x="1.4" y="0" dx="0.25" dy="0.8" layer="1" rot="R90"/>
-<smd name="12" x="1.4" y="-0.45" dx="0.25" dy="0.8" layer="1" rot="R90"/>
-<smd name="2" x="-1.4" y="0.45" dx="0.25" dy="0.8" layer="1" rot="R270"/>
-<smd name="3" x="-1.4" y="0" dx="0.25" dy="0.8" layer="1" rot="R270"/>
-<smd name="4" x="-1.4" y="-0.45" dx="0.25" dy="0.8" layer="1" rot="R270"/>
-<smd name="7" x="-0.45" y="-1.35" dx="0.25" dy="0.8" layer="1"/>
-<smd name="8" x="0" y="-1.35" dx="0.25" dy="0.8" layer="1"/>
-<smd name="9" x="0.45" y="-1.35" dx="0.25" dy="0.8" layer="1"/>
-<smd name="19" x="-0.45" y="1.4" dx="0.25" dy="0.8" layer="1" rot="R180"/>
-<smd name="18" x="0" y="1.4" dx="0.25" dy="0.8" layer="1" rot="R180"/>
-<smd name="17" x="0.45" y="1.4" dx="0.25" dy="0.8" layer="1" rot="R180"/>
-<smd name="20" x="-0.9" y="1.52" dx="0.25" dy="0.55" layer="1" rot="R180"/>
+<smd name="GND" x="0" y="0" dx="1.1" dy="1.1" layer="1"/>
+<smd name="PB4" x="1.4" y="0.45" dx="0.25" dy="0.8" layer="1" rot="R90"/>
+<smd name="PB3" x="1.4" y="0" dx="0.25" dy="0.8" layer="1" rot="R90"/>
+<smd name="PB2" x="1.4" y="-0.45" dx="0.25" dy="0.8" layer="1" rot="R90"/>
+<smd name="PA1" x="-1.4" y="0.45" dx="0.25" dy="0.8" layer="1" rot="R270"/>
+<smd name="PA0" x="-1.4" y="0" dx="0.25" dy="0.8" layer="1" rot="R270"/>
+<smd name="PD2" x="-1.4" y="-0.45" dx="0.25" dy="0.8" layer="1" rot="R270"/>
+<smd name="PD5" x="-0.45" y="-1.35" dx="0.25" dy="0.8" layer="1"/>
+<smd name="GND1" x="0" y="-1.35" dx="0.25" dy="0.8" layer="1"/>
+<smd name="PD6" x="0.45" y="-1.35" dx="0.25" dy="0.8" layer="1"/>
+<smd name="PA2" x="-0.45" y="1.4" dx="0.25" dy="0.8" layer="1" rot="R180"/>
+<smd name="VCC" x="0" y="1.4" dx="0.25" dy="0.8" layer="1" rot="R180"/>
+<smd name="PB7" x="0.45" y="1.4" dx="0.25" dy="0.8" layer="1" rot="R180"/>
+<smd name="PD0" x="-0.9" y="1.52" dx="0.25" dy="0.55" layer="1" rot="R180"/>
 <wire x1="-1.2" y1="1.5" x2="-1.5" y2="1.5" width="0.127" layer="21"/>
 <wire x1="-1.5" y1="1.5" x2="-1.5" y2="1.2" width="0.127" layer="21"/>
 <wire x1="1.2" y1="1.5" x2="1.5" y2="1.5" width="0.127" layer="21"/>
@@ -10759,15 +10759,15 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <wire x1="-1.2" y1="-1.5" x2="-1.5" y2="-1.5" width="0.127" layer="21"/>
 <wire x1="-1.5" y1="-1.5" x2="-1.5" y2="-1.2" width="0.127" layer="21"/>
 <circle x="-2" y="2" radius="0.1" width="0.3" layer="21"/>
-<text x="0" y="3" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="3.1" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="-2.5" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
-<smd name="1" x="-1.52" y="0.9" dx="0.25" dy="0.55" layer="1" rot="R270"/>
-<smd name="15" x="1.52" y="0.9" dx="0.25" dy="0.55" layer="1" rot="R90"/>
-<smd name="16" x="0.9" y="1.52" dx="0.25" dy="0.55" layer="1" rot="R180"/>
-<smd name="11" x="1.52" y="-0.9" dx="0.25" dy="0.55" layer="1" rot="R90"/>
-<smd name="5" x="-1.52" y="-0.9" dx="0.25" dy="0.55" layer="1" rot="R270"/>
-<smd name="6" x="-0.9" y="-1.48" dx="0.25" dy="0.55" layer="1"/>
-<smd name="10" x="0.9" y="-1.48" dx="0.25" dy="0.55" layer="1"/>
+<smd name="PD1" x="-1.52" y="0.9" dx="0.25" dy="0.55" layer="1" rot="R270"/>
+<smd name="PB5" x="1.52" y="0.9" dx="0.25" dy="0.55" layer="1" rot="R90"/>
+<smd name="PB6" x="0.9" y="1.52" dx="0.25" dy="0.55" layer="1" rot="R180"/>
+<smd name="PB1" x="1.52" y="-0.9" dx="0.25" dy="0.55" layer="1" rot="R90"/>
+<smd name="PD3" x="-1.52" y="-0.9" dx="0.25" dy="0.55" layer="1" rot="R270"/>
+<smd name="PD4" x="-0.9" y="-1.48" dx="0.25" dy="0.55" layer="1"/>
+<smd name="PB0" x="0.9" y="-1.48" dx="0.25" dy="0.55" layer="1"/>
 </package>
 <package name="MLF-20">
 <smd name="GND1" x="0" y="0" dx="2.25" dy="2.25" layer="1"/>
@@ -10867,26 +10867,26 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 </device>
 <device name="VQFN-20" package="VQFN-20">
 <connects>
-<connect gate="G$1" pin="!RESET!/DW/PCINT10-PA2" pad="19"/>
-<connect gate="G$1" pin="AIN0/PCINT0-PB0" pad="10"/>
-<connect gate="G$1" pin="AIN1/PCINT1-PB1" pad="11"/>
-<connect gate="G$1" pin="GND" pad="8 GND"/>
-<connect gate="G$1" pin="MISO/DO/PCINT6-PB6" pad="16"/>
-<connect gate="G$1" pin="MOSI/DI/SDA/PCINT5-PB5" pad="15"/>
-<connect gate="G$1" pin="OC0A/PCINT2-PB2" pad="12"/>
-<connect gate="G$1" pin="OC1A/PCINT3-PB3" pad="13"/>
-<connect gate="G$1" pin="OC1B/PCINT4-PB4" pad="14"/>
-<connect gate="G$1" pin="PCINT12/TXD-PD1" pad="1"/>
-<connect gate="G$1" pin="PCINT13/CKOUT/XCK/INT0-PD2" pad="4"/>
-<connect gate="G$1" pin="PCINT14/INT1-PD3" pad="5"/>
-<connect gate="G$1" pin="PCINT15/T0-PD4" pad="6"/>
-<connect gate="G$1" pin="PCINT16/OC0B/T1-PD5" pad="7"/>
-<connect gate="G$1" pin="PCINT17/ICPI-PD6" pad="9"/>
-<connect gate="G$1" pin="PCINT8/CLKI/XTAL1-PA0" pad="3"/>
-<connect gate="G$1" pin="PCINT9/XTAL2-PA1" pad="2"/>
-<connect gate="G$1" pin="RXD/PCINT11-PD0" pad="20"/>
-<connect gate="G$1" pin="USCK/SCL/SCK/PCINT7-PB7" pad="17"/>
-<connect gate="G$1" pin="VCC" pad="18"/>
+<connect gate="G$1" pin="!RESET!/DW/PCINT10-PA2" pad="PA2"/>
+<connect gate="G$1" pin="AIN0/PCINT0-PB0" pad="PB0"/>
+<connect gate="G$1" pin="AIN1/PCINT1-PB1" pad="PB1"/>
+<connect gate="G$1" pin="GND" pad="GND GND1"/>
+<connect gate="G$1" pin="MISO/DO/PCINT6-PB6" pad="PB6"/>
+<connect gate="G$1" pin="MOSI/DI/SDA/PCINT5-PB5" pad="PB5"/>
+<connect gate="G$1" pin="OC0A/PCINT2-PB2" pad="PB2"/>
+<connect gate="G$1" pin="OC1A/PCINT3-PB3" pad="PB3"/>
+<connect gate="G$1" pin="OC1B/PCINT4-PB4" pad="PB4"/>
+<connect gate="G$1" pin="PCINT12/TXD-PD1" pad="PD1"/>
+<connect gate="G$1" pin="PCINT13/CKOUT/XCK/INT0-PD2" pad="PD2"/>
+<connect gate="G$1" pin="PCINT14/INT1-PD3" pad="PD3"/>
+<connect gate="G$1" pin="PCINT15/T0-PD4" pad="PD4"/>
+<connect gate="G$1" pin="PCINT16/OC0B/T1-PD5" pad="PD5"/>
+<connect gate="G$1" pin="PCINT17/ICPI-PD6" pad="PD6"/>
+<connect gate="G$1" pin="PCINT8/CLKI/XTAL1-PA0" pad="PA0"/>
+<connect gate="G$1" pin="PCINT9/XTAL2-PA1" pad="PA1"/>
+<connect gate="G$1" pin="RXD/PCINT11-PD0" pad="PD0"/>
+<connect gate="G$1" pin="USCK/SCL/SCK/PCINT7-PB7" pad="PB7"/>
+<connect gate="G$1" pin="VCC" pad="VCC"/>
 </connects>
 <technologies>
 <technology name=""/>
