@@ -12158,9 +12158,9 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <junction x="368.3" y="198.12"/>
 </segment>
 <segment>
-<pinref part="IC1" gate="G$1" pin="OC1A/PCINT3-PB3"/>
-<wire x1="170.18" y1="162.56" x2="175.26" y2="162.56" width="0.1524" layer="91"/>
-<label x="175.26" y="162.56" size="1.778" layer="95"/>
+<pinref part="IC1" gate="G$1" pin="OC0A/PCINT2-PB2"/>
+<wire x1="170.18" y1="165.1" x2="175.26" y2="165.1" width="0.1524" layer="91"/>
+<label x="175.26" y="165.1" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V0" class="1">
@@ -12536,13 +12536,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="175.26" y="175.26" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$3" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="OC0A/PCINT2-PB2"/>
-<wire x1="170.18" y1="165.1" x2="175.26" y2="165.1" width="0.1524" layer="91"/>
-<label x="175.26" y="165.1" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="N$4" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="AIN0/PCINT0-PB0"/>
@@ -12630,6 +12623,13 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <label x="231.14" y="83.82" size="1.778" layer="95"/>
 </segment>
 </net>
+<net name="N$3" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="OC1A/PCINT3-PB3"/>
+<wire x1="170.18" y1="162.56" x2="175.26" y2="162.56" width="0.1524" layer="91"/>
+<label x="175.26" y="162.56" size="1.778" layer="95"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
@@ -12640,7 +12640,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <approved hash="204,1,337.82,198.12,IC6,VCC,,,,"/>
 <approved hash="106,1,170.18,172.72,N$1,,,,,"/>
 <approved hash="106,1,170.18,175.26,N$2,,,,,"/>
-<approved hash="106,1,170.18,165.1,N$3,,,,,"/>
+<approved hash="106,1,170.18,162.56,N$3,,,,,"/>
 <approved hash="106,1,170.18,170.18,N$4,,,,,"/>
 </errors>
 </schematic>
