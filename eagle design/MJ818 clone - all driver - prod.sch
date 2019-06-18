@@ -12555,9 +12555,9 @@ by R. Vogg  15.March.2002</description>
 <part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
 <part name="5V0_N" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
 <part name="BAT+_NW" library="signal testpoint" deviceset="TP" device="TH-1.2MM"/>
-<part name="LED_CAT" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
+<part name="LED_CAT" library="signal testpoint" deviceset="TP" device="TH-0.9MM"/>
 <part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
-<part name="LED_AN" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
+<part name="LED_AN" library="signal testpoint" deviceset="TP" device="TH-0.9MM"/>
 <part name="BAT+_W" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
 <part name="DIM_REAR_SW" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
 <part name="STBY_SW" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
