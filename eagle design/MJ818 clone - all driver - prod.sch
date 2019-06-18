@@ -8,34 +8,34 @@
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
-<layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
-<layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
-<layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
-<layer number="5" name="Route5" color="4" fill="4" visible="no" active="no"/>
-<layer number="6" name="Route6" color="1" fill="8" visible="no" active="no"/>
-<layer number="7" name="Route7" color="4" fill="8" visible="no" active="no"/>
-<layer number="8" name="Route8" color="1" fill="2" visible="no" active="no"/>
-<layer number="9" name="Route9" color="4" fill="2" visible="no" active="no"/>
-<layer number="10" name="Route10" color="1" fill="7" visible="no" active="no"/>
-<layer number="11" name="Route11" color="4" fill="7" visible="no" active="no"/>
-<layer number="12" name="Route12" color="1" fill="5" visible="no" active="no"/>
-<layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
-<layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
-<layer number="15" name="Route15" color="4" fill="6" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
-<layer number="17" name="Pads" color="2" fill="1" visible="no" active="no"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="no" active="no"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="no"/>
-<layer number="20" name="Dimension" color="24" fill="1" visible="no" active="no"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="no"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="no"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="no"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="no"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="no"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="no" active="no"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="no" active="no"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="no" active="no"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="no"/>
+<layer number="2" name="Route2" color="1" fill="3" visible="yes" active="no"/>
+<layer number="3" name="Route3" color="4" fill="3" visible="yes" active="no"/>
+<layer number="4" name="Route4" color="1" fill="4" visible="yes" active="no"/>
+<layer number="5" name="Route5" color="4" fill="4" visible="yes" active="no"/>
+<layer number="6" name="Route6" color="1" fill="8" visible="yes" active="no"/>
+<layer number="7" name="Route7" color="4" fill="8" visible="yes" active="no"/>
+<layer number="8" name="Route8" color="1" fill="2" visible="yes" active="no"/>
+<layer number="9" name="Route9" color="4" fill="2" visible="yes" active="no"/>
+<layer number="10" name="Route10" color="1" fill="7" visible="yes" active="no"/>
+<layer number="11" name="Route11" color="4" fill="7" visible="yes" active="no"/>
+<layer number="12" name="Route12" color="1" fill="5" visible="yes" active="no"/>
+<layer number="13" name="Route13" color="4" fill="5" visible="yes" active="no"/>
+<layer number="14" name="Route14" color="1" fill="6" visible="yes" active="no"/>
+<layer number="15" name="Route15" color="4" fill="6" visible="yes" active="no"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="no"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="no"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="no"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="no"/>
+<layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="no"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="no"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="no"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="no"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="no"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="no"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="no"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="no"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="no"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="no"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="no"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="no"/>
@@ -44,8 +44,8 @@
 <layer number="34" name="bFinish" color="6" fill="6" visible="no" active="no"/>
 <layer number="35" name="tGlue" color="7" fill="4" visible="no" active="no"/>
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="no"/>
-<layer number="37" name="tTest" color="7" fill="1" visible="no" active="no"/>
-<layer number="38" name="bTest" color="7" fill="1" visible="no" active="no"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="no"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="no"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="no"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="no"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="no"/>
@@ -53,19 +53,19 @@
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="no"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="no"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="no"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="no" active="no"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="no" active="no"/>
-<layer number="48" name="Document" color="7" fill="1" visible="no" active="no"/>
-<layer number="49" name="Reference" color="7" fill="1" visible="no" active="no"/>
-<layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="no"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="no"/>
-<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
-<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
-<layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
-<layer number="57" name="tCAD" color="7" fill="1" visible="no" active="no"/>
-<layer number="59" name="tCarbon" color="7" fill="1" visible="no" active="no"/>
-<layer number="60" name="bCarbon" color="7" fill="1" visible="no" active="no"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="no"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="no"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="no"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="no"/>
+<layer number="50" name="dxf" color="7" fill="1" visible="yes" active="no"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="no"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="no"/>
+<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="yes" active="no"/>
+<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="yes" active="no"/>
+<layer number="56" name="wert" color="7" fill="1" visible="yes" active="no"/>
+<layer number="57" name="tCAD" color="7" fill="1" visible="yes" active="no"/>
+<layer number="59" name="tCarbon" color="7" fill="1" visible="yes" active="no"/>
+<layer number="60" name="bCarbon" color="7" fill="1" visible="yes" active="no"/>
 <layer number="88" name="SimResults" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="89" name="SimProbes" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
@@ -10736,20 +10736,20 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <library name="ATtiny4313 microcontroller">
 <packages>
 <package name="VQFN-20">
-<smd name="GND" x="0" y="0" dx="1.1" dy="1.1" layer="1"/>
-<smd name="PB4" x="1.4" y="0.45" dx="0.25" dy="0.8" layer="1" rot="R90"/>
-<smd name="PB3" x="1.4" y="0" dx="0.25" dy="0.8" layer="1" rot="R90"/>
-<smd name="PB2" x="1.4" y="-0.45" dx="0.25" dy="0.8" layer="1" rot="R90"/>
-<smd name="PA1" x="-1.4" y="0.45" dx="0.25" dy="0.8" layer="1" rot="R270"/>
-<smd name="PA0" x="-1.4" y="0" dx="0.25" dy="0.8" layer="1" rot="R270"/>
-<smd name="PD2" x="-1.4" y="-0.45" dx="0.25" dy="0.8" layer="1" rot="R270"/>
-<smd name="PD5" x="-0.45" y="-1.35" dx="0.25" dy="0.8" layer="1"/>
-<smd name="GND1" x="0" y="-1.35" dx="0.25" dy="0.8" layer="1"/>
-<smd name="PD6" x="0.45" y="-1.35" dx="0.25" dy="0.8" layer="1"/>
-<smd name="PA2" x="-0.45" y="1.4" dx="0.25" dy="0.8" layer="1" rot="R180"/>
-<smd name="VCC" x="0" y="1.4" dx="0.25" dy="0.8" layer="1" rot="R180"/>
-<smd name="PB7" x="0.45" y="1.4" dx="0.25" dy="0.8" layer="1" rot="R180"/>
-<smd name="PD0" x="-0.9" y="1.52" dx="0.25" dy="0.55" layer="1" rot="R180"/>
+<smd name="GND" x="0" y="0" dx="1.5" dy="1.5" layer="1"/>
+<smd name="14" x="1.4" y="0.45" dx="0.25" dy="0.8" layer="1" rot="R90"/>
+<smd name="13" x="1.4" y="0" dx="0.25" dy="0.8" layer="1" rot="R90"/>
+<smd name="12" x="1.4" y="-0.45" dx="0.25" dy="0.8" layer="1" rot="R90"/>
+<smd name="2" x="-1.4" y="0.45" dx="0.25" dy="0.8" layer="1" rot="R270"/>
+<smd name="3" x="-1.4" y="0" dx="0.25" dy="0.8" layer="1" rot="R270"/>
+<smd name="4" x="-1.4" y="-0.45" dx="0.25" dy="0.8" layer="1" rot="R270"/>
+<smd name="7" x="-0.45" y="-1.35" dx="0.25" dy="0.8" layer="1"/>
+<smd name="8" x="0" y="-1.35" dx="0.25" dy="0.8" layer="1"/>
+<smd name="9" x="0.45" y="-1.35" dx="0.25" dy="0.8" layer="1"/>
+<smd name="19" x="-0.45" y="1.4" dx="0.25" dy="0.8" layer="1" rot="R180"/>
+<smd name="18" x="0" y="1.4" dx="0.25" dy="0.8" layer="1" rot="R180"/>
+<smd name="17" x="0.45" y="1.4" dx="0.25" dy="0.8" layer="1" rot="R180"/>
+<smd name="20" x="-0.9" y="1.52" dx="0.25" dy="0.55" layer="1" rot="R180"/>
 <wire x1="-1.2" y1="1.5" x2="-1.5" y2="1.5" width="0.127" layer="21"/>
 <wire x1="-1.5" y1="1.5" x2="-1.5" y2="1.2" width="0.127" layer="21"/>
 <wire x1="1.2" y1="1.5" x2="1.5" y2="1.5" width="0.127" layer="21"/>
@@ -10759,15 +10759,15 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <wire x1="-1.2" y1="-1.5" x2="-1.5" y2="-1.5" width="0.127" layer="21"/>
 <wire x1="-1.5" y1="-1.5" x2="-1.5" y2="-1.2" width="0.127" layer="21"/>
 <circle x="-2" y="2" radius="0.1" width="0.3" layer="21"/>
-<text x="0" y="3.1" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="3" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="-2.5" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
-<smd name="PD1" x="-1.52" y="0.9" dx="0.25" dy="0.55" layer="1" rot="R270"/>
-<smd name="PB5" x="1.52" y="0.9" dx="0.25" dy="0.55" layer="1" rot="R90"/>
-<smd name="PB6" x="0.9" y="1.52" dx="0.25" dy="0.55" layer="1" rot="R180"/>
-<smd name="PB1" x="1.52" y="-0.9" dx="0.25" dy="0.55" layer="1" rot="R90"/>
-<smd name="PD3" x="-1.52" y="-0.9" dx="0.25" dy="0.55" layer="1" rot="R270"/>
-<smd name="PD4" x="-0.9" y="-1.48" dx="0.25" dy="0.55" layer="1"/>
-<smd name="PB0" x="0.9" y="-1.48" dx="0.25" dy="0.55" layer="1"/>
+<smd name="1" x="-1.52" y="0.9" dx="0.25" dy="0.55" layer="1" rot="R270"/>
+<smd name="15" x="1.52" y="0.9" dx="0.25" dy="0.55" layer="1" rot="R90"/>
+<smd name="16" x="0.9" y="1.52" dx="0.25" dy="0.55" layer="1" rot="R180"/>
+<smd name="11" x="1.52" y="-0.9" dx="0.25" dy="0.55" layer="1" rot="R90"/>
+<smd name="5" x="-1.52" y="-0.9" dx="0.25" dy="0.55" layer="1" rot="R270"/>
+<smd name="6" x="-0.9" y="-1.48" dx="0.25" dy="0.55" layer="1"/>
+<smd name="10" x="0.9" y="-1.48" dx="0.25" dy="0.55" layer="1"/>
 </package>
 <package name="MLF-20">
 <smd name="GND1" x="0" y="0" dx="2.25" dy="2.25" layer="1"/>
@@ -10867,26 +10867,26 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 </device>
 <device name="VQFN-20" package="VQFN-20">
 <connects>
-<connect gate="G$1" pin="!RESET!/DW/PCINT10-PA2" pad="PA2"/>
-<connect gate="G$1" pin="AIN0/PCINT0-PB0" pad="PB0"/>
-<connect gate="G$1" pin="AIN1/PCINT1-PB1" pad="PB1"/>
-<connect gate="G$1" pin="GND" pad="GND GND1"/>
-<connect gate="G$1" pin="MISO/DO/PCINT6-PB6" pad="PB6"/>
-<connect gate="G$1" pin="MOSI/DI/SDA/PCINT5-PB5" pad="PB5"/>
-<connect gate="G$1" pin="OC0A/PCINT2-PB2" pad="PB2"/>
-<connect gate="G$1" pin="OC1A/PCINT3-PB3" pad="PB3"/>
-<connect gate="G$1" pin="OC1B/PCINT4-PB4" pad="PB4"/>
-<connect gate="G$1" pin="PCINT12/TXD-PD1" pad="PD1"/>
-<connect gate="G$1" pin="PCINT13/CKOUT/XCK/INT0-PD2" pad="PD2"/>
-<connect gate="G$1" pin="PCINT14/INT1-PD3" pad="PD3"/>
-<connect gate="G$1" pin="PCINT15/T0-PD4" pad="PD4"/>
-<connect gate="G$1" pin="PCINT16/OC0B/T1-PD5" pad="PD5"/>
-<connect gate="G$1" pin="PCINT17/ICPI-PD6" pad="PD6"/>
-<connect gate="G$1" pin="PCINT8/CLKI/XTAL1-PA0" pad="PA0"/>
-<connect gate="G$1" pin="PCINT9/XTAL2-PA1" pad="PA1"/>
-<connect gate="G$1" pin="RXD/PCINT11-PD0" pad="PD0"/>
-<connect gate="G$1" pin="USCK/SCL/SCK/PCINT7-PB7" pad="PB7"/>
-<connect gate="G$1" pin="VCC" pad="VCC"/>
+<connect gate="G$1" pin="!RESET!/DW/PCINT10-PA2" pad="19"/>
+<connect gate="G$1" pin="AIN0/PCINT0-PB0" pad="10"/>
+<connect gate="G$1" pin="AIN1/PCINT1-PB1" pad="11"/>
+<connect gate="G$1" pin="GND" pad="8 GND"/>
+<connect gate="G$1" pin="MISO/DO/PCINT6-PB6" pad="16"/>
+<connect gate="G$1" pin="MOSI/DI/SDA/PCINT5-PB5" pad="15"/>
+<connect gate="G$1" pin="OC0A/PCINT2-PB2" pad="12"/>
+<connect gate="G$1" pin="OC1A/PCINT3-PB3" pad="13"/>
+<connect gate="G$1" pin="OC1B/PCINT4-PB4" pad="14"/>
+<connect gate="G$1" pin="PCINT12/TXD-PD1" pad="1"/>
+<connect gate="G$1" pin="PCINT13/CKOUT/XCK/INT0-PD2" pad="4"/>
+<connect gate="G$1" pin="PCINT14/INT1-PD3" pad="5"/>
+<connect gate="G$1" pin="PCINT15/T0-PD4" pad="6"/>
+<connect gate="G$1" pin="PCINT16/OC0B/T1-PD5" pad="7"/>
+<connect gate="G$1" pin="PCINT17/ICPI-PD6" pad="9"/>
+<connect gate="G$1" pin="PCINT8/CLKI/XTAL1-PA0" pad="3"/>
+<connect gate="G$1" pin="PCINT9/XTAL2-PA1" pad="2"/>
+<connect gate="G$1" pin="RXD/PCINT11-PD0" pad="20"/>
+<connect gate="G$1" pin="USCK/SCL/SCK/PCINT7-PB7" pad="17"/>
+<connect gate="G$1" pin="VCC" pad="18"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -12281,18 +12281,13 @@ GDSB: gate, drain, source, bulk&lt;p&gt;
 by R. Vogg  15.March.2002</description>
 <packages>
 <package name="SC-70-6">
-<text x="0" y="2.25" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="-2" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
-<smd name="D" x="0" y="0.4" dx="1.5" dy="0.95" layer="1"/>
-<smd name="6D" x="0.975" y="0.725" dx="0.3" dy="0.45" layer="1" rot="R270"/>
-<smd name="5D" x="0.975" y="0.075" dx="0.3" dy="0.45" layer="1" rot="R270"/>
-<smd name="1D" x="-0.975" y="0.725" dx="0.3" dy="0.45" layer="1" rot="R270"/>
-<smd name="2D" x="-0.975" y="0.075" dx="0.3" dy="0.45" layer="1" rot="R270"/>
-<smd name="4S" x="0.975" y="-0.88" dx="0.3" dy="0.45" layer="1" rot="R270"/>
-<smd name="3G" x="-0.975" y="-0.88" dx="0.3" dy="0.45" layer="1" rot="R270"/>
-<smd name="S" x="0" y="-0.915" dx="0.87" dy="0.23" layer="1"/>
-<wire x1="1" y1="1.25" x2="-1" y2="1.25" width="0.127" layer="21"/>
-<wire x1="1" y1="-1.25" x2="-1" y2="-1.25" width="0.127" layer="21"/>
+<wire x1="1" y1="1" x2="1" y2="-1" width="0.127" layer="21"/>
+<wire x1="-1" y1="-1" x2="-1" y2="1" width="0.127" layer="21"/>
+<text x="0" y="3" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-3" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
+<smd name="D" x="-0.3256" y="-0.00405" dx="2.5" dy="0.95" layer="1" rot="R90"/>
+<smd name="S" x="0.6" y="0.4628" dx="1.77" dy="0.3" layer="1" rot="R270"/>
+<smd name="G" x="0.5966" y="-1.1261" dx="0.65" dy="0.3" layer="1" rot="R90"/>
 </package>
 </packages>
 <symbols>
@@ -12342,9 +12337,9 @@ by R. Vogg  15.March.2002</description>
 <devices>
 <device name="" package="SC-70-6">
 <connects>
-<connect gate="G$1" pin="D" pad="1D 2D 5D 6D D"/>
-<connect gate="G$1" pin="G" pad="3G"/>
-<connect gate="G$1" pin="S" pad="4S S"/>
+<connect gate="G$1" pin="D" pad="D"/>
+<connect gate="G$1" pin="G" pad="G"/>
+<connect gate="G$1" pin="S" pad="S"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -12437,15 +12432,19 @@ by R. Vogg  15.March.2002</description>
 </library>
 <library name="signal testpoint">
 <packages>
-<package name="SMT">
-<smd name="P$1" x="0" y="0" dx="1" dy="1" layer="1" roundness="100"/>
-<text x="0" y="2" size="1.27" layer="25" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="-2" size="1.27" layer="27" font="vector" align="center">&gt;VALUE</text>
-<circle x="0" y="0" radius="0.7" width="0.3" layer="21"/>
-</package>
-<package name="TH">
+<package name="TH-0.6MM">
 <pad name="TP$1" x="0" y="0" drill="0.6" diameter="1.016"/>
 <circle x="0" y="0" radius="0.7" width="0.3" layer="21"/>
+<text x="0" y="3" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
+</package>
+<package name="TH-1.2MM">
+<pad name="TP$1" x="0" y="0" drill="1.2" diameter="1.8"/>
+<circle x="0" y="0" radius="1.1" width="0.3" layer="21"/>
+<text x="0" y="3" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
+</package>
+<package name="TH-0.9MM">
+<pad name="TP$1" x="0" y="0" drill="0.9" diameter="1.5"/>
+<circle x="0" y="0" radius="0.95" width="0.3" layer="21"/>
 <text x="0" y="3" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
 </package>
 </packages>
@@ -12462,7 +12461,7 @@ by R. Vogg  15.March.2002</description>
 <gate name="G$1" symbol="TP" x="0" y="-7.62"/>
 </gates>
 <devices>
-<device name="TH" package="TH">
+<device name="TH-0.6MM" package="TH-0.6MM">
 <connects>
 <connect gate="G$1" pin="TP$1" pad="TP$1"/>
 </connects>
@@ -12470,9 +12469,17 @@ by R. Vogg  15.March.2002</description>
 <technology name=""/>
 </technologies>
 </device>
-<device name="SMT" package="SMT">
+<device name="TH-1.2MM" package="TH-1.2MM">
 <connects>
-<connect gate="G$1" pin="TP$1" pad="P$1"/>
+<connect gate="G$1" pin="TP$1" pad="TP$1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="TH-0.9MM" package="TH-0.9MM">
+<connects>
+<connect gate="G$1" pin="TP$1" pad="TP$1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -12546,19 +12553,18 @@ by R. Vogg  15.March.2002</description>
 <part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="47μF"/>
 <part name="IC8" library="MAX16820 LED Driver, constant current" deviceset="MAX16820" device="" value="MAX16820"/>
 <part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
-<part name="5V0_N" library="signal testpoint" deviceset="TP" device="TH"/>
-<part name="BAT+_NW" library="signal testpoint" deviceset="TP" device="TH"/>
-<part name="GND_SE" library="signal testpoint" deviceset="TP" device="TH"/>
-<part name="LED_CAT" library="signal testpoint" deviceset="TP" device="TH"/>
+<part name="5V0_N" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
+<part name="BAT+_NW" library="signal testpoint" deviceset="TP" device="TH-1.2MM"/>
+<part name="LED_CAT" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
 <part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
-<part name="LED_AN" library="signal testpoint" deviceset="TP" device="TH"/>
-<part name="BAT+_W" library="signal testpoint" deviceset="TP" device="TH"/>
-<part name="DIM_REAR_SW" library="signal testpoint" deviceset="TP" device="TH"/>
-<part name="STBY_SW" library="signal testpoint" deviceset="TP" device="TH"/>
-<part name="STBY_E" library="signal testpoint" deviceset="TP" device="TH"/>
-<part name="DIM_REAR_N" library="signal testpoint" deviceset="TP" device="TH"/>
-<part name="5V0_S" library="signal testpoint" deviceset="TP" device="TH"/>
-<part name="BAT+_S" library="signal testpoint" deviceset="TP" device="SMT"/>
+<part name="LED_AN" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
+<part name="BAT+_W" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
+<part name="DIM_REAR_SW" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
+<part name="STBY_SW" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
+<part name="STBY_E" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
+<part name="DIM_REAR_N" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
+<part name="5V0_S" library="signal testpoint" deviceset="TP" device="TH-0.6MM"/>
+<part name="GND_SE1" library="signal testpoint" deviceset="TP" device="TH-1.2MM"/>
 </parts>
 <sheets>
 <sheet>
@@ -12752,9 +12758,6 @@ Cree XPERED-L1-R250-00401</text>
 <instance part="BAT+_NW" gate="G$1" x="43.18" y="129.54" smashed="yes">
 <attribute name="NAME" x="43.18" y="132.08" size="1.27" layer="95" align="center"/>
 </instance>
-<instance part="GND_SE" gate="G$1" x="63.5" y="129.54" smashed="yes">
-<attribute name="NAME" x="63.5" y="132.08" size="1.27" layer="95" align="center"/>
-</instance>
 <instance part="LED_CAT" gate="G$1" x="43.18" y="147.32" smashed="yes">
 <attribute name="NAME" x="43.18" y="149.86" size="1.27" layer="95" align="center"/>
 </instance>
@@ -12783,8 +12786,8 @@ Cree XPERED-L1-R250-00401</text>
 <instance part="5V0_S" gate="G$1" x="279.4" y="162.56" smashed="yes">
 <attribute name="NAME" x="279.4" y="165.1" size="1.27" layer="95" align="center"/>
 </instance>
-<instance part="BAT+_S" gate="G$1" x="30.48" y="129.54" smashed="yes">
-<attribute name="NAME" x="30.48" y="132.08" size="1.27" layer="95" align="center"/>
+<instance part="GND_SE1" gate="G$1" x="88.9" y="127" smashed="yes">
+<attribute name="NAME" x="88.9" y="129.54" size="1.27" layer="95" align="center"/>
 </instance>
 </instances>
 <busses>
@@ -12849,11 +12852,6 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="17.78" y1="129.54" x2="20.32" y2="129.54" width="0.1524" layer="91"/>
 <label x="20.32" y="129.54" size="1.778" layer="95"/>
 </segment>
-<segment>
-<pinref part="BAT+_S" gate="G$1" pin="TP$1"/>
-<wire x1="30.48" y1="129.54" x2="33.02" y2="129.54" width="0.1524" layer="91"/>
-<label x="33.02" y="129.54" size="1.778" layer="95"/>
-</segment>
 </net>
 <net name="GND" class="0">
 <segment>
@@ -12880,11 +12878,6 @@ Cree XPERED-L1-R250-00401</text>
 <pinref part="C3" gate="G$1" pin="2"/>
 <wire x1="210.82" y1="30.48" x2="210.82" y2="27.94" width="0.1524" layer="91"/>
 <label x="210.82" y="27.94" size="1.778" layer="95"/>
-</segment>
-<segment>
-<wire x1="66.04" y1="129.54" x2="63.5" y2="129.54" width="0.1524" layer="91"/>
-<label x="66.04" y="129.54" size="1.778" layer="95"/>
-<pinref part="GND_SE" gate="G$1" pin="TP$1"/>
 </segment>
 <segment>
 <pinref part="IC2" gate="G$1" pin="GND"/>
@@ -12965,6 +12958,11 @@ Cree XPERED-L1-R250-00401</text>
 <pinref part="IC1" gate="G$1" pin="FLTS"/>
 <wire x1="45.72" y1="40.64" x2="60.96" y2="40.64" width="0.1524" layer="91"/>
 <label x="60.96" y="40.64" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="GND_SE1" gate="G$1" pin="TP$1"/>
+<wire x1="88.9" y1="127" x2="93.98" y2="127" width="0.1524" layer="91"/>
+<label x="93.98" y="127" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="DIM_BRAKE" class="2">
