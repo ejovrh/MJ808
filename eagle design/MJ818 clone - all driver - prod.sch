@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="yes" active="no"/>
@@ -11195,13 +11195,18 @@ GDSB: gate, drain, source, bulk&lt;p&gt;
 by R. Vogg  15.March.2002</description>
 <packages>
 <package name="SC-70-6">
-<wire x1="1" y1="1" x2="1" y2="-1" width="0.127" layer="21"/>
-<wire x1="-1" y1="-1" x2="-1" y2="1" width="0.127" layer="21"/>
-<text x="0" y="3" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="-3" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
-<smd name="D" x="-0.3256" y="-0.00405" dx="2.5" dy="0.95" layer="1" rot="R90"/>
-<smd name="S" x="0.6" y="0.4628" dx="1.77" dy="0.3" layer="1" rot="R270"/>
-<smd name="G" x="0.5966" y="-1.1261" dx="0.65" dy="0.3" layer="1" rot="R90"/>
+<text x="0" y="2.25" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-2" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
+<smd name="D" x="0" y="0.4" dx="1.5" dy="0.95" layer="1"/>
+<smd name="6D" x="0.975" y="0.725" dx="0.3" dy="0.45" layer="1" rot="R270"/>
+<smd name="5D" x="0.975" y="0.075" dx="0.3" dy="0.45" layer="1" rot="R270"/>
+<smd name="1D" x="-0.975" y="0.725" dx="0.3" dy="0.45" layer="1" rot="R270"/>
+<smd name="2D" x="-0.975" y="0.075" dx="0.3" dy="0.45" layer="1" rot="R270"/>
+<smd name="4S" x="0.975" y="-0.88" dx="0.3" dy="0.45" layer="1" rot="R270"/>
+<smd name="3G" x="-0.975" y="-0.88" dx="0.3" dy="0.45" layer="1" rot="R270"/>
+<smd name="S" x="0" y="-0.915" dx="0.87" dy="0.23" layer="1"/>
+<wire x1="1" y1="1.25" x2="-1" y2="1.25" width="0.127" layer="21"/>
+<wire x1="1" y1="-1.25" x2="-1" y2="-1.25" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -11251,9 +11256,9 @@ by R. Vogg  15.March.2002</description>
 <devices>
 <device name="" package="SC-70-6">
 <connects>
-<connect gate="G$1" pin="D" pad="D"/>
-<connect gate="G$1" pin="G" pad="G"/>
-<connect gate="G$1" pin="S" pad="S"/>
+<connect gate="G$1" pin="D" pad="1D 2D 5D 6D D"/>
+<connect gate="G$1" pin="G" pad="3G"/>
+<connect gate="G$1" pin="S" pad="4S S"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -11535,7 +11540,7 @@ by R. Vogg  15.March.2002</description>
 <part name="IC5" library="LDK320 5V LDO" deviceset="LDK320" device="SOT-23-5L" value="LDK320ADU50R"/>
 <part name="R3" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083331JP 330R"/>
 <part name="IC8" library="SIA456DJ-T1-GE3  N-Fet" deviceset="SIA456DJ" device="" value="SiA456DJ"/>
-<part name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R1210" package3d_urn="urn:adsk.eagle:package:23554/2" value="AC1210JR-07240RL 24R / 0.5W"/>
+<part name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R2010" package3d_urn="urn:adsk.eagle:package:23551/2" value="RK73H2HTTE22R0F / 22Ω, 0.75W"/>
 <part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2" value="47μF"/>
 <part name="IC7" library="MAX16820 LED Driver, constant current" deviceset="MAX16820" device="" value="MAX16820"/>
 <part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
