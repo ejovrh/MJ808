@@ -1,9 +1,7 @@
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 
-#define MJ808_															// what device to compile for?
-
-#include "gpio.h"														// macros for pin definitions
+#define MJ818_															// what device to compile for?
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"

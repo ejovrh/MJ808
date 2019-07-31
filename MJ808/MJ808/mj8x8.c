@@ -2,7 +2,6 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 
-#include "gpio.h"
 #include "mj8x8.h"
 
 // provides a periodic heartbeat based on the watchdog timer interrupt
