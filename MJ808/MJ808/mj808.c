@@ -126,7 +126,7 @@ volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, vo
 	msg->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
 
 	// EmptyBusOperation() on front light is so far not needed since we have a button
-	//self->mj8x8->EmptyBusOperation = &EmptyBusOperationMJ808;			// implement device-specific default operation
+	self->mj8x8->EmptyBusOperation = &EmptyBusOperationMJ808;			// implement device-specific default operation
 	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ808;	// implements device-specific operation depending on bus activity
 
 	self->led->virtual_led_ctor(self->led);								// call virtual constructor
