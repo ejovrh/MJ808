@@ -20,6 +20,7 @@ void Heartbeat(volatile void *msg)
 			WDTCR = ( _BV(WDIE) | _BV(WDP2) | _BV(WDP1) );				// set watchdog timer set to 1s
 
 			#if defined(MJ808_)
+			// TODO - access via object
 			util_led(UTIL_LED_RED_BLINK_1X);
 			#endif
 		}

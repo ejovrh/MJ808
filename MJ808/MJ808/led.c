@@ -85,6 +85,7 @@ void dev_light(volatile can_msg_t *msg)
 	#if defined (MJ808_)
 	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT) )		// front positional light - low beam
 	{
+		// TODO - access via object
 		fade(msg->ARGUMENT, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);		// fade front light to CAN msg. argument value
 		return;
 	}
@@ -94,6 +95,7 @@ void dev_light(volatile can_msg_t *msg)
 		if (msg->ARGUMENT > OCR_MAX_FRONT_LIGHT)
 		{
 			OCR_FRONT_LIGHT = OCR_MAX_FRONT_LIGHT;
+			// TODO - access via object
 			util_led(UTIL_LED_RED_BLINK_2X);							// CHECKME: something drives this OCR dangerously up
 		}
 		else

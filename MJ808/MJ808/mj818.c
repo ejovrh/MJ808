@@ -94,10 +94,10 @@ volatile mj818_t * mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, vo
 	msg->out->sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B);		// high byte
 	msg->out->sidl = ( RCPT_DEV_BLANK | BLANK);																		// low byte
 
+	msg->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
+
 	self->mj8x8->EmptyBusOperation = &EmptyBusOperationMJ818;			// implement device-specific default operation
 	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
-
-	msg->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
 
 	self->led->virtual_led_ctor(self->led);								// call virtual constructor
 

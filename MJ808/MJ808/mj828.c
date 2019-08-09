@@ -40,7 +40,7 @@ void virtual_led_ctorMJ828(volatile leds_t *self)
 {
 	self->led_count = 7;
 	self->flag_any_glow = 1;
-	self->leds[green].on = 1;
+	self->led_array[green].on = 1;
 };
 
 // defines device operation on empty bus
@@ -235,7 +235,7 @@ void charlieplexing_handler(volatile leds_t *in_led)
 {
 	static uint8_t i = 0;												// iterator to loop over all LEDs on device
 
-	glow(i, in_led->leds[i].on, in_led->leds[i].blink_count);			// e.g. command = 0x00 (red), arg = 0x01 (on)
+	glow(i, in_led->led_array[i].on, in_led->led_array[i].blink_count);			// e.g. command = 0x00 (red), arg = 0x01 (on)
 
 	// !!!!
 	(i == in_led->led_count) ? i = 0 : ++i;								// count up to led_count and then start from zero

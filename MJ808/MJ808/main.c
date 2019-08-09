@@ -16,14 +16,6 @@
 // TODO - refactor away
 volatile uint8_t flag_lamp_is_on = 0;									// flag - indicates if button turned the device on, used for pushbutton handling
 
-//volatile	uint8_t canintf;											// CAN debug variables for MCP2515 status readout from main()
-//volatile	uint8_t canstat;
-//volatile	uint8_t canctrl;
-//volatile	uint8_t eflg;
-//volatile	uint8_t rec;
-//volatile	uint8_t tec;
-
-
 int main(void)
 {
 	mj8x8_ctor(&MJ8X8, &CAN, &MCU);										// call base class constructor & tie in associated object addresses
@@ -49,15 +41,6 @@ int main(void)
 
 	while (1)															// forever loop
 	{
-		asm("nop");														// on purpose kept as empty as possible !!
-
-		//device.mj8x8->can->ReadBytes(CANINTF, &canintf, 1);			// download the interrupt flag register
-		//device.mj8x8->can->ReadBytes(CANSTAT, &canstat, 1);
-		//device.mj8x8->can->ReadBytes(CANSTAT, &canctrl, 1);
-		//device.mj8x8->can->ReadBytes(EFLG, &eflg, 1);
-		//device.mj8x8->can->ReadBytes(REC, &rec, 1);
-		//device.mj8x8->can->ReadBytes(TEC, &tec, 1);
-
 		if (MCUCR & _BV(SE))											// if sleep is enabled
 			sleep_cpu();												// ...sleep
 	}
@@ -230,6 +213,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	button_debounce(&device.button[0]);									// from here on the button is debounced and states can be consumed
 
 	if (device.button[0].hold_error)
+		// TODO - access via object
 		util_led(UTIL_LED_RED_BLINK_6X);
 
 	// FIXME - on really long button press (far beyond hold error) something writes crap into memory, i.e. the address of PIND in button struct gets overwritten, as does the adders of the led struct
@@ -241,9 +225,10 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 		if (message.bus->devices._MJ828)								// dashboard is present
 			message.SendMessage(&message, (CMND_DEVICE | DEV_LU | DASHBOARD), 0x00, 1);		// dummy command to dashboard
 
+		// TODO - access via object
 		fade(0x20, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);
-
 		util_led(UTIL_LED_GREEN_ON);									// power on green LED
+
 		message.SendMessage(&message, (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);			// convey button press via CAN
 
 		flag_lamp_is_on = 1;
@@ -254,9 +239,10 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 		if (message.bus->devices._MJ818)								// if rear light is present
 			message.SendMessage(&message, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);	// turn off rear light
 
+		// TODO - access via object
 		fade(0x00, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);				// turn off
-
 		util_led(UTIL_LED_GREEN_OFF);									// power off green LED
+
 		message.SendMessage(&message, (MSG_BUTTON_EVENT | BUTTON0_OFF), 0x00, 1);			// convey button release via CAN
 		flag_lamp_is_on = 0;
 	}
@@ -266,11 +252,11 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	button_debounce(&device.button[0]);									// from here on the button is debounced and states can be consumed
 	button_debounce(&device.button[1]);									// ditto
 
-	device.led->leds[blue].on = device.button[0].toggle;
-	device.led->leds[yellow].on = device.button[1].is_pressed;
-	device.led->leds[red].blink_count = (device.button[0].hold_error || device.button[1].hold_error);
-	device.led->leds[battery_led1].on = device.button[0].hold_temp;
-	device.led->leds[battery_led2].on = device.button[1].hold_temp;
+	device.led->led_array[blue].on = device.button[0].toggle;
+	device.led->led_array[yellow].on = device.button[1].is_pressed;
+	device.led->led_array[red].blink_count = (device.button[0].hold_error || device.button[1].hold_error);
+	device.led->led_array[battery_led1].on = device.button[0].hold_temp;
+	device.led->led_array[battery_led2].on = device.button[1].hold_temp;
 	#endif
 
 	sleep_enable();														// back to sleep
