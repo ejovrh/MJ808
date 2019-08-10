@@ -7,13 +7,22 @@
 #include "mj818.h"
 #include "gpio.h"
 
+void _fade(const uint8_t value, volatile uint8_t *ocr);
+
+// TODO - optimize
+void _wrapper_fade_mj818(uint8_t value)
+{
+// TODO - optimize
+	_fade(value, &OCR_REAR_LIGHT);
+};
+
 // implementation of virtual constructor for LEDs
 void virtual_led_ctorMJ818(volatile leds_t *self)
 {
 	static individual_led_t individual_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
 	self->led = individual_led;
 
-	self->led[Rear].Shine = &util_led;
+	self->led[Rear].Shine = &_wrapper_fade_mj818;
 };
 
 // defines device operation on empty bus
@@ -21,8 +30,8 @@ void EmptyBusOperationMJ818(void)
 {
 	if (OCR_REAR_LIGHT == 0x00)											// run once
 	{
-		fade(0x10, &OCR_REAR_LIGHT);									// turn on rear light
-		fade(0x05, &OCR_BRAKE_LIGHT);									// turn on rear light
+		_fade(0x10, &OCR_REAR_LIGHT);								// turn on rear light
+		_fade(0x05, &OCR_BRAKE_LIGHT);							// turn on rear light
 	}
 };
 
@@ -34,9 +43,10 @@ void PopulatedBusOperationMJ818(volatile void *in_msg, volatile void *self)
 
 	volatile can_msg_t *msg = msg_ptr->ReceiveMessage(msg_ptr);			// CAN message object
 
+	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | REAR_LIGHT) )		// rear positional light
 	{
-		fade(msg->ARGUMENT, &OCR_REAR_LIGHT, OCR_MAX_REAR_LIGHT);		// fade rear light to CAN msg. argument value
+		_wrapper_fade_mj818(msg->ARGUMENT);								// fade rear light to CAN msg. argument value
 		return;
 	}
 

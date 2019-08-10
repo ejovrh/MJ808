@@ -1,5 +1,6 @@
 #include <avr/sfr_defs.h>
 #include <avr/io.h>
+#include <util/delay.h>
 #include <inttypes.h>
 #include <avr/interrupt.h>
 
@@ -7,32 +8,46 @@
 #include "led.h"
 #include "gpio.h"
 
-/*
-// interprets LED commands for this device
-void digestMJ808(volatile can_msg_t *in_msg)
+// TODO - optimize
+void _fade(const uint8_t value, volatile uint8_t *ocr);
+
+// TODO - optimize
+void _wrapper_fade_mj808(const uint8_t value)
 {
-	// in here have mechanism that based on message does something
+	_fade(value, &OCR_FRONT_LIGHT);
+};
 
-	// https://barrgroup.com/Embedded-Systems/How-To/C-Function-Pointers
+// concrete utility LED handling function
+void _util_led_mj808(uint8_t in_val)
+{
+	uint8_t led = 0;													// holds the pin of the LED: D0 - green (default), D1 - red
 
-	// command for device
-	if (in_msg->COMMAND & CMND_DEVICE)									//  we received a command for some device...
+	if (in_val & _BV(B3))												// determine B3 value: red or green (default)
+	led = 1;															// red
+
+	in_val &= 7;														// clear everything except B2:0, which is the blink count (1-6)
+
+	if (in_val == 0x00)													// B3:B0 is 0 - turn off
 	{
-		if (in_msg->COMMAND & ( CMND_DEVICE | DEV_LIGHT ) )				// ...a LED device
-		{
-			dev_light(in_msg);											// deal with it
-			return;
-		}
-	}
-
-	if ( (in_msg->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)			// utility LED command
-	{
-		//util_led(in_msg->COMMAND);										// blinky thingy
-		LED.led[Utility].Shine(in_msg->COMMAND);
+		PORTD |= (1<<led);												// clear bit
 		return;
 	}
+
+	if (in_val == 0x07)													// B3:B0 is 7 - turn on
+	{
+		PORTD &= ~(1<<led);												// set bit
+		return;
+	}
+
+	while (in_val--)													// blink loop
+	{
+		// TODO - util_led() - get rid of _delay_ms()
+		_delay_ms(BLINK_DELAY);											// waste a few cycles (non-blocking)
+		PORTD ^= (1<<led);												// toggle the led pin
+		_delay_ms(BLINK_DELAY);											// waste a few cycles (non-blocking)
+		PORTD ^= (1<<led);												// toggle the led pin
+	}
 };
-*/
 
 // implementation of virtual constructor for buttons
 void virtual_button_ctorMJ808(volatile button_t *self)
@@ -47,8 +62,8 @@ void virtual_led_ctorMJ808(volatile leds_t *self)
 	static individual_led_t individual_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
 	self->led = individual_led;											// assign pointer to LED array
 
-	self->led[Utility].Shine = &util_led;
-	//self->led[Front].Shine = &util_led;
+	self->led[Utility].Shine = &_util_led_mj808;
+	self->led[Front].Shine = &_wrapper_fade_mj808;
 };
 
 // device default operation on empty bus
@@ -68,21 +83,21 @@ void PopulatedBusOperationMJ808(volatile void *in_msg, volatile void *self)
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if ( (msg->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)				// utility LED command
 	{
-		//util_led(msg->COMMAND);										// blinky thingy
-		dev_ptr->led->led[Utility].Shine(msg->COMMAND);
+		dev_ptr->led->led[Utility].Shine(msg->COMMAND);					// glowy thingy
 		return;
 	}
 
 	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT) )		// front positional light - low beam
 	{
 		// TODO - access via object
-		fade(msg->ARGUMENT, &OCR_FRONT_LIGHT);							// fade front light to CAN msg. argument value
+		_wrapper_fade_mj808(msg->ARGUMENT);										// fade front light to CAN msg. argument value
 		return;
 	}
 
 	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) ) // front positional light - high beam
 	{
-		if (msg->ARGUMENT > OCR_MAX_FRONT_LIGHT)
+		// TODO - implement timer based safeguard when OCR > OCR_MAX
+		if (msg->ARGUMENT > OCR_MAX_FRONT_LIGHT)						// safeguard against too high a value (heating of MOSFet)
 			OCR_FRONT_LIGHT = OCR_MAX_FRONT_LIGHT;
 		else
 			OCR_FRONT_LIGHT = msg->ARGUMENT;
@@ -165,7 +180,7 @@ volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, vo
 	self->button->virtual_button_ctor(self->button);					// call virtual constructor
 
 	// TODO - access via object
-	util_led(UTIL_LED_GREEN_BLINK_1X);									// crude "I'm finished" indicator
+	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);									// crude "I'm finished" indicator
 
 	return self;
 };

@@ -224,8 +224,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 		if (MsgHandler.bus->devices._MJ828)								// dashboard is present
 			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LU | DASHBOARD), 0x00, 1);		// dummy command to dashboard
 
-		// TODO - access via object
-		fade(0x20, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);
+		Device.led->led[Front].Shine(0x40);								// power on front light
 		Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);				// power on green LED
 
 		MsgHandler.SendMessage(&MsgHandler, (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);				// convey button press via CAN
@@ -238,8 +237,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 		if (MsgHandler.bus->devices._MJ818)								// if rear light is present
 			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);	// turn off rear light
 
-		// TODO - access via object
-		fade(0x00, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);				// turn off
+		Device.led->led[Front].Shine(0x00);								// power off front light
 		Device.led->led[Utility].Shine(UTIL_LED_GREEN_OFF);				// power off green LED
 
 		MsgHandler.SendMessage(&MsgHandler, (MSG_BUTTON_EVENT | BUTTON0_OFF), 0x00, 1);				// convey button release via CAN

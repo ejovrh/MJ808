@@ -21,7 +21,7 @@ void Heartbeat(volatile void *msg)
 
 			#if defined(MJ808_)
 			// TODO - access via object
-			util_led(UTIL_LED_RED_BLINK_1X);
+			//util_led(UTIL_LED_RED_BLINK_1X);
 			#endif
 		}
 	}

@@ -40,10 +40,6 @@ typedef struct	leds_t													// struct describing LEDs on device MJ828
 } leds_t;
 #endif
 
-// depreciated start
-void util_led(uint8_t in_val);											// interprets CMND_UTIL_LED command - utility LED (red, green, on, off, blink)
-// depreciated end
-
 extern volatile leds_t LED;												// declare LED object
 
 #endif /* LED_H_ */
