@@ -10,6 +10,12 @@
 #define PWM_brake_light_pin		B,	3,	3								// PWM - brake light
 // definitions of device/PCB layout-dependent hardware pins
 
+enum mj818_leds															// enum of lights on this device
+{
+	Rear,
+	Brake
+};
+
 typedef struct															// struct describing devices on MJ818
 {
 	volatile mj8x8_t *mj8x8;											// pointer to the base class

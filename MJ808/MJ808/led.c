@@ -38,7 +38,7 @@ void util_led(uint8_t in_val)
 };
 
 // private function - fades *ocr to value (or ocr_max) - up to OCR_MAX or down to 0x00
-void fade(uint8_t value, volatile uint8_t *ocr, uint8_t ocr_max)
+void fade(uint8_t value, volatile uint8_t *ocr)
 {
 	cli();																// if without cli(), *ocr gets corrupted; im suspecting an ISR while ocr is incrementin/decrementing
 	//	hence an atomic fade()
@@ -46,17 +46,7 @@ void fade(uint8_t value, volatile uint8_t *ocr, uint8_t ocr_max)
 	if (value > *ocr)													// we need to get brighter
 	{
 		while (++*ocr < value)											// loop until we match the OCR with the requested value & increment the OCR
-		{
-			//if (*ocr >= ocr_max)										// safeguard against too high a CAN command argument (OCR_MAX is a function of schematic & PCB design)
-			//{
-			//#if defined(MJ808_)
-			//util_led(UTIL_LED_RED_BLINK_2X);						// CHECKME: something drives this OCR dangerously up
-			//#endif
-			//break;
-			//}
-
 			_delay_ms(5);												// delay it a bit for visual stimulus ...
-		}
 
 		sei();															// enable interrupts
 		return;
@@ -79,47 +69,4 @@ void fade(uint8_t value, volatile uint8_t *ocr, uint8_t ocr_max)
 	}
 };
 
-// interprets CMND_DEVICE-DEV_LIGHT command - positional light control
-void dev_light(volatile can_msg_t *msg)
-{
-	#if defined (MJ808_)
-	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT) )		// front positional light - low beam
-	{
-		// TODO - access via object
-		fade(msg->ARGUMENT, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);		// fade front light to CAN msg. argument value
-		return;
-	}
-
-	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) ) // front positional light - high beam
-	{
-		if (msg->ARGUMENT > OCR_MAX_FRONT_LIGHT)
-		{
-			OCR_FRONT_LIGHT = OCR_MAX_FRONT_LIGHT;
-			// TODO - access via object
-			util_led(UTIL_LED_RED_BLINK_2X);							// CHECKME: something drives this OCR dangerously up
-		}
-		else
-		OCR_FRONT_LIGHT = msg->ARGUMENT;
-
-		return;
-	}
-	#endif
-
-	#if defined (MJ818_)
-	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | REAR_LIGHT) )		// rear positional light
-	{
-		fade(msg->ARGUMENT, &OCR_REAR_LIGHT, OCR_MAX_REAR_LIGHT);		// fade rear light to CAN msg. argument value
-		return;
-	}
-
-	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT) )		// brake light
-	{
-		if (msg->ARGUMENT > OCR_MAX_BRAKE_LIGHT)
-		OCR_BRAKE_LIGHT = OCR_MAX_BRAKE_LIGHT;
-		else
-		OCR_BRAKE_LIGHT = msg->ARGUMENT;
-	}
-	#endif
-};
-
-volatile leds_t LED __attribute__ ((section (".data")));				// define
+volatile leds_t LED __attribute__ ((section (".data")));				// define LED object and put it into .data

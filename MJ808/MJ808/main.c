@@ -20,7 +20,7 @@ int main(void)
 {
 	mj8x8_ctor(&MJ8X8, &CAN, &MCU);										// call base class constructor & tie in associated object addresses
 
-	message_handler_ctor(&MsgHandler, &CAN, &BUS, &msg_in, &msg_out);		// call message handler constructor
+	message_handler_ctor(&MsgHandler, &CAN, &BUS, &msg_in, &msg_out);	// call message handler constructor
 
 	#if defined(MJ808_)													// MJ808 - call derived class constructor and tie in base class
 	mj808_ctor(&Device, &MJ8X8, &LED, &BUTTON, &MsgHandler);
@@ -63,7 +63,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 
 	inline void helper_handle_rx(void)									// handles incoming message interrupts
 	{
-		Device.mj8x8->PopulatedBusOperation(MsgHandler.ReceiveMessage(&MsgHandler), &Device);	// let the device deal with the message
+		Device.mj8x8->PopulatedBusOperation(&MsgHandler, &Device);		// let the particular device deal with the message
 	};
 
 	void helper_handle_error(volatile can_t *in_can)					// handles RXBn overflow interrupts
@@ -213,8 +213,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	button_debounce(&Device.button[0]);									// from here on the button is debounced and states can be consumed
 
 	if (Device.button[0].hold_error)
-		// TODO - access via object
-		util_led(UTIL_LED_RED_BLINK_6X);
+		Device.led->led[Utility].Shine(UTIL_LED_RED_BLINK_6X);
 
 	// FIXME - on really long button press (far beyond hold error) something writes crap into memory, i.e. the address of PIND in button struct gets overwritten, as does the adders of the led struct
 	if (!flag_lamp_is_on && Device.button[0].hold_temp)					// turn front light on
@@ -227,23 +226,23 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 
 		// TODO - access via object
 		fade(0x20, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);
-		util_led(UTIL_LED_GREEN_ON);									// power on green LED
+		Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);				// power on green LED
 
-		MsgHandler.SendMessage(&MsgHandler, (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);			// convey button press via CAN
+		MsgHandler.SendMessage(&MsgHandler, (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);				// convey button press via CAN
 
 		flag_lamp_is_on = 1;
 	}
 
-	if ((flag_lamp_is_on && !Device.button[0].hold_temp) || Device.button->hold_error)		// turn front light off
+	if ((flag_lamp_is_on && !Device.button[0].hold_temp) || Device.button->hold_error)				// turn front light off
 	{
 		if (MsgHandler.bus->devices._MJ818)								// if rear light is present
 			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);	// turn off rear light
 
 		// TODO - access via object
 		fade(0x00, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);				// turn off
-		util_led(UTIL_LED_GREEN_OFF);									// power off green LED
+		Device.led->led[Utility].Shine(UTIL_LED_GREEN_OFF);				// power off green LED
 
-		MsgHandler.SendMessage(&MsgHandler, (MSG_BUTTON_EVENT | BUTTON0_OFF), 0x00, 1);			// convey button release via CAN
+		MsgHandler.SendMessage(&MsgHandler, (MSG_BUTTON_EVENT | BUTTON0_OFF), 0x00, 1);				// convey button release via CAN
 		flag_lamp_is_on = 0;
 	}
 	#endif

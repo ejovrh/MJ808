@@ -6,6 +6,9 @@
 #include "mj828.h"
 #include "gpio.h"
 
+// TODO - get rid of this ifdef
+#if defined(MJ828_)
+/*
 // interprets LED commands for this device
 void digestMJ828(volatile can_msg_t *in_msg)
 {
@@ -24,21 +27,24 @@ void digestMJ828(volatile can_msg_t *in_msg)
 		return;
 	}
 };
+*/
 
 // implementation of virtual constructor for buttons
 void virtual_button_ctorMJ828(volatile button_t *self)
 {
 
-	self[0].pin_number = 0;									// sw2 is connected to pin D0
-	self[1].pin_number = 1;									// sw2 is connected to pin D1
-	self[0].PIN = (uint8_t *) 0x30;							// 0x020 offset plus address - PIND register
-	self[1].PIN = (uint8_t *) 0x30;							// ditto
+	self[0].pin_number = 0;												// sw2 is connected to pin D0
+	self[1].pin_number = 1;												// sw2 is connected to pin D1
+	self[0].PIN = (uint8_t *) 0x30;										// 0x020 offset plus address - PIND register
+	self[1].PIN = (uint8_t *) 0x30;										// ditto
 };
 
 // implementation of virtual constructor for LEDs
 void virtual_led_ctorMJ828(volatile leds_t *self)
 {
-	self->led_count = 7;
+	individual_led_t individual_led[8] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
+	self->led = individual_led;
+
 	self->flag_any_glow = 1;
 	self->led_array[green].on = 1;
 };
@@ -50,10 +56,14 @@ void EmptyBusOperationMj828(void)
 };
 
 // dispatches CAN messages to appropriate sub-component on device
-void PopulatedBusOperationMJ828(volatile can_msg_t *in_msg, volatile void *self)
+void PopulatedBusOperationMJ828(volatile void *in_msg, volatile void *self)
 {
-	mj828_t *ptr = (mj828_t *) self;									// pointer cast to avoid compiler warnings
-	ptr->led->digest(in_msg);											// let the LED object deal wit it
+	message_handler_t *msg_ptr = (message_handler_t *) in_msg;			// pointer cast to avoid compiler warnings
+	mj828_t *dev_ptr = (mj828_t *) self;								//	ditto
+
+	volatile can_msg_t *msg = msg_ptr->ReceiveMessage(msg_ptr);			// CAN message object
+
+	// TODO - implement mj828 message handling
 };
 
 volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg)
@@ -109,7 +119,6 @@ volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, vo
 
 	self->mj8x8 = base;													// remember own object address
 	self->led = led;													// remember the LED object address
-	self->led->digest = &digestMJ828;
 	self->led->virtual_led_ctor = &virtual_led_ctorMJ828;
 	self->button->virtual_button_ctor = &virtual_button_ctorMJ828;
 	//self->button = &button;
@@ -235,12 +244,13 @@ void charlieplexing_handler(volatile leds_t *in_led)
 {
 	static uint8_t i = 0;												// iterator to loop over all LEDs on device
 
-	glow(i, in_led->led_array[i].on, in_led->led_array[i].blink_count);			// e.g. command = 0x00 (red), arg = 0x01 (on)
+	glow(i, in_led->led_array[i].on, in_led->led_array[i].blink_count);	// e.g. command = 0x00 (red), arg = 0x01 (on)
 
 	// !!!!
-	(i == in_led->led_count) ? i = 0 : ++i;								// count up to led_count and then start from zero
+	(i == 7) ? i = 0 : ++i;												// count up to led_count and then start from zero
 };
 
 #if defined(MJ828_)
-volatile mj828_t Device __attribute__ ((section (".data")));			// define
+volatile mj828_t Device __attribute__ ((section (".data")));			// define Device object and put it into .data
+#endif
 #endif

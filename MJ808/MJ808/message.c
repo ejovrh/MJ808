@@ -2,8 +2,13 @@
 
 #include "message.h"
 
+// loads outbound CAN message into local CAN IC and asks it to transmit it onto the bus
 void _SendMessage(volatile message_handler_t *self, const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
 {
+	// TODO - eventually consolidate two CAN message objects (in and out) into one and make sure own SID is set in outbound messages:
+	//			msg->out->sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);		// high byte
+	//			msg->out->sidl = ( RCPT_DEV_BLANK | BLANK);																		// low byte
+
 	if (in_command == CMND_ANNOUNCE)									// if we have the broadcast command
 		self->out->sidh |= BROADCAST;									//	then set the broadcast flag
 
@@ -14,6 +19,7 @@ void _SendMessage(volatile message_handler_t *self, const uint8_t in_command, co
 	self->can->RequestToSend(self->out);								// load message into TX buffer and request to send
 };
 
+// fetches message received from CAN bus by local CAN IC, populates known hosts and returns message handler object
 volatile can_msg_t *_ReceiveMessage(volatile struct message_handler_t *self)
 {
 	self->can->FetchMessage(self->in);									// fetch the message from some RX buffer
@@ -30,6 +36,7 @@ void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_c
 	self->in = in_msg;													// set address of inbound message struct
 	self->out = out_msg;												// set address of outbound message struct
 
+	// TODO - eventually get rid of union
 	self->bus->devices.uint16_val = 0x0000;
 	self->bus->NumericalCAN_ID = 0;
 	self->bus->FlagDoHeartbeat = 1;										// start with discovery mode
@@ -39,8 +46,8 @@ void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_c
 	self->SendMessage = &_SendMessage;									//	ditto
 };
 
-volatile canbus_t BUS __attribute__ ((section (".data")));				// define
-volatile message_handler_t MsgHandler __attribute__ ((section (".data")));	// define
+volatile canbus_t BUS __attribute__ ((section (".data")));				// define BUS object and put it into .data
+volatile message_handler_t MsgHandler __attribute__ ((section (".data")));		// define MsgHandler object and put it into .data
 
-volatile can_msg_t msg_out;												// define
-volatile can_msg_t msg_in;												// define
+volatile can_msg_t msg_out;												// define msg_out
+volatile can_msg_t msg_in;												// define msg_in

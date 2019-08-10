@@ -7,38 +7,46 @@
 #include "mj818.h"
 #include "gpio.h"
 
-// interprets LED commands for this device
-void digestMJ818(volatile can_msg_t *in_msg)
-{
-	// command for device
-	if (in_msg->COMMAND & CMND_DEVICE)									//  we received a command for some device...
-	{
-		if (in_msg->COMMAND & ( CMND_DEVICE | DEV_LIGHT ) )				// ...a LED device
-		{
-			dev_light(in_msg);											// deal with it
-			return;
-		}
-	}
-};
-
 // implementation of virtual constructor for LEDs
 void virtual_led_ctorMJ818(volatile leds_t *self)
 {
-	;
+	static individual_led_t individual_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
+	self->led = individual_led;
+
+	self->led[Rear].Shine = &util_led;
 };
 
 // defines device operation on empty bus
 void EmptyBusOperationMJ818(void)
 {
 	if (OCR_REAR_LIGHT == 0x00)											// run once
-		fade(0x10, &OCR_REAR_LIGHT, OCR_MAX_REAR_LIGHT);				// turn on rear light
+	{
+		fade(0x10, &OCR_REAR_LIGHT);									// turn on rear light
+		fade(0x05, &OCR_BRAKE_LIGHT);									// turn on rear light
+	}
 };
 
 // dispatches CAN messages to appropriate sub-component on device
-void PopulatedBusOperationMJ818(volatile can_msg_t *in_msg, volatile void *self)
+void PopulatedBusOperationMJ818(volatile void *in_msg, volatile void *self)
 {
-	mj818_t *ptr = (mj818_t *) self;									// pointer cast to avoid compiler warnings
-	ptr->led->digest(in_msg);											// let the LED object deal wit it
+	message_handler_t *msg_ptr = (message_handler_t *) in_msg;			// pointer cast to avoid compiler warnings
+	mj818_t *dev_ptr = (mj818_t *) self;								//	ditto
+
+	volatile can_msg_t *msg = msg_ptr->ReceiveMessage(msg_ptr);			// CAN message object
+
+	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | REAR_LIGHT) )		// rear positional light
+	{
+		fade(msg->ARGUMENT, &OCR_REAR_LIGHT, OCR_MAX_REAR_LIGHT);		// fade rear light to CAN msg. argument value
+		return;
+	}
+
+	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT) )		// brake light
+	{
+		if (msg->ARGUMENT > OCR_MAX_BRAKE_LIGHT)
+			OCR_BRAKE_LIGHT = OCR_MAX_BRAKE_LIGHT;
+		else
+			OCR_BRAKE_LIGHT = msg->ARGUMENT;
+	}
 };
 
 volatile mj818_t * mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg)
@@ -82,7 +90,6 @@ volatile mj818_t * mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, vo
 
 	self->mj8x8 = base;													// remember own object address
 	self->led = led;													// remember the LED object address
-	self->led->digest = &digestMJ818;
 	self->led->virtual_led_ctor = &virtual_led_ctorMJ818;
 
 	/*
@@ -105,5 +112,5 @@ volatile mj818_t * mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, vo
 };
 
 #if defined(MJ818_)
-volatile mj818_t Device __attribute__ ((section (".data")));			// define
+volatile mj818_t Device __attribute__ ((section (".data")));			// define Device object and put it into .data
 #endif

@@ -19,6 +19,18 @@
 
 void charlieplexing_handler(volatile leds_t *in_led);					// handles LEDs in charlieplexed configuration
 
+enum mj828_leds															// enum of lights on this device
+{
+	red,
+	green,
+	blue,
+	yellow,
+	battery_led1,
+	battery_led2,
+	battery_led3,
+	battery_led4
+} ;
+
 typedef struct															// struct describing devices on MJ828
 {
 	volatile mj8x8_t *mj8x8;											// pointer to the base class

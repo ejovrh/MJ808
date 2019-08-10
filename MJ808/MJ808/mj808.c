@@ -7,6 +7,7 @@
 #include "led.h"
 #include "gpio.h"
 
+/*
 // interprets LED commands for this device
 void digestMJ808(volatile can_msg_t *in_msg)
 {
@@ -26,22 +27,28 @@ void digestMJ808(volatile can_msg_t *in_msg)
 
 	if ( (in_msg->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)			// utility LED command
 	{
-		util_led(in_msg->COMMAND);										// blinky thingy
+		//util_led(in_msg->COMMAND);										// blinky thingy
+		LED.led[Utility].Shine(in_msg->COMMAND);
 		return;
 	}
 };
+*/
 
 // implementation of virtual constructor for buttons
 void virtual_button_ctorMJ808(volatile button_t *self)
 {
-	self[0].PIN = (uint8_t *) 0x30; 							// 0x020 offset plus address - PIND register
-	self[0].pin_number = 4;									// sw2 is connected to pin D0
+	self[0].PIN = (uint8_t *) 0x30; 									// 0x020 offset plus address - PIND register
+	self[0].pin_number = 4;												// sw2 is connected to pin D0
 };
 
 // implementation of virtual constructor for LEDs
 void virtual_led_ctorMJ808(volatile leds_t *self)
 {
-	;
+	static individual_led_t individual_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
+	self->led = individual_led;											// assign pointer to LED array
+
+	self->led[Utility].Shine = &util_led;
+	//self->led[Front].Shine = &util_led;
 };
 
 // device default operation on empty bus
@@ -50,11 +57,38 @@ void EmptyBusOperationMJ808(void)
 	;
 };
 
-// dispatches CAN messages to appropriate sub-component on device
-void PopulatedBusOperationMJ808(volatile can_msg_t *in_msg, volatile void *self)
+// received MsgHandler object and passes
+void PopulatedBusOperationMJ808(volatile void *in_msg, volatile void *self)
 {
-	mj808_t *ptr = (mj808_t *) self;									// pointer cast to avoid compiler warnings
-	ptr->led->digest(in_msg);											// let the LED object deal wit it
+	message_handler_t *msg_ptr = (message_handler_t *) in_msg;			// pointer cast to avoid compiler warnings
+	mj808_t *dev_ptr = (mj808_t *) self;								//	ditto
+
+	volatile can_msg_t *msg = msg_ptr->ReceiveMessage(msg_ptr);			// CAN message object
+
+	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
+	if ( (msg->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)				// utility LED command
+	{
+		//util_led(msg->COMMAND);										// blinky thingy
+		dev_ptr->led->led[Utility].Shine(msg->COMMAND);
+		return;
+	}
+
+	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT) )		// front positional light - low beam
+	{
+		// TODO - access via object
+		fade(msg->ARGUMENT, &OCR_FRONT_LIGHT);							// fade front light to CAN msg. argument value
+		return;
+	}
+
+	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) ) // front positional light - high beam
+	{
+		if (msg->ARGUMENT > OCR_MAX_FRONT_LIGHT)
+			OCR_FRONT_LIGHT = OCR_MAX_FRONT_LIGHT;
+		else
+			OCR_FRONT_LIGHT = msg->ARGUMENT;
+
+		return;
+	}
 };
 
 volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg)
@@ -109,7 +143,6 @@ volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, vo
 
 	self->mj8x8 = base;													// remember own object address
 	self->led = led;													// remember the LED object address
-	self->led->digest = &digestMJ808;
 	self->led->virtual_led_ctor = &virtual_led_ctorMJ808;
 	self->button->virtual_button_ctor = &virtual_button_ctorMJ808;
 	//self->button = &button;
@@ -138,5 +171,5 @@ volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, vo
 };
 
 #if defined(MJ808_)
-volatile mj808_t Device __attribute__ ((section (".data")));			// define
+volatile mj808_t Device __attribute__ ((section (".data")));			// define Device object and put it into .data
 #endif

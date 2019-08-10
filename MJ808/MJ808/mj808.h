@@ -14,6 +14,12 @@
 #define	PWM_front_light_pin		B,	2,	2								// PWM - front light
 // definitions of device/PCB layout-dependent hardware pins
 
+enum mj808_leds															// enum of lights on this device
+{
+	Utility,
+	Front
+};
+
 typedef struct															// struct describing devices on MJ808
 {
 	volatile mj8x8_t *mj8x8;											// pointer to the base class

@@ -75,7 +75,7 @@ void button_debounce(volatile button_t *in_button)						// marks a button as pre
 		if (in_button->hold_counter >= BUTTON_MIN_PRESS_TIME)			// pressed for a valid amount of time
 		{
 			if (!in_button->was_pressed)								// previous state (prevent flapping on/off)
-				in_button->hold_temp = !in_button->hold_temp;				// set "hold_temp" state
+				in_button->hold_temp = !in_button->hold_temp;			// set "hold_temp" state
 
 			in_button->was_pressed = 1;									// mark the button as being pressed
 			return;
@@ -91,4 +91,4 @@ void button_debounce(volatile button_t *in_button)						// marks a button as pre
 };
 #endif
 
-volatile button_t BUTTON __attribute__ ((section (".data")));			// define
+volatile button_t BUTTON __attribute__ ((section (".data")));			// define BUTTON object and put it into .data

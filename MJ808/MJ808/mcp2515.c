@@ -392,4 +392,4 @@ volatile can_t *can_ctor(volatile can_t *self)
 	return self;														// hmm... - gets itself as a parameter and then returns itself. i smell bullshit in the making.
 };
 
-volatile volatile can_t CAN __attribute__ ((section (".data")));		// define
+volatile volatile can_t CAN __attribute__ ((section (".data")));		// define CAN object and put it into .data
