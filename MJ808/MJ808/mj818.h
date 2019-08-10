@@ -18,6 +18,6 @@ typedef struct															// struct describing devices on MJ818
 
 volatile mj818_t *mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg);
 
-static volatile mj818_t device;
+extern volatile mj818_t Device;
 
 #endif /* MJ818_H_ */

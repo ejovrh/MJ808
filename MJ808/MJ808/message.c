@@ -38,3 +38,9 @@ void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_c
 	self->ReceiveMessage = &_ReceiveMessage;							// set up function pointer
 	self->SendMessage = &_SendMessage;									//	ditto
 };
+
+volatile canbus_t BUS __attribute__ ((section (".data")));				// define
+volatile message_handler_t MsgHandler __attribute__ ((section (".data")));	// define
+
+volatile can_msg_t msg_out;												// define
+volatile can_msg_t msg_in;												// define

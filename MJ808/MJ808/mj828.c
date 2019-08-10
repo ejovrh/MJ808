@@ -240,3 +240,7 @@ void charlieplexing_handler(volatile leds_t *in_led)
 	// !!!!
 	(i == in_led->led_count) ? i = 0 : ++i;								// count up to led_count and then start from zero
 };
+
+#if defined(MJ828_)
+volatile mj828_t Device __attribute__ ((section (".data")));			// define
+#endif

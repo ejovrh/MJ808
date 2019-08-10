@@ -58,3 +58,5 @@ volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volat
 
 	return self;
 };
+
+volatile volatile mj8x8_t MJ8X8 __attribute__ ((section (".data")));	// define

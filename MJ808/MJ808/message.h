@@ -51,10 +51,10 @@ typedef struct message_handler_t										// sends and receives (stores) CAN mes
 
 void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_can, volatile canbus_t *in_bus, volatile can_msg_t *in_msg, volatile can_msg_t *out_msg);
 
-static volatile canbus_t BUS;											// declare canbus_t object
+extern volatile canbus_t BUS;											// declare canbus_t object
+extern volatile message_handler_t MsgHandler;								// declare message handler object
 
-static volatile message_handler_t message;								// declare message handler object
-static volatile can_msg_t msg_out;										// message object for outbound messages
-static volatile can_msg_t msg_in;										// message object for inbound messages
+extern volatile can_msg_t msg_out;										// declare message object for outbound messages
+extern volatile can_msg_t msg_in;										// declare message object for inbound messages
 
 #endif /* MESSAGE_H_ */

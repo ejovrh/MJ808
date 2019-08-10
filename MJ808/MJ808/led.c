@@ -121,3 +121,5 @@ void dev_light(volatile can_msg_t *msg)
 	}
 	#endif
 };
+
+volatile leds_t LED __attribute__ ((section (".data")));				// define

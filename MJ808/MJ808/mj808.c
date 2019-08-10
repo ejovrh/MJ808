@@ -136,3 +136,7 @@ volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, vo
 
 	return self;
 };
+
+#if defined(MJ808_)
+volatile mj808_t Device __attribute__ ((section (".data")));			// define
+#endif

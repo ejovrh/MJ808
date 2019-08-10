@@ -20,16 +20,16 @@ int main(void)
 {
 	mj8x8_ctor(&MJ8X8, &CAN, &MCU);										// call base class constructor & tie in associated object addresses
 
-	message_handler_ctor(&message, &CAN, &BUS, &msg_in, &msg_out);		// call message handler constructor
+	message_handler_ctor(&MsgHandler, &CAN, &BUS, &msg_in, &msg_out);		// call message handler constructor
 
 	#if defined(MJ808_)													// MJ808 - call derived class constructor and tie in base class
-	mj808_ctor(&device, &MJ8X8, &LED, &BUTTON, &message);
+	mj808_ctor(&Device, &MJ8X8, &LED, &BUTTON, &MsgHandler);
 	#endif
 	#if defined(MJ818_)													// MJ818 - call derived class constructor and tie in base class
-	mj818_ctor(&device, &MJ8X8, &LED, &message);
+	mj818_ctor(&Device, &MJ8X8, &LED, &MsgHandler);
 	#endif
 	#if defined(MJ828_)													// MJ828 - call derived class constructor and tie in base class
-	mj828_ctor(&device, &MJ8X8, &LED, &BUTTON, &message);
+	mj828_ctor(&Device, &MJ8X8, &LED, &BUTTON, &MsgHandler);
 	#endif
 
 	// TODO - implement micro controller sleep cycles
@@ -51,7 +51,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 {
 	sleep_disable();													// wakey wakey
 
-	volatile can_t *can = device.mj8x8->can;							// get pointer to CAN instance
+	volatile can_t *can = Device.mj8x8->can;							// get pointer to CAN instance
 
 	// assumption: an incoming message is of interest for this unit
 	//	'being of interest' is defined in the filters
@@ -63,7 +63,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 
 	inline void helper_handle_rx(void)									// handles incoming message interrupts
 	{
-		device.mj8x8->PopulatedBusOperation(message.ReceiveMessage(&message), &device);	// let the device deal with the message
+		Device.mj8x8->PopulatedBusOperation(MsgHandler.ReceiveMessage(&MsgHandler), &Device);	// let the device deal with the message
 	};
 
 	void helper_handle_error(volatile can_t *in_can)					// handles RXBn overflow interrupts
@@ -76,7 +76,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		if (in_can->eflg & _BV(TXEP))									// handle TX error-passive situation
 		{
 			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
-			device.mj8x8->can->Sleep(in_can, 1);						// put to sleep
+			Device.mj8x8->can->Sleep(in_can, 1);						// put to sleep
 		}
 
 		if (in_can->eflg & _BV(RXEP))									// TODO - handle RX error-passive situation
@@ -210,53 +210,53 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	sleep_disable();													// wakey wakey
 
 	#if defined(MJ808_)													// pushbutton code for mj808
-	button_debounce(&device.button[0]);									// from here on the button is debounced and states can be consumed
+	button_debounce(&Device.button[0]);									// from here on the button is debounced and states can be consumed
 
-	if (device.button[0].hold_error)
+	if (Device.button[0].hold_error)
 		// TODO - access via object
 		util_led(UTIL_LED_RED_BLINK_6X);
 
 	// FIXME - on really long button press (far beyond hold error) something writes crap into memory, i.e. the address of PIND in button struct gets overwritten, as does the adders of the led struct
-	if (!flag_lamp_is_on && device.button[0].hold_temp)					// turn front light on
+	if (!flag_lamp_is_on && Device.button[0].hold_temp)					// turn front light on
 	{
-		if (message.bus->devices._MJ818)								// if rear light is present
-			message.SendMessage(&message, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);	// turn on rear light
+		if (MsgHandler.bus->devices._MJ818)								// if rear light is present
+			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);	// turn on rear light
 
-		if (message.bus->devices._MJ828)								// dashboard is present
-			message.SendMessage(&message, (CMND_DEVICE | DEV_LU | DASHBOARD), 0x00, 1);		// dummy command to dashboard
+		if (MsgHandler.bus->devices._MJ828)								// dashboard is present
+			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LU | DASHBOARD), 0x00, 1);		// dummy command to dashboard
 
 		// TODO - access via object
 		fade(0x20, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);
 		util_led(UTIL_LED_GREEN_ON);									// power on green LED
 
-		message.SendMessage(&message, (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);			// convey button press via CAN
+		MsgHandler.SendMessage(&MsgHandler, (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);			// convey button press via CAN
 
 		flag_lamp_is_on = 1;
 	}
 
-	if ((flag_lamp_is_on && !device.button[0].hold_temp) || device.button->hold_error)		// turn front light off
+	if ((flag_lamp_is_on && !Device.button[0].hold_temp) || Device.button->hold_error)		// turn front light off
 	{
-		if (message.bus->devices._MJ818)								// if rear light is present
-			message.SendMessage(&message, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);	// turn off rear light
+		if (MsgHandler.bus->devices._MJ818)								// if rear light is present
+			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);	// turn off rear light
 
 		// TODO - access via object
 		fade(0x00, &OCR_FRONT_LIGHT, OCR_MAX_FRONT_LIGHT);				// turn off
 		util_led(UTIL_LED_GREEN_OFF);									// power off green LED
 
-		message.SendMessage(&message, (MSG_BUTTON_EVENT | BUTTON0_OFF), 0x00, 1);			// convey button release via CAN
+		MsgHandler.SendMessage(&MsgHandler, (MSG_BUTTON_EVENT | BUTTON0_OFF), 0x00, 1);			// convey button release via CAN
 		flag_lamp_is_on = 0;
 	}
 	#endif
 
 	#if defined(MJ828_)													// pushbutton code for mj828
-	button_debounce(&device.button[0]);									// from here on the button is debounced and states can be consumed
-	button_debounce(&device.button[1]);									// ditto
+	button_debounce(&Device.button[0]);									// from here on the button is debounced and states can be consumed
+	button_debounce(&Device.button[1]);									// ditto
 
-	device.led->led_array[blue].on = device.button[0].toggle;
-	device.led->led_array[yellow].on = device.button[1].is_pressed;
-	device.led->led_array[red].blink_count = (device.button[0].hold_error || device.button[1].hold_error);
-	device.led->led_array[battery_led1].on = device.button[0].hold_temp;
-	device.led->led_array[battery_led2].on = device.button[1].hold_temp;
+	Device.led->led_array[blue].on = Device.button[0].toggle;
+	Device.led->led_array[yellow].on = Device.button[1].is_pressed;
+	Device.led->led_array[red].blink_count = (Device.button[0].hold_error || Device.button[1].hold_error);
+	Device.led->led_array[battery_led1].on = Device.button[0].hold_temp;
+	Device.led->led_array[battery_led2].on = Device.button[1].hold_temp;
 	#endif
 
 	sleep_enable();														// back to sleep
@@ -304,13 +304,13 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka
 	WDTCR |= _BV(WDIE);													// setting the bit prevents a reset when the timer expires
 
 	// TODO - refactor into message handler - where the message gets transmitted
-	if (device.mj8x8->can->in_sleep)									// if the CAN infra. is sleeping
-		device.mj8x8->can->Sleep(device.mj8x8->can, 0);					// wake it up
+	if (Device.mj8x8->can->in_sleep)									// if the CAN infra. is sleeping
+		Device.mj8x8->can->Sleep(Device.mj8x8->can, 0);					// wake it up
 
-	device.mj8x8->HeartBeat(&message);
+	Device.mj8x8->HeartBeat(&MsgHandler);
 
-	if ( (! message.bus->devices.uint16_val) && (message.bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
-		device.mj8x8->EmptyBusOperation();								// perform the device-specific default operation
+	if ( (! MsgHandler.bus->devices.uint16_val) && (MsgHandler.bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
+		Device.mj8x8->EmptyBusOperation();								// perform the device-specific default operation
 
 	sleep_enable();														// back to sleep
 }

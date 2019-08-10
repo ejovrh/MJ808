@@ -90,3 +90,5 @@ void button_debounce(volatile button_t *in_button)						// marks a button as pre
 	}
 };
 #endif
+
+volatile button_t BUTTON __attribute__ ((section (".data")));			// define

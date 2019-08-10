@@ -6,7 +6,7 @@
 #include "attiny4313.h"
 
 volatile attiny4313_t *attiny_ctor(volatile attiny4313_t * self)
-{	
+{
 	cli();																// clear interrupts globally
 
 	//self->wdtcr = &WDTCR;												// set proper value
@@ -26,3 +26,5 @@ volatile attiny4313_t *attiny_ctor(volatile attiny4313_t * self)
 
 	return self;
 };
+
+volatile attiny4313_t MCU __attribute__ ((section (".data")));			// define

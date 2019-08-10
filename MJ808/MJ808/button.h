@@ -24,6 +24,6 @@ typedef struct button_t													// struct describing a generic pushbutton
 
 void button_debounce(volatile button_t *in_button);						// marks a button as pressed if it was pressed for the duration of 2X ISR iterations
 
-static volatile button_t BUTTON;										// declare button object
+extern volatile button_t BUTTON;										// declare button object
 
 #endif /* BUTTON_H_ */

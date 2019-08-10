@@ -57,6 +57,6 @@ void util_led(uint8_t in_val);											// interprets CMND_UTIL_LED command - u
 void dev_light(volatile can_msg_t *msg);								// interprets CMND_DEVICE-DEV_LIGHT command - positional light control
 // depreciated end
 
-static volatile leds_t LED;												// declare LED object
+extern volatile leds_t LED;												// declare LED object
 
 #endif /* LED_H_ */

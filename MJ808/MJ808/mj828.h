@@ -28,6 +28,6 @@ typedef struct															// struct describing devices on MJ828
 
 volatile mj828_t *mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg);
 
-static volatile mj828_t device;
+extern volatile mj828_t Device;
 
 #endif /* MJ828_H_ */
