@@ -93,14 +93,8 @@
 	#define DEV_3B 13													//	radar
 	#define DEV_3C 14													//	??
 	#define DEV_3D 15 													//	??
+
 #define CMND_UTIL_LED 0x10 												// command for utility LED operation (color, on, off, blink)
-	#define LEDS 0x07
-//	#define GREEN 0x00
-	// TODO - change LED command layout - RED becomes 0x01
-	#define RED 0x00
-	#define GREEN 0x01
-	#define YELLOW 0x02
-	#define BLUE 0x03
 	#define BLUE_BATT_INDICATOR1 0x04
 	#define BLUE_BATT_INDICATOR2 0x05
 	#define BLUE_BATT_INDICATOR3 0x06
@@ -121,14 +115,24 @@
 	#define UTIL_LED_RED_BLINK_4X 0x1C									// utility LED - blink
 	#define UTIL_LED_RED_BLINK_5X 0x1D									// utility LED - blink
 	#define UTIL_LED_RED_BLINK_6X 0x1E									// utility LED - blink
-	#define LED_STATE_ON 0x01
-	#define LED_STATE_OFF 0x00
-	#define LED_STATE_MASK 0x01
-	#define LED_BLINK_MASK 0x06
 
-// TODO - define MJ828 LED & switch commands
-
-#define CMND_DB 0x20													// dashboard ?
+#define CMND_DASHBOARD	0x20											// dashboard ?
+	#define DASHBOARD_LED_RED_OFF		0x20							// dashboard red LED off
+	#define DASHBOARD_LED_RED_ON		0x21							// dashboard red LED on
+	#define DASHBOARD_LED_GREEN_OFF		0x22							//	etc.
+	#define DASHBOARD_LED_GREEN_ON		0x23							//	etc.
+	#define DASHBOARD_LED_BLUE1_OFF		0x24
+	#define DASHBOARD_LED_BLUE1_ON		0x25
+	#define DASHBOARD_LED_YELLOW_OFF	0x26
+	#define DASHBOARD_LED_YELLOW_ON		0x27
+	#define DASHBOARD_LED_BLUE2_OFF		0x28
+	#define DASHBOARD_LED_BLUE2_ON		0x29
+	#define DASHBOARD_LED_BLUE3_OFF		0x2A
+	#define DASHBOARD_LED_BLUE3_ON		0x2B
+	#define DASHBOARD_LED_BLUE4_OFF		0x2C
+	#define DASHBOARD_LED_BLUE4_ON		0x2D
+	#define DASHBOARD_LED_BLUE5_OFF		0x2E
+	#define DASHBOARD_LED_BLUE5_ON		0x2F
 
 #define CMND_DEVICE 0x40												// command for device (00 - logic unit, 01 - power sources, 02 - lights, 03 sensors)
 	#define DEV_LU 0x00													// logic unit device

@@ -8,26 +8,6 @@
 
 // TODO - get rid of this ifdef
 #if defined(MJ828_)
-/*
-// interprets LED commands for this device
-void digestMJ828(volatile can_msg_t *in_msg)
-{
-	if ( (in_msg->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)			// utility LED command
-	{
-		return;															// HACK - can be removed once CMND_UTIL_LED is of new command structure
-
-		if (in_msg->ARGUMENT == 0)
-		return;
-
-		//LED.flag_any_glow = (in_msg->ARGUMENT & ( LED_STATE_MASK | LED_BLINK_MASK) ); // figure out if anything shall glow at all
-		//
-		//uint8_t n = (uint8_t) ( (in_msg>COMMAND & CMND_UTIL_LED) & LEDS);			// translate numeric LED ID from command to LED on device
-		//LED.leds[n].on = (in_msg->ARGUMENT & LED_STATE_MASK);						// set the state command for that particular LED
-		//LED.leds[n].blink_count = (in_msg->ARGUMENT & LED_BLINK_MASK);				// set the blink command for that particular LED
-		return;
-	}
-};
-*/
 
 void mj828_led_gpio_init(void)
 {
