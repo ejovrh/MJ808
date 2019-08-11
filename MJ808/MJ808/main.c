@@ -1,7 +1,7 @@
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 
-#define MJ808_															// what device to compile for?
+#define MJ828_															// what device to compile for?
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"
@@ -249,11 +249,11 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	button_debounce(&Device.button[0]);									// from here on the button is debounced and states can be consumed
 	button_debounce(&Device.button[1]);									// ditto
 
-	Device.led->led_array[blue].on = Device.button[0].toggle;
-	Device.led->led_array[yellow].on = Device.button[1].is_pressed;
-	Device.led->led_array[red].blink_count = (Device.button[0].hold_error || Device.button[1].hold_error);
-	Device.led->led_array[battery_led1].on = Device.button[0].hold_temp;
-	Device.led->led_array[battery_led2].on = Device.button[1].hold_temp;
+	Device.led->led[blue].on = Device.button[0].toggle;
+	Device.led->led[yellow].on = Device.button[1].is_pressed;
+	//Device.led->led[red].blink_count = (Device.button[0].hold_error || Device.button[1].hold_error);
+	Device.led->led[battery_led1].on = Device.button[0].hold_temp;
+	Device.led->led[battery_led2].on = Device.button[1].hold_temp;
 	#endif
 
 	sleep_enable();														// back to sleep

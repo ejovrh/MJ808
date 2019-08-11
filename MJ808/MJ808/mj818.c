@@ -46,7 +46,7 @@ void PopulatedBusOperationMJ818(volatile void *in_msg, volatile void *self)
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | REAR_LIGHT) )		// rear positional light
 	{
-		_wrapper_fade_mj818(msg->ARGUMENT);								// fade rear light to CAN msg. argument value
+		dev_ptr->led->led[Rear].Shine(msg->ARGUMENT);					// fade rear light to CAN msg. argument value
 		return;
 	}
 
