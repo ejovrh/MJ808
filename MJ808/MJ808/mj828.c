@@ -34,18 +34,10 @@ void virtual_led_ctorMJ828(volatile leds_t *self)
 	static individual_led_t individual_led[8] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
 	self->led = individual_led;
 
-	//self->led[Red].Shine = &_glow;
-	//self->led[Green].Shine = &_glow;
-	//self->led[Blue].Shine = &_glow;
-	//self->led[Yellow].Shine = &_glow;
-	//self->led[Battery_led1].Shine = &_glow;
-	//self->led[Battery_led2].Shine = &_glow;
-	//self->led[Battery_led3].Shine = &_glow;
-	//self->led[Battery_led4].Shine = &_glow;
-
 	// FIXME - if below flag is 0, it doesnt work properly
 	self->flag_any_glow = 1;
 	// FIXME - if below flag is 0, it doesnt work properly: at least one LED has to be on for the thing to work
+	// also: if any other than Green is on, it doesnt shine properly
 	self->led[Green].Flag_On = 1;
 };
 
@@ -66,7 +58,7 @@ void PopulatedBusOperationMJ828(volatile void *in_msg, volatile void *self)
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if ( (msg->COMMAND & MASK_COMMAND) == CMND_DASHBOARD )				// dashboard command
 	{
-		dev_ptr->led->led[ ((msg->COMMAND & 0x0E) >> 1) ].Flag_On = (msg->COMMAND & 0x01);
+		dev_ptr->led->led[ ((msg->COMMAND & 0x0E) >> 1) ].Flag_On = (msg->COMMAND & 0x01);	// flag LED at appropriate index as whatever the command says
 		return;
 	}
 };
@@ -156,7 +148,7 @@ static void _LED_red(const uint8_t state)								// red LED on/off
 	if (state)															// on
 		gpio_conf(LED_CP1_pin, OUTPUT, LOW);							// pin b2 - cathode
 	else																// off
-		gpio_conf(LED_CP2_pin, OUTPUT, HIGH);							// pin b2 - cathode
+		gpio_conf(LED_CP1_pin, OUTPUT, HIGH);							// pin b2 - cathode
 };
 
 static void _LED_green(const uint8_t state)								// green LED on/off
@@ -246,13 +238,14 @@ static void _glow(uint8_t led, uint8_t state)
 		&_LED_blue4,
 		&_LED_blue5
 	};
+
 	mj828_led_gpio_init();												// set LED pins to initial state
 
 	// TODO - implement blinking
 	//static uint8_t counter;
 	//counter++;
 
-	(branchtable_led[led])(state);										// execute LED code depending on supplied LED number
+	(*branchtable_led[led])(state);										// execute LED code depending on supplied LED number
 };
 
 void charlieplexing_handler(volatile leds_t *in_led)
