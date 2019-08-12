@@ -90,7 +90,7 @@ void PopulatedBusOperationMJ808(volatile void *in_msg, volatile void *self)
 	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT) )		// front positional light - low beam
 	{
 		// TODO - access via object
-		_wrapper_fade_mj808(msg->ARGUMENT);										// fade front light to CAN msg. argument value
+		_wrapper_fade_mj808(msg->ARGUMENT);								// fade front light to CAN msg. argument value
 		return;
 	}
 

@@ -8,6 +8,7 @@
 
 // TODO - get rid of this ifdef
 #if defined(MJ828_)
+static void _glow(uint8_t led, uint8_t state);
 
 void mj828_led_gpio_init(void)
 {
@@ -33,8 +34,19 @@ void virtual_led_ctorMJ828(volatile leds_t *self)
 	static individual_led_t individual_led[8] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
 	self->led = individual_led;
 
+	//self->led[Red].Shine = &_glow;
+	//self->led[Green].Shine = &_glow;
+	//self->led[Blue].Shine = &_glow;
+	//self->led[Yellow].Shine = &_glow;
+	//self->led[Battery_led1].Shine = &_glow;
+	//self->led[Battery_led2].Shine = &_glow;
+	//self->led[Battery_led3].Shine = &_glow;
+	//self->led[Battery_led4].Shine = &_glow;
+
+	// FIXME - if below flag is 0, it doesnt work properly
 	self->flag_any_glow = 1;
-	self->led[green].on = 1;
+	// FIXME - if below flag is 0, it doesnt work properly: at least one LED has to be on for the thing to work
+	self->led[Green].Flag_On = 1;
 };
 
 // defines device operation on empty bus
@@ -51,7 +63,12 @@ void PopulatedBusOperationMJ828(volatile void *in_msg, volatile void *self)
 
 	volatile can_msg_t *msg = msg_ptr->ReceiveMessage(msg_ptr);			// CAN message object
 
-	// TODO - implement mj828 message handling
+	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
+	if ( (msg->COMMAND & MASK_COMMAND) == CMND_DASHBOARD )				// dashboard command
+	{
+		dev_ptr->led->led[ ((msg->COMMAND & 0x0E) >> 1) ].Flag_On = (msg->COMMAND & 0x01);
+		return;
+	}
 };
 
 volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg)
@@ -213,7 +230,7 @@ static void _LED_blue5(const uint8_t state)								// blue5 LED on/off
 }
 
 // private function, used only by the charlieplexing_handler() function
-static void glow(uint8_t led, uint8_t state)
+static void _glow(uint8_t led, uint8_t state)
 {
 	if (!state)															// if we get 0x00 (off argument) - do nothing and get out
 		return;
@@ -242,7 +259,7 @@ void charlieplexing_handler(volatile leds_t *in_led)
 {
 	static uint8_t i = 0;												// iterator to loop over all LEDs on device
 
-	glow(i, in_led->led[i].on);											// e.g. command = 0x00 (red), arg = 0x01 (on)
+	_glow(i, in_led->led[i].Flag_On);											// e.g. command = 0x00 (red), arg = 0x01 (on)
 
 	// !!!!
 	(i == 7) ? i = 0 : ++i;												// count up to led_count and then start from zero

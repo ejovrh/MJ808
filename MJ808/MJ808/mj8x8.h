@@ -64,8 +64,8 @@
 #define BLINK_DELAY 125													// delay used in the util_led() function
 #define REDISCOVER_ITERATION 2											// every (value * 1s) the CAN device will do a re-broadcast
 
-
-
+#define MASK_COMMAND 0xF0
+#define MASK_ARGUMENT 0x0F
 
 // command byte structure
 #define CMND_ANNOUNCE 0x00												// command to register self on other devices (announce-like broadcast)
@@ -93,7 +93,7 @@
 	#define DEV_3B 13													//	radar
 	#define DEV_3C 14													//	??
 	#define DEV_3D 15 													//	??
-	
+
 // general utility LED color definitions; used in LU code
 #define RED 0x00
 #define GREEN 0x01

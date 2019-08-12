@@ -221,12 +221,15 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 		if (MsgHandler.bus->devices._MJ818)								// if rear light is present
 			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);	// turn on rear light
 
+		// TOOD - send some command??
 		if (MsgHandler.bus->devices._MJ828)								// dashboard is present
 			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LU | DASHBOARD), 0x00, 1);		// dummy command to dashboard
 
+		// FIXME - distinguish between LU present and not
 		Device.led->led[Front].Shine(0x40);								// power on front light
 		Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);				// power on green LED
 
+		// FIXME - if the LU is present, actually the LU tells us how to glow
 		MsgHandler.SendMessage(&MsgHandler, (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);				// convey button press via CAN
 
 		flag_lamp_is_on = 1;
@@ -249,11 +252,11 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	button_debounce(&Device.button[0]);									// from here on the button is debounced and states can be consumed
 	button_debounce(&Device.button[1]);									// ditto
 
-	Device.led->led[blue].on = Device.button[0].toggle;
-	Device.led->led[yellow].on = Device.button[1].is_pressed;
+	Device.led->led[Blue].Flag_On = Device.button[0].toggle;
+	Device.led->led[Yellow].Flag_On = Device.button[1].is_pressed;
 	//Device.led->led[red].blink_count = (Device.button[0].hold_error || Device.button[1].hold_error);
-	Device.led->led[battery_led1].on = Device.button[0].hold_temp;
-	Device.led->led[battery_led2].on = Device.button[1].hold_temp;
+	Device.led->led[Battery_LED1].Flag_On = Device.button[0].hold_temp;
+	Device.led->led[Battery_LED2].Flag_On = Device.button[1].hold_temp;
 	#endif
 
 	sleep_enable();														// back to sleep
@@ -263,7 +266,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 ISR(TIMER0_COMPA_vect)													// timer/counter0 - 16.25ms - charlieplexed blinking
 {
 	if (LED.flag_any_glow)												// if there is any LED to glow at all
-		charlieplexing_handler(&LED);									// handles LEDs according to CAN message (of type CMND_UTIL_LED)
+		 charlieplexing_handler(&LED);									// handles LEDs according to CAN message (of type CMND_UTIL_LED)
 }
 #endif
 

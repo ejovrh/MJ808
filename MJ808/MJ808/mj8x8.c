@@ -21,7 +21,7 @@ void Heartbeat(volatile void *msg)
 
 			#if defined(MJ808_)
 			// TODO - access via object
-			//util_led(UTIL_LED_RED_BLINK_1X);
+			_util_led_mj808(UTIL_LED_RED_BLINK_1X);
 			#endif
 		}
 	}
@@ -59,4 +59,4 @@ volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volat
 	return self;
 };
 
-volatile volatile mj8x8_t MJ8X8 __attribute__ ((section (".data")));	// define MJ8X8 object and put it into .data
+volatile mj8x8_t MJ8X8 __attribute__ ((section (".data")));	// define MJ8X8 object and put it into .data

@@ -37,7 +37,6 @@ typedef struct															// canbus_t struct describing the CAN bus state
 	uint8_t FlagDoDefaultOperation : 2;
 } canbus_t;
 
-// FIXME - should be in message.h and not here
 typedef struct message_handler_t										// sends and receives (stores) CAN messages, keeps track of bus status
 {																		//	is message-agnostic -> the actual device has to know what to do with a message (via PopulatedBusOperation() )
 	volatile can_msg_t *in;												// container for inbound messages
