@@ -93,12 +93,18 @@
 	#define DEV_3B 13													//	radar
 	#define DEV_3C 14													//	??
 	#define DEV_3D 15 													//	??
-
+	
+// general utility LED color definitions; used in LU code
+#define RED 0x00
+#define GREEN 0x01
+#define YELLOW 0x02
+#define BLUE1 0x03
+#define BLUE2 0x04
+#define BLUE3 0x05
+#define BLUE4 0x06
+#define BLUE5 0x07
 #define CMND_UTIL_LED 0x10 												// command for utility LED operation (color, on, off, blink)
-	#define BLUE_BATT_INDICATOR1 0x04
-	#define BLUE_BATT_INDICATOR2 0x05
-	#define BLUE_BATT_INDICATOR3 0x06
-	#define BLUE_BATT_INDICATOR4 0x07
+
 	#define UTIL_LED_GREEN_OFF 0x10 									// utility LED - off
 	#define UTIL_LED_GREEN_ON 0x17 										// utility LED - on
 	#define UTIL_LED_GREEN_BLINK_1X 0x11 								// utility LED - blink
