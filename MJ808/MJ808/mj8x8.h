@@ -151,23 +151,25 @@
 	#define DEV_SENSOR 0x0C												// sensor device
 #define CMND_FW_FLASH 0x70												// command for flashing firmware
 #define MSG_TIME_SYNC 0x80												// time synchronization message
+
 #define MSG_BUTTON_EVENT 0x90											// message for button events
-	#define BUTTON0_OFF 0x00											// button n off
-	#define BUTTON0_ON 0x01												// button n on
-	#define BUTTON1_OFF 0x02
-	#define BUTTON1_ON 0x03
-	#define BUTTON2_OFF 0x04
-	#define BUTTON2_ON 0x05
-	#define BUTTON3_OFF 0x06
-	#define BUTTON3_ON 0x07
-	#define BUTTON4_OFF 0x08
-	#define BUTTON4_ON 0x09
-	#define BUTTON5_OFF 0x0A
-	#define BUTTON5_ON 0x0B
-	#define BUTTON6_OFF 0x0C
-	#define BUTTON6_ON 0x0D
-	#define BUTTON7_OFF 0x0E
-	#define BUTTON7_ON 0x0F
+	#define MSG_BUTTON_EVENT_BUTTON0_OFF	0x90							// button n off
+	#define MSG_BUTTON_EVENT_BUTTON0_ON		0x91							// button n on
+	#define MSG_BUTTON_EVENT_BUTTON1_OFF	0x92
+	#define MSG_BUTTON_EVENT_BUTTON1_ON		0x93
+	#define MSG_BUTTON_EVENT_BUTTON2_OFF	0x94
+	#define MSG_BUTTON_EVENT_BUTTON2_ON		0x95
+	#define MSG_BUTTON_EVENT_BUTTON3_OFF	0x96
+	#define MSG_BUTTON_EVENT_BUTTON3_ON		0x97
+	#define MSG_BUTTON_EVENT_BUTTON4_OFF	0x98
+	#define MSG_BUTTON_EVENT_BUTTON4_ON		0x99
+	#define MSG_BUTTON_EVENT_BUTTON5_OFF	0x9A
+	#define MSG_BUTTON_EVENT_BUTTON5_ON		0x9B
+	#define MSG_BUTTON_EVENT_BUTTON6_OFF	0x9C
+	#define MSG_BUTTON_EVENT_BUTTON6_ON		0x9D
+	#define MSG_BUTTON_EVENT_BUTTON7_OFF	0x9E
+	#define MSG_BUTTON_EVENT_BUTTON7_ON		0x9F
+
 #define MSG_MEASUREMENT_DATA 0xD0										// message containing various measurements
 #define MSG_BUS 0xF0													// CAN bus related control messages
 
@@ -229,7 +231,7 @@
 typedef struct															// "base class" struct for mj8x8 devices
 {
 	volatile can_t *can;												// pointer to the CAN structure
-	volatile attiny4313_t *mcu;											// pointer to MCU structure
+	volatile ATtiny4313_t *mcu;											// pointer to MCU structure
 
 	void (*HeartBeat)(volatile void *msg);								// default periodic heartbeat for all devices
 	void (*EmptyBusOperation)(void);									// device's default operation on empty bus, implemented in derived class
@@ -237,8 +239,8 @@ typedef struct															// "base class" struct for mj8x8 devices
 } mj8x8_t ;
 
 
-volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu);
+volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile ATtiny4313_t *mcu);
 
-extern volatile mj8x8_t MJ8X8;											// declare MJ8X8 object
+extern volatile mj8x8_t MJ8x8;											// declare MJ8X8 object
 
 #endif /* MJ8x8_H_ */

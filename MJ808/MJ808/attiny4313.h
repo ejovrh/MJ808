@@ -5,10 +5,10 @@ typedef struct
 {
 	//volatile uint8_t *wdtcr;
 
-} attiny4313_t;
+} ATtiny4313_t;
 
-volatile attiny4313_t *attiny_ctor(volatile attiny4313_t * self);
+volatile ATtiny4313_t *attiny_ctor(volatile ATtiny4313_t * self);
 
-extern volatile attiny4313_t MCU;										// declare MCU object
+extern volatile ATtiny4313_t MCU;										// declare MCU object
 
 #endif /* ATTINY4313_H_ */

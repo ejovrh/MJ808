@@ -21,11 +21,13 @@ void mj828_led_gpio_init(void)
 // implementation of virtual constructor for buttons
 void virtual_button_ctorMJ828(volatile button_t *self)
 {
+	static individual_button_t individual_button[2] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
+	self->button = individual_button;									// assign pointer to button array
 
-	self[0].pin_number = 0;												// sw2 is connected to pin D0
-	self[1].pin_number = 1;												// sw2 is connected to pin D1
-	self[0].PIN = (uint8_t *) 0x30;										// 0x020 offset plus address - PIND register
-	self[1].PIN = (uint8_t *) 0x30;										// ditto
+	self->button[0].pin_number = 0;										// sw2 is connected to pin D0
+	self->button[1].pin_number = 1;										// sw2 is connected to pin D1
+	self->button[0].PIN = (uint8_t *) 0x30;								// 0x020 offset plus address - PIND register
+	self->button[1].PIN = (uint8_t *) 0x30;								// ditto
 };
 
 // implementation of virtual constructor for LEDs
@@ -117,9 +119,10 @@ volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, vo
 
 	self->mj8x8 = base;													// remember own object address
 	self->led = led;													// remember the LED object address
+	self->button = button;												// remember the button object address
+
 	self->led->virtual_led_ctor = &virtual_led_ctorMJ828;
 	self->button->virtual_button_ctor = &virtual_button_ctorMJ828;
-	//self->button = &button;
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -252,7 +255,7 @@ void charlieplexing_handler(volatile leds_t *in_led)
 {
 	static uint8_t i = 0;												// iterator to loop over all LEDs on device
 
-	_glow(i, in_led->led[i].Flag_On);											// e.g. command = 0x00 (red), arg = 0x01 (on)
+	_glow(i, in_led->led[i].Flag_On);									// tell LED number "i" what to do
 
 	// !!!!
 	(i == 7) ? i = 0 : ++i;												// count up to led_count and then start from zero

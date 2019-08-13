@@ -5,7 +5,7 @@
 
 #include "attiny4313.h"
 
-volatile attiny4313_t *attiny_ctor(volatile attiny4313_t * self)
+volatile ATtiny4313_t *attiny_ctor(volatile ATtiny4313_t * self)
 {
 	cli();																// clear interrupts globally
 
@@ -27,4 +27,4 @@ volatile attiny4313_t *attiny_ctor(volatile attiny4313_t * self)
 	return self;
 };
 
-volatile attiny4313_t MCU __attribute__ ((section (".data")));			// define MCU object and put it into .data
+volatile ATtiny4313_t MCU __attribute__ ((section (".data")));			// define MCU object and put it into .data

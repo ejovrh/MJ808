@@ -1,7 +1,7 @@
 #include "button.h"
 
 #if defined(MJ808_) || defined (MJ828_)									// button debouncer for devices with buttons
-void button_debounce(volatile button_t *in_button)						// marks a button as pressed if it was pressed for the duration of 2X ISR iterations
+void button_debounce(volatile individual_button_t *in_button)						// marks a button as pressed if it was pressed for the duration of 2X ISR iterations
 	{
 	inline void local_advance_counter(void)								// local helper function which advances the debounce "timer"
 	{
@@ -91,4 +91,4 @@ void button_debounce(volatile button_t *in_button)						// marks a button as pre
 };
 #endif
 
-volatile button_t BUTTON __attribute__ ((section (".data")));			// define BUTTON object and put it into .data
+volatile button_t Button __attribute__ ((section (".data")));			// define BUTTON object and put it into .data

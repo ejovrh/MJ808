@@ -52,8 +52,12 @@ void _util_led_mj808(uint8_t in_val)
 // implementation of virtual constructor for buttons
 void virtual_button_ctorMJ808(volatile button_t *self)
 {
-	self[0].PIN = (uint8_t *) 0x30; 									// 0x020 offset plus address - PIND register
-	self[0].pin_number = 4;												// sw2 is connected to pin D0
+	static individual_button_t individual_button[1] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
+	self->button = individual_button;									// assign pointer to button array
+
+	self->button_count = 1;
+	self->button[Center].PIN = (uint8_t *) 0x30; 						// 0x020 offset plus address - PIND register
+	self->button[Center].pin_number = 4;								// sw2 is connected to pin D0
 };
 
 // implementation of virtual constructor for LEDs
@@ -158,9 +162,10 @@ volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, vo
 
 	self->mj8x8 = base;													// remember own object address
 	self->led = led;													// remember the LED object address
+	self->button = button;												// remember the button object address
+
 	self->led->virtual_led_ctor = &virtual_led_ctorMJ808;
 	self->button->virtual_button_ctor = &virtual_button_ctorMJ808;
-	//self->button = &button;
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device

@@ -38,7 +38,7 @@ void Heartbeat(volatile void *msg)
 	++ptr->bus->BeatIterationCount;										// increment the iteration counter
 };
 
-volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile attiny4313_t *mcu)
+volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile ATtiny4313_t *mcu)
 {
 	// GPIO state definitions
 	{
@@ -59,4 +59,4 @@ volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volat
 	return self;
 };
 
-volatile mj8x8_t MJ8X8 __attribute__ ((section (".data")));	// define MJ8X8 object and put it into .data
+volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));	// define MJ8X8 object and put it into .data

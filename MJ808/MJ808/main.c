@@ -1,7 +1,7 @@
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 
-#define MJ828_															// what device to compile for?
+#define MJ808_															// what device to compile for?
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"
@@ -18,18 +18,18 @@ volatile uint8_t flag_lamp_is_on = 0;									// flag - indicates if button turn
 
 int main(void)
 {
-	mj8x8_ctor(&MJ8X8, &CAN, &MCU);										// call base class constructor & tie in associated object addresses
+	mj8x8_ctor(&MJ8x8, &CAN, &MCU);										// call base class constructor & tie in associated object addresses
 
 	message_handler_ctor(&MsgHandler, &CAN, &BUS, &msg_in, &msg_out);	// call message handler constructor
 
 	#if defined(MJ808_)													// MJ808 - call derived class constructor and tie in base class
-	mj808_ctor(&Device, &MJ8X8, &LED, &BUTTON, &MsgHandler);
+	mj808_ctor(&Device, &MJ8x8, &LED, &Button, &MsgHandler);
 	#endif
 	#if defined(MJ818_)													// MJ818 - call derived class constructor and tie in base class
-	mj818_ctor(&Device, &MJ8X8, &LED, &MsgHandler);
+	mj818_ctor(&Device, &MJ8x8, &LED, &MsgHandler);
 	#endif
 	#if defined(MJ828_)													// MJ828 - call derived class constructor and tie in base class
-	mj828_ctor(&Device, &MJ8X8, &LED, &BUTTON, &MsgHandler);
+	mj828_ctor(&Device, &MJ8x8, &LED, &Button, &MsgHandler);
 	#endif
 
 	// TODO - implement micro controller sleep cycles
@@ -206,24 +206,22 @@ ISR(PCINT2_vect)														// ISR for pushbuttons
 #if ( defined(MJ808_) | defined(MJ828_) )								// ISR for timers 1 A compare match - button handling
 ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 {	// code to be executed every 25ms
-
 	sleep_disable();													// wakey wakey
 
 	#if defined(MJ808_)													// pushbutton code for mj808
-	button_debounce(&Device.button[0]);									// from here on the button is debounced and states can be consumed
+	button_debounce(&Device.button->button[Center]);						// from here on the button is debounced and states can be consumed
 
-	if (Device.button[0].hold_error)
+	if (Device.button->button[Center].hold_error)
 		Device.led->led[Utility].Shine(UTIL_LED_RED_BLINK_6X);
 
 	// FIXME - on really long button press (far beyond hold error) something writes crap into memory, i.e. the address of PIND in button struct gets overwritten, as does the adders of the led struct
-	if (!flag_lamp_is_on && Device.button[0].hold_temp)									// turn front light on
+	if (!flag_lamp_is_on && Device.button->button[Center].hold_temp)									// turn front light on
 	{
 		Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);				// power on green LED
+		Device.led->led[Front].Shine(0x20);							// power on front light
 
-		if (!MsgHandler.bus->devices._LU)					// if the logic unit is not present
-			Device.led->led[Front].Shine(0x20);							// power on front light
-		else												// if it is present
-			MsgHandler.SendMessage(&MsgHandler, (MSG_BUTTON_EVENT | BUTTON0_ON), 0x00, 1);				// convey button press via CAN and the logic unit will tell me what to do
+		if (MsgHandler.bus->devices._LU)					// if the logic unit is not present
+			MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);				// convey button press via CAN and the logic unit will tell me what to do
 
 		if (MsgHandler.bus->devices._MJ818)								// if rear light is present
 			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);	// turn on rear light
@@ -234,14 +232,13 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 		flag_lamp_is_on = 1;
 	}
 
-	if ((flag_lamp_is_on && !Device.button[0].hold_temp) || Device.button->hold_error)	// turn front light off
+	if ((flag_lamp_is_on && !Device.button->button[Center].hold_temp) || Device.button->button[Center].hold_error)	// turn front light off
 	{
 		Device.led->led[Utility].Shine(UTIL_LED_GREEN_OFF);				// power off green LED
-
-		if (!MsgHandler.bus->devices._LU)				// if the logic unit is not present
 			Device.led->led[Front].Shine(0x00);							// power off front light
-		else											// if it is present
-			MsgHandler.SendMessage(&MsgHandler, (MSG_BUTTON_EVENT | BUTTON0_OFF), 0x00, 1);				// convey button press via CAN and the logic unit will tell me what to do
+
+		if (MsgHandler.bus->devices._LU)				// if the logic unit is not present
+			MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);				// convey button press via CAN and the logic unit will tell me what to do
 
 		if (MsgHandler.bus->devices._MJ818)								// if rear light is present
 			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);	// turn off rear light
@@ -254,14 +251,19 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	#endif
 
 	#if defined(MJ828_)													// pushbutton code for mj828
-	button_debounce(&Device.button[0]);									// from here on the button is debounced and states can be consumed
-	button_debounce(&Device.button[1]);									// ditto
+	button_debounce(&Device.button->button[Left]);						// from here on the button is debounced and states can be consumed
+	button_debounce(&Device.button->button[Right]);						//	ditto
 
 // example commands for function-based buttons lighting up LEDs
-	//Device.led->led[Blue].Flag_On = Device.button[0].toggle;
-	//Device.led->led[Yellow].Flag_On = Device.button[1].is_pressed;
-	//Device.led->led[red].blink_count = (Device.button[0].hold_error || Device.button[1].hold_error);
-	//Device.led->led[Battery_LED1].Flag_On = Device.button[0].hold_temp;
+	//if (Device.button->button[Left].toggle)
+		//Device.led->led[Blue].Flag_On = 1;
+	//else
+		//Device.led->led[Blue].Flag_On = 0;
+
+	if (Device.button->button[Right].hold_temp)
+		Device.led->led[Battery_LED4].Flag_On = 1;
+	else
+		Device.led->led[Battery_LED4].Flag_On = 0;
 	#endif
 
 	sleep_enable();														// back to sleep
@@ -270,8 +272,8 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 #if defined(MJ828_)														// ISR for timer0 - 16.25ms - charlieplexing timer
 ISR(TIMER0_COMPA_vect)													// timer/counter0 - 16.25ms - charlieplexed blinking
 {
-	if (LED.flag_any_glow)												// if there is any LED to glow at all
-		 charlieplexing_handler(Device.led);									// handles LEDs according to CAN message (of type CMND_UTIL_LED)
+	if (Device.led->flag_any_glow)										// if there is any LED to glow at all
+		 charlieplexing_handler(Device.led);							// handles LEDs according to CAN message (of type CMND_UTIL_LED)
 }
 #endif
 
