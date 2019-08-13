@@ -12,11 +12,12 @@
 void _fade(const uint8_t value, volatile uint8_t *ocr);
 
 // TODO - optimize
-void _wrapper_fade_mj808(const uint8_t value)
+static void _wrapper_fade_mj808(const uint8_t value)
 {
 	_fade(value, &OCR_FRONT_LIGHT);
 };
 
+// TODO - should be static and the caller in question should use an object
 // concrete utility LED handling function
 void _util_led_mj808(uint8_t in_val)
 {
@@ -66,8 +67,8 @@ void virtual_led_ctorMJ808(volatile leds_t *self)
 	static individual_led_t individual_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
 	self->led = individual_led;											// assign pointer to LED array
 
-	self->led[Utility].Shine = &_util_led_mj808;
-	self->led[Front].Shine = &_wrapper_fade_mj808;
+	self->led[Utility].Shine = &_util_led_mj808;						// LED-specific implementation
+	self->led[Front].Shine = &_wrapper_fade_mj808;						// LED-specific implementation
 };
 
 // device default operation on empty bus
@@ -139,12 +140,12 @@ volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, vo
 	TIFR |= _BV(OCF1A);													// clear interrupt flag
 	TIMSK = _BV(OCIE1A);												// TCO compare match IRQ enable for OCIE1A
 	TCCR1B = ( _BV(WGM12) |												// CTC mode w. TOP = OCR1A, TOV1 set to MAX
-			   _BV(CS11)  );											// clkIO/8 (from prescaler), start timer
+			   _BV(CS11)  );											// clkIO/8 (from pre-scaler), start timer
 
 	// timer/counter0 - 8bit - front light PWM
-	TCCR0A = ( _BV(COM0A1)|												// Clear OC1A/OC1B on Compare Match when up counting
-	_BV(WGM00) );														// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
-	TCCR0B = _BV(CS01);													// clock prescaler: clk/8
+	TCCR0A = ( _BV(COM0A1) |											// Clear OC1A/OC1B on Compare Match when up counting
+			   _BV(WGM00) );											// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
+	TCCR0B = _BV(CS01);													// clock pre-scaler: clk/8
 
 
 	if(MCUSR & _BV(WDRF))												// power-up - if we got reset by the watchdog...
@@ -155,7 +156,7 @@ volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, vo
 	}
 
 	// TODO - setup of pin change interrupts for pushbuttons
-	PCMSK2 = _BV(PCINT15);												// enable pin change for sw @ pin D4
+	PCMSK2 = _BV(PCINT15);												// enable pin change for switch @ pin D4
 
 	sei();
 	}
@@ -185,7 +186,7 @@ volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, vo
 	self->button->virtual_button_ctor(self->button);					// call virtual constructor
 
 	// TODO - access via object
-	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);									// crude "I'm finished" indicator
+	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);							// crude "I'm finished" indicator
 
 	return self;
 };

@@ -10,7 +10,7 @@
 void _fade(const uint8_t value, volatile uint8_t *ocr);
 
 // TODO - optimize
-void _wrapper_fade_mj818(uint8_t value)
+static void _wrapper_fade_mj818(uint8_t value)
 {
 // TODO - optimize
 	_fade(value, &OCR_REAR_LIGHT);
@@ -20,9 +20,9 @@ void _wrapper_fade_mj818(uint8_t value)
 void virtual_led_ctorMJ818(volatile leds_t *self)
 {
 	static individual_led_t individual_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
-	self->led = individual_led;
+	self->led = individual_led;											// assign pointer to LED array
 
-	self->led[Rear].Shine = &_wrapper_fade_mj818;
+	self->led[Rear].Shine = &_wrapper_fade_mj818;						// LED-specific implementation
 };
 
 // defines device operation on empty bus
@@ -80,13 +80,13 @@ volatile mj818_t * mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, vo
 
 	// timer/counter1 - 16bit - brake light PWM
 	TCCR1A = (_BV(COM1A1) |												// Clear OC1A/OC1B on Compare Match when up counting
-	_BV(WGM10));														// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
-	TCCR1B = _BV(CS10);													// clock prescaler: clk/1 (no pre-scaling)
+			  _BV(WGM10));												// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
+	TCCR1B = _BV(CS10);													// clock pre-scaler: clk/1 (no pre-scaling)
 
 	// timer/counter0 - 8bit - rear light PWM
 	TCCR0A = ( _BV(COM0A1)|												// Clear OC1A/OC1B on Compare Match when up counting
-	_BV(WGM00) );														// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
-	TCCR0B = _BV(CS01);													// clock prescaler: clk/8
+			   _BV(WGM00) );											// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
+	TCCR0B = _BV(CS01);													// clock pre-scaler: clk/8
 
 	if(MCUSR & _BV(WDRF))												// power-up - if we got reset by the watchdog...
 	{

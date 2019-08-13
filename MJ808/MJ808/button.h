@@ -19,12 +19,11 @@ typedef struct 															// struct describing a generic pushbutton
 	uint8_t hold_temp :1;												// flag indicating a button press for a duration of BUTTON_MIN_PRESS_TIME (up to BUTTON_MAX_PRESS_TIME) seconds, followed by button release
 	uint8_t hold_error :1;												// flag indicating constant button press (by error, object leaning on pushbutton, etc.)
 	uint8_t is_at_default :1;											// 1 - default values, 0 otherwise
-
 } individual_button_t;
 
 typedef struct button_t
 {
-	individual_button_t *button;
+	individual_button_t *button;										// "virtual" pointer to array of buttons present on particular device
 	volatile uint8_t button_count : 2;									// max. 4 buttons
 
 	void (*virtual_button_ctor)(volatile struct button_t *self);		// "virtual" pointer to array of button present on particular device

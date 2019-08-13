@@ -1,7 +1,7 @@
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 
-#define MJ808_															// what device to compile for?
+#define MJ828_															// what device to compile for?
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"
@@ -14,7 +14,7 @@
 #endif
 
 // TODO - refactor away
-volatile uint8_t flag_lamp_is_on = 0;									// flag - indicates if button turned the device on, used for pushbutton handling
+volatile uint8_t flag_lamp_is_on = 0;									// flag - indicates if any utilty LED is to be lit; applies mostly to mj828
 
 int main(void)
 {
@@ -186,7 +186,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 	sleep_enable();														// back to sleep
 }
 
-ISR(PCINT2_vect)														// ISR for pushbuttons
+ISR(PCINT2_vect)														// pin-change ISR for pushbuttons
 {
 	sleep_disable();													// wakey wakey
 

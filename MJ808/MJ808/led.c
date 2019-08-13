@@ -23,7 +23,7 @@ void _fade(const uint8_t value, volatile uint8_t *ocr)
 	if (value < *ocr)													// we need to get dimmer & decrement the OCR
 	{
 		while (--*ocr > value)											// loop until we match the OCR with the requested value
-		_delay_ms(1);												// delay it a bit for visual stimulus ...
+		_delay_ms(1);													// delay it a bit for visual stimulus ...
 
 		sei();															// enable interrupts
 		return;
