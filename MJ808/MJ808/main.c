@@ -56,7 +56,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 	// assumption: an incoming message is of interest for this unit
 	//	'being of interest' is defined in the filters
 
-	inline void handle_message_error(volatile can_t *in_can)					// handles message error interrupts
+	inline void handle_message_error(volatile can_t *in_can)			// handles message error interrupts
 	{
 		in_can->BitModify(CANINTF, _BV(MERRF), 0x00);					// clear the flag
 	};
@@ -190,25 +190,18 @@ ISR(PCINT2_vect)														// pin-change ISR for pushbuttons
 	sleep_disable();													// wakey wakey
 
 	;
-	//button_debounce(&mj808.button[0]);								// from here on the button is debounced and states can be consumed
-	//button_debounce(&mj828.button[1]);								// ditto
-
-	//mj828.led->leds[blue].on = mj828.button[0].toggle;
-	//mj828.led->leds[yellow].on = mj828.button[1].is_pressed;
-	//mj828.led->leds[red].blink_count = (mj828.button[0].hold_error || mj828.button[1].hold_error);
-	//mj828.led->leds[battery_led1].on = mj828.button[0].hold_temp;
-	//mj828.led->leds[battery_led2].on = mj828.button[1].hold_temp;
 
 	sleep_enable();														// back to sleep
 }
 
 #if ( defined(MJ808_) | defined(MJ828_) )								// ISR for timers 1 A compare match - button handling
 ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
-{	// code to be executed every 25ms
+{
+	// code to be executed every 25ms
 	sleep_disable();													// wakey wakey
 
 	#if defined(MJ808_)													// pushbutton code for mj808
-	button_debounce(&Device.button->button[Center]);						// from here on the button is debounced and states can be consumed
+	button_debounce(&Device.button->button[Center]);					// from here on the button is debounced and states can be consumed
 
 	if (Device.button->button[Center].hold_error)
 		Device.led->led[Utility].Shine(UTIL_LED_RED_BLINK_6X);
@@ -217,16 +210,16 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	if (!flag_lamp_is_on && Device.button->button[Center].hold_temp)									// turn front light on
 	{
 		Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);				// power on green LED
-		Device.led->led[Front].Shine(0x20);							// power on front light
+		Device.led->led[Front].Shine(0x20);								// power on front light
 
-		if (MsgHandler.bus->devices._LU)					// if the logic unit is not present
-			MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);				// convey button press via CAN and the logic unit will tell me what to do
+		if (MsgHandler.bus->devices._LU)								// if the logic unit is not present
+			MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
 
 		if (MsgHandler.bus->devices._MJ818)								// if rear light is present
-			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);	// turn on rear light
+			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);		// turn on rear light
 
 		if (MsgHandler.bus->devices._MJ828)								// dashboard is present
-			MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_ON, 0x00, 1);		// turn on yellow LED
+			MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
 
 		flag_lamp_is_on = 1;
 	}
@@ -234,16 +227,16 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	if ((flag_lamp_is_on && !Device.button->button[Center].hold_temp) || Device.button->button[Center].hold_error)	// turn front light off
 	{
 		Device.led->led[Utility].Shine(UTIL_LED_GREEN_OFF);				// power off green LED
-			Device.led->led[Front].Shine(0x00);							// power off front light
+		Device.led->led[Front].Shine(0x00);								// power off front light
 
-		if (MsgHandler.bus->devices._LU)				// if the logic unit is not present
-			MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);				// convey button press via CAN and the logic unit will tell me what to do
+		if (MsgHandler.bus->devices._LU)								// if the logic unit is not present
+			MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
 
 		if (MsgHandler.bus->devices._MJ818)								// if rear light is present
-			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);	// turn off rear light
+			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);		// turn off rear light
 
 		if (MsgHandler.bus->devices._MJ828)								// dashboard is present
-			MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_OFF, 0x00, 1);		// turn off yellow LED
+			MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_OFF, 0x00, 1);						// turn off yellow LED
 
 		flag_lamp_is_on = 0;
 	}

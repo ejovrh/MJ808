@@ -23,9 +23,9 @@ static void _LED_red(const uint8_t state)								// red LED on/off
 	gpio_conf(LED_CP2_pin, OUTPUT, HIGH);								// pin b1 - anode
 
 	if (state)															// on
-	gpio_conf(LED_CP1_pin, OUTPUT, LOW);							// pin b2 - cathode
+		gpio_conf(LED_CP1_pin, OUTPUT, LOW);							// pin b2 - cathode
 	else																// off
-	gpio_conf(LED_CP1_pin, OUTPUT, HIGH);							// pin b2 - cathode
+		gpio_conf(LED_CP1_pin, OUTPUT, HIGH);							// pin b2 - cathode
 };
 
 static void _LED_green(const uint8_t state)								// green LED on/off
@@ -33,9 +33,9 @@ static void _LED_green(const uint8_t state)								// green LED on/off
 	gpio_conf(LED_CP1_pin, OUTPUT, HIGH);								// pin b2 - anode
 
 	if (state)															// on
-	gpio_conf(LED_CP2_pin, OUTPUT, LOW);							// pin b1 - cathode
+		gpio_conf(LED_CP2_pin, OUTPUT, LOW);							// pin b1 - cathode
 	else																// off
-	gpio_conf(LED_CP2_pin, OUTPUT, HIGH);							// pin b1 - cathode
+		gpio_conf(LED_CP2_pin, OUTPUT, HIGH);							// pin b1 - cathode
 }
 
 static void _LED_blue1(const uint8_t state)								// blue1 LED on/off
@@ -43,9 +43,9 @@ static void _LED_blue1(const uint8_t state)								// blue1 LED on/off
 	gpio_conf(LED_CP2_pin, OUTPUT, HIGH);								// pin b1 - anode
 
 	if (state)															// on
-	gpio_conf(LED_CP3_pin, OUTPUT, LOW);							// pin b0 - cathode
+		gpio_conf(LED_CP3_pin, OUTPUT, LOW);							// pin b0 - cathode
 	else																// off
-	gpio_conf(LED_CP3_pin, OUTPUT, HIGH);							// pin b0 - cathode
+		gpio_conf(LED_CP3_pin, OUTPUT, HIGH);							// pin b0 - cathode
 }
 
 static void _LED_yellow(const uint8_t state)							// yellow LED on/off
@@ -53,9 +53,9 @@ static void _LED_yellow(const uint8_t state)							// yellow LED on/off
 	gpio_conf(LED_CP3_pin, OUTPUT, HIGH);								// pin b2 - anode
 
 	if (state)															// on
-	gpio_conf(LED_CP2_pin, OUTPUT, LOW);							// pin b1 - cathode
+		gpio_conf(LED_CP2_pin, OUTPUT, LOW);							// pin b1 - cathode
 	else																// off
-	gpio_conf(LED_CP2_pin, OUTPUT, HIGH);							// pin b1 - cathode
+		gpio_conf(LED_CP2_pin, OUTPUT, HIGH);							// pin b1 - cathode
 }
 
 static void _LED_blue2(const uint8_t state)								// blue2 LED on/off
@@ -63,9 +63,9 @@ static void _LED_blue2(const uint8_t state)								// blue2 LED on/off
 	gpio_conf(LED_CP4_pin, OUTPUT, HIGH);								// pin d6 - anode
 
 	if (state)															// on
-	gpio_conf(LED_CP3_pin, OUTPUT, LOW);							// pin b0 - cathode
+		gpio_conf(LED_CP3_pin, OUTPUT, LOW);							// pin b0 - cathode
 	else																// off
-	gpio_conf(LED_CP3_pin, OUTPUT, HIGH);							// pin b0 - cathode
+		gpio_conf(LED_CP3_pin, OUTPUT, HIGH);							// pin b0 - cathode
 }
 
 static void _LED_blue3(const uint8_t state)								// blue3 LED on/off
@@ -73,9 +73,9 @@ static void _LED_blue3(const uint8_t state)								// blue3 LED on/off
 	gpio_conf(LED_CP3_pin, OUTPUT, HIGH);								// pin b0 - anode
 
 	if (state)															// on
-	gpio_conf(LED_CP4_pin, OUTPUT, LOW);							// pin d6 - cathode
+		gpio_conf(LED_CP4_pin, OUTPUT, LOW);							// pin d6 - cathode
 	else																// off
-	gpio_conf(LED_CP4_pin, OUTPUT, HIGH);							// pin d6 - cathode
+		gpio_conf(LED_CP4_pin, OUTPUT, HIGH);							// pin d6 - cathode
 }
 
 static void _LED_blue4(const uint8_t state)								// blue4 LED on/off
@@ -83,9 +83,9 @@ static void _LED_blue4(const uint8_t state)								// blue4 LED on/off
 	gpio_conf(LED_CP1_pin, OUTPUT, HIGH);								// pin b2 - anode
 
 	if (state)															// on
-	gpio_conf(LED_CP4_pin, OUTPUT, LOW);							// pin d6 - cathode
+		gpio_conf(LED_CP4_pin, OUTPUT, LOW);							// pin d6 - cathode
 	else																// off
-	gpio_conf(LED_CP4_pin, OUTPUT, HIGH);							// pin d6 - cathode
+		gpio_conf(LED_CP4_pin, OUTPUT, HIGH);							// pin d6 - cathode
 }
 
 static void _LED_blue5(const uint8_t state)								// blue5 LED on/off
@@ -93,9 +93,9 @@ static void _LED_blue5(const uint8_t state)								// blue5 LED on/off
 	gpio_conf(LED_CP4_pin, OUTPUT, HIGH);								// pin d6 - anode
 
 	if (state)															// on
-	gpio_conf(LED_CP1_pin, OUTPUT, LOW);							// pin b2 - cathode
+		gpio_conf(LED_CP1_pin, OUTPUT, LOW);							// pin b2 - cathode
 	else																// off
-	gpio_conf(LED_CP1_pin, OUTPUT, HIGH);							// pin b2 - cathode
+		gpio_conf(LED_CP1_pin, OUTPUT, HIGH);							// pin b2 - cathode
 }
 
 // private function, used only by the charlieplexing_handler() function
@@ -104,12 +104,12 @@ static void _glow(uint8_t led, uint8_t state)
 	if (!state)															// if we get 0x00 (off argument) - do nothing and get out
 		return;
 
-	static uint16_t (*fptr)(const uint8_t in_val);						// declare function pointer prototype
+	static uint16_t (*fptr)(const uint8_t in_val);						// declare pointer for function pointers in branchtable_led[]
 	static void (* const branchtable_led[])(const uint8_t in_val) PROGMEM =		// array of function pointers for basic LED handling in PROGMEM
 	{
 		&_LED_red,														// index 0
 		&_LED_green,													// index 1
-		&_LED_blue1,													// and so on...
+		&_LED_blue1,													//	and so on...
 		&_LED_yellow,
 		&_LED_blue2,
 		&_LED_blue3,

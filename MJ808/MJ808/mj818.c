@@ -30,8 +30,8 @@ void EmptyBusOperationMJ818(void)
 {
 	if (OCR_REAR_LIGHT == 0x00)											// run once
 	{
-		_fade(0x10, &OCR_REAR_LIGHT);								// turn on rear light
-		_fade(0x05, &OCR_BRAKE_LIGHT);							// turn on rear light
+		_fade(0x10, &OCR_REAR_LIGHT);									// turn on rear light
+		_fade(0x05, &OCR_BRAKE_LIGHT);									// turn on rear light
 	}
 };
 
