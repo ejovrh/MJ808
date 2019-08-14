@@ -21,6 +21,7 @@ void virtual_led_ctorMJ818(volatile leds_t *self)
 {
 	static individual_led_t individual_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
 	self->led = individual_led;											// assign pointer to LED array
+	self->flags = &LEDFlags;											// tie in LEDFlags struct into led struct
 
 	self->led[Rear].Shine = &_wrapper_fade_mj818;						// LED-specific implementation
 };
