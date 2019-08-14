@@ -23,7 +23,7 @@ void _SendMessage(volatile message_handler_t *self, const uint8_t in_command, co
 volatile can_msg_t *_ReceiveMessage(volatile struct message_handler_t *self)
 {
 	self->can->FetchMessage(self->in);									// fetch the message from some RX buffer
-	self->bus->devices.uint16_val |= ( 1 << ( (self->in->sidh >> 2) & 0x0F ) );	// populate devices in canbus_t struct so that we know who else is on the bus
+	self->bus->devices.All |= ( 1 << ( (self->in->sidh >> 2) & 0x0F ) );	// populate devices in canbus_t struct so that we know who else is on the bus
 
 	return self->in;													// return it to someone who will make use of it
 };
@@ -37,7 +37,7 @@ void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_c
 	self->out = out_msg;												// set address of outbound message struct
 
 	// TODO - eventually get rid of union
-	self->bus->devices.uint16_val = 0x0000;
+	self->bus->devices.All = 0x0000;
 	self->bus->NumericalCAN_ID = 0;
 	self->bus->FlagDoHeartbeat = 1;										// start with discovery mode
 	self->bus->FlagDoDefaultOperation = 0;

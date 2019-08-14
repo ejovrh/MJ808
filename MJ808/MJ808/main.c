@@ -1,7 +1,8 @@
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
+#include <avr/pgmspace.h>
 
-#define MJ828_															// what device to compile for?
+#define MJ808_															// what device to compile for?
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"
@@ -13,8 +14,6 @@
 #include "mj828.h"
 #endif
 
-// TODO - refactor away
-volatile uint8_t flag_lamp_is_on = 0;									// flag - indicates if any utilty LED is to be lit; applies mostly to mj828
 
 int main(void)
 {
@@ -49,12 +48,13 @@ int main(void)
 
 ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message reception of the MCP2515
 {
-	sleep_disable();													// wakey wakey
-
-	volatile can_t *can = Device.mj8x8->can;							// get pointer to CAN instance
-
 	// assumption: an incoming message is of interest for this unit
 	//	'being of interest' is defined in the filters
+
+	inline void helper_reti(void)
+	{
+		asm("reti");
+	};
 
 	inline void handle_message_error(volatile can_t *in_can)			// handles message error interrupts
 	{
@@ -136,6 +136,28 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		in_can->BitModify(CANINTF, 0x1C, 0x00);
 	};
 
+	sleep_disable();													// wakey wakey
+
+//#define BRANCHTABLE_ICOD
+
+	volatile can_t *can = Device.mj8x8->can;							// get pointer to CAN instance
+
+#if defined(BRANCHTABLE_ICOD)
+	static const uint16_t (*fptr)(volatile can_t *in_can);				// declare pointer for function pointers in branchtable_led[]
+	void (* const branchtable_icod[])(volatile can_t *in_can) PROGMEM =	// array of function pointers for basic LED handling in PROGMEM
+	{
+		&helper_reti,													// icod value 0
+		&helper_handle_error,											// icod value 1
+		&helper_handle_wakeup,											// icod value 2
+		&helper_handle_tx,												// icod value 3
+		&helper_handle_tx,												// icod value 4
+		&helper_handle_tx,												// icod value 5
+		&helper_handle_rx,												// icod value 6
+		&helper_handle_rx												// icod value 7
+	};
+#endif
+
+
 	do		// ICOD loop handler - runs while ICOD != 0
 	{
 		can->ReadBytes(TEC, &can->tec, 2);								// read in TEC and REC
@@ -143,6 +165,12 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		can->ReadBytes(CANCTRL, &can->canctrl, 1);
 
 		can->icod =  ((can->canstat & 0x0E) >> 1);						// right shift so that CANSTAT.U0 cant interfere
+
+#if defined(BRANCHTABLE_ICOD)
+		fptr = pgm_read_ptr(&branchtable_icod[can->icod]);							// get appropriate function pointer from PROGMEM
+		(fptr)(can);
+#endif
+#if !defined(BRANCHTABLE_ICOD)
 
 		// TODO - implement something like a vpointer lookup table or branch table instead of this shit:
 		switch (can->icod)												// handling of cases depending on ICOD value - sort of priority-style
@@ -179,6 +207,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 				helper_handle_rx();
 				break;
 		};
+#endif
 
 	} while (can->icod);
 
@@ -207,10 +236,12 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 		Device.led->led[Utility].Shine(UTIL_LED_RED_BLINK_6X);
 
 	// FIXME - on really long button press (far beyond hold error) something writes crap into memory, i.e. the address of PIND in button struct gets overwritten, as does the adders of the led struct
-	if (!flag_lamp_is_on && Device.button->button[Center].hold_temp)									// turn front light on
+	if (!(Device.led->flags->All & _BV(Front)) && Device.button->button[Center].hold_temp)									// turn front light on
 	{
 		Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);				// power on green LED
+		Device.led->flags->All |= _BV(Utility);							// set bit0
 		Device.led->led[Front].Shine(0x20);								// power on front light
+		Device.led->flags->All |= _BV(Front);							// set bit1
 
 		if (MsgHandler.bus->devices._LU)								// if the logic unit is not present
 			MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
@@ -220,14 +251,14 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 
 		if (MsgHandler.bus->devices._MJ828)								// dashboard is present
 			MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
-
-		flag_lamp_is_on = 1;
 	}
 
-	if ((flag_lamp_is_on && !Device.button->button[Center].hold_temp) || Device.button->button[Center].hold_error)	// turn front light off
+	if (( (Device.led->flags->All & _BV(Front)) && !Device.button->button[Center].hold_temp) || Device.button->button[Center].hold_error)	// turn front light off
 	{
 		Device.led->led[Utility].Shine(UTIL_LED_GREEN_OFF);				// power off green LED
+		Device.led->flags->All &= ~_BV(Utility);						// clear bit0
 		Device.led->led[Front].Shine(0x00);								// power off front light
+		Device.led->flags->All &= ~_BV(Front);							// clear bit1
 
 		if (MsgHandler.bus->devices._LU)								// if the logic unit is not present
 			MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
@@ -237,8 +268,6 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 
 		if (MsgHandler.bus->devices._MJ828)								// dashboard is present
 			MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_OFF, 0x00, 1);						// turn off yellow LED
-
-		flag_lamp_is_on = 0;
 	}
 	#endif
 
@@ -247,15 +276,10 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	button_debounce(&Device.button->button[Right]);						//	ditto
 
 // example commands for function-based buttons lighting up LEDs
-	//if (Device.button->button[Left].toggle)
-		//Device.led->led[Blue].Flag_On = 1;
-	//else
-		//Device.led->led[Blue].Flag_On = 0;
-
 	if (Device.button->button[Right].hold_temp)
-		Device.led->led[Battery_LED4].Flag_On = 1;
+		Device.led->flags->All |= _BV(Battery_LED4);					// set bit7
 	else
-		Device.led->led[Battery_LED4].Flag_On = 0;
+		Device.led->flags->All &= ~_BV(Battery_LED4);					// clear bit7
 	#endif
 
 	sleep_enable();														// back to sleep
@@ -264,7 +288,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 #if defined(MJ828_)														// ISR for timer0 - 16.25ms - charlieplexing timer
 ISR(TIMER0_COMPA_vect)													// timer/counter0 - 16.25ms - charlieplexed blinking
 {
-	if (Device.led->flag_any_glow)										// if there is any LED to glow at all
+	if (Device.led->flags->All)											// if there is any LED to glow at all
 		 charlieplexing_handler(Device.led);							// handles LEDs according to CAN message (of type CMND_UTIL_LED)
 }
 #endif
@@ -308,7 +332,7 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka
 
 	Device.mj8x8->HeartBeat(&MsgHandler);
 
-	if ( (! MsgHandler.bus->devices.uint16_val) && (MsgHandler.bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
+	if ( (! MsgHandler.bus->devices.All) && (MsgHandler.bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
 		Device.mj8x8->EmptyBusOperation();								// perform the device-specific default operation
 
 	sleep_enable();														// back to sleep

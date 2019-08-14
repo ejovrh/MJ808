@@ -21,14 +21,14 @@ void charlieplexing_handler(volatile leds_t *in_led);					// handles LEDs in cha
 
 enum mj828_leds															// enum of lights on this device
 {
-	Red,
-	Green,
-	Blue,
-	Yellow,
-	Battery_LED1,
-	Battery_LED2,
-	Battery_LED3,
-	Battery_LED4
+	Red,																// 0
+	Green,																// 1
+	Blue,																// 2
+	Yellow,																// 3
+	Battery_LED1,														// 4
+	Battery_LED2,														// 5
+	Battery_LED3,														// 6
+	Battery_LED4														// 7
 } ;
 
 enum mj828_buttons														// enum of buttons on this device

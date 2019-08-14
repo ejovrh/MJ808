@@ -25,7 +25,7 @@ typedef union															// u_devices union of bit fields and uint16_t - repr
 		uint8_t _DEV_3C :1;												//	ditto
 		uint8_t _DEV_3D :1;												//	ditto
 	};
-	uint16_t uint16_val;												// the bit field as one uint16_t
+	uint16_t All;														// the bit field as one uint16_t
 } u_devices;
 
 typedef struct															// canbus_t struct describing the CAN bus state

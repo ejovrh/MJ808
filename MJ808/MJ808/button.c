@@ -1,8 +1,8 @@
 #include "button.h"
 
 #if defined(MJ808_) || defined (MJ828_)									// button debouncer for devices with buttons
-void button_debounce(volatile individual_button_t *in_button)						// marks a button as pressed if it was pressed for the duration of 2X ISR iterations
-	{
+void button_debounce(volatile individual_button_t *in_button)			// marks a button as pressed if it was pressed for the duration of 2X ISR iterations
+{
 	inline void local_advance_counter(void)								// local helper function which advances the debounce "timer"
 	{
 		++in_button->hold_counter;										// start to count (used to determine long button press; not used for debouncing)
@@ -17,8 +17,12 @@ void button_debounce(volatile individual_button_t *in_button)						// marks a bu
 	/*	rationale of debouncing:
 	 *		- the ISR fires every 25ms, which means the sample rate of a button press is once per 25ms
 	 *		- if the button is held for only one iteration (bounce state) we have 0x01 and on the next iteration state is reset to 0x00 [1st 25ms]
-	 *		- if the button is held for two iterations, state is on the first iteration 0x01 and 0x03 on the second [2nd 25ms]
-	 *		- after 2 iterations 50ms have passed -> stable state
+	 *		- if the button is held for two iterations, on the first iteration state is 0x01 and on the second 0x03 [2nd 25ms]
+	 *		- after 2 iterations 50ms have passed -> we call that a stable state
+	 *
+	 *		detecting the stable state boils down to:
+	 *			- counting the duration of the stable state in 25ms intervals
+	 *			- comparing a bit-shifted number (count of 25ms intervals) to another value (BUTTON_MIN_PRESS_TIME or BUTTON_MAX_PRESS_TIME)
 	 *
 	 *		the debouncer does only that - it debounces
 	 *
