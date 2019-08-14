@@ -56,7 +56,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 	// assumption: an incoming message is of interest for this unit
 	//	'being of interest' is defined in the filters
 
-	void handle_message_error(volatile can_t *in_can)					// handles message error interrupts
+	inline void handle_message_error(volatile can_t *in_can)					// handles message error interrupts
 	{
 		in_can->BitModify(CANINTF, _BV(MERRF), 0x00);					// clear the flag
 	};
@@ -68,40 +68,42 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 
 	void helper_handle_error(volatile can_t *in_can)					// handles RXBn overflow interrupts
 	{
+		in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);					// clear the error interrupt flag
+
+/*
 		if (in_can->eflg & _BV(TXBO))									// TODO - handle bus off situation
 		{
-			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
+			;
 		}
 
 		if (in_can->eflg & _BV(TXEP))									// handle TX error-passive situation
 		{
-			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
 			Device.mj8x8->can->Sleep(in_can, 1);						// put to sleep
 		}
 
 		if (in_can->eflg & _BV(RXEP))									// TODO - handle RX error-passive situation
 		{
-			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
+			;
 		}
 
 		if (in_can->eflg & _BV(TXWAR))									// TODO - handle TX waring situation
 		{
 			// TODO - log it
-			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
+			;
 		}
 
 		if (in_can->eflg & _BV(RXWAR))									// TODO - handle RX warning situation
 		{
 			// TODO - log it
-			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
+			;
 		}
+*/
 
 		if (in_can->eflg & _BV(RX0OVR))									// RXB0 overflow - datasheet figure 4.3, p. 26
 		{
 			// FIXME - check for correct RX buffer clearing
 			helper_handle_rx();											// handle the message
 			in_can->BitModify(EFLG, _BV(RX0OVR), 0x00);					// clear the overflow bit
-			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
 			return;
 		}
 
@@ -109,11 +111,8 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		{
 			helper_handle_rx();											// handle the message
 			in_can->BitModify(EFLG, _BV(RX1OVR), 0x00);					// clear the overflow bit
-			in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);				// clear the error interrupt flag
 			return;
 		}
-
-		//mcp2515_opcode_bit_modify(CANINTF, _BV(ERRIF), 0x00);			// clear the error interrupt flag
 	};
 
 	void helper_handle_wakeup(volatile can_t *in_can)					// handles wakeup interrupts
@@ -132,7 +131,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		in_can->in_sleep = 0;
 	};
 
-	void helper_handle_tx(volatile can_t *in_can)
+	inline void helper_handle_tx(volatile can_t *in_can)
 	{
 		in_can->BitModify(CANINTF, 0x1C, 0x00);
 	};

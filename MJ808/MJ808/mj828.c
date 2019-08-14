@@ -2,10 +2,12 @@
 #include <avr/io.h>
 #include <inttypes.h>
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 
 #include "mj828.h"
 #include "gpio.h"
 
+#if defined(MJ828_)
 static void _glow(uint8_t led, uint8_t state);
 
 void mj828_led_gpio_init(void)
@@ -100,13 +102,14 @@ static void _LED_blue5(const uint8_t state)								// blue5 LED on/off
 static void _glow(uint8_t led, uint8_t state)
 {
 	if (!state)															// if we get 0x00 (off argument) - do nothing and get out
-	return;
+		return;
 
-	static void (* const branchtable_led[])(const uint8_t in_val) =		// array of function pointers for basic LED handling
+	static uint16_t (*fptr)(const uint8_t in_val);						// declare function pointer prototype
+	static void (* const branchtable_led[])(const uint8_t in_val) PROGMEM =		// array of function pointers for basic LED handling in PROGMEM
 	{
-		&_LED_red,
-		&_LED_green,
-		&_LED_blue1,
+		&_LED_red,														// index 0
+		&_LED_green,													// index 1
+		&_LED_blue1,													// and so on...
 		&_LED_yellow,
 		&_LED_blue2,
 		&_LED_blue3,
@@ -120,7 +123,8 @@ static void _glow(uint8_t led, uint8_t state)
 	//static uint8_t counter;
 	//counter++;
 
-	(*branchtable_led[led])(state);										// execute LED code depending on supplied LED number
+	fptr = pgm_read_ptr(&branchtable_led[led]);							// get appropriate function pointer from PROGMEM
+	fptr(state);														// execute with arguments given
 };
 
 void charlieplexing_handler(volatile leds_t *in_led)
@@ -261,4 +265,5 @@ volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, vo
 
 #if defined(MJ828_)
 volatile mj828_t Device __attribute__ ((section (".data")));			// define Device object and put it into .data
+#endif
 #endif
