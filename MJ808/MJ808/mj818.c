@@ -60,7 +60,7 @@ void PopulatedBusOperationMJ818(volatile void *in_msg, volatile void *self)
 	}
 };
 
-volatile mj818_t * mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg)
+void mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg)
 {
 	// GPIO state definitions
 	{
@@ -118,8 +118,6 @@ volatile mj818_t * mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, vo
 	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
 
 	self->led->virtual_led_ctor(self->led);								// call virtual constructor
-
-	return self;
 };
 
 #if defined(MJ818_)

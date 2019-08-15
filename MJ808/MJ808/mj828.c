@@ -187,7 +187,7 @@ void PopulatedBusOperationMJ828(volatile void *in_msg, volatile void *self)
 	}
 };
 
-volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg)
+void mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg)
 {
 	// GPIO state definitions
 	{
@@ -262,8 +262,6 @@ volatile mj828_t * mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, vo
 
 	self->led->virtual_led_ctor(self->led);								// call virtual constructor
 	self->button->virtual_button_ctor(self->button);					// call virtual constructor
-
-	return self;
 };
 
 #if defined(MJ828_)

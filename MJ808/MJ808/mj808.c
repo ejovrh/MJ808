@@ -112,7 +112,7 @@ void PopulatedBusOperationMJ808(volatile void *in_msg, volatile void *self)
 	}
 };
 
-volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg)
+void mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg)
 {
 	// GPIO state definitions
 	{
@@ -188,8 +188,6 @@ volatile mj808_t * mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, vo
 
 	// TODO - access via object
 	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);							// crude "I'm finished" indicator
-
-	return self;
 };
 
 #if defined(MJ808_)
