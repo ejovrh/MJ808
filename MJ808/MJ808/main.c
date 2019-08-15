@@ -236,7 +236,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 		Device.led->led[Utility].Shine(UTIL_LED_RED_BLINK_6X);
 
 	// FIXME - on really long button press (far beyond hold error) something writes crap into memory, i.e. the address of PIND in button struct gets overwritten, as does the adders of the led struct
-	if (!(Device.led->flags->All & _BV(Front)) && Device.button->button[Center].hold_temp)									// turn front light on
+	if (!(Device.led->flags->All & _BV(Front)) && Device.button->button[Center].hold_temp)													// turn front light on
 	{
 		Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);				// power on green LED
 		Device.led->flags->All |= _BV(Utility);							// set bit0

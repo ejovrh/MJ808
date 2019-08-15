@@ -19,6 +19,7 @@
 #define OCR_REAR_LIGHT OCR0A											// Output Compare Register for PWM of rear light
 #define OCR_BRAKE_LIGHT OCR1A											// Output Compare Register for PWM of brake light
 
+// TODO - update current measurements for latest boards
 	/* MJ818 - rear & brake light
 		timer/counter 0 and timer/counter 1 both operate in 8bit mode
 		hex val. - duty cycle - current back light - current brake light
@@ -56,7 +57,7 @@
 */
 
 // maximum safe values for light OCRs
-#define OCR_MAX_FRONT_LIGHT 0xE0										// max. OCR1A count limit for front light PWM
+#define OCR_MAX_FRONT_LIGHT 0xF8										// max. OCR1A count limit for front light PWM
 #define OCR_MAX_REAR_LIGHT 0xFF											// max. OCR0A count limit for rear light PWM - the sky is the limit
 #define OCR_MAX_BRAKE_LIGHT 0xF8										// max. OCR1A count limit for brake light PWM
 
