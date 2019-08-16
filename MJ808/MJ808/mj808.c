@@ -77,13 +77,13 @@ volatile leds_t *virtual_led_ctorMJ808(volatile leds_t *self)
 };
 
 // device default operation on empty bus
-void EmptyBusOperationMJ808(void)
+void _EmptyBusOperationMJ808(void)
 {
 	;
 };
 
 // received MsgHandler object and passes
-void PopulatedBusOperationMJ808(volatile void *in_msg, volatile void *self)
+void _PopulatedBusOperationMJ808(volatile void *in_msg, volatile void *self)
 {
 	message_handler_t *msg_ptr = (message_handler_t *) in_msg;			// pointer cast to avoid compiler warnings
 	mj808_t *dev_ptr = (mj808_t *) self;								//	ditto
@@ -180,8 +180,8 @@ void mj808_ctor(volatile mj808_t *self, volatile leds_t *led, volatile button_t 
 	self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);	// high byte
 	self->mj8x8->can->own_sidh = ( RCPT_DEV_BLANK | BLANK);																	// low byte
 
-	self->mj8x8->EmptyBusOperation = &EmptyBusOperationMJ808;			// implement device-specific default operation
-	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ808;	// implements device-specific operation depending on bus activity
+	self->mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ808;			// implement device-specific default operation
+	self->mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;	// implements device-specific operation depending on bus activity
 
 	// TODO - access via object
 	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);							// crude "I'm finished" indicator

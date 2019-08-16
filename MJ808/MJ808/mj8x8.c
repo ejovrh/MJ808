@@ -5,7 +5,7 @@
 #include "mj8x8.h"
 
 // provides a periodic heartbeat based on the watchdog timer interrupt
-void Heartbeat(volatile void *msg)
+void _Heartbeat(volatile void *msg)
 {
 	message_handler_t *ptr = (message_handler_t *) msg;
 
@@ -52,11 +52,11 @@ volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volat
 	// state initialization of device-unspecific pins
 	}
 
-	self->HeartBeat = &Heartbeat;
+	self->HeartBeat = &_Heartbeat;
 	self->mcu = attiny_ctor(mcu);										// pass MCU address into constructor
 	self->can = can_ctor(can);											// pass CAN address into constructor
 
 	return self;
 };
 
-volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));	// define MJ8X8 object and put it into .data
+volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));				// define MJ8X8 object and put it into .data

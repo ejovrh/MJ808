@@ -27,7 +27,7 @@ int main(void)
 	mj828_ctor(&Device, &LED, &Button);
 	#endif
 
-	message_handler_ctor(&MsgHandler, &CAN, &BUS, &msg);				// call message handler constructor
+	message_handler_ctor(&MsgHandler, &CAN, &BUS);						// call message handler constructor
 
 	// TODO - implement micro controller sleep cycles
 	set_sleep_mode(SLEEP_MODE_IDLE);									// 11mA

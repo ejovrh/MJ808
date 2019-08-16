@@ -29,7 +29,7 @@ volatile leds_t *virtual_led_ctorMJ818(volatile leds_t *self)
 };
 
 // defines device operation on empty bus
-void EmptyBusOperationMJ818(void)
+void _EmptyBusOperationMJ818(void)
 {
 	if (OCR_REAR_LIGHT == 0x00)											// run once
 	{
@@ -39,7 +39,7 @@ void EmptyBusOperationMJ818(void)
 };
 
 // dispatches CAN messages to appropriate sub-component on device
-void PopulatedBusOperationMJ818(volatile void *in_msg, volatile void *self)
+void _PopulatedBusOperationMJ818(volatile void *in_msg, volatile void *self)
 {
 	message_handler_t *msg_ptr = (message_handler_t *) in_msg;			// pointer cast to avoid compiler warnings
 	mj818_t *dev_ptr = (mj818_t *) self;								//	ditto
@@ -114,8 +114,8 @@ void mj818_ctor(volatile mj818_t *self, volatile leds_t *led)
 	self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B);	// high byte
 	self->mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																	// low byte
 
-	self->mj8x8->EmptyBusOperation = &EmptyBusOperationMJ818;			// implement device-specific default operation
-	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
+	self->mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;			// implement device-specific default operation
+	self->mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
 };
 
 #if defined(MJ818_)

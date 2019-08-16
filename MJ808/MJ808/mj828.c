@@ -9,7 +9,7 @@
 
 static void _glow(uint8_t led, uint8_t state);
 
-void mj828_led_gpio_init(void)
+void __mj828_led_gpio_init(void)
 {
 	gpio_conf(LED_CP1_pin, INPUT, LOW);									// Charlie-plexed pin1
 	gpio_conf(LED_CP2_pin, INPUT, LOW);									// Charlie-plexed pin2
@@ -116,7 +116,7 @@ static void _glow(uint8_t led, uint8_t state)
 		&_LED_blue5
 	};
 
-	mj828_led_gpio_init();												// set LED pins to initial state
+	__mj828_led_gpio_init();											// set LED pins to initial state
 
 	// TODO - implement blinking
 	//static uint8_t counter;
@@ -166,13 +166,13 @@ volatile leds_t *virtual_led_ctorMJ828(volatile leds_t *self)
 };
 
 // defines device operation on empty bus
-void EmptyBusOperationMj828(void)
+void _EmptyBusOperationMj828(void)
 {
 	;
 };
 
 // dispatches CAN messages to appropriate sub-component on device
-void PopulatedBusOperationMJ828(volatile void *in_msg, volatile void *self)
+void _PopulatedBusOperationMJ828(volatile void *in_msg, volatile void *self)
 {
 	message_handler_t *msg_ptr = (message_handler_t *) in_msg;			// pointer cast to avoid compiler warnings
 	mj828_t *dev_ptr = (mj828_t *) self;								//	ditto
@@ -257,8 +257,8 @@ void mj828_ctor(volatile mj828_t *self, volatile leds_t *led, volatile button_t 
 	self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D);	// high byte
 	self->mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																// low byte
 
-	self->mj8x8->EmptyBusOperation = &EmptyBusOperationMj828;			// implements device-specific default operation
-	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
+	self->mj8x8->EmptyBusOperation = &_EmptyBusOperationMj828;			// implements device-specific default operation
+	self->mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
 };
 
 #if defined(MJ828_)
