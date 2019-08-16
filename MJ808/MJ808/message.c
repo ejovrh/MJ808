@@ -47,5 +47,4 @@ void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_c
 volatile canbus_t BUS __attribute__ ((section (".data")));				// define BUS object and put it into .data
 volatile message_handler_t MsgHandler __attribute__ ((section (".data")));		// define MsgHandler object and put it into .data
 
-volatile can_msg_t msg_out;												// define msg_out
-volatile can_msg_t msg_in;												// define msg_in
+volatile can_msg_t msg;													// define msg_in

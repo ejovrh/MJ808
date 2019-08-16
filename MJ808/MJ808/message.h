@@ -39,7 +39,6 @@ typedef struct															// canbus_t struct describing the CAN bus state
 
 typedef struct message_handler_t										// sends and receives (stores) CAN messages, keeps track of bus status
 {																		//	is message-agnostic -> the actual device has to know what to do with a message (via PopulatedBusOperation() )
-	//volatile can_msg_t *in;												// container for inbound messages
 	volatile can_msg_t *msg;											// container for outbound messages
 	volatile can_t *can;												// pointer to CAN infrastructure
 	volatile canbus_t *bus;												// prime candidate for a private data member
@@ -53,7 +52,6 @@ void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_c
 extern volatile canbus_t BUS;											// declare canbus_t object
 extern volatile message_handler_t MsgHandler;							// declare message handler object
 
-extern volatile can_msg_t msg_out;										// declare message object for outbound messages
-extern volatile can_msg_t msg_in;										// declare message object for inbound messages
+extern volatile can_msg_t msg;											// declare message object for inbound messages
 
 #endif /* MESSAGE_H_ */
