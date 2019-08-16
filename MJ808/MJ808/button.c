@@ -10,7 +10,7 @@ void button_debounce(volatile individual_button_t *in_button)			// marks a butto
 																		// debouncing by means of bit shifting
 																		// CHECKME - XOR has no assignment operator
 		in_button->_state ^ 0x03;										// XOR what we currently have in state
-		in_button->_state <<= 1;											// left shift so that if we have 0x01 this becomes 0x02
+		in_button->_state <<= 1;										// left shift so that if we have 0x01 this becomes 0x02
 		in_button->_state |= 0x01;										// OR what we have with 0x01 so that 0x02 becomes 0x03
 	}
 

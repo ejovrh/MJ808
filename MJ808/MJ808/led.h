@@ -22,12 +22,12 @@ typedef struct															// struct describing a single generic LED
 	void (*Shine)(uint8_t in_val);										// virtual function for LED operation
 } individual_led_t;
 
-typedef struct	leds_t													// struct describing LEDs on any device
+typedef struct leds_t													// struct describing LEDs on any device
 {
 	individual_led_t *led;												// "virtual" pointer to array of LEDs present on particular device
 	volatile ledflags_t *flags;											// pointer to bitfield struct for flagging individual LEDs to be lit
 
-	void (*virtual_led_ctor)(volatile struct leds_t *self);				// virtual  constructor
+	//void (*virtual_led_ctor)(volatile struct leds_t *self);				// virtual  constructor
 } leds_t;
 
 extern volatile ledflags_t LEDFlags;									// declare LEDFlags object

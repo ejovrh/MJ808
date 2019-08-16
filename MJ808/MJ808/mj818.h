@@ -22,7 +22,7 @@ typedef struct															// struct describing devices on MJ818
 	volatile leds_t	*led;												// pointer to LED structure
 } mj818_t;
 
-void mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg);
+void mj818_ctor(volatile mj818_t *self, volatile leds_t *led);
 
 extern volatile mj818_t Device;
 

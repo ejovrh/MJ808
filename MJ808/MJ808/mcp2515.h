@@ -343,6 +343,9 @@ typedef struct can_t													// can_t struct describing the CAN device as a 
 	uint8_t icod:3;														// Interrupt Codes
 	uint8_t foo:4;														// placeholder
 
+	uint8_t own_sidh;
+	uint8_t own_sidl;
+
 // public methods
 
 	void (*Sleep)(volatile struct can_t *in_can, const uint8_t in_val);	// puts the MCP2515 to sleep (and wakes it up)

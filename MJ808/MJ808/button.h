@@ -27,7 +27,7 @@ typedef struct button_t
 	individual_button_t *button;										// "virtual" pointer to array of buttons present on particular device
 	volatile uint8_t button_count : 2;									// max. 4 buttons
 
-	void (*virtual_button_ctor)(volatile struct button_t *self);		// "virtual" pointer to array of button present on particular device
+	//void (*virtual_button_ctor)(volatile struct button_t *self);		// "virtual" pointer to array of button present on particular device
 } button_t;
 
 void button_debounce(volatile individual_button_t *in_button);			// marks a button as pressed if it was pressed for the duration of 2X ISR iterations

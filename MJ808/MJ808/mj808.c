@@ -51,7 +51,7 @@ void _util_led_mj808(uint8_t in_val)
 };
 
 // implementation of virtual constructor for buttons
-void virtual_button_ctorMJ808(volatile button_t *self)
+volatile button_t *virtual_button_ctorMJ808(volatile button_t *self)
 {
 	static individual_button_t individual_button[1] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
 	self->button = individual_button;									// assign pointer to button array
@@ -59,10 +59,12 @@ void virtual_button_ctorMJ808(volatile button_t *self)
 	self->button_count = 1;
 	self->button[Center].PIN = (uint8_t *) 0x30; 						// 0x020 offset plus address - PIND register
 	self->button[Center].pin_number = 4;								// sw2 is connected to pin D0
+
+	return self;
 };
 
 // implementation of virtual constructor for LEDs
-void virtual_led_ctorMJ808(volatile leds_t *self)
+volatile leds_t *virtual_led_ctorMJ808(volatile leds_t *self)
 {
 	static individual_led_t individual_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
 	self->led = individual_led;											// assign pointer to LED array
@@ -70,6 +72,8 @@ void virtual_led_ctorMJ808(volatile leds_t *self)
 
 	self->led[Utility].Shine = &_util_led_mj808;						// LED-specific implementation
 	self->led[Front].Shine = &_wrapper_fade_mj808;						// LED-specific implementation
+
+	return self;
 };
 
 // device default operation on empty bus
@@ -112,7 +116,7 @@ void PopulatedBusOperationMJ808(volatile void *in_msg, volatile void *self)
 	}
 };
 
-void mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg)
+void mj808_ctor(volatile mj808_t *self, volatile leds_t *led, volatile button_t *button)
 {
 	// GPIO state definitions
 	{
@@ -162,12 +166,10 @@ void mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile leds_t 
 	sei();
 	}
 
-	self->mj8x8 = base;													// remember own object address
-	self->led = led;													// remember the LED object address
-	self->button = button;												// remember the button object address
+	self->mj8x8 = mj8x8_ctor(&MJ8x8, &CAN, &MCU);						// call base class constructor & tie in object addresses
 
-	self->led->virtual_led_ctor = &virtual_led_ctorMJ808;
-	self->button->virtual_button_ctor = &virtual_button_ctorMJ808;
+	self->led = virtual_led_ctorMJ808(led);								// call virtual constructor & tie in object addresses
+	self->button = virtual_button_ctorMJ808(button);					// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -175,16 +177,11 @@ void mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile leds_t 
 	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
 	 */
-	msg->out->sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);		// high byte
-	msg->out->sidl = ( RCPT_DEV_BLANK | BLANK);																		// low byte
-
-	msg->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
+	self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);	// high byte
+	self->mj8x8->can->own_sidh = ( RCPT_DEV_BLANK | BLANK);																	// low byte
 
 	self->mj8x8->EmptyBusOperation = &EmptyBusOperationMJ808;			// implement device-specific default operation
 	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ808;	// implements device-specific operation depending on bus activity
-
-	self->led->virtual_led_ctor(self->led);								// call virtual constructor
-	self->button->virtual_button_ctor(self->button);					// call virtual constructor
 
 	// TODO - access via object
 	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);							// crude "I'm finished" indicator

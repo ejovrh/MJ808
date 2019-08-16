@@ -26,7 +26,7 @@ void Heartbeat(volatile void *msg)
 		}
 	}
 
-	if ( (! ptr->bus->BeatIterationCount) && (! ptr->bus->FlagDoHeartbeat) )		// counter roll-over, change from slow to fast
+	if ((!ptr->bus->BeatIterationCount) && (!ptr->bus->FlagDoHeartbeat))// counter roll-over, change from slow to fast
 	{
 		ptr->bus->FlagDoHeartbeat = 1;									// set heartbeat mode on
 		++ptr->bus->FlagDoDefaultOperation;								// essentially count how many times we are in non-heartbeat count mode
@@ -38,7 +38,7 @@ void Heartbeat(volatile void *msg)
 	++ptr->bus->BeatIterationCount;										// increment the iteration counter
 };
 
-void mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile ATtiny4313_t *mcu)
+volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile ATtiny4313_t *mcu)
 {
 	// GPIO state definitions
 	{
@@ -55,6 +55,8 @@ void mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile ATtiny4313
 	self->HeartBeat = &Heartbeat;
 	self->mcu = attiny_ctor(mcu);										// pass MCU address into constructor
 	self->can = can_ctor(can);											// pass CAN address into constructor
+
+	return self;
 };
 
 volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));	// define MJ8X8 object and put it into .data

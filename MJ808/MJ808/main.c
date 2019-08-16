@@ -17,19 +17,17 @@
 
 int main(void)
 {
-	mj8x8_ctor(&MJ8x8, &CAN, &MCU);										// call base class constructor & tie in associated object addresses
-
-	message_handler_ctor(&MsgHandler, &CAN, &BUS, &msg_in, &msg_out);	// call message handler constructor
-
 	#if defined(MJ808_)													// MJ808 - call derived class constructor and tie in base class
-	mj808_ctor(&Device, &MJ8x8, &LED, &Button, &MsgHandler);
+	mj808_ctor(&Device, &LED, &Button);
 	#endif
 	#if defined(MJ818_)													// MJ818 - call derived class constructor and tie in base class
-	mj818_ctor(&Device, &MJ8x8, &LED, &MsgHandler);
+	mj818_ctor(&Device, &LED);
 	#endif
 	#if defined(MJ828_)													// MJ828 - call derived class constructor and tie in base class
-	mj828_ctor(&Device, &MJ8x8, &LED, &Button, &MsgHandler);
+	mj828_ctor(&Device, &LED, &Button);
 	#endif
+
+	message_handler_ctor(&MsgHandler, &CAN, &BUS, &msg_in);				// call message handler constructor
 
 	// TODO - implement micro controller sleep cycles
 	set_sleep_mode(SLEEP_MODE_IDLE);									// 11mA
@@ -276,7 +274,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	button_debounce(&Device.button->button[Right]);						//	ditto
 
 // example commands for function-based buttons lighting up LEDs
-	if (Device.button->button[Right].hold_temp)
+	if (Device.button->button[Right].Hold)
 		Device.led->flags->All |= _BV(Battery_LED4);					// set bit7
 	else
 		Device.led->flags->All &= ~_BV(Battery_LED4);					// clear bit7

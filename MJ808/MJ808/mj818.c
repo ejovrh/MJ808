@@ -17,13 +17,15 @@ static void _wrapper_fade_mj818(uint8_t value)
 };
 
 // implementation of virtual constructor for LEDs
-void virtual_led_ctorMJ818(volatile leds_t *self)
+volatile leds_t *virtual_led_ctorMJ818(volatile leds_t *self)
 {
 	static individual_led_t individual_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
 	self->led = individual_led;											// assign pointer to LED array
 	self->flags = &LEDFlags;											// tie in LEDFlags struct into led struct
 
 	self->led[Rear].Shine = &_wrapper_fade_mj818;						// LED-specific implementation
+
+	return self;
 };
 
 // defines device operation on empty bus
@@ -60,7 +62,7 @@ void PopulatedBusOperationMJ818(volatile void *in_msg, volatile void *self)
 	}
 };
 
-void mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile message_handler_t *msg)
+void mj818_ctor(volatile mj818_t *self, volatile leds_t *led)
 {
 	// GPIO state definitions
 	{
@@ -99,9 +101,9 @@ void mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile leds_t 
 	sei();
 	}
 
-	self->mj8x8 = base;													// remember own object address
-	self->led = led;													// remember the LED object address
-	self->led->virtual_led_ctor = &virtual_led_ctorMJ818;
+	self->mj8x8 = mj8x8_ctor(&MJ8x8, &CAN, &MCU);						// call base class constructor & tie in object addresses
+
+	self->led = virtual_led_ctorMJ818(led);								// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -109,15 +111,11 @@ void mj818_ctor(volatile mj818_t *self, volatile mj8x8_t *base, volatile leds_t 
 	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
 	 */
-	msg->out->sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B);		// high byte
-	msg->out->sidl = ( RCPT_DEV_BLANK | BLANK);																		// low byte
-
-	msg->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
+	self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B);	// high byte
+	self->mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																	// low byte
 
 	self->mj8x8->EmptyBusOperation = &EmptyBusOperationMJ818;			// implement device-specific default operation
 	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
-
-	self->led->virtual_led_ctor(self->led);								// call virtual constructor
 };
 
 #if defined(MJ818_)

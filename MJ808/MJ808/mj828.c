@@ -103,7 +103,7 @@ static void _glow(uint8_t led, uint8_t state)
 	if (!state)															// if we get 0x00 (off argument) - do nothing and get out
 		return;
 
-	static const uint16_t (*fptr)(const uint8_t in_val);						// declare pointer for function pointers in branchtable_led[]
+	static uint8_t (*fptr)(const uint8_t in_val);						// declare pointer for function pointers in branchtable_led[]
 	static void (* const branchtable_led[])(const uint8_t in_val) PROGMEM =		// array of function pointers for basic LED handling in PROGMEM
 	{
 		&_LED_red,														// index 0
@@ -138,7 +138,7 @@ void charlieplexing_handler(volatile leds_t *in_led)
 };
 
 // implementation of virtual constructor for buttons
-void virtual_button_ctorMJ828(volatile button_t *self)
+volatile button_t *virtual_button_ctorMJ828(volatile button_t *self)
 {
 	static individual_button_t individual_button[2] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
 	self->button = individual_button;									// assign pointer to button array
@@ -147,10 +147,12 @@ void virtual_button_ctorMJ828(volatile button_t *self)
 	self->button[1].pin_number = 1;										// sw2 is connected to pin D1
 	self->button[0].PIN = (uint8_t *) 0x30;								// 0x020 offset plus address - PIND register
 	self->button[1].PIN = (uint8_t *) 0x30;								// ditto
+
+	return self;
 };
 
 // implementation of virtual constructor for LEDs
-void virtual_led_ctorMJ828(volatile leds_t *self)
+volatile leds_t *virtual_led_ctorMJ828(volatile leds_t *self)
 {
 	static individual_led_t individual_led[8] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
 	self->led = individual_led;											// assign pointer to LED array
@@ -159,6 +161,8 @@ void virtual_led_ctorMJ828(volatile leds_t *self)
 	// FIXME - if below flag is 0, it doesnt work properly: at least one LED has to be on for the thing to work
 	// also: if any other than Green is on, it doesnt shine properly
 	self->flags->All = _BV(Green);										// mark green LED as on
+
+	return self;
 };
 
 // defines device operation on empty bus
@@ -187,7 +191,7 @@ void PopulatedBusOperationMJ828(volatile void *in_msg, volatile void *self)
 	}
 };
 
-void mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg)
+void mj828_ctor(volatile mj828_t *self, volatile leds_t *led, volatile button_t *button)
 {
 	// GPIO state definitions
 	{
@@ -239,12 +243,10 @@ void mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t 
 	sei();
 	}
 
-	self->mj8x8 = base;													// remember own object address
-	self->led = led;													// remember the LED object address
-	self->button = button;												// remember the button object address
+	self->mj8x8 = mj8x8_ctor(&MJ8x8, &CAN, &MCU);						// call base class constructor & tie in object addresses
 
-	self->led->virtual_led_ctor = &virtual_led_ctorMJ828;
-	self->button->virtual_button_ctor = &virtual_button_ctorMJ828;
+	self->led = virtual_led_ctorMJ828(led);								// call virtual constructor & tie in object addresses
+	self->button = virtual_button_ctorMJ828(button);					// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -252,16 +254,11 @@ void mj828_ctor(volatile mj828_t *self, volatile mj8x8_t *base, volatile leds_t 
 	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
 	 */
-	msg->out->sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D);		// high byte
-	msg->out->sidl = ( RCPT_DEV_BLANK | BLANK);																	// low byte
-
-	msg->bus->NumericalCAN_ID = (uint8_t) ( (msg->out->sidh >>2 ) & 0x0F ) ; // populate the status structure with own ID
+	self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D);	// high byte
+	self->mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																// low byte
 
 	self->mj8x8->EmptyBusOperation = &EmptyBusOperationMj828;			// implements device-specific default operation
 	self->mj8x8->PopulatedBusOperation = &PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
-
-	self->led->virtual_led_ctor(self->led);								// call virtual constructor
-	self->button->virtual_button_ctor(self->button);					// call virtual constructor
 };
 
 #if defined(MJ828_)

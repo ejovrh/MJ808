@@ -32,7 +32,7 @@ typedef struct															// struct describing devices on MJ808
 	volatile button_t *button;											// array of button_t - one buttons
 } mj808_t;
 
-void mj808_ctor(volatile mj808_t *self, volatile mj8x8_t *base, volatile leds_t *led, volatile button_t *button, volatile message_handler_t *msg);
+void mj808_ctor(volatile mj808_t *self, volatile leds_t *led, volatile button_t *button);
 
 extern volatile mj808_t Device;
 

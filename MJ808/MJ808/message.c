@@ -5,40 +5,38 @@
 // loads outbound CAN message into local CAN IC and asks it to transmit it onto the bus
 void _SendMessage(volatile message_handler_t *self, const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
 {
-	// TODO - eventually consolidate two CAN message objects (in and out) into one and make sure own SID is set in outbound messages:
-	//			msg->out->sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);		// high byte
-	//			msg->out->sidl = ( RCPT_DEV_BLANK | BLANK);																		// low byte
+	self->msg->sidh = self->can->own_sidh;
+	self->msg->sidl = self->can->own_sidl;
 
 	if (in_command == CMND_ANNOUNCE)									// if we have the broadcast command
-		self->out->sidh |= BROADCAST;									//	then set the broadcast flag
+		self->msg->sidh |= BROADCAST;									//	then set the broadcast flag
 
-	self->out->COMMAND = in_command;									// set command into message
-	self->out->ARGUMENT = in_argument;									// set argument into message
-	self->out->dlc = in_len;											// set DLC
+	self->msg->COMMAND = in_command;									// set command into message
+	self->msg->ARGUMENT = in_argument;									// set argument into message
+	self->msg->dlc = in_len;											// set DLC
 
-	self->can->RequestToSend(self->out);								// load message into TX buffer and request to send
+	self->can->RequestToSend(self->msg);								// load message into TX buffer and request to send
 };
 
 // fetches message received from CAN bus by local CAN IC, populates known hosts and returns message handler object
 volatile can_msg_t *_ReceiveMessage(volatile struct message_handler_t *self)
 {
-	self->can->FetchMessage(self->in);									// fetch the message from some RX buffer
-	self->bus->devices.All |= ( 1 << ( (self->in->sidh >> 2) & 0x0F ) );	// populate devices in canbus_t struct so that we know who else is on the bus
+	self->can->FetchMessage(self->msg);									// fetch the message from some RX buffer
+	self->bus->devices.All |= ( 1 << ( (self->msg->sidh >> 2) & 0x0F ) );	// populate devices in canbus_t struct so that we know who else is on the bus
 
-	return self->in;													// return it to someone who will make use of it
+	return self->msg;													// return it to someone who will make use of it
 };
 
-void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_can, volatile canbus_t *in_bus, volatile can_msg_t *in_msg, volatile can_msg_t *out_msg)
+void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_can, volatile canbus_t *in_bus, volatile can_msg_t *msg)
 {
 	self->can = in_can;													// set address of can object
 	self->bus = in_bus;													// set address of bus object
 
-	self->in = in_msg;													// set address of inbound message struct
-	self->out = out_msg;												// set address of outbound message struct
+	self->msg = msg;													// set address of message struct
 
 	// TODO - eventually get rid of union
 	self->bus->devices.All = 0x0000;
-	self->bus->NumericalCAN_ID = 0;
+	self->bus->NumericalCAN_ID = (uint8_t) ( (self->can->own_sidh >>2 ) & 0x0F );
 	self->bus->FlagDoHeartbeat = 1;										// start with discovery mode
 	self->bus->FlagDoDefaultOperation = 0;
 
