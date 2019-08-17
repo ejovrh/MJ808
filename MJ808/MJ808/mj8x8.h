@@ -8,7 +8,7 @@
 #include "attiny4313.h"
 #include "mcp2515.h"
 #include "message.h"
-#include "task.h"
+#include "event.h"
 
 /* TODO - CAN bootloader
  * http://www.kreatives-chaos.com/artikel/can-bootloader
