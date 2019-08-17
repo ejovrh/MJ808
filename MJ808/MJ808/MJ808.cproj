@@ -123,7 +123,7 @@
     <ListValues>
       <Value>DEBUG</Value>
       <Value>F_CPU=8000000UL</Value>
-      <Value>MJ808_</Value>
+      <Value>MJ828_</Value>
     </ListValues>
   </avrgcc.compiler.symbols.DefSymbols>
   <avrgcc.compiler.directories.IncludePaths>
@@ -166,6 +166,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="button.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="event.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="event.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="message.c">
@@ -214,12 +220,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="mj8x8.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="task.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="task.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="uci_spi.c">

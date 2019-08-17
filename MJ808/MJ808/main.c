@@ -2,7 +2,7 @@
 #include <avr/sleep.h>
 #include <avr/pgmspace.h>
 
-#define MJ808_															// what device to compile for?
+#define MJ828_															// what device to compile for?
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"
@@ -28,6 +28,7 @@ int main(void)
 	#endif
 
 	message_handler_ctor(&MsgHandler, &CAN, &BUS);						// call message handler constructor
+	event_handler_ctor(&EventHandler);
 
 	// TODO - implement micro controller sleep cycles
 	set_sleep_mode(SLEEP_MODE_IDLE);									// 11mA
@@ -38,6 +39,8 @@ int main(void)
 
 	while (1)															// forever loop
 	{
+		EventHandler.HandleEvent();
+
 		if (MCUCR & _BV(SE))											// if sleep is enabled
 			sleep_cpu();												// ...sleep
 	}
@@ -228,56 +231,19 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	sleep_disable();													// wakey wakey
 
 	#if defined(MJ808_)													// pushbutton code for mj808
-	button_debounce(&Device.button->button[Center]);					// from here on the button is debounced and states can be consumed
+	button_debounce(&Device.button->button[Center], &EventHandler);		// from here on the button is debounced and states can be consumed
 
-	if (Device.button->button[Center].ErrorHold)
-		Device.led->led[Utility].Shine(UTIL_LED_RED_BLINK_6X);
-
-	// FIXME - on really long button press (far beyond hold error) something writes crap into memory, i.e. the address of PIND in button struct gets overwritten, as does the adders of the led struct
-	if (!(Device.led->flags->All & _BV(Front)) && Device.button->button[Center].Hold)												// turn front light on
-	{
-		Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);				// power on green LED
-		Device.led->flags->All |= _BV(Utility);							// set bit0
-		Device.led->led[Front].Shine(0x20);								// power on front light
-		Device.led->flags->All |= _BV(Front);							// set bit1
-
-		if (MsgHandler.bus->devices._LU)								// if the logic unit is not present
-			MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
-
-		if (MsgHandler.bus->devices._MJ818)								// if rear light is present
-			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);		// turn on rear light
-
-		if (MsgHandler.bus->devices._MJ828)								// dashboard is present
-			MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
-	}
-
-	if (( (Device.led->flags->All & _BV(Front)) && !Device.button->button[Center].Hold) || Device.button->button[Center].ErrorHold)	// turn front light off
-	{
-		Device.led->led[Utility].Shine(UTIL_LED_GREEN_OFF);				// power off green LED
-		Device.led->flags->All &= ~_BV(Utility);						// clear bit0
-		Device.led->led[Front].Shine(0x00);								// power off front light
-		Device.led->flags->All &= ~_BV(Front);							// clear bit1
-
-		if (MsgHandler.bus->devices._LU)								// if the logic unit is not present
-			MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
-
-		if (MsgHandler.bus->devices._MJ818)								// if rear light is present
-			MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);		// turn off rear light
-
-		if (MsgHandler.bus->devices._MJ828)								// dashboard is present
-			MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_OFF, 0x00, 1);						// turn off yellow LED
-	}
 	#endif
 
 	#if defined(MJ828_)													// pushbutton code for mj828
-	button_debounce(&Device.button->button[Left]);						// from here on the button is debounced and states can be consumed
-	button_debounce(&Device.button->button[Right]);						//	ditto
+	button_debounce(&Device.button->button[Left], &EventHandler);		// from here on the button is debounced and states can be consumed
+	button_debounce(&Device.button->button[Right], &EventHandler);		//	ditto
 
 // example commands for function-based buttons lighting up LEDs
-	if (Device.button->button[Right].Hold)
-		Device.led->flags->All |= _BV(Battery_LED4);					// set bit7
-	else
-		Device.led->flags->All &= ~_BV(Battery_LED4);					// clear bit7
+	//if (Device.button->button[Right].Hold)
+		//Device.led->flags->All |= _BV(Battery_LED4);					// set bit7
+	//else
+		//Device.led->flags->All &= ~_BV(Battery_LED4);					// clear bit7
 	#endif
 
 	sleep_enable();														// back to sleep

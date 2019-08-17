@@ -7,7 +7,7 @@
 #include "mj828.h"
 #include "gpio.h"
 
-static void _glow(uint8_t led, uint8_t state);
+static void __glow(uint8_t led, uint8_t state);
 
 void __mj828_led_gpio_init(void)
 {
@@ -17,7 +17,7 @@ void __mj828_led_gpio_init(void)
 	gpio_conf(LED_CP4_pin, INPUT, LOW);									// Charlie-plexed pin4
 };
 
-static void _LED_red(const uint8_t state)								// red LED on/off
+static void __LED_red(const uint8_t state)								// red LED on/off
 {
 	gpio_conf(LED_CP2_pin, OUTPUT, HIGH);								// pin b1 - anode
 
@@ -27,7 +27,7 @@ static void _LED_red(const uint8_t state)								// red LED on/off
 		gpio_conf(LED_CP1_pin, OUTPUT, HIGH);							// pin b2 - cathode
 };
 
-static void _LED_green(const uint8_t state)								// green LED on/off
+static void __LED_green(const uint8_t state)								// green LED on/off
 {
 	gpio_conf(LED_CP1_pin, OUTPUT, HIGH);								// pin b2 - anode
 
@@ -37,7 +37,7 @@ static void _LED_green(const uint8_t state)								// green LED on/off
 		gpio_conf(LED_CP2_pin, OUTPUT, HIGH);							// pin b1 - cathode
 }
 
-static void _LED_blue1(const uint8_t state)								// blue1 LED on/off
+static void __LED_blue1(const uint8_t state)								// blue1 LED on/off
 {
 	gpio_conf(LED_CP2_pin, OUTPUT, HIGH);								// pin b1 - anode
 
@@ -47,7 +47,7 @@ static void _LED_blue1(const uint8_t state)								// blue1 LED on/off
 		gpio_conf(LED_CP3_pin, OUTPUT, HIGH);							// pin b0 - cathode
 }
 
-static void _LED_yellow(const uint8_t state)							// yellow LED on/off
+static void __LED_yellow(const uint8_t state)							// yellow LED on/off
 {
 	gpio_conf(LED_CP3_pin, OUTPUT, HIGH);								// pin b2 - anode
 
@@ -57,7 +57,7 @@ static void _LED_yellow(const uint8_t state)							// yellow LED on/off
 		gpio_conf(LED_CP2_pin, OUTPUT, HIGH);							// pin b1 - cathode
 }
 
-static void _LED_blue2(const uint8_t state)								// blue2 LED on/off
+static void __LED_blue2(const uint8_t state)								// blue2 LED on/off
 {
 	gpio_conf(LED_CP4_pin, OUTPUT, HIGH);								// pin d6 - anode
 
@@ -67,7 +67,7 @@ static void _LED_blue2(const uint8_t state)								// blue2 LED on/off
 		gpio_conf(LED_CP3_pin, OUTPUT, HIGH);							// pin b0 - cathode
 }
 
-static void _LED_blue3(const uint8_t state)								// blue3 LED on/off
+static void __LED_blue3(const uint8_t state)								// blue3 LED on/off
 {
 	gpio_conf(LED_CP3_pin, OUTPUT, HIGH);								// pin b0 - anode
 
@@ -77,7 +77,7 @@ static void _LED_blue3(const uint8_t state)								// blue3 LED on/off
 		gpio_conf(LED_CP4_pin, OUTPUT, HIGH);							// pin d6 - cathode
 }
 
-static void _LED_blue4(const uint8_t state)								// blue4 LED on/off
+static void __LED_blue4(const uint8_t state)								// blue4 LED on/off
 {
 	gpio_conf(LED_CP1_pin, OUTPUT, HIGH);								// pin b2 - anode
 
@@ -87,7 +87,7 @@ static void _LED_blue4(const uint8_t state)								// blue4 LED on/off
 		gpio_conf(LED_CP4_pin, OUTPUT, HIGH);							// pin d6 - cathode
 }
 
-static void _LED_blue5(const uint8_t state)								// blue5 LED on/off
+static void __LED_blue5(const uint8_t state)								// blue5 LED on/off
 {
 	gpio_conf(LED_CP4_pin, OUTPUT, HIGH);								// pin d6 - anode
 
@@ -98,7 +98,7 @@ static void _LED_blue5(const uint8_t state)								// blue5 LED on/off
 }
 
 // private function, used only by the charlieplexing_handler() function
-static void _glow(uint8_t led, uint8_t state)
+static void __glow(uint8_t led, uint8_t state)
 {
 	if (!state)															// if we get 0x00 (off argument) - do nothing and get out
 		return;
@@ -106,14 +106,14 @@ static void _glow(uint8_t led, uint8_t state)
 	static uint8_t (*fptr)(const uint8_t in_val);						// declare pointer for function pointers in branchtable_led[]
 	static void (* const branchtable_led[])(const uint8_t in_val) PROGMEM =		// array of function pointers for basic LED handling in PROGMEM
 	{
-		&_LED_red,														// index 0
-		&_LED_green,													// index 1
-		&_LED_blue1,													//	and so on...
-		&_LED_yellow,
-		&_LED_blue2,
-		&_LED_blue3,
-		&_LED_blue4,
-		&_LED_blue5
+		&__LED_red,														// index 0
+		&__LED_green,													// index 1
+		&__LED_blue1,													//	and so on...
+		&__LED_yellow,
+		&__LED_blue2,
+		&__LED_blue3,
+		&__LED_blue4,
+		&__LED_blue5
 	};
 
 	__mj828_led_gpio_init();											// set LED pins to initial state
@@ -130,15 +130,61 @@ void charlieplexing_handler(volatile leds_t *in_led)
 {
 	static uint8_t i = 0;												// iterator to loop over all LEDs on device
 
-	//_glow(i, in_led->led[i].Flag_On);									// tell LED number "i" what to do
-	_glow(i, (in_led->flags->All & _BV(i)) );							// pass glow the LED number and the appropriate bit in the flag struct
+	__glow(i, (in_led->flags->All & _BV(i)) );							// pass glow the LED number and the appropriate bit in the flag struct
 
 	// !!!!
 	(i == 7) ? i = 0 : ++i;												// count up to led_count and then start from zero
 };
 
+void __mj828_button_execution_function(uint8_t val)
+{
+	static uint8_t state = 1;
+
+	switch (val)
+	{
+		default:
+			EventHandler.index &= ~_BV(0);
+			return;
+
+		case 1:
+			//lamp_off();
+			EventHandler.index &= ~_BV(1);
+		break;
+
+		case 4:
+			if (state)
+			{
+				LED.flags->All &= ~_BV(Red);
+				state = !state;
+			}
+			else
+			{
+				LED.flags->All |= _BV(Red);
+				state = !state;
+			}
+			EventHandler.index &= ~_BV(2);
+		break;
+
+		case 8:
+			if (state)
+			{
+				LED.flags->All &= ~_BV(Blue);
+				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 1);
+				state = !state;
+			}
+			else
+			{
+				LED.flags->All |= _BV(Blue);
+				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xf8, 1);
+				state = !state;
+			}
+			EventHandler.index &= ~_BV(3);
+		break;
+	}
+};
+
 // implementation of virtual constructor for buttons
-volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self)
+volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self, volatile event_handler_t *event)
 {
 	static individual_button_t individual_button[2] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
 	self->button = individual_button;									// assign pointer to button array
@@ -147,6 +193,31 @@ volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self)
 	self->button[1]._pin_number = 1;										// sw2 is connected to pin D1
 	self->button[0]._PIN = (uint8_t *) 0x30;								// 0x020 offset plus address - PIND register
 	self->button[1]._PIN = (uint8_t *) 0x30;								// ditto
+
+	static uint8_t LeftButtonEvents[] =
+	{
+		0,	// 0 - default - empty event
+		3,	// 1 - empty event - button press not defined
+		0,	// 2 - empty event - button press not defined
+		0,	// 3 - button Hold
+		0,	// 4 - empty event - button press not defined
+		1	// 5 - error event
+	};
+
+	static uint8_t RightButtonEvents[] =
+	{
+		0,	// 0 - default - empty event
+		2,	// 1 - empty event - button press not defined
+		0,	// 2 - empty event - button press not defined
+		0,	// 3 - button Hold
+		0,	// 4 - empty event - button press not defined
+		1	// 5 - error event
+	};
+
+	self->button[Left].action = LeftButtonEvents;
+	self->button[Right].action = RightButtonEvents;
+
+	event->fpointer = &__mj828_button_execution_function;
 
 	return self;
 };
@@ -244,8 +315,8 @@ void mj828_ctor(volatile mj828_t *self, volatile leds_t *led, volatile button_t 
 
 	self->mj8x8 = mj8x8_ctor(&MJ8x8, &CAN, &MCU);						// call base class constructor & tie in object addresses
 
-	self->led = _virtual_led_ctorMJ828(led);								// call virtual constructor & tie in object addresses
-	self->button = _virtual_button_ctorMJ828(button);					// call virtual constructor & tie in object addresses
+	self->led = _virtual_led_ctorMJ828(led);							// call virtual constructor & tie in object addresses
+	self->button = _virtual_button_ctorMJ828(button, &EventHandler);	// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device

@@ -8,6 +8,41 @@
 #include "led.h"
 #include "gpio.h"
 
+void lamp_on(void)
+{
+	Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);				// power on green LED
+	Device.led->flags->All |= _BV(Utility);							// set bit0
+	Device.led->led[Front].Shine(0x20);								// power on front light
+	Device.led->flags->All |= _BV(Front);							// set bit1
+
+	if (MsgHandler.bus->devices._LU)								// if the logic unit is not present
+	MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
+
+	if (MsgHandler.bus->devices._MJ818)								// if rear light is present
+	MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);		// turn on rear light
+
+	if (MsgHandler.bus->devices._MJ828)								// dashboard is present
+	MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
+};
+
+void lamp_off(void)
+{
+	Device.led->led[Utility].Shine(UTIL_LED_GREEN_OFF);				// power off green LED
+	Device.led->flags->All &= ~_BV(Utility);						// clear bit0
+	Device.led->led[Front].Shine(0x00);								// power off front light
+	Device.led->flags->All &= ~_BV(Front);							// clear bit1
+
+	if (MsgHandler.bus->devices._LU)								// if the logic unit is not present
+	MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
+
+	if (MsgHandler.bus->devices._MJ818)								// if rear light is present
+	MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);		// turn off rear light
+
+	if (MsgHandler.bus->devices._MJ828)								// dashboard is present
+	MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_OFF, 0x00, 1);						// turn off yellow LED
+};
+
+
 // TODO - optimize
 void _fade(const uint8_t value, volatile uint8_t *ocr);
 
@@ -50,14 +85,60 @@ void _util_led_mj808(uint8_t in_val)
 	}
 };
 
-volatile button_t *_virtual_button_ctorMJ808(volatile button_t *self)
+void __mj808_button_execution_function(uint8_t val)
+{
+	static uint8_t state = 1;
+
+	switch (val)
+	{
+		default:
+			EventHandler.index &= ~_BV(0);
+			return;
+
+		case 1:
+			//lamp_off();
+			EventHandler.index &= ~_BV(1);
+		break;
+
+		case 4:
+			if (state)
+			{
+				lamp_on();
+				state = !state;
+			}
+			else
+			{
+				lamp_off();
+				state = !state;
+			}
+			EventHandler.index &= ~_BV(2);
+		break;
+	}
+};
+
+volatile button_t *_virtual_button_ctorMJ808(volatile button_t *self, volatile event_handler_t *event)
 {
 	static individual_button_t individual_button[1] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
 	self->button = individual_button;									// assign pointer to button array
 
 	self->button_count = 1;
+
 	self->button[Center]._PIN = (uint8_t *) 0x30; 						// 0x020 offset plus address - PIND register
 	self->button[Center]._pin_number = 4;								// sw2 is connected to pin D0
+
+	static uint8_t button1events[] =
+	{
+		0,	// 0 - default - empty event
+		0,	// 1 - empty event - button press not defined
+		0,	// 2 - empty event - button press not defined
+		2,	// 3 - button Hold
+		0,	// 4 - empty event - button press not defined
+		1	// 5 - error event
+	};
+
+	self->button[Center].action = button1events;
+
+	event->fpointer = &__mj808_button_execution_function;
 
 	return self;
 };
@@ -167,7 +248,8 @@ void mj808_ctor(volatile mj808_t *self, volatile leds_t *led, volatile button_t 
 	self->mj8x8 = mj8x8_ctor(&MJ8x8, &CAN, &MCU);						// call base class constructor & tie in object addresses
 
 	self->led = _virtual_led_ctorMJ808(led);								// call virtual constructor & tie in object addresses
-	self->button = _virtual_button_ctorMJ808(button);					// call virtual constructor & tie in object addresses
+
+	self->button = _virtual_button_ctorMJ808(button, &EventHandler);					// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device

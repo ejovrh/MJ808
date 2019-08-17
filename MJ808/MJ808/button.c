@@ -1,17 +1,20 @@
 #include "button.h"
+//#include "task.h"
 
 #if defined(MJ808_) || defined (MJ828_)									// button debouncer for devices with buttons
-void button_debounce(volatile individual_button_t *in_button)			// marks a button as pressed if it was pressed for the duration of 2X ISR iterations
+void button_debounce(volatile individual_button_t *in_button, volatile event_handler_t *in_event)
 {
 	inline void local_advance_counter(void)								// local helper function which advances the debounce "timer"
 	{
 		++in_button->_hold_counter;										// start to count (used to determine long button press; not used for debouncing)
 
+
+		++in_button->_state;											//
+
 																		// debouncing by means of bit shifting
-																		// CHECKME - XOR has no assignment operator
-		in_button->_state ^ 0x03;										// XOR what we currently have in state
-		in_button->_state <<= 1;										// left shift so that if we have 0x01 this becomes 0x02
-		in_button->_state |= 0x01;										// OR what we have with 0x01 so that 0x02 becomes 0x03
+		//in_button->_state ^ 0x03;										// XOR what we currently have in state
+		//in_button->_state <<= 1;										// left shift so that if we have 0x01 this becomes 0x02
+		//in_button->_state |= 0x01;									// OR what we have with 0x01 so that 0x02 becomes 0x03
 	}
 
 	/*	rationale of debouncing:
@@ -49,6 +52,7 @@ void button_debounce(volatile individual_button_t *in_button)			// marks a butto
 			in_button->Momentary = 0;									// mark as currently not pressed
 			in_button->_was_pressed = 1;								// mark button as "was pressed" - this is the previous state in the next iteration
 			in_button->ErrorHold = 1;									// mark as error state
+			in_event->Notify(in_button->action[ErrorHold]);
 
 			in_button->Toggle = 0;										// toggled due to error state -> reset to default value
 			in_button->Hold = 0;										// mark as hold_temp off
@@ -79,16 +83,23 @@ void button_debounce(volatile individual_button_t *in_button)			// marks a butto
 		if (in_button->_hold_counter >= BUTTON_MIN_PRESS_TIME)			// pressed for a valid amount of time
 		{
 			if (!in_button->_was_pressed)								// previous state (prevent flapping on/off)
+			{
 				in_button->Hold = !in_button->Hold;						// set "hold_temp" state
+				in_event->Notify(in_button->action[Hold]);
+			}
 
 			in_button->_was_pressed = 1;								// mark the button as being pressed
 			return;
 		}
 
 		if (in_button->_was_pressed)									// previous state (prevent flapping on/off)
+		{
 			in_button->Toggle = !in_button->Toggle;						// set "toggle" state
+			in_event->Notify(in_button->action[Toggle]);
+		}
 
 		in_button->Momentary = 1;										// set "is_pressed" state
+		in_event->Notify(in_button->action[Momentary]);
 		in_button->_was_pressed = 0;									// mark the button as being pressed
 		in_button->_is_at_default = 0;
 	}
