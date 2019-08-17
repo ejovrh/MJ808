@@ -8,14 +8,14 @@
 
 typedef struct 															// struct describing a generic pushbutton
 {
-	uint8_t *PIN;														// PIN register address of button pin
-	uint8_t pin_number;													// pin number (0, 1...6) to which the button is connected
+	uint8_t *_PIN;														// PIN register address of button pin
+	uint8_t _pin_number;													// pin number (0, 1...6) to which the button is connected
 	uint8_t _hold_counter;												// counter to count button press duration for hold_X states
 
 	uint8_t Momentary :1;												// flag indicating if button is pressed right now
 	uint8_t Toggle :1;													// flag indicating the toggle state
 	uint8_t Hold :1;													// flag indicating a button press for a duration of BUTTON_MIN_PRESS_TIME (up to BUTTON_MAX_PRESS_TIME) seconds, followed by button release
-	uint8_t hold_error :1;												// flag indicating constant button press (by error, object leaning on pushbutton, etc.)
+	uint8_t ErrorHold :1;												// flag indicating constant button press (by error, object leaning on pushbutton, etc.)
 
 	uint8_t _state : 2;													// something akin to a "counter" used for debouncing
 	uint8_t _was_pressed :1;											// flag indicating if button was released after a stable state (used to remember previous state)

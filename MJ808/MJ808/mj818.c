@@ -17,7 +17,7 @@ static void _wrapper_fade_mj818(uint8_t value)
 };
 
 // implementation of virtual constructor for LEDs
-volatile leds_t *virtual_led_ctorMJ818(volatile leds_t *self)
+volatile leds_t *_virtual_led_ctorMJ818(volatile leds_t *self)
 {
 	static individual_led_t individual_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
 	self->led = individual_led;											// assign pointer to LED array
@@ -39,12 +39,11 @@ void _EmptyBusOperationMJ818(void)
 };
 
 // dispatches CAN messages to appropriate sub-component on device
-void _PopulatedBusOperationMJ818(volatile void *in_msg, volatile void *self)
+void _PopulatedBusOperationMJ818(volatile message_handler_t *in_msg, volatile void *self)
 {
-	message_handler_t *msg_ptr = (message_handler_t *) in_msg;			// pointer cast to avoid compiler warnings
-	mj818_t *dev_ptr = (mj818_t *) self;								//	ditto
+	mj818_t *dev_ptr = (mj818_t *) self;								// pointer cast to concrete device
 
-	volatile can_msg_t *msg = msg_ptr->ReceiveMessage(msg_ptr);			// CAN message object
+	volatile can_msg_t *msg = in_msg->ReceiveMessage(in_msg);			// CAN message object
 
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | REAR_LIGHT) )		// rear positional light
@@ -103,7 +102,7 @@ void mj818_ctor(volatile mj818_t *self, volatile leds_t *led)
 
 	self->mj8x8 = mj8x8_ctor(&MJ8x8, &CAN, &MCU);						// call base class constructor & tie in object addresses
 
-	self->led = virtual_led_ctorMJ818(led);								// call virtual constructor & tie in object addresses
+	self->led = _virtual_led_ctorMJ818(led);								// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device

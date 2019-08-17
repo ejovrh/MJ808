@@ -5,14 +5,18 @@
 
 #define ISR_PCINT2 2
 
-typedef struct task_handler_t
+typedef struct event_handler_t
 {
-	void (*Add)(const uint8_t in_val);
-	void (*Run)(void);
-} task_handler_t;
+	void (*fpointer)(uint8_t state);
+	void (*Add)(uint8_t val);
+	void (*Notify)(const uint8_t in_val);
+	void (*HandleEvent)(void);
 
-volatile task_handler_t *task_handler_ctor(volatile struct task_handler_t *self);// "virtual" pointer to array of button present on particular device
+	//void (*event_handler_ctor)(volatile struct event_handler_t *self, volatile void *device);
+} event_handler_t;
 
-extern volatile task_handler_t Task;									// declare task handler object
+//void virtual_event_handler_ctor(volatile struct event_handler_t *self, volatile void *device);// "virtual" pointer to array of button present on particular device
+
+extern volatile event_handler_t EventHandler;							// declare task handler object
 
 #endif /* TASK_H_ */

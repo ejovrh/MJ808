@@ -230,11 +230,11 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	#if defined(MJ808_)													// pushbutton code for mj808
 	button_debounce(&Device.button->button[Center]);					// from here on the button is debounced and states can be consumed
 
-	if (Device.button->button[Center].hold_error)
+	if (Device.button->button[Center].ErrorHold)
 		Device.led->led[Utility].Shine(UTIL_LED_RED_BLINK_6X);
 
 	// FIXME - on really long button press (far beyond hold error) something writes crap into memory, i.e. the address of PIND in button struct gets overwritten, as does the adders of the led struct
-	if (!(Device.led->flags->All & _BV(Front)) && Device.button->button[Center].Hold)													// turn front light on
+	if (!(Device.led->flags->All & _BV(Front)) && Device.button->button[Center].Hold)												// turn front light on
 	{
 		Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);				// power on green LED
 		Device.led->flags->All |= _BV(Utility);							// set bit0
@@ -251,7 +251,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 			MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
 	}
 
-	if (( (Device.led->flags->All & _BV(Front)) && !Device.button->button[Center].Hold) || Device.button->button[Center].hold_error)	// turn front light off
+	if (( (Device.led->flags->All & _BV(Front)) && !Device.button->button[Center].Hold) || Device.button->button[Center].ErrorHold)	// turn front light off
 	{
 		Device.led->led[Utility].Shine(UTIL_LED_GREEN_OFF);				// power off green LED
 		Device.led->flags->All &= ~_BV(Utility);						// clear bit0
@@ -323,10 +323,6 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka
 	sleep_disable();													// wakey wakey
 
 	WDTCR |= _BV(WDIE);													// setting the bit prevents a reset when the timer expires
-
-	// TODO - refactor into message handler - where the message gets transmitted
-	if (Device.mj8x8->can->in_sleep)									// if the CAN infra. is sleeping
-		Device.mj8x8->can->Sleep(Device.mj8x8->can, 0);					// wake it up
 
 	Device.mj8x8->HeartBeat(&MsgHandler);
 

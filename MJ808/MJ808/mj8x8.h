@@ -8,6 +8,7 @@
 #include "attiny4313.h"
 #include "mcp2515.h"
 #include "message.h"
+#include "task.h"
 
 /* TODO - CAN bootloader
  * http://www.kreatives-chaos.com/artikel/can-bootloader
@@ -107,21 +108,21 @@
 #define CMND_UTIL_LED 0x10 												// command for utility LED operation (color, on, off, blink)
 
 	#define UTIL_LED_GREEN_OFF 0x10 									// utility LED - off
-	#define UTIL_LED_GREEN_ON 0x17 										// utility LED - on
 	#define UTIL_LED_GREEN_BLINK_1X 0x11 								// utility LED - blink
 	#define UTIL_LED_GREEN_BLINK_2X 0x12 								// utility LED - blink
 	#define UTIL_LED_GREEN_BLINK_3X 0x13 								// utility LED - blink
 	#define UTIL_LED_GREEN_BLINK_4X 0x14 								// utility LED - blink
 	#define UTIL_LED_GREEN_BLINK_5X 0x15 								// utility LED - blink
 	#define UTIL_LED_GREEN_BLINK_6X 0x16								// utility LED - blink
+	#define UTIL_LED_GREEN_ON 0x17 										// utility LED - on
 	#define UTIL_LED_RED_OFF 0x18										// utility LED - off
-	#define UTIL_LED_RED_ON 0x1F										// utility LED - on
 	#define UTIL_LED_RED_BLINK_1X 0x19									// utility LED - blink
 	#define UTIL_LED_RED_BLINK_2X 0x1A									// utility LED - blink
 	#define UTIL_LED_RED_BLINK_3X 0x1B									// utility LED - blink
 	#define UTIL_LED_RED_BLINK_4X 0x1C									// utility LED - blink
 	#define UTIL_LED_RED_BLINK_5X 0x1D									// utility LED - blink
 	#define UTIL_LED_RED_BLINK_6X 0x1E									// utility LED - blink
+	#define UTIL_LED_RED_ON 0x1F										// utility LED - on
 
 #define CMND_DASHBOARD	0x20											// dashboard ?
 	#define DASHBOARD_LED_RED_OFF		0x20							// dashboard red LED off
@@ -234,9 +235,9 @@ typedef struct															// "base class" struct for mj8x8 devices
 	volatile can_t *can;												// pointer to the CAN structure
 	volatile ATtiny4313_t *mcu;											// pointer to MCU structure
 
-	void (*HeartBeat)(volatile void *__msg);								// default periodic heartbeat for all devices
-	void (*EmptyBusOperation)(void);															// device's default operation on empty bus, implemented in derived class
-	void (*PopulatedBusOperation)(volatile void *in_msg, volatile void *unspecified_device);	// device operation on populated bus; operates by means of MsgHandler object
+	void (*HeartBeat)(volatile void *__msg);							// default periodic heartbeat for all devices
+	void (*EmptyBusOperation)(void);																		// device's default operation on empty bus, implemented in derived class
+	void (*PopulatedBusOperation)(volatile message_handler_t *in_msg, volatile void *unspecified_device);	// device operation on populated bus; operates by means of MsgHandler object
 } mj8x8_t ;
 
 

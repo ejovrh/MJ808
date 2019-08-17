@@ -28,17 +28,17 @@ void button_debounce(volatile individual_button_t *in_button)			// marks a butto
 	 *
 	 *		the state marker marks the button state for external code to make sense of it
 	 *		valid states:
-	 *			- "Momentary" - key is pressed (and held for a short time)
-	 *			- "Toggle" - toggled on/off state, once per key press
-	 *			- "Hold" - held for e.g 1s to turn something on/off
-	 *			- "hold_error" - held constantly (e.g. by error) - to be ignored
+	 *			- "Momentary" - key is pressed (and held for a short time), while button is pressed - one state, when it is released back to the original state
+	 *			- "Toggle" - toggled on/off state, once per key press the state changes and remains changed until next press
+	 *			- "Hold" - held for e.g 1s to turn something on/off, akin to Momentary but a longer press is needed to change from one state to another
+	 *			- "hold_error" - held constantly (e.g. by error) - after a timeout revert to original state
 	 */
 																		// CHECKME - random spikes (not true button press events) every 25ms might be an issue
 	#if defined(MJ828_)													// inverted
-	if (	!	( (volatile) *(in_button->PIN) & (1<<in_button->pin_number))		)	// if in the given PIN register the given button is pressed
+	if (	!	( (volatile) *(in_button->_PIN) & (1<<in_button->_pin_number))		)	// if in the given PIN register the given button is pressed
 	#endif
 	#if defined(MJ808_)													// non-inverted
-	if (		( (volatile) *(in_button->PIN) & (1<<in_button->pin_number))		)	// if in the given PIN register the given button is pressed
+	if (		( (volatile) *(in_button->_PIN) & (1<<in_button->_pin_number))		)	// if in the given PIN register the given button is pressed
 	#endif
 	{												// button is pressed
 		local_advance_counter();										// debouncing happens here
@@ -48,7 +48,7 @@ void button_debounce(volatile individual_button_t *in_button)			// marks a butto
 			in_button->_state = 0;										// reset state
 			in_button->Momentary = 0;									// mark as currently not pressed
 			in_button->_was_pressed = 1;								// mark button as "was pressed" - this is the previous state in the next iteration
-			in_button->hold_error = 1;									// mark as error state
+			in_button->ErrorHold = 1;									// mark as error state
 
 			in_button->Toggle = 0;										// toggled due to error state -> reset to default value
 			in_button->Hold = 0;										// mark as hold_temp off
@@ -66,7 +66,7 @@ void button_debounce(volatile individual_button_t *in_button)			// marks a butto
 		in_button->Momentary = 0;										// mark as currently not pressed
 
 		in_button->_was_pressed = 1;									// mark button as "was pressed" - this is the previous state in the next iteration
-		in_button->hold_error = 0;										// release error flag, since button is now released
+		in_button->ErrorHold = 0;										// release error flag, since button is now released
 		in_button->_hold_counter = 0;									// set counter back to 0
 		in_button->Momentary = 0;										// mark as currently not pressed
 		in_button->_is_at_default = 1;
@@ -74,7 +74,7 @@ void button_debounce(volatile individual_button_t *in_button)			// marks a butto
 	}
 
 	// state markers
-	if (in_button->_state == 0x03 && !in_button->hold_error)			// if we have a non-error steady state
+	if (in_button->_state == 0x03 && !in_button->ErrorHold)				// if we have a non-error steady state
 	{
 		if (in_button->_hold_counter >= BUTTON_MIN_PRESS_TIME)			// pressed for a valid amount of time
 		{

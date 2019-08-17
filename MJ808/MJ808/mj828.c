@@ -138,21 +138,21 @@ void charlieplexing_handler(volatile leds_t *in_led)
 };
 
 // implementation of virtual constructor for buttons
-volatile button_t *virtual_button_ctorMJ828(volatile button_t *self)
+volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self)
 {
 	static individual_button_t individual_button[2] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
 	self->button = individual_button;									// assign pointer to button array
 
-	self->button[0].pin_number = 0;										// sw2 is connected to pin D0
-	self->button[1].pin_number = 1;										// sw2 is connected to pin D1
-	self->button[0].PIN = (uint8_t *) 0x30;								// 0x020 offset plus address - PIND register
-	self->button[1].PIN = (uint8_t *) 0x30;								// ditto
+	self->button[0]._pin_number = 0;										// sw2 is connected to pin D0
+	self->button[1]._pin_number = 1;										// sw2 is connected to pin D1
+	self->button[0]._PIN = (uint8_t *) 0x30;								// 0x020 offset plus address - PIND register
+	self->button[1]._PIN = (uint8_t *) 0x30;								// ditto
 
 	return self;
 };
 
 // implementation of virtual constructor for LEDs
-volatile leds_t *virtual_led_ctorMJ828(volatile leds_t *self)
+volatile leds_t *_virtual_led_ctorMJ828(volatile leds_t *self)
 {
 	static individual_led_t individual_led[8] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
 	self->led = individual_led;											// assign pointer to LED array
@@ -172,12 +172,11 @@ void _EmptyBusOperationMj828(void)
 };
 
 // dispatches CAN messages to appropriate sub-component on device
-void _PopulatedBusOperationMJ828(volatile void *in_msg, volatile void *self)
+void _PopulatedBusOperationMJ828(volatile message_handler_t *in_msg, volatile void *self)
 {
-	message_handler_t *msg_ptr = (message_handler_t *) in_msg;			// pointer cast to avoid compiler warnings
-	mj828_t *dev_ptr = (mj828_t *) self;								//	ditto
+	mj828_t *dev_ptr = (mj828_t *) self;								// pointer cast to concrete device
 
-	volatile can_msg_t *msg = msg_ptr->ReceiveMessage(msg_ptr);			// CAN message object
+	volatile can_msg_t *msg = in_msg->ReceiveMessage(in_msg);			// CAN message object
 
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if ( (msg->COMMAND & MASK_COMMAND) == CMND_DASHBOARD )				// dashboard command
@@ -245,8 +244,8 @@ void mj828_ctor(volatile mj828_t *self, volatile leds_t *led, volatile button_t 
 
 	self->mj8x8 = mj8x8_ctor(&MJ8x8, &CAN, &MCU);						// call base class constructor & tie in object addresses
 
-	self->led = virtual_led_ctorMJ828(led);								// call virtual constructor & tie in object addresses
-	self->button = virtual_button_ctorMJ828(button);					// call virtual constructor & tie in object addresses
+	self->led = _virtual_led_ctorMJ828(led);								// call virtual constructor & tie in object addresses
+	self->button = _virtual_button_ctorMJ828(button);					// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device

@@ -1,7 +1,7 @@
 #ifndef MESSAGE_H_
 #define MESSAGE_H_
 
-#include "mj8x8.h"
+#include "mcp2515.h"
 
 // TODO - get rid of unions
 typedef union															// u_devices union of bit fields and uint16_t - representation discovered devices on bus

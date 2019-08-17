@@ -47,6 +47,7 @@ C_SRCS +=  \
 ../mj818.c \
 ../mj828.c \
 ../mj8x8.c \
+../task.c \
 ../uci_spi.c
 
 
@@ -67,6 +68,7 @@ mj808.o \
 mj818.o \
 mj828.o \
 mj8x8.o \
+task.o \
 uci_spi.o
 
 OBJS_AS_ARGS +=  \
@@ -80,6 +82,7 @@ mj808.o \
 mj818.o \
 mj828.o \
 mj8x8.o \
+task.o \
 uci_spi.o
 
 C_DEPS +=  \
@@ -93,6 +96,7 @@ mj808.d \
 mj818.d \
 mj828.d \
 mj8x8.d \
+task.d \
 uci_spi.d
 
 C_DEPS_AS_ARGS +=  \
@@ -106,6 +110,7 @@ mj808.d \
 mj818.d \
 mj828.d \
 mj8x8.d \
+task.d \
 uci_spi.d
 
 OUTPUT_FILE_PATH +=MJ808.elf
@@ -186,6 +191,13 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./mj8x8.o: .././mj8x8.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DF_CPU=8000000UL -DMJ808_  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATtiny_DFP\1.3.172\include"  -Os -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g3 -Wall -Wextra -Wundef -mmcu=attiny4313 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATtiny_DFP\1.3.172\gcc\dev\attiny4313" -c -std=gnu99 --short-enums -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./task.o: .././task.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG -DF_CPU=8000000UL -DMJ808_  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATtiny_DFP\1.3.172\include"  -Os -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g3 -Wall -Wextra -Wundef -mmcu=attiny4313 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATtiny_DFP\1.3.172\gcc\dev\attiny4313" -c -std=gnu99 --short-enums -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

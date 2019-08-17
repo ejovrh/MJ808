@@ -22,5 +22,7 @@ mj828.c
 
 mj8x8.c
 
+task.c
+
 uci_spi.c
 

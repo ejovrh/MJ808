@@ -386,7 +386,6 @@ volatile can_t *can_ctor(volatile can_t *self)
 	self->ReadBytes = &_mcp2515_opcode_read_bytes;						// ditto
 	self->BitModify = &_mcp2515_opcode_bit_modify;						// ditto
 
-
 	__mcp2515_init();													// initialize & configure the MCP2515
 
 	return self;														// hmm... - gets itself as a parameter and then returns itself. i smell bullshit in the making.

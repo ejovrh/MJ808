@@ -50,21 +50,20 @@ void _util_led_mj808(uint8_t in_val)
 	}
 };
 
-// implementation of virtual constructor for buttons
-volatile button_t *virtual_button_ctorMJ808(volatile button_t *self)
+volatile button_t *_virtual_button_ctorMJ808(volatile button_t *self)
 {
 	static individual_button_t individual_button[1] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
 	self->button = individual_button;									// assign pointer to button array
 
 	self->button_count = 1;
-	self->button[Center].PIN = (uint8_t *) 0x30; 						// 0x020 offset plus address - PIND register
-	self->button[Center].pin_number = 4;								// sw2 is connected to pin D0
+	self->button[Center]._PIN = (uint8_t *) 0x30; 						// 0x020 offset plus address - PIND register
+	self->button[Center]._pin_number = 4;								// sw2 is connected to pin D0
 
 	return self;
 };
 
 // implementation of virtual constructor for LEDs
-volatile leds_t *virtual_led_ctorMJ808(volatile leds_t *self)
+volatile leds_t *_virtual_led_ctorMJ808(volatile leds_t *self)
 {
 	static individual_led_t individual_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
 	self->led = individual_led;											// assign pointer to LED array
@@ -83,12 +82,11 @@ void _EmptyBusOperationMJ808(void)
 };
 
 // received MsgHandler object and passes
-void _PopulatedBusOperationMJ808(volatile void *in_msg, volatile void *self)
+void _PopulatedBusOperationMJ808(volatile message_handler_t *in_msg, volatile void *self)
 {
-	message_handler_t *msg_ptr = (message_handler_t *) in_msg;			// pointer cast to avoid compiler warnings
-	mj808_t *dev_ptr = (mj808_t *) self;								//	ditto
+	mj808_t *dev_ptr = (mj808_t *) self;								// pointer cast to concrete device
 
-	volatile can_msg_t *msg = msg_ptr->ReceiveMessage(msg_ptr);			// CAN message object
+	volatile can_msg_t *msg = in_msg->ReceiveMessage(in_msg);			// CAN message object
 
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if ( (msg->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)				// utility LED command
@@ -168,8 +166,8 @@ void mj808_ctor(volatile mj808_t *self, volatile leds_t *led, volatile button_t 
 
 	self->mj8x8 = mj8x8_ctor(&MJ8x8, &CAN, &MCU);						// call base class constructor & tie in object addresses
 
-	self->led = virtual_led_ctorMJ808(led);								// call virtual constructor & tie in object addresses
-	self->button = virtual_button_ctorMJ808(button);					// call virtual constructor & tie in object addresses
+	self->led = _virtual_led_ctorMJ808(led);								// call virtual constructor & tie in object addresses
+	self->button = _virtual_button_ctorMJ808(button);					// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -178,7 +176,7 @@ void mj808_ctor(volatile mj808_t *self, volatile leds_t *led, volatile button_t 
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
 	 */
 	self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);	// high byte
-	self->mj8x8->can->own_sidh = ( RCPT_DEV_BLANK | BLANK);																	// low byte
+	self->mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																	// low byte
 
 	self->mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ808;			// implement device-specific default operation
 	self->mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;	// implements device-specific operation depending on bus activity
