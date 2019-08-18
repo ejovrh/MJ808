@@ -105,5 +105,3 @@ void button_debounce(volatile individual_button_t *in_button, volatile event_han
 	}
 };
 #endif
-
-volatile button_t Button __attribute__ ((section (".data")));			// define BUTTON object and put it into .data

@@ -14,7 +14,7 @@ typedef struct event_handler_t
 	void (*HandleEvent)(void);
 } event_handler_t;
 
-void event_handler_ctor(volatile event_handler_t *self);
+void event_handler_ctor(volatile event_handler_t * const self);
 
 extern volatile event_handler_t EventHandler;							// declare task handler object
 

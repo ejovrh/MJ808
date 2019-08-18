@@ -5,17 +5,15 @@
 #include "mj8x8.h"
 
 // provides a periodic heartbeat based on the watchdog timer interrupt
-void _Heartbeat(volatile void *msg)
+static void _Heartbeat(volatile message_handler_t * const msg)
 {
-	message_handler_t *ptr = (message_handler_t *) msg;
-
-	if (ptr->bus->FlagDoHeartbeat)										// if we are in heartbeat mode
+	if (msg->bus->FlagDoHeartbeat)										// if we are in heartbeat mode
 	{
-		if (ptr->bus->BeatIterationCount == ptr->bus->NumericalCAN_ID)	// see if this counter iteration is our turn
+		if (msg->bus->BeatIterationCount == msg->bus->NumericalCAN_ID)	// see if this counter iteration is our turn
 		{
-			ptr->SendMessage(ptr, CMND_ANNOUNCE, 0x00, 1);				// broadcast CAN heartbeat message
+			msg->SendMessage(msg, CMND_ANNOUNCE, 0x00, 1);				// broadcast CAN heartbeat message
 
-			ptr->bus->FlagDoHeartbeat = 0;								// heartbeat mode of for the remaining counter iterations
+			msg->bus->FlagDoHeartbeat = 0;								// heartbeat mode of for the remaining counter iterations
 			WDTCR |= (_BV(WDCE) | _BV(WDE));							// WDT change enable sequence
 			WDTCR = ( _BV(WDIE) | _BV(WDP2) | _BV(WDP1) );				// set watchdog timer set to 1s
 
@@ -26,19 +24,18 @@ void _Heartbeat(volatile void *msg)
 		}
 	}
 
-	if ((!ptr->bus->BeatIterationCount) && (!ptr->bus->FlagDoHeartbeat))// counter roll-over, change from slow to fast
+	if ((!msg->bus->BeatIterationCount) && (!msg->bus->FlagDoHeartbeat))// counter roll-over, change from slow to fast
 	{
-		ptr->bus->FlagDoHeartbeat = 1;									// set heartbeat mode on
-		++ptr->bus->FlagDoDefaultOperation;								// essentially count how many times we are in non-heartbeat count mode
+		msg->bus->FlagDoHeartbeat = 1;									// set heartbeat mode on
+		++msg->bus->FlagDoDefaultOperation;								// essentially count how many times we are in non-heartbeat count mode
 
 		WDTCR |= (_BV(WDCE) | _BV(WDE));								// WDT change enable sequence
 		WDTCR = ( _BV(WDIE) | _BV(WDP2)  );								// watchdog timer set to 0.25
 	}
-
-	++ptr->bus->BeatIterationCount;										// increment the iteration counter
+	++msg->bus->BeatIterationCount;										// increment the iteration counter
 };
 
-volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volatile ATtiny4313_t *mcu)
+volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t * const self)
 {
 	// GPIO state definitions
 	{
@@ -52,11 +49,12 @@ volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t *self, volatile can_t *can, volat
 	// state initialization of device-unspecific pins
 	}
 
+	static volatile ATtiny4313_t MCU __attribute__ ((section (".data")));			// define MCU object and put it into .data
+	static volatile can_t CAN __attribute__ ((section (".data")));					// define CAN object and put it into .data
+
 	self->HeartBeat = &_Heartbeat;
-	self->mcu = attiny_ctor(mcu);										// pass MCU address into constructor
-	self->can = can_ctor(can);											// pass CAN address into constructor
+	self->mcu = attiny_ctor(&MCU);										// pass MCU address into constructor
+	self->can = can_ctor(&CAN);											// pass CAN address into constructor
 
 	return self;
 };
-
-volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));				// define MJ8X8 object and put it into .data

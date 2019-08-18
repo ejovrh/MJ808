@@ -2,7 +2,7 @@
 #include <avr/sleep.h>
 #include <avr/pgmspace.h>
 
-#define MJ828_															// what device to compile for?
+#define MJ808_															// what device to compile for?
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"
@@ -18,17 +18,17 @@
 int main(void)
 {
 	#if defined(MJ808_)													// MJ808 - call derived class constructor and tie in base class
-	mj808_ctor(&Device, &LED, &Button);
+	mj808_ctor(&Device);
 	#endif
 	#if defined(MJ818_)													// MJ818 - call derived class constructor and tie in base class
-	mj818_ctor(&Device, &LED);
+	mj818_ctor(&Device);
 	#endif
 	#if defined(MJ828_)													// MJ828 - call derived class constructor and tie in base class
-	mj828_ctor(&Device, &LED, &Button);
+	mj828_ctor(&Device);
 	#endif
 
-	message_handler_ctor(&MsgHandler, &CAN, &BUS);						// call message handler constructor
-	event_handler_ctor(&EventHandler);
+	message_handler_ctor(&MsgHandler, Device.mj8x8->can);				// call message handler constructor
+	event_handler_ctor(&EventHandler);									// call event handler constructor
 
 	// TODO - implement micro controller sleep cycles
 	set_sleep_mode(SLEEP_MODE_IDLE);									// 11mA

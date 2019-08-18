@@ -13,7 +13,7 @@ static void _HandleEvent(void)
 	(*__self->fpointer)(__self->index);
 };
 
-void event_handler_ctor(volatile event_handler_t *self)					//
+void event_handler_ctor(volatile event_handler_t * const self)
 {
 	__self = self;
 	self->Notify = &_Notify;
