@@ -267,7 +267,7 @@ static void __mcp2515_opcode_load_tx_buffer(const uint8_t buffer, volatile const
 };
 
 // fetches a received CAN message from the MCP2515, triggered by RX interrupt
-void _mcp2515_can_msg_receive(volatile can_msg_t *msg)
+void _mcp2515_can_msg_receive(volatile can_msg_t * const msg)
 {
 	/* mode of operation - see figure 4.2 on p.26
 	 *	1. identify RX buffer
@@ -303,7 +303,7 @@ void _mcp2515_can_msg_receive(volatile can_msg_t *msg)
 
 // provide data to MCP2515 and flag for TX over the CAN bus
 //	provide not more than 4 bytes of data and len !!!
-void _mcp2515_can_msg_send(volatile can_msg_t *msg)
+void _mcp2515_can_msg_send(volatile can_msg_t * const msg)
 {
 	/* mode of operation - see figure 3.1 on p.17
 	 *	1. find an empty TX buffer
@@ -359,7 +359,7 @@ void _mcp2515_can_msg_send(volatile can_msg_t *msg)
 };
 
 // puts the whole CAN infrastructure to sleep; 1 - sleep, 0 - awake
-void _can_sleep(volatile can_t *in_can, const uint8_t in_val)
+void _can_sleep(volatile can_t * const in_can, const uint8_t in_val)
 {
 	if ( !(in_can->in_sleep) && in_val)									// if is awake and set to sleep
 	{
@@ -376,7 +376,7 @@ void _can_sleep(volatile can_t *in_can, const uint8_t in_val)
 };
 
 // object constructor
-volatile can_t *can_ctor(volatile can_t *self)
+volatile can_t * can_ctor(volatile can_t * const self)
 {
 	// populate self
 	self->Sleep = &_can_sleep;											// set up function pointer for public methods

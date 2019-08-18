@@ -6,7 +6,7 @@
 static can_msg_t __msg __attribute__ ((section (".data")));				// define private CAN message object and put it into .data
 
 // loads outbound CAN message into local CAN IC and asks it to transmit it onto the bus
-void _SendMessage(volatile message_handler_t *self, const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
+void _SendMessage(volatile message_handler_t * const self, const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
 {
 	if (self->can->in_sleep)											// if the CAN infra. is sleeping
 		self->can->Sleep(self->can, 0);									// wake it up
@@ -25,7 +25,7 @@ void _SendMessage(volatile message_handler_t *self, const uint8_t in_command, co
 };
 
 // fetches message received from CAN bus by local CAN IC, populates known hosts and returns message handler object
-volatile can_msg_t *_ReceiveMessage(volatile struct message_handler_t *self)
+volatile can_msg_t *_ReceiveMessage(volatile struct message_handler_t * const self)
 {
 	self->can->FetchMessage(&__msg);									// fetch the message from some RX buffer into RAM
 	// FIXME - 1st LU doesn't always get listed in devices.All -- very likely the root cause in the quick'n'dirty arduino LU
