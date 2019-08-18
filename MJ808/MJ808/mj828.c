@@ -154,12 +154,12 @@ void __mj828_button_execution_function(uint8_t val)
 		case 4:
 			if (state)
 			{
-				LED.flags->All &= ~_BV(Red);
+				Device.led->flags->All &= ~_BV(Red);
 				state = !state;
 			}
 			else
 			{
-				LED.flags->All |= _BV(Red);
+				Device.led->flags->All |= _BV(Red);
 				state = !state;
 			}
 			EventHandler.index &= ~_BV(2);
@@ -168,13 +168,13 @@ void __mj828_button_execution_function(uint8_t val)
 		case 8:
 			if (state)
 			{
-				LED.flags->All &= ~_BV(Blue);
+				Device.led->flags->All &= ~_BV(Blue);
 				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 1);
 				state = !state;
 			}
 			else
 			{
-				LED.flags->All |= _BV(Blue);
+				Device.led->flags->All |= _BV(Blue);
 				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xf8, 1);
 				state = !state;
 			}
@@ -261,7 +261,7 @@ void _PopulatedBusOperationMJ828(volatile message_handler_t *in_msg, volatile vo
 	}
 };
 
-void mj828_ctor(volatile mj828_t *self, volatile leds_t *led, volatile button_t *button)
+void mj828_ctor(volatile mj828_t * const self, volatile leds_t *led, volatile button_t *button)
 {
 	// GPIO state definitions
 	{
@@ -331,6 +331,6 @@ void mj828_ctor(volatile mj828_t *self, volatile leds_t *led, volatile button_t 
 	self->mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
 };
 
-#if defined(MJ828_)
+#if defined(MJ828_)														// all devices have the object name "Device", hence the preprocessor macro
 volatile mj828_t Device __attribute__ ((section (".data")));			// define Device object and put it into .data
 #endif

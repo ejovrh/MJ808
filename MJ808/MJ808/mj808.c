@@ -8,41 +8,6 @@
 #include "led.h"
 #include "gpio.h"
 
-void lamp_on(void)
-{
-	Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);				// power on green LED
-	Device.led->flags->All |= _BV(Utility);							// set bit0
-	Device.led->led[Front].Shine(0x20);								// power on front light
-	Device.led->flags->All |= _BV(Front);							// set bit1
-
-	if (MsgHandler.bus->devices._LU)								// if the logic unit is not present
-	MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
-
-	if (MsgHandler.bus->devices._MJ818)								// if rear light is present
-	MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);		// turn on rear light
-
-	if (MsgHandler.bus->devices._MJ828)								// dashboard is present
-	MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
-};
-
-void lamp_off(void)
-{
-	Device.led->led[Utility].Shine(UTIL_LED_GREEN_OFF);				// power off green LED
-	Device.led->flags->All &= ~_BV(Utility);						// clear bit0
-	Device.led->led[Front].Shine(0x00);								// power off front light
-	Device.led->flags->All &= ~_BV(Front);							// clear bit1
-
-	if (MsgHandler.bus->devices._LU)								// if the logic unit is not present
-	MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
-
-	if (MsgHandler.bus->devices._MJ818)								// if rear light is present
-	MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);		// turn off rear light
-
-	if (MsgHandler.bus->devices._MJ828)								// dashboard is present
-	MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_OFF, 0x00, 1);						// turn off yellow LED
-};
-
-
 // TODO - optimize
 void _fade(const uint8_t value, volatile uint8_t *ocr);
 
@@ -52,7 +17,7 @@ static void _wrapper_fade_mj808(const uint8_t value)
 	_fade(value, &OCR_FRONT_LIGHT);
 };
 
-// TODO - should be static and the caller in question should use an object
+// TODO - optimize & should be static and the caller in question should use an object
 // concrete utility LED handling function
 void _util_led_mj808(uint8_t in_val)
 {
@@ -85,7 +50,7 @@ void _util_led_mj808(uint8_t in_val)
 	}
 };
 
-void __mj808_button_execution_function(uint8_t val)
+void __mj808_button_execution_function(const uint8_t val)
 {
 	static uint8_t state = 1;
 
@@ -103,12 +68,26 @@ void __mj808_button_execution_function(uint8_t val)
 		case 4:
 			if (state)
 			{
-				lamp_on();
+				Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);		// green LED on
+				Device.led->led[Front].Shine(0x20);						// front light on - low key; gets overwritten by LU command, since it comes in a bit later
+
+				 //send the messages out, UDP-style. no need to check if the device is actually online
+				MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);					// convey button press via CAN and the logic unit will do its own thing
+				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);		// turn on rear light
+				MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
+
 				state = !state;
 			}
 			else
 			{
-				lamp_off();
+				Device.led->led[Utility].Shine(UTIL_LED_GREEN_OFF);		// green LED off
+				Device.led->led[Front].Shine(0x00);						// front light off
+
+				// send the messages out, UDP-style. no need to check if the device is actually online
+				MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
+				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);		// turn off rear light
+				MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_OFF, 0x00, 1);						// turn off yellow LED
+
 				state = !state;
 			}
 			EventHandler.index &= ~_BV(2);
@@ -116,7 +95,7 @@ void __mj808_button_execution_function(uint8_t val)
 	}
 };
 
-volatile button_t *_virtual_button_ctorMJ808(volatile button_t *self, volatile event_handler_t *event)
+volatile button_t *_virtual_button_ctorMJ808(volatile button_t * const self, volatile event_handler_t * const event)
 {
 	static individual_button_t individual_button[1] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
 	self->button = individual_button;									// assign pointer to button array
@@ -159,7 +138,8 @@ volatile leds_t *_virtual_led_ctorMJ808(volatile leds_t *self)
 // device default operation on empty bus
 void _EmptyBusOperationMJ808(void)
 {
-	;
+	// empty - our button will tell us when to act
+	return;
 };
 
 // received MsgHandler object and passes
@@ -195,7 +175,7 @@ void _PopulatedBusOperationMJ808(volatile message_handler_t *in_msg, volatile vo
 	}
 };
 
-void mj808_ctor(volatile mj808_t *self, volatile leds_t *led, volatile button_t *button)
+void mj808_ctor(volatile mj808_t * const self, volatile leds_t *led, volatile button_t *button)
 {
 	// GPIO state definitions
 	{
@@ -267,6 +247,6 @@ void mj808_ctor(volatile mj808_t *self, volatile leds_t *led, volatile button_t 
 	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);							// crude "I'm finished" indicator
 };
 
-#if defined(MJ808_)
+#if defined(MJ808_)														// all devices have the object name "Device", hence the preprocessor macro
 volatile mj808_t Device __attribute__ ((section (".data")));			// define Device object and put it into .data
 #endif

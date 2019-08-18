@@ -61,7 +61,7 @@ void _PopulatedBusOperationMJ818(volatile message_handler_t *in_msg, volatile vo
 	}
 };
 
-void mj818_ctor(volatile mj818_t *self, volatile leds_t *led)
+void mj818_ctor(volatile mj818_t * const self, volatile leds_t *led)
 {
 	// GPIO state definitions
 	{
@@ -117,6 +117,6 @@ void mj818_ctor(volatile mj818_t *self, volatile leds_t *led)
 	self->mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
 };
 
-#if defined(MJ818_)
+#if defined(MJ818_)														// all devices have the object name "Device", hence the preprocessor macro
 volatile mj818_t Device __attribute__ ((section (".data")));			// define Device object and put it into .data
 #endif
