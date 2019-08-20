@@ -143,42 +143,42 @@ void __mj828_button_execution_function(uint8_t val)
 	switch (val)
 	{
 		default:
-			EventHandler.index &= ~_BV(0);
+			//EventHandler.index &= ~_BV(0);
 			return;
 
 		case 1:
 			//lamp_off();
-			EventHandler.index &= ~_BV(1);
+			//EventHandler.index &= ~_BV(1);
 		break;
 
 		case 4:
-			if (state)
-			{
-				Device.led->flags->All &= ~_BV(Red);
-				state = !state;
-			}
-			else
-			{
-				Device.led->flags->All |= _BV(Red);
-				state = !state;
-			}
-			EventHandler.index &= ~_BV(2);
+			//if (state)
+			//{
+				//Device.led->flags->All &= ~_BV(Red);
+				//state = !state;
+			//}
+			//else
+			//{
+				//Device.led->flags->All |= _BV(Red);
+				//state = !state;
+			//}
+			//EventHandler.index &= ~_BV(2);
 		break;
 
 		case 8:
-			if (state)
-			{
-				Device.led->flags->All &= ~_BV(Blue);
-				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 1);
-				state = !state;
-			}
-			else
-			{
-				Device.led->flags->All |= _BV(Blue);
-				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xf8, 1);
-				state = !state;
-			}
-			EventHandler.index &= ~_BV(3);
+			//if (state)
+			//{
+				//Device.led->flags->All &= ~_BV(Blue);
+				//MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 1);
+				//state = !state;
+			//}
+			//else
+			//{
+				//Device.led->flags->All |= _BV(Blue);
+				//MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xf8, 1);
+				//state = !state;
+			//}
+			//EventHandler.index &= ~_BV(3);
 		break;
 	}
 };
@@ -217,7 +217,7 @@ volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self, volatile e
 	self->button[Left].action = LeftButtonEvents;
 	self->button[Right].action = RightButtonEvents;
 
-	event->fpointer = &__mj828_button_execution_function;
+	//event->fpointer = &__mj828_button_execution_function;
 
 	return self;
 };
