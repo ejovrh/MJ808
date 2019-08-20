@@ -61,8 +61,8 @@ void __mj808_button_execution_function(const uint8_t val)
 			return;
 
 		case 1:
-			//lamp_off();
 			EventHandler.index &= ~_BV(1);
+			return;
 		break;
 
 		case 4:
@@ -105,7 +105,7 @@ volatile button_t *_virtual_button_ctorMJ808(volatile button_t * const self, vol
 	self->button[Center]._PIN = (uint8_t *) 0x30; 						// 0x020 offset plus address - PIND register
 	self->button[Center]._pin_number = 4;								// sw2 is connected to pin D0
 
-	static uint8_t button1events[] =
+	static uint8_t event_table[] =
 	{
 		0,	// 0 - default - empty event
 		0,	// 1 - empty event - button press not defined
@@ -115,7 +115,7 @@ volatile button_t *_virtual_button_ctorMJ808(volatile button_t * const self, vol
 		1	// 5 - error event
 	};
 
-	self->button[Center].action = button1events;
+	self->button[Center].action = event_table;
 
 	event->fpointer = &__mj808_button_execution_function;
 

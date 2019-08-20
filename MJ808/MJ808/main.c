@@ -17,6 +17,9 @@
 
 int main(void)
 {
+	message_handler_ctor(&MsgHandler, &CAN, &BUS);						// call message handler constructor
+	event_handler_ctor(&EventHandler);									// call event handler constructor; the Device constructor further down has the chance to override EventHandler.fpointer and implement its own handler
+
 	#if defined(MJ808_)													// MJ808 - call derived class constructor and tie in base class
 	mj808_ctor(&Device, &LED, &Button);
 	#endif
@@ -27,8 +30,7 @@ int main(void)
 	mj828_ctor(&Device, &LED, &Button);
 	#endif
 
-	message_handler_ctor(&MsgHandler, &CAN, &BUS);						// call message handler constructor
-	event_handler_ctor(&EventHandler);
+
 
 	// TODO - implement micro controller sleep cycles
 	set_sleep_mode(SLEEP_MODE_IDLE);									// 11mA
@@ -52,6 +54,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 	// assumption: an incoming message is of interest for this unit
 	//	'being of interest' is defined in the filters
 
+	// TODO - consolidate into one global function
 	inline void helper_reti(void)
 	{
 		asm("reti");
