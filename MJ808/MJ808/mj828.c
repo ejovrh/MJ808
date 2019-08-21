@@ -138,47 +138,42 @@ void charlieplexing_handler(volatile leds_t *in_led)
 
 void __mj828_button_execution_function(uint8_t val)
 {
-	static uint8_t state = 1;
-
 	switch (val)
 	{
 		default:
-			//EventHandler.index &= ~_BV(0);
+			EventHandler.index &= ~val;
 			return;
 
-		case 1:
+		case 0x01:
 			//lamp_off();
-			//EventHandler.index &= ~_BV(1);
+			EventHandler.index &= ~val;
 		break;
 
-		case 4:
-			//if (state)
-			//{
-				//Device.led->flags->All &= ~_BV(Red);
-				//state = !state;
-			//}
-			//else
-			//{
-				//Device.led->flags->All |= _BV(Red);
-				//state = !state;
-			//}
-			//EventHandler.index &= ~_BV(2);
+		case 0x04:
+			if (Device.button->button[Left].Momentary)
+			{
+				Device.led->flags->All |= _BV(Blue);
+				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xF8, 2);
+			}
+			else
+			{
+				Device.led->flags->All &= ~_BV(Blue);	
+				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);		
+				EventHandler.index &= ~val;
+			}
+
 		break;
 
-		case 8:
-			//if (state)
-			//{
-				//Device.led->flags->All &= ~_BV(Blue);
-				//MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 1);
-				//state = !state;
-			//}
-			//else
-			//{
-				//Device.led->flags->All |= _BV(Blue);
-				//MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xf8, 1);
-				//state = !state;
-			//}
-			//EventHandler.index &= ~_BV(3);
+		case 0x02:
+			if (Device.button->button[Right].Toggle)
+			{
+				Device.led->flags->All &= ~_BV(Red);
+			}
+			else
+			{
+				Device.led->flags->All |= _BV(Red);
+			}
+			EventHandler.index &= ~val;
 		break;
 	}
 };
@@ -196,28 +191,28 @@ volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self, volatile e
 
 	static uint8_t LeftButtonEvents[] =
 	{
-		0,	// 0 - default - empty event
-		3,	// 1 - empty event - button press not defined
-		0,	// 2 - empty event - button press not defined
-		0,	// 3 - button Hold
-		0,	// 4 - empty event - button press not defined
-		1	// 5 - error event
+		0,		// 0 - 
+		0x04,	// 1 - jump case 0x04 - momentary event
+		0,		// 2 - 
+		0,		// 3 - 
+		0,		// 4 - 
+		0x01	// 5 - error event
 	};
 
 	static uint8_t RightButtonEvents[] =
 	{
-		0,	// 0 - default - empty event
-		2,	// 1 - empty event - button press not defined
-		0,	// 2 - empty event - button press not defined
-		0,	// 3 - button Hold
-		0,	// 4 - empty event - button press not defined
-		1	// 5 - error event
+		0,		// 0 - 
+		0,		// 1 - 
+		0x02,	// 2 - jump case 0x02 - toggle event
+		0,		// 3 - 
+		0,		// 4 - 
+		0x01	// 5 - error event
 	};
 
 	self->button[Left].action = LeftButtonEvents;
 	self->button[Right].action = RightButtonEvents;
 
-	//event->fpointer = &__mj828_button_execution_function;
+	event->fpointer = &__mj828_button_execution_function;
 
 	return self;
 };

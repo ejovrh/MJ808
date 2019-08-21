@@ -8,7 +8,7 @@
 #define BUTTON_MIN_PRESS_TIME 20										// number times 25ms duration: 500ms
 #define BUTTON_MAX_PRESS_TIME 120										// number times 25ms duration: 3s
 
-enum button_events 
+enum event_table_index 
 { 
 	Empty,			// 0 
 	Momentary,		// 1
