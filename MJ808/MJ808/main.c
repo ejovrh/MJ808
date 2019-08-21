@@ -2,7 +2,7 @@
 #include <avr/sleep.h>
 #include <avr/pgmspace.h>
 
-#define MJ828_															// what device to compile for?
+#define MJ808_															// what device to compile for?
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"
@@ -41,7 +41,7 @@ int main(void)
 
 	while (1)															// forever loop
 	{
-		EventHandler.HandleEvent();										// execute what the action function pointer points to according to argument taken from event_table[]
+		EventHandler.HandleEvent();										// execute the event handling function with argument taken from case table array
 
 		if (MCUCR & _BV(SE))											// if sleep is enabled
 			sleep_cpu();												// ...sleep
@@ -233,21 +233,8 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	// code to be executed every 25ms
 	sleep_disable();													// wakey wakey
 
-	#if defined(MJ808_)													// pushbutton code for mj808
-	button_debounce(&Device.button->button[Center], &EventHandler);		// from here on the button is debounced and states can be consumed
-
-	#endif
-
-	#if defined(MJ828_)													// pushbutton code for mj828
-	button_debounce(&Device.button->button[Left], &EventHandler);		// from here on the button is debounced and states can be consumed
-	button_debounce(&Device.button->button[Right], &EventHandler);		//	ditto
-
-// example commands for function-based buttons lighting up LEDs
-	//if (Device.button->button[Right].Hold)
-		//Device.led->flags->All |= _BV(Battery_LED4);					// set bit7
-	//else
-		//Device.led->flags->All &= ~_BV(Battery_LED4);					// clear bit7
-	#endif
+	for (uint8_t i=0; i<Device.button->button_count; ++i)				// loop over all available buttons and debounce them
+		Button.deBounce(&Device.button->button[i], &EventHandler);		// from here on the button is debounced and states can be consumed
 
 	sleep_enable();														// back to sleep
 }
