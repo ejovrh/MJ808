@@ -7,7 +7,8 @@
 #include "mj828.h"
 #include "gpio.h"
 
-static void __glow(uint8_t led, uint8_t state);
+extern void _fade(const uint8_t value, volatile uint8_t *ocr);
+extern void _debounce(volatile individual_button_t *in_button, volatile event_handler_t *in_event);
 
 void __mj828_led_gpio_init(void)
 {
@@ -27,7 +28,7 @@ static void __LED_red(const uint8_t state)								// red LED on/off
 		gpio_conf(LED_CP1_pin, OUTPUT, HIGH);							// pin b2 - cathode
 };
 
-static void __LED_green(const uint8_t state)								// green LED on/off
+static void __LED_green(const uint8_t state)							// green LED on/off
 {
 	gpio_conf(LED_CP1_pin, OUTPUT, HIGH);								// pin b2 - anode
 
@@ -37,7 +38,7 @@ static void __LED_green(const uint8_t state)								// green LED on/off
 		gpio_conf(LED_CP2_pin, OUTPUT, HIGH);							// pin b1 - cathode
 }
 
-static void __LED_blue1(const uint8_t state)								// blue1 LED on/off
+static void __LED_blue1(const uint8_t state)							// blue1 LED on/off
 {
 	gpio_conf(LED_CP2_pin, OUTPUT, HIGH);								// pin b1 - anode
 
@@ -57,7 +58,7 @@ static void __LED_yellow(const uint8_t state)							// yellow LED on/off
 		gpio_conf(LED_CP2_pin, OUTPUT, HIGH);							// pin b1 - cathode
 }
 
-static void __LED_blue2(const uint8_t state)								// blue2 LED on/off
+static void __LED_blue2(const uint8_t state)							// blue2 LED on/off
 {
 	gpio_conf(LED_CP4_pin, OUTPUT, HIGH);								// pin d6 - anode
 
@@ -67,7 +68,7 @@ static void __LED_blue2(const uint8_t state)								// blue2 LED on/off
 		gpio_conf(LED_CP3_pin, OUTPUT, HIGH);							// pin b0 - cathode
 }
 
-static void __LED_blue3(const uint8_t state)								// blue3 LED on/off
+static void __LED_blue3(const uint8_t state)							// blue3 LED on/off
 {
 	gpio_conf(LED_CP3_pin, OUTPUT, HIGH);								// pin b0 - anode
 
@@ -77,7 +78,7 @@ static void __LED_blue3(const uint8_t state)								// blue3 LED on/off
 		gpio_conf(LED_CP4_pin, OUTPUT, HIGH);							// pin d6 - cathode
 }
 
-static void __LED_blue4(const uint8_t state)								// blue4 LED on/off
+static void __LED_blue4(const uint8_t state)							// blue4 LED on/off
 {
 	gpio_conf(LED_CP1_pin, OUTPUT, HIGH);								// pin b2 - anode
 
@@ -87,7 +88,7 @@ static void __LED_blue4(const uint8_t state)								// blue4 LED on/off
 		gpio_conf(LED_CP4_pin, OUTPUT, HIGH);							// pin d6 - cathode
 }
 
-static void __LED_blue5(const uint8_t state)								// blue5 LED on/off
+static void __LED_blue5(const uint8_t state)							// blue5 LED on/off
 {
 	gpio_conf(LED_CP4_pin, OUTPUT, HIGH);								// pin d6 - anode
 
@@ -136,16 +137,14 @@ void charlieplexing_handler(volatile leds_t *in_led)
 	(i == 7) ? i = 0 : ++i;												// count up to led_count and then start from zero
 };
 
-void __mj828_button_execution_function(uint8_t val)
+// executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
+// cases in this switch-case statement must be unique for all events on this device
+void __mj828_event_execution_function(uint8_t val)
 {
-	switch (val)
+	switch (val)														// based on array value at position #foo of array e.g. FooButtonCaseTable[]
 	{
-		default:
-			EventHandler.index &= ~val;
-			return;
-
-		case 0x01:
-			//lamp_off();
+		case 0x01:														// error button press
+			// TODO - implement device function on button error press
 			EventHandler.index &= ~val;
 		break;
 
@@ -157,15 +156,15 @@ void __mj828_button_execution_function(uint8_t val)
 			}
 			else
 			{
-				Device.led->flags->All &= ~_BV(Blue);	
-				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);		
+				Device.led->flags->All &= ~_BV(Blue);
+				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);
 				EventHandler.index &= ~val;
 			}
 
 		break;
 
 		case 0x02:
-			if (Device.button->button[Right].Toggle)
+			if (!Device.button->button[Right].Toggle)
 			{
 				Device.led->flags->All &= ~_BV(Red);
 			}
@@ -175,6 +174,10 @@ void __mj828_button_execution_function(uint8_t val)
 			}
 			EventHandler.index &= ~val;
 		break;
+
+		default:														// no value passed
+			EventHandler.index &= ~val;									// do nothing
+		break;
 	}
 };
 
@@ -182,37 +185,35 @@ void __mj828_button_execution_function(uint8_t val)
 volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self, volatile event_handler_t *event)
 {
 	static individual_button_t individual_button[2] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
+
 	self->button = individual_button;									// assign pointer to button array
+	self->button_count = 2;												// how many buttons are on this device?
+	self->button[0]._PIN = (uint8_t *) 0x30;							// 0x020 offset plus address - PIND register
+	self->button[0]._pin_number = 0;									// sw2 is connected to pin D0
+	self->button[1]._PIN = (uint8_t *) 0x30;							// ditto
+	self->button[1]._pin_number = 1;									// sw2 is connected to pin D1
 
-	self->button[0]._pin_number = 0;										// sw2 is connected to pin D0
-	self->button[1]._pin_number = 1;										// sw2 is connected to pin D1
-	self->button[0]._PIN = (uint8_t *) 0x30;								// 0x020 offset plus address - PIND register
-	self->button[1]._PIN = (uint8_t *) 0x30;								// ditto
-
-	static uint8_t LeftButtonEvents[] =
+	static uint8_t LeftButtonCaseTable[] =								// array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
 	{
-		0,		// 0 - 
-		0x04,	// 1 - jump case 0x04 - momentary event
-		0,		// 2 - 
-		0,		// 3 - 
-		0,		// 4 - 
-		0x01	// 5 - error event
+		0x04,	// 0 - jump case 0x04 - momentary event
+		0x00,	// 1 - not defined
+		0x00,	// 2 - not defined
+		0x01	// 3 - not defined
 	};
 
-	static uint8_t RightButtonEvents[] =
+	static uint8_t RightButtonCaseTable[] =								// array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
 	{
-		0,		// 0 - 
-		0,		// 1 - 
-		0x02,	// 2 - jump case 0x02 - toggle event
-		0,		// 3 - 
-		0,		// 4 - 
-		0x01	// 5 - error event
+		0x00,	// 0 - not defined
+		0x02,	// 1 - jump case 0x02 - toggle event
+		0x00,	// 2 - not defined
+		0x01	// 3 - not defined
 	};
 
-	self->button[Left].action = LeftButtonEvents;
-	self->button[Right].action = RightButtonEvents;
+	self->button[Left].ButtonCaseptr = LeftButtonCaseTable;				// button press-to-case binding
+	self->button[Right].ButtonCaseptr = RightButtonCaseTable;			// button press-to-case binding
 
-	event->fpointer = &__mj828_button_execution_function;
+	self->deBounce = &_debounce;									// tie in debounce function
+	event->fpointer = &__mj828_event_execution_function;				// button execution override from default to device-specific
 
 	return self;
 };

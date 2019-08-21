@@ -9,7 +9,8 @@
 #include "gpio.h"
 
 // TODO - optimize
-void _fade(const uint8_t value, volatile uint8_t *ocr);
+extern void _fade(const uint8_t value, volatile uint8_t *ocr);
+extern void _debounce(volatile individual_button_t *in_button, volatile event_handler_t *in_event);
 
 // TODO - optimize
 static void _wrapper_fade_mj808(const uint8_t value)
@@ -50,14 +51,16 @@ void _util_led_mj808(uint8_t in_val)
 	}
 };
 
-void __mj808_button_execution_function(const uint8_t val)
+// executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
+// cases in this switch-case statement must be unique for all events on this device
+void __mj808_event_execution_function(const uint8_t val)
 {
 	switch (val)
 	{
 		case 0x01:	// button error: - do the error thing
+			// TODO - implement device function on button error press
 			EventHandler.index &= ~val;
 			return;
-		break;
 
 		case 0x02:	// button hold
 			if (Device.button->button[Center].Hold)
@@ -92,28 +95,24 @@ void __mj808_button_execution_function(const uint8_t val)
 volatile button_t *_virtual_button_ctorMJ808(volatile button_t * const self, volatile event_handler_t * const event)
 {
 	static individual_button_t individual_button[1] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
+
 	self->button = individual_button;									// assign pointer to button array
-
-	self->button_count = 1;
-
+	self->button_count = 1;												// how many buttons are on this device?
 	self->button[Center]._PIN = (uint8_t *) 0x30; 						// 0x020 offset plus address - PIND register
 	self->button[Center]._pin_number = 4;								// sw2 is connected to pin D0
 
-	static uint8_t event_table[] =
+	static uint8_t CenterButtonCaseTable[] =							// array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
 	{
-		0x00,	// 1 - 
-		0x00,	// 2 - 
-		0x00,	// 3 - 
-		0x02,	// 4 - jump case 0x02 - button Hold
-		0x01,	// 5 - jump case 0x01 - error event
-		0x00,	// 6 -
-		0x00,	// 7 -
-		0x00	// 8 - 
+		0x00,	// 0 - not defined
+		0x00,	// 1 - not defined
+		0x02,	// 2 - jump case 0x02 - button Hold
+		0x01,	// 3 - jump case 0x01 - error event
 	};
 
-	self->button[Center].action = event_table;
+	self->button[Center].ButtonCaseptr = CenterButtonCaseTable;			// button press-to-case binding
 
-	event->fpointer = &__mj808_button_execution_function;
+	self->deBounce = &_debounce;									// tie in debounce function
+	event->fpointer = &__mj808_event_execution_function;				// button execution override from default to device-specific
 
 	return self;
 };

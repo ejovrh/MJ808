@@ -20,7 +20,7 @@ enum mj808_leds															// enum of lights on this device
 	Front
 };
 
-enum mj828_buttons														// enum of buttons on this device
+enum mj808_buttons														// enum of buttons on this device
 {
 	Center
 };
