@@ -11116,56 +11116,6 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="AM2520SURC03-31454 - Red SMD LED">
-<packages>
-<package name="SMD">
-<smd name="C" x="2.3" y="0" dx="1.6" dy="1.6" layer="1"/>
-<smd name="A" x="-2.3" y="0" dx="1.6" dy="1.6" layer="1"/>
-<circle x="0.5" y="0" radius="0.70710625" width="0.127" layer="21"/>
-<wire x1="1.5" y1="1" x2="-1.5" y2="1" width="0.127" layer="21"/>
-<wire x1="-1.5" y1="1" x2="-1.5" y2="-1" width="0.127" layer="21"/>
-<wire x1="-1.5" y1="-1" x2="1.5" y2="-1" width="0.127" layer="21"/>
-<wire x1="1.5" y1="-1" x2="1.5" y2="1" width="0.127" layer="21"/>
-<text x="0" y="2" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="-2" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
-</package>
-</packages>
-<symbols>
-<symbol name="AM2520SURC03-31454">
-<pin name="A" x="-7.62" y="0" visible="off" length="middle"/>
-<pin name="C" x="7.62" y="0" visible="off" length="middle" rot="R180"/>
-<wire x1="2.54" y1="2.54" x2="2.54" y2="0" width="0.254" layer="94"/>
-<wire x1="2.54" y1="0" x2="2.54" y2="-2.54" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="2.54" x2="-2.54" y2="-2.54" width="0.254" layer="94"/>
-<wire x1="2.54" y1="0" x2="-2.54" y2="-2.54" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="2.54" x2="2.54" y2="0" width="0.254" layer="94"/>
-<text x="-2.54" y="5.08" size="1.27" layer="95">&gt;NAME</text>
-<text x="-2.54" y="-5.08" size="1.27" layer="96">&gt;VALUE</text>
-<wire x1="0" y1="2.54" x2="1.27" y2="3.81" width="0.254" layer="94" curve="90"/>
-<wire x1="2.54" y1="5.08" x2="1.27" y2="3.81" width="0.254" layer="94" curve="90"/>
-<wire x1="2.032" y1="5.588" x2="0.762" y2="4.318" width="0.254" layer="94" curve="90"/>
-<wire x1="-0.508" y1="3.048" x2="0.762" y2="4.318" width="0.254" layer="94" curve="90"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="AM2520SURC03-31454" prefix="LED" uservalue="yes">
-<gates>
-<gate name="G$1" symbol="AM2520SURC03-31454" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="SMD">
-<connects>
-<connect gate="G$1" pin="A" pad="A"/>
-<connect gate="G$1" pin="C" pad="C"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="MAX16839 LED Driver, constant current">
 <packages>
 <package name="TDFN-6-EP" urn="urn:adsk.eagle:footprint:451115/1" locally_modified="yes">
@@ -12482,6 +12432,56 @@ by R. Vogg  15.March.2002</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="1374-CLM2D-RCC-ACC-1064252 - Red SMD LED">
+<packages>
+<package name="SMD">
+<smd name="1" x="-1.5" y="0.75" dx="1" dy="0.7" layer="1"/>
+<smd name="2" x="-1.5" y="-0.75" dx="1" dy="0.7" layer="1"/>
+<smd name="4" x="1.5" y="0.75" dx="1" dy="0.7" layer="1" rot="R180"/>
+<smd name="3" x="1.5" y="-0.75" dx="1" dy="0.7" layer="1" rot="R180"/>
+<wire x1="-1.8" y1="-1.4" x2="1.8" y2="-1.4" width="0.127" layer="21"/>
+<wire x1="-1.8" y1="1.4" x2="1.8" y2="1.4" width="0.127" layer="21"/>
+<text x="0" y="2.54" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-2.54" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
+<rectangle x1="-2" y1="1.1" x2="-1" y2="1.8" layer="25"/>
+</package>
+</packages>
+<symbols>
+<symbol name="1374-CLM2D-RCC-ACC-1064252">
+<pin name="A" x="-7.62" y="0" visible="pad" length="middle"/>
+<pin name="C" x="7.62" y="0" visible="pad" length="middle" rot="R180"/>
+<wire x1="2.54" y1="2.54" x2="2.54" y2="0" width="0.254" layer="94"/>
+<wire x1="2.54" y1="0" x2="2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="2.54" x2="-2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-2.54" x2="2.54" y2="0" width="0.254" layer="94"/>
+<wire x1="2.54" y1="0" x2="-2.54" y2="2.54" width="0.254" layer="94"/>
+<text x="-2.54" y="-5.08" size="1.27" layer="95">&gt;NAME</text>
+<text x="-2.54" y="-7.62" size="1.27" layer="96">&gt;VALUE</text>
+<wire x1="0" y1="2.54" x2="2.54" y2="5.08" width="0.254" layer="94" curve="90"/>
+<wire x1="2.54" y1="5.08" x2="5.08" y2="7.62" width="0.254" layer="94" curve="-90"/>
+<wire x1="-1.27" y1="3.81" x2="1.27" y2="6.35" width="0.254" layer="94" curve="90"/>
+<wire x1="1.27" y1="6.35" x2="3.81" y2="8.89" width="0.254" layer="94" curve="-90"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="1374-CLM2D-RCC-ACC-1064252" prefix="D" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="1374-CLM2D-RCC-ACC-1064252" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SMD">
+<connects>
+<connect gate="G$1" pin="A" pad="2"/>
+<connect gate="G$1" pin="C" pad="4"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -12508,10 +12508,10 @@ by R. Vogg  15.March.2002</description>
 </class>
 </classes>
 <parts>
-<part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R1206" package3d_urn="urn:adsk.eagle:package:23540/2" value="30R/0.5W"/>
+<part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R2010" package3d_urn="urn:adsk.eagle:package:23551/2" value="WSLT2010R2200FEB18 / 0.22Ohm 1W"/>
 <part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="47μF"/>
 <part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD123" package3d_urn="urn:adsk.eagle:package:43420/1" value="PMEG2010ER,115"/>
-<part name="Q1" library="SIA456DJ-T1-GE3  N-Fet" deviceset="SIA456DJ" device="" value="SiA456DJ"/>
+<part name="Q1" library="SIA456DJ-T1-GE3  N-Fet" deviceset="SIA456DJ" device="" value="SQA470EEJ-T1_GE3"/>
 <part name="IC5" library="MCP2515-I-ML - Standalonce CAN Controller with SPI Interface" deviceset="MCP2515-I-ML" device="" value="MCP2515"/>
 <part name="IC6" library="MCP2561-2 - High-Speed CAN Transceiver" deviceset="MCP2561-2" device="" value="MCP2561-2"/>
 <part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
@@ -12524,21 +12524,21 @@ by R. Vogg  15.March.2002</description>
 <part name="IC2" library="ATtiny4313 microcontroller" deviceset="ATTINY4313" device="VQFN-20" value="ATTINY4313-MMH">
 <attribute name="SPICEPREFIX" value="X"/>
 </part>
-<part name="IC3" library="PRQV8.00CR1510Y00L - 8MHz resonator" deviceset="PRQV" device="" value="PRQV8.00CR1510Y00L"/>
+<part name="IC3" library="PRQV8.00CR1510Y00L - 8MHz resonator" deviceset="PRQV" device="" value="PBRC8.00GR50X000"/>
 <part name="X2" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="22-23-2021" device="" package3d_urn="urn:adsk.eagle:package:8078633/1" value="XPERED-L1-R250-00401"/>
 <part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1μF"/>
 <part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1μF"/>
 <part name="SPI" library="5034800600 FPC Connector" deviceset="5034800600" device="" value="5034800600"/>
 <part name="L1" library="DE0604A-778075 - Inductor" deviceset="DE0604A-778075" device="" value="SDE0604A-270M - 27uH"/>
-<part name="LED1" library="AM2520SURC03-31454 - Red SMD LED" deviceset="AM2520SURC03-31454" device="" value="604-AM2520SURC03 "/>
-<part name="LED4" library="AM2520SURC03-31454 - Red SMD LED" deviceset="AM2520SURC03-31454" device="" value="604-AM2520SURC03 "/>
-<part name="LED7" library="AM2520SURC03-31454 - Red SMD LED" deviceset="AM2520SURC03-31454" device="" value="604-AM2520SURC03 "/>
-<part name="LED2" library="AM2520SURC03-31454 - Red SMD LED" deviceset="AM2520SURC03-31454" device="" value="604-AM2520SURC03 "/>
-<part name="LED5" library="AM2520SURC03-31454 - Red SMD LED" deviceset="AM2520SURC03-31454" device="" value="604-AM2520SURC03 "/>
-<part name="LED8" library="AM2520SURC03-31454 - Red SMD LED" deviceset="AM2520SURC03-31454" device="" value="604-AM2520SURC03 "/>
-<part name="LED3" library="AM2520SURC03-31454 - Red SMD LED" deviceset="AM2520SURC03-31454" device="" value="604-AM2520SURC03 "/>
-<part name="LED6" library="AM2520SURC03-31454 - Red SMD LED" deviceset="AM2520SURC03-31454" device="" value="604-AM2520SURC03 "/>
-<part name="LED9" library="AM2520SURC03-31454 - Red SMD LED" deviceset="AM2520SURC03-31454" device="" value="604-AM2520SURC03 "/>
+<part name="LED1" library="1374-CLM2D-RCC-ACC-1064252 - Red SMD LED" deviceset="1374-CLM2D-RCC-ACC-1064252" device="" value="604-AM2520SURC03 "/>
+<part name="LED4" library="1374-CLM2D-RCC-ACC-1064252 - Red SMD LED" deviceset="1374-CLM2D-RCC-ACC-1064252" device="" value="604-AM2520SURC03 "/>
+<part name="LED7" library="1374-CLM2D-RCC-ACC-1064252 - Red SMD LED" deviceset="1374-CLM2D-RCC-ACC-1064252" device="" value="604-AM2520SURC03 "/>
+<part name="LED2" library="1374-CLM2D-RCC-ACC-1064252 - Red SMD LED" deviceset="1374-CLM2D-RCC-ACC-1064252" device="" value="604-AM2520SURC03 "/>
+<part name="LED5" library="1374-CLM2D-RCC-ACC-1064252 - Red SMD LED" deviceset="1374-CLM2D-RCC-ACC-1064252" device="" value="604-AM2520SURC03 "/>
+<part name="LED8" library="1374-CLM2D-RCC-ACC-1064252 - Red SMD LED" deviceset="1374-CLM2D-RCC-ACC-1064252" device="" value="604-AM2520SURC03 "/>
+<part name="LED3" library="1374-CLM2D-RCC-ACC-1064252 - Red SMD LED" deviceset="1374-CLM2D-RCC-ACC-1064252" device="" value="604-AM2520SURC03 "/>
+<part name="LED6" library="1374-CLM2D-RCC-ACC-1064252 - Red SMD LED" deviceset="1374-CLM2D-RCC-ACC-1064252" device="" value="604-AM2520SURC03 "/>
+<part name="LED9" library="1374-CLM2D-RCC-ACC-1064252 - Red SMD LED" deviceset="1374-CLM2D-RCC-ACC-1064252" device="" value="604-AM2520SURC03 "/>
 <part name="IC1" library="MAX16839 LED Driver, constant current" deviceset="MAX16839" device="" value="MAX16839 "/>
 <part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="10R/0.5W"/>
 <part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1μF"/>
