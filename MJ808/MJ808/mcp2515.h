@@ -8,7 +8,7 @@
 // low-level device instructions, see datasheet p. 66, table 12.1
 #define MCP2515_OPCODE_RESET			0xC0							// software reset instruction, datasheet p. 65
 #define MCP2515_OPCODE_READ				0x03							// read instruction, datasheet p. 65
-#define MCP2515_OPCODE_READ_RX_BUFFER	0x90							//	read rx buffer, datasheet p. 65 & 67
+#define MCP2515_OPCODE_READ_RX_BUFFER	0x90							// read rx buffer, datasheet p. 65 & 67
 #define MCP2515_OPCODE_READ_RX_BUFFER_RXB0SIDH	0x00					// receive buffer 0, start at RXB0SIDH, datasheet p. 67
 #define MCP2515_OPCODE_READ_RX_BUFFER_RXB0D0	0x02					// receive buffer 0, start at RXBB0D0, datasheet p. 67
 #define MCP2515_OPCODE_READ_RX_BUFFER_RXB1SIDH	0x04					// receive buffer 0, start at RXB1SIDH, datasheet p. 67
@@ -311,65 +311,53 @@
 // RXB1DM – RECEIVE BUFFER 1 DATA BYTE M
 #define RXB1DM 0x76  // datasheet p.31 - 0x76 up to 0x6C / 6 bytes
 
+////////////////////////////////////////////////////////////////////////
 
-typedef struct			// struct describing a generic CAN message
+#define COMMAND data[0]
+#define ARGUMENT data[1]
+
+typedef struct	 														// can_msg_t struct describing a generic CAN message
 {
-	// preserve byte order
+	// preserve byte order for sequential reads/writes
 	uint8_t		sidh;													// Standard Identifier High Byte
 	uint8_t		sidl;													// Standard Identifier Low Byte
 	uint8_t		eid8;													// Extended Identifier - not used here; just for padding so that read_rx_buffer() can read 13 bytes in one row
 	uint8_t		eid0;													// Extended Identifier - not used here
 	uint8_t		dlc;													// Data Length Code
-	uint8_t		data[CAN_MAX_MSG_LEN] ;									// Data, length identified by DLC
+	uint8_t		data[CAN_MAX_MSG_LEN];									// Data, length identified by DLC
 	uint8_t		rx_status;												// holds RX and TX status metadata
-	// preserve byte order
-} can_message_t __attribute__((aligned(8))) ;
+	// preserve byte order for sequential reads/writes
+} can_msg_t __attribute__((aligned(8))) ;
 
-typedef struct															// TODO - define RX buffer
+typedef struct can_t													// can_t struct describing the CAN device as a whole
 {
-	;
-} rxbuffer_t;
-
-// FIXME - in the long run, get rid of bitfields in combination with unions and structs
-
-typedef struct															// struct describing a generic transmit buffer - datasheet p.5 and 15
-{
-	uint8_t	txreq : 1;													// transmit request bit
-	uint8_t txp : 2;													// transmit priority
-	uint8_t abtf : 1;													// abort transmission flag
-	uint8_t txerr : 1;													// transmit error
-	uint8_t mloa : 1;													// message lost on arbitration bit
-	can_message_t *message;												// pointer to message struct
-} txbuffer_t;
-
-txbuffer_t txb[3];														// the whole TX buffer on the device
-
-typedef struct															// struct describing the CAN device as a whole
-{
-	// preserve byte order
+// preserve byte order for sequential reads/writes
 	uint8_t canintf;													// contents of CANINTF register, datasheet p. 53
 	uint8_t eflg;														// contents of EFLG register, datasheet p. 49
 	uint8_t canstat;													// contents of the CANSTAT register, datasheet p. 61
 	uint8_t canctrl;													// contents of the CANCTRL register, datasheet p. 60
 	uint8_t	tec;														// Transmit Error Counter - TEC, datasheet p. 48
 	uint8_t rec;														// Receive Error Counter - REC, datasheet p. 48
-	// preserve byte order
+// preserve byte order for sequential reads/writes
 	uint8_t in_sleep:1;													// is MCP2561 CAN transceiver in sleep or not
 	uint8_t icod:3;														// Interrupt Codes
 	uint8_t foo:4;														// placeholder
+
+	uint8_t own_sidh;
+	uint8_t own_sidl;
+
+// public methods
+
+	void (*Sleep)(volatile struct can_t *in_can, const uint8_t in_val);	// puts the MCP2515 to sleep (and wakes it up)
+	void (*RequestToSend)(volatile can_msg_t *msg);						// requests message to be sent to the CAN bus
+	void (*FetchMessage)(volatile can_msg_t *msg);						// fetches received message from some RX buffer
+	void (*ChangeOpMode)(const uint8_t mode);							// changes the operational mode of the MCP2515
+	void (*ReadBytes)(const uint8_t addr, volatile uint8_t *data, const uint8_t len);		// reads len bytes from some register in the MCP2515
+	void (*BitModify)(const uint8_t addr, const uint8_t mask, const uint8_t byte);			// modifies bit identified by "byte" according to "mask" in some register
 } can_t __attribute__((aligned(8)));
 
-can_t CAN;
+volatile can_t *can_ctor(volatile can_t * self);						// CAN object constructor - does function pointer & hardware initialization
 
-void can_sleep(volatile can_t *in_can, const uint8_t in_val);			// puts the whole CAN infrastructure to sleep; 1 - sleep, 0 - awake
+extern volatile can_t CAN;												// declare CAN object
 
-void mcp2515_init(void);												// initialization & configuration after power on
-void mcp2515_can_msg_send(can_message_t *msg);							// sends a CAN message onto the bus
-void mcp2515_can_msg_receive(can_message_t *msg);						// fetches a received CAN message from the MCP2515, triggered by RX interrupt
-void mcp2515_change_opmode(const uint8_t mode);							// changes the operation mode (and flushes any pending transmissions)
-
-// TODO - make private
-void mcp2515_opcode_read_bytes(const uint8_t addr, volatile uint8_t *data, const uint8_t len);	// read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
-void mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte);		//bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
-uint8_t mcp2515_opcode_read_byte(const uint8_t addr);
 #endif /* MCP2515_H_ */
