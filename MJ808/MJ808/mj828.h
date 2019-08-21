@@ -17,7 +17,7 @@
 #define LED_CP1_pin				B,	2,	2								// LED Charlie-plexed pin1
 // definitions of device/PCB layout-specific hardware pins
 
-void charlieplexing_handler(volatile leds_t *in_led);					// handles LEDs in charlieplexed configuration
+void charlieplexing_handler(volatile composite_led_t *in_led);					// handles LEDs in charlieplexed configuration
 
 enum mj828_leds															// enum of lights on this device
 {
@@ -40,11 +40,11 @@ enum mj828_buttons														// enum of buttons on this device
 typedef struct															// struct describing devices on MJ828
 {
 	volatile mj8x8_t *mj8x8;											// pointer to the base class
-	volatile leds_t	*led;												// pointer to LED structure
+	volatile composite_led_t	*led;												// pointer to LED structure
 	volatile button_t *button;											// array of button_t - two buttons
 } mj828_t;
 
- void mj828_ctor(volatile mj828_t *self, volatile leds_t *led, volatile button_t *button);
+ void mj828_ctor(volatile mj828_t * const self);
 
 extern volatile mj828_t Device;
 

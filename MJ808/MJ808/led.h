@@ -17,20 +17,17 @@ typedef union															// union describing LED flags
 	uint8_t All;														// all bits at once
 } ledflags_t;
 
-typedef struct															// struct describing a single generic LED
+typedef struct															// struct describing a primitive LED
 {
-	void (*Shine)(uint8_t in_val);										// virtual function for LED operation
-} individual_led_t;
+	void (*Shine)(const uint8_t in_val);										// virtual function for LED operation of a primitive (i.e.) single LED
+} primitive_led_t;
 
-typedef struct leds_t													// struct describing LEDs on any device
+typedef struct composite_led_t											// struct describing the aggregate of all LEDs on a device
 {
-	individual_led_t *led;												// "virtual" pointer to array of LEDs present on particular device
+	primitive_led_t *led;												// "virtual" pointer to array of primitive LEDs
 	volatile ledflags_t *flags;											// pointer to bitfield struct for flagging individual LEDs to be lit
 
-	//void (*virtual_led_ctor)(volatile struct leds_t *self);				// virtual  constructor
-} leds_t;
-
-extern volatile ledflags_t LEDFlags;									// declare LEDFlags object
-extern volatile leds_t LED;												// declare LED object
+	//void (*Shine)(const uint8_t in_val);								// virtual function for composite LED operation
+} composite_led_t;
 
 #endif /* LED_H_ */

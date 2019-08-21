@@ -6,6 +6,8 @@ attiny4313.c
 
 button.c
 
+event.c
+
 message.c
 
 led.c
@@ -21,8 +23,6 @@ mj818.c
 mj828.c
 
 mj8x8.c
-
-task.c
 
 uci_spi.c
 

@@ -17,9 +17,9 @@ static void _wrapper_fade_mj808(const uint8_t value)
 	_fade(value, &OCR_FRONT_LIGHT);
 };
 
-// TODO - should be static and the caller in question should use an object
+// TODO - optimize & should be static and the caller in question should use an object
 // concrete utility LED handling function
-void _util_led_mj808(uint8_t in_val)
+void _util_led_mj808( uint8_t in_val)
 {
 	uint8_t led = 0;													// holds the pin of the LED: D0 - green (default), D1 - red
 
@@ -50,24 +50,87 @@ void _util_led_mj808(uint8_t in_val)
 	}
 };
 
-volatile button_t *_virtual_button_ctorMJ808(volatile button_t *self)
+void __mj808_event_execution_function(const uint8_t val)
+{
+	static uint8_t state = 1;
+
+	switch (val)
+	{
+		default:
+			EventHandler.index &= ~_BV(0);
+			return;
+
+		case 1:
+
+			EventHandler.index &= ~_BV(1);
+		break;
+
+		case 4:
+			if (state)
+			{
+				Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);		// green LED on
+				Device.led->led[Front].Shine(0x20);						// front light on - low key; gets overwritten by LU command, since it comes in a bit later
+
+				 //send the messages out, UDP-style. no need to check if the device is actually online
+				MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);					// convey button press via CAN and the logic unit will do its own thing
+				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);		// turn on rear light
+				MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
+
+				state = !state;
+			}
+			else
+			{
+				Device.led->led[Utility].Shine(UTIL_LED_GREEN_OFF);		// green LED off
+				Device.led->led[Front].Shine(0x00);						// front light off
+
+				// send the messages out, UDP-style. no need to check if the device is actually online
+				MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
+				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);		// turn off rear light
+				MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_OFF, 0x00, 1);						// turn off yellow LED
+
+				state = !state;
+			}
+
+			EventHandler.index &= ~_BV(2);
+		break;
+	}
+};
+
+volatile button_t *_virtual_button_ctorMJ808(volatile button_t * const self, volatile event_handler_t * const event)
 {
 	static individual_button_t individual_button[1] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
 	self->button = individual_button;									// assign pointer to button array
 
 	self->button_count = 1;
+
 	self->button[Center]._PIN = (uint8_t *) 0x30; 						// 0x020 offset plus address - PIND register
 	self->button[Center]._pin_number = 4;								// sw2 is connected to pin D0
+
+	static uint8_t button1events[] =
+	{
+		0,	// 0 - default - empty event
+		0,	// 1 - empty event - button press not defined
+		0,	// 2 - empty event - button press not defined
+		2,	// 3 - button Hold
+		0,	// 4 - empty event - button press not defined
+		1	// 5 - error event
+	};
+
+	self->button[Center].action = button1events;
+
+	event->fpointer = &__mj808_event_execution_function;
 
 	return self;
 };
 
-// implementation of virtual constructor for LEDs
-volatile leds_t *_virtual_led_ctorMJ808(volatile leds_t *self)
+// device default operation on empty bus
+volatile composite_led_t *_virtual_led_ctorMJ808(volatile composite_led_t * const self)
 {
-	static individual_led_t individual_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
-	self->led = individual_led;											// assign pointer to LED array
-	self->flags = &LEDFlags;											// tie in LEDFlags struct into led struct
+	static volatile ledflags_t Flags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
+	static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
+
+	self->led = primitive_led;											// assign pointer to LED array
+	self->flags = &Flags;												// tie in LEDFlags struct into led struct
 
 	self->led[Utility].Shine = &_util_led_mj808;						// LED-specific implementation
 	self->led[Front].Shine = &_wrapper_fade_mj808;						// LED-specific implementation
@@ -78,7 +141,8 @@ volatile leds_t *_virtual_led_ctorMJ808(volatile leds_t *self)
 // device default operation on empty bus
 void _EmptyBusOperationMJ808(void)
 {
-	;
+	// empty - our button will tell us when to act
+	return;
 };
 
 // received MsgHandler object and passes
@@ -114,7 +178,7 @@ void _PopulatedBusOperationMJ808(volatile message_handler_t *in_msg, volatile vo
 	}
 };
 
-void mj808_ctor(volatile mj808_t *self, volatile leds_t *led, volatile button_t *button)
+void mj808_ctor(volatile mj808_t * const self)
 {
 	// GPIO state definitions
 	{
@@ -164,10 +228,13 @@ void mj808_ctor(volatile mj808_t *self, volatile leds_t *led, volatile button_t 
 	sei();
 	}
 
-	self->mj8x8 = mj8x8_ctor(&MJ8x8, &CAN, &MCU);						// call base class constructor & tie in object addresses
+	static volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));	// define MJ8X8 object and put it into .data
+	static volatile composite_led_t LED __attribute__ ((section (".data")));		// define LED object and put it into .data
+	static volatile button_t Button __attribute__ ((section (".data")));// define BUTTON object and put it into .data
 
-	self->led = _virtual_led_ctorMJ808(led);								// call virtual constructor & tie in object addresses
-	self->button = _virtual_button_ctorMJ808(button);					// call virtual constructor & tie in object addresses
+	self->mj8x8 = mj8x8_ctor(&MJ8x8);									// call base class constructor & tie in object addresses
+	self->led = _virtual_led_ctorMJ808(&LED);							// call virtual constructor & tie in object addresses
+	self->button = _virtual_button_ctorMJ808(&Button, &EventHandler);	// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -185,6 +252,6 @@ void mj808_ctor(volatile mj808_t *self, volatile leds_t *led, volatile button_t 
 	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);							// crude "I'm finished" indicator
 };
 
-#if defined(MJ808_)
+#if defined(MJ808_)														// all devices have the object name "Device", hence the preprocessor macro
 volatile mj808_t Device __attribute__ ((section (".data")));			// define Device object and put it into .data
 #endif
