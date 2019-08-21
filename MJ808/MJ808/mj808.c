@@ -52,21 +52,15 @@ void _util_led_mj808(uint8_t in_val)
 
 void __mj808_button_execution_function(const uint8_t val)
 {
-	static uint8_t state = 1;
-
 	switch (val)
 	{
-		default:
-			EventHandler.index &= ~_BV(0);
-			return;
-
-		case 1:
-			EventHandler.index &= ~_BV(1);
+		case 0x01:	// button error: - do the error thing
+			EventHandler.index &= ~val;
 			return;
 		break;
 
-		case 4:
-			if (state)
+		case 0x02:	// button hold
+			if (Device.button->button[Center].Hold)
 			{
 				Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);		// green LED on
 				Device.led->led[Front].Shine(0x20);						// front light on - low key; gets overwritten by LU command, since it comes in a bit later
@@ -75,8 +69,6 @@ void __mj808_button_execution_function(const uint8_t val)
 				MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);					// convey button press via CAN and the logic unit will do its own thing
 				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);		// turn on rear light
 				MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
-
-				state = !state;
 			}
 			else
 			{
@@ -87,11 +79,13 @@ void __mj808_button_execution_function(const uint8_t val)
 				MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
 				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);		// turn off rear light
 				MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_OFF, 0x00, 1);						// turn off yellow LED
-
-				state = !state;
 			}
-			EventHandler.index &= ~_BV(2);
+			EventHandler.index &= ~val;
 		break;
+
+		default:	// 0x00
+			EventHandler.index &= ~val;
+			return;
 	}
 };
 
@@ -107,12 +101,14 @@ volatile button_t *_virtual_button_ctorMJ808(volatile button_t * const self, vol
 
 	static uint8_t event_table[] =
 	{
-		0,	// 0 - default - empty event
-		0,	// 1 - empty event - button press not defined
-		0,	// 2 - empty event - button press not defined
-		2,	// 3 - button Hold
-		0,	// 4 - empty event - button press not defined
-		1	// 5 - error event
+		0x00,	// 1 - 
+		0x00,	// 2 - 
+		0x00,	// 3 - 
+		0x02,	// 4 - jump case 0x02 - button Hold
+		0x01,	// 5 - jump case 0x01 - error event
+		0x00,	// 6 -
+		0x00,	// 7 -
+		0x00	// 8 - 
 	};
 
 	self->button[Center].action = event_table;

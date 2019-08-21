@@ -8,9 +8,10 @@
 typedef struct event_handler_t
 {
 	uint8_t index;
+	//uint8_t event_table[8];
 
-	void (*fpointer)(uint8_t val);										// function pointer to handler function; default is to point to _return() in event.c
-	void (*Notify)(uint8_t in_val);										// notifier - updates __self in event.c
+	void (*fpointer)(const uint8_t val);										// function pointer to handler function; default is to point to _return() in event.c
+	void (*Notify)(const uint8_t in_val);								// notifier - updates __self in event.c
 	void (*HandleEvent)(void);											// handler - called from main(), executes either _return() or whatever a device points the function pointer to
 } event_handler_t;
 

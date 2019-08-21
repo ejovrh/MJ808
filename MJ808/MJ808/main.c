@@ -2,7 +2,7 @@
 #include <avr/sleep.h>
 #include <avr/pgmspace.h>
 
-#define MJ808_															// what device to compile for?
+#define MJ828_															// what device to compile for?
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"
@@ -41,7 +41,7 @@ int main(void)
 
 	while (1)															// forever loop
 	{
-		EventHandler.HandleEvent();
+		EventHandler.HandleEvent();										// execute what the action function pointer points to according to argument taken from event_table[]
 
 		if (MCUCR & _BV(SE))											// if sleep is enabled
 			sleep_cpu();												// ...sleep
