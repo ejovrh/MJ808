@@ -155,8 +155,8 @@
 #define MSG_TIME_SYNC 0x80												// time synchronization message
 
 #define MSG_BUTTON_EVENT 0x90											// message for button events
-	#define MSG_BUTTON_EVENT_BUTTON0_OFF	0x90							// button n off
-	#define MSG_BUTTON_EVENT_BUTTON0_ON		0x91							// button n on
+	#define MSG_BUTTON_EVENT_BUTTON0_OFF	0x90						// button n off
+	#define MSG_BUTTON_EVENT_BUTTON0_ON		0x91						// button n on
 	#define MSG_BUTTON_EVENT_BUTTON1_OFF	0x92
 	#define MSG_BUTTON_EVENT_BUTTON1_ON		0x93
 	#define MSG_BUTTON_EVENT_BUTTON2_OFF	0x94
@@ -235,7 +235,7 @@ typedef struct															// "base class" struct for mj8x8 devices
 	volatile can_t *can;												// pointer to the CAN structure
 	volatile ATtiny4313_t *mcu;											// pointer to MCU structure
 
-	void (*HeartBeat)(volatile message_handler_t * const msg);							// default periodic heartbeat for all devices
+	void (*HeartBeat)(volatile message_handler_t * const msg);			// default periodic heartbeat for all devices
 	void (*EmptyBusOperation)(void);																		// device's default operation on empty bus, implemented in derived class
 	void (*PopulatedBusOperation)(volatile message_handler_t *in_msg, volatile void *unspecified_device);	// device operation on populated bus; operates by means of MsgHandler object
 } mj8x8_t ;

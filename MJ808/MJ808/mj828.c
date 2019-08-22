@@ -184,7 +184,7 @@ void __mj828_event_execution_function(uint8_t val)
 // implementation of virtual constructor for buttons
 volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self, volatile event_handler_t *event)
 {
-	static individual_button_t individual_button[2] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
+	static individual_button_t individual_button[2] __attribute__ ((section (".data")));	// define array of actual buttons and put into .data
 
 	self->button = individual_button;									// assign pointer to button array
 	self->button_count = 2;												// how many buttons are on this device?
@@ -212,7 +212,7 @@ volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self, volatile e
 	self->button[Left].ButtonCaseptr = LeftButtonCaseTable;				// button press-to-case binding
 	self->button[Right].ButtonCaseptr = RightButtonCaseTable;			// button press-to-case binding
 
-	self->deBounce = &_debounce;									// tie in debounce function
+	self->deBounce = &_debounce;										// tie in debounce function
 	event->fpointer = &__mj828_event_execution_function;				// button execution override from default to device-specific
 
 	static uint8_t LeftButtonEvents[] =
@@ -235,10 +235,10 @@ volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self, volatile e
 		1	// 5 - error event
 	};
 
-	self->button[Left].action = LeftButtonEvents;
-	self->button[Right].action = RightButtonEvents;
+	self->button[Left].ButtonCaseptr = LeftButtonEvents;
+	self->button[Right].ButtonCaseptr = RightButtonEvents;
 
-	event->fpointer = &__mj828_button_execution_function;
+	event->fpointer = &__mj828_event_execution_function;
 
 	return self;
 };
@@ -247,7 +247,7 @@ volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self, volatile e
 volatile composite_led_t *_virtual_led_ctorMJ828(volatile composite_led_t *self)
 {
 	static volatile ledflags_t LEDFlags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
-	static primitive_led_t primitive_led[8] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
+	static primitive_led_t primitive_led[8] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
 	self->led = primitive_led;											// assign pointer to LED array
 	self->flags = &LEDFlags;											// tie in LEDFlags struct into led struct

@@ -120,8 +120,8 @@ volatile button_t *_virtual_button_ctorMJ808(volatile button_t * const self, vol
 // implementation of virtual constructor for LEDs
 volatile composite_led_t *_virtual_led_ctorMJ808(volatile composite_led_t * const self)
 {
-	static volatile ledflags_t Flags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
-	static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
+	static volatile ledflags_t Flags __attribute__ ((section (".data")));			// define LEDFlags object and put it into .data
+	static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
 	self->led = primitive_led;											// assign pointer to LED array
 	self->flags = &Flags;												// tie in LEDFlags struct into led struct
@@ -229,8 +229,6 @@ void mj808_ctor(volatile mj808_t * const self)
 	self->mj8x8 = mj8x8_ctor(&MJ8x8);									// call base class constructor & tie in object addresses
 	self->led = _virtual_led_ctorMJ808(&LED);							// call virtual constructor & tie in object addresses
 	self->button = _virtual_button_ctorMJ808(&Button, &EventHandler);	// call virtual constructor & tie in object addresses
-
-	self->button = _virtual_button_ctorMJ808(&Button, &EventHandler);					// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device

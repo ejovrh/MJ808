@@ -37,7 +37,7 @@ volatile can_msg_t *_ReceiveMessage(volatile struct message_handler_t * const se
 
 void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_can)
 {
-	static canbus_t BUS __attribute__ ((section (".data")));				// define BUS object and put it into .data
+	static canbus_t BUS __attribute__ ((section (".data")));			// define BUS object and put it into .data
 
 	self->can = in_can;													// set address of can object
 	self->bus = &BUS;													// set address of bus object

@@ -19,7 +19,7 @@ static void _wrapper_fade_mj818(uint8_t value)
 volatile composite_led_t *_virtual_led_ctorMJ818(volatile composite_led_t *self)
 {
 	static volatile ledflags_t LEDFlags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
-	static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
+	static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
 	self->led = primitive_led;											// assign pointer to LED array
 	self->flags = &LEDFlags;											// tie in LEDFlags struct into led struct
@@ -101,8 +101,8 @@ void mj818_ctor(volatile mj818_t * const self)
 	sei();
 	}
 
-	static volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));	// define MJ8X8 object and put it into .data
-	static volatile composite_led_t LED __attribute__ ((section (".data")));		// define LED object and put it into .data
+	static volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));			// define MJ8X8 object and put it into .data
+	static volatile composite_led_t LED __attribute__ ((section (".data")));	// define LED object and put it into .data
 
 	self->mj8x8 = mj8x8_ctor(&MJ8x8);									// call base class constructor & tie in object addresses
 	self->led = _virtual_led_ctorMJ818(&LED);							// call virtual constructor & tie in object addresses

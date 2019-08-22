@@ -54,8 +54,8 @@ void _debounce(volatile individual_button_t *in_button, volatile event_handler_t
 
 			// order is important
 			in_button->ErrorHold = 1;									// mark as error state
-      in_event->Notify(in_button->ButtonCaseptr[ErrorHold]);		// notify event handler of button press
-      
+		    in_event->Notify(in_button->ButtonCaseptr[ErrorHold]);		// notify event handler of button press
+
 			in_button->Toggle = 0;										// toggled due to error state -> reset to default value
 			in_button->Hold = 0;										// mark as hold_temp off
 			return;														// get out
@@ -84,11 +84,11 @@ void _debounce(volatile individual_button_t *in_button, volatile event_handler_t
 	{
 		if (in_button->_hold_counter >= BUTTON_MIN_PRESS_TIME)			// pressed for a valid amount of time
 		{
-			if (!in_button->_was_pressed)					              			// previous state (prevent flapping on/off)
+			if (!in_button->_was_pressed)								// previous state (prevent flapping on/off)
 			{
 				// order is important
-				in_button->Hold = !in_button->Hold;			          			// set "hold_temp" state
-				in_event->Notify(in_button->ButtonCaseptr[Hold]);		    // notify event handler of button press
+				in_button->Hold = !in_button->Hold;			          	// set "hold_temp" state
+				in_event->Notify(in_button->ButtonCaseptr[Hold]);		// notify event handler of button press
 			}
 
 			in_button->_was_pressed = 1;								// mark the button as being pressed
@@ -98,15 +98,15 @@ void _debounce(volatile individual_button_t *in_button, volatile event_handler_t
 		if (in_button->_was_pressed)									// previous state (prevent flapping on/off)
 		{
 			// order is important
-			in_button->Toggle = !in_button->Toggle;					      	// set "toggle" state
+			in_button->Toggle = !in_button->Toggle;						// set "toggle" state
 			in_event->Notify(in_button->ButtonCaseptr[Toggle]);			// notify event handler of button press
 		}
 
 		// order is important
 		in_button->Momentary = 1;										// set "is_pressed" state
-    in_event->Notify(in_button->ButtonCaseptr[Momentary]);			// notify event handler of button press
+    in_event->Notify(in_button->ButtonCaseptr[Momentary]);				// notify event handler of button press
 
-in_button->_was_pressed = 0;									// mark the button as being pressed
+in_button->_was_pressed = 0;											// mark the button as being pressed
 		in_button->_is_at_default = 0;
 	}
 };
