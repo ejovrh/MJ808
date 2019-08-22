@@ -215,6 +215,31 @@ volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self, volatile e
 	self->deBounce = &_debounce;									// tie in debounce function
 	event->fpointer = &__mj828_event_execution_function;				// button execution override from default to device-specific
 
+	static uint8_t LeftButtonEvents[] =
+	{
+		0,	// 0 - default - empty event
+		3,	// 1 - empty event - button press not defined
+		0,	// 2 - empty event - button press not defined
+		0,	// 3 - button Hold
+		0,	// 4 - empty event - button press not defined
+		1	// 5 - error event
+	};
+
+	static uint8_t RightButtonEvents[] =
+	{
+		0,	// 0 - default - empty event
+		2,	// 1 - empty event - button press not defined
+		0,	// 2 - empty event - button press not defined
+		0,	// 3 - button Hold
+		0,	// 4 - empty event - button press not defined
+		1	// 5 - error event
+	};
+
+	self->button[Left].action = LeftButtonEvents;
+	self->button[Right].action = RightButtonEvents;
+
+	event->fpointer = &__mj828_button_execution_function;
+
 	return self;
 };
 

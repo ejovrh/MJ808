@@ -17,7 +17,7 @@ typedef union															// union describing LED flags
 	uint8_t All;														// all bits at once
 } ledflags_t;
 
-typedef struct															// struct describing a single generic LED
+typedef struct															// struct describing a primitive LED
 {
 	void (*Shine)(const uint8_t in_val);										// virtual function for LED operation of a primitive (i.e.) single LED
 } primitive_led_t;

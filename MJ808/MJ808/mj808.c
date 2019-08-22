@@ -20,7 +20,7 @@ static void _wrapper_fade_mj808(const uint8_t value)
 
 // TODO - optimize & should be static and the caller in question should use an object
 // concrete utility LED handling function
-void _util_led_mj808(uint8_t in_val)
+void _util_led_mj808( uint8_t in_val)
 {
 	uint8_t led = 0;													// holds the pin of the LED: D0 - green (default), D1 - red
 

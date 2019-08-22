@@ -31,7 +31,6 @@ int main(void)
 
 	message_handler_ctor(&MsgHandler, Device.mj8x8->can );				// call message handler constructor
 
-
 	// TODO - implement micro controller sleep cycles
 	set_sleep_mode(SLEEP_MODE_IDLE);									// 11mA
 	//set_sleep_mode(SLEEP_MODE_STANDBY);								// 10mA

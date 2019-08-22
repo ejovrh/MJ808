@@ -5,7 +5,6 @@
 #include "mj8x8.h"
 #include "led.h"
 
-// private function - fades *ocr to value (or ocr_max) - up to OCR_MAX or down to 0x00
 void _fade(const uint8_t value, volatile uint8_t *ocr)
 {
 	cli();																// if without cli(), *ocr gets corrupted; im suspecting an ISR while ocr is incrementin/decrementing
