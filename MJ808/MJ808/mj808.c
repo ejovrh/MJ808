@@ -111,7 +111,7 @@ volatile button_t *_virtual_button_ctorMJ808(volatile button_t * const self, vol
 
 	self->button[Center].ButtonCaseptr = CenterButtonCaseTable;			// button press-to-case binding
 
-	self->deBounce = &_debounce;									// tie in debounce function
+	self->deBounce = &_debounce;										// tie in debounce function
 	event->fpointer = &__mj808_event_execution_function;				// button execution override from default to device-specific
 
 	return self;

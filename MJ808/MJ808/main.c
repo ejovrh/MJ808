@@ -2,7 +2,7 @@
 #include <avr/sleep.h>
 #include <avr/pgmspace.h>
 
-#define MJ808_															// what device to compile for?
+#define MJ828_															// what device to compile for?
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"
@@ -120,7 +120,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 
 	void helper_handle_wakeup(volatile can_t *in_can)					// handles wakeup interrupts
 	{
-		// functionally, this fucntion is similar to can_sleep(), but still different in one aspect:
+		// functionally, this function is similar to can_sleep(), but still different in one aspect:
 			// can_sleep(foo_can, 0) wakes up by triggering a wake up interrupt, which helper_handle_wakeup() handles
 			// helper_handle_wakeup() can be triggered by any external event while can_sleep(foo_can, 0) is called from within this program
 

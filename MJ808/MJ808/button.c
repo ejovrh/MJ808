@@ -104,9 +104,9 @@ void _debounce(volatile individual_button_t *in_button, volatile event_handler_t
 
 		// order is important
 		in_button->Momentary = 1;										// set "is_pressed" state
-    in_event->Notify(in_button->ButtonCaseptr[Momentary]);				// notify event handler of button press
+		in_event->Notify(in_button->ButtonCaseptr[Momentary]);			// notify event handler of button press
 
-in_button->_was_pressed = 0;											// mark the button as being pressed
+		in_button->_was_pressed = 0;									// mark the button as being pressed
 		in_button->_is_at_default = 0;
 	}
 };
