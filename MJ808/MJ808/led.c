@@ -29,6 +29,3 @@ void _fade(const uint8_t value, volatile uint8_t *ocr)
 		return;
 	}
 };
-
-volatile ledflags_t LEDFlags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
-volatile leds_t LED __attribute__ ((section (".data")));				// define LED object and put it into .data

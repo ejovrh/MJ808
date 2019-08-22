@@ -41,6 +41,4 @@ typedef struct button_t
 	//void (*virtual_button_ctor)(volatile struct button_t *self);		// "virtual" pointer to array of button present on particular device
 } button_t;
 
-extern volatile button_t Button;										// declare button object
-
 #endif /* BUTTON_H_ */

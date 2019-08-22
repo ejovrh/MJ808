@@ -118,11 +118,13 @@ volatile button_t *_virtual_button_ctorMJ808(volatile button_t * const self, vol
 };
 
 // implementation of virtual constructor for LEDs
-volatile leds_t *_virtual_led_ctorMJ808(volatile leds_t *self)
+volatile composite_led_t *_virtual_led_ctorMJ808(volatile composite_led_t * const self)
 {
-	static individual_led_t individual_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
-	self->led = individual_led;											// assign pointer to LED array
-	self->flags = &LEDFlags;											// tie in LEDFlags struct into led struct
+	static volatile ledflags_t Flags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
+	static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));		// define array of actual LEDs and put into .data
+
+	self->led = primitive_led;											// assign pointer to LED array
+	self->flags = &Flags;												// tie in LEDFlags struct into led struct
 
 	self->led[Utility].Shine = &_util_led_mj808;						// LED-specific implementation
 	self->led[Front].Shine = &_wrapper_fade_mj808;						// LED-specific implementation
@@ -170,7 +172,7 @@ void _PopulatedBusOperationMJ808(volatile message_handler_t *in_msg, volatile vo
 	}
 };
 
-void mj808_ctor(volatile mj808_t * const self, volatile leds_t *led, volatile button_t *button)
+void mj808_ctor(volatile mj808_t * const self)
 {
 	// GPIO state definitions
 	{
@@ -220,11 +222,13 @@ void mj808_ctor(volatile mj808_t * const self, volatile leds_t *led, volatile bu
 	sei();
 	}
 
-	self->mj8x8 = mj8x8_ctor(&MJ8x8, &CAN, &MCU);						// call base class constructor & tie in object addresses
+	static volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));	// define MJ8X8 object and put it into .data
+	static volatile composite_led_t LED __attribute__ ((section (".data")));		// define LED object and put it into .data
+	static volatile button_t Button __attribute__ ((section (".data")));// define BUTTON object and put it into .data
 
-	self->led = _virtual_led_ctorMJ808(led);								// call virtual constructor & tie in object addresses
-
-	self->button = _virtual_button_ctorMJ808(button, &EventHandler);					// call virtual constructor & tie in object addresses
+	self->mj8x8 = mj8x8_ctor(&MJ8x8);									// call base class constructor & tie in object addresses
+	self->led = _virtual_led_ctorMJ808(&LED);							// call virtual constructor & tie in object addresses
+	self->button = _virtual_button_ctorMJ808(&Button, &EventHandler);	// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device

@@ -358,6 +358,4 @@ typedef struct can_t													// can_t struct describing the CAN device as a 
 
 volatile can_t *can_ctor(volatile can_t * const self);						// CAN object constructor - does function pointer & hardware initialization
 
-extern volatile can_t CAN;												// declare CAN object
-
 #endif /* MCP2515_H_ */

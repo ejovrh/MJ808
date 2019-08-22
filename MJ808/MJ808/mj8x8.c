@@ -35,7 +35,7 @@ static void _Heartbeat(volatile message_handler_t * const msg)
 	++msg->bus->BeatIterationCount;										// increment the iteration counter
 };
 
-volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t * const self, volatile can_t *can, volatile ATtiny4313_t *mcu)
+volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t * const self)
 {
 	// GPIO state definitions
 	{
@@ -49,11 +49,12 @@ volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t * const self, volatile can_t *can
 	// state initialization of device-unspecific pins
 	}
 
+	static volatile ATtiny4313_t MCU __attribute__ ((section (".data")));			// define MCU object and put it into .data
+	static volatile can_t CAN __attribute__ ((section (".data")));					// define CAN object and put it into .data
+
 	self->HeartBeat = &_Heartbeat;
-	self->mcu = attiny_ctor(mcu);										// pass MCU address into constructor
-	self->can = can_ctor(can);											// pass CAN address into constructor
+	self->mcu = attiny_ctor(&MCU);										// pass MCU address into constructor
+	self->can = can_ctor(&CAN);											// pass CAN address into constructor
 
 	return self;
 };
-
-volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));				// define MJ8X8 object and put it into .data

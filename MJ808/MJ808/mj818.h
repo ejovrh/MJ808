@@ -19,10 +19,10 @@ enum mj818_leds															// enum of lights on this device
 typedef struct															// struct describing devices on MJ818
 {
 	volatile mj8x8_t *mj8x8;											// pointer to the base class
-	volatile leds_t	*led;												// pointer to LED structure
+	volatile composite_led_t	*led;												// pointer to LED structure
 } mj818_t;
 
-void mj818_ctor(volatile mj818_t * const self, volatile leds_t *led);
+void mj818_ctor(volatile mj818_t * const self);
 
 extern volatile mj818_t Device;
 

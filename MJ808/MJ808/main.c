@@ -17,19 +17,19 @@
 
 int main(void)
 {
-	message_handler_ctor(&MsgHandler, &CAN, &BUS);						// call message handler constructor
 	event_handler_ctor(&EventHandler);									// call event handler constructor; the Device constructor further down has the chance to override EventHandler.fpointer and implement its own handler
 
 	#if defined(MJ808_)													// MJ808 - call derived class constructor and tie in base class
-	mj808_ctor(&Device, &LED, &Button);
+	mj808_ctor(&Device);
 	#endif
 	#if defined(MJ818_)													// MJ818 - call derived class constructor and tie in base class
-	mj818_ctor(&Device, &LED);
+	mj818_ctor(&Device);
 	#endif
 	#if defined(MJ828_)													// MJ828 - call derived class constructor and tie in base class
-	mj828_ctor(&Device, &LED, &Button);
+	mj828_ctor(&Device);
 	#endif
 
+	message_handler_ctor(&MsgHandler, Device.mj8x8->can );				// call message handler constructor
 
 
 	// TODO - implement micro controller sleep cycles
@@ -171,7 +171,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		can->icod =  ((can->canstat & 0x0E) >> 1);						// right shift so that CANSTAT.U0 cant interfere
 
 #if defined(BRANCHTABLE_ICOD)
-		fptr = pgm_read_ptr(&branchtable_icod[can->icod]);							// get appropriate function pointer from PROGMEM
+		fptr = pgm_read_ptr(&branchtable_icod[can->icod]);				// get appropriate function pointer from PROGMEM
 		(fptr)(can);
 #endif
 #if !defined(BRANCHTABLE_ICOD)
@@ -234,7 +234,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	sleep_disable();													// wakey wakey
 
 	for (uint8_t i=0; i<Device.button->button_count; ++i)				// loop over all available buttons and debounce them
-		Button.deBounce(&Device.button->button[i], &EventHandler);		// from here on the button is debounced and states can be consumed
+		Device.button->deBounce(&Device.button->button[i], &EventHandler);		// from here on the button is debounced and states can be consumed
 
 	sleep_enable();														// back to sleep
 }

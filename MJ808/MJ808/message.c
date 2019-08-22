@@ -35,10 +35,12 @@ volatile can_msg_t *_ReceiveMessage(volatile struct message_handler_t * const se
 	return &__msg;														// return pointer to it to someone who will make use of it
 };
 
-void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_can, volatile canbus_t *in_bus)
+void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_can)
 {
+	static canbus_t BUS __attribute__ ((section (".data")));				// define BUS object and put it into .data
+
 	self->can = in_can;													// set address of can object
-	self->bus = in_bus;													// set address of bus object
+	self->bus = &BUS;													// set address of bus object
 
 	// TODO - eventually get rid of union
 	self->bus->devices.All = 0x0000;
@@ -50,5 +52,4 @@ void message_handler_ctor(volatile message_handler_t *self, volatile can_t *in_c
 	self->SendMessage = &_SendMessage;									//	ditto
 };
 
-volatile canbus_t BUS __attribute__ ((section (".data")));				// define BUS object and put it into .data
 volatile message_handler_t MsgHandler __attribute__ ((section (".data")));		// define MsgHandler object and put it into .data

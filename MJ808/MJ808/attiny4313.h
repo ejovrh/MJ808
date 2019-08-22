@@ -9,6 +9,4 @@ typedef struct
 
 volatile ATtiny4313_t *attiny_ctor(volatile ATtiny4313_t * const self);
 
-extern volatile ATtiny4313_t MCU;										// declare MCU object
-
 #endif /* ATTINY4313_H_ */

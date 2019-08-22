@@ -241,8 +241,6 @@ typedef struct															// "base class" struct for mj8x8 devices
 } mj8x8_t ;
 
 
-volatile mj8x8_t *mj8x8_ctor(volatile mj8x8_t * const self, volatile can_t *can, volatile ATtiny4313_t *mcu);
-
-extern volatile mj8x8_t MJ8x8;											// declare MJ8X8 object
+volatile mj8x8_t *mj8x8_ctor(volatile mj8x8_t * const self);
 
 #endif /* MJ8x8_H_ */
