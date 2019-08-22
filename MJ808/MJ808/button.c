@@ -2,7 +2,7 @@
 //#include "task.h"
 
 #if defined(MJ808_) || defined (MJ828_)									// button debouncer for devices with buttons
-void button_debounce(volatile individual_button_t *in_button, volatile event_handler_t *in_event)
+void _debounce(volatile individual_button_t *in_button, volatile event_handler_t *in_event)
 {
 	inline void local_advance_counter(void)								// local helper function which advances the debounce "timer"
 	{
@@ -51,9 +51,11 @@ void button_debounce(volatile individual_button_t *in_button, volatile event_han
 			in_button->_state = 0;										// reset state
 			in_button->Momentary = 0;									// mark as currently not pressed
 			in_button->_was_pressed = 1;								// mark button as "was pressed" - this is the previous state in the next iteration
-			in_button->ErrorHold = 1;									// mark as error state
-			in_event->Notify(in_button->action[ErrorHold]);
 
+			// order is important
+			in_button->ErrorHold = 1;									// mark as error state
+      in_event->Notify(in_button->ButtonCaseptr[ErrorHold]);		// notify event handler of button press
+      
 			in_button->Toggle = 0;										// toggled due to error state -> reset to default value
 			in_button->Hold = 0;										// mark as hold_temp off
 			return;														// get out
@@ -82,10 +84,11 @@ void button_debounce(volatile individual_button_t *in_button, volatile event_han
 	{
 		if (in_button->_hold_counter >= BUTTON_MIN_PRESS_TIME)			// pressed for a valid amount of time
 		{
-			if (!in_button->_was_pressed)								// previous state (prevent flapping on/off)
+			if (!in_button->_was_pressed)					              			// previous state (prevent flapping on/off)
 			{
-				in_button->Hold = !in_button->Hold;						// set "hold_temp" state
-				in_event->Notify(in_button->action[Hold]);
+				// order is important
+				in_button->Hold = !in_button->Hold;			          			// set "hold_temp" state
+				in_event->Notify(in_button->ButtonCaseptr[Hold]);		    // notify event handler of button press
 			}
 
 			in_button->_was_pressed = 1;								// mark the button as being pressed
@@ -94,13 +97,16 @@ void button_debounce(volatile individual_button_t *in_button, volatile event_han
 
 		if (in_button->_was_pressed)									// previous state (prevent flapping on/off)
 		{
-			in_button->Toggle = !in_button->Toggle;						// set "toggle" state
-			in_event->Notify(in_button->action[Toggle]);
+			// order is important
+			in_button->Toggle = !in_button->Toggle;					      	// set "toggle" state
+			in_event->Notify(in_button->ButtonCaseptr[Toggle]);			// notify event handler of button press
 		}
 
+		// order is important
 		in_button->Momentary = 1;										// set "is_pressed" state
-		in_event->Notify(in_button->action[Momentary]);
-		in_button->_was_pressed = 0;									// mark the button as being pressed
+    in_event->Notify(in_button->ButtonCaseptr[Momentary]);			// notify event handler of button press
+
+in_button->_was_pressed = 0;									// mark the button as being pressed
 		in_button->_is_at_default = 0;
 	}
 };

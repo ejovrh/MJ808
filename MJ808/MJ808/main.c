@@ -17,6 +17,8 @@
 
 int main(void)
 {
+	event_handler_ctor(&EventHandler);									// call event handler constructor; the Device constructor further down has the chance to override EventHandler.fpointer and implement its own handler
+
 	#if defined(MJ808_)													// MJ808 - call derived class constructor and tie in base class
 	mj808_ctor(&Device);
 	#endif
@@ -27,8 +29,7 @@ int main(void)
 	mj828_ctor(&Device);
 	#endif
 
-	message_handler_ctor(&MsgHandler, Device.mj8x8->can);				// call message handler constructor
-	event_handler_ctor(&EventHandler);									// call event handler constructor
+	message_handler_ctor(&MsgHandler, Device.mj8x8->can );				// call message handler constructor
 
 	// TODO - implement micro controller sleep cycles
 	set_sleep_mode(SLEEP_MODE_IDLE);									// 11mA
@@ -39,7 +40,7 @@ int main(void)
 
 	while (1)															// forever loop
 	{
-		EventHandler.HandleEvent();
+		EventHandler.HandleEvent();										// execute the event handling function with argument taken from case table array
 
 		if (MCUCR & _BV(SE))											// if sleep is enabled
 			sleep_cpu();												// ...sleep
@@ -52,6 +53,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 	// assumption: an incoming message is of interest for this unit
 	//	'being of interest' is defined in the filters
 
+	// TODO - consolidate into one global function
 	inline void helper_reti(void)
 	{
 		asm("reti");
@@ -168,7 +170,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		can->icod =  ((can->canstat & 0x0E) >> 1);						// right shift so that CANSTAT.U0 cant interfere
 
 #if defined(BRANCHTABLE_ICOD)
-		fptr = pgm_read_ptr(&branchtable_icod[can->icod]);							// get appropriate function pointer from PROGMEM
+		fptr = pgm_read_ptr(&branchtable_icod[can->icod]);				// get appropriate function pointer from PROGMEM
 		(fptr)(can);
 #endif
 #if !defined(BRANCHTABLE_ICOD)
@@ -230,21 +232,8 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	// code to be executed every 25ms
 	sleep_disable();													// wakey wakey
 
-	#if defined(MJ808_)													// pushbutton code for mj808
-	button_debounce(&Device.button->button[Center], &EventHandler);		// from here on the button is debounced and states can be consumed
-
-	#endif
-
-	#if defined(MJ828_)													// pushbutton code for mj828
-	button_debounce(&Device.button->button[Left], &EventHandler);		// from here on the button is debounced and states can be consumed
-	button_debounce(&Device.button->button[Right], &EventHandler);		//	ditto
-
-// example commands for function-based buttons lighting up LEDs
-	//if (Device.button->button[Right].Hold)
-		//Device.led->flags->All |= _BV(Battery_LED4);					// set bit7
-	//else
-		//Device.led->flags->All &= ~_BV(Battery_LED4);					// clear bit7
-	#endif
+	for (uint8_t i=0; i<Device.button->button_count; ++i)				// loop over all available buttons and debounce them
+		Device.button->deBounce(&Device.button->button[i], &EventHandler);		// from here on the button is debounced and states can be consumed
 
 	sleep_enable();														// back to sleep
 }

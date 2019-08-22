@@ -9,7 +9,8 @@
 #include "gpio.h"
 
 // TODO - optimize
-void _fade(const uint8_t value, volatile uint8_t *ocr);
+extern void _fade(const uint8_t value, volatile uint8_t *ocr);
+extern void _debounce(volatile individual_button_t *in_button, volatile event_handler_t *in_event);
 
 // TODO - optimize
 static void _wrapper_fade_mj808(const uint8_t value)
@@ -50,23 +51,19 @@ void _util_led_mj808( uint8_t in_val)
 	}
 };
 
+// executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
+// cases in this switch-case statement must be unique for all events on this device
 void __mj808_event_execution_function(const uint8_t val)
 {
-	static uint8_t state = 1;
-
 	switch (val)
 	{
-		default:
-			EventHandler.index &= ~_BV(0);
+		case 0x01:	// button error: - do the error thing
+			// TODO - implement device function on button error press
+			EventHandler.index &= ~val;
 			return;
 
-		case 1:
-
-			EventHandler.index &= ~_BV(1);
-		break;
-
-		case 4:
-			if (state)
+		case 0x02:	// button hold
+			if (Device.button->button[Center].Hold)
 			{
 				Device.led->led[Utility].Shine(UTIL_LED_GREEN_ON);		// green LED on
 				Device.led->led[Front].Shine(0x20);						// front light on - low key; gets overwritten by LU command, since it comes in a bit later
@@ -75,8 +72,6 @@ void __mj808_event_execution_function(const uint8_t val)
 				MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);					// convey button press via CAN and the logic unit will do its own thing
 				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);		// turn on rear light
 				MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
-
-				state = !state;
 			}
 			else
 			{
@@ -87,43 +82,42 @@ void __mj808_event_execution_function(const uint8_t val)
 				MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
 				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);		// turn off rear light
 				MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_OFF, 0x00, 1);						// turn off yellow LED
-
-				state = !state;
 			}
-
-			EventHandler.index &= ~_BV(2);
+			EventHandler.index &= ~val;
 		break;
+
+		default:	// 0x00
+			EventHandler.index &= ~val;
+			return;
 	}
 };
 
 volatile button_t *_virtual_button_ctorMJ808(volatile button_t * const self, volatile event_handler_t * const event)
 {
 	static individual_button_t individual_button[1] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
+
 	self->button = individual_button;									// assign pointer to button array
-
-	self->button_count = 1;
-
+	self->button_count = 1;												// how many buttons are on this device?
 	self->button[Center]._PIN = (uint8_t *) 0x30; 						// 0x020 offset plus address - PIND register
 	self->button[Center]._pin_number = 4;								// sw2 is connected to pin D0
 
-	static uint8_t button1events[] =
+	static uint8_t CenterButtonCaseTable[] =							// array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
 	{
-		0,	// 0 - default - empty event
-		0,	// 1 - empty event - button press not defined
-		0,	// 2 - empty event - button press not defined
-		2,	// 3 - button Hold
-		0,	// 4 - empty event - button press not defined
-		1	// 5 - error event
+		0x00,	// 0 - not defined
+		0x00,	// 1 - not defined
+		0x02,	// 2 - jump case 0x02 - button Hold
+		0x01,	// 3 - jump case 0x01 - error event
 	};
 
-	self->button[Center].action = button1events;
+	self->button[Center].ButtonCaseptr = CenterButtonCaseTable;			// button press-to-case binding
 
-	event->fpointer = &__mj808_event_execution_function;
+	self->deBounce = &_debounce;									// tie in debounce function
+	event->fpointer = &__mj808_event_execution_function;				// button execution override from default to device-specific
 
 	return self;
 };
 
-// device default operation on empty bus
+// implementation of virtual constructor for LEDs
 volatile composite_led_t *_virtual_led_ctorMJ808(volatile composite_led_t * const self)
 {
 	static volatile ledflags_t Flags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
@@ -236,12 +230,15 @@ void mj808_ctor(volatile mj808_t * const self)
 	self->led = _virtual_led_ctorMJ808(&LED);							// call virtual constructor & tie in object addresses
 	self->button = _virtual_button_ctorMJ808(&Button, &EventHandler);	// call virtual constructor & tie in object addresses
 
+	self->button = _virtual_button_ctorMJ808(&Button, &EventHandler);					// call virtual constructor & tie in object addresses
+
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
 	 * NOTE:
 	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
 	 */
+
 	self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);	// high byte
 	self->mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																	// low byte
 

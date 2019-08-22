@@ -9672,7 +9672,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="IC1" library="ATtiny4313 microcontroller" deviceset="ATTINY4313" device="VQFN-20" value="ATTINY4313-MMH">
 <attribute name="SPICEPREFIX" value="X"/>
 </part>
-<part name="IC2" library="PRQV8.00CR1510Y00L - 8MHz resonator" deviceset="PRQV" device="" value="PRQV8.00CR1510Y00L"/>
+<part name="IC2" library="PRQV8.00CR1510Y00L - 8MHz resonator" deviceset="PRQV" device="" value="PBRC8.00GR50X000"/>
 <part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1μF"/>
 <part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1μF"/>
 <part name="SPI" library="5034800600 FPC Connector" deviceset="5034800600" device="" value="5034800600"/>
@@ -9687,8 +9687,8 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="LED_BLUE2" library="Seeed-LED" library_urn="urn:adsk.eagle:library:472" deviceset="SMD-LED-CLEAR-BLUE(0402)" device="" package3d_urn="urn:adsk.eagle:package:32748/1" value="VLMB1500-GS08"/>
 <part name="R2" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083331JP"/>
 <part name="R1" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083102JP"/>
-<part name="SW2" library="TL3305-844809 SPST-NO Tact Switch" deviceset="TL3305-844809" device="" value="6x6mm spst-no tact"/>
-<part name="SW1" library="TL3305-844809 SPST-NO Tact Switch" deviceset="TL3305-844809" device="" value="6x6mm spst-no tact"/>
+<part name="SW2" library="TL3305-844809 SPST-NO Tact Switch" deviceset="TL3305-844809" device="" value="TL3305CF160QG"/>
+<part name="SW1" library="TL3305-844809 SPST-NO Tact Switch" deviceset="TL3305-844809" device="" value="TL3305CF160QG"/>
 <part name="R3" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083102JP"/>
 <part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.47μF"/>
 <part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.47μF"/>
