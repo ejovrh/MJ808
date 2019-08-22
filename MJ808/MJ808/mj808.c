@@ -230,11 +230,13 @@ void mj808_ctor(volatile mj808_t * const self)
 	self->led = _virtual_led_ctorMJ808(&LED);							// call virtual constructor & tie in object addresses
 	self->button = _virtual_button_ctorMJ808(&Button, &EventHandler);	// call virtual constructor & tie in object addresses
 
+	self->button = _virtual_button_ctorMJ808(button, &EventHandler);					// call virtual constructor & tie in object addresses
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
 	 * NOTE:
 	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
+	 */
 	 */
 	self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);	// high byte
 	self->mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																	// low byte
