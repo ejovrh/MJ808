@@ -38,6 +38,7 @@ typedef struct button_t
 	volatile uint8_t button_count : 2;									// max. 4 buttons
 
 	void (*deBounce)(volatile individual_button_t *in_button, volatile event_handler_t *in_event);			// button debouncer
+
 	//void (*virtual_button_ctor)(volatile struct button_t *self);		// "virtual" pointer to array of button present on particular device
 } button_t;
 

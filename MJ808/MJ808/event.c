@@ -55,10 +55,10 @@ void event_handler_ctor(volatile event_handler_t * const self)
 {
 	__self = self;														// private - pointer to self, utilized in functions above
 
-	self->UnSetEvent = &_UnSetEvent;									//
-	self->Notify = &_Notify;											// notifies about an event by setting the index to a predetermined value (uint8_t array-based lookup table)
-	self->HandleEvent = &_HandleEvent;									// handles event based on index
-	self->fpointer = &_return;											// default -- if not initialized: do nothing
+	__self->UnSetEvent = &_UnSetEvent;									//
+	__self->Notify = &_Notify;											// notifies about an event by setting the index to a predetermined value (uint8_t array-based lookup table)
+	__self->HandleEvent = &_HandleEvent;								// handles event based on index
+	__self->fpointer = &_return;										// default -- if not initialized: do nothing
 };
 
 volatile event_handler_t EventHandler __attribute__ ((section (".data")));		// define Task object and put it into .data

@@ -278,7 +278,7 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka
 	sleep_disable();													// wakey wakey
 
 	WDTCR |= _BV(WDIE);													// setting the bit prevents a reset when the timer expires
-
+	//Device.mj8x8->mcu->wdtcr |= _BV(WDIE);
 	Device.mj8x8->HeartBeat(&MsgHandler);
 
 	if ( (! MsgHandler.bus->devices.All) && (MsgHandler.bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus

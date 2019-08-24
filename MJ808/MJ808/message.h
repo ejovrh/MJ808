@@ -33,8 +33,9 @@ typedef struct															// canbus_t struct describing the CAN bus state
 	u_devices devices;													// indicator of devices discovered, 16 in total; B0 - 1st device (0A), B1 - 2nd device (0B), ..., B15 - 16th device (3D)
 	uint8_t NumericalCAN_ID ;											// ordered device number - A0 (0th device) until 3C (15th device), used in Heartbeat()
 	uint8_t BeatIterationCount : 4;										// how many times did we wakeup, sleep and wakeup again
-	uint8_t FlagDoHeartbeat : 1;
-	uint8_t FlagDoDefaultOperation : 2;
+	uint8_t FlagDoHeartbeat : 1;										// shall the heartbeat be initiated?
+	uint8_t FlagDoDefaultOperation : 2;									// we are alone on the bus - shall we do our device-specific default operation?
+	uint8_t placeholder : 1;											// empty space
 } canbus_t;
 
 typedef struct message_handler_t										// sends and receives (stores) CAN messages, keeps track of bus status
