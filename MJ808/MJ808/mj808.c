@@ -8,6 +8,8 @@
 #include "led.h"
 #include "gpio.h"
 
+static volatile mj808_t *__self;										// private pointer to self
+
 // TODO - optimize
 extern void _fade(const uint8_t value, volatile uint8_t *ocr);
 extern void _debounce(volatile individual_button_t *in_button, volatile event_handler_t *in_event);
@@ -69,9 +71,9 @@ void __mj808_event_execution_function(const uint8_t val)
 				Device.led->led[Front].Shine(0x20);						// front light on - low key; gets overwritten by LU command, since it comes in a bit later
 
 				 //send the messages out, UDP-style. no need to check if the device is actually online
-				MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);					// convey button press via CAN and the logic unit will do its own thing
-				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);		// turn on rear light
-				MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
+				MsgHandler.SendMessage(MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);					// convey button press via CAN and the logic unit will do its own thing
+				MsgHandler.SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);		// turn on rear light
+				MsgHandler.SendMessage(DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
 			}
 			else
 			{
@@ -79,9 +81,9 @@ void __mj808_event_execution_function(const uint8_t val)
 				Device.led->led[Front].Shine(0x00);						// front light off
 
 				// send the messages out, UDP-style. no need to check if the device is actually online
-				MsgHandler.SendMessage(&MsgHandler, MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
-				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);		// turn off rear light
-				MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_OFF, 0x00, 1);						// turn off yellow LED
+				MsgHandler.SendMessage(MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
+				MsgHandler.SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);		// turn off rear light
+				MsgHandler.SendMessage(DASHBOARD_LED_YELLOW_OFF, 0x00, 1);						// turn off yellow LED
 			}
 			EventHandler.UnSetEvent(val);
 		break;
@@ -140,16 +142,14 @@ void _EmptyBusOperationMJ808(void)
 };
 
 // received MsgHandler object and passes
-void _PopulatedBusOperationMJ808(volatile message_handler_t *in_msg, volatile void *self)
+void _PopulatedBusOperationMJ808(volatile message_handler_t *in_msg)
 {
-	mj808_t *dev_ptr = (mj808_t *) self;								// pointer cast to concrete device
-
-	volatile can_msg_t *msg = in_msg->ReceiveMessage(in_msg);			// CAN message object
+	volatile can_msg_t *msg = in_msg->ReceiveMessage();					// CAN message object
 
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if ( (msg->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)				// utility LED command
 	{
-		dev_ptr->led->led[Utility].Shine(msg->COMMAND);					// glowy thingy
+		__self->led->led[Utility].Shine(msg->COMMAND);					// glowy thingy
 		return;
 	}
 
@@ -222,13 +222,15 @@ void mj808_ctor(volatile mj808_t * const self)
 	sei();
 	}
 
+	__self = self;														// save address of self in private data member
+
 	static volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));	// define MJ8X8 object and put it into .data
 	static volatile composite_led_t LED __attribute__ ((section (".data")));		// define LED object and put it into .data
 	static volatile button_t Button __attribute__ ((section (".data")));// define BUTTON object and put it into .data
 
-	self->mj8x8 = mj8x8_ctor(&MJ8x8);									// call base class constructor & tie in object addresses
-	self->led = _virtual_led_ctorMJ808(&LED);							// call virtual constructor & tie in object addresses
-	self->button = _virtual_button_ctorMJ808(&Button, &EventHandler);	// call virtual constructor & tie in object addresses
+	__self->mj8x8 = mj8x8_ctor(&MJ8x8);									// call base class constructor & tie in object addresses
+	__self->led = _virtual_led_ctorMJ808(&LED);							// call virtual constructor & tie in object addresses
+	__self->button = _virtual_button_ctorMJ808(&Button, &EventHandler);	// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -237,11 +239,11 @@ void mj808_ctor(volatile mj808_t * const self)
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
 	 */
 
-	self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);	// high byte
-	self->mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																	// low byte
+	__self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);	// high byte
+	__self->mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																	// low byte
 
-	self->mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ808;			// implement device-specific default operation
-	self->mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;	// implements device-specific operation depending on bus activity
+	__self->mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ808;		// implement device-specific default operation
+	__self->mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;// implements device-specific operation depending on bus activity
 
 	// TODO - access via object
 	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);							// crude "I'm finished" indicator

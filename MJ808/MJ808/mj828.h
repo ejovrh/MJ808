@@ -40,7 +40,7 @@ enum mj828_buttons														// enum of buttons on this device
 typedef struct															// struct describing devices on MJ828
 {
 	volatile mj8x8_t *mj8x8;											// pointer to the base class
-	volatile composite_led_t	*led;									// pointer to LED structure
+	volatile composite_led_t *led;										// pointer to LED structure
 	volatile button_t *button;											// array of button_t - two buttons
 } mj828_t;
 

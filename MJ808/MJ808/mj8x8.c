@@ -11,7 +11,7 @@ static void _Heartbeat(volatile message_handler_t * const msg)
 	{
 		if (msg->bus->BeatIterationCount == msg->bus->NumericalCAN_ID)	// see if this counter iteration is our turn
 		{
-			msg->SendMessage(msg, CMND_ANNOUNCE, 0x00, 1);				// broadcast CAN heartbeat message
+			msg->SendMessage(CMND_ANNOUNCE, 0x00, 1);					// broadcast CAN heartbeat message
 
 			msg->bus->FlagDoHeartbeat = 0;								// heartbeat mode of for the remaining counter iterations
 			WDTCR |= (_BV(WDCE) | _BV(WDE));							// WDT change enable sequence

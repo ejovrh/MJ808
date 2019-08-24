@@ -2,7 +2,7 @@
 #include <avr/sleep.h>
 #include <avr/pgmspace.h>
 
-#define MJ828_															// what device to compile for?
+#define MJ808_															// what device to compile for?
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"
@@ -66,7 +66,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 
 	inline void helper_handle_rx(void)									// handles incoming message interrupts
 	{
-		Device.mj8x8->PopulatedBusOperation(&MsgHandler, &Device);		// let the particular device deal with the message
+		Device.mj8x8->PopulatedBusOperation(&MsgHandler);				// let the particular device deal with the message
 	};
 
 	void helper_handle_error(volatile can_t *in_can)					// handles RXBn overflow interrupts

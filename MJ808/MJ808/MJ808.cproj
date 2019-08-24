@@ -123,7 +123,7 @@
     <ListValues>
       <Value>DEBUG</Value>
       <Value>F_CPU=8000000UL</Value>
-      <Value>MJ828_</Value>
+      <Value>MJ808_</Value>
     </ListValues>
   </avrgcc.compiler.symbols.DefSymbols>
   <avrgcc.compiler.directories.IncludePaths>
