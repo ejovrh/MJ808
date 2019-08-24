@@ -1,8 +1,8 @@
-#include <avr/sfr_defs.h>
 #include "event.h"
 
-static volatile event_handler_t *__self;								// ... a true private data member of this "class"
+static volatile event_handler_t *__self;								// private pointer to self
 static uint8_t __walker = 1;											// local variable used to walk over bit positions 1 to 8
+static uint8_t __index ;												// bit-wise flags for events (see _HandleEvent())
 
 /* theory of operation
  *
@@ -32,24 +32,30 @@ static void _return(void)												// do-noting function
 	return;
 };
 
-// sets bit at bit_position ( 1 to 8) in byte EventHandler.index
+// sets bit at bit_position ( 1 to 8) in byte __index
+static void _UnSetEvent(const uint8_t val)
+{
+	__index &= ~val;													// simply clears the bit at position bit_position
+}
+
+// sets bit at bit_position ( 1 to 8) in byte __index
 static void _Notify(const uint8_t bit_position)
 {
-
-	__self->index |= bit_position;										// simply sets the bit at position bit_position
+	__index |= bit_position;											// simply sets the bit at position bit_position
 };
 
 // calls __mjxxx_event_execution_function and passes on argument into it
 static void _HandleEvent(void)
 {
 	__walker = (__walker << 1) | (__walker >> 7 );						// the __walker shifts a "1" cyclically from right to left
-	(*__self->fpointer)(__self->index & __walker);						//	and ANDs it with __index, thereby passing the result as an argument to __mjxxx_event_execution_function
+	(*__self->fpointer)(__index & __walker);							//	and ANDs it with __index, thereby passing the result as an argument to __mjxxx_event_execution_function
 };
 
 void event_handler_ctor(volatile event_handler_t * const self)
 {
 	__self = self;														// private - pointer to self, utilized in functions above
 
+	self->UnSetEvent = &_UnSetEvent;									//
 	self->Notify = &_Notify;											// notifies about an event by setting the index to a predetermined value (uint8_t array-based lookup table)
 	self->HandleEvent = &_HandleEvent;									// handles event based on index
 	self->fpointer = &_return;											// default -- if not initialized: do nothing

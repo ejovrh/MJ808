@@ -145,7 +145,7 @@ void __mj828_event_execution_function(uint8_t val)
 	{
 		case 0x01:														// error button press
 			// TODO - implement device function on button error press
-			EventHandler.index &= ~val;
+			EventHandler.UnSetEvent(val);
 		break;
 
 		case 0x04:
@@ -158,7 +158,7 @@ void __mj828_event_execution_function(uint8_t val)
 			{
 				Device.led->flags->All &= ~_BV(Blue);
 				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);
-				EventHandler.index &= ~val;
+				EventHandler.UnSetEvent(val);
 			}
 
 		break;
@@ -172,11 +172,11 @@ void __mj828_event_execution_function(uint8_t val)
 			{
 				Device.led->flags->All |= _BV(Red);
 			}
-			EventHandler.index &= ~val;
+			EventHandler.UnSetEvent(val);
 		break;
 
 		default:														// no value passed
-			EventHandler.index &= ~val;									// do nothing
+			EventHandler.UnSetEvent(val);								// do nothing
 		break;
 	}
 };

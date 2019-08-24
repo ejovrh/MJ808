@@ -59,7 +59,7 @@ void __mj808_event_execution_function(const uint8_t val)
 	{
 		case 0x01:	// button error: - do the error thing
 			// TODO - implement device function on button error press
-			EventHandler.index &= ~val;
+			EventHandler.UnSetEvent(val);
 			return;
 
 		case 0x02:	// button hold
@@ -83,11 +83,11 @@ void __mj808_event_execution_function(const uint8_t val)
 				MsgHandler.SendMessage(&MsgHandler, (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);		// turn off rear light
 				MsgHandler.SendMessage(&MsgHandler, DASHBOARD_LED_YELLOW_OFF, 0x00, 1);						// turn off yellow LED
 			}
-			EventHandler.index &= ~val;
+			EventHandler.UnSetEvent(val);
 		break;
 
 		default:	// 0x00
-			EventHandler.index &= ~val;
+			EventHandler.UnSetEvent(val);
 			return;
 	}
 };
