@@ -356,6 +356,6 @@ typedef struct can_t													// can_t struct describing the CAN device as a 
 	void (*BitModify)(const uint8_t addr, const uint8_t mask, const uint8_t byte);			// modifies bit identified by "byte" according to "mask" in some register
 } can_t __attribute__((aligned(8)));
 
-volatile can_t *can_ctor(volatile can_t * const self);					// CAN object constructor - does function pointer & hardware initialization
+can_t *can_ctor(volatile uint8_t * const port_stby, const uint8_t pin_stdby, volatile uint8_t * const port_ss, const uint8_t pin_ss);					// CAN object constructor - does function pointer & hardware initialization
 
 #endif /* MCP2515_H_ */

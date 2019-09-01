@@ -11,8 +11,8 @@ typedef struct event_handler_t											// struct describing the event handler 
 	void (*HandleEvent)(void);											// handler - called from main(), executes either _return() or whatever a device points the function pointer to
 } event_handler_t;
 
-void event_handler_ctor(volatile event_handler_t * const self);			// the event handler constructor
+void event_handler_ctor();												// the event handler constructor
 
-extern volatile event_handler_t EventHandler;							// declare task handler object
+event_handler_t * const EventHandler;									// declare pointer to public struct part
 
 #endif /* TASK_H_ */

@@ -5,7 +5,15 @@
 
 #include "attiny4313.h"
 
-volatile ATtiny4313_t * attiny_ctor(volatile ATtiny4313_t * const self)
+typedef struct															// ATtiny4313_t actual
+{
+	ATtiny4313_t public;												// public struct
+//	uint8_t foo_private;												// private - some data member
+} __ATtiny4313_t;
+
+static __ATtiny4313_t __MCU __attribute__ ((section (".data")));
+
+ATtiny4313_t *attiny_ctor()
 {
 	cli();																// clear interrupts globally
 
@@ -24,5 +32,5 @@ volatile ATtiny4313_t * attiny_ctor(volatile ATtiny4313_t * const self)
 
 	sei();																// enable interrupts globally
 
-	return self;
+	return &__MCU.public;												// return pointer to ATtiny4313_t public part
 };

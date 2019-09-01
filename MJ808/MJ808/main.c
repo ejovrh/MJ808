@@ -17,19 +17,19 @@
 
 int main(void)
 {
-	event_handler_ctor(&EventHandler);									// call event handler constructor; the Device constructor further down has the chance to override EventHandler.fpointer and implement its own handler
+	event_handler_ctor();												// call event handler constructor; the Device constructor further down has the chance to override EventHandler.fpointer and implement its own handler
 
 	#if defined(MJ808_)													// MJ808 - call derived class constructor and tie in base class
-	mj808_ctor(&Device);
+	mj808_ctor();
 	#endif
 	#if defined(MJ818_)													// MJ818 - call derived class constructor and tie in base class
-	mj818_ctor(&Device);
+	mj818_ctor();
 	#endif
 	#if defined(MJ828_)													// MJ828 - call derived class constructor and tie in base class
-	mj828_ctor(&Device);
+	mj828_ctor();
 	#endif
 
-	message_handler_ctor(&MsgHandler, Device.mj8x8->can );				// call message handler constructor
+	message_handler_ctor(Device->mj8x8->can);							// call message handler constructor
 
 	// TODO - implement micro controller sleep cycles
 	set_sleep_mode(SLEEP_MODE_IDLE);									// 11mA
@@ -40,7 +40,7 @@ int main(void)
 
 	while (1)															// forever loop
 	{
-		EventHandler.HandleEvent();										// execute the event handling function with argument taken from case table array
+			EventHandler->HandleEvent();								// execute the event handling function with argument taken from case table array
 
 		if (MCUCR & _BV(SE))											// if sleep is enabled
 			sleep_cpu();												// ...sleep
@@ -60,7 +60,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 
 	inline void helper_handle_rx(void)									// handles incoming message interrupts
 	{
-		Device.mj8x8->PopulatedBusOperation(&MsgHandler);				// let the particular device deal with the message
+		Device->mj8x8->PopulatedBusOperation(MsgHandler);				// let the particular device deal with the message
 	};
 
 	void helper_handle_error(volatile can_t * const in_can)				// handles RXBn overflow interrupts
@@ -137,7 +137,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 
 //#define BRANCHTABLE_ICOD
 
-	volatile can_t *can = Device.mj8x8->can;							// get pointer to CAN instance
+	volatile can_t *can = Device->mj8x8->can;							// get pointer to CAN instance
 
 #if defined(BRANCHTABLE_ICOD)
 	static const uint16_t (*fptr)(volatile can_t *in_can);				// declare pointer for function pointers in branchtable_led[]
@@ -229,8 +229,8 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	// code to be executed every 25ms
 	sleep_disable();													// wakey wakey
 
-	for (uint8_t i=0; i<Device.button->button_count; ++i)				// loop over all available buttons and debounce them
-		Device.button->deBounce(&Device.button->button[i], &EventHandler);		// from here on the button is debounced and states can be consumed
+	for (uint8_t i=0; i<Device->button->button_count; ++i)				// loop over all available buttons and debounce them
+		Device->button->deBounce(&Device->button->button[i], EventHandler);		// from here on the button is debounced and states can be consumed
 
 	sleep_enable();														// back to sleep
 }
@@ -238,8 +238,8 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 #if defined(MJ828_)														// ISR for timer0 - 16.25ms - charlieplexing timer
 ISR(TIMER0_COMPA_vect)													// timer/counter0 - 16.25ms - charlieplexed blinking
 {
-	if (Device.led->flags->All)											// if there is any LED to glow at all
-		 charlieplexing_handler(Device.led);							// handles LEDs according to CAN message (of type CMND_UTIL_LED)
+	if (Device->led->flags->All)											// if there is any LED to glow at all
+		 charlieplexing_handler(Device->led);							// handles LEDs according to CAN message (of type CMND_UTIL_LED)
 }
 #endif
 
@@ -276,10 +276,10 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka
 
 	WDTCR |= _BV(WDIE);													// setting the bit prevents a reset when the timer expires
 	//Device.mj8x8->mcu->wdtcr |= _BV(WDIE);
-	Device.mj8x8->HeartBeat(&MsgHandler);
+	Device->mj8x8->HeartBeat(MsgHandler);
 
-	if ( (! MsgHandler.bus->devices.All) && (MsgHandler.bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
-		Device.mj8x8->EmptyBusOperation();								// perform the device-specific default operation
+	if ( (! MsgHandler->bus->devices.All) && (MsgHandler->bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
+		Device->mj8x8->EmptyBusOperation();								// perform the device-specific default operation
 
 	sleep_enable();														// back to sleep
 }

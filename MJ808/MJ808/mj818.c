@@ -7,7 +7,13 @@
 #include "mj818.h"
 #include "gpio.h"
 
-static volatile mj818_t *__self;										// private pointer to self
+typedef struct															// mj818_t actual
+{
+	mj818_t public;														// public struct
+	//	uint8_t foo_private;												// private - some data member
+} __mj818_t;
+
+static __mj818_t __Device __attribute__ ((section (".data")));
 
 void _fade(const uint8_t value, volatile uint8_t *ocr);
 
@@ -42,14 +48,14 @@ void _EmptyBusOperationMJ818(void)
 };
 
 // dispatches CAN messages to appropriate sub-component on device
-void _PopulatedBusOperationMJ818(volatile message_handler_t *in_msg)
+void _PopulatedBusOperationMJ818(message_handler_t * const in_msg)
 {
 	volatile can_msg_t *msg = in_msg->ReceiveMessage();					// CAN message object
 
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | REAR_LIGHT) )		// rear positional light
 	{
-		__self->led->led[Rear].Shine(msg->ARGUMENT);					// fade rear light to CAN msg. argument value
+		__Device.public.led->led[Rear].Shine(msg->ARGUMENT);			// fade rear light to CAN msg. argument value
 		return;
 	}
 
@@ -62,7 +68,7 @@ void _PopulatedBusOperationMJ818(volatile message_handler_t *in_msg)
 	}
 };
 
-void mj818_ctor(volatile mj818_t * const self)
+void mj818_ctor()
 {
 	// GPIO state definitions
 	{
@@ -101,13 +107,10 @@ void mj818_ctor(volatile mj818_t * const self)
 	sei();
 	}
 
-	__self = self;														// save address of self in private data member
-
-	static volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));			// define MJ8X8 object and put it into .data
 	static volatile composite_led_t LED __attribute__ ((section (".data")));	// define LED object and put it into .data
 
-	__self->mj8x8 = mj8x8_ctor(&MJ8x8);									// call base class constructor & tie in object addresses
-	__self->led = _virtual_led_ctorMJ818(&LED);							// call virtual constructor & tie in object addresses
+	__Device.public.mj8x8 = mj8x8_ctor(&PORTB, 1, &PORTB, 4);					// call base class constructor & tie in object addresses
+	__Device.public.led = _virtual_led_ctorMJ818(&LED);							// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -115,13 +118,13 @@ void mj818_ctor(volatile mj818_t * const self)
 	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
 	 */
-	__self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B);	// high byte
-	__self->mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																	// low byte
+	__Device.public.mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B);	// high byte
+	__Device.public.mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																// low byte
 
-	__self->mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;			// implement device-specific default operation
-	__self->mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
+	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;			// implement device-specific default operation
+	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
 };
 
 #if defined(MJ818_)														// all devices have the object name "Device", hence the preprocessor macro
-volatile mj818_t Device __attribute__ ((section (".data")));			// define Device object and put it into .data
+mj818_t * const Device = &__Device.public ;								// set pointer to MsgHandler public part
 #endif

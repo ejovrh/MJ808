@@ -7,10 +7,16 @@
 #include "mj828.h"
 #include "gpio.h"
 
-static volatile mj828_t *__self;										// private pointer to self
+typedef struct															// mj828_t actual
+{
+	mj828_t public;														// public struct
+//	uint8_t foo_private;												// private - some data member
+} __mj828_t;
+
+static __mj828_t __Device __attribute__ ((section (".data")));
 
 extern void _fade(const uint8_t value, volatile uint8_t *ocr);
-extern void _debounce(volatile individual_button_t *in_button, volatile event_handler_t *in_event);
+extern void _debounce(volatile individual_button_t *in_button, event_handler_t * const in_event);
 
 void __mj828_led_gpio_init(void)
 {
@@ -147,44 +153,44 @@ void __mj828_event_execution_function(uint8_t val)
 	{
 		case 0x01:														// error button press
 			// TODO - implement device function on button error press
-			EventHandler.UnSetEvent(val);
+			EventHandler->UnSetEvent(val);
 		break;
 
 		case 0x04:
-			if (Device.button->button[Left].Momentary)
+			if (Device->button->button[Left].Momentary)
 			{
-				Device.led->flags->All |= _BV(Blue);
-				MsgHandler.SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xF8, 2);
+				Device->led->flags->All |= _BV(Blue);
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xF8, 2);
 			}
 			else
 			{
-				Device.led->flags->All &= ~_BV(Blue);
-				MsgHandler.SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);
-				EventHandler.UnSetEvent(val);
+				Device->led->flags->All &= ~_BV(Blue);
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);
+				EventHandler->UnSetEvent(val);
 			}
 
 		break;
 
 		case 0x02:
-			if (!Device.button->button[Right].Toggle)
+			if (!Device->button->button[Right].Toggle)
 			{
-				Device.led->flags->All &= ~_BV(Red);
+				Device->led->flags->All &= ~_BV(Red);
 			}
 			else
 			{
-				Device.led->flags->All |= _BV(Red);
+				Device->led->flags->All |= _BV(Red);
 			}
-			EventHandler.UnSetEvent(val);
+			EventHandler->UnSetEvent(val);
 		break;
 
 		default:														// no value passed
-			EventHandler.UnSetEvent(val);								// do nothing
+			EventHandler->UnSetEvent(val);								// do nothing
 		break;
 	}
 };
 
 // implementation of virtual constructor for buttons
-volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self, volatile event_handler_t *event)
+volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self, event_handler_t * const event)
 {
 	static individual_button_t individual_button[2] __attribute__ ((section (".data")));	// define array of actual buttons and put into .data
 
@@ -243,7 +249,7 @@ void _EmptyBusOperationMj828(void)
 };
 
 // dispatches CAN messages to appropriate sub-component on device
-void _PopulatedBusOperationMJ828(volatile message_handler_t *in_msg)
+void _PopulatedBusOperationMJ828(message_handler_t * const in_msg)
 {
 	volatile can_msg_t *msg = in_msg->ReceiveMessage();					// CAN message object
 
@@ -251,15 +257,15 @@ void _PopulatedBusOperationMJ828(volatile message_handler_t *in_msg)
 	if ( (msg->COMMAND & MASK_COMMAND) == CMND_DASHBOARD )				// dashboard command
 	{
 		if ((msg->COMMAND & 0x01))										// flag LED at appropriate index as whatever the command says
-			__self->led->flags->All |= _BV( ((msg->COMMAND & 0x0E) >> 1) );			// set bit
+			__Device.public.led->flags->All |= _BV( ((msg->COMMAND & 0x0E) >> 1) );			// set bit
 		else
-			__self->led->flags->All &= ~_BV( ((msg->COMMAND & 0x0E) >> 1) );		// clear bit
+			__Device.public.led->flags->All &= ~_BV( ((msg->COMMAND & 0x0E) >> 1) );		// clear bit
 
 		return;
 	}
 };
 
-void mj828_ctor(volatile mj828_t * const self)
+void mj828_ctor()
 {
 	// GPIO state definitions
 	{
@@ -311,15 +317,13 @@ void mj828_ctor(volatile mj828_t * const self)
 	sei();
 	}
 
-	__self = self;														// save address of self in private data member
-
-	static volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));	// define MJ8X8 object and put it into .data
-	static volatile composite_led_t LED __attribute__ ((section (".data")));		// define LED object and put it into .data
+	//static volatile mj8x8_t MJ8x8 __attribute__ ((section (".data")));	// define MJ8X8 object and put it into .data
+	static volatile composite_led_t LED __attribute__ ((section (".data")));	// define LED object and put it into .data
 	static volatile button_t Button __attribute__ ((section (".data")));// define BUTTON object and put it into .data
 
-	__self->mj8x8 = mj8x8_ctor(&MJ8x8);									// call base class constructor & tie in object addresses
-	__self->led = _virtual_led_ctorMJ828(&LED);							// call virtual constructor & tie in object addresses
-	__self->button = _virtual_button_ctorMJ828(&Button, &EventHandler);	// call virtual constructor & tie in object addresses
+	__Device.public.mj8x8 = mj8x8_ctor(&PORTB, 3, &PORTB, 4);					// call base class constructor & tie in object addresses
+	__Device.public.led = _virtual_led_ctorMJ828(&LED);							// call virtual constructor & tie in object addresses
+	__Device.public.button = _virtual_button_ctorMJ828(&Button, EventHandler);	// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
@@ -327,13 +331,13 @@ void mj828_ctor(volatile mj828_t * const self)
 	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
 	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
 	 */
-	__self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D);	// high byte
-	__self->mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																// low byte
+	__Device.public.mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D);	// high byte
+	__Device.public.mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																// low byte
 
-	__self->mj8x8->EmptyBusOperation = &_EmptyBusOperationMj828;			// implements device-specific default operation
-	__self->mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
+	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMj828;			// implements device-specific default operation
+	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
 };
 
 #if defined(MJ828_)														// all devices have the object name "Device", hence the preprocessor macro
-volatile mj828_t Device __attribute__ ((section (".data")));			// define Device object and put it into .data
+mj828_t * const Device = &__Device.public ;								// set pointer to MsgHandler public part
 #endif

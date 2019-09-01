@@ -46,8 +46,8 @@ typedef struct message_handler_t										// sends and receives (stores) CAN mes
 	volatile can_msg_t* (*ReceiveMessage)(void);						// downloads received message by local CAN IC
 } message_handler_t;
 
-void message_handler_ctor(volatile message_handler_t * const self, volatile can_t * const in_can);
+void message_handler_ctor(volatile can_t * const in_can);
 
-extern volatile message_handler_t MsgHandler;							// declare message handler object
+extern message_handler_t * const MsgHandler;							// declare pointer to public struct part
 
 #endif /* MESSAGE_H_ */

@@ -232,15 +232,15 @@
 
 typedef struct															// "base class" struct for mj8x8 devices
 {
-	volatile can_t *can;												// pointer to the CAN structure
-	volatile ATtiny4313_t *mcu;											// pointer to MCU structure
+	can_t *can;												// pointer to the CAN structure
+	ATtiny4313_t *mcu;											// pointer to MCU structure
 
 	void (*HeartBeat)(volatile message_handler_t * const msg);			// default periodic heartbeat for all devices
 	void (*EmptyBusOperation)(void);									// device's default operation on empty bus, implemented in derived class
-	void (*PopulatedBusOperation)(volatile message_handler_t *in_msg);	// device operation on populated bus; operates by means of MsgHandler object
+	void (*PopulatedBusOperation)(message_handler_t * const in_msg);	// device operation on populated bus; operates by means of MsgHandler object
 } mj8x8_t ;
 
 
-volatile mj8x8_t *mj8x8_ctor(volatile mj8x8_t * const self);
+volatile mj8x8_t *mj8x8_ctor(volatile uint8_t * const port_stby, const uint8_t pin_stdby, volatile uint8_t * const port_ss, const uint8_t pin_ss);
 
 #endif /* MJ8x8_H_ */

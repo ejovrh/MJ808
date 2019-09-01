@@ -44,8 +44,8 @@ typedef struct															// struct describing devices on MJ828
 	volatile button_t *button;											// array of button_t - two buttons
 } mj828_t;
 
- void mj828_ctor(volatile mj828_t * const self);
+ void mj828_ctor();
 
-extern volatile mj828_t Device;
+extern mj828_t * const Device;											// declare pointer to public struct part
 
 #endif /* MJ828_H_ */

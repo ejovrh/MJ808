@@ -4,6 +4,14 @@
 
 #include "mj8x8.h"
 
+typedef struct															// mj8x8_t actual
+{
+	mj8x8_t public;														// public struct
+//	uint8_t foo_private;												// private - some data member
+} __mj8x8_t;
+
+static __mj8x8_t __MJ8x8 __attribute__ ((section (".data")));
+
 // provides a periodic heartbeat based on the watchdog timer interrupt
 static void _Heartbeat(volatile message_handler_t * const msg)
 {
@@ -35,7 +43,7 @@ static void _Heartbeat(volatile message_handler_t * const msg)
 	++msg->bus->BeatIterationCount;										// increment the iteration counter
 };
 
-volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t * const self)
+volatile mj8x8_t * mj8x8_ctor(volatile uint8_t * const port_stby, const uint8_t pin_stdby, volatile uint8_t * const port_ss, const uint8_t pin_ss)
 {
 	// GPIO state definitions
 	{
@@ -49,12 +57,10 @@ volatile mj8x8_t * mj8x8_ctor(volatile mj8x8_t * const self)
 	// state initialization of device-unspecific pins
 	}
 
-	static volatile ATtiny4313_t MCU __attribute__ ((section (".data")));			// define MCU object and put it into .data
-	static volatile can_t CAN __attribute__ ((section (".data")));					// define CAN object and put it into .data
+	__MJ8x8.public.HeartBeat = &_Heartbeat;
 
-	self->HeartBeat = &_Heartbeat;
-	self->mcu = attiny_ctor(&MCU);										// pass MCU address into constructor
-	self->can = can_ctor(&CAN);											// pass CAN address into constructor
+	__MJ8x8.public.can = can_ctor(port_stby, pin_stdby, port_ss, pin_ss);	// pass on CAN public part
+	__MJ8x8.public.mcu = attiny_ctor();									// pass on MCU public part
 
-	return self;
+	return &__MJ8x8.public;
 };

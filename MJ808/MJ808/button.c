@@ -2,7 +2,7 @@
 //#include "task.h"
 
 #if defined(MJ808_) || defined (MJ828_)									// button debouncer for devices with buttons
-void _debounce(volatile individual_button_t *in_button, volatile event_handler_t *in_event)
+void _debounce(volatile individual_button_t *in_button, event_handler_t * const in_event)
 {
 	inline void local_advance_counter(void)								// local helper function which advances the debounce "timer"
 	{

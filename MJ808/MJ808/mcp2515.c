@@ -15,6 +15,16 @@
 #define	MCP2561_standby_pin		B,	1,	1								// MCP2561 standby
 #endif
 
+typedef struct															// can_t actual
+{
+	can_t public;														// public struct
+	volatile uint8_t *__port_ss;										// private - port of slave select pin
+	uint8_t __pin_ss;													// private - pin number of slave select pin
+	volatile uint8_t *__port_standby;									// private - port of standby pin
+	uint8_t __pin_standby;												// private - pin number of standby pin
+} __can_t;
+
+static __can_t __CAN __attribute__ ((section (".data")));
 
 /* the basic building blocks of interaction with the MCP2515:
  * opcodes -low level instructions- which the hardware executes
@@ -376,17 +386,22 @@ static void _can_sleep(volatile can_t * const in_can, const uint8_t in_val)
 };
 
 // object constructor
-volatile can_t * can_ctor(volatile can_t * const self)
+can_t * can_ctor(volatile uint8_t * const port_stby, const uint8_t pin_stdby, volatile uint8_t * const port_ss, const uint8_t pin_ss)
 {
+	__CAN.__port_standby = port_stby;
+	__CAN.__pin_standby = pin_stdby;
+	__CAN.__port_ss = port_ss;
+	__CAN.__pin_ss == pin_ss;
+
 	// populate self
-	self->Sleep = &_can_sleep;											// set up function pointer for public methods
-	self->RequestToSend = &_mcp2515_can_msg_send;						// ditto
-	self->FetchMessage = &_mcp2515_can_msg_receive;						// ditto
-	self->ChangeOpMode = &_mcp2515_change_opmode;						// ditto
-	self->ReadBytes = &_mcp2515_opcode_read_bytes;						// ditto
-	self->BitModify = &_mcp2515_opcode_bit_modify;						// ditto
+	__CAN.public.Sleep = &_can_sleep;									// set up function pointer for public methods
+	__CAN.public.RequestToSend = &_mcp2515_can_msg_send;				// ditto
+	__CAN.public.FetchMessage = &_mcp2515_can_msg_receive;				// ditto
+	__CAN.public.ChangeOpMode = &_mcp2515_change_opmode;				// ditto
+	__CAN.public.ReadBytes = &_mcp2515_opcode_read_bytes;				// ditto
+	__CAN.public.BitModify = &_mcp2515_opcode_bit_modify;				// ditto
 
 	__mcp2515_init();													// initialize & configure the MCP2515
 
-	return self;														// hmm... - gets itself as a parameter and then returns itself. i smell bullshit in the making.
+	return &__CAN.public;												// return pointer to can_t public part
 };
