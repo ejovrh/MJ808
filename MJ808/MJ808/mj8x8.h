@@ -241,6 +241,6 @@ typedef struct															// "base class" struct for mj8x8 devices
 } mj8x8_t ;
 
 
-volatile mj8x8_t *mj8x8_ctor(volatile uint8_t * const port_stby, const uint8_t pin_stdby, volatile uint8_t * const port_ss, const uint8_t pin_ss);
+volatile mj8x8_t *mj8x8_ctor();
 
 #endif /* MJ8x8_H_ */

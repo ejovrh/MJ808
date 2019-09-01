@@ -43,7 +43,7 @@ static void _Heartbeat(volatile message_handler_t * const msg)
 	++msg->bus->BeatIterationCount;										// increment the iteration counter
 };
 
-volatile mj8x8_t * mj8x8_ctor(volatile uint8_t * const port_stby, const uint8_t pin_stdby, volatile uint8_t * const port_ss, const uint8_t pin_ss)
+volatile mj8x8_t * mj8x8_ctor()
 {
 	// GPIO state definitions
 	{
@@ -59,7 +59,7 @@ volatile mj8x8_t * mj8x8_ctor(volatile uint8_t * const port_stby, const uint8_t 
 
 	__MJ8x8.public.HeartBeat = &_Heartbeat;
 
-	__MJ8x8.public.can = can_ctor(port_stby, pin_stdby, port_ss, pin_ss);	// pass on CAN public part
+	__MJ8x8.public.can = can_ctor();									// pass on CAN public part
 	__MJ8x8.public.mcu = attiny_ctor();									// pass on MCU public part
 
 	return &__MJ8x8.public;

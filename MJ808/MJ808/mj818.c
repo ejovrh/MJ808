@@ -109,7 +109,7 @@ void mj818_ctor()
 
 	static volatile composite_led_t LED __attribute__ ((section (".data")));	// define LED object and put it into .data
 
-	__Device.public.mj8x8 = mj8x8_ctor(&PORTB, 1, &PORTB, 4);					// call base class constructor & tie in object addresses
+	__Device.public.mj8x8 = mj8x8_ctor();										// call base class constructor & tie in object addresses
 	__Device.public.led = _virtual_led_ctorMJ818(&LED);							// call virtual constructor & tie in object addresses
 
 	/*

@@ -6,6 +6,7 @@
 #include "mcp2515.h"
 
 // TODO - move pin definitions out of here
+// setting the PORT & PIN via constructor is unfortunately too costly so preprocessor defines are for now the only option
 #define	SPI_SS_MCP2515_pin		B,	4,	4								// SPI - SS
 
 #if defined(MJ828_)
@@ -18,10 +19,7 @@
 typedef struct															// can_t actual
 {
 	can_t public;														// public struct
-	volatile uint8_t *__port_ss;										// private - port of slave select pin
-	uint8_t __pin_ss;													// private - pin number of slave select pin
-	volatile uint8_t *__port_standby;									// private - port of standby pin
-	uint8_t __pin_standby;												// private - pin number of standby pin
+//	uint8_t foo_private;												// private - some data member
 } __can_t;
 
 static __can_t __CAN __attribute__ ((section (".data")));
@@ -200,7 +198,7 @@ static void __mcp2515_init(void)
 // datasheet p.66 and table 12.3
 static void __mcp2515_opcode_read_rx_buffer(const uint8_t buffer, volatile uint8_t *data, const uint8_t len)
 {
-	uint8_t i = 0;
+	uint8_t i;
 
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
 
@@ -221,11 +219,13 @@ static void __mcp2515_opcode_read_rx_buffer(const uint8_t buffer, volatile uint8
 static uint8_t __mcp2515_opcode_rx_status(void)
 {
 	uint8_t retval;
+
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
 	spi_uci_transfer(MCP2515_OPCODE_RX_STATUS);							// send the RX status command
 	retval = spi_uci_transfer(0xFF);									// and get data
 	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
 	_delay_us(1);														// delay a little bit for the transfer to complete
+
 	return retval;
 };
 
@@ -233,11 +233,13 @@ static uint8_t __mcp2515_opcode_rx_status(void)
 static uint8_t __mcp2515_opcode_read_status(void)
 {
 	uint8_t retval;
+
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
 	spi_uci_transfer(MCP2515_OPCODE_READ_STATUS);						// send the read status command
 	retval = spi_uci_transfer(0xFF);									//  and get data
 	_delay_us(1);														// delay a little bit for the transfer to complete
 	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
+
 	return retval;
 };
 
@@ -386,13 +388,8 @@ static void _can_sleep(volatile can_t * const in_can, const uint8_t in_val)
 };
 
 // object constructor
-can_t * can_ctor(volatile uint8_t * const port_stby, const uint8_t pin_stdby, volatile uint8_t * const port_ss, const uint8_t pin_ss)
+can_t * can_ctor()
 {
-	__CAN.__port_standby = port_stby;
-	__CAN.__pin_standby = pin_stdby;
-	__CAN.__port_ss = port_ss;
-	__CAN.__pin_ss == pin_ss;
-
 	// populate self
 	__CAN.public.Sleep = &_can_sleep;									// set up function pointer for public methods
 	__CAN.public.RequestToSend = &_mcp2515_can_msg_send;				// ditto
