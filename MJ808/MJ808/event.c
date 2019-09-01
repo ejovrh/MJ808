@@ -1,5 +1,7 @@
 #include "event.h"
 
+extern void DoNothing(void);
+
 static volatile event_handler_t *__self;								// private pointer to self
 static uint8_t __walker = 1;											// local variable used to walk over bit positions 1 to 8
 static uint8_t __index ;												// bit-wise flags for events (see _HandleEvent())
@@ -25,12 +27,6 @@ static uint8_t __index ;												// bit-wise flags for events (see _HandleEve
  *		each subject ought to have its own case table
  *		all values in all case table arrays must be unique
  */
-
-// TODO - make global because similar functionality is needed elsewhere, too
-static void _return(void)												// do-noting function
-{
-	return;
-};
 
 // sets bit at bit_position ( 1 to 8) in byte __index
 static void _UnSetEvent(const uint8_t val)
@@ -58,7 +54,7 @@ void event_handler_ctor(volatile event_handler_t * const self)
 	__self->UnSetEvent = &_UnSetEvent;									//
 	__self->Notify = &_Notify;											// notifies about an event by setting the index to a predetermined value (uint8_t array-based lookup table)
 	__self->HandleEvent = &_HandleEvent;								// handles event based on index
-	__self->fpointer = &_return;										// default -- if not initialized: do nothing
+	__self->fpointer = &DoNothing;										// default -- if not initialized: do nothing
 };
 
 volatile event_handler_t EventHandler __attribute__ ((section (".data")));		// define Task object and put it into .data

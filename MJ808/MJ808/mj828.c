@@ -305,8 +305,8 @@ void mj828_ctor(volatile mj828_t * const self)
 			   _BV(CS00) );												// clkIO/1024 (from pre-scaler), start timer
 
 	// TODO - setup of pin change interrupts for pushbuttons
-	PCMSK2 = (_BV(PCINT11) |											// enable pin change for sw1 @ pin D0
-			  _BV(PCINT12));											// enable pin change for sw2 @ pin D1
+//	PCMSK2 = (_BV(PCINT11) |											// enable pin change for sw1 @ pin D0
+//			  _BV(PCINT12));											// enable pin change for sw2 @ pin D1
 
 	sei();
 	}

@@ -2,7 +2,7 @@
 #include <avr/sleep.h>
 #include <avr/pgmspace.h>
 
-#define MJ808_															// what device to compile for?
+#include "main.h"
 
 #if defined(MJ808_)														// mj808 header include
 #include "mj808.h"
@@ -53,13 +53,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 	// assumption: an incoming message is of interest for this unit
 	//	'being of interest' is defined in the filters
 
-	// TODO - consolidate into one global function
-	inline void helper_reti(void)
-	{
-		asm("reti");
-	};
-
-	inline void handle_message_error(volatile can_t *in_can)			// handles message error interrupts
+	inline void handle_message_error(volatile can_t * const in_can)		// handles message error interrupts
 	{
 		in_can->BitModify(CANINTF, _BV(MERRF), 0x00);					// clear the flag
 	};
@@ -69,7 +63,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		Device.mj8x8->PopulatedBusOperation(&MsgHandler);				// let the particular device deal with the message
 	};
 
-	void helper_handle_error(volatile can_t *in_can)					// handles RXBn overflow interrupts
+	void helper_handle_error(volatile can_t * const in_can)				// handles RXBn overflow interrupts
 	{
 		in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);					// clear the error interrupt flag
 
@@ -118,7 +112,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		}
 	};
 
-	void helper_handle_wakeup(volatile can_t *in_can)					// handles wakeup interrupts
+	void helper_handle_wakeup(volatile can_t *const in_can)				// handles wakeup interrupts
 	{
 		// functionally, this function is similar to can_sleep(), but still different in one aspect:
 			// can_sleep(foo_can, 0) wakes up by triggering a wake up interrupt, which helper_handle_wakeup() handles
@@ -134,7 +128,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		in_can->in_sleep = 0;
 	};
 
-	inline void helper_handle_tx(volatile can_t *in_can)
+	inline void helper_handle_tx(volatile can_t *const in_can)
 	{
 		in_can->BitModify(CANINTF, 0x1C, 0x00);
 	};
@@ -149,7 +143,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 	static const uint16_t (*fptr)(volatile can_t *in_can);				// declare pointer for function pointers in branchtable_led[]
 	void (* const branchtable_icod[])(volatile can_t *in_can) PROGMEM =	// array of function pointers for basic LED handling in PROGMEM
 	{
-		&helper_reti,													// icod value 0
+		&DoNothing,														// icod value 0
 		&helper_handle_error,											// icod value 1
 		&helper_handle_wakeup,											// icod value 2
 		&helper_handle_tx,												// icod value 3
@@ -217,6 +211,8 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 	sleep_enable();														// back to sleep
 }
 
+// port change interrupts - not used yet
+/*
 ISR(PCINT2_vect)														// pin-change ISR for pushbuttons
 {
 	sleep_disable();													// wakey wakey
@@ -225,6 +221,7 @@ ISR(PCINT2_vect)														// pin-change ISR for pushbuttons
 
 	sleep_enable();														// back to sleep
 }
+*/
 
 #if ( defined(MJ808_) | defined(MJ828_) )								// ISR for timers 1 A compare match - button handling
 ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms

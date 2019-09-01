@@ -13,6 +13,7 @@ static volatile mj808_t *__self;										// private pointer to self
 // TODO - optimize
 extern void _fade(const uint8_t value, volatile uint8_t *ocr);
 extern void _debounce(volatile individual_button_t *in_button, volatile event_handler_t *in_event);
+extern void DoNothing(void);
 
 // TODO - optimize
 static void _wrapper_fade_mj808(const uint8_t value)
@@ -134,13 +135,6 @@ volatile composite_led_t *_virtual_led_ctorMJ808(volatile composite_led_t * cons
 	return self;
 };
 
-// device default operation on empty bus
-void _EmptyBusOperationMJ808(void)
-{
-	// empty - our button will tell us when to act
-	return;
-};
-
 // received MsgHandler object and passes
 void _PopulatedBusOperationMJ808(volatile message_handler_t *in_msg)
 {
@@ -217,7 +211,7 @@ void mj808_ctor(volatile mj808_t * const self)
 	}
 
 	// TODO - setup of pin change interrupts for pushbuttons
-	PCMSK2 = _BV(PCINT15);												// enable pin change for switch @ pin D4
+	//PCMSK2 = _BV(PCINT15);												// enable pin change for switch @ pin D4
 
 	sei();
 	}
@@ -242,7 +236,7 @@ void mj808_ctor(volatile mj808_t * const self)
 	__self->mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);	// high byte
 	__self->mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																	// low byte
 
-	__self->mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ808;		// implement device-specific default operation
+	__self->mj8x8->EmptyBusOperation = &DoNothing;						// implement device-specific default operation
 	__self->mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;// implements device-specific operation depending on bus activity
 
 	// TODO - access via object

@@ -16,8 +16,8 @@ volatile ATtiny4313_t * attiny_ctor(volatile ATtiny4313_t * const self)
 
 	// setup of INT1  - handled via INT1_vect ISR
 	MCUCR = _BV(ISC11);													// a falling edge generates an IRQ
-	GIMSK = ( _BV(INT1)	|												// enable INT1
-			  _BV(PCIE2));												// enable pin change IRQ for PCTIN17-11 (further specified in PCMSK2)
+	GIMSK = ( _BV(INT1)	);												// enable INT1
+//			 | _BV(PCIE2));												// not used set - enable pin change IRQ for PCTIN17-11 (further specified in PCMSK2)
 
 	WDTCR |= (_BV(WDCE) | _BV(WDE));									// WDT change enable sequence
 	WDTCR = ( _BV(WDIE) | _BV(WDP2)  );									// watchdog timer set to 0.25s
