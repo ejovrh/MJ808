@@ -66,22 +66,21 @@ int main(void)
 			;
 		}
 
-#if ( defined(MJ808_) | defined(MJ828_) )								// ISR for timers 1 A compare match - button handling
-ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
-{
-	// code to be executed every 25ms
-	sleep_disable();													// wakey wakey
+		if (in_can->eflg & _BV(TXEP))									// handle TX error-passive situation
+		{
+			Device.mj8x8->can->Sleep(in_can, 1);						// put to sleep
+		}
 
-	Device->button->deBounce();											// call the debouncer
+		if (in_can->eflg & _BV(RXEP))									// TODO - handle RX error-passive situation
+		{
+			;
+		}
 
-	sleep_enable();														// back to sleep
-}
+		if (in_can->eflg & _BV(TXWAR))									// TODO - handle TX waring situation
+		{
+			// TODO - log it
+			;
+		}
 
-#if defined(MJ828_)														// ISR for timer0 - 16.25ms - charlieplexing timer
-ISR(TIMER0_COMPA_vect)													// timer/counter0 - 16.25ms - charlieplexed blinking
-{
-	Device->led->Handler();												// handles LEDs according to CAN message (of type CMND_UTIL_LED)
-}
-#endif
-
-#endif
+		if (in_can->eflg & _BV(RXWAR))									// TODO - handle RX warning situation
+		{
