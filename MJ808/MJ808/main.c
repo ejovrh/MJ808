@@ -13,7 +13,7 @@
 #include "mj828.h"
 #endif
 
-// FIXME - get rid of this here
+
 	void helper_handle_rx(void)											// handles incoming message interrupts
 	{
 		Device->mj8x8->PopulatedBusOperation(MsgHandler);				// let the particular device deal with the message
@@ -46,7 +46,7 @@ int main(void)
 
 	while (1)															// forever loop
 	{
-		EventHandler->HandleEvent();									// execute the event handling function with argument taken from case table array
+			EventHandler->HandleEvent();								// execute the event handling function with argument taken from case table array
 
 		if (MCUCR & _BV(SE))											// if sleep is enabled
 			sleep_cpu();												// ...sleep
@@ -54,17 +54,17 @@ int main(void)
 }
 
 
-// port change interrupts - not used yet
+	// assumption: an incoming message is of interest for this unit
+	//	'being of interest' is defined in the filters
+
+
+
+
 /*
-ISR(PCINT2_vect)														// pin-change ISR for pushbuttons
-{
-	sleep_disable();													// wakey wakey
-
-	;
-
-	sleep_enable();														// back to sleep
-}
-*/
+		if (in_can->eflg & _BV(TXBO))									// TODO - handle bus off situation
+		{
+			;
+		}
 
 #if ( defined(MJ808_) | defined(MJ828_) )								// ISR for timers 1 A compare match - button handling
 ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms

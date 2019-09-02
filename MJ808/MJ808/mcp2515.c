@@ -5,8 +5,12 @@
 #include <avr/pgmspace.h>
 
 #include "gpio.h"
-#include "uci_spi.h"
 #include "mcp2515.h"
+
+//#include "i_wire.h"
+#include "uci_spi.h"
+
+//extern i_wire_t Wire;
 
 // TODO - move pin definitions out of here
 // setting the PORT & PIN via constructor is unfortunately too costly so preprocessor defines are for now the only option
@@ -52,14 +56,14 @@ extern __can_t __CAN;													// declare can_t actual
  *	they are all described in the datasheet in chapter 12 - SPI interface
  */
 
-//bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
+// private functions here, object constructor at the end
 static void _mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte)
 {
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_BIT_MODIFY);						// send the bit modify command
-	spi_uci_transfer(addr);												// set the register address
-	spi_uci_transfer(mask);												// set the mask byte - i.e. what is 1'ed can change, otherwise not
-	spi_uci_transfer(byte);												// set the data byte - i.e. 1'ed becomes 1, 0 becomes 0
+	Wire.Transmit(MCP2515_OPCODE_BIT_MODIFY);						// send the bit modify command
+	Wire.Transmit(addr);												// set the register address
+	Wire.Transmit(mask);												// set the mask byte - i.e. what is 1'ed can change, otherwise not
+	Wire.Transmit(byte);												// set the data byte - i.e. 1'ed becomes 1, 0 becomes 0
 	_delay_us(1);														// delay a little bit for the transfer to complete
 	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
 };
@@ -70,12 +74,12 @@ static void _mcp2515_opcode_read_bytes(const uint8_t addr, volatile uint8_t *dat
 	uint8_t i;
 
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_READ);								// send read command
-	spi_uci_transfer(addr);												// send the address
+	Wire.Transmit(MCP2515_OPCODE_READ);								// send read command
+	Wire.Transmit(addr);												// send the address
 
 	for (i = 0; i<len; ++i)												// while the SS is held, the address is auto-incremented, thus multiple bytes can be read
 	{
-		*(data+i) = spi_uci_transfer(0xff);								// get the result
+		*(data+i) = Wire.Transmit(0xff);								// get the result
 		_delay_us(1);													// delay a little bit for the transfer to complete
 	}
 	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
@@ -112,7 +116,7 @@ static void __mcp2515_opcode_reset(void)
 	_delay_us(5);														// wait a while to begin
 
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_RESET);								// after a reset the device is in configuration mode (datasheet p. 59, para. 10.1)
+	Wire.Transmit(MCP2515_OPCODE_RESET);								// after a reset the device is in configuration mode (datasheet p. 59, para. 10.1)
 	_delay_us(5);														// delay a little bit for the transfer to complete
 	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
 
@@ -220,13 +224,13 @@ static void __mcp2515_opcode_read_rx_buffer(const uint8_t buffer, volatile uint8
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
 
 	if (buffer == RXB0SIDH)												//	select buffer
-	spi_uci_transfer(MCP2515_OPCODE_READ_RX_BUFFER | MCP2515_OPCODE_READ_RX_BUFFER_RXB0SIDH);	// select RXB0 - send command along with bit mask
+	Wire.Transmit(MCP2515_OPCODE_READ_RX_BUFFER | MCP2515_OPCODE_READ_RX_BUFFER_RXB0SIDH);	// select RXB0 - send command along with bit mask
 
 	if (buffer == RXB1SIDH)
-	spi_uci_transfer(MCP2515_OPCODE_READ_RX_BUFFER | MCP2515_OPCODE_READ_RX_BUFFER_RXB1SIDH);	// select RXB1
+	Wire.Transmit(MCP2515_OPCODE_READ_RX_BUFFER | MCP2515_OPCODE_READ_RX_BUFFER_RXB1SIDH);	// select RXB1
 
 	for (i = 0; i<len; ++i)												// while the SS is held, the address is auto-incremented, thus multiple bytes can be read
-	*(data+i) = spi_uci_transfer(0xff);									// get the result
+	*(data+i) = Wire.Transmit(0xff);									// get the result
 
 	_delay_us(1);														// delay a little bit for the transfer to complete
 	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
@@ -238,8 +242,8 @@ static uint8_t __mcp2515_opcode_rx_status(void)
 	uint8_t retval;
 
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_RX_STATUS);							// send the RX status command
-	retval = spi_uci_transfer(0xFF);									// and get data
+	Wire.Transmit(MCP2515_OPCODE_RX_STATUS);							// send the RX status command
+	retval = Wire.Transmit(0xFF);									// and get data
 	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
 	_delay_us(1);														// delay a little bit for the transfer to complete
 
@@ -252,8 +256,8 @@ static uint8_t __mcp2515_opcode_read_status(void)
 	uint8_t retval;
 
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_READ_STATUS);						// send the read status command
-	retval = spi_uci_transfer(0xFF);									//  and get data
+	Wire.Transmit(MCP2515_OPCODE_READ_STATUS);						// send the read status command
+	retval = Wire.Transmit(0xFF);									//  and get data
 	_delay_us(1);														// delay a little bit for the transfer to complete
 	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
 
@@ -267,7 +271,7 @@ static void __mcp2515_opcode_rts(const uint8_t buffer)
 	return;																// hence, do nothing
 
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
-	spi_uci_transfer(MCP2515_OPCODE_RTS | buffer);						// send RTS command & the buffer (bit mask)
+	Wire.Transmit(MCP2515_OPCODE_RTS | buffer);						// send RTS command & the buffer (bit mask)
 	_delay_us(1);														// delay a little bit for the transfer to complete
 	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
 };
@@ -280,16 +284,16 @@ static void __mcp2515_opcode_load_tx_buffer(const uint8_t buffer, volatile const
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
 
 	if (buffer == TXB0CTRL)
-	spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB0SIDH); // send load TX buffer command & buffer
+	Wire.Transmit(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB0SIDH); // send load TX buffer command & buffer
 
 	if (buffer == TXB1CTRL)
-	spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB1SIDH); // send load TX buffer command & buffer
+	Wire.Transmit(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB1SIDH); // send load TX buffer command & buffer
 
 	if (buffer == TXB2CTRL)
-	spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB2SIDH); // send load TX buffer command & buffer
+	Wire.Transmit(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB2SIDH); // send load TX buffer command & buffer
 
 	for(i=0; i<len; i++)
-	spi_uci_transfer(*(data+i));										// write single byte or stream
+	Wire.Transmit(*(data+i));										// write single byte or stream
 
 	_delay_us(1);														// delay a little bit for the transfer to complete
 	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
@@ -415,13 +419,13 @@ __can_t __CAN =															// instantiate can_t actual and set function point
 	.public.BitModify = &_mcp2515_opcode_bit_modify,					// ditto
 	.init = &__mcp2515_init												// ditto
 };
-
+// object constructor
 // object constructor
 can_t * can_ctor()
 {
 	__CAN.init();														// initialize & configure the MCP2515
 
-	return &__CAN.public;												// return address of public part; calling code accesses it via pointer
+	return &__CAN.public;												// return pointer to can_t public part
 };
 
 ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message reception of the MCP2515

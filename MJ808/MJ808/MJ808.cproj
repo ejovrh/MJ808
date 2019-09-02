@@ -258,6 +258,9 @@
     <Compile Include="uci_spi.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="i_wire.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="uci_spi.h">
       <SubType>compile</SubType>
     </Compile>
