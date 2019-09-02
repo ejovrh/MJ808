@@ -8,8 +8,17 @@
 #include "mcp2515.h"
 
 #include "uci_spi.h"													// low-level driver for communication, implements interface
+<<<<<<< .mine
+//#include "i_wire.h"
+=======
 
+>>>>>>> .theirs
+#include "uci_spi.h"
+<<<<<<< .mine
+
+=======
 // TODO - move pin definitions out of here
+>>>>>>> .theirs
 // setting the PORT & PIN via constructor is unfortunately too costly so preprocessor defines are for now the only option
 #define	SPI_SS_MCP2515_pin		B,	4,	4								// SPI - SS
 
@@ -416,8 +425,8 @@ __can_t __CAN =															// instantiate can_t actual and set function point
 	.public.BitModify = &_mcp2515_opcode_bit_modify,					// ditto
 	.init = &__mcp2515_init												// ditto
 };
-
-can_t * can_ctor()														// object constructor
+// object constructor
+can_t * can_ctor()
 {
 	__CAN.init();														// initialize & configure the MCP2515
 
