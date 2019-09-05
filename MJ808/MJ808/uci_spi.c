@@ -1,9 +1,9 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
-//#include "uci_spi.h"
+
 #include "i_wire.h"														// interface for generic wire transmission - SPI or I2C
 
-/* now, how does the bloody thing work ?!?
+
  * see datasheet section 16.3.1 for an explanation and flowchart
  * it is a scam. this is almost SW SPI - aka. bit banging
  * spi_via_usi_driver.c (AVR319) uses timers for intermediate SCK speeds; this function goes to the max. the CPU can deliver
@@ -15,7 +15,7 @@
  * http://www.avrfreaks.net/forum/attiny2313-spi-master - that last one is especially interesting.
  *
  * observe DI and DO pins - they are not unnecessarily the same as MISO/MOSI.
- *
+ * observe DI and DO pins - they are not unnecessarily the same as MISO/MOSI.
  *
  */
 

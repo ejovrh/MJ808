@@ -6,7 +6,7 @@ typedef struct															// mj818_t actual
 	mj818_t public;														// public struct
 } __mj818_t;
 
-static __mj818_t __Device __attribute__ ((section (".data")));			// preallocate __Device object in .data
+static __mj818_t __Device __attribute__ ((section (".data")));
 
 
 void _EmptyBusOperationMJ818(void)

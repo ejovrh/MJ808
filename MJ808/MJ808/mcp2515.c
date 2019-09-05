@@ -39,17 +39,17 @@ typedef struct															// can_t actual
 	uint8_t __rec;														// Receive Error Counter - REC, datasheet p. 48
 
 /* the basic building blocks of interaction with the MCP2515:
-	uint8_t __in_sleep:1;												// is MCP2561 CAN transceiver in sleep or not
-	uint8_t __icod:3;													// Interrupt Codes
  * opcodes -low level instructions- which the hardware executes
-} __can_t;
  *	they are meant to be "private" and not be used in main() directly
-extern __can_t __CAN;													// declare can_t actual
  *
  * internal functions to this translation unit, aka. "private"
  *	low-level instruction set: reset, read, read RX buffer, write, load TX buffer, RTS, read status, RX status, bit modify
  *	they are all described in the datasheet in chapter 12 - SPI interface
  */
+
+// private functions here, object constructor at the end
+
+//bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
 
 // private functions here, object constructor at the end
 
@@ -422,14 +422,14 @@ __can_t __CAN =															// instantiate can_t actual and set function point
 can_t * can_ctor()
 {
 	__CAN.init();														// initialize & configure the MCP2515
-
+	// populate self
 	return &__CAN.public;												// return pointer to can_t public part
 };
 
 ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message reception of the MCP2515
 {
 
-	//	'being of interest' is defined in the filters
+
 
 	inline void handle_message_error(void)								// handles message error interrupts
 	{
