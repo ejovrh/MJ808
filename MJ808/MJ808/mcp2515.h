@@ -3,7 +3,7 @@
 
 #include "can_msg.h"
 #include "mcp2515_hw_defines.h"
-
+//TODO - fill in missing comments
 typedef struct can_t													// can_t struct describing the CAN device as a whole
 {
 	uint8_t own_sidh;
