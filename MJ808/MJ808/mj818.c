@@ -13,7 +13,7 @@ typedef struct															// mj818_t actual
 	//	uint8_t foo_private;											// private - some data member
 } __mj818_t;
 
-static __mj818_t __Device __attribute__ ((section (".data")));
+static __mj818_t __Device __attribute__ ((section (".data")));			// instantiate mj818_t actual, as if it were initialized
 
 void _fade(const uint8_t value, volatile uint8_t *ocr);
 
@@ -121,7 +121,7 @@ void mj818_ctor()
 	__Device.public.mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B);	// high byte
 	__Device.public.mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																// low byte
 
-	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;			// implement device-specific default operation
+	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;			// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
 };
 

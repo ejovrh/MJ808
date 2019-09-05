@@ -9,7 +9,7 @@ typedef struct															// event_handler_t actual
 	uint8_t __index;													// private - bit-wise flags for events (see _HandleEvent())
 } __event_handler_t;
 
-static __event_handler_t __EventHandler __attribute__ ((section (".data")));
+extern __event_handler_t __EventHandler;								// declare event_handler_t actual
 
 /* theory of operation
  *
@@ -52,14 +52,17 @@ static void _HandleEvent(void)
 	(*__EventHandler.public.fpointer)(__EventHandler.__index & __EventHandler.__walker);		//	and ANDs it with __index, thereby passing the result as an argument to __mjxxx_event_execution_function
 };
 
-void event_handler_ctor()
+ __event_handler_t __EventHandler =										// instantiate event_handler_t actual and set function pointers
 {
-	__EventHandler.public.UnSetEvent = &_UnSetEvent;					// undo of what Nofity() does
-	__EventHandler.public.Notify = &_Notify;							// notifies about an event by setting the index to a predetermined value (uint8_t array-based lookup table)
-	__EventHandler.public.HandleEvent = &_HandleEvent;					// handles event based on index
-	__EventHandler.public.fpointer = &DoNothing;						// default -- if not initialized: do nothing
-
-	__EventHandler.__walker = 1;
+	.public.fpointer = &DoNothing,										// default -- if not initialized: do nothing
+	.public.Notify = &_Notify,											// notifies about an event by setting the index to a predetermined value (uint8_t array-based lookup table)
+	.public.UnSetEvent = &_UnSetEvent,									// un-does what Nofity() does
+	.public.HandleEvent = &_HandleEvent									// handles event based on index
 };
 
-event_handler_t * const EventHandler = &__EventHandler.public ;			// set pointer to EventHandler public part
+void event_handler_ctor()
+{
+	__EventHandler.__walker = 1;										// set the walker to 1 in order to start
+};
+
+event_handler_t * const EventHandler = &__EventHandler.public ;			// set const pointer to EventHandler public part

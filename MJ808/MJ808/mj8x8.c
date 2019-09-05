@@ -4,13 +4,15 @@
 
 #include "mj8x8.h"
 
+extern void DoNothing(void);
+
 typedef struct															// mj8x8_t actual
 {
 	mj8x8_t public;														// public struct
 //	uint8_t foo_private;												// private - some data member
 } __mj8x8_t;
 
-static __mj8x8_t __MJ8x8 __attribute__ ((section (".data")));
+extern __mj8x8_t __MJ8x8;												// declare mj8x8_t actual
 
 // provides a periodic heartbeat based on the watchdog timer interrupt
 static void _Heartbeat(message_handler_t * const msg)
@@ -43,6 +45,12 @@ static void _Heartbeat(message_handler_t * const msg)
 	++msg->bus->BeatIterationCount;										// increment the iteration counter
 };
 
+__mj8x8_t __MJ8x8 =														// instantiate mj8x8_t actual and set function pointers
+{
+	.public.HeartBeat = &_Heartbeat,									// implement device-agnostic default behavior - heartbeat
+	.public.EmptyBusOperation = &DoNothing								// implement device-agnostic default behavior - do nothing, usually an override happens
+};
+
 mj8x8_t * mj8x8_ctor()
 {
 	// GPIO state definitions
@@ -56,8 +64,6 @@ mj8x8_t * mj8x8_ctor()
 	gpio_conf(SPI_SS_MCP2515_pin, OUTPUT, HIGH);						// high (device inert), low (device selected)
 	// state initialization of device-unspecific pins
 	}
-
-	__MJ8x8.public.HeartBeat = &_Heartbeat;
 
 	__MJ8x8.public.can = can_ctor();									// pass on CAN public part
 	__MJ8x8.public.mcu = attiny_ctor();									// pass on MCU public part

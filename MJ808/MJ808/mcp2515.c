@@ -19,10 +19,10 @@
 typedef struct															// can_t actual
 {
 	can_t public;														// public struct
-//	uint8_t foo_private;												// private - some data member
+	void (*init)(void);													// private - CAN init
 } __can_t;
 
-static __can_t __CAN __attribute__ ((section (".data")));
+extern __can_t __CAN;													// declare can_t actual
 
 /* the basic building blocks of interaction with the MCP2515:
  * opcodes -low level instructions- which the hardware executes
@@ -387,18 +387,21 @@ static void _can_sleep(can_t * const in_can, const uint8_t in_val)
 	}
 };
 
+__can_t __CAN =															// instantiate can_t actual and set function pointers
+{
+	.public.Sleep = &_can_sleep,										// set up function pointer for public methods
+	.public.RequestToSend = &_mcp2515_can_msg_send,						// ditto
+	.public.FetchMessage = &_mcp2515_can_msg_receive,					// ditto
+	.public.ChangeOpMode = &_mcp2515_change_opmode,						// ditto
+	.public.ReadBytes = &_mcp2515_opcode_read_bytes,					// ditto
+	.public.BitModify = &_mcp2515_opcode_bit_modify,					// ditto
+	.init = &__mcp2515_init												// ditto
+};
+
 // object constructor
 can_t * can_ctor()
 {
-	// populate self
-	__CAN.public.Sleep = &_can_sleep;									// set up function pointer for public methods
-	__CAN.public.RequestToSend = &_mcp2515_can_msg_send;				// ditto
-	__CAN.public.FetchMessage = &_mcp2515_can_msg_receive;				// ditto
-	__CAN.public.ChangeOpMode = &_mcp2515_change_opmode;				// ditto
-	__CAN.public.ReadBytes = &_mcp2515_opcode_read_bytes;				// ditto
-	__CAN.public.BitModify = &_mcp2515_opcode_bit_modify;				// ditto
-
-	__mcp2515_init();													// initialize & configure the MCP2515
+	__CAN.init();														// initialize & configure the MCP2515
 
 	return &__CAN.public;												// return pointer to can_t public part
 };

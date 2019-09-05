@@ -13,7 +13,7 @@ typedef struct															// mj828_t actual
 //	uint8_t foo_private;												// private - some data member
 } __mj828_t;
 
-static __mj828_t __Device __attribute__ ((section (".data")));
+static __mj828_t __Device __attribute__ ((section (".data")));			// instantiate mj828_t actual, as if it were initialized
 
 extern void _fade(const uint8_t value, volatile uint8_t *ocr);
 extern void _debounce(individual_button_t *in_button, event_handler_t * const in_event);
@@ -235,8 +235,8 @@ composite_led_t *_virtual_led_ctorMJ828(composite_led_t *self)
 	self->led = primitive_led;											// assign pointer to LED array
 	self->flags = &LEDFlags;											// tie in LEDFlags struct into led struct
 
-	// FIXME - if below flag is 0, it doesnt work properly: at least one LED has to be on for the thing to work
-	// also: if any other than Green is on, it doesnt shine properly
+	// FIXME - if below flag is 0, it doesn't work properly: at least one LED has to be on for the thing to work
+	// also: if any other than Green is on, it doesn't shine properly
 	self->flags->All = _BV(Green);										// mark green LED as on
 
 	return self;
@@ -333,7 +333,6 @@ void mj828_ctor()
 	__Device.public.mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D);	// high byte
 	__Device.public.mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																// low byte
 
-	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMj828;			// implements device-specific default operation
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
 };
 

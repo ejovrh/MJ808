@@ -10,7 +10,7 @@ typedef struct															// message_handler_t actual
 	can_t *__can;														// private - pointer to can_t struct
 } __message_handler_t;
 
-static __message_handler_t __MsgHandler __attribute__ ((section (".data")));
+extern __message_handler_t __MsgHandler;								// declare message_handler_t actual
 
 // loads outbound CAN message into local CAN IC and asks it to transmit it onto the bus
 void _SendMessage(const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
@@ -42,6 +42,12 @@ volatile can_msg_t *_ReceiveMessage(void)
 	return &__MsgHandler.__msg;											// return pointer to it to someone who will make use of it
 };
 
+__message_handler_t __MsgHandler =										// instantiate message_handler_t actual and set function pointers
+{
+	.public.SendMessage = &_SendMessage,								// set up function pointer
+	.public.ReceiveMessage = &_ReceiveMessage							//	ditto
+};
+
 void message_handler_ctor(can_t * const in_can)
 {
 	static canbus_t BUS __attribute__ ((section (".data")));			// define BUS object and put it into .data
@@ -55,9 +61,6 @@ void message_handler_ctor(can_t * const in_can)
 	__MsgHandler.public.bus->NumericalCAN_ID = (uint8_t) ( (__MsgHandler.__can->own_sidh >>2 ) & 0x0F );
 	__MsgHandler.public.bus->FlagDoHeartbeat = 1;						// start with discovery mode
 	__MsgHandler.public.bus->FlagDoDefaultOperation = 0;
-
-	__MsgHandler.public.ReceiveMessage = &_ReceiveMessage;				// set up function pointer
-	__MsgHandler.public.SendMessage = &_SendMessage;					//	ditto
 };
 
 message_handler_t * const MsgHandler = &__MsgHandler.public ;			// set pointer to MsgHandler public part
