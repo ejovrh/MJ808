@@ -418,11 +418,11 @@ __can_t __CAN =															// instantiate can_t actual and set function point
 	.public.BitModify = &_mcp2515_opcode_bit_modify,					// ditto
 	.init = &__mcp2515_init												// ditto
 };
-// object constructor
-can_t * can_ctor()
+
+can_t * can_ctor()														// object constructor
 {
 	__CAN.init();														// initialize & configure the MCP2515
-	// populate self
+
 	return &__CAN.public;												// return pointer to can_t public part
 };
 
