@@ -3,7 +3,6 @@
 
 
 
-
 /* now, how does the bloody thing work ?!?
  * see datasheet section 16.3.1 for an explanation and flowchart
  * it is a scam. this is almost SW SPI - aka. bit banging
@@ -35,7 +34,7 @@
 
 // sends (and receives) data from the SPI bus
 // slave select must happen outside of this function
-static uint8_t spi_uci_transfer(const uint8_t data)
+static uint8_t _spi_uci_transfer(const uint8_t data)
 {
 	cli();									// lets call it paranoia but i want the SPI transaction to be atomic - i.e. no IRQ shall be able to abort it
 	USIDR = data;							// put the payload into the USI data register
@@ -54,5 +53,4 @@ static uint8_t spi_uci_transfer(const uint8_t data)
 	sei();
 	return USIDR;							// hopefully have something useful here...
 };
-
-i_wire_t Wire __attribute__ ((section (".data"))) = {.Transmit = spi_uci_transfer} ;				//
+const i_wire_t Wire = {.Transmit = _spi_uci_transfer} ;					// by instantiation of Wire the interface is implemented and can be used in whatever included uci_spi.h

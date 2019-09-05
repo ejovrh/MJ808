@@ -8,7 +8,7 @@ typedef struct															// mj818_t actual
 
 static __mj818_t __Device __attribute__ ((section (".data")));			// preallocate __Device object in .data
 
-// defines device operation on empty bus
+
 void _EmptyBusOperationMJ818(void)
 {
 	if (OCR_REAR_LIGHT == 0x00)											// run once
@@ -80,7 +80,7 @@ void mj818_ctor()
 
 	__Device.public.led = _virtual_led_ctorMJ818();						// call virtual constructor & tie in object addresses
 
-	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;			// override device-agnostic default operation with specifics
+	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;			// implement device-specific default operation
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
 };
 
