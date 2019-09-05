@@ -38,7 +38,7 @@ void _PopulatedBusOperationMJ818(message_handler_t * const in_msg)
 
 void mj818_ctor()
 {
-	// only SIDH is supplied since with the addressing scheme SIDL is always 0
+	// GPIO state definitions
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B));	// call base class constructor & initialize own SID
 
 	// GPIO state definitions
