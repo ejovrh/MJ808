@@ -18,7 +18,7 @@ static __mj808_t __Device __attribute__ ((section (".data")));
 
 // TODO - optimize
 extern void _fade(const uint8_t value, volatile uint8_t *ocr);
-extern void _debounce(volatile individual_button_t *in_button, event_handler_t * const in_event);
+extern void _debounce(individual_button_t *in_button, event_handler_t * const in_event);
 extern void DoNothing(void);
 
 // TODO - optimize
@@ -113,7 +113,7 @@ void __mj808_event_execution_function(const uint8_t val)
 	}
 };
 
-volatile button_t *_virtual_button_ctorMJ808(volatile button_t * const self, event_handler_t * const event)
+button_t *_virtual_button_ctorMJ808(button_t * const self, event_handler_t * const event)
 {
 	static individual_button_t individual_button[1] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
 
@@ -139,9 +139,9 @@ volatile button_t *_virtual_button_ctorMJ808(volatile button_t * const self, eve
 };
 
 // implementation of virtual constructor for LEDs
-volatile composite_led_t *_virtual_led_ctorMJ808(volatile composite_led_t * const self)
+composite_led_t *_virtual_led_ctorMJ808(composite_led_t * const self)
 {
-	static volatile ledflags_t Flags __attribute__ ((section (".data")));			// define LEDFlags object and put it into .data
+	static ledflags_t Flags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
 	static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
 	self->led = primitive_led;											// assign pointer to LED array
@@ -235,8 +235,8 @@ void mj808_ctor()
 	sei();
 	}
 
-	static volatile composite_led_t LED __attribute__ ((section (".data")));	// define LED object and put it into .data
-	static volatile button_t Button __attribute__ ((section (".data")));		// define BUTTON object and put it into .data
+	static composite_led_t LED __attribute__ ((section (".data")));		// define LED object and put it into .data
+	static button_t Button __attribute__ ((section (".data")));			// define BUTTON object and put it into .data
 
 	__Device.public.mj8x8 = mj8x8_ctor();										// call base class constructor & tie in object addresses
 	__Device.public.led = _virtual_led_ctorMJ808(&LED);							// call virtual constructor & tie in object addresses

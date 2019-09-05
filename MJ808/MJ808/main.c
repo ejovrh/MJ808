@@ -53,7 +53,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 	// assumption: an incoming message is of interest for this unit
 	//	'being of interest' is defined in the filters
 
-	inline void handle_message_error(volatile can_t * const in_can)		// handles message error interrupts
+	inline void handle_message_error(can_t * const in_can)				// handles message error interrupts
 	{
 		in_can->BitModify(CANINTF, _BV(MERRF), 0x00);					// clear the flag
 	};
@@ -63,7 +63,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		Device->mj8x8->PopulatedBusOperation(MsgHandler);				// let the particular device deal with the message
 	};
 
-	void helper_handle_error(volatile can_t * const in_can)				// handles RXBn overflow interrupts
+	void helper_handle_error(can_t * const in_can)						// handles RXBn overflow interrupts
 	{
 		in_can->BitModify(CANINTF, _BV(ERRIF), 0x00);					// clear the error interrupt flag
 
@@ -112,7 +112,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		}
 	};
 
-	void helper_handle_wakeup(volatile can_t *const in_can)				// handles wakeup interrupts
+	void helper_handle_wakeup(can_t *const in_can)						// handles wakeup interrupts
 	{
 		// functionally, this function is similar to can_sleep(), but still different in one aspect:
 			// can_sleep(foo_can, 0) wakes up by triggering a wake up interrupt, which helper_handle_wakeup() handles
@@ -128,7 +128,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		in_can->in_sleep = 0;
 	};
 
-	inline void helper_handle_tx(volatile can_t *const in_can)
+	inline void helper_handle_tx(can_t *const in_can)
 	{
 		in_can->BitModify(CANINTF, 0x1C, 0x00);
 	};
@@ -137,11 +137,11 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 
 //#define BRANCHTABLE_ICOD
 
-	volatile can_t *can = Device->mj8x8->can;							// get pointer to CAN instance
+	can_t *can = Device->mj8x8->can;									// get pointer to CAN instance
 
 #if defined(BRANCHTABLE_ICOD)
-	static const uint16_t (*fptr)(volatile can_t *in_can);				// declare pointer for function pointers in branchtable_led[]
-	void (* const branchtable_icod[])(volatile can_t *in_can) PROGMEM =	// array of function pointers for basic LED handling in PROGMEM
+	static const uint16_t (*fptr)(can_t *in_can);						// declare pointer for function pointers in branchtable_led[]
+	void (* const branchtable_icod[])(can_t *in_can) PROGMEM =			// array of function pointers for basic LED handling in PROGMEM
 	{
 		&DoNothing,														// icod value 0
 		&helper_handle_error,											// icod value 1

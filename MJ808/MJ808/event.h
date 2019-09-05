@@ -13,6 +13,6 @@ typedef struct event_handler_t											// struct describing the event handler 
 
 void event_handler_ctor();												// the event handler constructor
 
-event_handler_t * const EventHandler;									// declare pointer to public struct part
+extern event_handler_t * const EventHandler;							// declare pointer to public struct part
 
 #endif /* TASK_H_ */

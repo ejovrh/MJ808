@@ -7,7 +7,7 @@ typedef struct															// message_handler_t actual
 {
 	message_handler_t public;											// public struct
 	can_msg_t __msg;													// private - CAN message object
-	volatile can_t *__can;												// private - pointer to can_t struct
+	can_t *__can;														// private - pointer to can_t struct
 } __message_handler_t;
 
 static __message_handler_t __MsgHandler __attribute__ ((section (".data")));
@@ -42,7 +42,7 @@ volatile can_msg_t *_ReceiveMessage(void)
 	return &__MsgHandler.__msg;											// return pointer to it to someone who will make use of it
 };
 
-void message_handler_ctor(volatile can_t * const in_can)
+void message_handler_ctor(can_t * const in_can)
 {
 	static canbus_t BUS __attribute__ ((section (".data")));			// define BUS object and put it into .data
 

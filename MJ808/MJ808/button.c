@@ -1,8 +1,7 @@
 #include "button.h"
-//#include "task.h"
 
 #if defined(MJ808_) || defined (MJ828_)									// button debouncer for devices with buttons
-void _debounce(volatile individual_button_t *in_button, event_handler_t * const in_event)
+extern void _debounce(individual_button_t *in_button, event_handler_t * const in_event)
 {
 	inline void local_advance_counter(void)								// local helper function which advances the debounce "timer"
 	{
@@ -38,10 +37,10 @@ void _debounce(volatile individual_button_t *in_button, event_handler_t * const 
 	 */
 																		// CHECKME - random spikes (not true button press events) every 25ms might be an issue
 	#if defined(MJ828_)													// inverted
-	if (	!	( (volatile) *(in_button->_PIN) & (1<<in_button->_pin_number))		)	// if in the given PIN register the given button is pressed
+	if (	!( *(in_button->_PIN) & (1<<in_button->_pin_number))	)	// if in the given PIN register the given button is pressed
 	#endif
 	#if defined(MJ808_)													// non-inverted
-	if (		( (volatile) *(in_button->_PIN) & (1<<in_button->_pin_number))		)	// if in the given PIN register the given button is pressed
+	if (	( *(in_button->_PIN) & (1<<in_button->_pin_number))	)		// if in the given PIN register the given button is pressed
 	#endif
 	{												// button is pressed
 		local_advance_counter();										// debouncing happens here

@@ -371,7 +371,7 @@ static void _mcp2515_can_msg_send(volatile can_msg_t * const msg)
 };
 
 // puts the whole CAN infrastructure to sleep; 1 - sleep, 0 - awake
-static void _can_sleep(volatile can_t * const in_can, const uint8_t in_val)
+static void _can_sleep(can_t * const in_can, const uint8_t in_val)
 {
 	if ( !(in_can->in_sleep) && in_val)									// if is awake and set to sleep
 	{

@@ -348,7 +348,7 @@ typedef struct can_t													// can_t struct describing the CAN device as a 
 
 // public methods
 
-	void (*Sleep)(volatile struct can_t *in_can, const uint8_t in_val);	// puts the MCP2515 to sleep (and wakes it up)
+	void (*Sleep)(struct can_t *in_can, const uint8_t in_val);			// puts the MCP2515 to sleep (and wakes it up)
 	void (*RequestToSend)(volatile can_msg_t * const msg);				// requests message to be sent to the CAN bus
 	void (*FetchMessage)(volatile can_msg_t *msg);						// fetches received message from some RX buffer
 	void (*ChangeOpMode)(const uint8_t mode);							// changes the operational mode of the MCP2515
@@ -356,6 +356,6 @@ typedef struct can_t													// can_t struct describing the CAN device as a 
 	void (*BitModify)(const uint8_t addr, const uint8_t mask, const uint8_t byte);			// modifies bit identified by "byte" according to "mask" in some register
 } can_t __attribute__((aligned(8)));
 
-can_t *can_ctor();					// CAN object constructor - does function pointer & hardware initialization
+can_t *can_ctor();														// CAN object constructor - does function pointer & hardware initialization
 
 #endif /* MCP2515_H_ */

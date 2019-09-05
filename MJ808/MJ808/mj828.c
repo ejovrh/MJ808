@@ -16,7 +16,7 @@ typedef struct															// mj828_t actual
 static __mj828_t __Device __attribute__ ((section (".data")));
 
 extern void _fade(const uint8_t value, volatile uint8_t *ocr);
-extern void _debounce(volatile individual_button_t *in_button, event_handler_t * const in_event);
+extern void _debounce(individual_button_t *in_button, event_handler_t * const in_event);
 
 void __mj828_led_gpio_init(void)
 {
@@ -135,7 +135,7 @@ static void __glow(uint8_t led, uint8_t state)
 	fptr(state);														// execute with arguments given
 };
 
-void charlieplexing_handler(volatile composite_led_t *in_led)
+void charlieplexing_handler(composite_led_t *in_led)
 {
 	static uint8_t i = 0;												// iterator to loop over all LEDs on device
 
@@ -190,7 +190,7 @@ void __mj828_event_execution_function(uint8_t val)
 };
 
 // implementation of virtual constructor for buttons
-volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self, event_handler_t * const event)
+button_t *_virtual_button_ctorMJ828(button_t *self, event_handler_t * const event)
 {
 	static individual_button_t individual_button[2] __attribute__ ((section (".data")));	// define array of actual buttons and put into .data
 
@@ -227,9 +227,9 @@ volatile button_t *_virtual_button_ctorMJ828(volatile button_t *self, event_hand
 };
 
 // implementation of virtual constructor for LEDs
-volatile composite_led_t *_virtual_led_ctorMJ828(volatile composite_led_t *self)
+composite_led_t *_virtual_led_ctorMJ828(composite_led_t *self)
 {
-	static volatile ledflags_t LEDFlags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
+	static ledflags_t LEDFlags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
 	static primitive_led_t primitive_led[8] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
 	self->led = primitive_led;											// assign pointer to LED array
@@ -317,8 +317,8 @@ void mj828_ctor()
 	sei();
 	}
 
-	static volatile composite_led_t LED __attribute__ ((section (".data")));	// define LED object and put it into .data
-	static volatile button_t Button __attribute__ ((section (".data")));		// define BUTTON object and put it into .data
+	static composite_led_t LED __attribute__ ((section (".data")));		// define LED object and put it into .data
+	static button_t Button __attribute__ ((section (".data")));			// define BUTTON object and put it into .data
 
 	__Device.public.mj8x8 = mj8x8_ctor();										// call base class constructor & tie in object addresses
 	__Device.public.led = _virtual_led_ctorMJ828(&LED);							// call virtual constructor & tie in object addresses

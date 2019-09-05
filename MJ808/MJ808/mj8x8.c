@@ -13,7 +13,7 @@ typedef struct															// mj8x8_t actual
 static __mj8x8_t __MJ8x8 __attribute__ ((section (".data")));
 
 // provides a periodic heartbeat based on the watchdog timer interrupt
-static void _Heartbeat(volatile message_handler_t * const msg)
+static void _Heartbeat(message_handler_t * const msg)
 {
 	if (msg->bus->FlagDoHeartbeat)										// if we are in heartbeat mode
 	{
@@ -43,7 +43,7 @@ static void _Heartbeat(volatile message_handler_t * const msg)
 	++msg->bus->BeatIterationCount;										// increment the iteration counter
 };
 
-volatile mj8x8_t * mj8x8_ctor()
+mj8x8_t * mj8x8_ctor()
 {
 	// GPIO state definitions
 	{

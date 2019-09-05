@@ -10,7 +10,7 @@
 typedef struct															// mj818_t actual
 {
 	mj818_t public;														// public struct
-	//	uint8_t foo_private;												// private - some data member
+	//	uint8_t foo_private;											// private - some data member
 } __mj818_t;
 
 static __mj818_t __Device __attribute__ ((section (".data")));
@@ -24,9 +24,9 @@ static void _wrapper_fade_mj818(uint8_t value)
 	_fade(value, &OCR_REAR_LIGHT);
 };
 
-volatile composite_led_t *_virtual_led_ctorMJ818(volatile composite_led_t *self)
+composite_led_t *_virtual_led_ctorMJ818(composite_led_t *self)
 {
-	static volatile ledflags_t LEDFlags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
+	static ledflags_t LEDFlags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
 	static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
 	self->led = primitive_led;											// assign pointer to LED array
@@ -107,10 +107,10 @@ void mj818_ctor()
 	sei();
 	}
 
-	static volatile composite_led_t LED __attribute__ ((section (".data")));	// define LED object and put it into .data
+	static composite_led_t LED __attribute__ ((section (".data")));		// define LED object and put it into .data
 
-	__Device.public.mj8x8 = mj8x8_ctor();										// call base class constructor & tie in object addresses
-	__Device.public.led = _virtual_led_ctorMJ818(&LED);							// call virtual constructor & tie in object addresses
+	__Device.public.mj8x8 = mj8x8_ctor();								// call base class constructor & tie in object addresses
+	__Device.public.led = _virtual_led_ctorMJ818(&LED);					// call virtual constructor & tie in object addresses
 
 	/*
 	 * self, template of an outgoing CAN message; SID intialized to this device
