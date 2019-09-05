@@ -1,8 +1,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
-//#include "uci_spi.h"
-#include "i_wire.h"														// interface for generic wire transmission - SPI or I2C
 
+#include "i_wire.h"														// interface for generic wire transmission - SPI or I2C
 
 
 /* now, how does the bloody thing work ?!?
@@ -33,11 +32,11 @@
  *		CPHA 1 - sample on the trailing (second) edge of the clock signal
  *
  */
-<<<<<<< .mine
 
+<<<<<<< .mine
 // sends (and receives) data from the SPI bus
 // slave select must happen outside of this function
-static uint8_t spi_uci_transfer(const uint8_t data)
+static uint8_t _spi_uci_transfer(const uint8_t data)
 =======
 static uint8_t _spi_uci_transfer(const uint8_t data)
 

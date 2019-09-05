@@ -2,7 +2,7 @@
 #define SPI_H_
 
 <<<<<<< .mine
-#include "i_wire.h"
+#include "i_wire.h"														// interface for low-level communication, gets implemented in .c
 =======
 #include "i_wire.h"														// interface for low-level communication, gets implemented in .c
 >>>>>>> .theirs
