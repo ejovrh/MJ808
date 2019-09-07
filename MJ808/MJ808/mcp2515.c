@@ -9,7 +9,6 @@
 
 #include "i_wire.h"
 
-
 // setting the PORT & PIN via constructor is unfortunately too costly so preprocessor defines are for now the only option
 #define	SPI_SS_MCP2515_pin		B,	4,	4								// SPI - SS
 
