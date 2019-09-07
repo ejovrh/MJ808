@@ -70,6 +70,8 @@ void _PopulatedBusOperationMJ818(message_handler_t * const in_msg)
 
 void mj818_ctor()
 {
+	__Device.public.mj8x8 = mj8x8_ctor();								// call base class constructor & tie in object addresses
+
 	// GPIO state definitions
 	{
 	// state initialization of device-specific pins
@@ -109,7 +111,6 @@ void mj818_ctor()
 
 	static composite_led_t LED __attribute__ ((section (".data")));		// define LED object and put it into .data
 
-	__Device.public.mj8x8 = mj8x8_ctor();								// call base class constructor & tie in object addresses
 	__Device.public.led = _virtual_led_ctorMJ818(&LED);					// call virtual constructor & tie in object addresses
 
 	/*
