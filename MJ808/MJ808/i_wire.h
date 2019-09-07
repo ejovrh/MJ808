@@ -6,6 +6,6 @@ typedef struct															// an interface which defines one function, is impl
 	uint8_t (* const Transmit)(const uint8_t val);
 } i_wire_t;
 
-extern const i_wire_t Wire;
+extern const i_wire_t Wire;												// declare object
 
 #endif /* WIRE_H_ */

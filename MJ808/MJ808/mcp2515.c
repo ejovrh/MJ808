@@ -7,7 +7,7 @@
 #include "gpio.h"
 #include "mcp2515.h"
 
-#include "uci_spi.h"													// low-level driver for communication, implements interface
+#include "i_wire.h"
 
 
 // setting the PORT & PIN via constructor is unfortunately too costly so preprocessor defines are for now the only option
