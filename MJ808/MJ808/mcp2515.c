@@ -29,7 +29,7 @@ typedef struct															// can_t actual
 {
 	can_t public;														// public struct
 	void (*init)(void);													// private - CAN init
-//	uint8_t foo_private;												// private - some data member
+
 
 	uint8_t __canintf;													// contents of CANINTF register, datasheet p. 53
 	uint8_t __eflg;														// contents of EFLG register, datasheet p. 49
@@ -37,7 +37,6 @@ typedef struct															// can_t actual
 	uint8_t __canctrl;													// contents of the CANCTRL register, datasheet p. 60
 	uint8_t	__tec;														// Transmit Error Counter - TEC, datasheet p. 48
 	uint8_t __rec;														// Receive Error Counter - REC, datasheet p. 48
-
 /* the basic building blocks of interaction with the MCP2515:
  * opcodes -low level instructions- which the hardware executes
  *	they are meant to be "private" and not be used in main() directly
@@ -49,6 +48,7 @@ typedef struct															// can_t actual
 
 // private functions here, object constructor at the end
 
+//bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
 //bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
 
 // private functions here, object constructor at the end
@@ -418,11 +418,11 @@ __can_t __CAN =															// instantiate can_t actual and set function point
 	.public.BitModify = &_mcp2515_opcode_bit_modify,					// ditto
 	.init = &__mcp2515_init												// ditto
 };
-// object constructor
-can_t * can_ctor()
+
+can_t * can_ctor()														// object constructor
 {
 	__CAN.init();														// initialize & configure the MCP2515
-	// populate self
+
 	return &__CAN.public;												// return pointer to can_t public part
 };
 
