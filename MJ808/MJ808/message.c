@@ -8,6 +8,7 @@ typedef struct															// message_handler_t actual
 	message_handler_t public;											// public struct
 	can_msg_t __msg;													// private - CAN message object
 	can_t *__can;														// private - pointer to can_t struct
+	uint16_t __devices;													// indicator of devices discovered, 16 in total; B0 - 1st device (0A), B1 - 2nd device (0B), ..., B15 - 16th device (3D)
 } __message_handler_t;
 
 extern __message_handler_t __MsgHandler;								// declare message_handler_t actual
@@ -52,7 +53,6 @@ void message_handler_ctor(can_t * const in_can)
 {
 	__MsgHandler.__can = in_can;										// save address of can_t struct in private data member
 	__MsgHandler.public.devices = 0x0000;
-	//__MsgHandler.public.bus->NumericalCAN_ID = (uint8_t) ( (__MsgHandler.__can->own_sidh >>2 ) & 0x0F );
 };
 
 message_handler_t * const MsgHandler = &__MsgHandler.public ;			// set pointer to MsgHandler public part

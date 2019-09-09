@@ -72,7 +72,7 @@ mj8x8_t * mj8x8_ctor(const uint8_t in_own_sidh)
 	// state initialization of device-unspecific pins
 	}
 
-	__MJ8x8.__NumericalCAN_ID = (uint8_t) ( (in_own_sidh >>2 ) & 0x0F ),
+	__MJ8x8.__NumericalCAN_ID = (uint8_t) ( (in_own_sidh >>2 ) & 0x0F );
 
 	__MJ8x8.public.can = can_ctor();									// pass on CAN public part
 	__MJ8x8.public.mcu = attiny_ctor();									// pass on MCU public part
