@@ -40,7 +40,7 @@ int main(void)
 
 	while (1)															// forever loop
 	{
-			EventHandler->HandleEvent();								// execute the event handling function with argument taken from case table array
+		EventHandler->HandleEvent();									// execute the event handling function with argument taken from case table array
 
 		if (MCUCR & _BV(SE))											// if sleep is enabled
 			sleep_cpu();												// ...sleep
@@ -238,8 +238,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 #if defined(MJ828_)														// ISR for timer0 - 16.25ms - charlieplexing timer
 ISR(TIMER0_COMPA_vect)													// timer/counter0 - 16.25ms - charlieplexed blinking
 {
-	if (Device->led->flags->All)											// if there is any LED to glow at all
-		 charlieplexing_handler(Device->led);							// handles LEDs according to CAN message (of type CMND_UTIL_LED)
+		 charlieplexing_handler(Device->led->flags->All);				// handles LEDs according to CAN message (of type CMND_UTIL_LED)
 }
 #endif
 
@@ -278,7 +277,7 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka
 	//Device.mj8x8->mcu->wdtcr |= _BV(WDIE);
 	Device->mj8x8->HeartBeat(MsgHandler);
 
-	if ( (! MsgHandler->bus->devices.All) && (MsgHandler->bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
+	if ( (! MsgHandler->GetDevices() ) && (MsgHandler->bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
 		Device->mj8x8->EmptyBusOperation();								// perform the device-specific default operation
 
 	sleep_enable();														// back to sleep

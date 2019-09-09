@@ -8,6 +8,7 @@ typedef struct															// message_handler_t actual
 	message_handler_t public;											// public struct
 	can_msg_t __msg;													// private - CAN message object
 	can_t *__can;														// private - pointer to can_t struct
+	uint16_t __devices;													// indicator of devices discovered, 16 in total; B0 - 1st device (0A), B1 - 2nd device (0B), ..., B15 - 16th device (3D)
 } __message_handler_t;
 
 extern __message_handler_t __MsgHandler;								// declare message_handler_t actual
@@ -37,15 +38,22 @@ volatile can_msg_t *_ReceiveMessage(void)
 	__MsgHandler.__can->FetchMessage(&__MsgHandler.__msg);				// fetch the message from some RX buffer into RAM
 	// FIXME - 1st LU doesn't always get listed in devices.All -- very likely the root cause in the quick'n'dirty arduino LU
 	if (__MsgHandler.__msg.sidh & BROADCAST)							// if we get a broadcast message (aka. heartbeat)
-		__MsgHandler.public.bus->devices.All |= ( 1 << ( (__MsgHandler.__msg.sidh >> 2) & 0x0F ) );// populate devices in canbus_t struct so that we know who else is on the bus
+		__MsgHandler.__devices |= ( 1 << ( (__MsgHandler.__msg.sidh >> 2) & 0x0F ) );// populate devices in canbus_t struct so that we know who else is on the bus
 
 	return &__MsgHandler.__msg;											// return pointer to it to someone who will make use of it
 };
 
+// returns variable with bit-wise representation of devices on bus
+static uint16_t _GetDevices(void)
+{
+	return __MsgHandler.__devices;
+}
+
 __message_handler_t __MsgHandler =										// instantiate message_handler_t actual and set function pointers
 {
 	.public.SendMessage = &_SendMessage,								// set up function pointer
-	.public.ReceiveMessage = &_ReceiveMessage							//	ditto
+	.public.ReceiveMessage = &_ReceiveMessage,							//	ditto
+	.public.GetDevices = &_GetDevices
 };
 
 void message_handler_ctor(can_t * const in_can)
@@ -56,8 +64,7 @@ void message_handler_ctor(can_t * const in_can)
 
 	__MsgHandler.public.bus = &BUS;										// set address of bus object
 
-	// TODO - eventually get rid of union
-	__MsgHandler.public.bus->devices.All = 0x0000;
+	__MsgHandler.__devices = 0x0000;									// initialize to empty bus
 	__MsgHandler.public.bus->NumericalCAN_ID = (uint8_t) ( (__MsgHandler.__can->own_sidh >>2 ) & 0x0F );
 	__MsgHandler.public.bus->FlagDoHeartbeat = 1;						// start with discovery mode
 	__MsgHandler.public.bus->FlagDoDefaultOperation = 0;

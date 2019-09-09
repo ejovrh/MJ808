@@ -135,11 +135,14 @@ static void __glow(uint8_t led, uint8_t state)
 	fptr(state);														// execute with arguments given
 };
 
-void charlieplexing_handler(composite_led_t *in_led)
+void charlieplexing_handler(uint8_t in_flags)
 {
+	if (!in_flags)														// if there is any LED to glow at all
+		return;
+
 	static uint8_t i = 0;												// iterator to loop over all LEDs on device
 
-	__glow(i, (in_led->flags->All & _BV(i)) );							// pass glow the LED number and the appropriate bit in the flag struct
+	__glow(i, (in_flags & _BV(i)) );									// pass glow the LED number and the appropriate bit in the flag struct
 
 	// !!!!
 	(i == 7) ? i = 0 : ++i;												// count up to led_count and then start from zero
