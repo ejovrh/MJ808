@@ -5,7 +5,6 @@
 #include <avr/interrupt.h>
 
 #include "mj808.h"
-#include "led.h"
 #include "gpio.h"
 
 typedef struct															// mj808_t actual
@@ -187,7 +186,7 @@ void _PopulatedBusOperationMJ808(message_handler_t * const in_msg)
 
 void mj808_ctor()
 {
-	__Device.public.mj8x8 = mj8x8_ctor();								// call base class constructor & tie in object addresses
+	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A));								// call base class constructor & tie in object addresses
 
 	// GPIO state definitions
 	{
@@ -251,7 +250,7 @@ void mj808_ctor()
 	 */
 
 	__Device.public.mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A);	// high byte
-	__Device.public.mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																// low byte
+	__Device.public.mj8x8->can->own_sidl = (RCPT_DEV_BLANK | BLANK);																// low byte
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;// implements device-specific operation depending on bus activity
 

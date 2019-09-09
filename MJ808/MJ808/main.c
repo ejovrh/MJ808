@@ -238,48 +238,8 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 #if defined(MJ828_)														// ISR for timer0 - 16.25ms - charlieplexing timer
 ISR(TIMER0_COMPA_vect)													// timer/counter0 - 16.25ms - charlieplexed blinking
 {
-	if (Device->led->flags->All)											// if there is any LED to glow at all
-		 charlieplexing_handler(Device->led);							// handles LEDs according to CAN message (of type CMND_UTIL_LED)
+		 charlieplexing_handler(Device->led->flags->All);				// handles LEDs according to CAN message (of type CMND_UTIL_LED)
 }
 #endif
 
 #endif
-
-ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka. active CAN bus device discovery
-{
-	/* method of operation:
-	 *	- on the CAN bus there is room for max. 16 devices - in numeric form devices #0 up to #15
-	 *	- each device has its own unique NumericalCAN_ID, which is derived from its unique CAN bus ID
-	 *
-	 *	- on each watchdog timer iteration, BeatIterationCount is incremented (it is able to roll over from 0xf to 0x0)
-	 *	- when BeatIterationCount is equal to the device's NumericalCAN_ID, a heartbeat message is sent, otherwise nothing is done
-	 *
-	 *	- there are two modes: fast count and slow count - each set via WDTCR, the WatchDog Timer Control Register
-	 *		- fast count is performed when a heartbeat is supposed to be sent
-	 *			this mode speeds up the heartbeat procedure itself
-	 *
-	 *		- slow count is performed when no heartbeat is supposed to be sent
-	 *			this mode acts as a delay for heartbeat messages themselves
-	 *
-	 *	i.e. start in heartbeat mode, count fast to one's own ID, send the message and then exit heartbeat mode,
-	 *		continue counting slow until a counter rollover occurs and enter heartbeat mode again.
-	 *
-	 *	each device on the bus does this procedure.
-	 *	after one complete iteration each device should have received some other device's heartbeat message.
-	 *	on each and every message reception the senders ID is recorded in the canbus_t struct. thereby one device keeps track of its neighbors on the bus.
-	 *
-	 *	if there are no devices on the bus, a device-specific default operation is executed.
-	 */
-
-	// TODO - implement sleep cycles for processor and CAN bus hardware
-	sleep_disable();													// wakey wakey
-
-	WDTCR |= _BV(WDIE);													// setting the bit prevents a reset when the timer expires
-	//Device.mj8x8->mcu->wdtcr |= _BV(WDIE);
-	Device->mj8x8->HeartBeat(MsgHandler);
-
-	if ( (! MsgHandler->bus->devices.All) && (MsgHandler->bus->FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
-		Device->mj8x8->EmptyBusOperation();								// perform the device-specific default operation
-
-	sleep_enable();														// back to sleep
-}

@@ -241,6 +241,6 @@ typedef struct															// "base class" struct for mj8x8 devices
 } mj8x8_t ;
 
 
-mj8x8_t *mj8x8_ctor();													// declare constructor for abstract class
+mj8x8_t *mj8x8_ctor(const uint8_t in_own_sidh);							// declare constructor for abstract class
 
 #endif /* MJ8x8_H_ */

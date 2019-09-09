@@ -70,7 +70,7 @@ void _PopulatedBusOperationMJ818(message_handler_t * const in_msg)
 
 void mj818_ctor()
 {
-	__Device.public.mj8x8 = mj8x8_ctor();								// call base class constructor & tie in object addresses
+	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B));								// call base class constructor & tie in object addresses
 
 	// GPIO state definitions
 	{

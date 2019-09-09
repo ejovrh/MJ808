@@ -37,7 +37,7 @@ volatile can_msg_t *_ReceiveMessage(void)
 	__MsgHandler.__can->FetchMessage(&__MsgHandler.__msg);				// fetch the message from some RX buffer into RAM
 	// FIXME - 1st LU doesn't always get listed in devices.All -- very likely the root cause in the quick'n'dirty arduino LU
 	if (__MsgHandler.__msg.sidh & BROADCAST)							// if we get a broadcast message (aka. heartbeat)
-		__MsgHandler.public.bus->devices.All |= ( 1 << ( (__MsgHandler.__msg.sidh >> 2) & 0x0F ) );// populate devices in canbus_t struct so that we know who else is on the bus
+		__MsgHandler.public.devices |= ( 1 << ( (__MsgHandler.__msg.sidh >> 2) & 0x0F ) );// populate devices in canbus_t struct so that we know who else is on the bus
 
 	return &__MsgHandler.__msg;											// return pointer to it to someone who will make use of it
 };
@@ -50,17 +50,9 @@ __message_handler_t __MsgHandler =										// instantiate message_handler_t act
 
 void message_handler_ctor(can_t * const in_can)
 {
-	static canbus_t BUS __attribute__ ((section (".data")));			// define BUS object and put it into .data
-
 	__MsgHandler.__can = in_can;										// save address of can_t struct in private data member
-
-	__MsgHandler.public.bus = &BUS;										// set address of bus object
-
-	// TODO - eventually get rid of union
-	__MsgHandler.public.bus->devices.All = 0x0000;
-	__MsgHandler.public.bus->NumericalCAN_ID = (uint8_t) ( (__MsgHandler.__can->own_sidh >>2 ) & 0x0F );
-	__MsgHandler.public.bus->FlagDoHeartbeat = 1;						// start with discovery mode
-	__MsgHandler.public.bus->FlagDoDefaultOperation = 0;
+	__MsgHandler.public.devices = 0x0000;
+	//__MsgHandler.public.bus->NumericalCAN_ID = (uint8_t) ( (__MsgHandler.__can->own_sidh >>2 ) & 0x0F );
 };
 
 message_handler_t * const MsgHandler = &__MsgHandler.public ;			// set pointer to MsgHandler public part

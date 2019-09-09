@@ -135,11 +135,14 @@ static void __glow(uint8_t led, uint8_t state)
 	fptr(state);														// execute with arguments given
 };
 
-void charlieplexing_handler(composite_led_t *in_led)
+void charlieplexing_handler(uint8_t in_flags)
 {
+	if (!in_flags)														// if there is any LED to glow at all
+		return;
+
 	static uint8_t i = 0;												// iterator to loop over all LEDs on device
 
-	__glow(i, (in_led->flags->All & _BV(i)) );							// pass glow the LED number and the appropriate bit in the flag struct
+	__glow(i, (in_flags & _BV(i)) );									// pass glow the LED number and the appropriate bit in the flag struct
 
 	// !!!!
 	(i == 7) ? i = 0 : ++i;												// count up to led_count and then start from zero
@@ -242,12 +245,6 @@ composite_led_t *_virtual_led_ctorMJ828(composite_led_t *self)
 	return self;
 };
 
-// defines device operation on empty bus
-void _EmptyBusOperationMj828(void)
-{
-	;
-};
-
 // dispatches CAN messages to appropriate sub-component on device
 void _PopulatedBusOperationMJ828(message_handler_t * const in_msg)
 {
@@ -267,7 +264,7 @@ void _PopulatedBusOperationMJ828(message_handler_t * const in_msg)
 
 void mj828_ctor()
 {
-	__Device.public.mj8x8 = mj8x8_ctor();								// call base class constructor & tie in object addresses
+	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D));								// call base class constructor & tie in object addresses
 
 	// GPIO state definitions
 	{
