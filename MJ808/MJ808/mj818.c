@@ -26,11 +26,9 @@ static void _wrapper_fade_mj818(uint8_t value)
 
 composite_led_t *_virtual_led_ctorMJ818(composite_led_t *self)
 {
-	static ledflags_t LEDFlags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
 	static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
 	self->led = primitive_led;											// assign pointer to LED array
-	self->flags = &LEDFlags;											// tie in LEDFlags struct into led struct
 
 	self->led[Rear].Shine = &_wrapper_fade_mj818;						// LED-specific implementation
 // defines device operation on empty bus

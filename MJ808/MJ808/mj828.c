@@ -162,12 +162,12 @@ void __mj828_event_execution_function(uint8_t val)
 		case 0x04:
 			if (Device->button->button[Left].Momentary)
 			{
-				Device->led->flags->All |= _BV(Blue);
+				Device->led->flags |= _BV(Blue);
 				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xF8, 2);
 			}
 			else
 			{
-				Device->led->flags->All &= ~_BV(Blue);
+				Device->led->flags &= ~_BV(Blue);
 				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);
 				EventHandler->UnSetEvent(val);
 			}
@@ -177,11 +177,11 @@ void __mj828_event_execution_function(uint8_t val)
 		case 0x02:
 			if (!Device->button->button[Right].Toggle)
 			{
-				Device->led->flags->All &= ~_BV(Red);
+				Device->led->flags &= ~_BV(Red);
 			}
 			else
 			{
-				Device->led->flags->All |= _BV(Red);
+				Device->led->flags |= _BV(Red);
 			}
 			EventHandler->UnSetEvent(val);
 		break;
@@ -232,15 +232,13 @@ button_t *_virtual_button_ctorMJ828(button_t *self, event_handler_t * const even
 // implementation of virtual constructor for LEDs
 composite_led_t *_virtual_led_ctorMJ828(composite_led_t *self)
 {
-	static ledflags_t LEDFlags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
 	static primitive_led_t primitive_led[8] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
 	self->led = primitive_led;											// assign pointer to LED array
-	self->flags = &LEDFlags;											// tie in LEDFlags struct into led struct
 
 	// FIXME - if below flag is 0, it doesn't work properly: at least one LED has to be on for the thing to work
 	// also: if any other than Green is on, it doesn't shine properly
-	self->flags->All = _BV(Green);										// mark green LED as on
+	self->flags = _BV(Green);											// mark green LED as on
 
 	return self;
 };
@@ -254,9 +252,9 @@ void _PopulatedBusOperationMJ828(message_handler_t * const in_msg)
 	if ( (msg->COMMAND & MASK_COMMAND) == CMND_DASHBOARD )				// dashboard command
 	{
 		if ((msg->COMMAND & 0x01))										// flag LED at appropriate index as whatever the command says
-			__Device.public.led->flags->All |= _BV( ((msg->COMMAND & 0x0E) >> 1) );			// set bit
+			__Device.public.led->flags |= _BV( ((msg->COMMAND & 0x0E) >> 1) );		// set bit
 		else
-			__Device.public.led->flags->All &= ~_BV( ((msg->COMMAND & 0x0E) >> 1) );		// clear bit
+			__Device.public.led->flags &= ~_BV( ((msg->COMMAND & 0x0E) >> 1) );		// clear bit
 
 		return;
 	}

@@ -140,11 +140,9 @@ button_t *_virtual_button_ctorMJ808(button_t * const self, event_handler_t * con
 // implementation of virtual constructor for LEDs
 composite_led_t *_virtual_led_ctorMJ808(composite_led_t * const self)
 {
-	static ledflags_t Flags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
 	static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
 	self->led = primitive_led;											// assign pointer to LED array
-	self->flags = &Flags;												// tie in LEDFlags struct into led struct
 
 	self->Shine = &_component_led;										// component part ("interface")
 	self->led[Utility].Shine = &_util_led_mj808;						// LED-specific implementation

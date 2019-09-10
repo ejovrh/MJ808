@@ -238,7 +238,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 #if defined(MJ828_)														// ISR for timer0 - 16.25ms - charlieplexing timer
 ISR(TIMER0_COMPA_vect)													// timer/counter0 - 16.25ms - charlieplexed blinking
 {
-		 charlieplexing_handler(Device->led->flags->All);				// handles LEDs according to CAN message (of type CMND_UTIL_LED)
+		 charlieplexing_handler(Device->led->flags);					// handles LEDs according to CAN message (of type CMND_UTIL_LED)
 }
 #endif
 
