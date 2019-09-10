@@ -10,7 +10,7 @@ typedef struct composite_led_t											// struct describing the aggregate of a
 {
 	void (*Shine)(const uint8_t in_val);								// virtual function for LED operation of composite LEDs
 	primitive_led_t *led;												// "virtual" pointer to array of primitive LEDs - pointer to leaves
-	uint8_t flags;														// pointer to bitfield struct for flagging individual LEDs to be lit
+	uint8_t flags;														// uint8_t interpreted bit-wise for flagging individual LEDs to be lit
 
 	//composite_led_t *(*virtual_led_ctor)(composite_led_t * const self);		// virtual  constructor
 } composite_led_t;

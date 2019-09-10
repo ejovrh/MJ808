@@ -6,17 +6,6 @@
 
 typedef struct can_t													// can_t struct describing the CAN device as a whole
 {
-// preserve byte order for sequential reads/writes
-	uint8_t canintf;													// contents of CANINTF register, datasheet p. 53
-	uint8_t eflg;														// contents of EFLG register, datasheet p. 49
-	uint8_t canstat;													// contents of the CANSTAT register, datasheet p. 61
-	uint8_t canctrl;													// contents of the CANCTRL register, datasheet p. 60
-	uint8_t	tec;														// Transmit Error Counter - TEC, datasheet p. 48
-	uint8_t rec;														// Receive Error Counter - REC, datasheet p. 48
-// preserve byte order for sequential reads/writes
-	uint8_t in_sleep:1;													// is MCP2561 CAN transceiver in sleep or not
-	uint8_t icod:3;														// Interrupt Codes
-
 	uint8_t own_sidh;
 	uint8_t own_sidl;
 

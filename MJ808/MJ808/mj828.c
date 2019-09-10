@@ -159,6 +159,18 @@ void __mj828_event_execution_function(uint8_t val)
 			EventHandler->UnSetEvent(val);
 		break;
 
+		case 0x02:
+			if (!Device->button->button[Right].Toggle)
+			{
+				Device->led->flags &= ~_BV(Red);
+			}
+			else
+			{
+				Device->led->flags |= _BV(Red);
+			}
+			EventHandler->UnSetEvent(val);
+		break;
+
 		case 0x04:
 			if (Device->button->button[Left].Momentary)
 			{
@@ -174,17 +186,15 @@ void __mj828_event_execution_function(uint8_t val)
 
 		break;
 
-		case 0x02:
-			if (!Device->button->button[Right].Toggle)
-			{
-				Device->led->flags &= ~_BV(Red);
-			}
-			else
-			{
-				Device->led->flags |= _BV(Red);
-			}
-			EventHandler->UnSetEvent(val);
-		break;
+		//case 0x08:
+			//// next case
+			//EventHandler->UnSetEvent(val);
+		//break;
+
+		//case 0x16:
+		//// next case
+		//EventHandler->UnSetEvent(val);
+		//break;
 
 		default:														// no value passed
 			EventHandler->UnSetEvent(val);								// do nothing

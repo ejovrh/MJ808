@@ -106,6 +106,8 @@ void __mj808_event_execution_function(const uint8_t val)
 			EventHandler->UnSetEvent(val);
 		break;
 
+		// next cases: 0x08, 0x16, etc.
+
 		default:	// 0x00
 			EventHandler->UnSetEvent(val);
 			return;
