@@ -6,6 +6,7 @@
 typedef struct															// message_handler_t actual
 {
 	message_handler_t public;											// public struct
+	// TODO - convert to pointer
 	can_msg_t __msg;													// private - CAN message object
 	can_t *__can;														// private - pointer to can_t struct
 } __message_handler_t;
@@ -15,9 +16,6 @@ extern __message_handler_t __MsgHandler;								// declare message_handler_t act
 // loads outbound CAN message into local CAN IC and asks it to transmit it onto the bus
 void _SendMessage(const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
 {
-	if (__MsgHandler.__can->in_sleep)									// if the CAN infra. is sleeping
-		__MsgHandler.__can->Sleep(__MsgHandler.__can, 0);				// wake it up
-
 	__MsgHandler.__msg.sidh = __MsgHandler.__can->own_sidh;
 	__MsgHandler.__msg.sidl = __MsgHandler.__can->own_sidl;
 
@@ -28,6 +26,8 @@ void _SendMessage(const uint8_t in_command, const uint8_t in_argument, const uin
 	__MsgHandler.__msg.ARGUMENT = in_argument;							// set argument into message
 	__MsgHandler.__msg.dlc = in_len;									// set DLC
 
+	// TODO - move sleep wakeup into _mcp2515_can_msg_send()
+	__MsgHandler.__can->Sleep(0);										// attempt to wake it up
 	__MsgHandler.__can->RequestToSend(&__MsgHandler.__msg);				// load message into TX buffer and request to send
 };
 

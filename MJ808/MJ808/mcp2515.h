@@ -22,7 +22,7 @@ typedef struct can_t													// can_t struct describing the CAN device as a 
 
 // public methods
 
-	void (* const Sleep)(struct can_t *in_can, const uint8_t in_val);	// puts the MCP2515 to sleep (and wakes it up)
+	void (* const Sleep)(const uint8_t in_val);							// puts the MCP2515 to sleep (and wakes it up)
 	void (* const RequestToSend)(volatile can_msg_t * const msg);		// requests message to be sent to the CAN bus
 	void (* const FetchMessage)(volatile can_msg_t *msg);				// fetches received message from some RX buffer
 	void (* const ChangeOpMode)(const uint8_t mode);					// changes the operational mode of the MCP2515

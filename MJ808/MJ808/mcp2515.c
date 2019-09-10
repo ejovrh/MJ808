@@ -371,16 +371,16 @@ static void _mcp2515_can_msg_send(volatile can_msg_t * const msg)
 };
 
 // puts the whole CAN infrastructure to sleep; 1 - sleep, 0 - awake
-static void _can_sleep(can_t * const in_can, const uint8_t in_val)
+static void _can_sleep(const uint8_t in_val)
 {
-	if ( !(in_can->in_sleep) && in_val)									// if is awake and set to sleep
+	if ( !(__CAN.public.in_sleep) && in_val)							// if is awake and set to sleep
 	{
 		_mcp2515_change_opmode(REQOP_SLEEP);							// sleep MCP2515
 		gpio_conf(MCP2561_standby_pin, OUTPUT, HIGH);					// sleep MCP2561
-		in_can->in_sleep = 1;											// mark as sleeping
+		__CAN.public.in_sleep = 1;										// mark as sleeping
 	}
 
-	if (in_can->in_sleep && !in_val)									// if is sleeping and set to wake up
+	if (__CAN.public.in_sleep && !in_val)								// if is sleeping and set to wake up
 	{
 		_mcp2515_opcode_bit_modify(CANINTF, 0xFF, 0x00);				// clear out all interrupt flags so that a wakeup can be asserted (if there are not handled interrupts, a wakeup interrupt will never occur)
 		_mcp2515_opcode_bit_modify(CANINTF, _BV(WAKIF), _BV(WAKIF));	// create a wake up interrupt event -- the sucker will actually go and create a real one and go on to service it
