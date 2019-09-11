@@ -235,6 +235,7 @@ button_t *_virtual_button_ctorMJ828(button_t *self, event_handler_t * const even
 
 	self->deBounce = &_debounce;										// tie in debounce function
 
+
 	return self;
 };
 
@@ -251,6 +252,9 @@ composite_led_t *_virtual_led_ctorMJ828(composite_led_t *self)
 	self->led = primitive_led;											// assign pointer to LED array
 
 	self->Shine = &_component_led_mj828;
+
+
+	//self->flags = _BV(Green);											// mark green LED as on
 
 	return self;
 };
