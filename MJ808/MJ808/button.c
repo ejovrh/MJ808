@@ -102,8 +102,11 @@ extern void _debounce(individual_button_t *in_button, event_handler_t * const in
 		}
 
 		// order is important
-		in_button->Momentary = 1;										// set "is_pressed" state
-		in_event->Notify(in_button->ButtonCaseptr[Momentary]);			// notify event handler of button press
+		if (!in_button->Momentary)
+		{
+			in_button->Momentary = 1;									// set "is_pressed" state
+			in_event->Notify(in_button->ButtonCaseptr[Momentary]);		// notify event handler of button press
+		}
 
 		in_button->_was_pressed = 0;									// mark the button as being pressed
 		in_button->_is_at_default = 0;

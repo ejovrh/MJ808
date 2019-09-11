@@ -136,8 +136,8 @@
 	#define DEV_LU 0x00													// logic unit device
 	#define DEV_PWR_SRC 0x04											// power source device
 	#define DEV_LIGHT 0x08												// positional light device
-			#define FRONT_LIGHT 0x00									// front positional light (mj808) - low beam
-			#define FRONT_LIGHT_HIGH 0x01								// front positional light (mj808) - high beam
+			#define FRONT_LIGHT 0x00									// with fade - front positional light (mj808) - low beam
+			#define FRONT_LIGHT_HIGH 0x01								// WITHOUT fade - front positional light (mj808) - high beam
 			#define REAR_LIGHT 0x02										// rear positional light (mj818)
 			#define BRAKE_LIGHT 0x03									// brake light (mj818)
 	#define DEV_SENSOR 0x0C												// sensor device

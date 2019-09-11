@@ -160,13 +160,15 @@ void _event_execution_function_mj828(uint8_t val)
 		break;
 
 		case 0x02:														//
-			if (!Device->button->button[Right].Toggle)
+			Device->led->Shine(Red);
+
+			if (Device->button->button[Right].Toggle)
 			{
-				Device->led->flags &= ~_BV(Red);
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x20, 2);
 			}
 			else
 			{
-				Device->led->flags |= _BV(Red);
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);
 			}
 			EventHandler->UnSetEvent(val);
 		break;
@@ -174,16 +176,17 @@ void _event_execution_function_mj828(uint8_t val)
 		case 0x04:														//
 			if (Device->button->button[Left].Momentary)
 			{
-				Device->led->flags |= _BV(Blue);
+				Device->led->Shine(Blue);
 				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xF8, 2);
+
 			}
 			else
 			{
-				Device->led->flags &= ~_BV(Blue);
+				Device->led->Shine(Blue);
 				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);
+
 				EventHandler->UnSetEvent(val);
 			}
-
 		break;
 
 		//case 0x08:														//
@@ -239,9 +242,10 @@ button_t *_virtual_button_ctorMJ828(button_t *self, event_handler_t * const even
 	return self;
 };
 
+// toggles a bit in the LED flags variable; charlieplexer in tun makes it shine
 void _component_led_mj828(const uint8_t val)
 {
-	Device->led->flags |= val;
+	Device->led->flags ^= _BV(val);										// just toggle
 };
 
 // implementation of virtual constructor for LEDs
@@ -267,10 +271,7 @@ void _PopulatedBusOperationMJ828(message_handler_t * const in_msg)
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if ( (msg->COMMAND & MASK_COMMAND) == CMND_DASHBOARD )				// dashboard command
 	{
-		if ((msg->COMMAND & 0x01))										// flag LED at appropriate index as whatever the command says
-			__Device.public.led->flags |= _BV( ((msg->COMMAND & 0x0E) >> 1) );		// set bit
-		else
-			__Device.public.led->flags &= ~_BV( ((msg->COMMAND & 0x0E) >> 1) );		// clear bit
+		__Device.public.led->Shine(((msg->COMMAND & 0x0E) >> 1));		// flag LED at appropriate index as whatever the command says
 
 		return;
 	}
@@ -343,7 +344,7 @@ void mj828_ctor()
 
 	// FIXME - if below flag is 0, it doesn't work properly: at least one LED has to be on for the thing to work
 	// also: if any other than Green is on, it doesn't shine properly
-	__Device.public.led->Shine(_BV(GREEN));								// crude power indicator
+	__Device.public.led->Shine(GREEN);									// crude power indicator
 };
 
 #if defined(MJ828_)														// all devices have the object name "Device", hence the preprocessor macro
