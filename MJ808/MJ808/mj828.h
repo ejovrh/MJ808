@@ -44,7 +44,7 @@ typedef struct															// struct describing devices on MJ828
 	button_t *button;													// array of button_t - two buttons
 } mj828_t;
 
- void mj828_ctor();														// declare constructor for concrete class
+void mj828_ctor();														// declare constructor for concrete class
 
 extern mj828_t * const Device;											// declare pointer to public struct part
 

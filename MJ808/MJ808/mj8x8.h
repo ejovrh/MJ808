@@ -7,8 +7,10 @@
 
 #include "attiny4313.h"
 #include "mcp2515.h"
+
 #include "message.h"
 #include "event.h"
+
 #include "mj8x8_commands.h"
 
 // definitions of device/PCB layout-independent hardware pins

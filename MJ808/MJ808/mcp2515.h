@@ -6,10 +6,8 @@
 
 typedef struct can_t													// can_t struct describing the CAN device as a whole
 {
-	uint8_t own_sidh;
-	uint8_t own_sidl;
-
-// public methods
+	uint8_t own_sidh;													// SIDH for device
+	uint8_t own_sidl;													// SIDL for device
 
 	void (* const Sleep)(const uint8_t in_val);							// puts the MCP2515 to sleep (and wakes it up)
 	void (* const RequestToSend)(volatile can_msg_t * const msg);		// requests message to be sent to the CAN bus

@@ -1,6 +1,6 @@
 #pragma once
 
-#define CAN_MAX_MSG_LEN					8								// 8 bytes are the max. length of a CAN message
+#define CAN_MAX_MSG_LEN 8												// 8 bytes are the max. length of a CAN message
 #define COMMAND data[0]
 #define ARGUMENT data[1]
 

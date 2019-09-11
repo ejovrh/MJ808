@@ -59,7 +59,7 @@ void _util_led_mj808( uint8_t in_val)
 	}
 };
 
-void __device_on()
+void __component_led_mj808_device_on(void)
 {
 	Device->led->led[Utility].Shine(UTIL_LED_GREEN_ON);					// green LED on
 	Device->led->led[Front].Shine(0x20);								// front light on - low key; gets overwritten by LU command, since it comes in a bit later
@@ -70,7 +70,7 @@ void __device_on()
 	MsgHandler->SendMessage(DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
 }
 
-void __device_off()
+void __component_led_mj808_device_off(void)
 {
 	Device->led->led[Utility].Shine(UTIL_LED_GREEN_OFF);				// green LED off
 	Device->led->led[Front].Shine(0x00);								// front light off
@@ -82,17 +82,17 @@ void __device_off()
 }
 
 // delegates operations from LED component downwards to LED leaves
-void _component_led(const uint8_t val)
+void _component_led_mj808(const uint8_t val)
 {
-	if(val)																// true - on, false - off
-		__device_on();													// delegate indirectly to the leaves
+	if (val)															// true - on, false - off
+		__component_led_mj808_device_on();								// delegate indirectly to the leaves
 	else
-		__device_off();
+		__component_led_mj808_device_off();
 };
 
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 // cases in this switch-case statement must be unique for all events on this device
-void __mj808_event_execution_function(const uint8_t val)
+void _event_execution_function_mj808(const uint8_t val)
 {
 	switch (val)
 	{
@@ -134,7 +134,7 @@ button_t *_virtual_button_ctorMJ808(button_t * const self, event_handler_t * con
 	self->button[Center].ButtonCaseptr = CenterButtonCaseTable;			// button press-to-case binding
 
 	self->deBounce = &_debounce;										// tie in debounce function
-	event->fpointer = &__mj808_event_execution_function;				// button execution override from default to device-specific
+	event->fpointer = &_event_execution_function_mj808;					// button execution override from default to device-specific
 
 	return self;
 };
@@ -146,7 +146,7 @@ composite_led_t *_virtual_led_ctorMJ808(composite_led_t * const self)
 
 	self->led = primitive_led;											// assign pointer to LED array
 
-	self->Shine = &_component_led;										// component part ("interface")
+	self->Shine = &_component_led_mj808;								// component part ("interface")
 	self->led[Utility].Shine = &_util_led_mj808;						// LED-specific implementation
 	self->led[Front].Shine = &_wrapper_fade_mj808;						// LED-specific implementation
 
@@ -244,6 +244,8 @@ void mj808_ctor()
 	__Device.public.button = _virtual_button_ctorMJ808(&Button, EventHandler);	// call virtual constructor & tie in object addresses
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;// implements device-specific operation depending on bus activity
+
+	EventHandler->fpointer = &_event_execution_function_mj808;			// implements event hander for this device
 
 	// TODO - access via object
 	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);							// crude "I'm finished" indicator

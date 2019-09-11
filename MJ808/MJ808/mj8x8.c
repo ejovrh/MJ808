@@ -117,8 +117,8 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka
 
 	__MJ8x8.public.HeartBeat(MsgHandler);
 
-	if ( (! MsgHandler->devices) && (__MJ8x8.__FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
-		__MJ8x8.public.EmptyBusOperation();								// perform the device-specific default operation
+	if ( (! MsgHandler->Devices) && (__MJ8x8.__FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
+		__MJ8x8.public.EmptyBusOperation();								// perform the device-specific default operation (is overridden in specific device constructor)
 
 	sleep_enable();														// back to sleep
 }

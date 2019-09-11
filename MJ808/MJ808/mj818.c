@@ -15,13 +15,39 @@ typedef struct															// mj818_t actual
 
 static __mj818_t __Device __attribute__ ((section (".data")));			// instantiate mj818_t actual, as if it were initialized
 
-void _fade(const uint8_t value, volatile uint8_t *ocr);
+extern void _fade(const uint8_t value, volatile uint8_t *ocr);
 
 // TODO - optimize
-static void _wrapper_fade_mj818(uint8_t value)
+static void _wrapper_fade_mj818_rear(uint8_t value)
 {
 // TODO - optimize
 	_fade(value, &OCR_REAR_LIGHT);
+};
+
+static void _wrapper_fade_mj818_brake(uint8_t value)
+{
+	// TODO - optimize
+	_fade(value, &OCR_BRAKE_LIGHT);
+};
+
+inline void __component_led_mj818_device_on(const uint8_t val)
+{
+	_fade(val, &OCR_BRAKE_LIGHT);
+	_fade(val, &OCR_REAR_LIGHT);
+};
+
+inline void __component_led_mj818_device_off(void)
+{
+	_fade(0x00, &OCR_BRAKE_LIGHT);
+	_fade(0x00, &OCR_REAR_LIGHT);
+};
+
+void _component_led_mj818(const uint8_t val)
+{
+	if (val)															// true - on, false - off
+		__component_led_mj818_device_on(val);							// delegate indirectly to the leaves
+	else
+		__component_led_mj818_device_off();
 };
 
 composite_led_t *_virtual_led_ctorMJ818(composite_led_t *self)
@@ -30,8 +56,10 @@ composite_led_t *_virtual_led_ctorMJ818(composite_led_t *self)
 
 	self->led = primitive_led;											// assign pointer to LED array
 
-	self->led[Rear].Shine = &_wrapper_fade_mj818;						// LED-specific implementation
-// defines device operation on empty bus
+	self->Shine = &_component_led_mj818;								// component part ("interface")
+	self->led[Rear].Shine = &_wrapper_fade_mj818_rear;					// LED-specific implementation
+	self->led[Brake].Shine = &_wrapper_fade_mj818_brake;				// LED-specific implementation
+
 	return self;
 };
 
@@ -39,10 +67,7 @@ composite_led_t *_virtual_led_ctorMJ818(composite_led_t *self)
 void _EmptyBusOperationMJ818(void)
 {
 	if (OCR_REAR_LIGHT == 0x00)											// run once
-	{
-		_fade(0x10, &OCR_REAR_LIGHT);									// turn on rear light
-		_fade(0x05, &OCR_BRAKE_LIGHT);									// turn on rear light
-	}
+		__Device.public.led->Shine(0x10);								// operate on component part
 };
 
 // dispatches CAN messages to appropriate sub-component on device

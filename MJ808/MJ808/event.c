@@ -39,7 +39,7 @@ static void _UnSetEvent(const uint8_t val)
 	__EventHandler.__index &= ~val;										// simply clears the bit at position bit_position
 }
 
-// sets bit at bit_position ( 1 to 8) in byte __index
+// sets bit at bit_position ( 1 to 8) in byte __index - _index will have values 0, 1, 2, 4, 8, 16...128
 static void _Notify(const uint8_t bit_position)
 {
 	__EventHandler.__index |= bit_position;								// simply sets the bit at position bit_position
