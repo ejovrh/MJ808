@@ -46,7 +46,7 @@ int main(void)
 
 	while (1)															// forever loop
 	{
-			EventHandler->HandleEvent();								// execute the event handling function with argument taken from case table array
+		EventHandler->HandleEvent();									// execute the event handling function with argument taken from case table array
 
 		if (MCUCR & _BV(SE))											// if sleep is enabled
 			sleep_cpu();												// ...sleep

@@ -150,7 +150,7 @@ void charlieplexing_handler(uint8_t in_flags)
 
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 // cases in this switch-case statement must be unique for all events on this device
-void __mj828_event_execution_function(uint8_t val)
+void _event_execution_function_mj828(uint8_t val)
 {
 	switch (val)														// based on array value at position #foo of array e.g. FooButtonCaseTable[]
 	{
@@ -234,9 +234,14 @@ button_t *_virtual_button_ctorMJ828(button_t *self, event_handler_t * const even
 	self->button[Right].ButtonCaseptr = RightButtonCaseTable;			// button press-to-case binding
 
 	self->deBounce = &_debounce;										// tie in debounce function
-	event->fpointer = &__mj828_event_execution_function;				// button execution override from default to device-specific
+	//event->fpointer = &_event_execution_function_mj828;					// button execution override from default to device-specific
 
 	return self;
+};
+
+void _component_led_mj828(const uint8_t val)
+{
+	Device->led->flags |= val;
 };
 
 // implementation of virtual constructor for LEDs
@@ -246,9 +251,12 @@ composite_led_t *_virtual_led_ctorMJ828(composite_led_t *self)
 
 	self->led = primitive_led;											// assign pointer to LED array
 
+	self->Shine = &_component_led_mj828;
+
 	// FIXME - if below flag is 0, it doesn't work properly: at least one LED has to be on for the thing to work
 	// also: if any other than Green is on, it doesn't shine properly
-	self->flags = _BV(Green);											// mark green LED as on
+
+	//self->flags = _BV(Green);											// mark green LED as on
 
 	return self;
 };
@@ -332,6 +340,10 @@ void mj828_ctor()
 	__Device.public.button = _virtual_button_ctorMJ828(&Button, EventHandler);	// call virtual constructor & tie in object addresses
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
+
+	EventHandler->fpointer = &_event_execution_function_mj828;			// implements event hander for this device
+
+	__Device.public.led->Shine(_BV(GREEN));
 };
 
 #if defined(MJ828_)														// all devices have the object name "Device", hence the preprocessor macro

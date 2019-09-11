@@ -6,8 +6,8 @@
 
 typedef struct can_t													// can_t struct describing the CAN device as a whole
 {
-	uint8_t own_sidh;
-	uint8_t own_sidl;
+	uint8_t own_sidh;													// SIDH for device
+	uint8_t own_sidl;													// SIDL for device
 
 // public methods
 

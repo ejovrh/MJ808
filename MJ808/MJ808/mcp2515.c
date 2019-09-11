@@ -402,6 +402,7 @@ static void _can_sleep(const uint8_t in_val)
 	{
 		_mcp2515_opcode_bit_modify(CANINTF, 0xFF, 0x00);				// clear out all interrupt flags so that a wakeup can be asserted (if there are not handled interrupts, a wakeup interrupt will never occur)
 		_mcp2515_opcode_bit_modify(CANINTF, _BV(WAKIF), _BV(WAKIF));	// create a wake up interrupt event -- the sucker will actually go and create a real one and go on to service it
+		__CAN.__in_sleep = 0;											// mark as awake
 	}
 };
 
