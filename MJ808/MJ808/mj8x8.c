@@ -77,6 +77,9 @@ mj8x8_t * mj8x8_ctor(const uint8_t in_own_sidh)
 	__MJ8x8.public.can = can_ctor();									// pass on CAN public part
 	__MJ8x8.public.mcu = attiny_ctor();									// pass on MCU public part
 
+	__MJ8x8.public.can->own_sidh = in_own_sidh;							// high byte
+	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);			// low byte
+
 	return &__MJ8x8.public;
 };
 

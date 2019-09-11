@@ -68,7 +68,8 @@ void _PopulatedBusOperationMJ818(message_handler_t * const in_msg)
 
 void mj818_ctor()
 {
-	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B));								// call base class constructor & tie in object addresses
+	// only SIDH is supplied since with the addressing scheme SIDL is always 0
+	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B));	// call base class constructor & initialize own SID
 
 	// GPIO state definitions
 	{
@@ -110,15 +111,6 @@ void mj818_ctor()
 	static composite_led_t LED __attribute__ ((section (".data")));		// define LED object and put it into .data
 
 	__Device.public.led = _virtual_led_ctorMJ818(&LED);					// call virtual constructor & tie in object addresses
-
-	/*
-	 * self, template of an outgoing CAN message; SID intialized to this device
-	 * NOTE:
-	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
-	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
-	 */
-	__Device.public.mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B);	// high byte
-	__Device.public.mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																// low byte
 
 	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;			// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
