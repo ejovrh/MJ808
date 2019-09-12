@@ -206,7 +206,7 @@ void _event_execution_function_mj828(uint8_t val)
 };
 
 // implementation of virtual constructor for buttons
-button_t *_virtual_button_ctorMJ828(button_t *self, event_handler_t * const event)
+button_t *_virtual_button_ctorMJ828(button_t *self)
 {
 	static individual_button_t individual_button[2] __attribute__ ((section (".data")));	// define array of actual buttons and put into .data
 
@@ -336,7 +336,7 @@ void mj828_ctor()
 	static button_t Button __attribute__ ((section (".data")));			// define BUTTON object and put it into .data
 
 	__Device.public.led = _virtual_led_ctorMJ828(&LED);							// call virtual constructor & tie in object addresses
-	__Device.public.button = _virtual_button_ctorMJ828(&Button, EventHandler);	// call virtual constructor & tie in object addresses
+	__Device.public.button = _virtual_button_ctorMJ828(&Button);	// call virtual constructor & tie in object addresses
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
 
