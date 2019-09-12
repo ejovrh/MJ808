@@ -1,11 +1,5 @@
-#include <avr/sfr_defs.h>
-#include <avr/io.h>
-#include <util/delay.h>
-#include <inttypes.h>
-#include <avr/interrupt.h>
-
 #include "mj808.h"
-#include "gpio.h"
+#include "mj808_led.c"													// concrete LED-specific functions
 
 typedef struct															// mj808_t actual
 {
@@ -18,77 +12,7 @@ static __mj808_t __Device __attribute__ ((section (".data")));			// instantiate 
 // TODO - optimize
 extern void _fade(const uint8_t value, volatile uint8_t *ocr);
 extern void _debounce(individual_button_t *in_button, event_handler_t * const in_event);
-extern void DoNothing(void);
-
-// TODO - optimize
-static void _wrapper_fade_mj808(const uint8_t value)
-{
-	_fade(value, &OCR_FRONT_LIGHT);
-};
-
-// TODO - optimize & should be static and the caller in question should use an object
-// concrete utility LED handling function
-void _util_led_mj808( uint8_t in_val)
-{
-	uint8_t led = 0;													// holds the pin of the LED: D0 - green (default), D1 - red
-
-	if (in_val & _BV(B3))												// determine B3 value: red or green (default)
-	led = 1;															// red
-
-	in_val &= 7;														// clear everything except B2:0, which is the blink count (1-6)
-
-	if (in_val == 0x00)													// B3:B0 is 0 - turn off
-	{
-		PORTD |= (1<<led);												// clear bit
-		return;
-	}
-
-	if (in_val == 0x07)													// B3:B0 is 7 - turn on
-	{
-		PORTD &= ~(1<<led);												// set bit
-		return;
-	}
-
-	while (in_val--)													// blink loop
-	{
-		// TODO - util_led() - get rid of _delay_ms()
-		_delay_ms(BLINK_DELAY);											// waste a few cycles (non-blocking)
-		PORTD ^= (1<<led);												// toggle the led pin
-		_delay_ms(BLINK_DELAY);											// waste a few cycles (non-blocking)
-		PORTD ^= (1<<led);												// toggle the led pin
-	}
-};
-
-void __component_led_mj808_device_on(void)
-{
-	Device->led->led[Utility].Shine(UTIL_LED_GREEN_ON);					// green LED on
-	Device->led->led[Front].Shine(0x20);								// front light on - low key; gets overwritten by LU command, since it comes in a bit later
-
-	 //send the messages out, UDP-style. no need to check if the device is actually online
-	MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);					// convey button press via CAN and the logic unit will do its own thing
-	MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);		// turn on rear light
-	MsgHandler->SendMessage(DASHBOARD_LED_YELLOW_ON, 0x00, 1);						// turn on yellow LED
-}
-
-void __component_led_mj808_device_off(void)
-{
-	Device->led->led[Utility].Shine(UTIL_LED_GREEN_OFF);				// green LED off
-	Device->led->led[Front].Shine(0x00);								// front light off
-
-	// send the messages out, UDP-style. no need to check if the device is actually online
-	MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);					// convey button press via CAN and the logic unit will tell me what to do
-	MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);		// turn off rear light
-	MsgHandler->SendMessage(DASHBOARD_LED_YELLOW_OFF, 0x00, 1);						// turn off yellow LED
-}
-
-// delegates operations from LED component downwards to LED leaves
-void _component_led_mj808(const uint8_t val)
-{
-	if (val)															// true - on, false - off
-		__component_led_mj808_device_on();								// delegate indirectly to the leaves
-	else
-		__component_led_mj808_device_off();
-};
+//extern void DoNothing(void);
 
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 // cases in this switch-case statement must be unique for all events on this device
@@ -114,7 +38,7 @@ void _event_execution_function_mj808(const uint8_t val)
 	}
 };
 
-button_t *_virtual_button_ctorMJ808(button_t * const self, event_handler_t * const event)
+button_t *_virtual_button_ctorMJ808(button_t * const self)
 {
 	static individual_button_t individual_button[1] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
 
@@ -134,21 +58,6 @@ button_t *_virtual_button_ctorMJ808(button_t * const self, event_handler_t * con
 	self->button[Center].ButtonCaseptr = CenterButtonCaseTable;			// button press-to-case binding
 
 	self->deBounce = &_debounce;										// tie in debounce function
-	event->fpointer = &_event_execution_function_mj808;					// button execution override from default to device-specific
-
-	return self;
-};
-
-// implementation of virtual constructor for LEDs
-composite_led_t *_virtual_led_ctorMJ808(composite_led_t * const self)
-{
-	static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
-
-	self->led = primitive_led;											// assign pointer to LED array
-
-	self->Shine = &_component_led_mj808;								// component part ("interface")
-	self->led[Utility].Shine = &_util_led_mj808;						// LED-specific implementation
-	self->led[Front].Shine = &_wrapper_fade_mj808;						// LED-specific implementation
 
 	return self;
 };
@@ -167,8 +76,10 @@ void _PopulatedBusOperationMJ808(message_handler_t * const in_msg)
 
 	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT) )		// front positional light - low beam
 	{
+		// CHECKME - does it work?
+		__Device.public.led->led[Front].Shine(msg->ARGUMENT);
 		// TODO - access via object
-		_wrapper_fade_mj808(msg->ARGUMENT);								// fade front light to CAN msg. argument value
+//		_wrapper_fade_mj808(msg->ARGUMENT);								// fade front light to CAN msg. argument value
 		return;
 	}
 
@@ -237,11 +148,10 @@ void mj808_ctor()
 	sei();
 	}
 
-	static composite_led_t LED __attribute__ ((section (".data")));		// define LED object and put it into .data
 	static button_t Button __attribute__ ((section (".data")));			// define BUTTON object and put it into .data
 
-	__Device.public.led = _virtual_led_ctorMJ808(&LED);							// call virtual constructor & tie in object addresses
-	__Device.public.button = _virtual_button_ctorMJ808(&Button, EventHandler);	// call virtual constructor & tie in object addresses
+	__Device.public.led = _virtual_led_ctorMJ808();						// call virtual constructor & tie in object addresses
+	__Device.public.button = _virtual_button_ctorMJ808(&Button);		// call virtual constructor & tie in object addresses
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;// implements device-specific operation depending on bus activity
 

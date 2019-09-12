@@ -17,8 +17,6 @@
 #define LED_CP1_pin				B,	2,	2								// LED Charlie-plexed pin1
 // definitions of device/PCB layout-specific hardware pins
 
-void charlieplexing_handler(uint8_t in_flags);							// handles LEDs in charlieplexed configuration
-
 enum mj828_leds															// enum of lights on this device
 {
 	Red,																// 0

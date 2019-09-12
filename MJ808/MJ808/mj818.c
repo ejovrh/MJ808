@@ -1,11 +1,5 @@
-#include <avr/sfr_defs.h>
-#include <avr/io.h>
-#include <inttypes.h>
-#include <avr/interrupt.h>
-#include <util/delay.h>
-
 #include "mj818.h"
-#include "gpio.h"
+#include "mj818_led.c"													// concrete LED-specific functions
 
 typedef struct															// mj818_t actual
 {
@@ -16,52 +10,6 @@ typedef struct															// mj818_t actual
 static __mj818_t __Device __attribute__ ((section (".data")));			// instantiate mj818_t actual, as if it were initialized
 
 extern void _fade(const uint8_t value, volatile uint8_t *ocr);
-
-// TODO - optimize
-static void _wrapper_fade_mj818_rear(uint8_t value)
-{
-// TODO - optimize
-	_fade(value, &OCR_REAR_LIGHT);
-};
-
-static void _wrapper_fade_mj818_brake(uint8_t value)
-{
-	// TODO - optimize
-	_fade(value, &OCR_BRAKE_LIGHT);
-};
-
-inline void __component_led_mj818_device_on(const uint8_t val)
-{
-	_fade(val, &OCR_BRAKE_LIGHT);
-	_fade(val, &OCR_REAR_LIGHT);
-};
-
-inline void __component_led_mj818_device_off(void)
-{
-	_fade(0x00, &OCR_BRAKE_LIGHT);
-	_fade(0x00, &OCR_REAR_LIGHT);
-};
-
-void _component_led_mj818(const uint8_t val)
-{
-	if (val)															// true - on, false - off
-		__component_led_mj818_device_on(val);							// delegate indirectly to the leaves
-	else
-		__component_led_mj818_device_off();
-};
-
-composite_led_t *_virtual_led_ctorMJ818(composite_led_t *self)
-{
-	static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
-
-	self->led = primitive_led;											// assign pointer to LED array
-
-	self->Shine = &_component_led_mj818;								// component part ("interface")
-	self->led[Rear].Shine = &_wrapper_fade_mj818_rear;					// LED-specific implementation
-	self->led[Brake].Shine = &_wrapper_fade_mj818_brake;				// LED-specific implementation
-
-	return self;
-};
 
 // defines device operation on empty bus
 void _EmptyBusOperationMJ818(void)
@@ -133,9 +81,7 @@ void mj818_ctor()
 	sei();
 	}
 
-	static composite_led_t LED __attribute__ ((section (".data")));		// define LED object and put it into .data
-
-	__Device.public.led = _virtual_led_ctorMJ818(&LED);					// call virtual constructor & tie in object addresses
+	__Device.public.led = _virtual_led_ctorMJ818();						// call virtual constructor & tie in object addresses
 
 	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;			// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
