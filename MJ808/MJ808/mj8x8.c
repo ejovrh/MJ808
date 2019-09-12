@@ -34,7 +34,8 @@ static void _Heartbeat(message_handler_t * const msg)
 
 			#if defined(MJ808_)
 			// TODO - access via object
-			_util_led_mj808(UTIL_LED_RED_BLINK_1X);
+			//Device->led->led[Utility].Shine(UTIL_LED_RED_BLINK_1X);
+			//_util_led_mj808(UTIL_LED_RED_BLINK_1X);
 			#endif
 		}
 	}
