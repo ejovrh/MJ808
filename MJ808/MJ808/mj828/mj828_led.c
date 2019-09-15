@@ -4,10 +4,10 @@
 #include <inttypes.h>
 #include <avr/pgmspace.h>
 
-#include "mj828.h"
-#include "led.h"
+#include "mj828\mj828.h"
+#include "led\led.h"
 
-#include "composite_led_actual.c"										// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
+#include "led\composite_led_actual.c"										// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
 
 static primitive_led_t primitive_led[8] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 

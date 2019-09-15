@@ -1,7 +1,7 @@
 #ifndef MESSAGE_H_
 #define MESSAGE_H_
 
-#include "mcp2515.h"
+#include "mj8x8\mcp2515.h"
 
 typedef struct message_handler_t										// sends and receives (stores) CAN messages, keeps track of bus status
 {																		//	is message-agnostic -> the actual device has to know what to do with a message (via PopulatedBusOperation() )

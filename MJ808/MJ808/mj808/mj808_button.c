@@ -1,8 +1,8 @@
 #ifndef MJ808_BUTTON_C_
 #define MJ808_BUTTON_C_
 
-#include "mj808.h"
-#include "button_types_actual.c"										// various __*button_t types - for convenience in one place for all LED devices
+#include "mj808\mj808.h"
+#include "button\button_types_actual.c"										// various __*button_t types - for convenience in one place for all LED devices
 
 extern void _debounce(__individual_button_t *in_button, event_handler_t * const in_event);
 

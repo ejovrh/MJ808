@@ -1,9 +1,9 @@
 #ifndef MJ828_H_
 #define MJ828_H_
 
-#include "mj8x8.h"
-#include "led.h"
-#include "button.h"
+#include "mj8x8\mj8x8.h"
+#include "led\led.h"
+#include "button\button.h"
 
 // definitions of device/PCB layout-specific hardware pins
 #define MCP2561_standby_pin		B,	3,	3								// MCP2561 standby

@@ -129,6 +129,7 @@
   <avrgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>%24(PackRepoDir)\Atmel\ATtiny_DFP\1.3.229\include</Value>
+      <Value>..</Value>
     </ListValues>
   </avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
@@ -156,111 +157,121 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="attiny4313.c">
+    <Compile Include="button\button.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="attiny4313.h">
+    <Compile Include="button\button.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="button.c">
+    <Compile Include="button\button_types_actual.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="button.h">
+    <Compile Include="event\event.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="button_types_actual.c">
+    <Compile Include="event\event.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="can_msg.h">
+    <Compile Include="led\composite_led_actual.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="composite_led_actual.c">
+    <Compile Include="led\led.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="event.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="event.h">
+    <Compile Include="led\led.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mcp2515_hw_defines.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="message.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="message.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="gpio.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="led.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="led.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mcp2515.c">
+    <Compile Include="message\message.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mcp2515.h">
+    <Compile Include="message\message.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj808.c">
+    <Compile Include="mj808\mj808.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj808.h">
+    <Compile Include="mj808\mj808.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj808_button.c">
+    <Compile Include="mj808\mj808_button.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj808_led.c">
+    <Compile Include="mj808\mj808_led.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj818.c">
+    <Compile Include="mj818\mj818.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj818.h">
+    <Compile Include="mj818\mj818.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj818_led.c">
+    <Compile Include="mj818\mj818_led.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj828.c">
+    <Compile Include="mj828\mj828.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj828.h">
+    <Compile Include="mj828\mj828.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj828_button.c">
+    <Compile Include="mj828\mj828_button.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj828_led.c">
+    <Compile Include="mj828\mj828_led.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj8x8.c">
+    <Compile Include="mj8x8\attiny4313.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj8x8.h">
+    <Compile Include="mj8x8\attiny4313.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj8x8_commands.h">
+    <Compile Include="mj8x8\can_msg.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="uci_spi.c">
+    <Compile Include="mj8x8\mcp2515.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="uci_spi.h">
+    <Compile Include="mj8x8\mcp2515.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="mj8x8\mcp2515_hw_defines.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj8x8\mj8x8.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj8x8\mj8x8.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj8x8\mj8x8_commands.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj8x8\uci_spi.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj8x8\uci_spi.h">
+      <SubType>compile</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="mj828" />
+    <Folder Include="mj818" />
+    <Folder Include="mj808" />
+    <Folder Include="mj8x8" />
+    <Folder Include="led" />
+    <Folder Include="button" />
+    <Folder Include="event" />
+    <Folder Include="message" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>
