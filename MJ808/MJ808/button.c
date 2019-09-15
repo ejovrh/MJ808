@@ -1,19 +1,20 @@
+#include "button_types_actual.c"
 #include "button.h"
 
 // button debouncer for devices with buttons
-extern void _debounce(individual_button_t *in_button, event_handler_t * const in_event)
+void _debounce(__individual_button_t * const in_button, event_handler_t * const in_event)
 {
 	inline void local_advance_counter(void)								// local helper function which advances the debounce "timer"
 	{
-		++in_button->_hold_counter;										// start to count (used to determine long button press; not used for debouncing)
+		++in_button->__hold_counter;									// start to count (used to determine long button press; not used for debouncing)
 
 
-		++in_button->_state;											//
+		++in_button->__state;											// debouncing by means of bit shifting - redux
 
 																		// debouncing by means of bit shifting
-		//in_button->_state ^ 0x03;										// XOR what we currently have in state
-		//in_button->_state <<= 1;										// left shift so that if we have 0x01 this becomes 0x02
-		//in_button->_state |= 0x01;									// OR what we have with 0x01 so that 0x02 becomes 0x03
+		//in_button._state ^ 0x03;										// XOR what we currently have in state
+		//in_button._state <<= 1;										// left shift so that if we have 0x01 this becomes 0x02
+		//in_button._state |= 0x01;										// OR what we have with 0x01 so that 0x02 becomes 0x03
 	}
 
 	/*	rationale of debouncing:
@@ -37,26 +38,26 @@ extern void _debounce(individual_button_t *in_button, event_handler_t * const in
 	 */
 																		// CHECKME - random spikes (not true button press events) every 25ms might be an issue
 	#if defined(MJ828_)													// inverted
-	if (	!( *(in_button->_PIN) & (1<<in_button->_pin_number))	)	// if in the given PIN register the given button is pressed
+	if (	!( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
 	#endif
 	#if defined(MJ808_)													// non-inverted
-	if (	( *(in_button->_PIN) & (1<<in_button->_pin_number))	)		// if in the given PIN register the given button is pressed
+	if (	( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
 	#endif
 	{												// button is pressed
 		local_advance_counter();										// debouncing happens here
 
-		if (in_button->_hold_counter >= BUTTON_MAX_PRESS_TIME)			// too long button press -> error state
+		if (in_button->__hold_counter >= BUTTON_MAX_PRESS_TIME)			// too long button press -> error state
 		{																// turn everything off
-			in_button->_state = 0;										// reset state
-			in_button->Momentary = 0;									// mark as currently not pressed
-			in_button->_was_pressed = 1;								// mark button as "was pressed" - this is the previous state in the next iteration
+			in_button->__state = 0;										// reset state
+			in_button->public.Momentary = 0;							// mark as currently not pressed
+			in_button->__was_pressed = 1;								// mark button as "was pressed" - this is the previous state in the next iteration
 
 			// order is important
-			in_button->ErrorHold = 1;									// mark as error state
-		    in_event->Notify(in_button->ButtonCaseptr[ErrorHold]);		// notify event handler of button press
+			in_button->public.ErrorHold = 1;							// mark as error state
+		    in_event->Notify(in_button->__ButtonCaseptr[CaseErrorHold]);// notify event handler of button press
 
-			in_button->Toggle = 0;										// toggled due to error state -> reset to default value
-			in_button->Hold = 0;										// mark as hold_temp off
+			in_button->public.Toggle = 0;								// toggled due to error state -> reset to default value
+			in_button->public.Hold = 0;									// mark as hold_temp off
 			return;														// get out
 		}
 	}
@@ -64,53 +65,53 @@ extern void _debounce(individual_button_t *in_button, event_handler_t * const in
 	else											// button is released
 #endif
 	{
-		if (in_button->_is_at_default)									// if we are in zero state
+		if (in_button->__is_at_default)									// if we are in zero state
 			return;														// no need to do anything
 
 																		// button is released
 																		// button is not pressed - reset everything to default values
-		in_button->_state = 0;											// reset state
-		in_button->Momentary = 0;										// mark as currently not pressed
+		in_button->__state = 0;											// reset state
+		in_button->public.Momentary = 0;								// mark as currently not pressed
 
-		in_button->_was_pressed = 1;									// mark button as "was pressed" - this is the previous state in the next iteration
-		in_button->ErrorHold = 0;										// release error flag, since button is now released
-		in_button->_hold_counter = 0;									// set counter back to 0
-		in_button->Momentary = 0;										// mark as currently not pressed
-		in_button->_is_at_default = 1;
+		in_button->__was_pressed = 1;									// mark button as "was pressed" - this is the previous state in the next iteration
+		in_button->public.ErrorHold = 0;								// release error flag, since button is now released
+		in_button->__hold_counter = 0;									// set counter back to 0
+		in_button->public.Momentary = 0;								// mark as currently not pressed
+		in_button->__is_at_default = 1;
 		return;															// finish
 	}
 
 	// state markers
-	if (in_button->_state == 0x03 && !in_button->ErrorHold)				// if we have a non-error steady state
+	if (in_button->__state == 0x03 && !in_button->public.ErrorHold)		// if we have a non-error steady state
 	{
-		if (in_button->_hold_counter >= BUTTON_MIN_PRESS_TIME)			// pressed for a valid amount of time
+		if (in_button->__hold_counter >= BUTTON_MIN_PRESS_TIME)			// pressed for a valid amount of time
 		{
-			if (!in_button->_was_pressed)								// previous state (prevent flapping on/off)
+			if (!in_button->__was_pressed)								// previous state (prevent flapping on/off)
 			{
 				// order is important
-				in_button->Hold = !in_button->Hold;			          	// set "hold_temp" state
-				in_event->Notify(in_button->ButtonCaseptr[Hold]);		// notify event handler of button press
+				in_button->public.Hold = !in_button->public.Hold;		// set "hold_temp" state
+				in_event->Notify(in_button->__ButtonCaseptr[CaseHold]);	// notify event handler of button press
 			}
 
-			in_button->_was_pressed = 1;								// mark the button as being pressed
+			in_button->__was_pressed = 1;								// mark the button as being pressed
 			return;
 		}
 
-		if (in_button->_was_pressed)									// previous state (prevent flapping on/off)
+		if (in_button->__was_pressed)									// previous state (prevent flapping on/off)
 		{
 			// order is important
-			in_button->Toggle = !in_button->Toggle;						// set "toggle" state
-			in_event->Notify(in_button->ButtonCaseptr[Toggle]);			// notify event handler of button press
+			in_button->public.Toggle = !in_button->public.Toggle;		// set "toggle" state
+			in_event->Notify(in_button->__ButtonCaseptr[CaseToggle]);	// notify event handler of button press
 		}
 
 		// order is important
-		if (!in_button->Momentary)
+		if (!in_button->public.Momentary)
 		{
-			in_button->Momentary = 1;									// set "is_pressed" state
-			in_event->Notify(in_button->ButtonCaseptr[Momentary]);		// notify event handler of button press
+			in_button->public.Momentary = 1;							// set "is_pressed" state
+			in_event->Notify(in_button->__ButtonCaseptr[CaseMomentary]);// notify event handler of button press
 		}
 
-		in_button->_was_pressed = 0;									// mark the button as being pressed
-		in_button->_is_at_default = 0;
+		in_button->__was_pressed = 0;									// mark the button as being pressed
+		in_button->__is_at_default = 0;
 	}
 };

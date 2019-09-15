@@ -9,11 +9,6 @@ typedef struct															// mj808_t actual
 
 static __mj808_t __Device __attribute__ ((section (".data")));			// preallocate __Device object in .data
 
-// TODO - optimize
-extern void _fade(const uint8_t value, volatile uint8_t *ocr);
-extern void _debounce(individual_button_t *in_button, event_handler_t * const in_event);
-//extern void DoNothing(void);
-
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 // cases in this switch-case statement must be unique for all events on this device
 void _event_execution_function_mj808(const uint8_t val)

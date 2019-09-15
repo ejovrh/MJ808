@@ -8,8 +8,6 @@ typedef struct															// mj818_t actual
 
 static __mj818_t __Device __attribute__ ((section (".data")));			// preallocate __Device object in .data
 
-extern void _fade(const uint8_t value, volatile uint8_t *ocr);
-
 // defines device operation on empty bus
 void _EmptyBusOperationMJ818(void)
 {
