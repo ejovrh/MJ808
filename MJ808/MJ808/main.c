@@ -13,7 +13,7 @@
 #include "mj828.h"
 #endif
 
-
+// FIXME - get rid of this here
 	void helper_handle_rx(void)											// handles incoming message interrupts
 	{
 		Device->mj8x8->PopulatedBusOperation(MsgHandler);				// let the particular device deal with the message
@@ -46,7 +46,7 @@ int main(void)
 
 	while (1)															// forever loop
 	{
-			EventHandler->HandleEvent();								// execute the event handling function with argument taken from case table array
+		EventHandler->HandleEvent();									// execute the event handling function with argument taken from case table array
 
 		if (MCUCR & _BV(SE))											// if sleep is enabled
 			sleep_cpu();												// ...sleep
@@ -54,33 +54,34 @@ int main(void)
 }
 
 
-	// assumption: an incoming message is of interest for this unit
-	//	'being of interest' is defined in the filters
-
-
-
-
+// port change interrupts - not used yet
 /*
-		if (in_can->eflg & _BV(TXBO))									// TODO - handle bus off situation
-		{
-			;
-		}
+ISR(PCINT2_vect)														// pin-change ISR for pushbuttons
+{
+	sleep_disable();													// wakey wakey
 
-		if (in_can->eflg & _BV(TXEP))									// handle TX error-passive situation
-		{
-			Device.mj8x8->can->Sleep(in_can, 1);						// put to sleep
-		}
+	;
 
-		if (in_can->eflg & _BV(RXEP))									// TODO - handle RX error-passive situation
-		{
-			;
-		}
+	sleep_enable();														// back to sleep
+}
+*/
 
-		if (in_can->eflg & _BV(TXWAR))									// TODO - handle TX waring situation
-		{
-			// TODO - log it
-			;
-		}
+#if ( defined(MJ808_) | defined(MJ828_) )								// ISR for timers 1 A compare match - button handling
+ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
+{
+	// code to be executed every 25ms
+	sleep_disable();													// wakey wakey
 
-		if (in_can->eflg & _BV(RXWAR))									// TODO - handle RX warning situation
-		{
+	Device->button->deBounce();											// call the debouncer
+
+	sleep_enable();														// back to sleep
+}
+
+#if defined(MJ828_)														// ISR for timer0 - 16.25ms - charlieplexing timer
+ISR(TIMER0_COMPA_vect)													// timer/counter0 - 16.25ms - charlieplexed blinking
+{
+	Device->led->Handler();												// handles LEDs according to CAN message (of type CMND_UTIL_LED)
+}
+#endif
+
+#endif
