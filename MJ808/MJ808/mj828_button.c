@@ -15,7 +15,7 @@ static void _debounce_wrapper()
 // implementation of virtual constructor for buttons
 static button_t *_virtual_button_ctorMJ828(void)
 {
-	static individual_button_t individual_button[2] __attribute__ ((section (".data")));	// define array of actual buttons and put into .data
+	static individual_button_t individual_button[2] __attribute__ ((section (".data")));	// preallocate individual_button object in .data
 
 	__Button.public.button = individual_button;							// assign pointer to button array
 	__Button.__button_count = 2;										// how many buttons are on this device?

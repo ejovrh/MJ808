@@ -1,6 +1,6 @@
 #include "button.h"
 
-typedef struct															// __indovodial_button_t actual
+typedef struct															// individual_button_t actual
 {
 	individual_button_t public;											// public struct
 	
@@ -13,4 +13,4 @@ typedef struct															// button_t actual
 	uint8_t __button_count : 2;											// private - button count, max. 4 buttons
 } __button_t;
 
-static __button_t __Button __attribute__ ((section (".data")));		// define BUTTON object and put it into .data
+static __button_t __Button __attribute__ ((section (".data")));			// preallocate __Button object in .data

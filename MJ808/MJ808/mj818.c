@@ -1,12 +1,12 @@
 #include "mj818.h"
-#include "mj818_led.c"													// concrete decice-specific LED functions
+#include "mj818_led.c"													// concrete device-specific LED functions
 
 typedef struct															// mj818_t actual
 {
 	mj818_t public;														// public struct
 } __mj818_t;
 
-static __mj818_t __Device __attribute__ ((section (".data")));			// instantiate mj818_t actual, as if it were initialized
+static __mj818_t __Device __attribute__ ((section (".data")));			// preallocate __Device object in .data
 
 extern void _fade(const uint8_t value, volatile uint8_t *ocr);
 

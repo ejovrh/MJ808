@@ -10,7 +10,7 @@ typedef struct															// mj828_t actual
 	mj828_t public;														// public struct
 } __mj828_t;
 
-static __mj828_t __Device __attribute__ ((section (".data")));			// instantiate mj828_t actual, as if it were initialized
+static __mj828_t __Device __attribute__ ((section (".data")));			// preallocate __Device object in .data
 
 void _event_execution_function_mj828(uint8_t val)
 {

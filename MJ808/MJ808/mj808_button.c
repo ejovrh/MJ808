@@ -13,7 +13,7 @@ static void _debounce_wrapper()
 };
 
 // implementation of virtual constructor for buttons
-button_t *_virtual_button_ctorMJ808()
+static button_t *_virtual_button_ctorMJ808()
 {
 	static individual_button_t individual_button[1] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
 

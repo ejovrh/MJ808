@@ -1,12 +1,13 @@
 #include "mj808.h"
-#include "mj808_led.c"													// concrete decice-specific LED functions
+#include "mj808_led.c"													// concrete device-specific LED functions
+#include "mj808_button.c"												// concrete device-specific button functions
 
 typedef struct															// mj808_t actual
 {
 	mj808_t public;														// public struct
 } __mj808_t;
 
-static __mj808_t __Device __attribute__ ((section (".data")));			// instantiate mj808_t actual, as if it were initialized
+static __mj808_t __Device __attribute__ ((section (".data")));			// preallocate __Device object in .data
 
 // TODO - optimize
 extern void _fade(const uint8_t value, volatile uint8_t *ocr);
@@ -123,10 +124,8 @@ void mj808_ctor()
 	sei();
 	}
 
-	static button_t Button __attribute__ ((section (".data")));			// define BUTTON object and put it into .data
-
 	__Device.public.led = _virtual_led_ctorMJ808();						// call virtual constructor & tie in object addresses
-	__Device.public.button = _virtual_button_ctorMJ808(&Button);		// call virtual constructor & tie in object addresses
+	__Device.public.button = _virtual_button_ctorMJ808();				// call virtual constructor & tie in object addresses
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;// implements device-specific operation depending on bus activity
 
