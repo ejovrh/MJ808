@@ -1,10 +1,9 @@
 #include "mj808.h"
-#include "mj808_led.c"													// concrete LED-specific functions
+#include "mj808_led.c"													// concrete decice-specific LED functions
 
 typedef struct															// mj808_t actual
 {
 	mj808_t public;														// public struct
-//	uint8_t foo_private;												// private - some data member
 } __mj808_t;
 
 static __mj808_t __Device __attribute__ ((section (".data")));			// instantiate mj808_t actual, as if it were initialized
@@ -36,30 +35,6 @@ void _event_execution_function_mj808(const uint8_t val)
 			EventHandler->UnSetEvent(val);
 			return;
 	}
-};
-
-button_t *_virtual_button_ctorMJ808(button_t * const self)
-{
-	static individual_button_t individual_button[1] __attribute__ ((section (".data")));		// define array of actual buttons and put into .data
-
-	self->button = individual_button;									// assign pointer to button array
-	self->button_count = 1;												// how many buttons are on this device?
-	self->button[Center]._PIN = (uint8_t *) 0x30; 						// 0x020 offset plus address - PIND register
-	self->button[Center]._pin_number = 4;								// sw2 is connected to pin D0
-
-	static uint8_t CenterButtonCaseTable[] =							// array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
-	{
-		0x00,	// 0 - not defined
-		0x00,	// 1 - not defined
-		0x02,	// 2 - jump case 0x02 - button Hold
-		0x01,	// 3 - jump case 0x01 - error event
-	};
-
-	self->button[Center].ButtonCaseptr = CenterButtonCaseTable;			// button press-to-case binding
-
-	self->deBounce = &_debounce;										// tie in debounce function
-
-	return self;
 };
 
 // received MsgHandler object and passes

@@ -72,8 +72,7 @@ ISR(TIMER1_COMPA_vect)													// timer/counter 1 - button debounce - 25ms
 	// code to be executed every 25ms
 	sleep_disable();													// wakey wakey
 
-	for (uint8_t i=0; i<Device->button->button_count; ++i)				// loop over all available buttons and debounce them
-		Device->button->deBounce(&Device->button->button[i], EventHandler);		// from here on the button is debounced and states can be consumed
+	Device->button->deBounce();											// call the debouncer
 
 	sleep_enable();														// back to sleep
 }

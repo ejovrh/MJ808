@@ -35,6 +35,7 @@ typedef struct															// can_t actual
 	uint8_t	__tec;														// Transmit Error Counter - TEC, datasheet p. 48
 	uint8_t __rec;														// Receive Error Counter - REC, datasheet p. 48
 	// preserve byte order for sequential reads/writes
+
 	uint8_t __in_sleep:1;												// is MCP2561 CAN transceiver in sleep or not
 	uint8_t __icod:3;													// Interrupt Codes
 
@@ -50,8 +51,6 @@ extern __can_t __CAN;													// declare can_t actual
  *	low-level instruction set: reset, read, read RX buffer, write, load TX buffer, RTS, read status, RX status, bit modify
  *	they are all described in the datasheet in chapter 12 - SPI interface
  */
-
-// private functions here, object constructor at the end
 
 //bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
 static void _mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte)
@@ -422,7 +421,7 @@ can_t * can_ctor()
 {
 	__CAN.init();														// initialize & configure the MCP2515
 
-	return &__CAN.public;												// return pointer to can_t public part
+	return &__CAN.public;												// return address of public part; calling code accesses it via pointer
 };
 
 ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message reception of the MCP2515

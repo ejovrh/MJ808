@@ -1,10 +1,9 @@
 #include "mj818.h"
-#include "mj818_led.c"													// concrete LED-specific functions
+#include "mj818_led.c"													// concrete decice-specific LED functions
 
 typedef struct															// mj818_t actual
 {
 	mj818_t public;														// public struct
-	//	uint8_t foo_private;											// private - some data member
 } __mj818_t;
 
 static __mj818_t __Device __attribute__ ((section (".data")));			// instantiate mj818_t actual, as if it were initialized

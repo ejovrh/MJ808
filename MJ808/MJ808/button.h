@@ -35,9 +35,8 @@ typedef struct 															// struct describing a generic pushbutton
 typedef struct button_t
 {
 	individual_button_t *button;										// "virtual" pointer to array of buttons present on particular device
-	uint8_t button_count : 2;											// max. 4 buttons
 
-	void (*deBounce)(individual_button_t *in_button, event_handler_t * const in_event);			// button debouncer
+	void (*deBounce)(void);												// button debouncer
 
 	//button_t *(*virtual_button_ctor)(struct button_t * const self);	// "virtual" pointer to array of button present on particular device
 } button_t;

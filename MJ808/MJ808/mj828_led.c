@@ -7,15 +7,9 @@
 #include "mj828.h"
 #include "led.h"
 
-typedef struct															// composite_led_t actual
-{
-	composite_led_t public;												// public struct
-
-	uint8_t flags;														// private - uint8_t interpreted bit-wise for flagging individual LEDs to be lit
-} __composite_led_t;
+#include "composite_led_actual.c"										// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
 
 static primitive_led_t primitive_led[8] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
-static __composite_led_t __LED;
 
 static void __mj828_led_gpio_init(void)
 {
@@ -164,7 +158,7 @@ static __composite_led_t __LED =
 // implementation of virtual constructor for LEDs
 static composite_led_t *_virtual_led_ctorMJ828()
 {
-	return &__LED.public;
+	return &__LED.public;												// return address of public part; calling code accesses it via pointer
 };
 
 #endif /* MJ828_LED_C_ */

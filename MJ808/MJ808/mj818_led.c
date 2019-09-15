@@ -1,21 +1,14 @@
 #ifndef MJ818_LED_C_
 #define MJ818_LED_C_
 
-#include <avr/io.h>
 #include <avr/interrupt.h>
 
 #include "mj818.h"
 #include "led.h"
 
-typedef struct															// composite_led_t actual
-{
-	composite_led_t public;												// public struct
-
-	uint8_t flags;														// private - uint8_t interpreted bit-wise for flagging individual LEDs to be lit
-} __composite_led_t;
+#include "composite_led_actual.c"										// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
 
 static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
-static __composite_led_t __LED;
 
 extern void DoNothing(void);
 
@@ -63,9 +56,9 @@ static composite_led_t *_virtual_led_ctorMJ818()
 {
 	__LED.public.led[Rear].Shine = &_wrapper_fade_mj818_rear;			// LED-specific implementation
 	__LED.public.led[Brake].Shine = &_wrapper_fade_mj818_brake;			// LED-specific implementation
-	__LED.public.Handler = &DoNothing;									//
+	__LED.public.Handler = &DoNothing;									// do noting
 
-	return &__LED.public ;
+	return &__LED.public;												// return address of public part; calling code accesses it via pointer
 };
 
 #endif /* MJ808_LED_C_ */

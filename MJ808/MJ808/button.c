@@ -1,6 +1,6 @@
 #include "button.h"
 
-#if defined(MJ808_) || defined (MJ828_)									// button debouncer for devices with buttons
+// button debouncer for devices with buttons
 extern void _debounce(individual_button_t *in_button, event_handler_t * const in_event)
 {
 	inline void local_advance_counter(void)								// local helper function which advances the debounce "timer"
@@ -60,7 +60,9 @@ extern void _debounce(individual_button_t *in_button, event_handler_t * const in
 			return;														// get out
 		}
 	}
+#if ( defined(MJ808_) | defined(MJ828_) )
 	else											// button is released
+#endif
 	{
 		if (in_button->_is_at_default)									// if we are in zero state
 			return;														// no need to do anything
@@ -112,4 +114,3 @@ extern void _debounce(individual_button_t *in_button, event_handler_t * const in
 		in_button->_is_at_default = 0;
 	}
 };
-#endif

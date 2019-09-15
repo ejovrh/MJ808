@@ -1,19 +1,16 @@
 #include <avr/interrupt.h>
 
 #include "mj828.h"
-#include "mj828_led.c"													// concrete LED-specific functions
+
+#include "mj828_led.c"													// concrete device-specific LED functions
+#include "mj828_button.c"												// concrete device-specific button functions
 
 typedef struct															// mj828_t actual
 {
 	mj828_t public;														// public struct
-//	uint8_t foo_private;												// private - some data member
 } __mj828_t;
 
 static __mj828_t __Device __attribute__ ((section (".data")));			// instantiate mj828_t actual, as if it were initialized
-
-extern void _debounce(individual_button_t *in_button, event_handler_t * const in_event);
-
-
 
 void _event_execution_function_mj828(uint8_t val)
 {
@@ -69,43 +66,6 @@ void _event_execution_function_mj828(uint8_t val)
 			EventHandler->UnSetEvent(val);								// do nothing
 		break;
 	}
-};
-
-// implementation of virtual constructor for buttons
-button_t *_virtual_button_ctorMJ828(button_t *self)
-{
-	static individual_button_t individual_button[2] __attribute__ ((section (".data")));	// define array of actual buttons and put into .data
-
-	self->button = individual_button;									// assign pointer to button array
-	self->button_count = 2;												// how many buttons are on this device?
-	self->button[0]._PIN = (uint8_t *) 0x30;							// 0x020 offset plus address - PIND register
-	self->button[0]._pin_number = 0;									// sw2 is connected to pin D0
-	self->button[1]._PIN = (uint8_t *) 0x30;							// ditto
-	self->button[1]._pin_number = 1;									// sw2 is connected to pin D1
-
-	static uint8_t LeftButtonCaseTable[] =								// array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
-	{
-		0x04,	// 0 - jump case 0x04 - momentary event
-		0x00,	// 1 - not defined
-		0x00,	// 2 - not defined
-		0x01	// 3 - not defined
-	};
-
-	static uint8_t RightButtonCaseTable[] =								// array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
-	{
-		0x00,	// 0 - not defined
-		0x02,	// 1 - jump case 0x02 - toggle event
-		0x00,	// 2 - not defined
-		0x01	// 3 - not defined
-	};
-
-	self->button[Left].ButtonCaseptr = LeftButtonCaseTable;				// button press-to-case binding
-	self->button[Right].ButtonCaseptr = RightButtonCaseTable;			// button press-to-case binding
-
-	self->deBounce = &_debounce;										// tie in debounce function
-
-
-	return self;
 };
 
 // toggles a bit in the LED flags variable; charlieplexer in tun makes it shine
@@ -177,10 +137,8 @@ void mj828_ctor()
 	sei();
 	}
 
-	static button_t Button __attribute__ ((section (".data")));			// define BUTTON object and put it into .data
-
 	__Device.public.led = _virtual_led_ctorMJ828();						// call virtual constructor & tie in object addresses
-	__Device.public.button = _virtual_button_ctorMJ828(&Button);		// call virtual constructor & tie in object addresses
+	__Device.public.button = _virtual_button_ctorMJ828();				// call virtual constructor & tie in object addresses
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
 

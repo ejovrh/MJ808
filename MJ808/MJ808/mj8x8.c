@@ -81,7 +81,7 @@ mj8x8_t * mj8x8_ctor(const uint8_t in_own_sidh)
 	__MJ8x8.public.can->own_sidh = in_own_sidh;							// high byte
 	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);			// low byte
 
-	return &__MJ8x8.public;
+	return &__MJ8x8.public;												// return address of public part; calling code accesses it via pointer
 };
 
 ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka. active CAN bus device discovery
