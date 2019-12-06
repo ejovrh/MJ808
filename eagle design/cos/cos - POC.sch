@@ -24400,9 +24400,9 @@ of current control</text>
 <label x="182.88" y="-368.3" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC8" gate="G$1" pin="OC1A/PCINT3-PB3"/>
-<wire x1="193.04" y1="-256.54" x2="198.12" y2="-256.54" width="0.1524" layer="91"/>
-<label x="198.12" y="-256.54" size="1.778" layer="95"/>
+<pinref part="IC8" gate="G$1" pin="OC0A/PCINT2-PB2"/>
+<wire x1="193.04" y1="-254" x2="198.12" y2="-254" width="0.1524" layer="91"/>
+<label x="198.12" y="-254" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V0_TP-OUT" class="2">
@@ -24808,14 +24808,14 @@ of current control</text>
 <label x="165.1" y="-10.16" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC8" gate="G$1" pin="OC0A/PCINT2-PB2"/>
-<wire x1="193.04" y1="-254" x2="198.12" y2="-254" width="0.1524" layer="91"/>
-<label x="198.12" y="-254" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="R18" gate="G$1" pin="6"/>
 <wire x1="173.99" y1="-363.22" x2="182.88" y2="-363.22" width="0.1524" layer="91"/>
 <label x="182.88" y="-363.22" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="IC15" gate="G$1" pin="16_GP7"/>
+<wire x1="294.64" y1="10.16" x2="304.8" y2="10.16" width="0.1524" layer="91"/>
+<label x="304.8" y="10.16" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$10" class="0">
@@ -25095,6 +25095,11 @@ of current control</text>
 <pinref part="IC3" gate="G$1" pin="1-PS/S"/>
 <wire x1="81.28" y1="439.42" x2="88.9" y2="439.42" width="0.1524" layer="91"/>
 <label x="88.9" y="439.42" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="IC8" gate="G$1" pin="OC1A/PCINT3-PB3"/>
+<wire x1="193.04" y1="-256.54" x2="198.12" y2="-256.54" width="0.1524" layer="91"/>
+<label x="198.12" y="-256.54" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="PG" class="3">
@@ -25406,13 +25411,6 @@ of current control</text>
 <pinref part="IC15" gate="G$1" pin="15_GP6"/>
 <wire x1="294.64" y1="7.62" x2="304.8" y2="7.62" width="0.1524" layer="91"/>
 <label x="304.8" y="7.62" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="MCP23S08_GP7" class="0">
-<segment>
-<pinref part="IC15" gate="G$1" pin="16_GP7"/>
-<wire x1="294.64" y1="10.16" x2="304.8" y2="10.16" width="0.1524" layer="91"/>
-<label x="304.8" y="10.16" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V9_LDO" class="0">
