@@ -20,6 +20,8 @@ void _event_execution_function_cos(const uint8_t val)
 // received MsgHandler object and passes
 void _PopulatedBusOperationCOS(message_handler_t * const in_msg)
 {
+	volatile can_msg_t *msg = in_msg->ReceiveMessage();					// CAN message object
+
 	return;
 };
 
