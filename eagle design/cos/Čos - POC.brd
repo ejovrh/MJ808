@@ -3864,7 +3864,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="30.75" y1="26" x2="31.5" y2="26" width="1" layer="15"/>
 <wire x1="31.5" y1="26" x2="32.25" y2="26" width="1" layer="15"/>
 <wire x1="32.25" y1="26" x2="30.75" y2="26" width="0.5" layer="1"/>
-<wire x1="30.75" y1="26" x2="30.75" y2="25.9" width="0" layer="19" extent="1-16"/>
+<wire x1="32.25" y1="26" x2="32.35" y2="26" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="RESET" class="3">
 <contactref element="IC14" pad="!RESET!"/>
