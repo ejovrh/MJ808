@@ -30,7 +30,7 @@ typedef struct															// "base class" struct for mj8x8 devices
 	void (* const HeartBeat)(message_handler_t * const msg);			// default periodic heartbeat for all devices
 	void (*EmptyBusOperation)(void);									// device's default operation on empty bus, implemented in derived class
 	void (*PopulatedBusOperation)(message_handler_t * const in_msg);	// device operation on populated bus; operates by means of MsgHandler object
-} mj8x8_t ;
+} mj8x8_t;
 
 
 mj8x8_t *mj8x8_ctor(const uint8_t in_own_sidh);							// declare constructor for abstract class
