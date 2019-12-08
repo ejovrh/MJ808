@@ -18,6 +18,10 @@
 #if defined(MJ808_) || defined(MJ818_)
 #define	MCP2561_standby_pin		B,	1,	1								// MCP2561 standby
 #endif
+#if defined(COS_)
+#define	MCP2561_standby_pin		B,	2,	2								// MCP2561 standby
+#endif
+
 
 extern void DoNothing(void);
 extern void helper_handle_rx(void);

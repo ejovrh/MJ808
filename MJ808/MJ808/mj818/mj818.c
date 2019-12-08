@@ -1,5 +1,5 @@
 #include "mj818\mj818.h"
-#include "mj818\mj818_led.c"													// concrete device-specific LED functions
+#include "mj818\mj818_led.c"											// concrete device-specific LED functions
 
 typedef struct															// mj818_t actual
 {

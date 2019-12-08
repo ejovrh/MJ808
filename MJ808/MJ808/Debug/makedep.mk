@@ -6,6 +6,8 @@ button\button.c
 
 button\button_types_actual.c
 
+cos\cos.c
+
 event\event.c
 
 led\composite_led_actual.c
