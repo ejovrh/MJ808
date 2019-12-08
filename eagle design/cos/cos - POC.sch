@@ -6,36 +6,36 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="no"/>
-<layer number="2" name="Route2" color="26" fill="1" visible="yes" active="no"/>
-<layer number="3" name="Route3" color="4" fill="3" visible="yes" active="no"/>
-<layer number="4" name="Route4" color="1" fill="4" visible="yes" active="no"/>
-<layer number="5" name="Route5" color="4" fill="4" visible="yes" active="no"/>
-<layer number="6" name="Route6" color="1" fill="8" visible="yes" active="no"/>
-<layer number="7" name="Route7" color="4" fill="8" visible="yes" active="no"/>
-<layer number="8" name="Route8" color="1" fill="2" visible="yes" active="no"/>
-<layer number="9" name="Route9" color="4" fill="2" visible="yes" active="no"/>
-<layer number="10" name="Route10" color="1" fill="7" visible="yes" active="no"/>
-<layer number="11" name="Route11" color="4" fill="7" visible="yes" active="no"/>
-<layer number="12" name="Route12" color="1" fill="5" visible="yes" active="no"/>
-<layer number="13" name="Route13" color="4" fill="5" visible="yes" active="no"/>
-<layer number="14" name="Route14" color="1" fill="6" visible="yes" active="no"/>
-<layer number="15" name="Route15" color="24" fill="1" visible="yes" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="no"/>
-<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="no"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="no"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="no"/>
-<layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="no"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="no"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="no"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="no"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="no"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="no"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="no"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="no"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="no"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
+<layer number="2" name="Route2" color="26" fill="1" visible="no" active="no"/>
+<layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
+<layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
+<layer number="5" name="Route5" color="4" fill="4" visible="no" active="no"/>
+<layer number="6" name="Route6" color="1" fill="8" visible="no" active="no"/>
+<layer number="7" name="Route7" color="4" fill="8" visible="no" active="no"/>
+<layer number="8" name="Route8" color="1" fill="2" visible="no" active="no"/>
+<layer number="9" name="Route9" color="4" fill="2" visible="no" active="no"/>
+<layer number="10" name="Route10" color="1" fill="7" visible="no" active="no"/>
+<layer number="11" name="Route11" color="4" fill="7" visible="no" active="no"/>
+<layer number="12" name="Route12" color="1" fill="5" visible="no" active="no"/>
+<layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
+<layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
+<layer number="15" name="Route15" color="24" fill="1" visible="no" active="no"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="no" active="no"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="no" active="no"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="no"/>
+<layer number="20" name="Dimension" color="24" fill="1" visible="no" active="no"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="no"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="no"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="no"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="no"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="no" active="no"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="no" active="no"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="no"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="no"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="no"/>
@@ -44,8 +44,8 @@
 <layer number="34" name="bFinish" color="6" fill="6" visible="no" active="no"/>
 <layer number="35" name="tGlue" color="7" fill="4" visible="no" active="no"/>
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="no"/>
-<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="no"/>
-<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="no"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="no"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="no"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="no"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="no"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="no"/>
@@ -53,19 +53,19 @@
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="no"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="no"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="no"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="no"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="no"/>
-<layer number="48" name="Document" color="7" fill="1" visible="yes" active="no"/>
-<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="no"/>
-<layer number="50" name="dxf" color="7" fill="1" visible="yes" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="no"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="no"/>
-<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="yes" active="no"/>
-<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="yes" active="no"/>
-<layer number="56" name="wert" color="7" fill="1" visible="yes" active="no"/>
-<layer number="57" name="tCAD" color="7" fill="1" visible="yes" active="no"/>
-<layer number="59" name="tCarbon" color="7" fill="1" visible="yes" active="no"/>
-<layer number="60" name="bCarbon" color="7" fill="1" visible="yes" active="no"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="no"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="no"/>
+<layer number="48" name="Document" color="7" fill="1" visible="no" active="no"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="no" active="no"/>
+<layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
+<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
+<layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
+<layer number="57" name="tCAD" color="7" fill="1" visible="no" active="no"/>
+<layer number="59" name="tCarbon" color="7" fill="1" visible="no" active="no"/>
+<layer number="60" name="bCarbon" color="7" fill="1" visible="no" active="no"/>
 <layer number="88" name="SimResults" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="89" name="SimProbes" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
@@ -11600,7 +11600,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="R-EU_" urn="urn:adsk.eagle:component:23791/20" prefix="R" uservalue="yes" library_version="10">
+<deviceset name="R-EU_" urn="urn:adsk.eagle:component:23791/21" prefix="R" uservalue="yes" library_version="11">
 <description>&lt;B&gt;RESISTOR&lt;/B&gt;, European symbol</description>
 <gates>
 <gate name="G$1" symbol="R-EU" x="0" y="0"/>
@@ -11616,6 +11616,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11630,6 +11631,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="70" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11644,6 +11646,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="86" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11658,6 +11661,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="3" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11672,6 +11676,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="41" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11686,6 +11691,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="3" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11700,6 +11706,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11714,6 +11721,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11728,6 +11736,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="3" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11742,6 +11751,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11756,6 +11766,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11770,6 +11781,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11784,6 +11796,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11798,6 +11811,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11812,6 +11826,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11826,6 +11841,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="5" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11840,6 +11856,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11854,6 +11871,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11868,6 +11886,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11882,6 +11901,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11896,6 +11916,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11910,6 +11931,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11924,6 +11946,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="45" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11938,6 +11961,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="17" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11952,6 +11976,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11966,6 +11991,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11980,6 +12006,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -11994,6 +12021,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12008,6 +12036,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12022,6 +12051,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12036,6 +12066,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="35" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12050,6 +12081,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="79" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12064,6 +12096,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="11" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12078,6 +12111,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="81" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12092,6 +12126,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="9" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12106,6 +12141,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="2" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12120,6 +12156,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="17" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12134,6 +12171,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="4" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12148,6 +12186,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="46" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12162,6 +12201,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="2" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12176,6 +12216,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="6" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12190,6 +12231,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="2" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12204,6 +12246,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="5" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12218,6 +12261,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12232,6 +12276,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="4" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12246,6 +12291,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12260,6 +12306,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12274,6 +12321,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12288,6 +12336,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="2" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12302,6 +12351,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12316,6 +12366,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12330,6 +12381,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12344,6 +12396,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12358,6 +12411,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12372,6 +12426,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12386,6 +12441,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12400,6 +12456,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="3" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12414,6 +12471,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12428,6 +12486,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12442,6 +12501,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12456,6 +12516,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12470,6 +12531,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12484,6 +12546,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12498,6 +12561,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12512,6 +12576,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12526,6 +12591,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12540,6 +12606,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12554,6 +12621,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12568,6 +12636,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12582,6 +12651,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12596,6 +12666,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12610,6 +12681,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12624,6 +12696,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12638,6 +12711,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12652,6 +12726,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12666,6 +12741,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12680,6 +12756,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12694,6 +12771,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12708,6 +12786,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12722,6 +12801,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12736,6 +12816,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12750,6 +12831,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12764,6 +12846,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12778,6 +12861,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12792,6 +12876,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12806,6 +12891,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="R" constant="no"/>
 </technology>
 </technologies>
@@ -12818,7 +12904,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </pinmapping>
 </spice>
 </deviceset>
-<deviceset name="C-EU" urn="urn:adsk.eagle:component:23793/45" prefix="C" uservalue="yes" library_version="10">
+<deviceset name="C-EU" urn="urn:adsk.eagle:component:23793/46" prefix="C" uservalue="yes" library_version="11">
 <description>&lt;B&gt;CAPACITOR&lt;/B&gt;, European symbol</description>
 <gates>
 <gate name="G$1" symbol="C-EU" x="0" y="0"/>
@@ -12834,6 +12920,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="18" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -12848,6 +12935,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="2" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -12862,6 +12950,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="73" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -12876,6 +12965,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="88" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -12890,6 +12980,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="54" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -12904,6 +12995,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -12918,6 +13010,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -12932,6 +13025,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="3" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -12946,6 +13040,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="3" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -12960,6 +13055,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -12974,6 +13070,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -12988,6 +13085,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="4" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13002,6 +13100,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13016,6 +13115,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13030,6 +13130,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13044,6 +13145,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="56" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13058,6 +13160,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="65" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13072,6 +13175,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="14" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13086,6 +13190,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="4" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13100,6 +13205,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="16" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13114,6 +13220,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13128,6 +13235,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13142,6 +13250,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13156,6 +13265,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13170,6 +13280,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13184,6 +13295,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13198,6 +13310,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="33" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13212,6 +13325,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="29" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13226,6 +13340,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13240,6 +13355,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="9" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13254,6 +13370,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13268,6 +13385,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13282,6 +13400,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13296,6 +13415,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13310,6 +13430,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13324,6 +13445,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13338,6 +13460,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="4" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13352,6 +13475,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13366,6 +13490,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13380,6 +13505,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13394,6 +13520,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13408,6 +13535,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="3" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13422,6 +13550,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13436,6 +13565,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13450,6 +13580,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13464,6 +13595,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13478,6 +13610,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13492,6 +13625,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="2" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13506,6 +13640,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13520,6 +13655,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13534,6 +13670,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13548,6 +13685,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13562,6 +13700,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13576,6 +13715,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13590,6 +13730,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13604,6 +13745,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13618,6 +13760,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13632,6 +13775,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13646,6 +13790,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13660,6 +13805,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13674,6 +13820,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="2" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13688,6 +13835,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13702,6 +13850,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13716,6 +13865,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13730,6 +13880,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13744,6 +13895,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="15" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13758,6 +13910,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="30" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13772,6 +13925,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="52" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13786,6 +13940,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="13" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13800,6 +13955,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13814,6 +13970,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13828,6 +13985,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13842,6 +14000,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13856,6 +14015,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13870,6 +14030,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13884,6 +14045,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13898,6 +14060,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13912,6 +14075,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13926,6 +14090,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13938,7 +14103,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </pinmapping>
 </spice>
 </deviceset>
-<deviceset name="CPOL-EU" urn="urn:adsk.eagle:component:23787/27" prefix="C" uservalue="yes" library_version="10">
+<deviceset name="CPOL-EU" urn="urn:adsk.eagle:component:23787/28" prefix="C" uservalue="yes" library_version="11">
 <description>&lt;B&gt;POLARIZED CAPACITOR&lt;/B&gt;, European symbol</description>
 <gates>
 <gate name="G$1" symbol="CPOL" x="0" y="0"/>
@@ -13954,6 +14119,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13968,6 +14134,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13982,6 +14149,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="2" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -13996,6 +14164,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14010,6 +14179,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="9" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14024,6 +14194,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="2" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14038,6 +14209,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14052,6 +14224,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14066,6 +14239,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14080,6 +14254,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14094,6 +14269,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="2" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14108,6 +14284,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14122,6 +14299,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14136,6 +14314,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14150,6 +14329,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14164,6 +14344,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14178,6 +14359,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14192,6 +14374,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14206,6 +14389,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14220,6 +14404,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14234,6 +14419,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14248,6 +14434,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14262,6 +14449,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14276,6 +14464,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14290,6 +14479,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14304,6 +14494,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14318,6 +14509,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14332,6 +14524,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14346,6 +14539,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14360,6 +14554,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14374,6 +14569,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14388,6 +14584,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14402,6 +14599,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14416,6 +14614,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14430,6 +14629,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14444,6 +14644,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14458,6 +14659,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14472,6 +14674,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14486,6 +14689,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="12" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14500,6 +14704,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14514,6 +14719,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14528,6 +14734,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14542,6 +14749,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14556,6 +14764,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="16" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14570,6 +14779,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="26" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14584,6 +14794,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="17" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14598,6 +14809,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14612,6 +14824,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="7" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14626,6 +14839,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="14" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14640,6 +14854,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14654,6 +14869,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14668,6 +14884,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14682,6 +14899,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="5" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14696,6 +14914,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14710,6 +14929,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14724,6 +14944,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="13" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14738,6 +14959,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14752,6 +14974,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14766,6 +14989,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14780,6 +15004,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14794,6 +15019,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14808,6 +15034,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14822,6 +15049,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14836,6 +15064,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14850,6 +15079,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14864,6 +15094,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14878,6 +15109,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14892,6 +15124,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14906,6 +15139,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="23" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14920,6 +15154,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14934,6 +15169,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14948,6 +15184,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="6" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14962,6 +15199,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="2" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14976,6 +15214,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -14990,6 +15229,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15004,6 +15244,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15018,6 +15259,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15032,6 +15274,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15046,6 +15289,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15060,6 +15304,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="4" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15074,6 +15319,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="6" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15088,6 +15334,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15102,6 +15349,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15116,6 +15364,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15130,6 +15379,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15144,6 +15394,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15158,6 +15409,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15172,6 +15424,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15186,6 +15439,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="3" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15200,6 +15454,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15214,6 +15469,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15228,6 +15484,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15242,6 +15499,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15256,6 +15514,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15270,6 +15529,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="4" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15284,6 +15544,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15298,6 +15559,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15312,6 +15574,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="3" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15326,6 +15589,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15340,6 +15604,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15354,6 +15619,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15368,6 +15634,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="3" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15382,6 +15649,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="5" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15396,6 +15664,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15410,6 +15679,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="4" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15424,6 +15694,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15438,6 +15709,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15452,6 +15724,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15466,6 +15739,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15480,6 +15754,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15494,6 +15769,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15508,6 +15784,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15522,6 +15799,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15536,6 +15814,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="4" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15550,6 +15829,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15564,6 +15844,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15578,6 +15859,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="3" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15592,6 +15874,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15606,6 +15889,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15620,6 +15904,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15634,6 +15919,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15648,6 +15934,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15662,6 +15949,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15676,6 +15964,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="4" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15690,6 +15979,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="4" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15704,6 +15994,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="16" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15718,6 +16009,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15732,6 +16024,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15746,6 +16039,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="2" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15760,6 +16054,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="10" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15774,6 +16069,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="27" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15788,6 +16084,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="4" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15802,6 +16099,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15816,6 +16114,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15830,6 +16129,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="25" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15844,6 +16144,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="4" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15858,6 +16159,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15872,6 +16174,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15886,6 +16189,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15900,6 +16204,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15914,6 +16219,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15928,6 +16234,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15942,6 +16249,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15956,6 +16264,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15970,6 +16279,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15984,6 +16294,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -15998,6 +16309,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16012,6 +16324,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16026,6 +16339,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16040,6 +16354,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16054,6 +16369,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16068,6 +16384,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16082,6 +16399,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16096,6 +16414,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16110,6 +16429,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16124,6 +16444,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16138,6 +16459,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16152,6 +16474,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16166,6 +16489,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16180,6 +16504,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16194,6 +16519,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16208,6 +16534,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16222,6 +16549,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16236,6 +16564,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="2" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16250,6 +16579,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16264,6 +16594,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16278,6 +16609,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16292,6 +16624,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16306,6 +16639,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16320,6 +16654,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16334,6 +16669,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16348,6 +16684,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16362,6 +16699,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16376,6 +16714,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="1" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16390,6 +16729,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3dinstances>
 <technologies>
 <technology name="">
+<attribute name="POPULARITY" value="0" constant="no"/>
 <attribute name="SPICEPREFIX" value="C" constant="no"/>
 </technology>
 </technologies>
@@ -16436,7 +16776,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="2" y1="-2" x2="2" y2="-1.5" width="0.1016" layer="21"/>
 <wire x1="1.5" y1="2" x2="2" y2="2" width="0.1016" layer="21"/>
 <wire x1="2" y1="2" x2="2" y2="1.5" width="0.1016" layer="21"/>
-<circle x="-2.5" y="2.5" radius="0.1" width="0.3" layer="21"/>
+<circle x="-2.25" y="2.25" radius="0.05" width="0.3" layer="21"/>
 <text x="0" y="3.5" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="-3.5" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
 </package>
@@ -16520,7 +16860,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <smd name="SPLIT" x="0.975" y="1.55" dx="0.65" dy="0.35" layer="1" rot="R90"/>
 <wire x1="1.5" y1="-1.5" x2="1.5" y2="1.5" width="0.1016" layer="21"/>
 <wire x1="-1.5" y1="1.5" x2="-1.5" y2="-1.5" width="0.1016" layer="21"/>
-<circle x="-1.75" y="-1.75" radius="0.1" width="0.3" layer="21"/>
+<circle x="-2" y="-1" radius="0.05" width="0.3" layer="21"/>
 <text x="-3" y="0" size="1" layer="25" font="vector" rot="R90" align="center">&gt;NAME</text>
 <text x="2.75" y="-0.25" size="1" layer="27" font="vector" rot="R90" align="center">&gt;VALUE</text>
 <wire x1="1.5" y1="1.5" x2="1.8" y2="1.5" width="0.1016" layer="21"/>
@@ -16597,7 +16937,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="1.5" y1="-1.5" x2="1.5" y2="-1.2" width="0.127" layer="21"/>
 <wire x1="-1.2" y1="-1.5" x2="-1.5" y2="-1.5" width="0.127" layer="21"/>
 <wire x1="-1.5" y1="-1.5" x2="-1.5" y2="-1.2" width="0.127" layer="21"/>
-<circle x="-2" y="2" radius="0.1" width="0.3" layer="21"/>
+<circle x="-1.75" y="1.75" radius="0.05" width="0.3" layer="21"/>
 <text x="0" y="3" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="-2.5" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
 <smd name="1" x="-1.52" y="0.9" dx="0.25" dy="0.55" layer="1" rot="R270"/>
@@ -16796,7 +17136,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="-2" y1="-1.73" x2="2" y2="-1.73" width="0.127" layer="21"/>
 <text x="0" y="2.54" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="-3.81" size="1" layer="21" font="vector" align="center">&gt;VALUE</text>
-<circle x="-2.54" y="2.54" radius="0.1" width="0.3" layer="21"/>
+<circle x="-2.54" y="-2.56" radius="0.1" width="0.3" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -16916,10 +17256,28 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </library>
 <library name="signal testpoint">
 <packages>
-<package name="TH">
+<package name="SMT-1.2MM">
+<smd name="P$1" x="0" y="0" dx="1.2" dy="1.2" layer="1" roundness="100"/>
+<circle x="0" y="0" radius="0.9" width="0.3" layer="21"/>
+</package>
+<package name="TH-0.6MM">
 <pad name="TP$1" x="0" y="0" drill="0.6" diameter="1.016"/>
 <circle x="0" y="0" radius="0.7" width="0.3" layer="21"/>
 <text x="0" y="3" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
+</package>
+<package name="TH-1.2MM">
+<pad name="TP$1" x="0" y="0" drill="1.2" diameter="1.8"/>
+<circle x="0" y="0" radius="1.1" width="0.3" layer="21"/>
+<text x="0" y="3" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
+</package>
+<package name="TH-0.9MM">
+<pad name="TP$1" x="0" y="0" drill="0.9" diameter="1.5"/>
+<circle x="0" y="0" radius="0.95" width="0.3" layer="21"/>
+<text x="0" y="3" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
+</package>
+<package name="SMT-0.9MM">
+<smd name="P$1" x="0" y="0" dx="0.9" dy="0.9" layer="1" roundness="100"/>
+<circle x="0" y="0" radius="0.7" width="0.3" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -16930,14 +17288,46 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="TP" prefix="TP" uservalue="yes">
+<deviceset name="TP" prefix="CONN" uservalue="yes">
 <gates>
 <gate name="G$1" symbol="TP" x="0" y="-7.62"/>
 </gates>
 <devices>
-<device name="" package="TH">
+<device name="TH-0.6MM" package="TH-0.6MM">
 <connects>
 <connect gate="G$1" pin="TP$1" pad="TP$1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="TH-1.2MM" package="TH-1.2MM">
+<connects>
+<connect gate="G$1" pin="TP$1" pad="TP$1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="TH-0.9MM" package="TH-0.9MM">
+<connects>
+<connect gate="G$1" pin="TP$1" pad="TP$1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="SMT-0.9MM" package="SMT-0.9MM">
+<connects>
+<connect gate="G$1" pin="TP$1" pad="P$1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="SMT-1.2MM" package="SMT-1.2MM">
+<connects>
+<connect gate="G$1" pin="TP$1" pad="P$1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -16985,7 +17375,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <pad name="GND4" x="0.5" y="-0.5" drill="0.3" diameter="0.6096" stop="no" thermals="no"/>
 <pad name="GND3" x="-0.5" y="-0.5" drill="0.3" diameter="0.6096" stop="no" thermals="no"/>
 <text x="0" y="-3.81" size="1" layer="27" font="vector" rot="SR0" align="center">&gt;VALUE</text>
-<circle x="-2.54" y="2.54" radius="0.2" width="0.5" layer="21"/>
+<circle x="-2.54" y="2.54" radius="0.05" width="0.5" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -17048,61 +17438,6 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <attribute name="PACKAGE" value="QFN-20" constant="no"/>
 <attribute name="SUPPLIER" value="Microchip" constant="no"/>
 </technology>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
-<library name="MP3221–2.7A, 1.2MHZ, HIGH-EFFICIENCY STEP UP CONVERTER WITH INPUT DISCONNECT">
-<packages>
-<package name="TSOT23-6">
-<smd name="1_SW" x="-0.95" y="-1.35" dx="1.2" dy="0.6" layer="1" rot="R90"/>
-<smd name="2_GND" x="0" y="-1.35" dx="1.2" dy="0.6" layer="1" rot="R90"/>
-<smd name="3_FB" x="0.95" y="-1.35" dx="1.2" dy="0.6" layer="1" rot="R90"/>
-<smd name="6_FAULT" x="-0.95" y="1.3" dx="1.2" dy="0.6" layer="1" rot="R90"/>
-<smd name="5_IN" x="0" y="1.3" dx="1.2" dy="0.6" layer="1" rot="R90"/>
-<smd name="4_EN" x="0.95" y="1.3" dx="1.2" dy="0.6" layer="1" rot="R90"/>
-<wire x1="1.4" y1="1.3" x2="1.4" y2="-1.3" width="0.127" layer="21"/>
-<wire x1="-1.4" y1="1.3" x2="-1.4" y2="-1.3" width="0.127" layer="21"/>
-<text x="0" y="3" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="-3" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
-<circle x="-2" y="-2" radius="0.2" width="0.5" layer="21"/>
-</package>
-</packages>
-<symbols>
-<symbol name="MP3221">
-<pin name="1_SW" x="22.86" y="2.54" length="middle" rot="R180"/>
-<pin name="2_GND" x="7.62" y="-15.24" length="middle" rot="R90"/>
-<pin name="3_FB" x="22.86" y="-7.62" length="middle" rot="R180"/>
-<pin name="4_EN" x="-12.7" y="-7.62" length="middle"/>
-<pin name="5_IN" x="-12.7" y="2.54" length="middle"/>
-<pin name="6_FAULT" x="5.08" y="10.16" length="middle" rot="R270"/>
-<wire x1="-7.62" y1="5.08" x2="-7.62" y2="-10.16" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="-10.16" x2="17.78" y2="-10.16" width="0.254" layer="94"/>
-<wire x1="17.78" y1="-10.16" x2="17.78" y2="5.08" width="0.254" layer="94"/>
-<wire x1="17.78" y1="5.08" x2="-7.62" y2="5.08" width="0.254" layer="94"/>
-<text x="-5.08" y="7.62" size="1.27" layer="95" font="vector" align="center">&gt;NAME</text>
-<text x="10.16" y="7.62" size="1.27" layer="96" font="vector" align="center">&gt;VALUE</text>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="MP3221" prefix="IC" uservalue="yes">
-<gates>
-<gate name="G$1" symbol="MP3221" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="TSOT23-6">
-<connects>
-<connect gate="G$1" pin="1_SW" pad="1_SW"/>
-<connect gate="G$1" pin="2_GND" pad="2_GND"/>
-<connect gate="G$1" pin="3_FB" pad="3_FB"/>
-<connect gate="G$1" pin="4_EN" pad="4_EN"/>
-<connect gate="G$1" pin="5_IN" pad="5_IN"/>
-<connect gate="G$1" pin="6_FAULT" pad="6_FAULT"/>
-</connects>
-<technologies>
-<technology name=""/>
 </technologies>
 </device>
 </devices>
@@ -17754,7 +18089,7 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <wire x1="2" y1="2" x2="2.5" y2="2" width="0.127" layer="21"/>
 <wire x1="-2.5" y1="-2" x2="-2" y2="-2" width="0.127" layer="21"/>
 <wire x1="2" y1="-2" x2="2.5" y2="-2" width="0.127" layer="21"/>
-<circle x="-3" y="-2.5" radius="0.1" width="0.5" layer="21"/>
+<circle x="-3" y="-2.5" radius="0.05" width="0.5" layer="21"/>
 <text x="0" y="3.25" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="-3.25" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
 </package>
@@ -17829,7 +18164,7 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <smd name="NC2" x="0.98" y="2.17" dx="1.45" dy="0.45" layer="1" rot="R90"/>
 <wire x1="-1.5" y1="1.5" x2="-1.5" y2="-1.5" width="0.127" layer="21"/>
 <wire x1="1.5" y1="1.5" x2="1.5" y2="-1.5" width="0.127" layer="21"/>
-<circle x="-2" y="-2" radius="0.1" width="0.3" layer="21"/>
+<circle x="-1.5" y="-2" radius="0.1" width="0.3" layer="21"/>
 <text x="-3" y="0" size="1" layer="21" font="vector" rot="R90" align="center">&gt;NAME</text>
 <text x="2.5" y="0" size="1" layer="27" font="vector" rot="R90" align="center">&gt;VALUE</text>
 </package>
@@ -20748,7 +21083,7 @@ Source: Comchip CGRM4001-G.pdf</description>
 <wire x1="1.5" y1="0.8" x2="1.3" y2="0.8" width="0.127" layer="21"/>
 <wire x1="-1.5" y1="-0.8" x2="-1.3" y2="-0.8" width="0.127" layer="21"/>
 <wire x1="1.5" y1="-0.8" x2="1.3" y2="-0.8" width="0.127" layer="21"/>
-<circle x="-2" y="-1.5" radius="0.1" width="0.5" layer="21"/>
+<circle x="-1.5" y="-1.5" radius="0.05" width="0.5" layer="21"/>
 <text x="0" y="2.5" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="-2.5" size="1" layer="27" font="vector" rot="R180" align="center">&gt;VALUE</text>
 </package>
@@ -20816,7 +21151,7 @@ Source: Comchip CGRM4001-G.pdf</description>
 <smd name="VIN" x="0.5" y="1.325" dx="0.25" dy="0.6" layer="1" rot="R90"/>
 <smd name="9-L2" x="0.99" y="-0.5" dx="0.25" dy="1.55" layer="1" rot="R90"/>
 <smd name="VOUT" x="0.505" y="-1.325" dx="0.25" dy="0.6" layer="1" rot="R90"/>
-<circle x="-1.75" y="2" radius="0.1" width="0.5" layer="21"/>
+<circle x="-1.75" y="2" radius="0.05" width="0.5" layer="21"/>
 <wire x1="-1.3" y1="1.55" x2="-0.95" y2="1.55" width="0.127" layer="21"/>
 <wire x1="-1.3" y1="1.55" x2="-1.3" y2="0.95" width="0.127" layer="21"/>
 <wire x1="0.95" y1="1.55" x2="1.3" y2="1.55" width="0.127" layer="21"/>
@@ -22606,7 +22941,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="1.2" y1="-2" x2="2" y2="-2" width="0.127" layer="21"/>
 <wire x1="2" y1="-2" x2="2" y2="-1.2" width="0.127" layer="21"/>
 <smd name="GND" x="0" y="0" dx="2.8" dy="2.8" layer="1"/>
-<circle x="-2.5" y="2.5" radius="0.2" width="0.5" layer="21"/>
+<circle x="-2.5" y="2.5" radius="0.05" width="0.5" layer="21"/>
 <text x="0" y="3.5" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="-3.5" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
 </package>
@@ -22760,7 +23095,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <text x="3.25" y="0" size="0.75" layer="27" font="vector" rot="R90" align="center">&gt;VALUE</text>
 <wire x1="2.5" y1="2.25" x2="2.5" y2="-2.25" width="0.1016" layer="51"/>
 <wire x1="-2.5" y1="-2.25" x2="-2.5" y2="2.25" width="0.1016" layer="51"/>
-<circle x="-2" y="-3" radius="0.2" width="0.5" layer="21"/>
+<circle x="-3" y="-2" radius="0.05" width="0.5" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -22810,6 +23145,61 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </deviceset>
 </devicesets>
 </library>
+<library name="MP3221–2.7A, 1.2MHZ, HIGH-EFFICIENCY STEP UP CONVERTER WITH INPUT DISCONNECT">
+<packages>
+<package name="TSOT23-6">
+<smd name="1_SW" x="-0.95" y="-1.35" dx="1.2" dy="0.6" layer="1" rot="R90"/>
+<smd name="2_GND" x="0" y="-1.35" dx="1.2" dy="0.6" layer="1" rot="R90"/>
+<smd name="3_FB" x="0.95" y="-1.35" dx="1.2" dy="0.6" layer="1" rot="R90"/>
+<smd name="6_FAULT" x="-0.95" y="1.3" dx="1.2" dy="0.6" layer="1" rot="R90"/>
+<smd name="5_IN" x="0" y="1.3" dx="1.2" dy="0.6" layer="1" rot="R90"/>
+<smd name="4_EN" x="0.95" y="1.3" dx="1.2" dy="0.6" layer="1" rot="R90"/>
+<wire x1="1.4" y1="1.3" x2="1.4" y2="-1.3" width="0.127" layer="21"/>
+<wire x1="-1.4" y1="1.3" x2="-1.4" y2="-1.3" width="0.127" layer="21"/>
+<text x="0" y="3" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-3" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
+<circle x="-1" y="-2.5" radius="0.05" width="0.5" layer="21"/>
+</package>
+</packages>
+<symbols>
+<symbol name="MP3221">
+<pin name="1_SW" x="22.86" y="2.54" length="middle" rot="R180"/>
+<pin name="2_GND" x="7.62" y="-15.24" length="middle" rot="R90"/>
+<pin name="3_FB" x="22.86" y="-7.62" length="middle" rot="R180"/>
+<pin name="4_EN" x="-12.7" y="-7.62" length="middle"/>
+<pin name="5_IN" x="-12.7" y="2.54" length="middle"/>
+<pin name="6_FAULT" x="5.08" y="10.16" length="middle" rot="R270"/>
+<wire x1="-7.62" y1="5.08" x2="-7.62" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="-10.16" x2="17.78" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="17.78" y1="-10.16" x2="17.78" y2="5.08" width="0.254" layer="94"/>
+<wire x1="17.78" y1="5.08" x2="-7.62" y2="5.08" width="0.254" layer="94"/>
+<text x="-5.08" y="7.62" size="1.27" layer="95" font="vector" align="center">&gt;NAME</text>
+<text x="10.16" y="7.62" size="1.27" layer="96" font="vector" align="center">&gt;VALUE</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="MP3221" prefix="IC" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="MP3221" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="TSOT23-6">
+<connects>
+<connect gate="G$1" pin="1_SW" pad="1_SW"/>
+<connect gate="G$1" pin="2_GND" pad="2_GND"/>
+<connect gate="G$1" pin="3_FB" pad="3_FB"/>
+<connect gate="G$1" pin="4_EN" pad="4_EN"/>
+<connect gate="G$1" pin="5_IN" pad="5_IN"/>
+<connect gate="G$1" pin="6_FAULT" pad="6_FAULT"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -22836,121 +23226,121 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </class>
 </classes>
 <parts>
-<part name="IC16" library="MCP2515-I-ML - Standalonce CAN Controller with SPI Interface" deviceset="MCP2515-I-ML" device="" value="MCP2515"/>
-<part name="IC19" library="MCP2561-2 - High-Speed CAN Transceiver" deviceset="MCP2561-2" device="" value="MCP2561-2"/>
-<part name="C33" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="IC14" library="MCP2515-I-ML - Standalonce CAN Controller with SPI Interface" deviceset="MCP2515-I-ML" device="" value="MCP2515"/>
+<part name="IC18" library="MCP2561-2 - High-Speed CAN Transceiver" deviceset="MCP2561-2" device="" value="MCP2561-2"/>
+<part name="C31" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
 <part name="R27" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="120"/>
-<part name="C27" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
-<part name="C19" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="C26" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="C10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
 <part name="IC8" library="ATtiny4313 microcontroller" deviceset="ATTINY4313" device="VQFN-20" value="ATTINY4313-MMH">
 <attribute name="SPICEPREFIX" value="X"/>
 </part>
-<part name="IC10" library="PRQV8.00CR1510Y00L - 8MHz resonator" deviceset="PRQV" device="" value="PBRC8.00GR50X000"/>
+<part name="IC9" library="PRQV8.00CR1510Y00L - 8MHz resonator" deviceset="PRQV" device="" value="PBRC8.00GR50X000"/>
 <part name="CONN1" library="5034800600 FPC Connector" deviceset="5034800600" device="" value="5034800600"/>
-<part name="R20" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083331JP / 330Ω"/>
-<part name="R21" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083103JP / 10kΩ"/>
-<part name="TP3" library="signal testpoint" deviceset="TP" device="" value="CAN Low"/>
-<part name="TP4" library="signal testpoint" deviceset="TP" device="" value="CAN High"/>
+<part name="R18" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083331JP / 330Ω"/>
+<part name="R19" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083103JP / 10kΩ"/>
+<part name="CONN2" library="signal testpoint" deviceset="TP" device="SMT-1.2MM" value="CAN Low"/>
+<part name="CONN3" library="signal testpoint" deviceset="TP" device="SMT-1.2MM" value="CAN High"/>
 <part name="IC13" library="MCP73871 - Powerpath and Charge Controller" deviceset="MCP73871-2AAI/ML" device="" value="MCP73871-2CCI/ML"/>
-<part name="IC21" library="MP3221–2.7A, 1.2MHZ, HIGH-EFFICIENCY STEP UP CONVERTER WITH INPUT DISCONNECT" deviceset="MP3221" device="" value="MP3221GJ-P"/>
 <part name="L2" library="DJNR6045-100S Power Inductor" deviceset="DJNR6045-100-S" device=""/>
 <part name="D6" library="Diodes" library_urn="urn:adsk.eagle:library:11396254" deviceset="1N4148WS" device="" package3d_urn="urn:adsk.eagle:package:10898396/3"/>
 <part name="R12" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="47k"/>
-<part name="C25" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="10μF"/>
-<part name="C31" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="4.7μF"/>
-<part name="C21" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="4.7μF"/>
-<part name="R18" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="1k"/>
-<part name="R19" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="270k"/>
-<part name="R23" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="V526-0" package3d_urn="urn:adsk.eagle:package:23590/1" value="thermistor NTC 10k"/>
-<part name="R16" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
-<part name="R10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="337k"/>
-<part name="R11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="110k"/>
+<part name="C24" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="10μF"/>
+<part name="C29" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="4.7μF"/>
+<part name="C18" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="4.7μF"/>
+<part name="R16" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="1k"/>
+<part name="R17" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="270k"/>
+<part name="R22" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="V526-0" package3d_urn="urn:adsk.eagle:package:23590/1" value="thermistor NTC 10k"/>
+<part name="R15" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
+<part name="R9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="337k"/>
+<part name="R10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="110k"/>
 <part name="R13" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="47k"/>
 <part name="R14" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="47k"/>
 <part name="R24" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
-<part name="C34" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="10μF"/>
+<part name="C32" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="10μF"/>
 <part name="R25" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="653k"/>
 <part name="R26" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
-<part name="C36" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="22μF"/>
+<part name="C34" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="22μF"/>
 <part name="IC7" library="LMP92064SD - LMP92064 Precision Low-Side, 125-kSps Simultaneous Sampling Current Sensor and Voltage Monitor With SPI" deviceset="LMP92064SD" device="" value="LMP92064SD/NOPB"/>
-<part name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R1206" package3d_urn="urn:adsk.eagle:package:23540/2" value="100k"/>
-<part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R1206" package3d_urn="urn:adsk.eagle:package:23540/2" value="100k"/>
+<part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R1206" package3d_urn="urn:adsk.eagle:package:23540/2" value="100k"/>
 <part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R1206" package3d_urn="urn:adsk.eagle:package:23540/2" value="100k"/>
-<part name="C17" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
-<part name="C15" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
-<part name="C16" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="10pF"/>
-<part name="C14" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="10pF"/>
-<part name="C12" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1μF"/>
-<part name="IC4" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
-<part name="IC9" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
+<part name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R1206" package3d_urn="urn:adsk.eagle:package:23540/2" value="100k"/>
+<part name="C14" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="C12" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="C13" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="10pF"/>
+<part name="C11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="10pF"/>
+<part name="C9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1μF"/>
+<part name="IC3" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
+<part name="IC10" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
 <part name="IC12" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
-<part name="IC18" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
+<part name="IC16" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
 <part name="D4" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="DO214AA" package3d_urn="urn:adsk.eagle:package:43433/2" value="CZRB5353B-HF"/>
 <part name="D3" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="DO214AA" package3d_urn="urn:adsk.eagle:package:43433/2" value="CZRB5353B-HF"/>
-<part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
-<part name="C20" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
-<part name="C26" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
-<part name="C32" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="C16" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="C25" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="C30" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
 <part name="C23" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E1.8-4" package3d_urn="urn:adsk.eagle:package:23336/2" value="5600μF"/>
 <part name="D5" library="Diodes" library_urn="urn:adsk.eagle:library:11396254" deviceset="CESD5V0D1" device="" package3d_urn="urn:adsk.eagle:package:10898395/2" value="BZT52-C4V7X"/>
-<part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="22k"/>
-<part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
+<part name="R3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="22k"/>
+<part name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
 <part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="CGRM400*-G" device="" package3d_urn="urn:adsk.eagle:package:43457/2" technology="6" value="1N4148W-7-F"/>
 <part name="D2" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="CGRM400*-G" device="" package3d_urn="urn:adsk.eagle:package:43457/2" technology="6" value="1N4148W-7-F"/>
-<part name="IC20" library="ad5160 - 256-Position SPI-Compatible Digital Potentiometer" deviceset="AD5160" device="" value="AD5160BRJZ5-R2"/>
-<part name="C35" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
-<part name="C9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E1.8-4" package3d_urn="urn:adsk.eagle:package:23336/2" value="220μF"/>
-<part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E1.8-4" package3d_urn="urn:adsk.eagle:package:23336/2" value="330μF"/>
+<part name="IC19" library="ad5160 - 256-Position SPI-Compatible Digital Potentiometer" deviceset="AD5160" device="" value="AD5160BRJZ5-R2"/>
+<part name="C33" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E1.8-4" package3d_urn="urn:adsk.eagle:package:23336/2" value="220μF"/>
+<part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E1.8-4" package3d_urn="urn:adsk.eagle:package:23336/2" value="330μF"/>
 <part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E1.8-4" package3d_urn="urn:adsk.eagle:package:23336/2" value="3300μF / 35V / ultralow ESR"/>
 <part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E1.8-4" package3d_urn="urn:adsk.eagle:package:23336/2" value="3300μF / 35V / ultralow ESR"/>
-<part name="R3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="47k"/>
-<part name="IC3" library="TPS630701 - Buck Boost 5V regulator" deviceset="TPS630701" device="" value="TPS630702RNMT"/>
-<part name="C10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="10μF"/>
-<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="10μF"/>
-<part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10μF"/>
+<part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="47k"/>
+<part name="IC6" library="TPS630701 - Buck Boost 5V regulator" deviceset="TPS630701" device="" value="TPS630702RNMT"/>
+<part name="C17" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="10μF"/>
+<part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="10μF"/>
+<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10μF"/>
 <part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10μF"/>
-<part name="C11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10μF"/>
-<part name="C13" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10μF"/>
-<part name="C18" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10μF"/>
-<part name="R15" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
-<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="100nF"/>
+<part name="C19" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10μF"/>
+<part name="C20" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10μF"/>
+<part name="C22" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10μF"/>
+<part name="R21" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
+<part name="C15" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="100nF"/>
 <part name="L1" library="XFL4020-152MEC Inductor 1.5uH" deviceset="XFL4020-152MEC" device="" value="XFL4020-152MEC"/>
-<part name="TP11" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP12" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP8" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP7" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP5" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP6" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP10" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
-<part name="IC14" library="MCP23S08 - 8-Bit IO Expander with Serial Interface" deviceset="MCP23S08" device="" value="MCP23S08-E/ML"/>
-<part name="C24" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
-<part name="R22" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
+<part name="TP2_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="TP2_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="TP1_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="TP1_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="TP4_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="TP4_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="TP7" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
+<part name="IC17" library="MCP23S08 - 8-Bit IO Expander with Serial Interface" deviceset="MCP23S08" device="" value="MCP23S08-E/ML"/>
+<part name="C27" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="R20" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
 <part name="IC1" library="SQJ952EP-T1_GE3 - Dual N-Fet" deviceset="SQJ952EP-T1_GE3" device="" value="SQJ952EP-T1_GE3"/>
 <part name="IC2" library="SQJ952EP-T1_GE3 - Dual N-Fet" deviceset="SQJ952EP-T1_GE3" device="" value="SQJ952EP-T1_GE3"/>
-<part name="IC5" library="SQJ952EP-T1_GE3 - Dual N-Fet" deviceset="SQJ952EP-T1_GE3" device="" value="SQJ952EP-T1_GE3"/>
-<part name="R9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
-<part name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
+<part name="IC4" library="SQJ952EP-T1_GE3 - Dual N-Fet" deviceset="SQJ952EP-T1_GE3" device="" value="SQJ952EP-T1_GE3"/>
+<part name="R11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
+<part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
 <part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
-<part name="IC6" library="FDMQ8403 4x N-Channel Fet" deviceset="FDMQ8403" device="" value="FDMQ8403"/>
+<part name="IC5" library="FDMQ8403 4x N-Channel Fet" deviceset="FDMQ8403" device="" value="FDMQ8403"/>
 <part name="TP1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
 <part name="TP2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
-<part name="IC22" library="SQJ952EP-T1_GE3 - Dual N-Fet" deviceset="SQJ952EP-T1_GE3" device="" value="SQJ952EP-T1_GE3"/>
+<part name="IC21" library="SQJ952EP-T1_GE3 - Dual N-Fet" deviceset="SQJ952EP-T1_GE3" device="" value="SQJ952EP-T1_GE3"/>
 <part name="IC11" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
-<part name="IC17" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
-<part name="C22" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
-<part name="C29" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
-<part name="R17" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
-<part name="TP9" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP13" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="IC24" library="SQJ952EP-T1_GE3 - Dual N-Fet" deviceset="SQJ952EP-T1_GE3" device="" value="SQJ952EP-T1_GE3"/>
-<part name="IC23" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
-<part name="C37" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
-<part name="TP14" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP15" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP16" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP17" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP18" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP19" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="IC15" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
+<part name="C21" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="C28" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="R23" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
+<part name="TP3_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="TP3_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="IC23" library="SQJ952EP-T1_GE3 - Dual N-Fet" deviceset="SQJ952EP-T1_GE3" device="" value="SQJ952EP-T1_GE3"/>
+<part name="IC22" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
+<part name="C35" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="TP5_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="TP5_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="TP6_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="TP6_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="TP7_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="TP7_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="IC20" library="MP3221–2.7A, 1.2MHZ, HIGH-EFFICIENCY STEP UP CONVERTER WITH INPUT DISCONNECT" deviceset="MP3221" device="" value="MP3221GJ-P"/>
 </parts>
 <sheets>
 <sheet>
@@ -23435,15 +23825,15 @@ CAN</text>
 <text x="144.78" y="622.3" size="1.778" layer="94" rot="R270">TP7</text>
 </plain>
 <instances>
-<instance part="IC16" gate="G$1" x="281.94" y="7.62" smashed="yes">
+<instance part="IC14" gate="G$1" x="281.94" y="7.62" smashed="yes">
 <attribute name="NAME" x="266.7" y="27.94" size="2.54" layer="95"/>
 <attribute name="VALUE" x="266.7" y="-17.78" size="2.54" layer="96"/>
 </instance>
-<instance part="IC19" gate="G$1" x="375.92" y="15.24" smashed="yes">
+<instance part="IC18" gate="G$1" x="375.92" y="15.24" smashed="yes">
 <attribute name="NAME" x="363.22" y="30.48" size="2.54" layer="95"/>
 <attribute name="VALUE" x="363.22" y="-2.54" size="2.54" layer="96"/>
 </instance>
-<instance part="C33" gate="G$1" x="347.98" y="7.62" smashed="yes">
+<instance part="C31" gate="G$1" x="347.98" y="7.62" smashed="yes">
 <attribute name="NAME" x="345.44" y="7.62" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="345.44" y="5.08" size="1.778" layer="96" rot="R180"/>
 </instance>
@@ -23451,11 +23841,11 @@ CAN</text>
 <attribute name="NAME" x="443.0014" y="8.89" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="447.802" y="8.89" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="C27" gate="G$1" x="243.84" y="-7.62" smashed="yes">
+<instance part="C26" gate="G$1" x="243.84" y="-7.62" smashed="yes">
 <attribute name="NAME" x="241.3" y="-7.62" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="241.3" y="-10.16" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="C19" gate="G$1" x="139.7" y="144.78" smashed="yes" rot="R180">
+<instance part="C10" gate="G$1" x="139.7" y="144.78" smashed="yes" rot="R180">
 <attribute name="NAME" x="138.176" y="144.399" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="138.176" y="149.479" size="1.778" layer="96" rot="R180"/>
 </instance>
@@ -23463,7 +23853,7 @@ CAN</text>
 <attribute name="NAME" x="162.56" y="170.18" size="1.27" layer="95"/>
 <attribute name="VALUE" x="162.56" y="114.3" size="1.27" layer="95"/>
 </instance>
-<instance part="IC10" gate="G$1" x="162.56" y="104.14" smashed="yes">
+<instance part="IC9" gate="G$1" x="162.56" y="104.14" smashed="yes">
 <attribute name="NAME" x="163.83" y="108.585" size="1.27" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="163.83" y="99.695" size="1.27" layer="96" font="vector" align="center"/>
 </instance>
@@ -23471,27 +23861,23 @@ CAN</text>
 <attribute name="NAME" x="58.42" y="167.64" size="1.27" layer="95"/>
 <attribute name="VALUE" x="58.42" y="139.7" size="1.27" layer="95"/>
 </instance>
-<instance part="R20" gate="G$1" x="162.56" y="44.45" smashed="yes">
+<instance part="R18" gate="G$1" x="162.56" y="44.45" smashed="yes">
 <attribute name="NAME" x="154.94" y="50.8" size="1.778" layer="95"/>
 <attribute name="VALUE" x="162.56" y="50.8" size="1.778" layer="96"/>
 </instance>
-<instance part="R21" gate="G$1" x="163.83" y="24.13" smashed="yes">
+<instance part="R19" gate="G$1" x="163.83" y="24.13" smashed="yes">
 <attribute name="NAME" x="156.21" y="30.48" size="1.778" layer="95"/>
 <attribute name="VALUE" x="163.83" y="30.48" size="1.778" layer="96"/>
 </instance>
-<instance part="TP3" gate="G$1" x="71.12" y="121.92" smashed="yes">
+<instance part="CONN2" gate="G$1" x="71.12" y="121.92" smashed="yes">
 <attribute name="NAME" x="71.12" y="134.62" size="1.27" layer="95" align="center"/>
 </instance>
-<instance part="TP4" gate="G$1" x="88.9" y="121.92" smashed="yes">
+<instance part="CONN3" gate="G$1" x="88.9" y="121.92" smashed="yes">
 <attribute name="NAME" x="88.9" y="134.62" size="1.27" layer="95" align="center"/>
 </instance>
 <instance part="IC13" gate="A" x="266.7" y="246.38" smashed="yes">
 <attribute name="NAME" x="249.0978" y="269.2654" size="2.0828" layer="95" ratio="10" rot="SR0"/>
 <attribute name="VALUE" x="249.047" y="264.2108" size="2.0828" layer="96" ratio="10" rot="SR0"/>
-</instance>
-<instance part="IC21" gate="G$1" x="398.78" y="109.22" smashed="yes">
-<attribute name="NAME" x="393.7" y="119.38" size="1.27" layer="95" font="vector" align="center"/>
-<attribute name="VALUE" x="393.7" y="116.84" size="1.27" layer="96" font="vector" align="center"/>
 </instance>
 <instance part="L2" gate="G$2" x="403.86" y="127" smashed="yes" rot="R90">
 <attribute name="NAME" x="398.78" y="132.08" size="1.778" layer="95"/>
@@ -23505,39 +23891,39 @@ CAN</text>
 <attribute name="NAME" x="81.28" y="231.14" size="1.778" layer="95"/>
 <attribute name="VALUE" x="81.28" y="228.6" size="1.778" layer="96"/>
 </instance>
-<instance part="C25" gate="G$1" x="231.14" y="259.08" smashed="yes" rot="R180">
+<instance part="C24" gate="G$1" x="231.14" y="259.08" smashed="yes" rot="R180">
 <attribute name="NAME" x="228.6" y="259.08" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="228.6" y="261.62" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="C31" gate="G$1" x="299.72" y="261.62" smashed="yes">
+<instance part="C29" gate="G$1" x="299.72" y="261.62" smashed="yes">
 <attribute name="NAME" x="302.26" y="261.62" size="1.778" layer="95"/>
 <attribute name="VALUE" x="302.26" y="259.08" size="1.778" layer="96"/>
 </instance>
-<instance part="C21" gate="G$1" x="172.72" y="294.64" smashed="yes">
+<instance part="C18" gate="G$1" x="172.72" y="294.64" smashed="yes">
 <attribute name="NAME" x="175.26" y="294.64" size="1.778" layer="95"/>
 <attribute name="VALUE" x="175.26" y="292.1" size="1.778" layer="96"/>
 </instance>
-<instance part="R18" gate="G$1" x="154.94" y="266.7" smashed="yes">
+<instance part="R16" gate="G$1" x="154.94" y="266.7" smashed="yes">
 <attribute name="NAME" x="152.4" y="269.24" size="1.778" layer="95"/>
 <attribute name="VALUE" x="157.48" y="269.24" size="1.778" layer="96"/>
 </instance>
-<instance part="R19" gate="G$1" x="160.02" y="261.62" smashed="yes" rot="R90">
+<instance part="R17" gate="G$1" x="160.02" y="261.62" smashed="yes" rot="R90">
 <attribute name="NAME" x="162.56" y="264.16" size="1.778" layer="95"/>
 <attribute name="VALUE" x="162.56" y="261.62" size="1.778" layer="96"/>
 </instance>
-<instance part="R23" gate="G$1" x="172.72" y="261.62" smashed="yes" rot="R90">
+<instance part="R22" gate="G$1" x="172.72" y="261.62" smashed="yes" rot="R90">
 <attribute name="NAME" x="175.26" y="264.16" size="1.778" layer="95"/>
 <attribute name="VALUE" x="175.26" y="261.62" size="1.778" layer="96"/>
 </instance>
-<instance part="R16" gate="G$1" x="119.38" y="228.6" smashed="yes" rot="R90">
+<instance part="R15" gate="G$1" x="119.38" y="228.6" smashed="yes" rot="R90">
 <attribute name="NAME" x="121.92" y="231.14" size="1.778" layer="95"/>
 <attribute name="VALUE" x="121.92" y="228.6" size="1.778" layer="96"/>
 </instance>
-<instance part="R10" gate="G$1" x="76.2" y="284.48" smashed="yes" rot="R90">
+<instance part="R9" gate="G$1" x="76.2" y="284.48" smashed="yes" rot="R90">
 <attribute name="NAME" x="78.74" y="287.02" size="1.778" layer="95"/>
 <attribute name="VALUE" x="78.74" y="284.48" size="1.778" layer="96"/>
 </instance>
-<instance part="R11" gate="G$1" x="76.2" y="274.32" smashed="yes" rot="R90">
+<instance part="R10" gate="G$1" x="76.2" y="274.32" smashed="yes" rot="R90">
 <attribute name="NAME" x="78.74" y="276.86" size="1.778" layer="95"/>
 <attribute name="VALUE" x="78.74" y="274.32" size="1.778" layer="96"/>
 </instance>
@@ -23553,7 +23939,7 @@ CAN</text>
 <attribute name="NAME" x="383.54" y="109.22" size="1.778" layer="95"/>
 <attribute name="VALUE" x="383.54" y="106.68" size="1.778" layer="96"/>
 </instance>
-<instance part="C34" gate="G$1" x="370.84" y="109.22" smashed="yes">
+<instance part="C32" gate="G$1" x="370.84" y="109.22" smashed="yes">
 <attribute name="NAME" x="373.38" y="109.22" size="1.778" layer="95"/>
 <attribute name="VALUE" x="373.38" y="106.68" size="1.778" layer="96"/>
 </instance>
@@ -23565,7 +23951,7 @@ CAN</text>
 <attribute name="NAME" x="434.34" y="99.06" size="1.778" layer="95"/>
 <attribute name="VALUE" x="434.34" y="96.52" size="1.778" layer="96"/>
 </instance>
-<instance part="C36" gate="G$1" x="441.96" y="109.22" smashed="yes">
+<instance part="C34" gate="G$1" x="441.96" y="109.22" smashed="yes">
 <attribute name="NAME" x="444.5" y="109.22" size="1.778" layer="95"/>
 <attribute name="VALUE" x="444.5" y="106.68" size="1.778" layer="96"/>
 </instance>
@@ -23573,43 +23959,43 @@ CAN</text>
 <attribute name="NAME" x="111.76" y="391.16" size="1" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="111.76" y="388.62" size="1" layer="96" font="vector" align="center"/>
 </instance>
-<instance part="R8" gate="G$1" x="-15.24" y="365.76" smashed="yes" rot="R90">
+<instance part="R2" gate="G$1" x="-15.24" y="365.76" smashed="yes" rot="R90">
 <attribute name="NAME" x="-12.7" y="368.3" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-12.7" y="365.76" size="1.778" layer="96"/>
 </instance>
-<instance part="R6" gate="G$1" x="50.8" y="383.54" smashed="yes" rot="R90">
+<instance part="R7" gate="G$1" x="50.8" y="383.54" smashed="yes" rot="R90">
 <attribute name="NAME" x="53.34" y="386.08" size="1.778" layer="95"/>
 <attribute name="VALUE" x="53.34" y="383.54" size="1.778" layer="96"/>
 </instance>
-<instance part="R7" gate="G$1" x="50.8" y="373.38" smashed="yes" rot="R90">
+<instance part="R8" gate="G$1" x="50.8" y="373.38" smashed="yes" rot="R90">
 <attribute name="NAME" x="53.34" y="375.92" size="1.778" layer="95"/>
 <attribute name="VALUE" x="53.34" y="373.38" size="1.778" layer="96"/>
 </instance>
-<instance part="C17" gate="G$1" x="149.86" y="391.16" smashed="yes" rot="R90">
+<instance part="C14" gate="G$1" x="149.86" y="391.16" smashed="yes" rot="R90">
 <attribute name="NAME" x="149.86" y="393.7" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="152.4" y="393.7" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="C15" gate="G$1" x="142.24" y="421.64" smashed="yes" rot="R90">
+<instance part="C12" gate="G$1" x="142.24" y="421.64" smashed="yes" rot="R90">
 <attribute name="NAME" x="142.24" y="424.18" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="144.78" y="424.18" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="C16" gate="G$1" x="149.86" y="403.86" smashed="yes" rot="R90">
+<instance part="C13" gate="G$1" x="149.86" y="403.86" smashed="yes" rot="R90">
 <attribute name="NAME" x="149.86" y="406.4" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="152.4" y="406.4" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="C14" gate="G$1" x="142.24" y="434.34" smashed="yes" rot="R90">
+<instance part="C11" gate="G$1" x="142.24" y="434.34" smashed="yes" rot="R90">
 <attribute name="NAME" x="142.24" y="436.88" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="144.78" y="436.88" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="C12" gate="G$1" x="132.08" y="398.78" smashed="yes" rot="R180">
+<instance part="C9" gate="G$1" x="132.08" y="398.78" smashed="yes" rot="R180">
 <attribute name="NAME" x="129.54" y="398.78" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="129.54" y="401.32" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="IC4" gate="G$1" x="78.74" y="965.2" smashed="yes">
+<instance part="IC3" gate="G$1" x="78.74" y="965.2" smashed="yes">
 <attribute name="NAME" x="93.98" y="977.9" size="1.27" layer="95" align="center-left"/>
 <attribute name="VALUE" x="93.98" y="975.36" size="1.27" layer="96" align="center-left"/>
 </instance>
-<instance part="IC9" gate="G$1" x="165.1" y="965.2" smashed="yes">
+<instance part="IC10" gate="G$1" x="165.1" y="965.2" smashed="yes">
 <attribute name="NAME" x="180.34" y="977.9" size="1.27" layer="95" align="center-left"/>
 <attribute name="VALUE" x="180.34" y="975.36" size="1.27" layer="96" align="center-left"/>
 </instance>
@@ -23617,7 +24003,7 @@ CAN</text>
 <attribute name="NAME" x="256.54" y="977.9" size="1.27" layer="95" align="center-left"/>
 <attribute name="VALUE" x="256.54" y="975.36" size="1.27" layer="96" align="center-left"/>
 </instance>
-<instance part="IC18" gate="G$1" x="309.88" y="965.2" smashed="yes">
+<instance part="IC16" gate="G$1" x="309.88" y="965.2" smashed="yes">
 <attribute name="NAME" x="325.12" y="977.9" size="1.27" layer="95" align="center-left"/>
 <attribute name="VALUE" x="325.12" y="975.36" size="1.27" layer="96" align="center-left"/>
 </instance>
@@ -23629,19 +24015,19 @@ CAN</text>
 <attribute name="NAME" x="20.32" y="1053.338" size="1.778" layer="95"/>
 <attribute name="VALUE" x="20.32" y="1050.417" size="1.778" layer="96"/>
 </instance>
-<instance part="C6" gate="G$1" x="81.28" y="942.34" smashed="yes" rot="R270">
+<instance part="C4" gate="G$1" x="81.28" y="942.34" smashed="yes" rot="R270">
 <attribute name="NAME" x="78.74" y="937.26" size="1.778" layer="95"/>
 <attribute name="VALUE" x="78.74" y="934.72" size="1.778" layer="96"/>
 </instance>
-<instance part="C20" gate="G$1" x="167.64" y="942.34" smashed="yes" rot="R270">
+<instance part="C16" gate="G$1" x="167.64" y="942.34" smashed="yes" rot="R270">
 <attribute name="NAME" x="165.1" y="937.26" size="1.778" layer="95"/>
 <attribute name="VALUE" x="165.1" y="934.72" size="1.778" layer="96"/>
 </instance>
-<instance part="C26" gate="G$1" x="243.84" y="942.34" smashed="yes" rot="R270">
+<instance part="C25" gate="G$1" x="243.84" y="942.34" smashed="yes" rot="R270">
 <attribute name="NAME" x="241.3" y="937.26" size="1.778" layer="95"/>
 <attribute name="VALUE" x="241.3" y="934.72" size="1.778" layer="96"/>
 </instance>
-<instance part="C32" gate="G$1" x="312.42" y="942.34" smashed="yes" rot="R270">
+<instance part="C30" gate="G$1" x="312.42" y="942.34" smashed="yes" rot="R270">
 <attribute name="NAME" x="309.88" y="937.26" size="1.778" layer="95"/>
 <attribute name="VALUE" x="309.88" y="934.72" size="1.778" layer="96"/>
 </instance>
@@ -23653,11 +24039,11 @@ CAN</text>
 <attribute name="NAME" x="15.1384" y="959.7136" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="22.2758" y="958.1896" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="R2" gate="G$1" x="-2.54" y="960.12" smashed="yes" rot="R90">
+<instance part="R3" gate="G$1" x="-2.54" y="960.12" smashed="yes" rot="R90">
 <attribute name="NAME" x="0" y="960.12" size="1.778" layer="95"/>
 <attribute name="VALUE" x="0" y="957.58" size="1.778" layer="96"/>
 </instance>
-<instance part="R4" gate="G$1" x="7.62" y="965.2" smashed="yes">
+<instance part="R5" gate="G$1" x="7.62" y="965.2" smashed="yes">
 <attribute name="NAME" x="5.08" y="970.28" size="1.778" layer="95"/>
 <attribute name="VALUE" x="5.08" y="967.74" size="1.778" layer="96"/>
 </instance>
@@ -23669,19 +24055,19 @@ CAN</text>
 <attribute name="NAME" x="-10.16" y="967.74" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-5.08" y="967.74" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="IC20" gate="G$1" x="383.54" y="243.84" smashed="yes">
+<instance part="IC19" gate="G$1" x="383.54" y="243.84" smashed="yes">
 <attribute name="NAME" x="370.84" y="256.54" size="1.27" layer="95"/>
 <attribute name="VALUE" x="386.08" y="256.54" size="1.27" layer="96"/>
 </instance>
-<instance part="C35" gate="G$1" x="386.08" y="261.62" smashed="yes" rot="R90">
+<instance part="C33" gate="G$1" x="386.08" y="261.62" smashed="yes" rot="R90">
 <attribute name="NAME" x="386.08" y="266.7" size="1.778" layer="95"/>
 <attribute name="VALUE" x="386.08" y="264.16" size="1.778" layer="96"/>
 </instance>
-<instance part="C9" gate="G$1" x="96.52" y="845.82" smashed="yes">
+<instance part="C7" gate="G$1" x="96.52" y="845.82" smashed="yes">
 <attribute name="NAME" x="93.98" y="845.82" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="93.98" y="843.28" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="C8" gate="G$1" x="96.52" y="863.6" smashed="yes">
+<instance part="C6" gate="G$1" x="96.52" y="863.6" smashed="yes">
 <attribute name="NAME" x="93.98" y="863.6" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="93.98" y="861.06" size="1.778" layer="96" rot="R180"/>
 </instance>
@@ -23693,23 +24079,23 @@ CAN</text>
 <attribute name="NAME" x="-10.16" y="850.9" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="-15.24" y="850.9" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="R3" gate="G$1" x="-2.54" y="850.9" smashed="yes" rot="R90">
+<instance part="R4" gate="G$1" x="-2.54" y="850.9" smashed="yes" rot="R90">
 <attribute name="NAME" x="0" y="850.9" size="1.778" layer="95"/>
 <attribute name="VALUE" x="0" y="848.36" size="1.778" layer="96"/>
 </instance>
-<instance part="IC3" gate="G$1" x="134.62" y="510.54" smashed="yes">
+<instance part="IC6" gate="G$1" x="134.62" y="510.54" smashed="yes">
 <attribute name="NAME" x="142.24" y="546.1" size="1.778" layer="95"/>
 <attribute name="VALUE" x="142.24" y="543.56" size="1.778" layer="96"/>
 </instance>
-<instance part="C10" gate="G$1" x="167.64" y="528.32" smashed="yes">
+<instance part="C17" gate="G$1" x="167.64" y="528.32" smashed="yes">
 <attribute name="NAME" x="170.18" y="528.32" size="1.778" layer="95"/>
 <attribute name="VALUE" x="170.18" y="525.78" size="1.778" layer="96"/>
 </instance>
-<instance part="C5" gate="G$1" x="96.52" y="528.32" smashed="yes">
+<instance part="C8" gate="G$1" x="96.52" y="528.32" smashed="yes">
 <attribute name="NAME" x="99.06" y="528.32" size="1.778" layer="95"/>
 <attribute name="VALUE" x="99.06" y="525.78" size="1.778" layer="96"/>
 </instance>
-<instance part="C4" gate="G$1" x="86.36" y="528.32" smashed="yes">
+<instance part="C5" gate="G$1" x="86.36" y="528.32" smashed="yes">
 <attribute name="NAME" x="88.9" y="528.32" size="1.778" layer="95"/>
 <attribute name="VALUE" x="88.9" y="525.78" size="1.778" layer="96"/>
 </instance>
@@ -23717,23 +24103,23 @@ CAN</text>
 <attribute name="NAME" x="78.74" y="528.32" size="1.778" layer="95"/>
 <attribute name="VALUE" x="78.74" y="525.78" size="1.778" layer="96"/>
 </instance>
-<instance part="C11" gate="G$1" x="177.8" y="528.32" smashed="yes">
+<instance part="C19" gate="G$1" x="177.8" y="528.32" smashed="yes">
 <attribute name="NAME" x="180.34" y="528.32" size="1.778" layer="95"/>
 <attribute name="VALUE" x="180.34" y="525.78" size="1.778" layer="96"/>
 </instance>
-<instance part="C13" gate="G$1" x="187.96" y="528.32" smashed="yes">
+<instance part="C20" gate="G$1" x="187.96" y="528.32" smashed="yes">
 <attribute name="NAME" x="190.5" y="528.32" size="1.778" layer="95"/>
 <attribute name="VALUE" x="190.5" y="525.78" size="1.778" layer="96"/>
 </instance>
-<instance part="C18" gate="G$1" x="198.12" y="528.32" smashed="yes">
+<instance part="C22" gate="G$1" x="198.12" y="528.32" smashed="yes">
 <attribute name="NAME" x="200.66" y="528.32" size="1.778" layer="95"/>
 <attribute name="VALUE" x="200.66" y="525.78" size="1.778" layer="96"/>
 </instance>
-<instance part="R15" gate="G$1" x="172.72" y="490.22" smashed="yes" rot="R90">
+<instance part="R21" gate="G$1" x="172.72" y="490.22" smashed="yes" rot="R90">
 <attribute name="NAME" x="175.26" y="490.22" size="1.778" layer="95"/>
 <attribute name="VALUE" x="175.26" y="487.68" size="1.778" layer="96"/>
 </instance>
-<instance part="C7" gate="G$1" x="160.02" y="490.22" smashed="yes">
+<instance part="C15" gate="G$1" x="160.02" y="490.22" smashed="yes">
 <attribute name="NAME" x="162.56" y="490.22" size="1.778" layer="95"/>
 <attribute name="VALUE" x="162.56" y="487.68" size="1.778" layer="96"/>
 </instance>
@@ -23741,43 +24127,43 @@ CAN</text>
 <attribute name="NAME" x="132.08" y="561.34" size="1" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="132.08" y="557.53" size="1" layer="96" font="vector" align="center"/>
 </instance>
-<instance part="TP11" gate="G$1" x="231.14" y="855.98" smashed="yes" rot="R180">
+<instance part="TP2_IN" gate="G$1" x="231.14" y="855.98" smashed="yes" rot="R180">
 <attribute name="NAME" x="231.14" y="863.6" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="229.87" y="858.52" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="TP12" gate="G$1" x="236.22" y="855.98" smashed="yes" rot="R180">
+<instance part="TP2_OUT" gate="G$1" x="236.22" y="855.98" smashed="yes" rot="R180">
 <attribute name="NAME" x="236.22" y="863.6" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="234.95" y="858.52" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="TP8" gate="G$1" x="167.64" y="855.98" smashed="yes" rot="R180">
+<instance part="TP1_OUT" gate="G$1" x="167.64" y="855.98" smashed="yes" rot="R180">
 <attribute name="NAME" x="167.64" y="863.6" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="166.37" y="858.52" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="TP7" gate="G$1" x="162.56" y="855.98" smashed="yes" rot="R180">
+<instance part="TP1_IN" gate="G$1" x="162.56" y="855.98" smashed="yes" rot="R180">
 <attribute name="NAME" x="162.56" y="863.6" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="161.29" y="858.52" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="TP5" gate="G$1" x="208.28" y="533.4" smashed="yes" rot="R180">
+<instance part="TP4_IN" gate="G$1" x="208.28" y="533.4" smashed="yes" rot="R180">
 <attribute name="NAME" x="208.28" y="541.02" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="207.01" y="535.94" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="TP6" gate="G$1" x="218.44" y="533.4" smashed="yes" rot="R180">
+<instance part="TP4_OUT" gate="G$1" x="218.44" y="533.4" smashed="yes" rot="R180">
 <attribute name="NAME" x="218.44" y="541.02" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="217.17" y="535.94" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="TP10" gate="G$1" x="167.64" y="297.18" smashed="yes" rot="R270">
+<instance part="TP7" gate="G$1" x="167.64" y="297.18" smashed="yes" rot="R270">
 <attribute name="NAME" x="165.1" y="297.18" size="1.778" layer="95" rot="R180"/>
 <attribute name="TP_SIGNAL_NAME" x="166.37" y="294.64" size="1.778" layer="97" rot="R270"/>
 </instance>
-<instance part="IC14" gate="G$1" x="337.82" y="373.38" smashed="yes">
+<instance part="IC17" gate="G$1" x="337.82" y="373.38" smashed="yes">
 <attribute name="NAME" x="320.04" y="393.7" size="1.27" layer="95"/>
 <attribute name="VALUE" x="320.04" y="391.16" size="1.27" layer="96"/>
 </instance>
-<instance part="C24" gate="G$1" x="289.56" y="358.14" smashed="yes">
+<instance part="C27" gate="G$1" x="289.56" y="358.14" smashed="yes">
 <attribute name="NAME" x="292.1" y="358.14" size="1.778" layer="95"/>
 <attribute name="VALUE" x="292.1" y="355.6" size="1.778" layer="96"/>
 </instance>
-<instance part="R22" gate="G$1" x="165.1" y="2.54" smashed="yes">
+<instance part="R20" gate="G$1" x="165.1" y="2.54" smashed="yes">
 <attribute name="NAME" x="162.56" y="7.62" size="1.778" layer="95"/>
 <attribute name="VALUE" x="162.56" y="5.08" size="1.778" layer="96"/>
 </instance>
@@ -23789,15 +24175,15 @@ CAN</text>
 <attribute name="NAME" x="38.1" y="861.06" size="1.778" layer="95" rot="R180" align="center-left"/>
 <attribute name="VALUE" x="43.18" y="863.6" size="1.778" layer="96" rot="R180" align="center-left"/>
 </instance>
-<instance part="IC5" gate="G$1" x="99.06" y="881.38" smashed="yes">
+<instance part="IC4" gate="G$1" x="99.06" y="881.38" smashed="yes">
 <attribute name="NAME" x="93.98" y="891.54" size="1.778" layer="95" align="center-left"/>
 <attribute name="VALUE" x="93.98" y="889" size="1.778" layer="96" align="center-left"/>
 </instance>
-<instance part="R9" gate="G$1" x="78.74" y="878.84" smashed="yes" rot="R90">
+<instance part="R11" gate="G$1" x="78.74" y="878.84" smashed="yes" rot="R90">
 <attribute name="NAME" x="81.28" y="878.84" size="1.778" layer="95"/>
 <attribute name="VALUE" x="81.28" y="876.3" size="1.778" layer="96"/>
 </instance>
-<instance part="R5" gate="G$1" x="50.8" y="873.76" smashed="yes" rot="R90">
+<instance part="R6" gate="G$1" x="50.8" y="873.76" smashed="yes" rot="R90">
 <attribute name="NAME" x="53.34" y="873.76" size="1.778" layer="95"/>
 <attribute name="VALUE" x="53.34" y="871.22" size="1.778" layer="96"/>
 </instance>
@@ -23805,7 +24191,7 @@ CAN</text>
 <attribute name="NAME" x="-38.1" y="871.22" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-38.1" y="868.68" size="1.778" layer="96"/>
 </instance>
-<instance part="IC6" gate="G$1" x="106.68" y="1049.02" smashed="yes">
+<instance part="IC5" gate="G$1" x="106.68" y="1049.02" smashed="yes">
 <attribute name="NAME" x="96.52" y="1064.26" size="1.778" layer="95" align="center-left"/>
 <attribute name="VALUE" x="96.52" y="1061.72" size="1.778" layer="96" align="center-left"/>
 </instance>
@@ -23817,7 +24203,7 @@ CAN</text>
 <attribute name="NAME" x="-27.94" y="1043.94" size="1.778" layer="95" rot="R180"/>
 <attribute name="TP_SIGNAL_NAME" x="-26.67" y="1041.4" size="1.778" layer="97" rot="R270"/>
 </instance>
-<instance part="IC22" gate="G$1" x="403.86" y="858.52" smashed="yes">
+<instance part="IC21" gate="G$1" x="403.86" y="858.52" smashed="yes">
 <attribute name="NAME" x="398.78" y="868.68" size="1.778" layer="95" align="center-left"/>
 <attribute name="VALUE" x="398.78" y="866.14" size="1.778" layer="96" align="center-left"/>
 </instance>
@@ -23825,65 +24211,69 @@ CAN</text>
 <attribute name="NAME" x="208.28" y="866.14" size="1.27" layer="95" align="center-left"/>
 <attribute name="VALUE" x="208.28" y="863.6" size="1.27" layer="96" align="center-left"/>
 </instance>
-<instance part="IC17" gate="G$1" x="294.64" y="853.44" smashed="yes">
+<instance part="IC15" gate="G$1" x="294.64" y="853.44" smashed="yes">
 <attribute name="NAME" x="309.88" y="866.14" size="1.27" layer="95" align="center-left"/>
 <attribute name="VALUE" x="309.88" y="863.6" size="1.27" layer="96" align="center-left"/>
 </instance>
-<instance part="C22" gate="G$1" x="195.58" y="825.5" smashed="yes" rot="R270">
+<instance part="C21" gate="G$1" x="195.58" y="825.5" smashed="yes" rot="R270">
 <attribute name="NAME" x="193.04" y="820.42" size="1.778" layer="95"/>
 <attribute name="VALUE" x="193.04" y="817.88" size="1.778" layer="96"/>
 </instance>
-<instance part="C29" gate="G$1" x="297.18" y="825.5" smashed="yes" rot="R270">
+<instance part="C28" gate="G$1" x="297.18" y="825.5" smashed="yes" rot="R270">
 <attribute name="NAME" x="294.64" y="820.42" size="1.778" layer="95"/>
 <attribute name="VALUE" x="294.64" y="817.88" size="1.778" layer="96"/>
 </instance>
-<instance part="R17" gate="G$1" x="190.5" y="490.22" smashed="yes" rot="R90">
+<instance part="R23" gate="G$1" x="190.5" y="490.22" smashed="yes" rot="R90">
 <attribute name="NAME" x="193.04" y="490.22" size="1.778" layer="95"/>
 <attribute name="VALUE" x="193.04" y="487.68" size="1.778" layer="96"/>
 </instance>
-<instance part="TP9" gate="G$1" x="269.24" y="855.98" smashed="yes" rot="R180">
+<instance part="TP3_OUT" gate="G$1" x="269.24" y="855.98" smashed="yes" rot="R180">
 <attribute name="NAME" x="269.24" y="863.6" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="267.97" y="858.52" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="TP13" gate="G$1" x="264.16" y="855.98" smashed="yes" rot="R180">
+<instance part="TP3_IN" gate="G$1" x="264.16" y="855.98" smashed="yes" rot="R180">
 <attribute name="NAME" x="264.16" y="863.6" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="262.89" y="858.52" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="IC24" gate="G$1" x="614.68" y="858.52" smashed="yes">
+<instance part="IC23" gate="G$1" x="614.68" y="858.52" smashed="yes">
 <attribute name="NAME" x="609.6" y="868.68" size="1.778" layer="95" align="center-left"/>
 <attribute name="VALUE" x="609.6" y="866.14" size="1.778" layer="96" align="center-left"/>
 </instance>
-<instance part="IC23" gate="G$1" x="523.24" y="853.44" smashed="yes">
+<instance part="IC22" gate="G$1" x="523.24" y="853.44" smashed="yes">
 <attribute name="NAME" x="538.48" y="866.14" size="1.27" layer="95" align="center-left"/>
 <attribute name="VALUE" x="538.48" y="863.6" size="1.27" layer="96" align="center-left"/>
 </instance>
-<instance part="C37" gate="G$1" x="525.78" y="825.5" smashed="yes" rot="R270">
+<instance part="C35" gate="G$1" x="525.78" y="825.5" smashed="yes" rot="R270">
 <attribute name="NAME" x="523.24" y="820.42" size="1.778" layer="95"/>
 <attribute name="VALUE" x="523.24" y="817.88" size="1.778" layer="96"/>
 </instance>
-<instance part="TP14" gate="G$1" x="497.84" y="855.98" smashed="yes" rot="R180">
+<instance part="TP5_IN" gate="G$1" x="497.84" y="855.98" smashed="yes" rot="R180">
 <attribute name="NAME" x="497.84" y="863.6" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="496.57" y="858.52" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="TP15" gate="G$1" x="492.76" y="855.98" smashed="yes" rot="R180">
+<instance part="TP5_OUT" gate="G$1" x="492.76" y="855.98" smashed="yes" rot="R180">
 <attribute name="NAME" x="492.76" y="863.6" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="491.49" y="858.52" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="TP16" gate="G$1" x="452.12" y="114.3" smashed="yes" rot="R180">
+<instance part="TP6_IN" gate="G$1" x="452.12" y="114.3" smashed="yes" rot="R180">
 <attribute name="NAME" x="452.12" y="121.92" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="450.85" y="116.84" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="TP17" gate="G$1" x="457.2" y="114.3" smashed="yes" rot="R180">
+<instance part="TP6_OUT" gate="G$1" x="457.2" y="114.3" smashed="yes" rot="R180">
 <attribute name="NAME" x="457.2" y="121.92" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="455.93" y="116.84" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="TP18" gate="G$1" x="-12.7" y="350.52" smashed="yes" rot="R90">
+<instance part="TP7_IN" gate="G$1" x="-12.7" y="350.52" smashed="yes" rot="R90">
 <attribute name="NAME" x="-5.08" y="350.52" size="1.778" layer="95"/>
 <attribute name="TP_SIGNAL_NAME" x="-10.16" y="351.79" size="1.778" layer="97" rot="R90"/>
 </instance>
-<instance part="TP19" gate="G$1" x="-12.7" y="342.9" smashed="yes" rot="R90">
+<instance part="TP7_OUT" gate="G$1" x="-12.7" y="342.9" smashed="yes" rot="R90">
 <attribute name="NAME" x="-5.08" y="342.9" size="1.778" layer="95"/>
 <attribute name="TP_SIGNAL_NAME" x="-10.16" y="344.17" size="1.778" layer="97" rot="R90"/>
+</instance>
+<instance part="IC20" gate="G$1" x="398.78" y="109.22" smashed="yes">
+<attribute name="NAME" x="393.7" y="119.38" size="1.27" layer="95" font="vector" align="center"/>
+<attribute name="VALUE" x="393.7" y="116.84" size="1.27" layer="96" font="vector" align="center"/>
 </instance>
 </instances>
 <busses>
@@ -23901,17 +24291,17 @@ CAN</text>
 <label x="17.78" y="957.58" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="R2" gate="G$1" pin="1"/>
+<pinref part="R3" gate="G$1" pin="1"/>
 <wire x1="-2.54" y1="955.04" x2="-2.54" y2="952.5" width="0.1524" layer="91"/>
 <label x="-2.54" y="952.5" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="C9" gate="G$1" pin="-"/>
+<pinref part="C7" gate="G$1" pin="-"/>
 <wire x1="96.52" y1="840.74" x2="106.68" y2="840.74" width="0.1524" layer="91"/>
 <label x="106.68" y="840.74" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R9" gate="G$1" pin="1"/>
+<pinref part="R11" gate="G$1" pin="1"/>
 <wire x1="78.74" y1="873.76" x2="78.74" y2="871.22" width="0.1524" layer="91"/>
 <label x="78.74" y="871.22" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -23921,17 +24311,17 @@ CAN</text>
 <label x="-40.64" y="863.6" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC6" gate="G$1" pin="5_S2"/>
+<pinref part="IC5" gate="G$1" pin="5_S2"/>
 <wire x1="88.9" y1="1046.48" x2="76.2" y2="1046.48" width="0.1524" layer="91"/>
 <label x="76.2" y="1046.48" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="IC6" gate="G$1" pin="S3_8"/>
+<pinref part="IC5" gate="G$1" pin="S3_8"/>
 <wire x1="124.46" y1="1056.64" x2="137.16" y2="1056.64" width="0.1524" layer="91"/>
 <label x="137.16" y="1056.64" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC9" gate="G$1" pin="ANODE"/>
+<pinref part="IC10" gate="G$1" pin="ANODE"/>
 <wire x1="149.86" y1="965.2" x2="139.7" y2="965.2" width="0.1524" layer="91"/>
 <label x="139.7" y="965.2" size="1.778" layer="95" rot="R270"/>
 </segment>
@@ -23957,7 +24347,7 @@ CAN</text>
 <label x="137.16" y="645.16" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="TP19" gate="G$1" pin="TP"/>
+<pinref part="TP7_OUT" gate="G$1" pin="TP"/>
 <wire x1="-15.24" y1="342.9" x2="-15.24" y2="332.74" width="0.1524" layer="91"/>
 <label x="-15.24" y="332.74" size="1.778" layer="95"/>
 </segment>
@@ -23978,7 +24368,7 @@ CAN</text>
 <label x="78.74" y="157.48" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R20" gate="G$1" pin="3"/>
+<pinref part="R18" gate="G$1" pin="3"/>
 <wire x1="154.94" y1="43.18" x2="142.24" y2="43.18" width="0.1524" layer="91"/>
 <label x="142.24" y="43.18" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -23995,7 +24385,7 @@ CAN</text>
 <label x="78.74" y="160.02" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R20" gate="G$1" pin="5"/>
+<pinref part="R18" gate="G$1" pin="5"/>
 <wire x1="154.94" y1="45.72" x2="142.24" y2="45.72" width="0.1524" layer="91"/>
 <label x="142.24" y="45.72" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -24012,7 +24402,7 @@ CAN</text>
 <label x="78.74" y="154.94" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R20" gate="G$1" pin="1"/>
+<pinref part="R18" gate="G$1" pin="1"/>
 <wire x1="154.94" y1="40.64" x2="142.24" y2="40.64" width="0.1524" layer="91"/>
 <label x="142.24" y="40.64" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -24024,19 +24414,19 @@ CAN</text>
 <pinref part="IC8" gate="G$1" pin="OC1B/PCINT4-PB4"/>
 </segment>
 <segment>
-<pinref part="R20" gate="G$1" pin="7"/>
+<pinref part="R18" gate="G$1" pin="7"/>
 <wire x1="154.94" y1="48.26" x2="142.24" y2="48.26" width="0.1524" layer="91"/>
 <label x="142.24" y="48.26" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="IC16" gate="G$1" pin="!CS!"/>
+<pinref part="IC14" gate="G$1" pin="!CS!"/>
 <wire x1="261.62" y1="12.7" x2="243.84" y2="12.7" width="0.1524" layer="91"/>
 <label x="243.84" y="12.7" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="CANH" class="2">
 <segment>
-<pinref part="IC19" gate="G$1" pin="CANH"/>
+<pinref part="IC18" gate="G$1" pin="CANH"/>
 <wire x1="391.16" y1="20.32" x2="414.02" y2="20.32" width="0.1524" layer="91"/>
 <label x="414.02" y="20.32" size="1.778" layer="95"/>
 </segment>
@@ -24048,12 +24438,12 @@ CAN</text>
 <segment>
 <label x="93.98" y="121.92" size="1.778" layer="95"/>
 <wire x1="88.9" y1="121.92" x2="93.98" y2="121.92" width="0.1524" layer="91"/>
-<pinref part="TP4" gate="G$1" pin="TP$1"/>
+<pinref part="CONN3" gate="G$1" pin="TP$1"/>
 </segment>
 </net>
 <net name="CANL" class="2">
 <segment>
-<pinref part="IC19" gate="G$1" pin="CANL"/>
+<pinref part="IC18" gate="G$1" pin="CANL"/>
 <wire x1="391.16" y1="17.78" x2="414.02" y2="17.78" width="0.1524" layer="91"/>
 <label x="414.02" y="17.78" size="1.778" layer="95"/>
 </segment>
@@ -24064,22 +24454,22 @@ CAN</text>
 </segment>
 <segment>
 <label x="76.2" y="121.92" size="1.778" layer="95"/>
-<pinref part="TP3" gate="G$1" pin="TP$1"/>
+<pinref part="CONN2" gate="G$1" pin="TP$1"/>
 <wire x1="71.12" y1="121.92" x2="76.2" y2="121.92" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="TXCAN" class="3">
 <segment>
-<pinref part="IC19" gate="G$1" pin="TXD"/>
-<pinref part="IC16" gate="G$1" pin="TXCAN"/>
+<pinref part="IC18" gate="G$1" pin="TXD"/>
+<pinref part="IC14" gate="G$1" pin="TXCAN"/>
 <wire x1="358.14" y1="20.32" x2="302.26" y2="20.32" width="0.1524" layer="91"/>
 <label x="322.58" y="20.32" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="RXCAN" class="3">
 <segment>
-<pinref part="IC16" gate="G$1" pin="RXCAN"/>
-<pinref part="IC19" gate="G$1" pin="RXD"/>
+<pinref part="IC14" gate="G$1" pin="RXCAN"/>
+<pinref part="IC18" gate="G$1" pin="RXD"/>
 <wire x1="302.26" y1="17.78" x2="358.14" y2="17.78" width="0.1524" layer="91"/>
 <label x="322.58" y="15.24" size="1.778" layer="95"/>
 </segment>
@@ -24098,7 +24488,7 @@ CAN</text>
 </net>
 <net name="INT_MCP2515" class="3">
 <segment>
-<pinref part="IC16" gate="G$1" pin="!INT!"/>
+<pinref part="IC14" gate="G$1" pin="!INT!"/>
 <wire x1="302.26" y1="-5.08" x2="320.04" y2="-5.08" width="0.1524" layer="91"/>
 <label x="320.04" y="-5.08" size="1.778" layer="95"/>
 </segment>
@@ -24115,7 +24505,7 @@ CAN</text>
 <pinref part="IC8" gate="G$1" pin="PCINT13/CKOUT/XCK/INT0-PD2"/>
 </segment>
 <segment>
-<pinref part="IC16" gate="G$1" pin="OSC1"/>
+<pinref part="IC14" gate="G$1" pin="OSC1"/>
 <wire x1="261.62" y1="5.08" x2="243.84" y2="5.08" width="0.1524" layer="91"/>
 <label x="243.84" y="5.08" size="1.778" layer="95"/>
 </segment>
@@ -24127,7 +24517,7 @@ CAN</text>
 <label x="195.58" y="165.1" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC10" gate="G$1" pin="XTAL1"/>
+<pinref part="IC9" gate="G$1" pin="XTAL1"/>
 <wire x1="156.21" y1="104.14" x2="149.86" y2="104.14" width="0.1524" layer="91"/>
 <label x="149.86" y="104.14" size="1.778" layer="95"/>
 </segment>
@@ -24139,19 +24529,19 @@ CAN</text>
 <label x="195.58" y="162.56" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC10" gate="G$1" pin="XTAL2"/>
+<pinref part="IC9" gate="G$1" pin="XTAL2"/>
 <wire x1="171.45" y1="104.14" x2="177.8" y2="104.14" width="0.1524" layer="91"/>
 <label x="177.8" y="104.14" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="STBY" class="3">
 <segment>
-<pinref part="IC19" gate="G$1" pin="STBY"/>
+<pinref part="IC18" gate="G$1" pin="STBY"/>
 <label x="414.02" y="10.16" size="1.778" layer="95"/>
 <wire x1="391.16" y1="10.16" x2="414.02" y2="10.16" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="R21" gate="G$1" pin="2"/>
+<pinref part="R19" gate="G$1" pin="2"/>
 <wire x1="171.45" y1="20.32" x2="180.34" y2="20.32" width="0.1524" layer="91"/>
 <label x="180.34" y="20.32" size="1.778" layer="95"/>
 </segment>
@@ -24163,18 +24553,18 @@ CAN</text>
 </net>
 <net name="5V0_TP-OUT" class="2">
 <segment>
-<pinref part="C16" gate="G$1" pin="1"/>
+<pinref part="C13" gate="G$1" pin="1"/>
 <wire x1="147.32" y1="403.86" x2="147.32" y2="414.02" width="0.1524" layer="91"/>
 <label x="147.32" y="414.02" size="1.778" layer="95"/>
 <pinref part="IC7" gate="G$1" pin="VDIG_9"/>
-<pinref part="C17" gate="G$1" pin="1"/>
+<pinref part="C14" gate="G$1" pin="1"/>
 <wire x1="147.32" y1="403.86" x2="147.32" y2="391.16" width="0.1524" layer="91"/>
 <junction x="147.32" y="403.86"/>
 <junction x="147.32" y="391.16"/>
 </segment>
 <segment>
-<pinref part="C15" gate="G$1" pin="1"/>
-<pinref part="C14" gate="G$1" pin="1"/>
+<pinref part="C12" gate="G$1" pin="1"/>
+<pinref part="C11" gate="G$1" pin="1"/>
 <wire x1="139.7" y1="421.64" x2="139.7" y2="434.34" width="0.1524" layer="91"/>
 <wire x1="139.7" y1="434.34" x2="139.7" y2="444.5" width="0.1524" layer="91"/>
 <junction x="139.7" y="434.34"/>
@@ -24184,10 +24574,10 @@ CAN</text>
 <junction x="139.7" y="421.64"/>
 </segment>
 <segment>
-<pinref part="IC20" gate="G$1" pin="VDD_2"/>
+<pinref part="IC19" gate="G$1" pin="VDD_2"/>
 <wire x1="383.54" y1="259.08" x2="383.54" y2="261.62" width="0.1524" layer="91"/>
 <label x="383.54" y="266.7" size="1.778" layer="95" rot="R180"/>
-<pinref part="C35" gate="G$1" pin="1"/>
+<pinref part="C33" gate="G$1" pin="1"/>
 <wire x1="383.54" y1="261.62" x2="383.54" y2="266.7" width="0.1524" layer="91"/>
 <junction x="383.54" y="261.62"/>
 </segment>
@@ -24195,7 +24585,7 @@ CAN</text>
 <pinref part="IC13" gate="A" pin="IN"/>
 <wire x1="243.84" y1="256.54" x2="231.14" y2="256.54" width="0.1524" layer="91"/>
 <label x="223.52" y="256.54" size="1.778" layer="95" rot="R180"/>
-<pinref part="C25" gate="G$1" pin="1"/>
+<pinref part="C24" gate="G$1" pin="1"/>
 <wire x1="231.14" y1="256.54" x2="223.52" y2="256.54" width="0.1524" layer="91"/>
 <junction x="231.14" y="256.54"/>
 </segment>
@@ -24215,7 +24605,7 @@ CAN</text>
 <label x="223.52" y="236.22" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="R10" gate="G$1" pin="2"/>
+<pinref part="R9" gate="G$1" pin="2"/>
 <wire x1="76.2" y1="289.56" x2="76.2" y2="292.1" width="0.1524" layer="91"/>
 <label x="76.2" y="292.1" size="1.778" layer="95" rot="R90"/>
 </segment>
@@ -24225,7 +24615,7 @@ CAN</text>
 <label x="223.52" y="238.76" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="TP6" gate="G$1" pin="TP"/>
+<pinref part="TP4_OUT" gate="G$1" pin="TP"/>
 <wire x1="218.44" y1="530.86" x2="223.52" y2="530.86" width="0.1524" layer="91"/>
 <label x="223.52" y="530.86" size="1.778" layer="95" rot="R270"/>
 </segment>
@@ -24251,13 +24641,13 @@ CAN</text>
 <segment>
 <pinref part="IC8" gate="G$1" pin="VCC"/>
 <wire x1="142.24" y1="142.24" x2="139.7" y2="142.24" width="0.1524" layer="91"/>
-<pinref part="C19" gate="G$1" pin="1"/>
+<pinref part="C10" gate="G$1" pin="1"/>
 <wire x1="139.7" y1="142.24" x2="132.08" y2="142.24" width="0.1524" layer="91"/>
 <junction x="139.7" y="142.24"/>
 <label x="132.08" y="142.24" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="R20" gate="G$1" pin="8"/>
+<pinref part="R18" gate="G$1" pin="8"/>
 <wire x1="170.18" y1="48.26" x2="180.34" y2="48.26" width="0.1524" layer="91"/>
 <label x="180.34" y="48.26" size="1.778" layer="95"/>
 </segment>
@@ -24265,39 +24655,39 @@ CAN</text>
 <label x="146.05" y="27.94" size="1.778" layer="95" rot="R180"/>
 <wire x1="151.13" y1="27.94" x2="149.86" y2="27.94" width="0.1524" layer="91"/>
 <wire x1="149.86" y1="27.94" x2="146.05" y2="27.94" width="0.1524" layer="91"/>
-<pinref part="R21" gate="G$1" pin="5"/>
+<pinref part="R19" gate="G$1" pin="5"/>
 <wire x1="156.21" y1="25.4" x2="149.86" y2="25.4" width="0.1524" layer="91"/>
 <wire x1="149.86" y1="25.4" x2="149.86" y2="27.94" width="0.1524" layer="91"/>
 <junction x="149.86" y="27.94"/>
-<pinref part="R21" gate="G$1" pin="7"/>
+<pinref part="R19" gate="G$1" pin="7"/>
 <wire x1="156.21" y1="27.94" x2="149.86" y2="27.94" width="0.1524" layer="91"/>
-<pinref part="R21" gate="G$1" pin="3"/>
+<pinref part="R19" gate="G$1" pin="3"/>
 <wire x1="156.21" y1="22.86" x2="149.86" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="149.86" y1="22.86" x2="149.86" y2="25.4" width="0.1524" layer="91"/>
 <junction x="149.86" y="25.4"/>
-<pinref part="R21" gate="G$1" pin="1"/>
+<pinref part="R19" gate="G$1" pin="1"/>
 <wire x1="156.21" y1="20.32" x2="149.86" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="149.86" y1="20.32" x2="149.86" y2="22.86" width="0.1524" layer="91"/>
 <junction x="149.86" y="22.86"/>
 </segment>
 <segment>
-<pinref part="R22" gate="G$1" pin="2"/>
+<pinref part="R20" gate="G$1" pin="2"/>
 <wire x1="170.18" y1="2.54" x2="175.26" y2="2.54" width="0.1524" layer="91"/>
 <label x="175.26" y="2.54" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC16" gate="G$1" pin="VDD"/>
+<pinref part="IC14" gate="G$1" pin="VDD"/>
 <wire x1="261.62" y1="-5.08" x2="243.84" y2="-5.08" width="0.1524" layer="91"/>
 <label x="238.76" y="-5.08" size="1.778" layer="95" rot="R180"/>
-<pinref part="C27" gate="G$1" pin="1"/>
+<pinref part="C26" gate="G$1" pin="1"/>
 <wire x1="243.84" y1="-5.08" x2="238.76" y2="-5.08" width="0.1524" layer="91"/>
 <junction x="243.84" y="-5.08"/>
 </segment>
 <segment>
-<pinref part="IC19" gate="G$1" pin="VCC"/>
+<pinref part="IC18" gate="G$1" pin="VCC"/>
 <wire x1="358.14" y1="10.16" x2="347.98" y2="10.16" width="0.1524" layer="91"/>
 <label x="342.9" y="10.16" size="1.778" layer="95" rot="R180"/>
-<pinref part="C33" gate="G$1" pin="1"/>
+<pinref part="C31" gate="G$1" pin="1"/>
 <wire x1="347.98" y1="10.16" x2="342.9" y2="10.16" width="0.1524" layer="91"/>
 <junction x="347.98" y="10.16"/>
 </segment>
@@ -24307,44 +24697,44 @@ CAN</text>
 <label x="78.74" y="152.4" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="4_!RESET!"/>
+<pinref part="IC17" gate="G$1" pin="4_!RESET!"/>
 <wire x1="314.96" y1="368.3" x2="304.8" y2="368.3" width="0.1524" layer="91"/>
 <label x="304.8" y="368.3" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="18_VCC"/>
+<pinref part="IC17" gate="G$1" pin="18_VCC"/>
 <wire x1="314.96" y1="360.68" x2="289.56" y2="360.68" width="0.1524" layer="91"/>
 <label x="287.02" y="360.68" size="1.778" layer="95" rot="R180"/>
-<pinref part="C24" gate="G$1" pin="1"/>
+<pinref part="C27" gate="G$1" pin="1"/>
 <wire x1="289.56" y1="360.68" x2="287.02" y2="360.68" width="0.1524" layer="91"/>
 <junction x="289.56" y="360.68"/>
 </segment>
 <segment>
-<pinref part="R6" gate="G$1" pin="2"/>
+<pinref part="R7" gate="G$1" pin="2"/>
 <wire x1="50.8" y1="388.62" x2="50.8" y2="393.7" width="0.1524" layer="91"/>
 <label x="50.8" y="393.7" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="RESET" class="3">
 <segment>
-<pinref part="IC16" gate="G$1" pin="!RESET!"/>
+<pinref part="IC14" gate="G$1" pin="!RESET!"/>
 <wire x1="302.26" y1="-7.62" x2="320.04" y2="-7.62" width="0.1524" layer="91"/>
 <label x="320.04" y="-7.62" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R21" gate="G$1" pin="4"/>
+<pinref part="R19" gate="G$1" pin="4"/>
 <wire x1="171.45" y1="22.86" x2="180.34" y2="22.86" width="0.1524" layer="91"/>
 <label x="180.34" y="22.86" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SPI_MOSI" class="3">
 <segment>
-<pinref part="IC16" gate="G$1" pin="SI"/>
+<pinref part="IC14" gate="G$1" pin="SI"/>
 <wire x1="261.62" y1="17.78" x2="243.84" y2="17.78" width="0.1524" layer="91"/>
 <label x="243.84" y="17.78" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="R20" gate="G$1" pin="4"/>
+<pinref part="R18" gate="G$1" pin="4"/>
 <wire x1="170.18" y1="43.18" x2="180.34" y2="43.18" width="0.1524" layer="91"/>
 <label x="180.34" y="43.18" size="1.778" layer="95"/>
 </segment>
@@ -24354,24 +24744,24 @@ CAN</text>
 <label x="185.42" y="370.84" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC20" gate="G$1" pin="5_SDI"/>
+<pinref part="IC19" gate="G$1" pin="5_SDI"/>
 <wire x1="365.76" y1="243.84" x2="358.14" y2="243.84" width="0.1524" layer="91"/>
 <label x="358.14" y="243.84" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="20_MOSI"/>
+<pinref part="IC17" gate="G$1" pin="20_MOSI"/>
 <wire x1="314.96" y1="383.54" x2="304.8" y2="383.54" width="0.1524" layer="91"/>
 <label x="304.8" y="383.54" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="SPI_MISO" class="3">
 <segment>
-<pinref part="IC16" gate="G$1" pin="SO"/>
+<pinref part="IC14" gate="G$1" pin="SO"/>
 <wire x1="243.84" y1="20.32" x2="261.62" y2="20.32" width="0.1524" layer="91"/>
 <label x="243.84" y="20.32" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="R20" gate="G$1" pin="6"/>
+<pinref part="R18" gate="G$1" pin="6"/>
 <wire x1="170.18" y1="45.72" x2="180.34" y2="45.72" width="0.1524" layer="91"/>
 <label x="180.34" y="45.72" size="1.778" layer="95"/>
 </segment>
@@ -24381,19 +24771,19 @@ CAN</text>
 <label x="185.42" y="368.3" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="1_MISO"/>
+<pinref part="IC17" gate="G$1" pin="1_MISO"/>
 <wire x1="314.96" y1="386.08" x2="304.8" y2="386.08" width="0.1524" layer="91"/>
 <label x="304.8" y="386.08" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="SPI_SCK" class="0">
 <segment>
-<pinref part="IC16" gate="G$1" pin="SCK"/>
+<pinref part="IC14" gate="G$1" pin="SCK"/>
 <wire x1="261.62" y1="15.24" x2="243.84" y2="15.24" width="0.1524" layer="91"/>
 <label x="243.84" y="15.24" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="R20" gate="G$1" pin="2"/>
+<pinref part="R18" gate="G$1" pin="2"/>
 <wire x1="170.18" y1="40.64" x2="180.34" y2="40.64" width="0.1524" layer="91"/>
 <label x="180.34" y="40.64" size="1.778" layer="95"/>
 </segment>
@@ -24403,12 +24793,12 @@ CAN</text>
 <label x="185.42" y="373.38" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC20" gate="G$1" pin="4_CLK"/>
+<pinref part="IC19" gate="G$1" pin="4_CLK"/>
 <wire x1="365.76" y1="241.3" x2="358.14" y2="241.3" width="0.1524" layer="91"/>
 <label x="358.14" y="241.3" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="19_SCK"/>
+<pinref part="IC17" gate="G$1" pin="19_SCK"/>
 <wire x1="314.96" y1="381" x2="304.8" y2="381" width="0.1524" layer="91"/>
 <label x="304.8" y="381" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -24420,7 +24810,7 @@ CAN</text>
 <label x="309.88" y="238.76" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R16" gate="G$1" pin="2"/>
+<pinref part="R15" gate="G$1" pin="2"/>
 <wire x1="119.38" y1="233.68" x2="119.38" y2="236.22" width="0.1524" layer="91"/>
 <label x="119.38" y="236.22" size="1.778" layer="95" rot="R90"/>
 </segment>
@@ -24432,7 +24822,7 @@ CAN</text>
 <label x="309.88" y="241.3" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC20" gate="G$1" pin="W_1"/>
+<pinref part="IC19" gate="G$1" pin="W_1"/>
 <wire x1="401.32" y1="243.84" x2="406.4" y2="243.84" width="0.1524" layer="91"/>
 <label x="406.4" y="243.84" size="1.778" layer="95"/>
 </segment>
@@ -24444,7 +24834,7 @@ CAN</text>
 <label x="309.88" y="243.84" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R18" gate="G$1" pin="1"/>
+<pinref part="R16" gate="G$1" pin="1"/>
 <wire x1="149.86" y1="266.7" x2="144.78" y2="266.7" width="0.1524" layer="91"/>
 <label x="144.78" y="266.7" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -24461,11 +24851,11 @@ CAN</text>
 <junction x="304.8" y="246.38"/>
 </segment>
 <segment>
-<pinref part="C21" gate="G$1" pin="1"/>
+<pinref part="C18" gate="G$1" pin="1"/>
 <wire x1="172.72" y1="297.18" x2="172.72" y2="299.72" width="0.1524" layer="91"/>
 <label x="172.72" y="299.72" size="1.778" layer="95"/>
 <junction x="172.72" y="297.18"/>
-<pinref part="TP10" gate="G$1" pin="TP"/>
+<pinref part="TP7" gate="G$1" pin="TP"/>
 <wire x1="170.18" y1="297.18" x2="172.72" y2="297.18" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -24478,15 +24868,14 @@ CAN</text>
 <pinref part="IC13" gate="A" pin="OUT"/>
 <wire x1="289.56" y1="256.54" x2="299.72" y2="256.54" width="0.1524" layer="91"/>
 <label x="309.88" y="256.54" size="1.778" layer="95"/>
-<pinref part="C31" gate="G$1" pin="2"/>
+<pinref part="C29" gate="G$1" pin="2"/>
 <wire x1="299.72" y1="256.54" x2="309.88" y2="256.54" width="0.1524" layer="91"/>
 <junction x="299.72" y="256.54"/>
 </segment>
 <segment>
 <pinref part="R24" gate="G$1" pin="2"/>
-<pinref part="IC21" gate="G$1" pin="5_IN"/>
 <wire x1="381" y1="111.76" x2="386.08" y2="111.76" width="0.1524" layer="91"/>
-<pinref part="C34" gate="G$1" pin="1"/>
+<pinref part="C32" gate="G$1" pin="1"/>
 <wire x1="370.84" y1="111.76" x2="378.46" y2="111.76" width="0.1524" layer="91"/>
 <junction x="381" y="111.76"/>
 <wire x1="378.46" y1="111.76" x2="381" y2="111.76" width="0.1524" layer="91"/>
@@ -24497,18 +24886,19 @@ CAN</text>
 <wire x1="378.46" y1="111.76" x2="378.46" y2="127" width="0.1524" layer="91"/>
 <wire x1="378.46" y1="127" x2="396.24" y2="127" width="0.1524" layer="91"/>
 <junction x="378.46" y="111.76"/>
+<pinref part="IC20" gate="G$1" pin="5_IN"/>
 </segment>
 <segment>
 <wire x1="266.7" y1="1216.66" x2="276.86" y2="1216.66" width="0.1524" layer="91"/>
 <label x="276.86" y="1216.66" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="TP13" gate="G$1" pin="TP"/>
+<pinref part="TP3_IN" gate="G$1" pin="TP"/>
 <wire x1="264.16" y1="853.44" x2="256.54" y2="853.44" width="0.1524" layer="91" style="longdash"/>
 <label x="256.54" y="853.44" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC22" gate="G$1" pin="S2"/>
+<pinref part="IC21" gate="G$1" pin="S2"/>
 <wire x1="391.16" y1="853.44" x2="381" y2="853.44" width="0.1524" layer="91"/>
 <label x="381" y="853.44" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -24529,7 +24919,7 @@ CAN</text>
 <label x="88.9" y="220.98" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="9_GP0"/>
+<pinref part="IC17" gate="G$1" pin="9_GP0"/>
 <wire x1="360.68" y1="368.3" x2="370.84" y2="368.3" width="0.1524" layer="91"/>
 <label x="370.84" y="368.3" size="1.778" layer="95"/>
 </segment>
@@ -24546,7 +24936,7 @@ CAN</text>
 <label x="99.06" y="220.98" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="10_GP1"/>
+<pinref part="IC17" gate="G$1" pin="10_GP1"/>
 <wire x1="360.68" y1="370.84" x2="370.84" y2="370.84" width="0.1524" layer="91"/>
 <label x="370.84" y="370.84" size="1.778" layer="95"/>
 </segment>
@@ -24563,7 +24953,7 @@ CAN</text>
 <label x="78.74" y="220.98" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="11_GP2"/>
+<pinref part="IC17" gate="G$1" pin="11_GP2"/>
 <wire x1="360.68" y1="373.38" x2="370.84" y2="373.38" width="0.1524" layer="91"/>
 <label x="370.84" y="373.38" size="1.778" layer="95"/>
 </segment>
@@ -24575,8 +24965,8 @@ CAN</text>
 <label x="223.52" y="251.46" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="R10" gate="G$1" pin="1"/>
-<pinref part="R11" gate="G$1" pin="2"/>
+<pinref part="R9" gate="G$1" pin="1"/>
+<pinref part="R10" gate="G$1" pin="2"/>
 <wire x1="76.2" y1="279.4" x2="83.82" y2="279.4" width="0.1524" layer="91"/>
 <junction x="76.2" y="279.4"/>
 <label x="83.82" y="279.4" size="1.778" layer="95"/>
@@ -24584,9 +24974,9 @@ CAN</text>
 </net>
 <net name="N$8" class="0">
 <segment>
-<pinref part="R18" gate="G$1" pin="2"/>
-<pinref part="R19" gate="G$1" pin="2"/>
-<pinref part="R23" gate="G$1" pin="2"/>
+<pinref part="R16" gate="G$1" pin="2"/>
+<pinref part="R17" gate="G$1" pin="2"/>
+<pinref part="R22" gate="G$1" pin="2"/>
 <wire x1="160.02" y1="266.7" x2="172.72" y2="266.7" width="0.1524" layer="91"/>
 <junction x="160.02" y="266.7"/>
 </segment>
@@ -24596,13 +24986,13 @@ CAN</text>
 <pinref part="D6" gate="G$1" pin="C"/>
 <pinref part="R25" gate="G$1" pin="2"/>
 <wire x1="431.8" y1="111.76" x2="429.26" y2="111.76" width="0.1524" layer="91"/>
-<pinref part="C36" gate="G$1" pin="1"/>
+<pinref part="C34" gate="G$1" pin="1"/>
 <wire x1="431.8" y1="111.76" x2="441.96" y2="111.76" width="0.1524" layer="91"/>
 <junction x="431.8" y="111.76"/>
 <wire x1="441.96" y1="111.76" x2="452.12" y2="111.76" width="0.1524" layer="91"/>
 <junction x="441.96" y="111.76"/>
 <label x="452.12" y="111.76" size="1.778" layer="95"/>
-<pinref part="TP16" gate="G$1" pin="TP"/>
+<pinref part="TP6_IN" gate="G$1" pin="TP"/>
 </segment>
 <segment>
 <wire x1="266.7" y1="662.94" x2="266.7" y2="670.56" width="0.1524" layer="91"/>
@@ -24611,24 +25001,24 @@ CAN</text>
 </net>
 <net name="EN" class="0">
 <segment>
-<pinref part="R15" gate="G$1" pin="1"/>
+<pinref part="R21" gate="G$1" pin="1"/>
 <wire x1="172.72" y1="485.14" x2="172.72" y2="482.6" width="0.1524" layer="91"/>
 <label x="172.72" y="482.6" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="G$1" pin="14-EN"/>
+<pinref part="IC6" gate="G$1" pin="14-EN"/>
 <wire x1="147.32" y1="518.16" x2="165.1" y2="518.16" width="0.1524" layer="91"/>
 <label x="165.1" y="518.16" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="SW" class="0">
 <segment>
-<pinref part="IC21" gate="G$1" pin="1_SW"/>
 <pinref part="D6" gate="G$1" pin="A"/>
 <wire x1="424.18" y1="111.76" x2="421.64" y2="111.76" width="0.1524" layer="91"/>
 <pinref part="L2" gate="G$2" pin="2"/>
 <wire x1="411.48" y1="127" x2="421.64" y2="127" width="0.1524" layer="91"/>
 <wire x1="421.64" y1="127" x2="421.64" y2="111.76" width="0.1524" layer="91"/>
+<pinref part="IC20" gate="G$1" pin="1_SW"/>
 <junction x="421.64" y="111.76"/>
 </segment>
 </net>
@@ -24636,9 +25026,9 @@ CAN</text>
 <segment>
 <pinref part="R25" gate="G$1" pin="1"/>
 <pinref part="R26" gate="G$1" pin="2"/>
-<pinref part="IC21" gate="G$1" pin="3_FB"/>
 <wire x1="421.64" y1="101.6" x2="431.8" y2="101.6" width="0.1524" layer="91"/>
 <junction x="431.8" y="101.6"/>
+<pinref part="IC20" gate="G$1" pin="3_FB"/>
 </segment>
 </net>
 <net name="LMP92064SD_CS" class="0">
@@ -24648,12 +25038,12 @@ CAN</text>
 <label x="185.42" y="375.92" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R21" gate="G$1" pin="6"/>
+<pinref part="R19" gate="G$1" pin="6"/>
 <wire x1="171.45" y1="25.4" x2="180.34" y2="25.4" width="0.1524" layer="91"/>
 <label x="180.34" y="25.4" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="16_GP7"/>
+<pinref part="IC17" gate="G$1" pin="16_GP7"/>
 <wire x1="360.68" y1="386.08" x2="370.84" y2="386.08" width="0.1524" layer="91"/>
 <label x="370.84" y="386.08" size="1.778" layer="95"/>
 </segment>
@@ -24665,10 +25055,10 @@ CAN</text>
 <label x="93.98" y="358.14" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="R8" gate="G$1" pin="1"/>
+<pinref part="R2" gate="G$1" pin="1"/>
 <wire x1="-15.24" y1="360.68" x2="-15.24" y2="350.52" width="0.1524" layer="91"/>
 <label x="-5.08" y="360.68" size="1.778" layer="95"/>
-<pinref part="TP18" gate="G$1" pin="TP"/>
+<pinref part="TP7_IN" gate="G$1" pin="TP"/>
 <wire x1="-15.24" y1="360.68" x2="-5.08" y2="360.68" width="0.1524" layer="91"/>
 <junction x="-15.24" y="360.68"/>
 </segment>
@@ -24684,14 +25074,14 @@ CAN</text>
 <label x="93.98" y="365.76" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="R8" gate="G$1" pin="2"/>
+<pinref part="R2" gate="G$1" pin="2"/>
 <wire x1="-15.24" y1="370.84" x2="-15.24" y2="381" width="0.1524" layer="91"/>
 <label x="-5.08" y="370.84" size="1.778" layer="95"/>
 <wire x1="-15.24" y1="370.84" x2="-5.08" y2="370.84" width="0.1524" layer="91"/>
 <junction x="-15.24" y="370.84"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="G$1" pin="10-PGND"/>
+<pinref part="IC6" gate="G$1" pin="10-PGND"/>
 <wire x1="134.62" y1="495.3" x2="134.62" y2="487.68" width="0.1524" layer="91"/>
 <label x="134.62" y="487.68" size="1.778" layer="95" rot="R270"/>
 </segment>
@@ -24702,51 +25092,51 @@ CAN</text>
 </segment>
 <segment>
 <wire x1="86.36" y1="523.24" x2="86.36" y2="520.7" width="0.1524" layer="91"/>
-<pinref part="C4" gate="G$1" pin="2"/>
+<pinref part="C5" gate="G$1" pin="2"/>
 <label x="86.36" y="520.7" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
 <wire x1="96.52" y1="523.24" x2="96.52" y2="520.7" width="0.1524" layer="91"/>
-<pinref part="C5" gate="G$1" pin="2"/>
+<pinref part="C8" gate="G$1" pin="2"/>
 <label x="96.52" y="520.7" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="G$1" pin="4-GND"/>
+<pinref part="IC6" gate="G$1" pin="4-GND"/>
 <wire x1="127" y1="495.3" x2="127" y2="487.68" width="0.1524" layer="91"/>
 <label x="127" y="487.68" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="C7" gate="G$1" pin="2"/>
+<pinref part="C15" gate="G$1" pin="2"/>
 <wire x1="160.02" y1="485.14" x2="160.02" y2="482.6" width="0.1524" layer="91"/>
 <label x="160.02" y="482.6" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="G$1" pin="6-FB2"/>
+<pinref part="IC6" gate="G$1" pin="6-FB2"/>
 <wire x1="147.32" y1="513.08" x2="154.94" y2="513.08" width="0.1524" layer="91"/>
 <label x="154.94" y="513.08" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
 <wire x1="167.64" y1="523.24" x2="167.64" y2="520.7" width="0.1524" layer="91"/>
-<pinref part="C10" gate="G$1" pin="2"/>
+<pinref part="C17" gate="G$1" pin="2"/>
 <label x="167.64" y="520.7" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
 <wire x1="177.8" y1="523.24" x2="177.8" y2="520.7" width="0.1524" layer="91"/>
-<pinref part="C11" gate="G$1" pin="2"/>
+<pinref part="C19" gate="G$1" pin="2"/>
 <label x="177.8" y="520.7" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
 <wire x1="187.96" y1="523.24" x2="187.96" y2="520.7" width="0.1524" layer="91"/>
-<pinref part="C13" gate="G$1" pin="2"/>
+<pinref part="C20" gate="G$1" pin="2"/>
 <label x="187.96" y="520.7" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
 <wire x1="198.12" y1="523.24" x2="198.12" y2="520.7" width="0.1524" layer="91"/>
-<pinref part="C18" gate="G$1" pin="2"/>
+<pinref part="C22" gate="G$1" pin="2"/>
 <label x="198.12" y="520.7" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="G$1" pin="15-VSEL"/>
+<pinref part="IC6" gate="G$1" pin="15-VSEL"/>
 <wire x1="114.3" y1="515.62" x2="109.22" y2="515.62" width="0.1524" layer="91"/>
 <label x="109.22" y="515.62" size="1.778" layer="95" rot="R270"/>
 </segment>
@@ -24771,62 +25161,62 @@ CAN</text>
 <label x="185.42" y="365.76" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="C17" gate="G$1" pin="2"/>
+<pinref part="C14" gate="G$1" pin="2"/>
 <wire x1="154.94" y1="391.16" x2="157.48" y2="391.16" width="0.1524" layer="91"/>
 <label x="157.48" y="391.16" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="C16" gate="G$1" pin="2"/>
+<pinref part="C13" gate="G$1" pin="2"/>
 <wire x1="154.94" y1="403.86" x2="157.48" y2="403.86" width="0.1524" layer="91"/>
 <label x="157.48" y="403.86" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="C15" gate="G$1" pin="2"/>
+<pinref part="C12" gate="G$1" pin="2"/>
 <wire x1="147.32" y1="421.64" x2="149.86" y2="421.64" width="0.1524" layer="91"/>
 <label x="149.86" y="421.64" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="C14" gate="G$1" pin="2"/>
+<pinref part="C11" gate="G$1" pin="2"/>
 <wire x1="147.32" y1="434.34" x2="149.86" y2="434.34" width="0.1524" layer="91"/>
 <label x="149.86" y="434.34" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="C12" gate="G$1" pin="2"/>
+<pinref part="C9" gate="G$1" pin="2"/>
 <wire x1="132.08" y1="403.86" x2="132.08" y2="406.4" width="0.1524" layer="91"/>
 <label x="132.08" y="406.4" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="3_A0"/>
+<pinref part="IC17" gate="G$1" pin="3_A0"/>
 <wire x1="360.68" y1="358.14" x2="370.84" y2="358.14" width="0.1524" layer="91"/>
 <label x="370.84" y="358.14" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="2_A1"/>
+<pinref part="IC17" gate="G$1" pin="2_A1"/>
 <wire x1="360.68" y1="360.68" x2="370.84" y2="360.68" width="0.1524" layer="91"/>
 <label x="370.84" y="360.68" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="C24" gate="G$1" pin="2"/>
+<pinref part="C27" gate="G$1" pin="2"/>
 <wire x1="289.56" y1="353.06" x2="289.56" y2="350.52" width="0.1524" layer="91"/>
 <label x="289.56" y="350.52" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="GND"/>
+<pinref part="IC17" gate="G$1" pin="GND"/>
 <wire x1="314.96" y1="358.14" x2="304.8" y2="358.14" width="0.1524" layer="91"/>
 <label x="304.8" y="358.14" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="C35" gate="G$1" pin="2"/>
+<pinref part="C33" gate="G$1" pin="2"/>
 <wire x1="391.16" y1="261.62" x2="396.24" y2="261.62" width="0.1524" layer="91"/>
 <label x="396.24" y="261.62" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC20" gate="G$1" pin="B_7"/>
+<pinref part="IC19" gate="G$1" pin="B_7"/>
 <wire x1="401.32" y1="241.3" x2="406.4" y2="241.3" width="0.1524" layer="91"/>
 <label x="406.4" y="241.3" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC20" gate="G$1" pin="3_GND"/>
+<pinref part="IC19" gate="G$1" pin="3_GND"/>
 <wire x1="383.54" y1="226.06" x2="383.54" y2="220.98" width="0.1524" layer="91"/>
 <label x="383.54" y="220.98" size="1.778" layer="95" rot="R270"/>
 </segment>
@@ -24836,37 +25226,37 @@ CAN</text>
 <label x="266.7" y="210.82" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="C31" gate="G$1" pin="1"/>
+<pinref part="C29" gate="G$1" pin="1"/>
 <wire x1="299.72" y1="264.16" x2="299.72" y2="269.24" width="0.1524" layer="91"/>
 <label x="299.72" y="269.24" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="C25" gate="G$1" pin="2"/>
+<pinref part="C24" gate="G$1" pin="2"/>
 <wire x1="231.14" y1="264.16" x2="231.14" y2="269.24" width="0.1524" layer="91"/>
 <label x="231.14" y="269.24" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="R23" gate="G$1" pin="1"/>
+<pinref part="R22" gate="G$1" pin="1"/>
 <wire x1="172.72" y1="256.54" x2="172.72" y2="254" width="0.1524" layer="91"/>
 <label x="172.72" y="254" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="R19" gate="G$1" pin="1"/>
+<pinref part="R17" gate="G$1" pin="1"/>
 <wire x1="160.02" y1="256.54" x2="160.02" y2="254" width="0.1524" layer="91"/>
 <label x="160.02" y="254" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="C21" gate="G$1" pin="2"/>
+<pinref part="C18" gate="G$1" pin="2"/>
 <wire x1="172.72" y1="289.56" x2="172.72" y2="287.02" width="0.1524" layer="91"/>
 <label x="172.72" y="287.02" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R16" gate="G$1" pin="1"/>
+<pinref part="R15" gate="G$1" pin="1"/>
 <wire x1="119.38" y1="223.52" x2="119.38" y2="220.98" width="0.1524" layer="91"/>
 <label x="119.38" y="220.98" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="R11" gate="G$1" pin="1"/>
+<pinref part="R10" gate="G$1" pin="1"/>
 <wire x1="76.2" y1="269.24" x2="76.2" y2="266.7" width="0.1524" layer="91"/>
 <label x="76.2" y="266.7" size="1.778" layer="95" rot="R270"/>
 </segment>
@@ -24886,7 +25276,7 @@ CAN</text>
 <label x="132.08" y="139.7" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="C19" gate="G$1" pin="2"/>
+<pinref part="C10" gate="G$1" pin="2"/>
 <wire x1="139.7" y1="149.86" x2="139.7" y2="154.94" width="0.1524" layer="91"/>
 <label x="139.7" y="154.94" size="1.778" layer="95"/>
 </segment>
@@ -24896,19 +25286,19 @@ CAN</text>
 <label x="195.58" y="137.16" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC10" gate="G$1" pin="GND"/>
+<pinref part="IC9" gate="G$1" pin="GND"/>
 <wire x1="157.48" y1="96.52" x2="157.48" y2="93.98" width="0.1524" layer="91"/>
 <label x="157.48" y="93.98" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="C34" gate="G$1" pin="2"/>
+<pinref part="C32" gate="G$1" pin="2"/>
 <wire x1="370.84" y1="104.14" x2="370.84" y2="101.6" width="0.1524" layer="91"/>
 <label x="370.84" y="101.6" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC21" gate="G$1" pin="2_GND"/>
 <wire x1="406.4" y1="93.98" x2="406.4" y2="88.9" width="0.1524" layer="91"/>
 <label x="406.4" y="88.9" size="1.778" layer="95" rot="R270"/>
+<pinref part="IC20" gate="G$1" pin="2_GND"/>
 </segment>
 <segment>
 <pinref part="R26" gate="G$1" pin="1"/>
@@ -24916,23 +25306,23 @@ CAN</text>
 <label x="431.8" y="88.9" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="C36" gate="G$1" pin="2"/>
+<pinref part="C34" gate="G$1" pin="2"/>
 <wire x1="441.96" y1="104.14" x2="441.96" y2="101.6" width="0.1524" layer="91"/>
 <label x="441.96" y="101.6" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="C27" gate="G$1" pin="2"/>
+<pinref part="C26" gate="G$1" pin="2"/>
 <wire x1="243.84" y1="-12.7" x2="243.84" y2="-15.24" width="0.1524" layer="91"/>
 <label x="243.84" y="-15.24" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="C33" gate="G$1" pin="2"/>
+<pinref part="C31" gate="G$1" pin="2"/>
 <label x="347.98" y="-5.08" size="1.778" layer="95" rot="R270"/>
 <wire x1="347.98" y1="2.54" x2="347.98" y2="-5.08" width="0.1524" layer="91"/>
 <junction x="347.98" y="2.54"/>
 </segment>
 <segment>
-<pinref part="IC19" gate="G$1" pin="GND"/>
+<pinref part="IC18" gate="G$1" pin="GND"/>
 <wire x1="358.14" y1="7.62" x2="358.14" y2="-5.08" width="0.1524" layer="91"/>
 <label x="358.14" y="-5.08" size="1.778" layer="95" rot="R270"/>
 </segment>
@@ -24942,7 +25332,7 @@ CAN</text>
 <wire x1="160.02" y1="624.84" x2="147.32" y2="624.84" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="R7" gate="G$1" pin="1"/>
+<pinref part="R8" gate="G$1" pin="1"/>
 <wire x1="50.8" y1="368.3" x2="50.8" y2="363.22" width="0.1524" layer="91"/>
 <label x="50.8" y="363.22" size="1.778" layer="95"/>
 </segment>
@@ -24952,7 +25342,7 @@ CAN</text>
 <label x="93.98" y="375.92" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="IC16" gate="G$1" pin="GND"/>
+<pinref part="IC14" gate="G$1" pin="GND"/>
 <wire x1="261.62" y1="-7.62" x2="251.46" y2="-7.62" width="0.1524" layer="91"/>
 <label x="251.46" y="-7.62" size="1.778" layer="95" rot="R270"/>
 </segment>
@@ -24964,8 +25354,8 @@ CAN</text>
 <label x="93.98" y="383.54" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="R6" gate="G$1" pin="1"/>
-<pinref part="R7" gate="G$1" pin="2"/>
+<pinref part="R7" gate="G$1" pin="1"/>
+<pinref part="R8" gate="G$1" pin="2"/>
 <wire x1="50.8" y1="378.46" x2="55.88" y2="378.46" width="0.1524" layer="91"/>
 <junction x="50.8" y="378.46"/>
 <label x="55.88" y="378.46" size="1.778" layer="95"/>
@@ -24975,7 +25365,7 @@ CAN</text>
 <segment>
 <pinref part="IC7" gate="G$1" pin="REFC_1"/>
 <wire x1="132.08" y1="391.16" x2="132.08" y2="396.24" width="0.1524" layer="91"/>
-<pinref part="C12" gate="G$1" pin="1"/>
+<pinref part="C9" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="ZENER_COMMON" class="0">
@@ -25002,17 +25392,17 @@ CAN</text>
 <junction x="-7.62" y="828.04"/>
 </segment>
 <segment>
-<pinref part="IC6" gate="G$1" pin="3_S1/D2"/>
+<pinref part="IC5" gate="G$1" pin="3_S1/D2"/>
 <wire x1="88.9" y1="1051.56" x2="76.2" y2="1051.56" width="0.1524" layer="91"/>
 <label x="76.2" y="1051.56" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="IC4" gate="G$1" pin="ANODE"/>
+<pinref part="IC3" gate="G$1" pin="ANODE"/>
 <wire x1="63.5" y1="965.2" x2="55.88" y2="965.2" width="0.1524" layer="91"/>
 <label x="55.88" y="965.2" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC9" gate="G$1" pin="CATHODE"/>
+<pinref part="IC10" gate="G$1" pin="CATHODE"/>
 <wire x1="182.88" y1="965.2" x2="193.04" y2="965.2" width="0.1524" layer="91"/>
 <label x="193.04" y="965.2" size="1.778" layer="95" rot="R270"/>
 </segment>
@@ -25033,12 +25423,12 @@ CAN</text>
 <pinref part="TP2" gate="G$1" pin="TP"/>
 </segment>
 <segment>
-<pinref part="IC6" gate="G$1" pin="D3/S4_10"/>
+<pinref part="IC5" gate="G$1" pin="D3/S4_10"/>
 <wire x1="124.46" y1="1051.56" x2="137.16" y2="1051.56" width="0.1524" layer="91"/>
 <label x="137.16" y="1051.56" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC18" gate="G$1" pin="ANODE"/>
+<pinref part="IC16" gate="G$1" pin="ANODE"/>
 <wire x1="294.64" y1="965.2" x2="287.02" y2="965.2" width="0.1524" layer="91"/>
 <label x="287.02" y="965.2" size="1.778" layer="95" rot="R270"/>
 </segment>
@@ -25054,32 +25444,32 @@ CAN</text>
 </net>
 <net name="D1_VCAPH" class="0">
 <segment>
-<pinref part="IC4" gate="G$1" pin="VCAPH"/>
-<pinref part="C6" gate="G$1" pin="2"/>
+<pinref part="IC3" gate="G$1" pin="VCAPH"/>
+<pinref part="C4" gate="G$1" pin="2"/>
 <wire x1="73.66" y1="947.42" x2="73.66" y2="942.34" width="0.1524" layer="91"/>
 <wire x1="73.66" y1="942.34" x2="76.2" y2="942.34" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="D1_VCAPL" class="0">
 <segment>
-<pinref part="C6" gate="G$1" pin="1"/>
-<pinref part="IC4" gate="G$1" pin="VCAPL"/>
+<pinref part="C4" gate="G$1" pin="1"/>
+<pinref part="IC3" gate="G$1" pin="VCAPL"/>
 <wire x1="83.82" y1="942.34" x2="86.36" y2="942.34" width="0.1524" layer="91"/>
 <wire x1="86.36" y1="942.34" x2="86.36" y2="947.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="D2_VCAPH" class="0">
 <segment>
-<pinref part="IC9" gate="G$1" pin="VCAPH"/>
-<pinref part="C20" gate="G$1" pin="2"/>
+<pinref part="IC10" gate="G$1" pin="VCAPH"/>
+<pinref part="C16" gate="G$1" pin="2"/>
 <wire x1="160.02" y1="947.42" x2="160.02" y2="942.34" width="0.1524" layer="91"/>
 <wire x1="160.02" y1="942.34" x2="162.56" y2="942.34" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="D2_VCAPL" class="0">
 <segment>
-<pinref part="C20" gate="G$1" pin="1"/>
-<pinref part="IC9" gate="G$1" pin="VCAPL"/>
+<pinref part="C16" gate="G$1" pin="1"/>
+<pinref part="IC10" gate="G$1" pin="VCAPL"/>
 <wire x1="170.18" y1="942.34" x2="172.72" y2="942.34" width="0.1524" layer="91"/>
 <wire x1="172.72" y1="942.34" x2="172.72" y2="947.42" width="0.1524" layer="91"/>
 </segment>
@@ -25087,14 +25477,14 @@ CAN</text>
 <net name="D3_VCAPH" class="0">
 <segment>
 <pinref part="IC12" gate="G$1" pin="VCAPH"/>
-<pinref part="C26" gate="G$1" pin="2"/>
+<pinref part="C25" gate="G$1" pin="2"/>
 <wire x1="236.22" y1="947.42" x2="236.22" y2="942.34" width="0.1524" layer="91"/>
 <wire x1="236.22" y1="942.34" x2="238.76" y2="942.34" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="D3_VCAPL" class="0">
 <segment>
-<pinref part="C26" gate="G$1" pin="1"/>
+<pinref part="C25" gate="G$1" pin="1"/>
 <pinref part="IC12" gate="G$1" pin="VCAPL"/>
 <wire x1="246.38" y1="942.34" x2="248.92" y2="942.34" width="0.1524" layer="91"/>
 <wire x1="248.92" y1="942.34" x2="248.92" y2="947.42" width="0.1524" layer="91"/>
@@ -25102,16 +25492,16 @@ CAN</text>
 </net>
 <net name="D4_VCAPH" class="0">
 <segment>
-<pinref part="IC18" gate="G$1" pin="VCAPH"/>
-<pinref part="C32" gate="G$1" pin="2"/>
+<pinref part="IC16" gate="G$1" pin="VCAPH"/>
+<pinref part="C30" gate="G$1" pin="2"/>
 <wire x1="304.8" y1="947.42" x2="304.8" y2="942.34" width="0.1524" layer="91"/>
 <wire x1="304.8" y1="942.34" x2="307.34" y2="942.34" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="D4_VCAPL" class="0">
 <segment>
-<pinref part="C32" gate="G$1" pin="1"/>
-<pinref part="IC18" gate="G$1" pin="VCAPL"/>
+<pinref part="C30" gate="G$1" pin="1"/>
+<pinref part="IC16" gate="G$1" pin="VCAPL"/>
 <wire x1="314.96" y1="942.34" x2="317.5" y2="942.34" width="0.1524" layer="91"/>
 <wire x1="317.5" y1="942.34" x2="317.5" y2="947.42" width="0.1524" layer="91"/>
 </segment>
@@ -25123,7 +25513,7 @@ CAN</text>
 <label x="195.58" y="139.7" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R4" gate="G$1" pin="2"/>
+<pinref part="R5" gate="G$1" pin="2"/>
 <pinref part="D5" gate="G$1" pin="C"/>
 <wire x1="12.7" y1="965.2" x2="17.78" y2="965.2" width="0.1524" layer="91"/>
 <wire x1="17.78" y1="965.2" x2="27.94" y2="965.2" width="0.1524" layer="91"/>
@@ -25133,8 +25523,8 @@ CAN</text>
 </net>
 <net name="N$4" class="0">
 <segment>
-<pinref part="R2" gate="G$1" pin="2"/>
-<pinref part="R4" gate="G$1" pin="1"/>
+<pinref part="R3" gate="G$1" pin="2"/>
+<pinref part="R5" gate="G$1" pin="1"/>
 <wire x1="-2.54" y1="965.2" x2="2.54" y2="965.2" width="0.1524" layer="91"/>
 <pinref part="D2" gate="G$1" pin="C"/>
 <wire x1="-5.08" y1="965.2" x2="-2.54" y2="965.2" width="0.1524" layer="91"/>
@@ -25150,17 +25540,17 @@ CAN</text>
 </net>
 <net name="AD5160_CS" class="0">
 <segment>
-<pinref part="IC20" gate="G$1" pin="6_!CS!"/>
+<pinref part="IC19" gate="G$1" pin="6_!CS!"/>
 <wire x1="365.76" y1="246.38" x2="358.14" y2="246.38" width="0.1524" layer="91"/>
 <label x="358.14" y="246.38" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="R21" gate="G$1" pin="8"/>
+<pinref part="R19" gate="G$1" pin="8"/>
 <wire x1="171.45" y1="27.94" x2="180.34" y2="27.94" width="0.1524" layer="91"/>
 <label x="180.34" y="27.94" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="15_GP6"/>
+<pinref part="IC17" gate="G$1" pin="15_GP6"/>
 <wire x1="360.68" y1="383.54" x2="370.84" y2="383.54" width="0.1524" layer="91"/>
 <label x="370.84" y="383.54" size="1.778" layer="95"/>
 </segment>
@@ -25187,7 +25577,7 @@ CAN</text>
 <junction x="-7.62" y="889"/>
 </segment>
 <segment>
-<pinref part="IC5" gate="G$1" pin="D2"/>
+<pinref part="IC4" gate="G$1" pin="D2"/>
 <wire x1="111.76" y1="878.84" x2="119.38" y2="878.84" width="0.1524" layer="91"/>
 <label x="119.38" y="878.84" size="1.778" layer="95"/>
 </segment>
@@ -25200,23 +25590,23 @@ CAN</text>
 <segment>
 <pinref part="C1" gate="G$1" pin="+"/>
 <pinref part="C2" gate="G$1" pin="+"/>
-<pinref part="R3" gate="G$1" pin="1"/>
+<pinref part="R4" gate="G$1" pin="1"/>
 <wire x1="-7.62" y1="845.82" x2="-2.54" y2="845.82" width="0.1524" layer="91"/>
 <junction x="-7.62" y="845.82"/>
 </segment>
 </net>
 <net name="DELON_1" class="0">
 <segment>
-<pinref part="C8" gate="G$1" pin="-"/>
+<pinref part="C6" gate="G$1" pin="-"/>
 <wire x1="96.52" y1="858.52" x2="96.52" y2="853.44" width="0.1524" layer="91"/>
 <wire x1="96.52" y1="853.44" x2="96.52" y2="848.36" width="0.1524" layer="91"/>
 <wire x1="96.52" y1="853.44" x2="106.68" y2="853.44" width="0.1524" layer="91"/>
 <junction x="96.52" y="853.44"/>
 <label x="106.68" y="853.44" size="1.778" layer="95"/>
-<pinref part="C9" gate="G$1" pin="+"/>
+<pinref part="C7" gate="G$1" pin="+"/>
 </segment>
 <segment>
-<pinref part="IC5" gate="G$1" pin="D1"/>
+<pinref part="IC4" gate="G$1" pin="D1"/>
 <wire x1="111.76" y1="881.38" x2="119.38" y2="881.38" width="0.1524" layer="91"/>
 <label x="119.38" y="881.38" size="1.778" layer="95"/>
 </segment>
@@ -25227,7 +25617,7 @@ CAN</text>
 </net>
 <net name="PS/SYNC" class="3">
 <segment>
-<pinref part="IC3" gate="G$1" pin="1-PS/S"/>
+<pinref part="IC6" gate="G$1" pin="1-PS/S"/>
 <wire x1="147.32" y1="515.62" x2="154.94" y2="515.62" width="0.1524" layer="91"/>
 <label x="154.94" y="515.62" size="1.778" layer="95"/>
 </segment>
@@ -25239,31 +25629,31 @@ CAN</text>
 </net>
 <net name="PG" class="3">
 <segment>
-<pinref part="IC3" gate="G$1" pin="2-PG"/>
+<pinref part="IC6" gate="G$1" pin="2-PG"/>
 <wire x1="147.32" y1="523.24" x2="154.94" y2="523.24" width="0.1524" layer="91"/>
 <label x="154.94" y="523.24" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R17" gate="G$1" pin="1"/>
+<pinref part="R23" gate="G$1" pin="1"/>
 <wire x1="190.5" y1="485.14" x2="190.5" y2="482.6" width="0.1524" layer="91" style="longdash"/>
 <label x="190.5" y="482.6" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="VAUX" class="0">
 <segment>
-<pinref part="C7" gate="G$1" pin="1"/>
+<pinref part="C15" gate="G$1" pin="1"/>
 <wire x1="160.02" y1="492.76" x2="160.02" y2="495.3" width="0.1524" layer="91"/>
 <label x="160.02" y="495.3" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="G$1" pin="3-VAUX"/>
+<pinref part="IC6" gate="G$1" pin="3-VAUX"/>
 <wire x1="114.3" y1="520.7" x2="109.22" y2="520.7" width="0.1524" layer="91"/>
 <label x="109.22" y="520.7" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="N$1" class="0">
 <segment>
-<pinref part="IC3" gate="G$1" pin="11-L1"/>
+<pinref part="IC6" gate="G$1" pin="11-L1"/>
 <pinref part="L1" gate="G$1" pin="P$1"/>
 <wire x1="127" y1="546.1" x2="124.46" y2="546.1" width="0.1524" layer="91"/>
 <wire x1="124.46" y1="546.1" x2="124.46" y2="558.8" width="0.1524" layer="91"/>
@@ -25271,7 +25661,7 @@ CAN</text>
 </net>
 <net name="N$5" class="0">
 <segment>
-<pinref part="IC3" gate="G$1" pin="9-L2"/>
+<pinref part="IC6" gate="G$1" pin="9-L2"/>
 <pinref part="L1" gate="G$1" pin="P$2"/>
 <wire x1="134.62" y1="546.1" x2="139.7" y2="546.1" width="0.1524" layer="91"/>
 <wire x1="139.7" y1="546.1" x2="139.7" y2="558.8" width="0.1524" layer="91"/>
@@ -25281,35 +25671,35 @@ CAN</text>
 <segment>
 <wire x1="96.52" y1="866.14" x2="106.68" y2="866.14" width="0.1524" layer="91"/>
 <label x="106.68" y="866.14" size="1.778" layer="95"/>
-<pinref part="C8" gate="G$1" pin="+"/>
+<pinref part="C6" gate="G$1" pin="+"/>
 </segment>
 <segment>
-<pinref part="R3" gate="G$1" pin="2"/>
+<pinref part="R4" gate="G$1" pin="2"/>
 <wire x1="-2.54" y1="855.98" x2="-2.54" y2="858.52" width="0.1524" layer="91"/>
 <label x="-2.54" y="858.52" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="TP7" gate="G$1" pin="TP"/>
+<pinref part="TP1_IN" gate="G$1" pin="TP"/>
 <wire x1="162.56" y1="853.44" x2="152.4" y2="853.44" width="0.1524" layer="91"/>
 <label x="152.4" y="853.44" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC6" gate="G$1" pin="2_D1/D4"/>
+<pinref part="IC5" gate="G$1" pin="2_D1/D4"/>
 <wire x1="88.9" y1="1054.1" x2="76.2" y2="1054.1" width="0.1524" layer="91"/>
 <label x="76.2" y="1054.1" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="IC6" gate="G$1" pin="D1/D4_11"/>
+<pinref part="IC5" gate="G$1" pin="D1/D4_11"/>
 <wire x1="124.46" y1="1049.02" x2="137.16" y2="1049.02" width="0.1524" layer="91"/>
 <label x="137.16" y="1049.02" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC4" gate="G$1" pin="CATHODE"/>
+<pinref part="IC3" gate="G$1" pin="CATHODE"/>
 <wire x1="96.52" y1="965.2" x2="109.22" y2="965.2" width="0.1524" layer="91"/>
 <label x="109.22" y="965.2" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC18" gate="G$1" pin="CATHODE"/>
+<pinref part="IC16" gate="G$1" pin="CATHODE"/>
 <wire x1="327.66" y1="965.2" x2="337.82" y2="965.2" width="0.1524" layer="91"/>
 <label x="337.82" y="965.2" size="1.778" layer="95" rot="R270"/>
 </segment>
@@ -25328,7 +25718,7 @@ CAN</text>
 <label x="231.14" y="853.44" size="1.778" layer="95" rot="R270"/>
 <pinref part="IC11" gate="G$1" pin="CATHODE"/>
 <wire x1="210.82" y1="853.44" x2="220.98" y2="853.44" width="0.1524" layer="91"/>
-<pinref part="TP11" gate="G$1" pin="TP"/>
+<pinref part="TP2_IN" gate="G$1" pin="TP"/>
 <wire x1="220.98" y1="853.44" x2="231.14" y2="853.44" width="0.1524" layer="91"/>
 <junction x="220.98" y="853.44"/>
 </segment>
@@ -25339,15 +25729,15 @@ CAN</text>
 </net>
 <net name="V_REGULATED_TP-OUT" class="2">
 <segment>
-<pinref part="IC3" gate="G$1" pin="13-VIN"/>
-<pinref part="IC3" gate="G$1" pin="12-VIN"/>
+<pinref part="IC6" gate="G$1" pin="13-VIN"/>
+<pinref part="IC6" gate="G$1" pin="12-VIN"/>
 <wire x1="114.3" y1="528.32" x2="114.3" y2="530.86" width="0.1524" layer="91"/>
-<pinref part="C5" gate="G$1" pin="1"/>
+<pinref part="C8" gate="G$1" pin="1"/>
 <wire x1="114.3" y1="530.86" x2="96.52" y2="530.86" width="0.1524" layer="91"/>
 <junction x="114.3" y="530.86"/>
 <wire x1="96.52" y1="530.86" x2="86.36" y2="530.86" width="0.1524" layer="91"/>
 <junction x="96.52" y="530.86"/>
-<pinref part="C4" gate="G$1" pin="1"/>
+<pinref part="C5" gate="G$1" pin="1"/>
 <pinref part="C3" gate="G$1" pin="1"/>
 <wire x1="76.2" y1="530.86" x2="86.36" y2="530.86" width="0.1524" layer="91"/>
 <junction x="86.36" y="530.86"/>
@@ -25356,20 +25746,20 @@ CAN</text>
 <label x="66.04" y="530.86" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="TP12" gate="G$1" pin="TP"/>
+<pinref part="TP2_OUT" gate="G$1" pin="TP"/>
 <wire x1="236.22" y1="853.44" x2="246.38" y2="853.44" width="0.1524" layer="91"/>
 <label x="246.38" y="853.44" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC22" gate="G$1" pin="D1"/>
-<pinref part="IC22" gate="G$1" pin="D2"/>
+<pinref part="IC21" gate="G$1" pin="D1"/>
+<pinref part="IC21" gate="G$1" pin="D2"/>
 <wire x1="416.56" y1="858.52" x2="416.56" y2="855.98" width="0.1524" layer="91"/>
 <wire x1="416.56" y1="858.52" x2="424.18" y2="858.52" width="0.1524" layer="91"/>
 <junction x="416.56" y="858.52"/>
 <label x="424.18" y="858.52" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC17" gate="G$1" pin="CATHODE"/>
+<pinref part="IC15" gate="G$1" pin="CATHODE"/>
 <wire x1="312.42" y1="853.44" x2="325.12" y2="853.44" width="0.1524" layer="91"/>
 <label x="325.12" y="853.44" size="1.778" layer="95" rot="R270"/>
 </segment>
@@ -25390,19 +25780,19 @@ CAN</text>
 <label x="50.8" y="690.88" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC24" gate="G$1" pin="D1"/>
+<pinref part="IC23" gate="G$1" pin="D1"/>
 <wire x1="627.38" y1="858.52" x2="635" y2="858.52" width="0.1524" layer="91"/>
 <label x="635" y="858.52" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC23" gate="G$1" pin="CATHODE"/>
+<pinref part="IC22" gate="G$1" pin="CATHODE"/>
 <wire x1="541.02" y1="853.44" x2="553.72" y2="853.44" width="0.1524" layer="91"/>
 <label x="553.72" y="853.44" size="1.778" layer="95" rot="R270"/>
 </segment>
 </net>
 <net name="V_DC_TP-OUT" class="0">
 <segment>
-<pinref part="IC22" gate="G$1" pin="S1"/>
+<pinref part="IC21" gate="G$1" pin="S1"/>
 <wire x1="391.16" y1="855.98" x2="381" y2="855.98" width="0.1524" layer="91"/>
 <label x="381" y="855.98" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -25410,7 +25800,7 @@ CAN</text>
 <pinref part="IC11" gate="G$1" pin="ANODE"/>
 <wire x1="177.8" y1="853.44" x2="167.64" y2="853.44" width="0.1524" layer="91"/>
 <label x="167.64" y="853.44" size="1.778" layer="95" rot="R270"/>
-<pinref part="TP8" gate="G$1" pin="TP"/>
+<pinref part="TP1_OUT" gate="G$1" pin="TP"/>
 </segment>
 <segment>
 <wire x1="210.82" y1="1206.5" x2="210.82" y2="1196.34" width="0.1524" layer="91"/>
@@ -25419,38 +25809,38 @@ CAN</text>
 </net>
 <net name="5V0_TP-IN" class="2">
 <segment>
-<pinref part="IC3" gate="G$1" pin="8-VOUT"/>
-<pinref part="IC3" gate="G$1" pin="7-VOUT"/>
+<pinref part="IC6" gate="G$1" pin="8-VOUT"/>
+<pinref part="IC6" gate="G$1" pin="7-VOUT"/>
 <wire x1="147.32" y1="528.32" x2="147.32" y2="530.86" width="0.1524" layer="91"/>
-<pinref part="C10" gate="G$1" pin="1"/>
+<pinref part="C17" gate="G$1" pin="1"/>
 <wire x1="147.32" y1="530.86" x2="152.4" y2="530.86" width="0.1524" layer="91"/>
 <junction x="147.32" y="530.86"/>
-<pinref part="IC3" gate="G$1" pin="5-FB"/>
+<pinref part="IC6" gate="G$1" pin="5-FB"/>
 <wire x1="152.4" y1="530.86" x2="167.64" y2="530.86" width="0.1524" layer="91"/>
 <wire x1="147.32" y1="525.78" x2="152.4" y2="525.78" width="0.1524" layer="91"/>
 <wire x1="152.4" y1="525.78" x2="152.4" y2="530.86" width="0.1524" layer="91"/>
 <junction x="152.4" y="530.86"/>
 <wire x1="167.64" y1="530.86" x2="177.8" y2="530.86" width="0.1524" layer="91"/>
 <junction x="167.64" y="530.86"/>
-<pinref part="C11" gate="G$1" pin="1"/>
+<pinref part="C19" gate="G$1" pin="1"/>
 <wire x1="177.8" y1="530.86" x2="187.96" y2="530.86" width="0.1524" layer="91"/>
 <junction x="177.8" y="530.86"/>
-<pinref part="C13" gate="G$1" pin="1"/>
+<pinref part="C20" gate="G$1" pin="1"/>
 <wire x1="187.96" y1="530.86" x2="198.12" y2="530.86" width="0.1524" layer="91"/>
 <junction x="187.96" y="530.86"/>
-<pinref part="C18" gate="G$1" pin="1"/>
+<pinref part="C22" gate="G$1" pin="1"/>
 <wire x1="198.12" y1="530.86" x2="208.28" y2="530.86" width="0.1524" layer="91"/>
 <junction x="198.12" y="530.86"/>
 <label x="208.28" y="530.86" size="1.778" layer="95" rot="R270"/>
-<pinref part="TP5" gate="G$1" pin="TP"/>
+<pinref part="TP4_IN" gate="G$1" pin="TP"/>
 </segment>
 <segment>
-<pinref part="R15" gate="G$1" pin="2"/>
+<pinref part="R21" gate="G$1" pin="2"/>
 <wire x1="172.72" y1="495.3" x2="172.72" y2="497.84" width="0.1524" layer="91"/>
 <label x="172.72" y="497.84" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R17" gate="G$1" pin="2"/>
+<pinref part="R23" gate="G$1" pin="2"/>
 <wire x1="190.5" y1="495.3" x2="190.5" y2="497.84" width="0.1524" layer="91" style="longdash"/>
 <label x="190.5" y="497.84" size="1.778" layer="95"/>
 </segment>
@@ -25459,26 +25849,26 @@ CAN</text>
 <label x="104.14" y="673.1" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="R5" gate="G$1" pin="2"/>
+<pinref part="R6" gate="G$1" pin="2"/>
 <wire x1="50.8" y1="878.84" x2="50.8" y2="883.92" width="0.1524" layer="91"/>
 <label x="50.8" y="883.92" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="INT_MCP23S08" class="0">
 <segment>
-<pinref part="IC14" gate="G$1" pin="7_INT"/>
+<pinref part="IC17" gate="G$1" pin="7_INT"/>
 <wire x1="314.96" y1="370.84" x2="304.8" y2="370.84" width="0.1524" layer="91"/>
 <label x="304.8" y="370.84" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="SPI_SS_MCP23S08" class="0">
 <segment>
-<pinref part="IC14" gate="G$1" pin="5_!CS!"/>
+<pinref part="IC17" gate="G$1" pin="5_!CS!"/>
 <wire x1="314.96" y1="378.46" x2="304.8" y2="378.46" width="0.1524" layer="91"/>
 <label x="304.8" y="378.46" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="R22" gate="G$1" pin="1"/>
+<pinref part="R20" gate="G$1" pin="1"/>
 <wire x1="160.02" y1="2.54" x2="154.94" y2="2.54" width="0.1524" layer="91"/>
 <label x="154.94" y="2.54" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -25501,7 +25891,7 @@ CAN</text>
 <label x="-45.72" y="876.3" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="13_GP4"/>
+<pinref part="IC17" gate="G$1" pin="13_GP4"/>
 <wire x1="360.68" y1="378.46" x2="370.84" y2="378.46" width="0.1524" layer="91"/>
 <label x="370.84" y="378.46" size="1.778" layer="95"/>
 </segment>
@@ -25513,13 +25903,13 @@ CAN</text>
 <wire x1="45.72" y1="868.68" x2="45.72" y2="871.22" width="0.1524" layer="91"/>
 <wire x1="45.72" y1="868.68" x2="50.8" y2="868.68" width="0.1524" layer="91"/>
 <junction x="45.72" y="868.68"/>
-<pinref part="R5" gate="G$1" pin="1"/>
+<pinref part="R6" gate="G$1" pin="1"/>
 <wire x1="50.8" y1="868.68" x2="58.42" y2="868.68" width="0.1524" layer="91"/>
 <junction x="50.8" y="868.68"/>
 <label x="58.42" y="868.68" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="12_GP3"/>
+<pinref part="IC17" gate="G$1" pin="12_GP3"/>
 <wire x1="360.68" y1="375.92" x2="370.84" y2="375.92" width="0.1524" layer="91"/>
 <label x="370.84" y="375.92" size="1.778" layer="95"/>
 </segment>
@@ -25540,32 +25930,32 @@ CAN</text>
 </net>
 <net name="N$20" class="0">
 <segment>
-<pinref part="IC5" gate="G$1" pin="S1"/>
-<pinref part="IC5" gate="G$1" pin="S2"/>
+<pinref part="IC4" gate="G$1" pin="S1"/>
+<pinref part="IC4" gate="G$1" pin="S2"/>
 <wire x1="86.36" y1="878.84" x2="86.36" y2="876.3" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GATE_DELON" class="0">
 <segment>
-<pinref part="IC5" gate="G$1" pin="G1"/>
-<pinref part="IC5" gate="G$1" pin="G2"/>
+<pinref part="IC4" gate="G$1" pin="G1"/>
+<pinref part="IC4" gate="G$1" pin="G2"/>
 <wire x1="86.36" y1="883.92" x2="86.36" y2="881.38" width="0.1524" layer="91"/>
 <wire x1="86.36" y1="883.92" x2="78.74" y2="883.92" width="0.1524" layer="91"/>
 <junction x="86.36" y="883.92"/>
-<pinref part="R9" gate="G$1" pin="2"/>
+<pinref part="R11" gate="G$1" pin="2"/>
 <wire x1="78.74" y1="883.92" x2="73.66" y2="883.92" width="0.1524" layer="91"/>
 <junction x="78.74" y="883.92"/>
 <label x="73.66" y="883.92" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="IC14" gate="G$1" pin="14_GP5"/>
+<pinref part="IC17" gate="G$1" pin="14_GP5"/>
 <wire x1="360.68" y1="381" x2="370.84" y2="381" width="0.1524" layer="91"/>
 <label x="370.84" y="381" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="GATE_D3" class="0">
 <segment>
-<pinref part="IC6" gate="G$1" pin="G3_9"/>
+<pinref part="IC5" gate="G$1" pin="G3_9"/>
 <wire x1="124.46" y1="1054.1" x2="137.16" y2="1054.1" width="0.1524" layer="91"/>
 <label x="137.16" y="1054.1" size="1.778" layer="95"/>
 </segment>
@@ -25580,14 +25970,14 @@ CAN</text>
 </net>
 <net name="GATE_D4" class="0">
 <segment>
-<pinref part="IC6" gate="G$1" pin="G4_12"/>
+<pinref part="IC5" gate="G$1" pin="G4_12"/>
 <wire x1="124.46" y1="1046.48" x2="137.16" y2="1046.48" width="0.1524" layer="91"/>
 <label x="137.16" y="1046.48" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC18" gate="G$1" pin="GATE_PULLD"/>
+<pinref part="IC16" gate="G$1" pin="GATE_PULLD"/>
 <label x="322.58" y="982.98" size="1.778" layer="95"/>
-<pinref part="IC18" gate="G$1" pin="GATE"/>
+<pinref part="IC16" gate="G$1" pin="GATE"/>
 <wire x1="304.8" y1="982.98" x2="317.5" y2="982.98" width="0.1524" layer="91"/>
 <junction x="317.5" y="982.98"/>
 <wire x1="317.5" y1="982.98" x2="322.58" y2="982.98" width="0.1524" layer="91"/>
@@ -25595,14 +25985,14 @@ CAN</text>
 </net>
 <net name="GATE_D1" class="0">
 <segment>
-<pinref part="IC6" gate="G$1" pin="1_G1"/>
+<pinref part="IC5" gate="G$1" pin="1_G1"/>
 <wire x1="88.9" y1="1056.64" x2="76.2" y2="1056.64" width="0.1524" layer="91"/>
 <label x="76.2" y="1056.64" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="IC4" gate="G$1" pin="GATE_PULLD"/>
+<pinref part="IC3" gate="G$1" pin="GATE_PULLD"/>
 <label x="91.44" y="982.98" size="1.778" layer="95"/>
-<pinref part="IC4" gate="G$1" pin="GATE"/>
+<pinref part="IC3" gate="G$1" pin="GATE"/>
 <wire x1="73.66" y1="982.98" x2="86.36" y2="982.98" width="0.1524" layer="91"/>
 <junction x="86.36" y="982.98"/>
 <wire x1="86.36" y1="982.98" x2="91.44" y2="982.98" width="0.1524" layer="91"/>
@@ -25610,14 +26000,14 @@ CAN</text>
 </net>
 <net name="GATE_D2" class="0">
 <segment>
-<pinref part="IC6" gate="G$1" pin="4_G2"/>
+<pinref part="IC5" gate="G$1" pin="4_G2"/>
 <wire x1="88.9" y1="1049.02" x2="76.2" y2="1049.02" width="0.1524" layer="91"/>
 <label x="76.2" y="1049.02" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="IC9" gate="G$1" pin="GATE_PULLD"/>
+<pinref part="IC10" gate="G$1" pin="GATE_PULLD"/>
 <label x="177.8" y="982.98" size="1.778" layer="95"/>
-<pinref part="IC9" gate="G$1" pin="GATE"/>
+<pinref part="IC10" gate="G$1" pin="GATE"/>
 <wire x1="160.02" y1="982.98" x2="172.72" y2="982.98" width="0.1524" layer="91"/>
 <junction x="172.72" y="982.98"/>
 <wire x1="172.72" y1="982.98" x2="177.8" y2="982.98" width="0.1524" layer="91"/>
@@ -25636,22 +26026,22 @@ CAN</text>
 </net>
 <net name="GATE_DIODE_V_LIION" class="0">
 <segment>
-<pinref part="IC17" gate="G$1" pin="GATE"/>
-<pinref part="IC17" gate="G$1" pin="GATE_PULLD"/>
+<pinref part="IC15" gate="G$1" pin="GATE"/>
+<pinref part="IC15" gate="G$1" pin="GATE_PULLD"/>
 <wire x1="302.26" y1="871.22" x2="325.12" y2="871.22" width="0.1524" layer="91"/>
 <junction x="302.26" y="871.22"/>
 <label x="325.12" y="871.22" size="1.778" layer="95" rot="R90"/>
 <wire x1="289.56" y1="871.22" x2="302.26" y2="871.22" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="IC22" gate="G$1" pin="G2"/>
+<pinref part="IC21" gate="G$1" pin="G2"/>
 <wire x1="391.16" y1="858.52" x2="381" y2="858.52" width="0.1524" layer="91"/>
 <label x="381" y="858.52" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="GATE_DIODE_SMOOTH" class="0">
 <segment>
-<pinref part="IC22" gate="G$1" pin="G1"/>
+<pinref part="IC21" gate="G$1" pin="G1"/>
 <wire x1="391.16" y1="861.06" x2="381" y2="861.06" width="0.1524" layer="91"/>
 <label x="381" y="861.06" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -25667,14 +26057,14 @@ CAN</text>
 <net name="D_SMOOTH_VCAPH" class="0">
 <segment>
 <pinref part="IC11" gate="G$1" pin="VCAPH"/>
-<pinref part="C22" gate="G$1" pin="2"/>
+<pinref part="C21" gate="G$1" pin="2"/>
 <wire x1="187.96" y1="835.66" x2="187.96" y2="825.5" width="0.1524" layer="91"/>
 <wire x1="187.96" y1="825.5" x2="190.5" y2="825.5" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="D_SMOOTH_VCAP" class="0">
 <segment>
-<pinref part="C22" gate="G$1" pin="1"/>
+<pinref part="C21" gate="G$1" pin="1"/>
 <pinref part="IC11" gate="G$1" pin="VCAPL"/>
 <wire x1="198.12" y1="825.5" x2="200.66" y2="825.5" width="0.1524" layer="91"/>
 <wire x1="200.66" y1="825.5" x2="200.66" y2="835.66" width="0.1524" layer="91"/>
@@ -25682,33 +26072,33 @@ CAN</text>
 </net>
 <net name="D_VLIION_VCAPH" class="0">
 <segment>
-<pinref part="IC17" gate="G$1" pin="VCAPH"/>
-<pinref part="C29" gate="G$1" pin="2"/>
+<pinref part="IC15" gate="G$1" pin="VCAPH"/>
+<pinref part="C28" gate="G$1" pin="2"/>
 <wire x1="289.56" y1="835.66" x2="289.56" y2="825.5" width="0.1524" layer="91"/>
 <wire x1="289.56" y1="825.5" x2="292.1" y2="825.5" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="D_VLIION_VCAPL" class="0">
 <segment>
-<pinref part="C29" gate="G$1" pin="1"/>
-<pinref part="IC17" gate="G$1" pin="VCAPL"/>
+<pinref part="C28" gate="G$1" pin="1"/>
+<pinref part="IC15" gate="G$1" pin="VCAPL"/>
 <wire x1="299.72" y1="825.5" x2="302.26" y2="825.5" width="0.1524" layer="91"/>
 <wire x1="302.26" y1="825.5" x2="302.26" y2="835.66" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="EN2" class="0">
 <segment>
-<pinref part="IC21" gate="G$1" pin="4_EN"/>
 <pinref part="R24" gate="G$1" pin="1"/>
 <wire x1="386.08" y1="101.6" x2="381" y2="101.6" width="0.1524" layer="91"/>
+<pinref part="IC20" gate="G$1" pin="4_EN"/>
 </segment>
 </net>
 <net name="V_LI-ION_TP-OUT" class="0">
 <segment>
-<pinref part="IC17" gate="G$1" pin="ANODE"/>
+<pinref part="IC15" gate="G$1" pin="ANODE"/>
 <wire x1="279.4" y1="853.44" x2="269.24" y2="853.44" width="0.1524" layer="91"/>
 <label x="269.24" y="853.44" size="1.778" layer="95" rot="R270"/>
-<pinref part="TP9" gate="G$1" pin="TP"/>
+<pinref part="TP3_OUT" gate="G$1" pin="TP"/>
 </segment>
 <segment>
 <wire x1="276.86" y1="1211.58" x2="266.7" y2="1211.58" width="0.1524" layer="91"/>
@@ -25717,29 +26107,29 @@ CAN</text>
 </net>
 <net name="D_VLIION_VCAPH1" class="0">
 <segment>
-<pinref part="IC23" gate="G$1" pin="VCAPH"/>
-<pinref part="C37" gate="G$1" pin="2"/>
+<pinref part="IC22" gate="G$1" pin="VCAPH"/>
+<pinref part="C35" gate="G$1" pin="2"/>
 <wire x1="518.16" y1="835.66" x2="518.16" y2="825.5" width="0.1524" layer="91"/>
 <wire x1="518.16" y1="825.5" x2="520.7" y2="825.5" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="D_VLIION_VCAPL1" class="0">
 <segment>
-<pinref part="C37" gate="G$1" pin="1"/>
-<pinref part="IC23" gate="G$1" pin="VCAPL"/>
+<pinref part="C35" gate="G$1" pin="1"/>
+<pinref part="IC22" gate="G$1" pin="VCAPL"/>
 <wire x1="528.32" y1="825.5" x2="530.86" y2="825.5" width="0.1524" layer="91"/>
 <wire x1="530.86" y1="825.5" x2="530.86" y2="835.66" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GATE_SOLAR-CELL" class="0">
 <segment>
-<pinref part="IC24" gate="G$1" pin="G1"/>
+<pinref part="IC23" gate="G$1" pin="G1"/>
 <wire x1="601.98" y1="861.06" x2="591.82" y2="861.06" width="0.1524" layer="91"/>
 <label x="591.82" y="861.06" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="IC23" gate="G$1" pin="GATE"/>
-<pinref part="IC23" gate="G$1" pin="GATE_PULLD"/>
+<pinref part="IC22" gate="G$1" pin="GATE"/>
+<pinref part="IC22" gate="G$1" pin="GATE_PULLD"/>
 <wire x1="530.86" y1="871.22" x2="553.72" y2="871.22" width="0.1524" layer="91"/>
 <junction x="530.86" y="871.22"/>
 <label x="553.72" y="871.22" size="1.778" layer="95" rot="R90"/>
@@ -25748,15 +26138,15 @@ CAN</text>
 </net>
 <net name="SOLAR-CELL_TP-OUT" class="0">
 <segment>
-<pinref part="IC24" gate="G$1" pin="S1"/>
+<pinref part="IC23" gate="G$1" pin="S1"/>
 <wire x1="601.98" y1="855.98" x2="591.82" y2="855.98" width="0.1524" layer="91"/>
 <label x="591.82" y="855.98" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="IC23" gate="G$1" pin="ANODE"/>
+<pinref part="IC22" gate="G$1" pin="ANODE"/>
 <wire x1="508" y1="853.44" x2="497.84" y2="853.44" width="0.1524" layer="91"/>
 <label x="497.84" y="853.44" size="1.778" layer="95" rot="R270"/>
-<pinref part="TP14" gate="G$1" pin="TP"/>
+<pinref part="TP5_IN" gate="G$1" pin="TP"/>
 </segment>
 <segment>
 <wire x1="40.64" y1="693.42" x2="33.02" y2="693.42" width="0.1524" layer="91"/>
@@ -25765,7 +26155,7 @@ CAN</text>
 </net>
 <net name="SOLAR-CELL_TP-IN" class="0">
 <segment>
-<pinref part="TP15" gate="G$1" pin="TP"/>
+<pinref part="TP5_OUT" gate="G$1" pin="TP"/>
 <wire x1="492.76" y1="853.44" x2="485.14" y2="853.44" width="0.1524" layer="91" style="longdash"/>
 <label x="485.14" y="853.44" size="1.778" layer="95" rot="R270"/>
 </segment>
@@ -25804,7 +26194,7 @@ CAN</text>
 </net>
 <net name="6V0_TP-OUT" class="0">
 <segment>
-<pinref part="TP17" gate="G$1" pin="TP"/>
+<pinref part="TP6_OUT" gate="G$1" pin="TP"/>
 <wire x1="457.2" y1="111.76" x2="464.82" y2="111.76" width="0.1524" layer="91"/>
 <label x="464.82" y="111.76" size="1.778" layer="95" rot="R90"/>
 </segment>
@@ -25823,10 +26213,10 @@ CAN</text>
 </sheet>
 </sheets>
 <errors>
-<approved hash="104,1,261.62,-7.62,IC16,GND,GND_VIA_INCP,,,"/>
-<approved hash="104,1,261.62,-5.08,IC16,VDD,5V0_TP-OUT,,,"/>
-<approved hash="104,1,358.14,7.62,IC19,GND,GND_VIA_INCP,,,"/>
-<approved hash="104,1,358.14,10.16,IC19,VCC,5V0_TP-OUT,,,"/>
+<approved hash="104,1,261.62,-7.62,IC14,GND,GND_VIA_INCP,,,"/>
+<approved hash="104,1,261.62,-5.08,IC14,VDD,5V0_TP-OUT,,,"/>
+<approved hash="104,1,358.14,7.62,IC18,GND,GND_VIA_INCP,,,"/>
+<approved hash="104,1,358.14,10.16,IC18,VCC,5V0_TP-OUT,,,"/>
 <approved hash="104,1,243.84,256.54,IC13,IN,5V0_TP-OUT,,,"/>
 <approved hash="104,1,289.56,256.54,IC13,OUT,V_LI-ION_OUT,,,"/>
 <approved hash="104,1,289.56,246.38,IC13,VBAT,V_LI-ION_BATTERY-CELL,,,"/>
@@ -25835,8 +26225,8 @@ CAN</text>
 <approved hash="104,1,147.32,350.52,IC7,10_DGND,GND_VIA_INCP,,,"/>
 <approved hash="104,1,139.7,350.52,IC7,7_GND,GND_VIA_INCP,,,"/>
 <approved hash="104,1,132.08,350.52,IC7,2_REFG,GND_VIA_INCP,,,"/>
-<approved hash="104,1,314.96,358.14,IC14,GND,GND_VIA_INCP,,,"/>
-<approved hash="104,1,314.96,360.68,IC14,18_VCC,5V0_TP-OUT,,,"/>
+<approved hash="104,1,314.96,358.14,IC17,GND,GND_VIA_INCP,,,"/>
+<approved hash="104,1,314.96,360.68,IC17,18_VCC,5V0_TP-OUT,,,"/>
 <approved hash="209,1,457.2,111.76,6V0_TP-OUT,,,,,"/>
 <approved hash="106,1,457.2,111.76,6V0_TP-OUT,,,,,"/>
 <approved hash="106,1,190.5,147.32,N$2,,,,,"/>
