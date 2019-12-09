@@ -33,8 +33,8 @@ void cos_ctor()
 	// GPIO state definitions
 	{
 	// state initialization of device-specific pins
-	gpio_conf(BCK_BST_PS_SYNC_pin, OUTPUT, HIGH);						// low (off), high (on)
 	gpio_conf(MCP2561_standby_pin, OUTPUT, LOW);						// low (on), high (off)
+	gpio_conf(TPS630702_PWM_pin, OUTPUT, HIGH);							// low (off), high (on)
 	// state initialization of device-specific pins
 	}
 

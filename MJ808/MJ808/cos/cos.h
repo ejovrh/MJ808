@@ -1,15 +1,19 @@
 #ifndef COS_H_
 #define COS_H_
 
-#include "mj8x8\mj8x8.h"
+#include "mj8x8\mj8x8.h"												// base infrastructure
+#include "ad5160\ad5160.h"												// SPI Digital Potentiometer
+#include "lmp92064sd\lmp92064sd.h"										// SPI Current/Voltage sensor
+#include "mcp23s08/mcp23s08.h"											// SPI port expander
 
 // definitions of device/PCB layout-dependent hardware pins
-#define	SPI_SS_MCP23S08_pin		D,	1,	1								// MCP23S08 Port Expander Slave Select
-#define	COMPARATOR_IN_pin		B,	0,	0								// Comparator input pin
-#define	COMPARATOR_REF_pin		B,	1,	1								// Comparator reference pin
-#define	MCP2561_standby_pin		B,	2,	2								// MCP2561 standby
-#define BCK_BST_PS_SYNC_pin		B,	3,	3								// Buck&Boost 5V0 out
-#define	SPI_SS_MCP2515_pin		B,	4,	4								// SPI - SS
+#define	COMPARATOR_IN_pin		B,	0,	0								// Comparator input pin - zero cross from dynamo
+#define	COMPARATOR_REF_pin		B,	1,	1								// Comparator reference pin = GND
+#define	MCP2561_standby_pin		B,	2,	2								// MCP2561 standby, controlled in mcp2515.c
+#define TPS630702_PWM_pin		B,	3,	3								// TPS630702_PWM PWM Control Pin (PS/SYNC)
+
+#define INT_MCP2515_pin			D,	3,	3								// MCP2515 CAN Controller interrupt pin
+#define INT_MCP23S08_pin		D,	4,	4								// MCP23S08 Port Expander Interrupt pin
 // definitions of device/PCB layout-dependent hardware pins
 
 typedef struct															// struct describing devices on MJ808

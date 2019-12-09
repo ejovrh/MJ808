@@ -6,7 +6,13 @@ button\button.c
 
 button\button_types_actual.c
 
+cos\ad5160\ad5160.c
+
 cos\cos.c
+
+cos\lmp92064sd\lmp92064sd.c
+
+cos\mcp23s08\mcp23s08.c
 
 event\event.c
 
