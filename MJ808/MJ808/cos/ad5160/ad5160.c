@@ -16,4 +16,10 @@ typedef struct															// ad5160_t actual
 
 } __ad5160_t;
 
+
+ad5160_t * ad5160_ctor()
+{
+	;
+}
+
 extern __ad5160_t __AD5160;												// declare ad5160_t actual
