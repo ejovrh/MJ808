@@ -16,4 +16,10 @@ typedef struct															// mcp23s08_t actual
 
 } __mcp23s08_t;
 
+
+mcp23s08_t * mcp23s08_ctor()
+{
+	;
+}
+
 extern __mcp23s08_t __MCP23S08;											// declare mcp23s08_t actual

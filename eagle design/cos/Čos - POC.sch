@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.4.0">
+<eagle version="9.4.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -23206,23 +23206,37 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <variantdefs>
 </variantdefs>
 <classes>
-<class number="0" name="GND" width="0.254" drill="0.254">
-<clearance class="0" value="0.127"/>
+<class number="0" name="GND" width="0.5" drill="0.3">
+<clearance class="0" value="0.2"/>
 </class>
-<class number="1" name="Bat+" width="0.5" drill="0.3">
+<class number="1" name="GND_VIA_INCP" width="0.5" drill="0.3">
 <clearance class="1" value="0.2"/>
 </class>
-<class number="2" name="5v0" width="0.3" drill="0.3">
-<clearance class="2" value="0.2"/>
+<class number="2" name="DYNAMO_OUT" width="0.9" drill="0.3">
+<clearance class="2" value="0.5"/>
 </class>
-<class number="3" name="signal" width="0.25" drill="0.3">
+<class number="3" name="V_DC" width="0.3" drill="0.3">
 <clearance class="3" value="0.2"/>
 </class>
-<class number="4" name="6V0" width="0.3" drill="0.3">
+<class number="4" name="V_REGULATED" width="0.3" drill="0.3">
 <clearance class="4" value="0.2"/>
 </class>
-<class number="5" name="dynamo_out" width="0.4" drill="0.3">
+<class number="5" name="V_LI-ION" width="0.3" drill="0.3">
 <clearance class="5" value="0.2"/>
+</class>
+<class number="6" name="5V0" width="0.3" drill="0.3">
+<clearance class="6" value="0.2"/>
+</class>
+<class number="7" name="6V0" width="0.3" drill="0.3">
+<clearance class="7" value="0.2"/>
+</class>
+<class number="8" name="SOLAR-CELL" width="0.3" drill="0.3">
+<clearance class="8" value="0.2"/>
+</class>
+<class number="9" name="signal" width="0.3" drill="0.3">
+<clearance class="9" value="0.2"/>
+</class>
+<class number="10" name="LI_ION-CELL" width="0" drill="0">
 </class>
 </classes>
 <parts>
@@ -23809,7 +23823,7 @@ CAN</text>
 <wire x1="157.48" y1="655.32" x2="165.1" y2="655.32" width="0.1524" layer="97"/>
 <wire x1="147.32" y1="655.32" x2="96.52" y2="655.32" width="0.1524" layer="97"/>
 <circle x="160.02" y="655.32" radius="0.254" width="0.6096" layer="97"/>
-<text x="5.08" y="345.44" size="6.4516" layer="94">TP6</text>
+<text x="5.08" y="345.44" size="6.4516" layer="94">TP7</text>
 <text x="129.54" y="665.48" size="1.778" layer="97" align="center">Rdivide</text>
 <wire x1="139.7" y1="657.86" x2="139.7" y2="652.78" width="0.1524" layer="94"/>
 <text x="106.68" y="665.48" size="1.778" layer="94" rot="R90">TP4</text>
@@ -24356,7 +24370,7 @@ CAN</text>
 <label x="132.08" y="624.84" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="ICSP_DO/MOSI" class="3">
+<net name="ICSP_DO/MOSI" class="9">
 <segment>
 <wire x1="190.5" y1="124.46" x2="195.58" y2="124.46" width="0.1524" layer="91"/>
 <label x="195.58" y="124.46" size="1.778" layer="95"/>
@@ -24373,7 +24387,7 @@ CAN</text>
 <label x="142.24" y="43.18" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="ICSP_DI/MISO" class="3">
+<net name="ICSP_DI/MISO" class="9">
 <segment>
 <wire x1="190.5" y1="127" x2="195.58" y2="127" width="0.1524" layer="91"/>
 <label x="195.58" y="127" size="1.778" layer="95"/>
@@ -24390,7 +24404,7 @@ CAN</text>
 <label x="142.24" y="45.72" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="ICSP_SCK" class="3">
+<net name="ICSP_SCK" class="9">
 <segment>
 <wire x1="190.5" y1="121.92" x2="195.58" y2="121.92" width="0.1524" layer="91"/>
 <label x="195.58" y="121.92" size="1.778" layer="95"/>
@@ -24407,7 +24421,7 @@ CAN</text>
 <label x="142.24" y="40.64" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="SPI_SS_MCP2515" class="3">
+<net name="SPI_SS_MCP2515" class="9">
 <segment>
 <wire x1="190.5" y1="129.54" x2="195.58" y2="129.54" width="0.1524" layer="91"/>
 <label x="195.58" y="129.54" size="1.778" layer="95"/>
@@ -24424,7 +24438,7 @@ CAN</text>
 <label x="243.84" y="12.7" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="CANH" class="2">
+<net name="CANH" class="9">
 <segment>
 <pinref part="IC18" gate="G$1" pin="CANH"/>
 <wire x1="391.16" y1="20.32" x2="414.02" y2="20.32" width="0.1524" layer="91"/>
@@ -24441,7 +24455,7 @@ CAN</text>
 <pinref part="CONN3" gate="G$1" pin="TP$1"/>
 </segment>
 </net>
-<net name="CANL" class="2">
+<net name="CANL" class="9">
 <segment>
 <pinref part="IC18" gate="G$1" pin="CANL"/>
 <wire x1="391.16" y1="17.78" x2="414.02" y2="17.78" width="0.1524" layer="91"/>
@@ -24458,7 +24472,7 @@ CAN</text>
 <wire x1="71.12" y1="121.92" x2="76.2" y2="121.92" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="TXCAN" class="3">
+<net name="TXCAN" class="9">
 <segment>
 <pinref part="IC18" gate="G$1" pin="TXD"/>
 <pinref part="IC14" gate="G$1" pin="TXCAN"/>
@@ -24466,7 +24480,7 @@ CAN</text>
 <label x="322.58" y="20.32" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="RXCAN" class="3">
+<net name="RXCAN" class="9">
 <segment>
 <pinref part="IC14" gate="G$1" pin="RXCAN"/>
 <pinref part="IC18" gate="G$1" pin="RXD"/>
@@ -24474,7 +24488,7 @@ CAN</text>
 <label x="322.58" y="15.24" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="DEBUGWIRE/RESET" class="3">
+<net name="DEBUGWIRE/RESET" class="9">
 <segment>
 <wire x1="190.5" y1="160.02" x2="195.58" y2="160.02" width="0.1524" layer="91"/>
 <label x="195.58" y="160.02" size="1.778" layer="95"/>
@@ -24486,7 +24500,7 @@ CAN</text>
 <label x="78.74" y="149.86" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="INT_MCP2515" class="3">
+<net name="INT_MCP2515" class="9">
 <segment>
 <pinref part="IC14" gate="G$1" pin="!INT!"/>
 <wire x1="302.26" y1="-5.08" x2="320.04" y2="-5.08" width="0.1524" layer="91"/>
@@ -24498,7 +24512,7 @@ CAN</text>
 <pinref part="IC8" gate="G$1" pin="PCINT14/INT1-PD3"/>
 </segment>
 </net>
-<net name="CLOCKOUT" class="3">
+<net name="CLOCKOUT" class="9">
 <segment>
 <wire x1="190.5" y1="152.4" x2="195.58" y2="152.4" width="0.1524" layer="91"/>
 <label x="195.58" y="152.4" size="1.778" layer="95"/>
@@ -24510,7 +24524,7 @@ CAN</text>
 <label x="243.84" y="5.08" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="XTAL1" class="3">
+<net name="XTAL1" class="9">
 <segment>
 <pinref part="IC8" gate="G$1" pin="PCINT8/CLKI/XTAL1-PA0"/>
 <wire x1="190.5" y1="165.1" x2="195.58" y2="165.1" width="0.1524" layer="91"/>
@@ -24522,7 +24536,7 @@ CAN</text>
 <label x="149.86" y="104.14" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="XTAL2" class="3">
+<net name="XTAL2" class="9">
 <segment>
 <pinref part="IC8" gate="G$1" pin="PCINT9/XTAL2-PA1"/>
 <wire x1="190.5" y1="162.56" x2="195.58" y2="162.56" width="0.1524" layer="91"/>
@@ -24534,7 +24548,7 @@ CAN</text>
 <label x="177.8" y="104.14" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="STBY" class="3">
+<net name="STBY" class="9">
 <segment>
 <pinref part="IC18" gate="G$1" pin="STBY"/>
 <label x="414.02" y="10.16" size="1.778" layer="95"/>
@@ -24551,7 +24565,7 @@ CAN</text>
 <label x="195.58" y="134.62" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="5V0_TP-OUT" class="2">
+<net name="5V0_TP-OUT" class="6">
 <segment>
 <pinref part="C13" gate="G$1" pin="1"/>
 <wire x1="147.32" y1="403.86" x2="147.32" y2="414.02" width="0.1524" layer="91"/>
@@ -24715,7 +24729,7 @@ CAN</text>
 <label x="50.8" y="393.7" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="RESET" class="3">
+<net name="RESET" class="9">
 <segment>
 <pinref part="IC14" gate="G$1" pin="!RESET!"/>
 <wire x1="302.26" y1="-7.62" x2="320.04" y2="-7.62" width="0.1524" layer="91"/>
@@ -24727,7 +24741,7 @@ CAN</text>
 <label x="180.34" y="22.86" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_MOSI" class="3">
+<net name="SPI_MOSI" class="9">
 <segment>
 <pinref part="IC14" gate="G$1" pin="SI"/>
 <wire x1="261.62" y1="17.78" x2="243.84" y2="17.78" width="0.1524" layer="91"/>
@@ -24754,7 +24768,7 @@ CAN</text>
 <label x="304.8" y="383.54" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="SPI_MISO" class="3">
+<net name="SPI_MISO" class="9">
 <segment>
 <pinref part="IC14" gate="G$1" pin="SO"/>
 <wire x1="243.84" y1="20.32" x2="261.62" y2="20.32" width="0.1524" layer="91"/>
@@ -24776,7 +24790,7 @@ CAN</text>
 <label x="304.8" y="386.08" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="SPI_SCK" class="0">
+<net name="SPI_SCK" class="9">
 <segment>
 <pinref part="IC14" gate="G$1" pin="SCK"/>
 <wire x1="261.62" y1="15.24" x2="243.84" y2="15.24" width="0.1524" layer="91"/>
@@ -24803,7 +24817,7 @@ CAN</text>
 <label x="304.8" y="381" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="PROG3" class="3">
+<net name="PROG3" class="9">
 <segment>
 <pinref part="IC13" gate="A" pin="PROG3"/>
 <wire x1="289.56" y1="238.76" x2="309.88" y2="238.76" width="0.1524" layer="91"/>
@@ -24815,7 +24829,7 @@ CAN</text>
 <label x="119.38" y="236.22" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
-<net name="PROG1" class="3">
+<net name="PROG1" class="9">
 <segment>
 <pinref part="IC13" gate="A" pin="PROG1"/>
 <wire x1="289.56" y1="241.3" x2="309.88" y2="241.3" width="0.1524" layer="91"/>
@@ -24827,7 +24841,7 @@ CAN</text>
 <label x="406.4" y="243.84" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="THERM" class="0">
+<net name="THERM" class="9">
 <segment>
 <pinref part="IC13" gate="A" pin="THERM"/>
 <wire x1="289.56" y1="243.84" x2="309.88" y2="243.84" width="0.1524" layer="91"/>
@@ -24839,7 +24853,7 @@ CAN</text>
 <label x="144.78" y="266.7" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="V_LI-ION_BATTERY-CELL" class="0">
+<net name="V_LI-ION_BATTERY-CELL" class="10">
 <segment>
 <pinref part="IC13" gate="A" pin="VBAT"/>
 <wire x1="289.56" y1="246.38" x2="304.8" y2="246.38" width="0.1524" layer="91"/>
@@ -24863,7 +24877,7 @@ CAN</text>
 <label x="167.64" y="683.26" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
-<net name="V_LI-ION_OUT" class="0">
+<net name="V_LI-ION_OUT" class="5">
 <segment>
 <pinref part="IC13" gate="A" pin="OUT"/>
 <wire x1="289.56" y1="256.54" x2="299.72" y2="256.54" width="0.1524" layer="91"/>
@@ -24907,7 +24921,7 @@ CAN</text>
 <label x="223.52" y="673.1" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="MCP73871_STAT1/!LBO!_PIN" class="3">
+<net name="MCP73871_STAT1/!LBO!_PIN" class="9">
 <segment>
 <pinref part="IC13" gate="A" pin="STAT1/!LBO!"/>
 <wire x1="243.84" y1="243.84" x2="223.52" y2="243.84" width="0.1524" layer="91"/>
@@ -24924,7 +24938,7 @@ CAN</text>
 <label x="370.84" y="368.3" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="MCP73871_STAT2_PIN" class="3">
+<net name="MCP73871_STAT2_PIN" class="9">
 <segment>
 <pinref part="IC13" gate="A" pin="STAT2"/>
 <wire x1="243.84" y1="246.38" x2="223.52" y2="246.38" width="0.1524" layer="91"/>
@@ -24941,7 +24955,7 @@ CAN</text>
 <label x="370.84" y="370.84" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="MCP73871_PG_PIN" class="3">
+<net name="MCP73871_PG_PIN" class="9">
 <segment>
 <pinref part="IC13" gate="A" pin="!PG!"/>
 <wire x1="243.84" y1="248.92" x2="223.52" y2="248.92" width="0.1524" layer="91"/>
@@ -24958,7 +24972,7 @@ CAN</text>
 <label x="370.84" y="373.38" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="VPCC" class="0">
+<net name="VPCC" class="9">
 <segment>
 <pinref part="IC13" gate="A" pin="VPCC"/>
 <wire x1="243.84" y1="251.46" x2="223.52" y2="251.46" width="0.1524" layer="91"/>
@@ -24972,7 +24986,7 @@ CAN</text>
 <label x="83.82" y="279.4" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$8" class="0">
+<net name="N$8" class="9">
 <segment>
 <pinref part="R16" gate="G$1" pin="2"/>
 <pinref part="R17" gate="G$1" pin="2"/>
@@ -24981,7 +24995,7 @@ CAN</text>
 <junction x="160.02" y="266.7"/>
 </segment>
 </net>
-<net name="6V0_TP-IN" class="0">
+<net name="6V0_TP-IN" class="7">
 <segment>
 <pinref part="D6" gate="G$1" pin="C"/>
 <pinref part="R25" gate="G$1" pin="2"/>
@@ -24999,7 +25013,7 @@ CAN</text>
 <label x="266.7" y="670.56" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
-<net name="EN" class="0">
+<net name="EN" class="9">
 <segment>
 <pinref part="R21" gate="G$1" pin="1"/>
 <wire x1="172.72" y1="485.14" x2="172.72" y2="482.6" width="0.1524" layer="91"/>
@@ -25011,7 +25025,7 @@ CAN</text>
 <label x="165.1" y="518.16" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
-<net name="SW" class="0">
+<net name="SW" class="7">
 <segment>
 <pinref part="D6" gate="G$1" pin="A"/>
 <wire x1="424.18" y1="111.76" x2="421.64" y2="111.76" width="0.1524" layer="91"/>
@@ -25022,7 +25036,7 @@ CAN</text>
 <junction x="421.64" y="111.76"/>
 </segment>
 </net>
-<net name="FB" class="0">
+<net name="FB" class="9">
 <segment>
 <pinref part="R25" gate="G$1" pin="1"/>
 <pinref part="R26" gate="G$1" pin="2"/>
@@ -25031,7 +25045,7 @@ CAN</text>
 <pinref part="IC20" gate="G$1" pin="3_FB"/>
 </segment>
 </net>
-<net name="LMP92064SD_CS" class="0">
+<net name="SPI_SS_LMP92064SD" class="9">
 <segment>
 <pinref part="IC7" gate="G$1" pin="CSB_14"/>
 <wire x1="172.72" y1="375.92" x2="185.42" y2="375.92" width="0.1524" layer="91"/>
@@ -25043,12 +25057,12 @@ CAN</text>
 <label x="180.34" y="25.4" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC17" gate="G$1" pin="16_GP7"/>
-<wire x1="360.68" y1="386.08" x2="370.84" y2="386.08" width="0.1524" layer="91"/>
-<label x="370.84" y="386.08" size="1.778" layer="95"/>
+<pinref part="IC8" gate="G$1" pin="PCINT17/ICPI-PD6"/>
+<wire x1="190.5" y1="142.24" x2="195.58" y2="142.24" width="0.1524" layer="91"/>
+<label x="195.58" y="142.24" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="INCN" class="0">
+<net name="INCN" class="1">
 <segment>
 <pinref part="IC7" gate="G$1" pin="4_INCN"/>
 <wire x1="104.14" y1="358.14" x2="93.98" y2="358.14" width="0.1524" layer="91"/>
@@ -25067,7 +25081,7 @@ CAN</text>
 <label x="142.24" y="645.16" size="1.778" layer="95" rot="R270"/>
 </segment>
 </net>
-<net name="GND_VIA_INCP" class="0">
+<net name="GND_VIA_INCP" class="1">
 <segment>
 <pinref part="IC7" gate="G$1" pin="3_INCP"/>
 <wire x1="104.14" y1="365.76" x2="93.98" y2="365.76" width="0.1524" layer="91"/>
@@ -25347,7 +25361,7 @@ CAN</text>
 <label x="251.46" y="-7.62" size="1.778" layer="95" rot="R270"/>
 </segment>
 </net>
-<net name="INVP" class="0">
+<net name="INVP" class="9">
 <segment>
 <pinref part="IC7" gate="G$1" pin="5_INVP"/>
 <wire x1="104.14" y1="383.54" x2="93.98" y2="383.54" width="0.1524" layer="91"/>
@@ -25361,21 +25375,21 @@ CAN</text>
 <label x="55.88" y="378.46" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$17" class="0">
+<net name="N$17" class="9">
 <segment>
 <pinref part="IC7" gate="G$1" pin="REFC_1"/>
 <wire x1="132.08" y1="391.16" x2="132.08" y2="396.24" width="0.1524" layer="91"/>
 <pinref part="C9" gate="G$1" pin="1"/>
 </segment>
 </net>
-<net name="ZENER_COMMON" class="0">
+<net name="ZENER_COMMON" class="2">
 <segment>
 <pinref part="D4" gate="G$1" pin="C"/>
 <pinref part="D3" gate="G$1" pin="C"/>
 <wire x1="17.78" y1="1049.02" x2="17.78" y2="1046.48" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="DYNAMO_2_AFTER_SW" class="0">
+<net name="DYNAMO_2_AFTER_SW" class="2">
 <segment>
 <pinref part="D1" gate="G$1" pin="A"/>
 <wire x1="-17.78" y1="965.2" x2="-22.86" y2="965.2" width="0.1524" layer="91"/>
@@ -25411,7 +25425,7 @@ CAN</text>
 <label x="185.42" y="1181.1" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="DYNAMO_1" class="5">
+<net name="DYNAMO_1" class="2">
 <segment>
 <pinref part="D4" gate="G$1" pin="A"/>
 <wire x1="17.78" y1="1041.4" x2="17.78" y2="1038.86" width="0.1524" layer="91"/>
@@ -25442,7 +25456,7 @@ CAN</text>
 <label x="76.2" y="1160.78" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="D1_VCAPH" class="0">
+<net name="D1_VCAPH" class="9">
 <segment>
 <pinref part="IC3" gate="G$1" pin="VCAPH"/>
 <pinref part="C4" gate="G$1" pin="2"/>
@@ -25450,7 +25464,7 @@ CAN</text>
 <wire x1="73.66" y1="942.34" x2="76.2" y2="942.34" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="D1_VCAPL" class="0">
+<net name="D1_VCAPL" class="9">
 <segment>
 <pinref part="C4" gate="G$1" pin="1"/>
 <pinref part="IC3" gate="G$1" pin="VCAPL"/>
@@ -25458,7 +25472,7 @@ CAN</text>
 <wire x1="86.36" y1="942.34" x2="86.36" y2="947.42" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="D2_VCAPH" class="0">
+<net name="D2_VCAPH" class="9">
 <segment>
 <pinref part="IC10" gate="G$1" pin="VCAPH"/>
 <pinref part="C16" gate="G$1" pin="2"/>
@@ -25466,7 +25480,7 @@ CAN</text>
 <wire x1="160.02" y1="942.34" x2="162.56" y2="942.34" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="D2_VCAPL" class="0">
+<net name="D2_VCAPL" class="9">
 <segment>
 <pinref part="C16" gate="G$1" pin="1"/>
 <pinref part="IC10" gate="G$1" pin="VCAPL"/>
@@ -25474,7 +25488,7 @@ CAN</text>
 <wire x1="172.72" y1="942.34" x2="172.72" y2="947.42" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="D3_VCAPH" class="0">
+<net name="D3_VCAPH" class="9">
 <segment>
 <pinref part="IC12" gate="G$1" pin="VCAPH"/>
 <pinref part="C25" gate="G$1" pin="2"/>
@@ -25482,7 +25496,7 @@ CAN</text>
 <wire x1="236.22" y1="942.34" x2="238.76" y2="942.34" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="D3_VCAPL" class="0">
+<net name="D3_VCAPL" class="9">
 <segment>
 <pinref part="C25" gate="G$1" pin="1"/>
 <pinref part="IC12" gate="G$1" pin="VCAPL"/>
@@ -25490,7 +25504,7 @@ CAN</text>
 <wire x1="248.92" y1="942.34" x2="248.92" y2="947.42" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="D4_VCAPH" class="0">
+<net name="D4_VCAPH" class="9">
 <segment>
 <pinref part="IC16" gate="G$1" pin="VCAPH"/>
 <pinref part="C30" gate="G$1" pin="2"/>
@@ -25498,7 +25512,7 @@ CAN</text>
 <wire x1="304.8" y1="942.34" x2="307.34" y2="942.34" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="D4_VCAPL" class="0">
+<net name="D4_VCAPL" class="9">
 <segment>
 <pinref part="C30" gate="G$1" pin="1"/>
 <pinref part="IC16" gate="G$1" pin="VCAPL"/>
@@ -25506,7 +25520,7 @@ CAN</text>
 <wire x1="317.5" y1="942.34" x2="317.5" y2="947.42" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="COMP_IN" class="0">
+<net name="COMPARATOR_IN" class="9">
 <segment>
 <pinref part="IC8" gate="G$1" pin="AIN0/PCINT0-PB0"/>
 <wire x1="190.5" y1="139.7" x2="195.58" y2="139.7" width="0.1524" layer="91"/>
@@ -25521,7 +25535,7 @@ CAN</text>
 <label x="27.94" y="965.2" size="1.778" layer="95" rot="R270"/>
 </segment>
 </net>
-<net name="N$4" class="0">
+<net name="N$4" class="9">
 <segment>
 <pinref part="R3" gate="G$1" pin="2"/>
 <pinref part="R5" gate="G$1" pin="1"/>
@@ -25531,14 +25545,14 @@ CAN</text>
 <junction x="-2.54" y="965.2"/>
 </segment>
 </net>
-<net name="N$3" class="0">
+<net name="N$3" class="9">
 <segment>
 <pinref part="D1" gate="G$1" pin="C"/>
 <pinref part="D2" gate="G$1" pin="A"/>
 <wire x1="-12.7" y1="965.2" x2="-10.16" y2="965.2" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="AD5160_CS" class="0">
+<net name="SPI_SS_AD5160" class="9">
 <segment>
 <pinref part="IC19" gate="G$1" pin="6_!CS!"/>
 <wire x1="365.76" y1="246.38" x2="358.14" y2="246.38" width="0.1524" layer="91"/>
@@ -25550,12 +25564,12 @@ CAN</text>
 <label x="180.34" y="27.94" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC17" gate="G$1" pin="15_GP6"/>
-<wire x1="360.68" y1="383.54" x2="370.84" y2="383.54" width="0.1524" layer="91"/>
-<label x="370.84" y="383.54" size="1.778" layer="95"/>
+<pinref part="IC8" gate="G$1" pin="PCINT16/OC0B/T1-PD5"/>
+<wire x1="190.5" y1="144.78" x2="195.58" y2="144.78" width="0.1524" layer="91"/>
+<label x="195.58" y="144.78" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="DYNAMO_2_BEFORE_SW" class="0">
+<net name="DYNAMO_2_BEFORE_SW" class="2">
 <segment>
 <wire x1="-22.86" y1="1049.02" x2="-17.78" y2="1049.02" width="0.1524" layer="91"/>
 <label x="-17.78" y="1049.02" size="1.778" layer="95"/>
@@ -25586,7 +25600,7 @@ CAN</text>
 <label x="104.14" y="1160.78" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="TUNIN_CAP2_BIAS" class="0">
+<net name="TUNIN_CAP2_BIAS" class="9">
 <segment>
 <pinref part="C1" gate="G$1" pin="+"/>
 <pinref part="C2" gate="G$1" pin="+"/>
@@ -25595,7 +25609,7 @@ CAN</text>
 <junction x="-7.62" y="845.82"/>
 </segment>
 </net>
-<net name="DELON_1" class="0">
+<net name="DELON_1" class="2">
 <segment>
 <pinref part="C6" gate="G$1" pin="-"/>
 <wire x1="96.52" y1="858.52" x2="96.52" y2="853.44" width="0.1524" layer="91"/>
@@ -25615,7 +25629,7 @@ CAN</text>
 <label x="208.28" y="1173.48" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="PS/SYNC" class="3">
+<net name="TPS630702_PWM" class="9">
 <segment>
 <pinref part="IC6" gate="G$1" pin="1-PS/S"/>
 <wire x1="147.32" y1="515.62" x2="154.94" y2="515.62" width="0.1524" layer="91"/>
@@ -25627,7 +25641,7 @@ CAN</text>
 <label x="195.58" y="132.08" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="PG" class="3">
+<net name="PG" class="9">
 <segment>
 <pinref part="IC6" gate="G$1" pin="2-PG"/>
 <wire x1="147.32" y1="523.24" x2="154.94" y2="523.24" width="0.1524" layer="91"/>
@@ -25639,7 +25653,7 @@ CAN</text>
 <label x="190.5" y="482.6" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="VAUX" class="0">
+<net name="VAUX" class="9">
 <segment>
 <pinref part="C15" gate="G$1" pin="1"/>
 <wire x1="160.02" y1="492.76" x2="160.02" y2="495.3" width="0.1524" layer="91"/>
@@ -25651,7 +25665,7 @@ CAN</text>
 <label x="109.22" y="520.7" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$1" class="0">
+<net name="N$1" class="6">
 <segment>
 <pinref part="IC6" gate="G$1" pin="11-L1"/>
 <pinref part="L1" gate="G$1" pin="P$1"/>
@@ -25659,7 +25673,7 @@ CAN</text>
 <wire x1="124.46" y1="546.1" x2="124.46" y2="558.8" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$5" class="0">
+<net name="N$5" class="6">
 <segment>
 <pinref part="IC6" gate="G$1" pin="9-L2"/>
 <pinref part="L1" gate="G$1" pin="P$2"/>
@@ -25667,7 +25681,7 @@ CAN</text>
 <wire x1="139.7" y1="546.1" x2="139.7" y2="558.8" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="V_DC_TP-IN" class="0">
+<net name="V_DC_TP-IN" class="3">
 <segment>
 <wire x1="96.52" y1="866.14" x2="106.68" y2="866.14" width="0.1524" layer="91"/>
 <label x="106.68" y="866.14" size="1.778" layer="95"/>
@@ -25712,7 +25726,7 @@ CAN</text>
 <label x="104.14" y="1209.04" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="V_REGULATED_TP-IN" class="2">
+<net name="V_REGULATED_TP-IN" class="4">
 <segment>
 <pinref part="C23" gate="G$1" pin="+"/>
 <label x="231.14" y="853.44" size="1.778" layer="95" rot="R270"/>
@@ -25727,7 +25741,7 @@ CAN</text>
 <wire x1="236.22" y1="1201.42" x2="236.22" y2="1196.34" width="0.1524" layer="91" style="longdash"/>
 </segment>
 </net>
-<net name="V_REGULATED_TP-OUT" class="2">
+<net name="V_REGULATED_TP-OUT" class="4">
 <segment>
 <pinref part="IC6" gate="G$1" pin="13-VIN"/>
 <pinref part="IC6" gate="G$1" pin="12-VIN"/>
@@ -25790,7 +25804,7 @@ CAN</text>
 <label x="553.72" y="853.44" size="1.778" layer="95" rot="R270"/>
 </segment>
 </net>
-<net name="V_DC_TP-OUT" class="0">
+<net name="V_DC_TP-OUT" class="3">
 <segment>
 <pinref part="IC21" gate="G$1" pin="S1"/>
 <wire x1="391.16" y1="855.98" x2="381" y2="855.98" width="0.1524" layer="91"/>
@@ -25807,7 +25821,7 @@ CAN</text>
 <label x="210.82" y="1206.5" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
-<net name="5V0_TP-IN" class="2">
+<net name="5V0_TP-IN" class="6">
 <segment>
 <pinref part="IC6" gate="G$1" pin="8-VOUT"/>
 <pinref part="IC6" gate="G$1" pin="7-VOUT"/>
@@ -25854,14 +25868,19 @@ CAN</text>
 <label x="50.8" y="883.92" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
-<net name="INT_MCP23S08" class="0">
+<net name="INT_MCP23S08" class="9">
 <segment>
 <pinref part="IC17" gate="G$1" pin="7_INT"/>
 <wire x1="314.96" y1="370.84" x2="304.8" y2="370.84" width="0.1524" layer="91"/>
 <label x="304.8" y="370.84" size="1.778" layer="95" rot="R180"/>
 </segment>
+<segment>
+<pinref part="IC8" gate="G$1" pin="PCINT15/T0-PD4"/>
+<wire x1="190.5" y1="147.32" x2="195.58" y2="147.32" width="0.1524" layer="91"/>
+<label x="195.58" y="147.32" size="1.778" layer="95"/>
+</segment>
 </net>
-<net name="SPI_SS_MCP23S08" class="0">
+<net name="SPI_SS_MCP23S08" class="9">
 <segment>
 <pinref part="IC17" gate="G$1" pin="5_!CS!"/>
 <wire x1="314.96" y1="378.46" x2="304.8" y2="378.46" width="0.1524" layer="91"/>
@@ -25878,7 +25897,7 @@ CAN</text>
 <label x="195.58" y="154.94" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GATE_TUNING-CAP" class="0">
+<net name="GATE_TUNING-CAP" class="9">
 <segment>
 <pinref part="IC1" gate="G$1" pin="G1"/>
 <pinref part="IC1" gate="G$1" pin="G2"/>
@@ -25896,7 +25915,7 @@ CAN</text>
 <label x="370.84" y="378.46" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GATE_GRAETZ" class="0">
+<net name="GATE_GRAETZ" class="9">
 <segment>
 <pinref part="IC2" gate="G$1" pin="G1"/>
 <pinref part="IC2" gate="G$1" pin="G2"/>
@@ -25914,28 +25933,28 @@ CAN</text>
 <label x="370.84" y="375.92" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$13" class="0">
+<net name="N$13" class="9">
 <segment>
 <pinref part="IC1" gate="G$1" pin="S1"/>
 <pinref part="IC1" gate="G$1" pin="S2"/>
 <wire x1="-33.02" y1="871.22" x2="-33.02" y2="868.68" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$16" class="0">
+<net name="N$16" class="9">
 <segment>
 <pinref part="IC2" gate="G$1" pin="S1"/>
 <pinref part="IC2" gate="G$1" pin="S2"/>
 <wire x1="45.72" y1="873.76" x2="45.72" y2="876.3" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$20" class="0">
+<net name="N$20" class="9">
 <segment>
 <pinref part="IC4" gate="G$1" pin="S1"/>
 <pinref part="IC4" gate="G$1" pin="S2"/>
 <wire x1="86.36" y1="878.84" x2="86.36" y2="876.3" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GATE_DELON" class="0">
+<net name="GATE_DELON" class="9">
 <segment>
 <pinref part="IC4" gate="G$1" pin="G1"/>
 <pinref part="IC4" gate="G$1" pin="G2"/>
@@ -25953,7 +25972,7 @@ CAN</text>
 <label x="370.84" y="381" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GATE_D3" class="0">
+<net name="GATE_D3" class="9">
 <segment>
 <pinref part="IC5" gate="G$1" pin="G3_9"/>
 <wire x1="124.46" y1="1054.1" x2="137.16" y2="1054.1" width="0.1524" layer="91"/>
@@ -25968,7 +25987,7 @@ CAN</text>
 <wire x1="248.92" y1="982.98" x2="254" y2="982.98" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GATE_D4" class="0">
+<net name="GATE_D4" class="9">
 <segment>
 <pinref part="IC5" gate="G$1" pin="G4_12"/>
 <wire x1="124.46" y1="1046.48" x2="137.16" y2="1046.48" width="0.1524" layer="91"/>
@@ -25983,7 +26002,7 @@ CAN</text>
 <wire x1="317.5" y1="982.98" x2="322.58" y2="982.98" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GATE_D1" class="0">
+<net name="GATE_D1" class="9">
 <segment>
 <pinref part="IC5" gate="G$1" pin="1_G1"/>
 <wire x1="88.9" y1="1056.64" x2="76.2" y2="1056.64" width="0.1524" layer="91"/>
@@ -25998,7 +26017,7 @@ CAN</text>
 <wire x1="86.36" y1="982.98" x2="91.44" y2="982.98" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GATE_D2" class="0">
+<net name="GATE_D2" class="9">
 <segment>
 <pinref part="IC5" gate="G$1" pin="4_G2"/>
 <wire x1="88.9" y1="1049.02" x2="76.2" y2="1049.02" width="0.1524" layer="91"/>
@@ -26013,7 +26032,7 @@ CAN</text>
 <wire x1="172.72" y1="982.98" x2="177.8" y2="982.98" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="AFTER_SW_BEFORE_TUNING_CAP" class="0">
+<net name="AFTER_SW_BEFORE_TUNING_CAP" class="2">
 <segment>
 <pinref part="IC1" gate="G$1" pin="D2"/>
 <pinref part="C1" gate="G$1" pin="-"/>
@@ -26024,7 +26043,7 @@ CAN</text>
 <label x="157.48" y="1163.32" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GATE_DIODE_V_LIION" class="0">
+<net name="GATE_DIODE_V_LIION" class="9">
 <segment>
 <pinref part="IC15" gate="G$1" pin="GATE"/>
 <pinref part="IC15" gate="G$1" pin="GATE_PULLD"/>
@@ -26039,7 +26058,7 @@ CAN</text>
 <label x="381" y="858.52" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="GATE_DIODE_SMOOTH" class="0">
+<net name="GATE_DIODE_SMOOTH" class="9">
 <segment>
 <pinref part="IC21" gate="G$1" pin="G1"/>
 <wire x1="391.16" y1="861.06" x2="381" y2="861.06" width="0.1524" layer="91"/>
@@ -26054,7 +26073,7 @@ CAN</text>
 <wire x1="187.96" y1="871.22" x2="200.66" y2="871.22" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="D_SMOOTH_VCAPH" class="0">
+<net name="D_SMOOTH_VCAPH" class="9">
 <segment>
 <pinref part="IC11" gate="G$1" pin="VCAPH"/>
 <pinref part="C21" gate="G$1" pin="2"/>
@@ -26062,7 +26081,7 @@ CAN</text>
 <wire x1="187.96" y1="825.5" x2="190.5" y2="825.5" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="D_SMOOTH_VCAP" class="0">
+<net name="D_SMOOTH_VCAP" class="9">
 <segment>
 <pinref part="C21" gate="G$1" pin="1"/>
 <pinref part="IC11" gate="G$1" pin="VCAPL"/>
@@ -26070,7 +26089,7 @@ CAN</text>
 <wire x1="200.66" y1="825.5" x2="200.66" y2="835.66" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="D_VLIION_VCAPH" class="0">
+<net name="D_VLIION_VCAPH" class="9">
 <segment>
 <pinref part="IC15" gate="G$1" pin="VCAPH"/>
 <pinref part="C28" gate="G$1" pin="2"/>
@@ -26078,7 +26097,7 @@ CAN</text>
 <wire x1="289.56" y1="825.5" x2="292.1" y2="825.5" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="D_VLIION_VCAPL" class="0">
+<net name="D_VLIION_VCAPL" class="9">
 <segment>
 <pinref part="C28" gate="G$1" pin="1"/>
 <pinref part="IC15" gate="G$1" pin="VCAPL"/>
@@ -26086,14 +26105,14 @@ CAN</text>
 <wire x1="302.26" y1="825.5" x2="302.26" y2="835.66" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="EN2" class="0">
+<net name="EN2" class="9">
 <segment>
 <pinref part="R24" gate="G$1" pin="1"/>
 <wire x1="386.08" y1="101.6" x2="381" y2="101.6" width="0.1524" layer="91"/>
 <pinref part="IC20" gate="G$1" pin="4_EN"/>
 </segment>
 </net>
-<net name="V_LI-ION_TP-OUT" class="0">
+<net name="V_LI-ION_TP-OUT" class="5">
 <segment>
 <pinref part="IC15" gate="G$1" pin="ANODE"/>
 <wire x1="279.4" y1="853.44" x2="269.24" y2="853.44" width="0.1524" layer="91"/>
@@ -26105,7 +26124,7 @@ CAN</text>
 <label x="276.86" y="1211.58" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="D_VLIION_VCAPH1" class="0">
+<net name="D_VLIION_VCAPH1" class="9">
 <segment>
 <pinref part="IC22" gate="G$1" pin="VCAPH"/>
 <pinref part="C35" gate="G$1" pin="2"/>
@@ -26113,7 +26132,7 @@ CAN</text>
 <wire x1="518.16" y1="825.5" x2="520.7" y2="825.5" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="D_VLIION_VCAPL1" class="0">
+<net name="D_VLIION_VCAPL1" class="9">
 <segment>
 <pinref part="C35" gate="G$1" pin="1"/>
 <pinref part="IC22" gate="G$1" pin="VCAPL"/>
@@ -26121,7 +26140,7 @@ CAN</text>
 <wire x1="530.86" y1="825.5" x2="530.86" y2="835.66" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GATE_SOLAR-CELL" class="0">
+<net name="GATE_SOLAR-CELL" class="9">
 <segment>
 <pinref part="IC23" gate="G$1" pin="G1"/>
 <wire x1="601.98" y1="861.06" x2="591.82" y2="861.06" width="0.1524" layer="91"/>
@@ -26136,7 +26155,7 @@ CAN</text>
 <wire x1="518.16" y1="871.22" x2="530.86" y2="871.22" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="SOLAR-CELL_TP-OUT" class="0">
+<net name="SOLAR-CELL_TP-OUT" class="8">
 <segment>
 <pinref part="IC23" gate="G$1" pin="S1"/>
 <wire x1="601.98" y1="855.98" x2="591.82" y2="855.98" width="0.1524" layer="91"/>
@@ -26153,7 +26172,7 @@ CAN</text>
 <label x="33.02" y="693.42" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="SOLAR-CELL_TP-IN" class="0">
+<net name="SOLAR-CELL_TP-IN" class="8">
 <segment>
 <pinref part="TP5_OUT" gate="G$1" pin="TP"/>
 <wire x1="492.76" y1="853.44" x2="485.14" y2="853.44" width="0.1524" layer="91" style="longdash"/>
@@ -26164,35 +26183,14 @@ CAN</text>
 <label x="33.02" y="698.5" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$2" class="0">
-<segment>
-<pinref part="IC8" gate="G$1" pin="PCINT15/T0-PD4"/>
-<wire x1="190.5" y1="147.32" x2="195.58" y2="147.32" width="0.1524" layer="91"/>
-<label x="195.58" y="147.32" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="N$6" class="0">
-<segment>
-<pinref part="IC8" gate="G$1" pin="PCINT16/OC0B/T1-PD5"/>
-<wire x1="190.5" y1="144.78" x2="195.58" y2="144.78" width="0.1524" layer="91"/>
-<label x="195.58" y="144.78" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="N$7" class="0">
-<segment>
-<pinref part="IC8" gate="G$1" pin="PCINT17/ICPI-PD6"/>
-<wire x1="190.5" y1="142.24" x2="195.58" y2="142.24" width="0.1524" layer="91"/>
-<label x="195.58" y="142.24" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="N$9" class="0">
+<net name="N$9" class="9">
 <segment>
 <pinref part="IC8" gate="G$1" pin="RXD/PCINT11-PD0"/>
 <wire x1="190.5" y1="157.48" x2="195.58" y2="157.48" width="0.1524" layer="91"/>
 <label x="195.58" y="157.48" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="6V0_TP-OUT" class="0">
+<net name="6V0_TP-OUT" class="7">
 <segment>
 <pinref part="TP6_OUT" gate="G$1" pin="TP"/>
 <wire x1="457.2" y1="111.76" x2="464.82" y2="111.76" width="0.1524" layer="91"/>
@@ -26207,6 +26205,20 @@ CAN</text>
 <segment>
 <wire x1="-15.24" y1="391.16" x2="-15.24" y2="396.24" width="0.1524" layer="91"/>
 <label x="-15.24" y="396.24" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$7" class="9">
+<segment>
+<pinref part="IC17" gate="G$1" pin="16_GP7"/>
+<wire x1="360.68" y1="386.08" x2="370.84" y2="386.08" width="0.1524" layer="91"/>
+<label x="370.84" y="386.08" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$2" class="9">
+<segment>
+<pinref part="IC17" gate="G$1" pin="15_GP6"/>
+<wire x1="360.68" y1="383.54" x2="370.84" y2="383.54" width="0.1524" layer="91"/>
+<label x="370.84" y="383.54" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
@@ -26229,9 +26241,6 @@ CAN</text>
 <approved hash="104,1,314.96,360.68,IC17,18_VCC,5V0_TP-OUT,,,"/>
 <approved hash="209,1,457.2,111.76,6V0_TP-OUT,,,,,"/>
 <approved hash="106,1,457.2,111.76,6V0_TP-OUT,,,,,"/>
-<approved hash="106,1,190.5,147.32,N$2,,,,,"/>
-<approved hash="106,1,190.5,144.78,N$6,,,,,"/>
-<approved hash="106,1,190.5,142.24,N$7,,,,,"/>
 <approved hash="106,1,190.5,157.48,N$9,,,,,"/>
 <approved hash="105,1,-15.24,393.7,N$12,,,,,"/>
 <approved hash="209,1,492.76,853.44,SOLAR-CELL_TP-IN,,,,,"/>

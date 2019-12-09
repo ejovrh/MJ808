@@ -16,4 +16,10 @@ typedef struct															// lmp92064sd_t actual
 
 } __lmp92064sd_t;
 
+
+lmp92064sd_t * lmp92064sd_ctor()
+{
+	;
+}
+
 extern __lmp92064sd_t __MCP23S08;										// declare lmp92064sd actual
