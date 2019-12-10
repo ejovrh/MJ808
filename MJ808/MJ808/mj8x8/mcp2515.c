@@ -224,13 +224,13 @@ static void __mcp2515_opcode_read_rx_buffer(const uint8_t buffer, volatile uint8
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
 
 	if (buffer == RXB0SIDH)												//	select buffer
-	spi_uci_transfer(MCP2515_OPCODE_READ_RX_BUFFER | MCP2515_OPCODE_READ_RX_BUFFER_RXB0SIDH);	// select RXB0 - send command along with bit mask
+		spi_uci_transfer(MCP2515_OPCODE_READ_RX_BUFFER | MCP2515_OPCODE_READ_RX_BUFFER_RXB0SIDH);	// select RXB0 - send command along with bit mask
 
 	if (buffer == RXB1SIDH)
-	spi_uci_transfer(MCP2515_OPCODE_READ_RX_BUFFER | MCP2515_OPCODE_READ_RX_BUFFER_RXB1SIDH);	// select RXB1
+		spi_uci_transfer(MCP2515_OPCODE_READ_RX_BUFFER | MCP2515_OPCODE_READ_RX_BUFFER_RXB1SIDH);	// select RXB1
 
 	for (i = 0; i<len; ++i)												// while the SS is held, the address is auto-incremented, thus multiple bytes can be read
-	*(data+i) = spi_uci_transfer(0xff);									// get the result
+		*(data+i) = spi_uci_transfer(0xff);								// get the result
 
 	_delay_us(1);														// delay a little bit for the transfer to complete
 	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
@@ -268,7 +268,7 @@ static uint8_t __mcp2515_opcode_read_status(void)
 static void __mcp2515_opcode_rts(const uint8_t buffer)
 {
 	if (buffer == 0)													// we didn't specify any buffer to do a RTS on
-	return;																// hence, do nothing
+		return;															// hence, do nothing
 
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
 	spi_uci_transfer(MCP2515_OPCODE_RTS | buffer);						// send RTS command & the buffer (bit mask)
@@ -284,16 +284,16 @@ static void __mcp2515_opcode_load_tx_buffer(const uint8_t buffer, volatile const
 	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
 
 	if (buffer == TXB0CTRL)
-	spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB0SIDH); // send load TX buffer command & buffer
+		spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB0SIDH); // send load TX buffer command & buffer
 
 	if (buffer == TXB1CTRL)
-	spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB1SIDH); // send load TX buffer command & buffer
+		spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB1SIDH); // send load TX buffer command & buffer
 
 	if (buffer == TXB2CTRL)
-	spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB2SIDH); // send load TX buffer command & buffer
+		spi_uci_transfer(MCP2515_OPCODE_LOAD_TX_BUFFER | MCP2515_OPCODE_LOAD_TX_BUFFER_TXB2SIDH); // send load TX buffer command & buffer
 
 	for(i=0; i<len; i++)
-	spi_uci_transfer(*(data+i));										// write single byte or stream
+		spi_uci_transfer(*(data+i));									// write single byte or stream
 
 	_delay_us(1);														// delay a little bit for the transfer to complete
 	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
