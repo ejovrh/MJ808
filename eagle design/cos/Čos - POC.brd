@@ -9,7 +9,7 @@
 <grid distance="0.25" unitdist="mm" unit="mm" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="mm" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
-<layer number="2" name="Route2" color="26" fill="1" visible="no" active="yes"/>
+<layer number="2" name="Route2" color="26" fill="1" visible="yes" active="yes"/>
 <layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
 <layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
 <layer number="5" name="Route5" color="4" fill="4" visible="no" active="no"/>
@@ -22,21 +22,21 @@
 <layer number="12" name="Route12" color="1" fill="5" visible="no" active="no"/>
 <layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
 <layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
-<layer number="15" name="Route15" color="24" fill="1" visible="no" active="yes"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
+<layer number="15" name="Route15" color="24" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
-<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
 <layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
@@ -47,9 +47,9 @@
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
@@ -59,7 +59,7 @@
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
 <layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -219,38 +219,38 @@ ejovrh rev.1</text>
 <wire x1="6.25" y1="50.5" x2="4.25" y2="50.5" width="0.5" layer="21"/>
 <wire x1="4.25" y1="50.5" x2="4.25" y2="54" width="0.5" layer="21"/>
 <wire x1="4.25" y1="54" x2="6.25" y2="54" width="0.5" layer="21"/>
-<text x="12" y="72" size="1" layer="15" font="vector" rot="R270" align="center-right">GND</text>
-<text x="8" y="72" size="1" layer="1" font="vector" rot="R270" align="center-right">GND</text>
-<text x="14" y="72" size="1" layer="16" font="vector" rot="MR270" align="center-right">GND</text>
-<text x="10" y="72" size="1" layer="2" font="vector" rot="R270" align="center-right">GND</text>
-<text x="-2" y="49.5" size="1" layer="15" font="vector" align="center-right">GND</text>
-<text x="-2" y="45.5" size="1" layer="1" font="vector" align="center-right">GND</text>
-<text x="-2" y="51.5" size="1" layer="16" font="vector" rot="MR180" align="center-right">GND</text>
-<text x="-2" y="47.5" size="1" layer="2" font="vector" align="center-right">GND</text>
+<text x="18.5" y="71.75" size="1" layer="15" font="vector" rot="R270" align="center-right">GND</text>
+<text x="14.5" y="71.75" size="1" layer="1" font="vector" rot="R270" align="center-right">GND</text>
+<text x="20.5" y="71.75" size="1" layer="16" font="vector" rot="MR270" align="center-right">GND</text>
+<text x="16.5" y="71.75" size="1" layer="2" font="vector" rot="R270" align="center-right">GND</text>
+<text x="-2" y="49.25" size="1" layer="15" font="vector" align="center-right">GND</text>
+<text x="-2" y="45.25" size="1" layer="1" font="vector" align="center-right">GND</text>
+<text x="-2" y="51.25" size="1" layer="16" font="vector" rot="MR180" align="center-right">GND</text>
+<text x="-2" y="47.25" size="1" layer="2" font="vector" align="center-right">GND</text>
 <text x="36.75" y="47.25" size="1" layer="15" font="vector" rot="R180" align="center-right">GND</text>
 <text x="36.75" y="51.25" size="1" layer="1" font="vector" rot="R180" align="center-right">GND</text>
 <text x="36.75" y="45.25" size="1" layer="16" font="vector" rot="MR0" align="center-right">GND</text>
 <text x="36.75" y="49.25" size="1" layer="2" font="vector" rot="R180" align="center-right">GND</text>
-<text x="-2" y="38.5" size="1" layer="15" font="vector" align="center-right">5V0_TP-OUT</text>
-<text x="-2" y="34.5" size="1" layer="1" font="vector" align="center-right">GND_VIA_INCP</text>
-<text x="-2" y="40.5" size="1" layer="16" font="vector" rot="MR180" align="center-right">GND_VIA_INCP</text>
-<text x="-2" y="36.5" size="1" layer="2" font="vector" align="center-right">GND</text>
-<text x="37" y="36.25" size="1" layer="15" font="vector" rot="R180" align="center-right">5V0_TP-OUT</text>
-<text x="37" y="40.25" size="1" layer="1" font="vector" rot="R180" align="center-right">GND_VIA_INCP</text>
-<text x="37" y="34.25" size="1" layer="16" font="vector" rot="MR0" align="center-right">GND_VIA_INCP</text>
-<text x="37" y="38.25" size="1" layer="2" font="vector" rot="R180" align="center-right">GND</text>
-<text x="37" y="18" size="1" layer="15" font="vector" rot="R180" align="center-right">5V0_TP-OUT</text>
-<text x="37" y="22" size="1" layer="1" font="vector" rot="R180" align="center-right">GND_VIA_INCP</text>
-<text x="37" y="16" size="1" layer="16" font="vector" rot="MR0" align="center-right">GND_VIA_INCP</text>
-<text x="37" y="20" size="1" layer="2" font="vector" rot="R180" align="center-right">GND</text>
-<text x="-2" y="20" size="1" layer="15" font="vector" align="center-right">5V0_TP-OUT</text>
-<text x="-2" y="16" size="1" layer="1" font="vector" align="center-right">GND_VIA_INCP</text>
-<text x="-2" y="22" size="1" layer="16" font="vector" rot="MR180" align="center-right">GND_VIA_INCP</text>
-<text x="-2" y="18" size="1" layer="2" font="vector" align="center-right">GND</text>
-<text x="16.5" y="-1.75" size="1" layer="15" font="vector" rot="R90" align="center-right">5V0_TP-OUT</text>
-<text x="20.5" y="-1.75" size="1" layer="1" font="vector" rot="R90" align="center-right">GND_VIA_INCP</text>
-<text x="14.25" y="-1.75" size="1" layer="16" font="vector" rot="MR90" align="center-right">GND_VIA_INCP</text>
-<text x="18.5" y="-1.75" size="1" layer="2" font="vector" rot="R90" align="center-right">GND</text>
+<text x="-2" y="38.75" size="1" layer="15" font="vector" align="center-right">5V0_TP-OUT</text>
+<text x="-2" y="34.75" size="1" layer="1" font="vector" align="center-right">GND_VIA_INCP</text>
+<text x="-2" y="40.75" size="1" layer="16" font="vector" rot="MR180" align="center-right">GND_VIA_INCP</text>
+<text x="-2" y="36.75" size="1" layer="2" font="vector" align="center-right">GND</text>
+<text x="36.75" y="36.25" size="1" layer="15" font="vector" rot="R180" align="center-right">5V0_TP-OUT</text>
+<text x="36.75" y="40.25" size="1" layer="1" font="vector" rot="R180" align="center-right">GND_VIA_INCP</text>
+<text x="36.75" y="34.25" size="1" layer="16" font="vector" rot="MR0" align="center-right">GND_VIA_INCP</text>
+<text x="36.75" y="38.25" size="1" layer="2" font="vector" rot="R180" align="center-right">GND</text>
+<text x="37" y="18.5" size="1" layer="15" font="vector" rot="R180" align="center-right">5V0_TP-OUT</text>
+<text x="37" y="22.5" size="1" layer="1" font="vector" rot="R180" align="center-right">GND_VIA_INCP</text>
+<text x="37" y="16.5" size="1" layer="16" font="vector" rot="MR0" align="center-right">GND_VIA_INCP</text>
+<text x="37" y="20.5" size="1" layer="2" font="vector" rot="R180" align="center-right">GND</text>
+<text x="-2.25" y="20" size="1" layer="15" font="vector" align="center-right">5V0_TP-OUT</text>
+<text x="-2.25" y="16" size="1" layer="1" font="vector" align="center-right">GND_VIA_INCP</text>
+<text x="-2.25" y="22" size="1" layer="16" font="vector" rot="MR180" align="center-right">GND_VIA_INCP</text>
+<text x="-2.25" y="18" size="1" layer="2" font="vector" align="center-right">GND</text>
+<text x="16" y="-2" size="1" layer="15" font="vector" rot="R90" align="center-right">5V0_TP-OUT</text>
+<text x="20" y="-2" size="1" layer="1" font="vector" rot="R90" align="center-right">GND_VIA_INCP</text>
+<text x="14" y="-2" size="1" layer="16" font="vector" rot="MR90" align="center-right">GND_VIA_INCP</text>
+<text x="18" y="-2" size="1" layer="2" font="vector" rot="R90" align="center-right">GND</text>
 <text x="26.75" y="38.75" size="0.75" layer="21" font="vector" rot="MR90" align="center-right">TP4</text>
 <text x="3.25" y="52.25" size="0.75" layer="21" font="vector" rot="MR270" align="center">TP2</text>
 <text x="3.25" y="56.75" size="0.75" layer="21" font="vector" rot="MR270" align="center">TP1</text>
@@ -284,17 +284,11 @@ ejovrh rev.1</text>
 <rectangle x1="2.63" y1="66.96" x2="4.13" y2="68.96" layer="30"/>
 <rectangle x1="0.76" y1="65.87" x2="3.01" y2="67.37" layer="30"/>
 <text x="18.75" y="4" size="0.75" layer="21" font="vector" rot="MR90" align="center-right">TP6</text>
-<wire x1="3" y1="42" x2="3" y2="46.75" width="0.5" layer="22"/>
-<wire x1="3" y1="42" x2="5" y2="42" width="0.5" layer="22"/>
-<wire x1="3" y1="46.75" x2="5" y2="46.75" width="0.5" layer="22"/>
-<wire x1="5" y1="42" x2="5" y2="46.75" width="0.5" layer="22"/>
-<text x="4" y="47.25" size="0.75" layer="22" font="vector" rot="R270" align="center-right">TP7</text>
-<polygon width="0.25" layer="41">
-<vertex x="8.25" y="34.5"/>
-<vertex x="9" y="34.5"/>
-<vertex x="9" y="27.25"/>
-<vertex x="8.25" y="27.25"/>
-</polygon>
+<wire x1="2.5" y1="42" x2="2.5" y2="46.75" width="0.5" layer="22"/>
+<wire x1="2.5" y1="42" x2="4.5" y2="42" width="0.5" layer="22"/>
+<wire x1="2.5" y1="46.75" x2="4.5" y2="46.75" width="0.5" layer="22"/>
+<wire x1="4.5" y1="42" x2="4.5" y2="46.75" width="0.5" layer="22"/>
+<text x="3.5" y="41.5" size="0.75" layer="22" font="vector" rot="R90" align="center-right">TP7</text>
 <wire x1="3.25" y1="4.75" x2="4.75" y2="3.25" width="1.25" layer="42" curve="-90"/>
 <wire x1="30.25" y1="3.25" x2="31.75" y2="4.75" width="1.25" layer="42" curve="-90"/>
 <wire x1="30.25" y1="3.25" x2="31.75" y2="4.75" width="1.25" layer="41" curve="-90"/>
@@ -320,15 +314,20 @@ ejovrh rev.1</text>
 <wire x1="16.5" y1="66" x2="18.5" y2="66" width="0.25" layer="21"/>
 <wire x1="17" y1="65.5" x2="18" y2="65.5" width="0.25" layer="21"/>
 <text x="18.75" y="8.5" size="1" layer="21" font="vector" ratio="10" rot="R270" align="center-right">6V0</text>
-<wire x1="6.25" y1="46.75" x2="7.375" y2="46.75" width="0.1524" layer="22"/>
-<wire x1="7.375" y1="46.75" x2="8.5" y2="46.75" width="0.1524" layer="22"/>
-<wire x1="6.75" y1="47.25" x2="8" y2="47.25" width="0.1524" layer="22"/>
-<wire x1="7.25" y1="47.75" x2="7.5" y2="47.75" width="0.1524" layer="22"/>
-<wire x1="7.375" y1="46.75" x2="7.375" y2="45.25" width="0.1524" layer="22"/>
-<text x="7.375" y="48.5" size="1" layer="30" font="vector" ratio="10" rot="MR0" align="center">GND</text>
-<text x="7.375" y="42.5" size="1" layer="30" font="vector" ratio="10" rot="MR0" align="center">vGND</text>
+<text x="7" y="45.75" size="1" layer="30" font="vector" ratio="10" rot="MR180" align="center">GND</text>
+<text x="6.75" y="43" size="1" layer="30" font="vector" ratio="10" rot="MR0" align="center">vGND</text>
 <text x="17.5" y="64.375" size="1" layer="29" font="vector" ratio="10" align="center">GND</text>
 <text x="21.375" y="66.75" size="1" layer="30" font="vector" ratio="10" rot="MR0" align="center">GND</text>
+<polygon width="0.25" layer="41">
+<vertex x="8.75" y="27"/>
+<vertex x="8.75" y="31.75"/>
+<vertex x="10.5" y="31.75"/>
+<vertex x="10.5" y="33.25"/>
+<vertex x="6.5" y="33.25"/>
+<vertex x="6.5" y="31.75"/>
+<vertex x="8.25" y="31.75"/>
+<vertex x="8.25" y="27"/>
+</polygon>
 </plain>
 <libraries>
 <library name="rcl" urn="urn:adsk.eagle:library:334">
@@ -1479,21 +1478,21 @@ grid 1.8 mm, diameter 4 mm</description>
 <text x="2.159" y="-1.778" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
 <rectangle x1="0.254" y1="-1.016" x2="0.762" y2="1.016" layer="51"/>
 </package>
-<package name="R1206" urn="urn:adsk.eagle:footprint:23047/1" library_version="2">
+<package name="R2512" urn="urn:adsk.eagle:footprint:23055/1" library_version="2">
 <description>&lt;b&gt;RESISTOR&lt;/b&gt;</description>
-<wire x1="0.9525" y1="-0.8128" x2="-0.9652" y2="-0.8128" width="0.1524" layer="51"/>
-<wire x1="0.9525" y1="0.8128" x2="-0.9652" y2="0.8128" width="0.1524" layer="51"/>
-<wire x1="-2.473" y1="0.983" x2="2.473" y2="0.983" width="0.0508" layer="39"/>
-<wire x1="2.473" y1="0.983" x2="2.473" y2="-0.983" width="0.0508" layer="39"/>
-<wire x1="2.473" y1="-0.983" x2="-2.473" y2="-0.983" width="0.0508" layer="39"/>
-<wire x1="-2.473" y1="-0.983" x2="-2.473" y2="0.983" width="0.0508" layer="39"/>
-<smd name="2" x="1.422" y="0" dx="1.6" dy="1.803" layer="1"/>
-<smd name="1" x="-1.422" y="0" dx="1.6" dy="1.803" layer="1"/>
-<text x="-1.27" y="1.27" size="1.27" layer="25">&gt;NAME</text>
-<text x="-1.27" y="-2.54" size="1.27" layer="27">&gt;VALUE</text>
-<rectangle x1="-1.6891" y1="-0.8763" x2="-0.9525" y2="0.8763" layer="51"/>
-<rectangle x1="0.9525" y1="-0.8763" x2="1.6891" y2="0.8763" layer="51"/>
-<rectangle x1="-0.3" y1="-0.7" x2="0.3" y2="0.7" layer="35"/>
+<wire x1="-2.362" y1="1.473" x2="2.387" y2="1.473" width="0.1524" layer="51"/>
+<wire x1="-2.362" y1="-1.473" x2="2.387" y2="-1.473" width="0.1524" layer="51"/>
+<wire x1="-3.973" y1="1.983" x2="3.973" y2="1.983" width="0.0508" layer="39"/>
+<wire x1="3.973" y1="1.983" x2="3.973" y2="-1.983" width="0.0508" layer="39"/>
+<wire x1="3.973" y1="-1.983" x2="-3.973" y2="-1.983" width="0.0508" layer="39"/>
+<wire x1="-3.973" y1="-1.983" x2="-3.973" y2="1.983" width="0.0508" layer="39"/>
+<smd name="1" x="-2.8" y="0" dx="1.8" dy="3.2" layer="1"/>
+<smd name="2" x="2.8" y="0" dx="1.8" dy="3.2" layer="1"/>
+<text x="-2.54" y="1.905" size="1.27" layer="25">&gt;NAME</text>
+<text x="-2.54" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="-3.2004" y1="-1.5494" x2="-2.3505" y2="1.5507" layer="51"/>
+<rectangle x1="2.3622" y1="-1.5494" x2="3.2121" y2="1.5507" layer="51"/>
+<rectangle x1="-0.5001" y1="-1" x2="0.5001" y2="1" layer="35"/>
 </package>
 </packages>
 <packages3d>
@@ -1548,10 +1547,10 @@ grid 1.8 mm, diameter 4 mm</description>
 <packageinstance name="E1,8-4"/>
 </packageinstances>
 </package3d>
-<package3d name="R1206" urn="urn:adsk.eagle:package:23540/2" type="model" library_version="7">
+<package3d name="R2512" urn="urn:adsk.eagle:package:23545/2" type="model" library_version="7">
 <description>RESISTOR</description>
 <packageinstances>
-<packageinstance name="R1206"/>
+<packageinstance name="R2512"/>
 </packageinstances>
 </package3d>
 </packages3d>
@@ -3021,23 +3020,23 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <attribute name="NAME" x="4.75" y="27" size="0.75" layer="25" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="8" y="28.75" size="1" layer="27" font="vector" rot="R180" align="center"/>
 </element>
-<element name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R1206" package3d_urn="urn:adsk.eagle:package:23540/2" value="100k" x="8.5" y="33.75" smashed="yes">
-<attribute name="NAME" x="11.25" y="33.75" size="0.75" layer="25" font="vector" align="center-left"/>
-<attribute name="POPULARITY" value="41" x="8.5" y="33.75" size="1.778" layer="27" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="8.5" y="33.75" size="0.75" layer="27" font="vector" display="off"/>
-<attribute name="VALUE" x="7.865" y="31.845" size="1.27" layer="27"/>
+<element name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R2512" package3d_urn="urn:adsk.eagle:package:23545/2" value="43mR, 200mW" x="8.5" y="32.5" smashed="yes" rot="MR180">
+<attribute name="NAME" x="11.25" y="32.5" size="0.75" layer="26" font="vector" rot="MR180" align="center-left"/>
+<attribute name="POPULARITY" value="0" x="8.5" y="32.5" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="8.5" y="32.5" size="0.75" layer="28" font="vector" rot="MR180" display="off"/>
+<attribute name="VALUE" x="7.865" y="34.405" size="1.27" layer="28" rot="MR180"/>
 </element>
-<element name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="320k" x="6" y="29.25" smashed="yes" rot="R270">
-<attribute name="NAME" x="7" y="29.25" size="0.75" layer="25" font="vector" rot="R270" align="center"/>
-<attribute name="POPULARITY" value="0" x="6" y="29.25" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="6" y="29.25" size="0.75" layer="27" font="vector" rot="R270" display="off"/>
-<attribute name="VALUE" x="4.095" y="29.885" size="1.27" layer="27" rot="R270"/>
+<element name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="320k" x="7" y="28.75" smashed="yes" rot="R180">
+<attribute name="NAME" x="6" y="28.75" size="0.75" layer="25" font="vector" align="center-right"/>
+<attribute name="POPULARITY" value="0" x="7" y="28.75" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="7" y="28.75" size="0.75" layer="27" font="vector" rot="R180" display="off"/>
+<attribute name="VALUE" x="7.635" y="30.655" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k" x="6" y="31.5" smashed="yes" rot="R270">
-<attribute name="NAME" x="7" y="31.5" size="0.75" layer="25" font="vector" rot="R90" align="center"/>
-<attribute name="POPULARITY" value="0" x="6" y="31.5" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="6" y="31.5" size="0.75" layer="27" font="vector" rot="R270" display="off"/>
-<attribute name="VALUE" x="4.095" y="32.135" size="1.27" layer="27" rot="R270"/>
+<element name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k" x="7" y="29.75" smashed="yes">
+<attribute name="NAME" x="6" y="29.75" size="0.75" layer="25" font="vector" align="center-right"/>
+<attribute name="POPULARITY" value="0" x="7" y="29.75" size="1.778" layer="27" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="7" y="29.75" size="0.75" layer="27" font="vector" display="off"/>
+<attribute name="VALUE" x="6.365" y="27.845" size="1.27" layer="27"/>
 </element>
 <element name="C14" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF" x="5.75" y="24" smashed="yes" rot="MR90">
 <attribute name="NAME" x="5.75" y="22.5" size="0.75" layer="26" font="vector" rot="MR270" align="center-left"/>
@@ -3258,37 +3257,37 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <attribute name="VALUE" x="21" y="37" size="1" layer="27" font="vector" align="center"/>
 </element>
 <element name="TP2_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="5.25" y="53" smashed="yes" rot="R270">
-<attribute name="NAME" x="-0.75" y="53" size="0.75" layer="25" font="vector" align="center-right"/>
+<attribute name="NAME" x="-14" y="54" size="0.75" layer="25" font="vector" align="center-right"/>
 <attribute name="POPULARITY" value="0" x="5.25" y="53" size="1" layer="27" font="vector" rot="R270" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="5.25" y="53" size="1" layer="27" font="vector" rot="R270" display="off"/>
 <attribute name="VALUE" x="4.615" y="53.508" size="0.0254" layer="27" rot="R270"/>
 </element>
 <element name="TP2_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="5.25" y="51.5" smashed="yes" rot="R270">
-<attribute name="NAME" x="-0.75" y="52" size="0.75" layer="25" font="vector" align="center-right"/>
+<attribute name="NAME" x="-14" y="53" size="0.75" layer="25" font="vector" align="center-right"/>
 <attribute name="POPULARITY" value="0" x="5.25" y="51.5" size="1" layer="27" font="vector" rot="R270" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="5.25" y="51.5" size="1" layer="27" font="vector" rot="R270" display="off"/>
 <attribute name="VALUE" x="4.615" y="52.008" size="0.0254" layer="27" rot="R270"/>
 </element>
 <element name="TP1_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="5.2" y="56.08" smashed="yes" rot="R270">
-<attribute name="NAME" x="-0.8" y="56.58" size="0.75" layer="25" font="vector" align="center-right"/>
+<attribute name="NAME" x="-14.25" y="56.5" size="0.75" layer="25" font="vector" align="center-right"/>
 <attribute name="POPULARITY" value="0" x="5.2" y="56.08" size="1" layer="27" font="vector" rot="R270" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="5.2" y="56.08" size="1" layer="27" font="vector" rot="R270" display="off"/>
 <attribute name="VALUE" x="4.565" y="56.588" size="0.0254" layer="27" rot="R270"/>
 </element>
 <element name="TP1_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="5.2" y="57.58" smashed="yes" rot="R270">
-<attribute name="NAME" x="-0.8" y="57.58" size="0.75" layer="25" font="vector" align="center-right"/>
+<attribute name="NAME" x="-14.25" y="57.5" size="0.75" layer="25" font="vector" align="center-right"/>
 <attribute name="POPULARITY" value="0" x="5.2" y="57.58" size="1" layer="27" font="vector" rot="R270" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="5.2" y="57.58" size="1" layer="27" font="vector" rot="R270" display="off"/>
 <attribute name="VALUE" x="4.565" y="58.088" size="0.0254" layer="27" rot="R270"/>
 </element>
 <element name="TP4_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="25.5" y="41.75" smashed="yes" rot="R270">
-<attribute name="NAME" x="36.5" y="38.5" size="0.75" layer="25" font="vector" rot="R180" align="center-right"/>
+<attribute name="NAME" x="47.5" y="38.5" size="0.75" layer="25" font="vector" rot="R180" align="center-right"/>
 <attribute name="POPULARITY" value="0" x="25.5" y="41.75" size="1" layer="27" font="vector" rot="R270" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="25.5" y="41.75" size="1" layer="27" font="vector" rot="R270" display="off"/>
 <attribute name="VALUE" x="24.865" y="42.258" size="0.0254" layer="27" rot="R270"/>
 </element>
 <element name="TP4_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="25.5" y="40.25" smashed="yes" rot="R270">
-<attribute name="NAME" x="36.5" y="37.5" size="0.75" layer="25" font="vector" rot="R180" align="center-right"/>
+<attribute name="NAME" x="47.5" y="37.5" size="0.75" layer="25" font="vector" rot="R180" align="center-right"/>
 <attribute name="POPULARITY" value="0" x="25.5" y="40.25" size="1" layer="27" font="vector" rot="R270" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="25.5" y="40.25" size="1" layer="27" font="vector" rot="R270" display="off"/>
 <attribute name="VALUE" x="24.865" y="40.758" size="0.0254" layer="27" rot="R270"/>
@@ -3300,7 +3299,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <attribute name="VALUE" x="30.5" y="32.25" size="0.0254" layer="27"/>
 </element>
 <element name="IC17" library="MCP23S08 - 8-Bit IO Expander with Serial Interface" package="QFN20" value="MCP23S08-E/ML" x="20.5" y="25.5" smashed="yes" rot="R90">
-<attribute name="NAME" x="20.5" y="28.75" size="0.75" layer="25" font="vector" rot="R180" align="center"/>
+<attribute name="NAME" x="16.25" y="25.5" size="0.75" layer="25" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="24" y="25.5" size="1" layer="27" font="vector" rot="R90" align="center"/>
 </element>
 <element name="C27" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF" x="19.25" y="25.5" smashed="yes" rot="MR180">
@@ -3392,13 +3391,13 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <attribute name="VALUE" x="21.865" y="35.155" size="1.27" layer="28" rot="MR180"/>
 </element>
 <element name="TP3_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="16.75" y="40.25" smashed="yes">
-<attribute name="NAME" x="36.25" y="42" size="0.75" layer="25" font="vector" rot="R180" align="center-right"/>
+<attribute name="NAME" x="47.5" y="42.25" size="0.75" layer="25" font="vector" rot="R180" align="center-right"/>
 <attribute name="POPULARITY" value="0" x="16.75" y="40.25" size="0.75" layer="27" font="vector" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="16.75" y="40.25" size="0.75" layer="27" font="vector" display="off"/>
 <attribute name="VALUE" x="16.242" y="39.615" size="0.0254" layer="27"/>
 </element>
 <element name="TP3_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="16.75" y="41.75" smashed="yes">
-<attribute name="NAME" x="36.25" y="43" size="0.75" layer="25" font="vector" rot="R180" align="center-right"/>
+<attribute name="NAME" x="47.5" y="43.25" size="0.75" layer="25" font="vector" rot="R180" align="center-right"/>
 <attribute name="POPULARITY" value="0" x="16.75" y="41.75" size="0.75" layer="27" font="vector" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="16.75" y="41.75" size="0.75" layer="27" font="vector" display="off"/>
 <attribute name="VALUE" x="16.242" y="41.115" size="0.0254" layer="27"/>
@@ -3418,40 +3417,40 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <attribute name="VALUE" x="9.405" y="40.635" size="1.27" layer="28" rot="MR270"/>
 </element>
 <element name="TP5_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="3.5" y="41.75" smashed="yes">
-<attribute name="NAME" x="-1.25" y="41.75" size="0.75" layer="25" font="vector" align="center-right"/>
+<attribute name="NAME" x="-13.5" y="42" size="0.75" layer="25" font="vector" align="center-right"/>
 <attribute name="POPULARITY" value="0" x="-2.5" y="40.25" size="0.75" layer="27" font="vector" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="3.5" y="39.845" size="1" layer="37"/>
 <attribute name="VALUE" x="2.992" y="41.115" size="0.0254" layer="27"/>
 </element>
 <element name="TP5_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="3.5" y="40.25" smashed="yes">
-<attribute name="NAME" x="-1.25" y="40.75" size="0.75" layer="25" font="vector" align="center-right"/>
+<attribute name="NAME" x="-13.5" y="41" size="0.75" layer="25" font="vector" align="center-right"/>
 <attribute name="POPULARITY" value="0" x="3.5" y="40" size="0.75" layer="27" font="vector" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="3.5" y="38.345" size="1" layer="37"/>
 <attribute name="VALUE" x="2.992" y="39.615" size="0.0254" layer="27"/>
 </element>
 <element name="TP6_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="18.75" y="7" smashed="yes">
-<attribute name="NAME" x="36.75" y="7" size="0.75" layer="25" font="vector" rot="R180" align="center-right"/>
+<attribute name="NAME" x="48" y="7" size="0.75" layer="25" font="vector" rot="R180" align="center-right"/>
 <attribute name="POPULARITY" value="0" x="18.75" y="7" size="1" layer="27" font="vector" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="18.75" y="7" size="1" layer="27" font="vector" display="off"/>
 <attribute name="VALUE" x="18.242" y="6.365" size="0.0254" layer="27"/>
 </element>
 <element name="TP6_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="18.75" y="5.5" smashed="yes">
-<attribute name="NAME" x="36.75" y="6" size="0.75" layer="25" font="vector" rot="R180" align="center-right"/>
+<attribute name="NAME" x="48" y="6" size="0.75" layer="25" font="vector" rot="R180" align="center-right"/>
 <attribute name="POPULARITY" value="0" x="18.75" y="5.5" size="1" layer="27" font="vector" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="18.75" y="5.5" size="1" layer="27" font="vector" display="off"/>
 <attribute name="VALUE" x="18.242" y="4.865" size="0.0254" layer="27"/>
 </element>
-<element name="TP7_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="4" y="43" smashed="yes" rot="MR0">
-<attribute name="NAME" x="-5.5001" y="44.2001" size="0.75" layer="26" font="vector" rot="MR180" align="center-right"/>
-<attribute name="POPULARITY" value="0" x="4" y="43" size="1" layer="28" font="vector" rot="MR0" display="off"/>
-<attribute name="TP_SIGNAL_NAME" value="" x="4" y="43" size="1" layer="28" font="vector" rot="MR0" display="off"/>
-<attribute name="VALUE" x="4.508" y="42.365" size="0.0254" layer="28" rot="MR0"/>
+<element name="TP7_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="3.5" y="43" smashed="yes" rot="MR0">
+<attribute name="NAME" x="-15.5001" y="43.7001" size="0.75" layer="26" font="vector" rot="MR180" align="center-right"/>
+<attribute name="POPULARITY" value="0" x="3.5" y="43" size="1" layer="28" font="vector" rot="MR0" display="off"/>
+<attribute name="TP_SIGNAL_NAME" value="" x="3.5" y="43" size="1" layer="28" font="vector" rot="MR0" display="off"/>
+<attribute name="VALUE" x="4.008" y="42.365" size="0.0254" layer="28" rot="MR0"/>
 </element>
-<element name="TP7_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="4" y="45.75" smashed="yes" rot="MR0">
-<attribute name="NAME" x="-5.5001" y="45.7001" size="0.75" layer="26" font="vector" rot="MR180" align="center-right"/>
-<attribute name="POPULARITY" value="0" x="4" y="45.75" size="1" layer="28" font="vector" rot="MR0" display="off"/>
-<attribute name="TP_SIGNAL_NAME" value="" x="4" y="45.75" size="1" layer="28" font="vector" rot="MR0" display="off"/>
-<attribute name="VALUE" x="4.508" y="45.115" size="0.0254" layer="28" rot="MR0"/>
+<element name="TP7_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="3.5" y="45.75" smashed="yes" rot="MR0">
+<attribute name="NAME" x="-15.5001" y="44.7001" size="0.75" layer="26" font="vector" rot="MR180" align="center-right"/>
+<attribute name="POPULARITY" value="0" x="3.5" y="45.75" size="1" layer="28" font="vector" rot="MR0" display="off"/>
+<attribute name="TP_SIGNAL_NAME" value="" x="3.5" y="45.75" size="1" layer="28" font="vector" rot="MR0" display="off"/>
+<attribute name="VALUE" x="4.008" y="45.115" size="0.0254" layer="28" rot="MR0"/>
 </element>
 <element name="IC20" library="MP3221–2.7A, 1.2MHZ, HIGH-EFFICIENCY STEP UP CONVERTER WITH INPUT DISCONNECT" package="TSOT23-6" value="MP3221GJ-P" x="24.75" y="12.75" smashed="yes" rot="R90">
 <attribute name="NAME" x="24.75" y="15" size="0.75" layer="25" font="vector" rot="R180" align="center"/>
@@ -3465,6 +3464,10 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 </element>
 <element name="FD3" library="Fiducial" package="FID_040" value="FID_40MIL" x="5.5" y="64.5" smashed="yes">
 <attribute name="BOM" value="" x="5.5" y="64.5" size="1.778" layer="27" display="off"/>
+</element>
+<element name="R28" library="741X083331JP Resistor Array" package="0402" value="741X083331JP / 330Ω" x="20.25" y="29.5" smashed="yes" rot="R90">
+<attribute name="NAME" x="18.5" y="29.5" size="0.75" layer="25" font="vector" rot="R90" align="center"/>
+<attribute name="VALUE" x="22.25" y="29.5" size="1" layer="27" font="vector" rot="R90" align="center"/>
 </element>
 </elements>
 <signals>
@@ -3594,6 +3597,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <vertex x="35" y="0"/>
 <vertex x="0" y="0"/>
 </polygon>
+<via x="3.5" y="45.75" extent="1-16" drill="0.35"/>
 </signal>
 <signal name="ICSP_DO/MOSI" class="9">
 <contactref element="IC8" pad="16"/>
@@ -3901,12 +3905,11 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="18.75" y1="25.35" x2="18.75" y2="24.25" width="0.3" layer="16"/>
 <wire x1="19" y1="21.75" x2="20.75" y2="21.75" width="0.3" layer="16"/>
 <contactref element="R7" pad="2"/>
-<via x="12.75" y="32" extent="1-16" drill="0.3"/>
 <wire x1="30.75" y1="26" x2="31.5" y2="26" width="1" layer="15"/>
 <wire x1="31.5" y1="26" x2="32.25" y2="26" width="1" layer="15"/>
 <wire x1="32.25" y1="26" x2="30.75" y2="26" width="0.5" layer="1"/>
-<wire x1="6" y1="28.75" x2="5.75" y2="28.5" width="0.3" layer="1"/>
-<wire x1="5.75" y1="28.5" x2="5.75" y2="28" width="0.3" layer="1"/>
+<wire x1="5.75" y1="28" x2="5.75" y2="28.75" width="0.3" layer="1"/>
+<wire x1="5.75" y1="28.75" x2="6.5" y2="28.75" width="0.3" layer="1"/>
 <wire x1="32.25" y1="26" x2="32.35" y2="26" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="RESET" class="9">
@@ -4091,8 +4094,8 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="22.4" y1="8" x2="22.25" y2="8.15" width="0.5" layer="1"/>
 <wire x1="22.25" y1="12.75" x2="22.25" y2="8.25" width="0.5" layer="1"/>
 <wire x1="22.25" y1="8.25" x2="22.25" y2="8.15" width="0.5" layer="1"/>
-<wire x1="17.5" y1="30.5" x2="17.5" y2="34.5" width="0.4" layer="2"/>
-<via x="17.5" y="34.5" extent="1-16" drill="0.4"/>
+<wire x1="17.5" y1="30.5" x2="17.5" y2="31.25" width="0.4" layer="2"/>
+<via x="17.5" y="31.25" extent="1-16" drill="0.4"/>
 <wire x1="11.5" y1="10.5" x2="9.25" y2="12.75" width="0.4" layer="2"/>
 <wire x1="18.25" y1="8.25" x2="22.25" y2="8.25" width="0.4" layer="2"/>
 <wire x1="11.5" y1="10.5" x2="16" y2="10.5" width="0.4" layer="2"/>
@@ -4112,12 +4115,12 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="15.5" y1="44" x2="13" y2="44" width="0.4" layer="2"/>
 <wire x1="12.5" y1="43.5" x2="13" y2="44" width="0.4" layer="2"/>
 <wire x1="16.75" y1="41.75" x2="17.5" y2="41" width="0.4" layer="2"/>
-<wire x1="17.5" y1="41" x2="17.5" y2="34.5" width="0.4" layer="2"/>
-<wire x1="17.5" y1="34.5" x2="17.5" y2="32.75" width="0.3" layer="1"/>
-<wire x1="24.75" y1="29.5" x2="29.75" y2="29.5" width="0.3" layer="1"/>
-<wire x1="17.5" y1="32.75" x2="18.75" y2="31.5" width="0.3" layer="1"/>
-<wire x1="18.75" y1="31.5" x2="22.75" y2="31.5" width="0.3" layer="1"/>
-<wire x1="22.75" y1="31.5" x2="24.75" y2="29.5" width="0.3" layer="1"/>
+<wire x1="17.5" y1="41" x2="17.5" y2="31.25" width="0.4" layer="2"/>
+<wire x1="25" y1="29.5" x2="29.75" y2="29.5" width="0.3" layer="1"/>
+<wire x1="22" y1="32.5" x2="17.75" y2="32.5" width="0.3" layer="1"/>
+<wire x1="17.75" y1="32.5" x2="17.5" y2="32.25" width="0.3" layer="1"/>
+<wire x1="17.5" y1="32.25" x2="17.5" y2="31.25" width="0.3" layer="1"/>
+<wire x1="22" y1="32.5" x2="25" y2="29.5" width="0.3" layer="1"/>
 <wire x1="30.25" y1="27.8796" x2="30.25" y2="29" width="0.3" layer="1"/>
 <wire x1="30.25" y1="29" x2="29.75" y2="29.5" width="0.3" layer="1"/>
 </signal>
@@ -4259,13 +4262,29 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <contactref element="R2" pad="1"/>
 <contactref element="TP7_IN" pad="TP"/>
 <via x="7.25" y="35.25" extent="1-16" drill="0.3"/>
-<wire x1="4" y1="43" x2="4" y2="40" width="1" layer="16"/>
+<wire x1="3.5" y1="43" x2="3.5" y2="40.5" width="1" layer="16"/>
 <wire x1="7.25" y1="36.75" x2="7.25" y2="35.25" width="1" layer="16"/>
-<wire x1="4" y1="40" x2="7.25" y2="36.75" width="1" layer="16"/>
-<wire x1="8.25" y1="27.4" x2="8.25" y2="33.75" width="0.25" layer="1"/>
-<wire x1="8.25" y1="33.75" x2="7.25" y2="33.75" width="0.25" layer="1"/>
-<wire x1="7.25" y1="33.75" x2="7.078" y2="33.75" width="0.254" layer="1"/>
-<wire x1="7.25" y1="35.25" x2="7.25" y2="33.75" width="1" layer="1"/>
+<wire x1="3.5" y1="40.5" x2="7.25" y2="36.75" width="1" layer="16"/>
+<via x="7" y="32.5" extent="1-16" drill="0.35"/>
+<wire x1="8.25" y1="27.4" x2="8.25" y2="32.5" width="0.25" layer="1"/>
+<wire x1="8.25" y1="32.5" x2="7" y2="32.5" width="0.25" layer="1"/>
+<wire x1="5.75" y1="32.5" x2="7" y2="32.5" width="1" layer="16"/>
+<via x="5.75" y="32.5" extent="1-16" drill="0.35"/>
+<via x="5.75" y="33.75" extent="1-16" drill="0.35"/>
+<via x="5" y="33.75" extent="1-16" drill="0.35"/>
+<via x="5" y="32.5" extent="1-16" drill="0.35"/>
+<via x="5.75" y="31.25" extent="1-16" drill="0.35"/>
+<via x="5" y="31.25" extent="1-16" drill="0.35"/>
+<wire x1="5.7" y1="33.75" x2="5.75" y2="33.75" width="0.5" layer="16"/>
+<wire x1="5.75" y1="32.5" x2="5.75" y2="31.25" width="0.5" layer="16"/>
+<wire x1="5.7" y1="32.5" x2="5.7" y2="31.25" width="0.5" layer="16"/>
+<wire x1="5.7" y1="31.25" x2="5" y2="31.25" width="0.5" layer="16"/>
+<wire x1="5.7" y1="32.5" x2="5.75" y2="32.5" width="0.5" layer="16"/>
+<wire x1="5.7" y1="32.5" x2="5.7" y2="33.75" width="0.5" layer="16"/>
+<wire x1="5.7" y1="33.75" x2="5" y2="33.75" width="0.5" layer="16"/>
+<wire x1="5.7" y1="32.5" x2="5" y2="32.5" width="0.5" layer="16"/>
+<wire x1="7.25" y1="35.25" x2="7.25" y2="32.5" width="1" layer="16"/>
+<wire x1="7.25" y1="32.5" x2="7" y2="32.5" width="1" layer="16"/>
 </signal>
 <signal name="GND_VIA_INCP" class="1">
 <contactref element="IC7" pad="3_INCP"/>
@@ -4395,13 +4414,8 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="31.9" y1="27.5" x2="31.75" y2="27.5" width="0.5" layer="16"/>
 <via x="13.25" y="20" extent="1-16" drill="0.3"/>
 <via x="5.25" y="35.25" extent="1-16" drill="0.3"/>
-<via x="10.25" y="35.25" extent="1-16" drill="0.3"/>
-<via x="12.75" y="35.25" extent="1-16" drill="0.3"/>
-<via x="15.25" y="35.25" extent="1-16" drill="0.3"/>
 <via x="16.5" y="39.25" extent="1-16" drill="0.3"/>
 <via x="15.25" y="42.5" extent="1-16" drill="0.3"/>
-<wire x1="8.75" y1="27.4" x2="8.75" y2="33.75" width="0.25" layer="1"/>
-<wire x1="8.75" y1="33.75" x2="9.922" y2="33.75" width="0.25" layer="1"/>
 <wire x1="9.25" y1="27.4" x2="9.25" y2="25.5" width="0.254" layer="1"/>
 <wire x1="9.25" y1="25.5" x2="8.25" y2="25.5" width="0.254" layer="1"/>
 <contactref element="R8" pad="1"/>
@@ -4445,15 +4459,24 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <via x="27.25" y="15.25" extent="1-16" drill="0.4"/>
 <wire x1="7.25" y1="27.4" x2="7.25" y2="26.5" width="0.25" layer="1"/>
 <wire x1="7.25" y1="26.5" x2="8.25" y2="25.5" width="0.5" layer="1"/>
+<via x="10" y="32.5" extent="1-16" drill="0.35"/>
+<via x="11.25" y="31.25" extent="1-16" drill="0.35"/>
+<via x="12" y="31.25" extent="1-16" drill="0.35"/>
+<via x="12" y="32.5" extent="1-16" drill="0.35"/>
+<via x="11.25" y="32.5" extent="1-16" drill="0.35"/>
+<via x="11.25" y="33.75" extent="1-16" drill="0.35"/>
+<via x="12" y="33.75" extent="1-16" drill="0.35"/>
+<wire x1="10" y1="32.5" x2="11.3" y2="32.5" width="1" layer="16"/>
+<wire x1="8.75" y1="27.4" x2="8.75" y2="32.5" width="0.25" layer="1"/>
+<wire x1="8.75" y1="32.5" x2="10" y2="32.5" width="0.25" layer="1"/>
 </signal>
 <signal name="INVP" class="9">
 <contactref element="IC7" pad="5_INVP"/>
 <contactref element="R7" pad="1"/>
 <contactref element="R8" pad="2"/>
-<wire x1="7.75" y1="29.25" x2="7.75" y2="27.4" width="0.25" layer="1"/>
-<wire x1="7.25" y1="29.75" x2="7.75" y2="29.25" width="0.25" layer="1"/>
-<wire x1="6" y1="31" x2="6" y2="29.75" width="0.25" layer="1"/>
-<wire x1="6" y1="29.75" x2="7.25" y2="29.75" width="0.25" layer="1"/>
+<wire x1="7.75" y1="28.5" x2="7.75" y2="27.4" width="0.25" layer="1"/>
+<wire x1="7.5" y1="28.75" x2="7.5" y2="29.75" width="0.25" layer="1"/>
+<wire x1="7.5" y1="28.75" x2="7.75" y2="28.5" width="0.25" layer="1"/>
 </signal>
 <signal name="N$17" class="9">
 <contactref element="IC7" pad="1_REFC"/>
@@ -5081,14 +5104,14 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="22.5" y1="45.25" x2="24.5" y2="45.25" width="0.4" layer="1"/>
 <wire x1="24.912" y1="44.838" x2="24.912" y2="44.3" width="0.4" layer="1"/>
 <wire x1="24.5" y1="45.25" x2="24.912" y2="44.838" width="0.4" layer="1"/>
-<contactref element="IC17" pad="13_GP4"/>
-<via x="20.5" y="30.5" extent="1-16" drill="0.3"/>
-<wire x1="20.5" y1="27.5" x2="20.5" y2="30.5" width="0.3" layer="1"/>
-<wire x1="20.5" y1="30.5" x2="20.5" y2="32" width="0.4" layer="2"/>
+<via x="20.5" y="31.5" extent="1-16" drill="0.3"/>
+<wire x1="20.5" y1="31.5" x2="20.5" y2="32" width="0.4" layer="2"/>
 <wire x1="21.25" y1="32.75" x2="20.5" y2="32" width="0.4" layer="2"/>
 <wire x1="21.25" y1="34.57849375" x2="21.25" y2="32.75" width="0.4" layer="2"/>
 <wire x1="21.25" y1="34.57849375" x2="22.5" y2="35.82849375" width="0.4" layer="2"/>
 <wire x1="22.5" y1="35.82849375" x2="22.5" y2="45.25" width="0.4" layer="2"/>
+<contactref element="R28" pad="4"/>
+<wire x1="20.5" y1="31.5" x2="20.5" y2="30" width="0.3" layer="1"/>
 </signal>
 <signal name="GATE_GRAETZ" class="9">
 <contactref element="IC2" pad="G1"/>
@@ -5102,18 +5125,17 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="30.25" y1="45.25" x2="30.412" y2="45.088" width="0.4" layer="1"/>
 <wire x1="28.25" y1="43.25" x2="28.25" y2="45" width="0.3" layer="16"/>
 <wire x1="28.25" y1="45" x2="28" y2="45.25" width="0.3" layer="16"/>
-<contactref element="IC17" pad="12_GP3"/>
-<via x="21.25" y="30.5" extent="1-16" drill="0.3"/>
-<wire x1="21" y1="27.5" x2="21" y2="30" width="0.3" layer="1"/>
-<wire x1="21.25" y1="30.25" x2="21.25" y2="30.5" width="0.3" layer="1"/>
-<wire x1="21.25" y1="30.25" x2="21" y2="30" width="0.3" layer="1"/>
+<via x="21.25" y="31.25" extent="1-16" drill="0.3"/>
+<wire x1="21.25" y1="31.25" x2="21" y2="31" width="0.3" layer="1"/>
+<wire x1="21" y1="31" x2="21" y2="30" width="0.3" layer="1"/>
 <wire x1="21.25" y1="31.5" x2="24.25" y2="34.5" width="0.4" layer="2"/>
-<wire x1="21.25" y1="30.5" x2="21.25" y2="31.5" width="0.4" layer="2"/>
+<wire x1="21.25" y1="31.25" x2="21.25" y2="31.5" width="0.4" layer="2"/>
 <wire x1="28" y1="43.25" x2="28" y2="45.25" width="0.4" layer="2"/>
 <wire x1="27.25" y1="42.5" x2="28" y2="43.25" width="0.4" layer="2"/>
 <wire x1="24.25" y1="34.5" x2="24.25" y2="41.75" width="0.4" layer="2"/>
 <wire x1="24.25" y1="41.75" x2="25" y2="42.5" width="0.4" layer="2"/>
 <wire x1="25" y1="42.5" x2="27.25" y2="42.5" width="0.4" layer="2"/>
+<contactref element="R28" pad="2"/>
 </signal>
 <signal name="N$13" class="9">
 <contactref element="IC1" pad="S1"/>
@@ -5146,18 +5168,16 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="17" y1="45.25" x2="19.25" y2="45.25" width="0.4" layer="1"/>
 <wire x1="19.412" y1="45.088" x2="19.412" y2="44.3" width="0.4" layer="1"/>
 <wire x1="19.25" y1="45.25" x2="19.412" y2="45.088" width="0.4" layer="1"/>
-<contactref element="IC17" pad="14_GP5"/>
-<via x="17.75" y="29.75" extent="1-16" drill="0.3"/>
+<via x="19.75" y="31.25" extent="1-16" drill="0.3"/>
 <wire x1="19.25" y1="40.25" x2="17" y2="42.5" width="0.4" layer="2"/>
 <wire x1="17" y1="42.5" x2="17" y2="45.25" width="0.4" layer="2"/>
-<wire x1="20" y1="28.5" x2="20" y2="27.5" width="0.3" layer="1"/>
-<wire x1="20" y1="28.5" x2="18.75" y2="29.75" width="0.3" layer="1"/>
-<wire x1="17.75" y1="29.75" x2="18.75" y2="29.75" width="0.3" layer="1"/>
-<wire x1="18.25" y1="35.5" x2="18.25" y2="30" width="0.4" layer="2"/>
-<wire x1="17.75" y1="29.75" x2="18" y2="29.75" width="0.4" layer="2"/>
-<wire x1="18.25" y1="30" x2="18" y2="29.75" width="0.4" layer="2"/>
+<wire x1="19.75" y1="31.25" x2="18.25" y2="32.75" width="0.4" layer="2"/>
+<wire x1="18.25" y1="35.5" x2="18.25" y2="32.75" width="0.4" layer="2"/>
 <wire x1="18.25" y1="35.5" x2="19.25" y2="36.5" width="0.4" layer="2"/>
 <wire x1="19.25" y1="36.5" x2="19.25" y2="40.25" width="0.4" layer="2"/>
+<contactref element="R28" pad="6"/>
+<wire x1="19.75" y1="31.25" x2="20" y2="31" width="0.3" layer="1"/>
+<wire x1="20" y1="31" x2="20" y2="30" width="0.3" layer="1"/>
 </signal>
 <signal name="GATE_D3" class="9">
 <contactref element="IC5" pad="9_G3"/>
@@ -5354,8 +5374,20 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <signal name="N$7" class="9">
 <contactref element="IC17" pad="16_GP7"/>
 </signal>
-<signal name="N$2" class="9">
-<contactref element="IC17" pad="15_GP6"/>
+<signal name="N$6" class="9">
+<contactref element="IC17" pad="14_GP5"/>
+<contactref element="R28" pad="5"/>
+<wire x1="20" y1="27.5" x2="20" y2="29" width="0.3" layer="1"/>
+</signal>
+<signal name="N$10" class="9">
+<contactref element="IC17" pad="13_GP4"/>
+<contactref element="R28" pad="3"/>
+<wire x1="20.5" y1="29" x2="20.5" y2="27.5" width="0.3" layer="1"/>
+</signal>
+<signal name="N$11" class="9">
+<contactref element="IC17" pad="12_GP3"/>
+<contactref element="R28" pad="1"/>
+<wire x1="21" y1="29" x2="21" y2="27.5" width="0.3" layer="1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
@@ -5488,8 +5520,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="19,1,73067582874a81ce"/>
 <approved hash="19,1,5d265e1728352b04"/>
 <approved hash="19,1,945695d2bbfcba78"/>
-<approved hash="19,1,617a602282ea83b2"/>
-<approved hash="19,1,62ba64b986718072"/>
 <approved hash="19,16,4a074a67f7cc1d6f"/>
 <approved hash="19,16,c6beb850c8d8cc5c"/>
 <approved hash="19,16,d846ab391a7e6757"/>
@@ -5543,38 +5573,10 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="6,1,753c0f708f0cf540"/>
 <approved hash="6,1,08c0e2e5698b4c4d"/>
 <approved hash="6,1,10f46c328db3d62f"/>
-<approved hash="3,1,d10f2c187a29873e"/>
-<approved hash="3,1,eb28283b826c417f"/>
-<approved hash="3,1,c504fd0d94c5accc"/>
-<approved hash="3,1,c75cbf6b29b55182"/>
-<approved hash="3,1,3f62d3a385926953"/>
-<approved hash="3,1,cccf711fdb486698"/>
 <approved hash="3,1,04478d8827f8ae37"/>
-<approved hash="3,1,af5b11b847a7f944"/>
-<approved hash="3,2,c62d7cbdd6cc6c5c"/>
-<approved hash="3,2,a5989d9355bf6db4"/>
-<approved hash="3,2,2690af01f91e708f"/>
 <approved hash="3,2,0e9b93cc39bca4eb"/>
-<approved hash="3,2,969f1ffc49e3c080"/>
-<approved hash="3,2,9d421781bdf03733"/>
-<approved hash="3,2,db6545aa13b58d7a"/>
-<approved hash="3,2,f90ac11358db60c2"/>
-<approved hash="3,15,c28a67c731fb94b6"/>
-<approved hash="3,15,28f7c16c97507ecb"/>
-<approved hash="3,15,444676591ba129be"/>
-<approved hash="3,15,f87c2efa84965210"/>
-<approved hash="3,15,969b51defbb23cf7"/>
-<approved hash="3,15,98e30530532fcefc"/>
-<approved hash="3,15,bd1085191cd124d8"/>
 <approved hash="3,15,10df9a303040baaf"/>
 <approved hash="3,16,b19e0acf5cbfe7ee"/>
-<approved hash="3,16,e2461ec6b4f74877"/>
-<approved hash="3,16,45b9b8691258ef88"/>
-<approved hash="3,16,c654be5f297d5176"/>
-<approved hash="3,16,5b05f7c4a1930d52"/>
-<approved hash="3,16,22619ee0c8b77436"/>
-<approved hash="3,16,d5a25af2f0ed7fbd"/>
-<approved hash="3,16,fe4fc6385e0c667b"/>
 <approved hash="3,1,397a4f084f08397a"/>
 <approved hash="3,1,6b7e190c19116b63"/>
 <approved hash="3,1,096a48984b980a6a"/>
@@ -5598,23 +5600,12 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="19,1,0c810da10f690e49"/>
 <approved hash="23,1,280f7afd796d2b9f"/>
 <approved hash="23,1,0d0c67f866990c6d"/>
-<approved hash="6,1,9a2ad1999198da2b"/>
-<approved hash="6,1,513ee835282837df"/>
-<approved hash="6,1,3906e54f72495d88"/>
-<approved hash="6,1,307ee306d6c0f630"/>
-<approved hash="6,1,1b42093009701b02"/>
-<approved hash="6,1,6b4c093e097e6b0c"/>
 <approved hash="3,1,0bf5b987be3e0c4c"/>
 <approved hash="3,1,9b6ab918b91e9b6c"/>
 <approved hash="3,1,4ad6f8a4e7075575"/>
 <approved hash="3,1,8bf8b98ab8368a44"/>
-<approved hash="3,1,5abd08cf09585b2a"/>
 <approved hash="3,1,9942bb30bb7e990c"/>
 <approved hash="3,1,4b7ef90cf9174b65"/>
-<approved hash="3,1,d7cac9b8c978d70a"/>
-<approved hash="3,1,6bcb09b909796b0b"/>
-<approved hash="3,1,1b42093009701b02"/>
-<approved hash="3,1,6b4c093e097e6b0c"/>
 <approved hash="5,1,9b9c9fc5827c82dd"/>
 <approved hash="5,1,45bd6c0b8be1db13"/>
 <approved hash="5,1,ae6626c9e10d562a"/>
@@ -5722,7 +5713,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,be32c2cec18ebd72"/>
 <approved hash="3,1,89df0120c10eeded"/>
 <approved hash="3,1,f470008400f1f405"/>
-<approved hash="3,1,5ec21cbc1c6b5e15"/>
 <approved hash="3,1,d7098c7b8df7d685"/>
 <approved hash="3,1,a06308870a5e93cc"/>
 <approved hash="3,1,118b5a795d2d16df"/>
@@ -5735,7 +5725,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,fc9706e30617fc63"/>
 <approved hash="3,1,4e7a690e6a914de5"/>
 <approved hash="3,1,e63a828cdea036ae"/>
-<approved hash="3,1,ea688a168c2bec55"/>
 <approved hash="3,1,00681e161834064a"/>
 <approved hash="3,1,9be60198001e9a60"/>
 <approved hash="3,1,0ffa198819f40f86"/>
@@ -5746,12 +5735,9 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,85fc5e6818a95f4a"/>
 <approved hash="3,1,7a1403e002907b64"/>
 <approved hash="3,1,7a7235ec35807a1e"/>
-<approved hash="3,1,95bdfbc3fb60951e"/>
-<approved hash="3,1,f83f076d022e7c3f"/>
 <approved hash="3,1,3bf2558c55e33b9d"/>
 <approved hash="3,1,e49578617833e4c7"/>
 <approved hash="3,1,51cadbb8dbfc518e"/>
-<approved hash="3,1,7c00727e732d7d53"/>
 <approved hash="3,1,54e01e9e1f35554b"/>
 <approved hash="3,1,cef420002080ce74"/>
 <approved hash="3,1,fdfcfd08fd0afdfe"/>
@@ -5923,15 +5909,79 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,706a4a184b1b7169"/>
 <approved hash="3,1,478a09f80839464b"/>
 <approved hash="3,1,ff45091708987661"/>
-<approved hash="6,1,603c02b98e40ac79"/>
-<approved hash="6,1,d90235568a69f337"/>
 <approved hash="3,1,e2680216042be455"/>
 <approved hash="3,1,1a67a819ae251c5b"/>
 <approved hash="3,1,69940be60ba969db"/>
-<approved hash="3,1,0bbdb9cfb90e0b7c"/>
-<approved hash="3,1,b06a4a184a1eb06c"/>
-<approved hash="3,1,fa29097b0818760d"/>
-<approved hash="6,1,7ee54e33d091754d"/>
+<approved hash="7,39,72b5c3fd6ab9eb09"/>
+<approved hash="7,39,c2b4bd408ec2220f"/>
+<approved hash="7,39,be8e77ab7a23a0c2"/>
+<approved hash="7,39,72b5b3ab7a1864f9"/>
+<approved hash="7,39,96a721ed910110bd"/>
+<approved hash="7,39,c2b433910623a0f8"/>
+<approved hash="7,39,16a386fb8ec1cbae"/>
+<approved hash="6,1,08bf091bf1297f0d"/>
+<approved hash="6,1,1ac308b19359f727"/>
+<approved hash="6,1,d1b99a2b9a2ad1b8"/>
+<approved hash="6,1,60bb60b42b262b29"/>
+<approved hash="6,1,66f818861aa464da"/>
+<approved hash="6,1,31facb88ca753007"/>
+<approved hash="3,1,5abc08ce08795a0b"/>
+<approved hash="3,1,1979090b09676165"/>
+<approved hash="3,1,66aa08d80f1d616f"/>
+<approved hash="3,1,1ac308b109151b67"/>
+<approved hash="3,1,6acd08bf091b6b69"/>
+<approved hash="3,1,31facb88ca753007"/>
+<approved hash="5,16,c0de3efdeae01207"/>
+<approved hash="5,16,1b8cc75539b2e3af"/>
+<approved hash="19,16,168e2b9771b94ca0"/>
+<approved hash="19,16,159614a34e8d4fb8"/>
+<approved hash="19,16,1e731e92a7aca6fd"/>
+<approved hash="19,16,161e196b43454c30"/>
+<approved hash="19,16,1c431c9aaa24a505"/>
+<approved hash="19,16,1d1b2235984fa5ad"/>
+<approved hash="19,16,8d968caeb680b7b8"/>
+<approved hash="19,16,8e8eb39a89b4b4a0"/>
+<approved hash="19,16,315d0cbdaac795eb"/>
+<approved hash="19,16,320d335e96609683"/>
+<approved hash="19,16,1ed621dd07f338f8"/>
+<approved hash="6,1,6ae61c981eba68c4"/>
+<approved hash="6,1,55f9378b36775405"/>
+<approved hash="3,1,55f9378b36775405"/>
+<approved hash="19,16,8e1e8166bb48b430"/>
+<approved hash="19,16,31f53ed6946894b3"/>
+<approved hash="3,1,2da292f3c4ec7bbd"/>
+<approved hash="3,1,012d3924d6fceef5"/>
+<approved hash="3,1,32af11bcbbee98fd"/>
+<approved hash="3,1,50f7af50f96106c6"/>
+<approved hash="3,1,47e00b215d1311d2"/>
+<approved hash="3,1,d25c7e8cd4db780b"/>
+<approved hash="3,1,d518ad20347e4c46"/>
+<approved hash="3,2,17e69837ce2841f9"/>
+<approved hash="3,2,c523fd3a9ae2a2fb"/>
+<approved hash="3,2,44c1ce026472eeb1"/>
+<approved hash="3,2,5a1dcb729d6d0c02"/>
+<approved hash="3,2,5e1fd78e819f080e"/>
+<approved hash="3,2,cbbe7e2ed45f61cf"/>
+<approved hash="3,2,b7548f5c28701078"/>
+<approved hash="3,15,192a866bd0744f35"/>
+<approved hash="3,15,f939c1315ee966e1"/>
+<approved hash="3,15,4f1a185fb230e575"/>
+<approved hash="3,15,4c42e69fb0a31a7e"/>
+<approved hash="3,15,507519ee4fd1064a"/>
+<approved hash="3,15,fdef280982655783"/>
+<approved hash="3,15,50096212e66ad471"/>
+<approved hash="3,16,56e5db2a7135fcfa"/>
+<approved hash="3,16,386600519875a042"/>
+<approved hash="3,16,fbe6a767f135adb4"/>
+<approved hash="3,16,610e9c1f362ecb3f"/>
+<approved hash="3,16,3d3b60ebcad99709"/>
+<approved hash="3,16,5c9af1b5a7e20acd"/>
+<approved hash="3,16,9f9fe7976f35173d"/>
+<approved hash="23,1,0ffa198819f40f86"/>
+<approved hash="23,1,8bf8b98ab8368a44"/>
+<approved hash="23,1,be32c2cec18ebd72"/>
+<approved hash="23,1,7853880f8a8f7ad3"/>
+<approved hash="23,1,7d2b25db25157de5"/>
 </errors>
 </board>
 </drawing>
