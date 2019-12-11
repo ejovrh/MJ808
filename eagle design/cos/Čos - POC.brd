@@ -3465,7 +3465,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <element name="FD3" library="Fiducial" package="FID_040" value="FID_40MIL" x="5.5" y="64.5" smashed="yes">
 <attribute name="BOM" value="" x="5.5" y="64.5" size="1.778" layer="27" display="off"/>
 </element>
-<element name="R28" library="741X083331JP Resistor Array" package="0402" value="741X083331JP / 330Ω" x="20.25" y="29.5" smashed="yes" rot="R90">
+<element name="R28" library="741X083331JP Resistor Array" package="0402" value="741X083101JP  / 100Ω" x="20.25" y="29.5" smashed="yes" rot="R90">
 <attribute name="NAME" x="18.5" y="29.5" size="0.75" layer="25" font="vector" rot="R90" align="center"/>
 <attribute name="VALUE" x="22.25" y="29.5" size="1" layer="27" font="vector" rot="R90" align="center"/>
 </element>
