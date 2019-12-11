@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.4.2">
+<eagle version="9.4.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -23200,6 +23200,127 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </deviceset>
 </devicesets>
 </library>
+<library name="Fiducial">
+<description>Fiducial Marks
+&lt;br&gt;Alignment marks for fabrication and placement.
+&lt;p&gt;
+&lt;i&gt;05/24/17 - Changed circles to smd pads so locations show up in XY files. C. Nicks</description>
+<packages>
+<package name="FID_020">
+<description>Fiducial 20mil</description>
+<circle x="0" y="0" radius="0.508" width="0" layer="29"/>
+<circle x="0" y="0" radius="0.508" width="0" layer="30"/>
+<circle x="0" y="0" radius="0.635" width="0" layer="41"/>
+<circle x="0" y="0" radius="0.635" width="0" layer="42"/>
+<smd name="FIDT" x="0" y="0" dx="0.508" dy="0.508" layer="1" roundness="100" stop="no" thermals="no" cream="no"/>
+<smd name="FIDB" x="0" y="0" dx="0.508" dy="0.508" layer="16" roundness="100" stop="no" thermals="no" cream="no"/>
+</package>
+<package name="FID_040">
+<description>Fiducial 40mil</description>
+<circle x="0" y="0" radius="1.016" width="0" layer="29"/>
+<circle x="0" y="0" radius="1.016" width="0" layer="30"/>
+<circle x="0" y="0" radius="1.27" width="0" layer="41"/>
+<circle x="0" y="0" radius="1.27" width="0" layer="42"/>
+<smd name="FIDT" x="0" y="0" dx="1.016" dy="1.016" layer="1" roundness="100" stop="no" thermals="no" cream="no"/>
+<smd name="FIDB" x="0" y="0" dx="1.016" dy="1.016" layer="16" roundness="100" stop="no" thermals="no" cream="no"/>
+</package>
+<package name="FID_060">
+<description>Fiducial 60mil</description>
+<circle x="0" y="0" radius="1.27" width="0" layer="30"/>
+<circle x="0" y="0" radius="1.27" width="0" layer="29"/>
+<circle x="0" y="0" radius="1.524" width="0" layer="41"/>
+<circle x="0" y="0" radius="1.524" width="0" layer="42"/>
+<smd name="FIDT" x="0" y="0" dx="1.524" dy="1.524" layer="1" roundness="100" stop="no" thermals="no"/>
+<smd name="FIDB" x="0" y="0" dx="1.524" dy="1.524" layer="16" roundness="100" stop="no" thermals="no"/>
+</package>
+<package name="FID_020_P">
+<description>Fiducial 20mil with paste for alignment</description>
+<circle x="0" y="0" radius="0.508" width="0" layer="29"/>
+<circle x="0" y="0" radius="0.508" width="0" layer="30"/>
+<circle x="0" y="0" radius="0.635" width="0" layer="41"/>
+<circle x="0" y="0" radius="0.635" width="0" layer="42"/>
+<smd name="FIDT" x="0" y="0" dx="0.508" dy="0.508" layer="1" roundness="100" stop="no" thermals="no"/>
+<smd name="FIDB" x="0" y="0" dx="0.508" dy="0.508" layer="16" roundness="100" stop="no" thermals="no"/>
+</package>
+<package name="FID_040_P">
+<description>Fiducial 40mil with paste for alignment</description>
+<circle x="0" y="0" radius="1.016" width="0" layer="29"/>
+<circle x="0" y="0" radius="1.016" width="0" layer="30"/>
+<circle x="0" y="0" radius="1.27" width="0" layer="41"/>
+<circle x="0" y="0" radius="1.27" width="0" layer="42"/>
+<smd name="FIDT" x="0" y="0" dx="1.016" dy="1.016" layer="1" roundness="100" stop="no" thermals="no"/>
+<smd name="FIDB" x="0" y="0" dx="1.016" dy="1.016" layer="16" roundness="100" stop="no" thermals="no"/>
+</package>
+<package name="FID_060_P">
+<description>Fiducial 60mil with paste for alignment</description>
+<circle x="0" y="0" radius="1.27" width="0" layer="30"/>
+<circle x="0" y="0" radius="1.27" width="0" layer="29"/>
+<circle x="0" y="0" radius="1.524" width="0" layer="41"/>
+<circle x="0" y="0" radius="1.524" width="0" layer="42"/>
+<smd name="FIDT" x="0" y="0" dx="1.524" dy="1.524" layer="1" roundness="100" stop="no" thermals="no"/>
+<smd name="FIDB" x="0" y="0" dx="1.524" dy="1.524" layer="16" roundness="100" stop="no" thermals="no"/>
+</package>
+</packages>
+<symbols>
+<symbol name="FIDUCIAL">
+<description>Empty symbol so a blank device can be made. Sometimes when working with scripts and ULPs they error when there are board-only elements</description>
+<circle x="0" y="0" radius="0.254" width="0" layer="94"/>
+<text x="0" y="1.27" size="1.016" layer="95" font="vector" ratio="12">&gt;NAME</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="FID" prefix="FD">
+<description>Fiducial marks. Top and Bottom copper with stop mask</description>
+<gates>
+<gate name="G$2" symbol="FIDUCIAL" x="0" y="0"/>
+</gates>
+<devices>
+<device name="_20MIL" package="FID_020">
+<technologies>
+<technology name="">
+<attribute name="BOM" value="" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="_40MIL" package="FID_040">
+<technologies>
+<technology name="">
+<attribute name="BOM" value="" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="_60MIL" package="FID_060">
+<technologies>
+<technology name="">
+<attribute name="BOM" value="" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="_20MIL_P" package="FID_020_P">
+<technologies>
+<technology name="">
+<attribute name="BOM" value="" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="_40MIL_P" package="FID_040_P">
+<technologies>
+<technology name="">
+<attribute name="BOM" value="" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="_60MIL_P" package="FID_060_P">
+<technologies>
+<technology name="">
+<attribute name="BOM" value="" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -23355,6 +23476,9 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="TP7_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
 <part name="TP7_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
 <part name="IC20" library="MP3221–2.7A, 1.2MHZ, HIGH-EFFICIENCY STEP UP CONVERTER WITH INPUT DISCONNECT" deviceset="MP3221" device="" value="MP3221GJ-P"/>
+<part name="FD1" library="Fiducial" deviceset="FID" device="_40MIL"/>
+<part name="FD2" library="Fiducial" deviceset="FID" device="_40MIL"/>
+<part name="FD3" library="Fiducial" deviceset="FID" device="_40MIL"/>
 </parts>
 <sheets>
 <sheet>
@@ -24288,6 +24412,15 @@ CAN</text>
 <instance part="IC20" gate="G$1" x="398.78" y="109.22" smashed="yes">
 <attribute name="NAME" x="393.7" y="119.38" size="1.27" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="393.7" y="116.84" size="1.27" layer="96" font="vector" align="center"/>
+</instance>
+<instance part="FD1" gate="G$2" x="-25.4" y="1031.24" smashed="yes">
+<attribute name="NAME" x="-25.4" y="1032.51" size="1.016" layer="95" font="vector" ratio="12"/>
+</instance>
+<instance part="FD2" gate="G$2" x="-25.4" y="1028.7" smashed="yes">
+<attribute name="NAME" x="-25.4" y="1029.97" size="1.016" layer="95" font="vector" ratio="12"/>
+</instance>
+<instance part="FD3" gate="G$2" x="-25.4" y="1026.16" smashed="yes">
+<attribute name="NAME" x="-25.4" y="1027.43" size="1.016" layer="95" font="vector" ratio="12"/>
 </instance>
 </instances>
 <busses>
