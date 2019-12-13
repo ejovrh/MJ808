@@ -9,12 +9,14 @@
 // definitions of device/PCB layout-dependent hardware pins
 #define	COMPARATOR_IN_pin		B,	0,	0								// Comparator input pin - zero cross from dynamo
 #define	COMPARATOR_REF_pin		B,	1,	1								// Comparator reference pin = GND
-#define	MCP2561_standby_pin		B,	2,	2								// MCP2561 standby, controlled in mcp2515.c
-#define TPS630702_PWM_pin		B,	3,	3								// TPS630702_PWM PWM Control Pin (PS/SYNC)
+#define TPS630702_PWM_pin		B,	2,	2								// TPS630702_PWM PWM Control Pin (PS/SYNC)
+#define	MCP2561_standby_pin		B,	3,	3								// MCP2561 standby, controlled in mcp2515.c
 
 #define INT_MCP2515_pin			D,	3,	3								// MCP2515 CAN Controller interrupt pin
 #define INT_MCP23S08_pin		D,	4,	4								// MCP23S08 Port Expander Interrupt pin
 // definitions of device/PCB layout-dependent hardware pins
+
+#define OCR_BUCK_BOOST OCR0A											// Output Compare Register for PWM of BuckBoost regulator
 
 typedef struct															// struct describing devices on MJ808
 {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.4.2">
+<eagle version="9.4.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -24703,9 +24703,9 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="180.34" y="20.32" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC8" gate="G$1" pin="OC0A/PCINT2-PB2"/>
-<wire x1="190.5" y1="134.62" x2="195.58" y2="134.62" width="0.1524" layer="91"/>
-<label x="195.58" y="134.62" size="1.778" layer="95"/>
+<pinref part="IC8" gate="G$1" pin="OC1A/PCINT3-PB3"/>
+<wire x1="190.5" y1="132.08" x2="195.58" y2="132.08" width="0.1524" layer="91"/>
+<label x="195.58" y="132.08" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V0_TP-OUT" class="6">
@@ -25783,9 +25783,9 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="154.94" y="515.62" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC8" gate="G$1" pin="OC1A/PCINT3-PB3"/>
-<wire x1="190.5" y1="132.08" x2="195.58" y2="132.08" width="0.1524" layer="91"/>
-<label x="195.58" y="132.08" size="1.778" layer="95"/>
+<pinref part="IC8" gate="G$1" pin="OC0A/PCINT2-PB2"/>
+<wire x1="190.5" y1="134.62" x2="195.58" y2="134.62" width="0.1524" layer="91"/>
+<label x="195.58" y="134.62" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="PG" class="9">
