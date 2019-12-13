@@ -6,6 +6,11 @@
 typedef struct															// cos_t actual
 {
 	cos_t public;														// public struct
+
+	volatile uint8_t __timer1_overflow;									// private timer1 overflow counter, gets incremented by TIMER1_OVF_vect ISR
+	volatile uint8_t __ICR1L;											// Input Capture Register, gets filled by value of
+	volatile uint8_t __ICR1H;											//
+
 } __cos_t;
 
 static __cos_t __Device __attribute__ ((section (".data")));			// preallocate __Device object in .data
@@ -28,11 +33,13 @@ void _PopulatedBusOperationCOS(message_handler_t * const in_msg)
 void cos_ctor()
 {
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
-	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A));	// call base class constructor & initialize own SID
+	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_PWR_SRC | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A));	// call base class constructor & initialize own SID
 
 	// GPIO state definitions
 	{
 	// state initialization of device-specific pins
+	gpio_conf(COMPARATOR_REF_pin, INPUT, NOPULLUP);						// comparator pin as input and nopullups
+	gpio_conf(COMPARATOR_IN_pin, INPUT, NOPULLUP);						// comparator pin as input and nopullups
 	gpio_conf(MCP2561_standby_pin, OUTPUT, LOW);						// low (on), high (off)
 	gpio_conf(TPS630702_PWM_pin, OUTPUT, HIGH);							// low (off), high (on)
 	// state initialization of device-specific pins
@@ -42,21 +49,25 @@ void cos_ctor()
 	{
 	cli();
 
-	OCR_FRONT_LIGHT = 0x00;												// OCR init for front light - have light off
+	ACSR &= ~_BV(ACD);													// enable comparator
+	ACSR |= (  _BV(ACIC) | 												// enable input capture function in timer1, needs ICIE1 in TIMSK
+			(_BV(ACIS1) | _BV(ACIS0)) );								// rising edge
 
-	// timer/counter1 - 16bit (and timer/counter0 - 8bit) - pushbutton timing
-	/* timing of OCR1A in ms
-		0xffff - 65.4ms
-		0x6180 - 25ms
-		0x2780 - 10ms
+	// timer/counter1 - 16bit - frequency measurement by means of zero cross detection of dynamo AC voltage
+	/*
+
 	*/
-	OCR1A = 0x6180;														// 0x6180 - 25ms - counter increment up to this value
-	TIFR |= _BV(OCF1A);													// clear interrupt flag
-	TIMSK = _BV(OCIE1A);												// TCO compare match IRQ enable for OCIE1A
-	TCCR1B = ( _BV(WGM12) |												// CTC mode w. TOP = OCR1A, TOV1 set to MAX
+
+	TIFR |= _BV(ICF1);													// clear interrupt flag
+	TIMSK = ( _BV(ICIE1) | _BV(TOIE1) );								// Input Capture & Timer1 Overflow interrupt enable
+	TCCR1B = ( _BV(WGM13) |												// TOP = ICR1, TOV1 set on BOTTOM
+			   _BV(ICNC1) |												// turn on comparator noise canceler
+			   _BV(ICES1) |												// capture on rising edge
 			   _BV(CS11)  );											// clkIO/8 (from pre-scaler), start timer
 
+
 	// timer/counter0 - 8bit - front light PWM
+	OCR_BUCK_BOOST = 0xFF;												// TODO: full on for test purposes -- 0x6180 - 25ms - counter increment up to this value
 	TCCR0A = ( _BV(COM0A1) |											// Clear OC1A/OC1B on Compare Match when up counting
 			   _BV(WGM00) );											// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
 	TCCR0B = _BV(CS01);													// clock pre-scaler: clk/8
@@ -69,13 +80,13 @@ void cos_ctor()
 		WDTCR = 0x00;													// disable the thing completely
 	}
 
-	// TODO - setup of pin change interrupts for pushbuttons
-	//PCMSK2 = _BV(PCINT15);												// enable pin change for switch @ pin D4
+	GIMSK |= _BV(PCIE2);												// enable pin change interrupts on PCINT17..11 (INT_MCP23S08_pin - PD4)
+	PCMSK2 = _BV(PCINT15);												// enable pin change for switch @ pin D4
 
 	sei();
 	}
 
-
+	__Device.__timer1_overflow = 0;										// sets timer1 overflow counter to 0
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationCOS;// implements device-specific operation depending on bus activity
 
@@ -86,3 +97,23 @@ void cos_ctor()
 #if defined(COS_)														// all devices have the object name "Device", hence the preprocessor macro
 cos_t * const Device = &__Device.public ;								// set pointer to MsgHandler public part
 #endif
+
+ISR(PCINT2_vect)														// pin change ISR (PD4) if port expander sees activity
+{
+	;
+}
+
+ISR(TIMER1_CAPT_vect)													// timer1 input capture interrupt for comparator output
+{
+	cli();																// disable interrupts
+
+	__Device.__ICR1L = ICR1L;											// first read in Input Capture low byte
+	__Device.__ICR1H = ICR1H;											// then Input Capture high byte
+
+	sei();																// enable interrupts
+}
+
+ISR(TIMER1_OVF_vect)													// timer1 overflow vector
+{
+	++__Device.__timer1_overflow;										// increment
+}

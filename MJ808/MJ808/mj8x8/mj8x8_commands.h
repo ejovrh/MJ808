@@ -68,8 +68,8 @@
 	#define DEV_0D 3													//	4th logic unit
 		#define MJ828 3													// dashboard
 		#define DASHBOARD 3
-	#define DEV_1A 4													//	dynamo1
-		#define DYN1 4
+	#define DEV_1A 4													//	dynamo1 - Èos
+		#define COS 4
 	#define DEV_1B 5 													//	dynamo2
 		#define DYN2 5
 	#define DEV_1C 6 													//	battery
