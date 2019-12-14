@@ -8,8 +8,12 @@ typedef struct															// cos_t actual
 	cos_t public;														// public struct
 
 	volatile uint8_t __timer1_overflow;									// private timer1 overflow counter, gets incremented by TIMER1_OVF_vect ISR
-	volatile uint8_t __ICR1L;											// Input Capture Register, gets filled by value of
-	volatile uint8_t __ICR1H;											//
+
+	union
+	{
+		volatile uint8_t icrl1_low_byte;
+		volatile uint8_t icrl1_high_byte;
+	} __ICR1;															// Input Capture Register, gets filled by value of
 
 } __cos_t;
 
@@ -65,7 +69,6 @@ void cos_ctor()
 			   _BV(ICES1) |												// capture on rising edge
 			   _BV(CS11)  );											// clkIO/8 (from pre-scaler), start timer
 
-
 	// timer/counter0 - 8bit - front light PWM
 	OCR_BUCK_BOOST = 0xFF;												// TODO: full on for test purposes -- 0x6180 - 25ms - counter increment up to this value
 	TCCR0A = ( _BV(COM0A1) |											// Clear OC1A/OC1B on Compare Match when up counting
@@ -73,7 +76,7 @@ void cos_ctor()
 	TCCR0B = _BV(CS01);													// clock pre-scaler: clk/8
 
 
-	if(MCUSR & _BV(WDRF))												// power-up - if we got reset by the watchdog...
+	if (MCUSR & _BV(WDRF))												// power-up - if we got reset by the watchdog...
 	{
 		MCUSR &= ~_BV(WDRF);											// clear the reset flag
 		WDTCR |= (_BV(WDCE) | _BV(WDE));								// WDT change enable sequence
@@ -107,8 +110,8 @@ ISR(TIMER1_CAPT_vect)													// timer1 input capture interrupt for comparat
 {
 	cli();																// disable interrupts
 
-	__Device.__ICR1L = ICR1L;											// first read in Input Capture low byte
-	__Device.__ICR1H = ICR1H;											// then Input Capture high byte
+	__Device.__ICR1.icrl1_low_byte = ICR1L;								// first read in Input Capture low byte
+	__Device.__ICR1.icrl1_high_byte = ICR1H;							// then Input Capture high byte
 
 	sei();																// enable interrupts
 }
