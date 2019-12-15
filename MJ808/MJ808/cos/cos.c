@@ -42,10 +42,11 @@ void cos_ctor()
 	// GPIO state definitions
 	{
 	// state initialization of device-specific pins
-	gpio_conf(COMPARATOR_REF_pin, INPUT, NOPULLUP);						// comparator pin as input and nopullups
-	gpio_conf(COMPARATOR_IN_pin, INPUT, NOPULLUP);						// comparator pin as input and nopullups
-	gpio_conf(MCP2561_standby_pin, OUTPUT, LOW);						// low (on), high (off)
-	gpio_conf(TPS630702_PWM_pin, OUTPUT, HIGH);							// low (off), high (on)
+	gpio_conf(COMPARATOR_REF_pin, INPUT, NOPULLUP);						// comparator pin as input and no pullups
+	gpio_conf(COMPARATOR_IN_pin, INPUT, NOPULLUP);						// comparator pin as input and no pullups
+	gpio_conf(MCP2561_standby_pin, OUTPUT, LOW);						// MCP2561 standby - low (on), high (off)
+	gpio_conf(TPS630702_PWM_pin, OUTPUT, HIGH);							// Buck-Boost converter PWM input - low (off), high (on)
+	gpio_conf(MP3221_EN_pin, OUTPUT, LOW);								// 6V0 Boost converter enable pin - low (off), high (on)
 	// state initialization of device-specific pins
 	}
 
