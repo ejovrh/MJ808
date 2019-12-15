@@ -12,6 +12,7 @@
 #define TPS630702_PWM_pin		B,	2,	2								// TPS630702_PWM PWM Control Pin (PS/SYNC)
 #define	MCP2561_standby_pin		B,	3,	3								// MCP2561 standby, controlled in mcp2515.c
 
+#define	MP3221_EN_pin			D,	2,	2								// 5V0 output stage boost converter enable pin
 #define INT_MCP2515_pin			D,	3,	3								// MCP2515 CAN Controller interrupt pin
 #define INT_MCP23S08_pin		D,	4,	4								// MCP23S08 Port Expander Interrupt pin
 // definitions of device/PCB layout-dependent hardware pins
