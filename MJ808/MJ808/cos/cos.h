@@ -4,6 +4,7 @@
 #include "mj8x8\mj8x8.h"												// base infrastructure
 #include "tps630701/tps630701.h"										// BuckBoost controller object
 #include "mcp73871/mcp73871.h"											// LiIon Charger object
+#include "cap/cap.h"													// capacitor bank object
 
 // definitions of device/PCB layout-dependent hardware pins
 #define	COMPARATOR_IN_pin		B,	0,	0								// Comparator input pin - zero cross from dynamo
@@ -23,6 +24,7 @@ typedef struct															// struct describing devices on MJ808
 	mj8x8_t *mj8x8;														// pointer to the base class
 	tps630701_t *BuckBoost;												// 5V0 out Buck-Boost converter, powered by rectified dynamo, powers LiIon Charger
 	mcp73871_t *LiIonCharger;											// LiIon Charger & Powerpath controller, powered by 5V0, powers downstream with LiIon cell voltage (2.8-4.2V)
+	cap_t *Cap;															// capacitor bank abstraction
 	volatile uint8_t WheelFreq;											//
 } cos_t;
 
