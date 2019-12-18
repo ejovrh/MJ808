@@ -172,6 +172,12 @@
     <Compile Include="cos\ad5160\ad5160.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="cos\cap\cap.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="cos\cap\cap.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="cos\cos.c">
       <SubType>compile</SubType>
     </Compile>
@@ -304,6 +310,7 @@
     <Folder Include="cos\lmp92064sd" />
     <Folder Include="cos\mcp23s08" />
     <Folder Include="cos\mcp73871" />
+    <Folder Include="cos\cap" />
     <Folder Include="cos\tps630701" />
     <Folder Include="mj828" />
     <Folder Include="mj818" />

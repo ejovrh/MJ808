@@ -4,8 +4,6 @@
 #include <inttypes.h>
 
 
-
-
 #define LMP92064SD_CONFIG_A		0x0000									// RW, default 0x18, datasheet p.13
 #define LMP92064SD_CONFIG_A_RESET				0x07					//	RW
 #define LMP92064SD_CONFIG_A_DDIR				6						//	RO
@@ -45,7 +43,5 @@ typedef struct lmp92064sd_t												// lmp92064sd_t actual struct describing 
 {
 	void (* const DownloadData)(uint8_t *data_array);					// returns 2byte voltage value
 } lmp92064sd_t __attribute__((aligned(8)));
-
-//lmp92064sd_t *lmp92064sd_ctor();										// lmp92064sd_t object constructor - does function pointer & hardware initialization
 
 #endif /* LMP92064SD_H_ */
