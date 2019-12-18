@@ -2,9 +2,8 @@
 #define COS_H_
 
 #include "mj8x8\mj8x8.h"												// base infrastructure
-#include "ad5160\ad5160.h"												// SPI Digital Potentiometer
-#include "lmp92064sd\lmp92064sd.h"										// SPI Current/Voltage sensor
-#include "mcp23s08/mcp23s08.h"											// SPI port expander
+#include "tps630701/tps630701.h"										// BuckBoost controller object
+#include "mcp73871/mcp73871.h"											// LiIon Charger object
 
 // definitions of device/PCB layout-dependent hardware pins
 #define	COMPARATOR_IN_pin		B,	0,	0								// Comparator input pin - zero cross from dynamo
@@ -22,6 +21,9 @@
 typedef struct															// struct describing devices on MJ808
 {
 	mj8x8_t *mj8x8;														// pointer to the base class
+	tps630701_t *BuckBoost;												// 5V0 out Buck-Boost converter, powered by rectified dynamo, powers LiIon Charger
+	mcp73871_t *LiIonCharger;											// LiIon Charger & Powerpath controller, powered by 5V0, powers downstream with LiIon cell voltage (2.8-4.2V)
+	volatile uint8_t WheelFreq;											//
 } cos_t;
 
 void cos_ctor();														// declare constructor for concrete class

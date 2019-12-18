@@ -1,4 +1,6 @@
 #include "cos\cos.h"
+#include "cos\tps630701\tps630701.h"
+#include "cos\mcp73871\mcp73871.h"
 
 #include <util/delay.h>
 #include <avr/interrupt.h>
@@ -9,11 +11,11 @@ typedef struct															// cos_t actual
 
 	volatile uint8_t __timer1_overflow;									// private timer1 overflow counter, gets incremented by TIMER1_OVF_vect ISR
 
-	union
+	volatile union
 	{
 		volatile uint8_t icrl1_low_byte;
 		volatile uint8_t icrl1_high_byte;
-	} __ICR1;															// Input Capture Register, gets filled by value of
+	} __ICR1;															// Input Capture Register, gets filled by ISR of ICR
 
 } __cos_t;
 
@@ -114,6 +116,8 @@ ISR(TIMER1_CAPT_vect)													// timer1 input capture interrupt for comparat
 	__Device.__ICR1.icrl1_low_byte = ICR1L;								// first read in Input Capture low byte
 	__Device.__ICR1.icrl1_high_byte = ICR1H;							// then Input Capture high byte
 
+	//TODO - determine wheel freq. based on ICRs
+	__Device.public.WheelFreq = 123;
 	sei();																// enable interrupts
 }
 

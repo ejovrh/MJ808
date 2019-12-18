@@ -20,11 +20,10 @@
 #define MCP23S08_GPIO		0x09										// Port register, GP7:0 - 1 logic high, 0 logic low
 #define MCP23S08_OLAT		0x0a										// Output latch register, OL7:0 - 1 logic high, 0 logic low
 
-typedef struct mcp23s08_t												// mcp23s08_t struct describing the port expander as a whole
+typedef struct mcp23s08_t												// mcp23s08_t actual struct describing the port expander as a whole
 {
-
+	void (* const SetFoo)(const uint8_t in_val);						// set command for foo
+	uint8_t (* const GetBar)(uint8_t in_val);							// get command for bar
 } mcp23s08_t __attribute__((aligned(8)));
-
-mcp23s08_t *mcp23s08_ctor();											// mcp23s08_t object constructor - does function pointer & hardware initialization
 
 #endif /* MCP23S08_H_ */

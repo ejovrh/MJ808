@@ -1,6 +1,11 @@
 #ifndef LMP92064SD_H_
 #define LMP92064SD_H_
 
+#include <inttypes.h>
+
+
+
+
 #define LMP92064SD_CONFIG_A		0x0000									// RW, default 0x18, datasheet p.13
 #define LMP92064SD_CONFIG_A_RESET				0x07					//	RW
 #define LMP92064SD_CONFIG_A_DDIR				6						//	RO
@@ -36,12 +41,11 @@
 #define LMP92064SD_DATA_COUT_LSB	0x0202								// RO, datasheet p.16, COUT_DATA_LSB[7:0]
 #define LMP92064SD_DATA_COUT_MSB	0x0203								// RO, datasheet p.16, COUT_DATA_MSB[7:0]
 
-typedef struct lmp92064sd_t												// lmp92064sd_t struct describing the Voltage/Current meter as a whole
+typedef struct lmp92064sd_t												// lmp92064sd_t actual struct describing the Voltage/Current meter as a whole
 {
-	uint16_t (*getVoltage)(void);										// returns 2byte voltage value
-	uint16_t (*getCurrent)(void);										// returns 2byte current value
+	void (* const DownloadData)(uint8_t *data_array);					// returns 2byte voltage value
 } lmp92064sd_t __attribute__((aligned(8)));
 
-lmp92064sd_t *lmp92064sd_ctor();										// lmp92064sd_t object constructor - does function pointer & hardware initialization
+//lmp92064sd_t *lmp92064sd_ctor();										// lmp92064sd_t object constructor - does function pointer & hardware initialization
 
 #endif /* LMP92064SD_H_ */
