@@ -1,6 +1,8 @@
 #ifndef MCP23S08_H_
 #define MCP23S08_H_
 
+#include <inttypes.h>
+
 #define MCP23S08_IODIR		0x00										// I/O direction register, IO7:0 - 1 input, 0 output
 #define MCP23S08_IPOL		0x01										// Input Polarity port register, IP7:0 - 1 reflects opposite logic state as input pin, 0 same logic
 #define MCP23S08_GPINTEN	0x02										// Interrupt on Change control register, GPINT7:0 - 1 enable interrupt change event, 0 disable
