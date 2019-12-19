@@ -33,8 +33,16 @@ void _event_execution_function_cos(const uint8_t val)
 void _PopulatedBusOperationCOS(message_handler_t * const in_msg)
 {
 	volatile can_msg_t *msg = in_msg->ReceiveMessage();					// CAN message object
+
+	// TODO: handle some messages
+
 	msg->dlc;
 	return;
+};
+
+void _EmptyBusOperation(void)
+{
+	;
 };
 
 void cos_ctor()
@@ -58,7 +66,7 @@ void cos_ctor()
 	cli();
 
 	ACSR &= ~_BV(ACD);													// enable comparator
-	ACSR |= (  _BV(ACIC) | 												// enable input capture function in timer1, needs ICIE1 in TIMSK
+	ACSR |= ( _BV(ACIC) | 												// enable input capture function in timer1, needs ICIE1 in TIMSK
 			(_BV(ACIS1) | _BV(ACIS0)) );								// rising edge
 
 	// timer/counter1 - 16bit - frequency measurement by means of zero cross detection of dynamo AC voltage
@@ -73,8 +81,7 @@ void cos_ctor()
 			   _BV(ICES1) |												// capture on rising edge
 			   _BV(CS11)  );											// clkIO/8 (from pre-scaler), start timer
 
-	// timer/counter0 - 8bit - front light PWM
-	OCR_BUCK_BOOST = 0xFF;												// TODO: full on for test purposes -- 0x6180 - 25ms - counter increment up to this value
+	// timer/counter0 - 8bit - buck-boost PWM control
 	TCCR0A = ( _BV(COM0A1) |											// Clear OC1A/OC1B on Compare Match when up counting
 			   _BV(WGM00) );											// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
 	TCCR0B = _BV(CS01);													// clock pre-scaler: clk/8
@@ -93,11 +100,18 @@ void cos_ctor()
 	sei();
 	}
 
-	__Device.__timer1_overflow = 0;										// sets timer1 overflow counter to 0
-
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationCOS;// implements device-specific operation depending on bus activity
+	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperation;		// implements device operation on emtpy bus
 
 	EventHandler->fpointer = &_event_execution_function_cos;			// implements event hander for this device
+
+	__Device.public.Reg = reg_ctor();									// initializes reg_t object
+	__Device.public.BuckBoost = tps630701_ctor();						// initializes tps630701_t object
+	__Device.public.LiIonCharger = mcp73871_ctor();						// initializes mcp73871_t object
+
+	// Cos device operational initialization
+	__Device.public.Reg->SetRegulatorMode(Delon);						// set regulator into Delon mode - we are very likely to start spinning slow
+	*(__Device.public.BuckBoost->PWM) = 0xFF;							// put Buck-Boost into PWM/PFM (auto) mode
 
 }
 
@@ -118,7 +132,7 @@ ISR(TIMER1_CAPT_vect)													// timer1 input capture interrupt for comparat
 	__Device.__ICR1.icrl1_high_byte = ICR1H;							// then Input Capture high byte
 
 	//TODO - determine wheel freq. based on ICRs
-	__Device.public.WheelFreq = 123;
+	__Device.public.ACFreq = 123;
 	sei();																// enable interrupts
 }
 

@@ -24,8 +24,10 @@
 
 typedef struct mcp23s08_t												// mcp23s08_t actual struct describing the port expander as a whole
 {
-	void (* const SetFoo)(const uint8_t in_val);						// set command for foo
-	uint8_t (* const GetBar)(uint8_t in_val);							// get command for bar
+	void (* SetFoo)(const uint8_t in_val);								// set command for foo
+	uint8_t (* GetBar)(uint8_t in_val);									// get command for bar
 } mcp23s08_t __attribute__((aligned(8)));
+
+mcp23s08_t *mcp23s08_ctor();											// initialize mcp23s08_t actual and set function pointers
 
 #endif /* MCP23S08_H_ */
