@@ -30,6 +30,6 @@ uint8_t _GetBar(uint8_t in_val)											// downloads some data
 
  mcp23s08_t __MCP23S08 =												// instantiate mcp23s08_t actual and set function pointers
 {
-	.SetFoo = &_SetFoo,
-	.GetBar = &_GetBar
+	.SetFoo = &_SetFoo,													// set command for foo
+	.GetBar = &_GetBar													// get command for bar
 };

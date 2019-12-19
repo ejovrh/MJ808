@@ -23,6 +23,6 @@ uint8_t _GetStatus(void)												// gets the device status (PG, STAT1, STAT2)
 
 __mcp73871_t __MCP73871 =												// instantiate __mcp73871_t actual and set function pointers
 {
-	.public.SetResistor = &_SetResistor,
-	.public.GetStatus = &_GetStatus
+	.public.SetResistor = &_SetResistor,								// sets ad5160 potentiometer to val - see datasheet p. 14
+	.public.GetStatus = &_GetStatus										// gets mcp73871's device status (PG, STAT1, STAT2) via mcp23s08's GPIO
 };
