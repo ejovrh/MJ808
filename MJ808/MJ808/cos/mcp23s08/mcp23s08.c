@@ -1,10 +1,13 @@
 #include <avr/io.h>
+#include <util/delay.h>
 
 #include "gpio.h"
 #include "uci_spi.h"
 #include "cos\mcp23s08\mcp23s08.h"
 
 #define	SPI_SS_MCP23S08_pin		D,	1,	1								// MCP23S08 Port Expander Slave Select
+
+static mcp23s08_t __MCP23S08 __attribute__ ((section (".data")));		// declare mcp23s08_t actual and put into .data
 
 void _SetFoo(const uint8_t in_val)										// uploads some data
 {
@@ -28,8 +31,11 @@ uint8_t _GetBar(uint8_t in_val)											// downloads some data
 	return retval;
 };
 
- mcp23s08_t __MCP23S08 =												// instantiate mcp23s08_t actual and set function pointers
+mcp23s08_t *mcp23s08_ctor()												// initialize mcp23s08_t actual and set function pointers
 {
-	.SetFoo = &_SetFoo,													// set command for foo
-	.GetBar = &_GetBar													// get command for bar
+	// TODO: implement port expander low level functions
+	__MCP23S08.SetFoo = &_SetFoo;										// uploads some data
+	__MCP23S08.GetBar = &_GetBar;										// downloads some data
+
+	return &__MCP23S08;													// return address of public part
 };
