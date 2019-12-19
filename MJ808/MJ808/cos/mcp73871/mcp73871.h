@@ -12,6 +12,6 @@ typedef struct															// struct describing the LiIon Charger&Powerpath co
 		500mA = 1000V/2000 Ohm
 	*/
 	uint8_t (* const GetStatus)(void);									// gets the device status (PG, STAT1, STAT2)
-} mcp73871_t;
+} mcp73871_t __attribute__((aligned(8)));
 
 #endif /* MCP73871_H_ */

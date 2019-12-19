@@ -2,9 +2,9 @@
 #define COS_H_
 
 #include "mj8x8\mj8x8.h"												// base infrastructure
-#include "tps630701/tps630701.h"										// BuckBoost controller object
-#include "mcp73871/mcp73871.h"											// LiIon Charger object
-#include "cap/cap.h"													// capacitor bank object
+#include "tps630701\tps630701.h"										// BuckBoost controller object
+#include "mcp73871\mcp73871.h"											// LiIon Charger object
+#include "cap\cap.h"													// capacitor bank object
 
 // definitions of device/PCB layout-dependent hardware pins
 #define	COMPARATOR_IN_pin		B,	0,	0								// Comparator input pin - zero cross from dynamo
