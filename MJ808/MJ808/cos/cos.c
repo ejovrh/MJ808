@@ -25,6 +25,7 @@ static __cos_t __Device __attribute__ ((section (".data")));			// preallocate __
 // cases in this switch-case statement must be unique for all events on this device
 void _event_execution_function_cos(const uint8_t val)
 {
+	val;
 	return;
 };
 
@@ -32,7 +33,7 @@ void _event_execution_function_cos(const uint8_t val)
 void _PopulatedBusOperationCOS(message_handler_t * const in_msg)
 {
 	volatile can_msg_t *msg = in_msg->ReceiveMessage();					// CAN message object
-
+	msg->dlc;
 	return;
 };
 

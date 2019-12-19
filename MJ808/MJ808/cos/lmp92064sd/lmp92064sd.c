@@ -9,7 +9,7 @@
 
 static void __DownloadData(uint8_t *data_array)							// downloads voltage / current measurement from device
 {
-	uint8_t i;															// iterator
+	uint8_t i;
 
 	gpio_clr(SPI_SS_LMP92064SD_pin);									// select the slave
 	for (i = 0; i<4; ++i)												// while the SS is held, the address is auto-decremented, thus multiple bytes can be read
@@ -22,5 +22,5 @@ static void __DownloadData(uint8_t *data_array)							// downloads voltage / cur
 
 lmp92064sd_t __lmp92064sd =												// instantiate lmp92064sd_t actual and set function pointers
 {
-	.DownloadData = &__DownloadData
+	.DownloadData = &__DownloadData										//
 };										

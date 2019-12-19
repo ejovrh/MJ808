@@ -8,8 +8,6 @@ button\button_types_actual.c
 
 cos\ad5160\ad5160.c
 
-cos\cap\cap.c
-
 cos\cos.c
 
 cos\lmp92064sd\lmp92064sd.c
@@ -17,6 +15,8 @@ cos\lmp92064sd\lmp92064sd.c
 cos\mcp23s08\mcp23s08.c
 
 cos\mcp73871\mcp73871.c
+
+cos\reg\reg.c
 
 cos\tps630701\tps630701.c
 
