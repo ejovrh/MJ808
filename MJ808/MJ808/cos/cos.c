@@ -21,16 +21,14 @@ typedef struct															// cos_t actual
 
 static __cos_t __Device __attribute__ ((section (".data")));			// preallocate __Device object in .data
 
-// executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
-// cases in this switch-case statement must be unique for all events on this device
-void _event_execution_function_cos(const uint8_t val)
+void _event_execution_function_cos(const uint8_t val)					// executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 {
+	// cases in this switch-case statement must be unique for all events on this device
 	val;
 	return;
 };
 
-// received MsgHandler object and passes
-void _PopulatedBusOperationCOS(message_handler_t * const in_msg)
+void _PopulatedBusOperationCOS(message_handler_t * const in_msg)		// received MsgHandler object and passes
 {
 	volatile can_msg_t *msg = in_msg->ReceiveMessage();					// CAN message object
 
@@ -40,12 +38,20 @@ void _PopulatedBusOperationCOS(message_handler_t * const in_msg)
 	return;
 };
 
-void _EmptyBusOperation(void)
+void _EmptyBusOperation(void)											// empty bus operation
 {
 	;
 };
 
-void cos_ctor()
+void _Cos6V0OutputEnabled(const uint8_t in_val) // enable/disable the Èos 5V0 output boost converter
+{
+	if (in_val)
+		gpio_set(MP3221_EN_pin);
+	else
+		gpio_clr(MP3221_EN_pin);
+};
+
+void cos_ctor()															// constructor for concrete class
 {
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_PWR_SRC | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A));	// call base class constructor & initialize own SID
@@ -57,7 +63,7 @@ void cos_ctor()
 	gpio_conf(COMPARATOR_IN_pin, INPUT, NOPULLUP);						// comparator pin as input and no pullups
 	gpio_conf(MCP2561_standby_pin, OUTPUT, LOW);						// MCP2561 standby - low (on), high (off)
 	gpio_conf(TPS630702_PWM_pin, OUTPUT, HIGH);							// Buck-Boost converter PWM input - low (off), high (on)
-	gpio_conf(MP3221_EN_pin, OUTPUT, LOW);								// 6V0 Boost converter enable pin - low (off), high (on)
+	gpio_conf(MP3221_EN_pin, OUTPUT, LOW);								// 5V0 Boost converter enable pin - low (off), high (on)
 	// state initialization of device-specific pins
 	}
 
@@ -75,11 +81,11 @@ void cos_ctor()
 	*/
 
 	TIFR |= _BV(ICF1);													// clear interrupt flag
-	TIMSK = ( _BV(ICIE1) | _BV(TOIE1) );								// Input Capture & Timer1 Overflow interrupt enable
+	//TIMSK = ( _BV(ICIE1) | _BV(TOIE1) );								// Input Capture & Timer1 Overflow interrupt enable
 	TCCR1B = ( _BV(WGM13) |												// TOP = ICR1, TOV1 set on BOTTOM
 			   _BV(ICNC1) |												// turn on comparator noise canceler
 			   _BV(ICES1) |												// capture on rising edge
-			   _BV(CS11)  );											// clkIO/8 (from pre-scaler), start timer
+			   _BV(CS11) );												// clkIO/8 (from pre-scaler), start timer
 
 	// timer/counter0 - 8bit - buck-boost PWM control
 	TCCR0A = ( _BV(COM0A1) |											// Clear OC1A/OC1B on Compare Match when up counting
@@ -101,7 +107,8 @@ void cos_ctor()
 	}
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationCOS;// implements device-specific operation depending on bus activity
-	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperation;		// implements device operation on emtpy bus
+	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperation;		// implements device operation on empty bus
+	__Device.public.Cos6V0OutputEnabled = &_Cos6V0OutputEnabled;				// enabled/disables the 5V0 Boost output controller
 
 	EventHandler->fpointer = &_event_execution_function_cos;			// implements event hander for this device
 
@@ -112,17 +119,18 @@ void cos_ctor()
 	// Cos device operational initialization
 	__Device.public.Reg->SetRegulatorMode(Delon);						// set regulator into Delon mode - we are very likely to start spinning slow
 	*(__Device.public.BuckBoost->PWM) = 0xFF;							// put Buck-Boost into PWM/PFM (auto) mode
-
-}
+	__Device.public.LiIonCharger->SetResistor(128);						// set resistor value to something
+	__Device.public.BuckBoost->GetValues(__Device.public.VoltageCurrentValuesArray);		// download voltage/current measurement into array
+};
 
 #if defined(COS_)														// all devices have the object name "Device", hence the preprocessor macro
-cos_t * const Device = &__Device.public ;								// set pointer to MsgHandler public part
+cos_t * const Device = &__Device.public;								// set pointer to MsgHandler public part
 #endif
 
 ISR(PCINT2_vect)														// pin change ISR (PD4) if port expander sees activity
 {
 	;
-}
+};
 
 ISR(TIMER1_CAPT_vect)													// timer1 input capture interrupt for comparator output
 {
@@ -134,9 +142,9 @@ ISR(TIMER1_CAPT_vect)													// timer1 input capture interrupt for comparat
 	//TODO - determine wheel freq. based on ICRs
 	__Device.public.ACFreq = 123;
 	sei();																// enable interrupts
-}
+};
 
 ISR(TIMER1_OVF_vect)													// timer1 overflow vector
 {
 	++__Device.__timer1_overflow;										// increment
-}
+};
