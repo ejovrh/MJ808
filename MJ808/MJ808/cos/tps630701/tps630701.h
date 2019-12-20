@@ -20,7 +20,7 @@
 typedef struct															// struct describing the Buck-Boost controller object
 {
 	volatile uint8_t *PWM;												// direct access to OCR SFR
-	void (* GetValues)(uint8_t *data_array);							// download current and voltage measurement into external container
+	void (* GetValues)(volatile uint8_t *data_array);					// download current and voltage measurement into external container
 } tps630701_t __attribute__((aligned(8)));
 
 tps630701_t *tps630701_ctor(void);										// initializes tps630701_t object

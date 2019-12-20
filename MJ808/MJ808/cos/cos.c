@@ -32,23 +32,38 @@ void _PopulatedBusOperationCOS(message_handler_t * const in_msg)		// received Ms
 {
 	volatile can_msg_t *msg = in_msg->ReceiveMessage();					// CAN message object
 
-	// TODO: handle some messages
+	//TODO - if clause is a dummy - implement proper command byte structure
+	if (msg->COMMAND == CMND_REPORT_STATUS)								// handle request for device statistics
+	{
+		__Device.public.BuckBoost->GetValues(__Device.public.OpParamArray);	// download voltage/current measurement into array
+		__Device.public.OpParamArray[MISC_STATUS_BITS] |= ( 0x1C & __Device.public.LiIonCharger->GetStatus());	// save charger/powerpath controller operating mode its into MISC_STATUS_BITS
+		__Device.public.OpParamArray[MISC_STATUS_BITS] |= ( 0xE0 & __Device.public.Reg->RegulatorMode);		// save rectifier operating mode bits into MISC_STATUS_BITS
 
-	msg->dlc;
+		//TODO - implement array as argument to send message and not copy by value as SendMessage currently is (see _SendMessage() in message.c)
+		in_msg->SendMessage(0xF1, __Device.public.OpParamArray, OP_PARAM_ARRAY_SIZE);		// foo request response
+	}
+
+	//TODO - if clause is a dummy - implement proper command byte structure
+	if (msg->COMMAND == (CMND_COS_SET_MODE | 0x0F))						// handle request for operating mode change
+		__Device.public.Reg->SetRegulatorMode(0x07 & msg->COMMAND);		// bit val
+
+	//TODO - if clause is a dummy - implement proper command byte structure
+	if (msg->COMMAND == (CMND_COS_SET_MODE | 0x07))						// handle request for operating mode change
+		__Device.public.BuckBoost->PWM = (msg->COMMAND | 0xf00);		// full byte val
+
+	//TODO - if clause is a dummy - implement proper command byte structure
+	if (msg->COMMAND == (CMND_COS_SET_MODE | 0x07))						// handle request for operating mode change
+		__Device.public.LiIonCharger->SetResistor(msg->COMMAND | 0xf00);// full byte val
+
 	return;
 };
 
-void _EmptyBusOperation(void)											// empty bus operation
+void _Cos6V0OutputEnabled(const uint8_t in_val)							// enable/disable the Èos 5V0 output boost converter, 0 - off, 1 - on
 {
-	;
-};
-
-void _Cos6V0OutputEnabled(const uint8_t in_val) // enable/disable the Èos 5V0 output boost converter
-{
-	if (in_val)
-		gpio_set(MP3221_EN_pin);
+	if (in_val)															// if non-zero
+		gpio_set(MP3221_EN_pin);										// turn on
 	else
-		gpio_clr(MP3221_EN_pin);
+		gpio_clr(MP3221_EN_pin);										// turn off
 };
 
 void cos_ctor()															// constructor for concrete class
@@ -106,21 +121,21 @@ void cos_ctor()															// constructor for concrete class
 	sei();
 	}
 
+	// __Device function pointers
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationCOS;// implements device-specific operation depending on bus activity
-	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperation;		// implements device operation on empty bus
-	__Device.public.Cos6V0OutputEnabled = &_Cos6V0OutputEnabled;				// enabled/disables the 5V0 Boost output controller
+	__Device.public.Cos6V0OutputEnabled = &_Cos6V0OutputEnabled;		// enabled/disables the 5V0 Boost output controller
 
 	EventHandler->fpointer = &_event_execution_function_cos;			// implements event hander for this device
 
+	// __Device core objects
 	__Device.public.Reg = reg_ctor();									// initializes reg_t object
 	__Device.public.BuckBoost = tps630701_ctor();						// initializes tps630701_t object
 	__Device.public.LiIonCharger = mcp73871_ctor();						// initializes mcp73871_t object
 
-	// Cos device operational initialization
+	// Èos __Device operational initialization on MCU power on
 	__Device.public.Reg->SetRegulatorMode(Delon);						// set regulator into Delon mode - we are very likely to start spinning slow
 	*(__Device.public.BuckBoost->PWM) = 0xFF;							// put Buck-Boost into PWM/PFM (auto) mode
 	__Device.public.LiIonCharger->SetResistor(128);						// set resistor value to something
-	__Device.public.BuckBoost->GetValues(__Device.public.VoltageCurrentValuesArray);		// download voltage/current measurement into array
 };
 
 #if defined(COS_)														// all devices have the object name "Device", hence the preprocessor macro
@@ -140,7 +155,7 @@ ISR(TIMER1_CAPT_vect)													// timer1 input capture interrupt for comparat
 	__Device.__ICR1.icrl1_high_byte = ICR1H;							// then Input Capture high byte
 
 	//TODO - determine wheel freq. based on ICRs
-	__Device.public.ACFreq = 123;
+	__Device.public.OpParamArray[ACFREQ] = 123;							// sets
 	sei();																// enable interrupts
 };
 

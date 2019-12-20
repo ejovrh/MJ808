@@ -22,6 +22,39 @@
 
 #define OCR_BUCK_BOOST OCR0A											// Output Compare Register for PWM of BuckBoost regulator
 
+#define OP_PARAM_ARRAY_SIZE		6										// size of Èos operational parameters uint8_t data array
+// uint8_t OpParamArray fields:
+#define TPS630701_IOUT_MSB		0										// LMP92064SD Datasheet p.16, COUT_DATA_MSB[7:0]
+#define TPS630701_IOUT_LSB		1										// LMP92064SD Datasheet p.16, COUT_DATA_MSB[7:0]
+#define TPS630701_UOUT_MSB		2										// LMP92064SD Datasheet p.16, COUT_DATA_MSB[7:0]
+#define TPS630701_UOUT_LSB		3										// LMP92064SD Datasheet p.16, COUT_DATA_MSB[7:0]
+#define TPS630701_PWM			4
+#define ACFREQ					5										// length of one Dynamo AC period in n cycles, as determined by comparator and measured by input capture
+#define MISC_STATUS_BITS		6										// byte containing misc. Èos device status bits: rectifier mode, charger mode, 6V0 out
+// field 7 (which would be a full byte) is left out because of CAN msg limitations: payload max. 8 bytes, COMMAND takes one --> only 7
+
+// OpParamArray[MISC_STATUS_BITS] bit field:
+#define MISC_STATUS_BITS_FOO				7							// free for future use
+#define MISC_STATUS_BITS_MCP73871_STAT2		6							// MCP73871 LiIon Charger/Powerpath controller mode bits
+#define MISC_STATUS_BITS_MCP73871_STAT1		5							// MCP73871 LiIon Charger/Powerpath controller mode bits
+#define MISC_STATUS_BITS_MCP73871_PG		4							// MCP73871 LiIon Charger/Powerpath controller mode bits
+
+#define MISC_STATUS_BITS_MP3221_ENABLED		3							// MP3221 6V0 out enabled true/false
+#define MISC_STATUS_BITS_AC2				2							// AC rectifier operational mode bits:
+#define MISC_STATUS_BITS_AC1				1							// TODO - define rectifier mode bits
+#define MISC_STATUS_BITS_AC0				0							//
+
+
+/*
+#define COS_6V0_OUT_ENABLE			3									// Èos output enable yes/no
+#define COS_CONFIG_AC_REC2			2									// AC rectifier opmode:
+#define COS_CONFIG_AC_REC1			1									// 00 - , 01 - , 10 - , 11 -
+#define COS_CONFIG_AC_REC0			0									//
+
+#define COS_CONFIG_BUCKBOOST_PWM	2									// PWM value for MCP630701
+#define COS_CHARGE_CURRENT			4									// MCP73871 charge current control resistor
+*/
+
 typedef struct															// struct describing devices on MJ808
 {
 	void (* Cos6V0OutputEnabled)(const uint8_t in_val);					// enable/disable the Èos 5V0 output boost converter
@@ -31,8 +64,7 @@ typedef struct															// struct describing devices on MJ808
 	mcp73871_t *LiIonCharger;											// LiIon Charger & Powerpath controller, powered by 5V0, powers downstream with LiIon cell voltage (2.8-4.2V)
 	reg_t *Reg;															// AC regulator: Graetz bridge, tuning capacitors on/off, Delon voltage doubler on/off
 
-	volatile uint8_t ACFreq;											// length of one Dynamo AC period in n cycles, as determined by comparator and measured by input capture
-	uint8_t VoltageCurrentValuesArray[4];								//
+	volatile uint8_t OpParamArray[OP_PARAM_ARRAY_SIZE];					//
 } cos_t;
 
 void cos_ctor();														// declare constructor for concrete class

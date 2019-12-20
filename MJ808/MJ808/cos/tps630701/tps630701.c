@@ -9,7 +9,7 @@ typedef struct															// tps630701_t actual
 
 static __tps630701_t __TPS630701 __attribute__ ((section (".data")));	// declare tps630701_t actual and put into .data
 
-void _GetValues(uint8_t *in_data_array)									// download current and voltage measurement into external container
+void _GetValues(volatile uint8_t *in_data_array)						// download current and voltage measurement into external container
 {
 	__TPS630701.__lmp92064sd->DownloadData(in_data_array);
 };
