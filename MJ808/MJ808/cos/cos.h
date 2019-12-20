@@ -15,7 +15,7 @@
 
 #define	MCP2561_standby_pin		B,	3,	3								// MCP2561 standby, controlled in mcp2515.c
 
-#define	MP3221_EN_pin			D,	2,	2								// 5V0 output stage boost converter enable pin, pulled low
+#define	MP3221_EN_pin			D,	2,	2								// Èos 5V0 output stage boost converter enable pin, pulled low
 #define INT_MCP2515_pin			D,	3,	3								// MCP2515 CAN Controller interrupt pin
 #define INT_MCP23S08_pin		D,	4,	4								// MCP23S08 Port Expander Interrupt pin
 // definitions of device/PCB layout-dependent hardware pins
@@ -24,11 +24,15 @@
 
 typedef struct															// struct describing devices on MJ808
 {
+	void (* Cos6V0OutputEnabled)(const uint8_t in_val);					// enable/disable the Èos 5V0 output boost converter
+
 	mj8x8_t *mj8x8;														// pointer to the base class
 	tps630701_t *BuckBoost;												// 5V0 out Buck-Boost converter, powered by rectified dynamo, powers LiIon Charger
 	mcp73871_t *LiIonCharger;											// LiIon Charger & Powerpath controller, powered by 5V0, powers downstream with LiIon cell voltage (2.8-4.2V)
 	reg_t *Reg;															// AC regulator: Graetz bridge, tuning capacitors on/off, Delon voltage doubler on/off
+
 	volatile uint8_t ACFreq;											// length of one Dynamo AC period in n cycles, as determined by comparator and measured by input capture
+	uint8_t VoltageCurrentValuesArray[4];								//
 } cos_t;
 
 void cos_ctor();														// declare constructor for concrete class
