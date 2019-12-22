@@ -11,7 +11,7 @@
 #define	COMPARATOR_REF_pin		B,	1,	1								// Comparator reference pin = GND
 
 // TODO: use pullup resistor?
-#define TPS630702_PWM_pin		B,	2,	2								// TPS630702_PWM PWM Control Pin (PS/SYNC)
+#define TPS630701_PWM_pin		B,	2,	2								// TPS630701_PWM PWM Control Pin (PS/SYNC)
 
 #define	MCP2561_standby_pin		B,	3,	3								// MCP2561 standby, controlled in mcp2515.c
 
@@ -44,6 +44,9 @@
 #define MISC_STATUS_BITS_AC1				1							// TODO - define rectifier mode bits
 #define MISC_STATUS_BITS_AC0				0							//
 
+#define MASK_MISC_STATUS_BITS_MCP73871			0x70
+#define MASK_MISC_STATUS_BITS_MP3221_ENABLED	0x08
+#define MASK_MISC_STATUS_BITS_AC				0x07
 
 /*
 #define COS_6V0_OUT_ENABLE			3									// Èos output enable yes/no

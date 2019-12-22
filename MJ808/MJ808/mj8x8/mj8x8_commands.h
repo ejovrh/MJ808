@@ -142,6 +142,11 @@
 			#define BRAKE_LIGHT 0x03									// brake light (mj818)
 	#define DEV_SENSOR 0x0C												// sensor device
 #define CMND_FW_FLASH 0x70												// command for flashing firmware
+
+#define CMND_COS_SET_MODE 0xE0											// command to set Èos into some operating mode
+
+#define CMND_REPORT_STATUS 0xFF											// command for a device to report status
+
 #define MSG_TIME_SYNC 0x80												// time synchronization message
 
 #define MSG_BUTTON_EVENT 0x90											// message for button events
