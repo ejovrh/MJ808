@@ -13,7 +13,7 @@ enum RegulatorOperatesAs												// enum of AC regulator operation: Graetz br
 typedef struct 															// reg_t struct describing the AC regulator as a whole
 {
 	uint8_t RegulatorMode;												// regulator operating mode data member
-	void (* SetRegulatorMode)(const uint8_t in_cap);					// sets regulator operating mode
+	void (* SetRegulatorMode)(const uint8_t in_mode);					// sets regulator operating mode
 } reg_t __attribute__((aligned(8)));
 
 reg_t *reg_ctor();														// initializes reg_t object

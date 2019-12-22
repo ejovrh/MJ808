@@ -10,10 +10,11 @@ typedef struct															// cap_t actual
 
 static __reg_t __REG __attribute__ ((section (".data")));				// declare reg_t actual and put into .data
 
-void _SetRegulatorMode(const uint8_t in_val)							// sets the regulator to desired work mode: pure Graetz, Delon or tuning caps
+// TODO - define argument format for regulator operation modes
+void _SetRegulatorMode(const uint8_t in_mode)							// sets the regulator to desired work mode: pure Graetz, Delon or tuning caps
 {
-	__REG.public.RegulatorMode = in_val;								// set regulator mode data member
-	__REG.__mcp23s08->SetFoo(in_val);									// sets the regulator to work as indicated by function argument by modification on the port expander
+	__REG.public.RegulatorMode = in_mode;								// set regulator mode data member
+	__REG.__mcp23s08->SetFoo(in_mode);									// sets the regulator to work as indicated by function argument by modification on the port expander
 };
 
 reg_t *reg_ctor()														// initializes reg_t object

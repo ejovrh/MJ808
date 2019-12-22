@@ -54,6 +54,7 @@ static void _Heartbeat(message_handler_t * const msg)
 __mj8x8_t __MJ8x8 =														// instantiate mj8x8_t actual and set function pointers
 {
 	.public.HeartBeat = &_Heartbeat,									// implement device-agnostic default behavior - heartbeat
+	.public.HeartbeatPeriodic = &DoNothing,								// every invocation for the heartbeat ISR runs this, implemented by derived classes
 	.public.EmptyBusOperation = &DoNothing,								// implement device-agnostic default behavior - do nothing, usually an override happens
 	.__FlagDoHeartbeat = 1,												// start with discovery mode
 	.__FlagDoDefaultOperation = 0
@@ -116,7 +117,9 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka
 	WDTCR |= _BV(WDIE);													// setting the bit prevents a reset when the timer expires
 	//Device.mj8x8->mcu->wdtcr |= _BV(WDIE);
 
-	__MJ8x8.public.HeartBeat(MsgHandler);
+	__MJ8x8.public.HeartBeat(MsgHandler);								// execute the heartbeat
+
+	__MJ8x8.public.HeartbeatPeriodic();									// execute something heatbeat-ISR periodic, implemented by derived classes
 
 	if ( (! MsgHandler->Devices) && (__MJ8x8.__FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
 		__MJ8x8.public.EmptyBusOperation();								// perform the device-specific default operation (is overridden in specific device constructor)
