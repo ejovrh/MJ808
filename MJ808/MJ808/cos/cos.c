@@ -9,29 +9,17 @@ typedef struct															// cos_t actual
 {
 	cos_t public;														// public struct
 
-	volatile struct
-	{
-		volatile uint8_t icrl1_low_byte;
-		volatile uint8_t icrl1_high_byte;
-	} __ICR1;															// Input Capture Register, gets filled by ISR of ICR
-
-	volatile uint8_t __timer1_overflow;									// private timer1 overflow counter, gets incremented by TIMER1_OVF_vect ISR
-
+	volatile uint16_t __ICR1;											// Input Capture Register, gets filled by ISR of ICR
 } __cos_t;
 
 static __cos_t __Device __attribute__ ((section (".data")));			// preallocate __Device object in .data
 
-void _event_execution_function_cos(const uint8_t val)					// executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
-{
-	// cases in this switch-case statement must be unique for all events on this device
-	val;
-	return;
-};
-
 void _HeartbeatPeriodicCos(void)										// ran by every watchdog ISR, period should be 250ms
 {
+	__Device.public.ACfreq = (125000.0 / __Device.__ICR1);				// convert cycle count to frequency
+
 	/* on this device the 250ms periodic call is responsible for monitoring the dynamo-generated AC voltage and for adjusting Èos operational parameters.
-	* operational parameters are:
+	*  operational parameters are:
 	*	- wheel speed (expressed via __Device.public.OpParamArray[ACFREQ])
 	*		this parameter is the basis for everything: Vout with/without no load depends on it, Pmax depends on it
 	*	- rectifier operational mode: Delon voltage doubler on/off, Graetz rectifier on/ff, Tuning capacitors on/off
@@ -42,29 +30,37 @@ void _HeartbeatPeriodicCos(void)										// ran by every watchdog ISR, period s
 	*	- MP3221 6V0 output for outside system load
 	*
 	*	operational parameters are stored in the uint8_t OpParamArray[OP_PARAM_ARRAY_SIZE] array - see cos.h
-	*
-	*
 	*/
 
-	if (__Device.public.OpParamArray[ACFREQ] < 25)						// slow speed - Delon voltage doubler rectifier
+	if (__Device.public.ACfreq < 5.0)									// slow speed - Delon voltage doubler rectifier
 		__Device.public.Reg->SetRegulatorMode(__Device.public.Reg->RegulatorMode & Delon);
 
-	if (__Device.public.OpParamArray[ACFREQ] >= 25)						// higher speed - Graetz rectifier
+	if (__Device.public.ACfreq >= 5.0)									// higher speed - Graetz rectifier
 		__Device.public.Reg->SetRegulatorMode(__Device.public.Reg->RegulatorMode & Graetz);
 
-	if (__Device.public.OpParamArray[ACFREQ] >= 50)						// even higher speed - Graetz & tuning caps, increase load
+	if (__Device.public.ACfreq >= 18.0)									// even higher speed - Graetz & tuning caps, increase load
 	{
 		__Device.public.Reg->SetRegulatorMode(__Device.public.Reg->RegulatorMode & ( Graetz | Tuning) );
 		__Device.public.LiIonCharger->SetResistor(128);
 		*(__Device.public.BuckBoost->PWM) = 0xE0;
 	}
 
-	if (__Device.public.OpParamArray[ACFREQ] >= 100)					// even more higher speed - Graetz and even higher load
+	if (__Device.public.ACfreq >= 45.0)									// even more higher speed - Graetz and even higher load
 	{
 		__Device.public.Reg->SetRegulatorMode(__Device.public.Reg->RegulatorMode & Graetz);
 		__Device.public.LiIonCharger->SetResistor(255);
 		*(__Device.public.BuckBoost->PWM) = 0xE0;
 	}
+
+	// TODO - define message format
+	// TODO - try to average over 250ms
+	__Device.public.BuckBoost->GetValues(__Device.public.OpParamArray);	// download voltage/current measurement into array
+	__Device.public.OpParamArray[MISC_STATUS_BITS] |= ( 0x1C & __Device.public.LiIonCharger->GetStatus());	// save charger/Powerpath controller operating mode its into MISC_STATUS_BITS
+	__Device.public.OpParamArray[MISC_STATUS_BITS] |= ( 0xE0 & __Device.public.Reg->RegulatorMode);			// save rectifier operating mode bits into MISC_STATUS_BITS
+
+	// TODO - implement array as argument to send message and not copy by value as SendMessage currently is (see _SendMessage() in message.c)
+	MsgHandler->SendMessage(0x01, *__Device.public.OpParamArray, 7);	// send out operational parameters to the bus
+	MsgHandler->SendMessage(0x01, __Device.public.ACfreq, 7);			// send out operational parameters to the bus
 };
 
 void _PopulatedBusOperationCOS(message_handler_t * const in_msg)		// received MsgHandler object and passes
@@ -72,29 +68,16 @@ void _PopulatedBusOperationCOS(message_handler_t * const in_msg)		// received Ms
 	volatile can_msg_t *msg = in_msg->ReceiveMessage();					// CAN message object
 
 	//TODO - if clause is a dummy - implement proper command byte structure
-	if (msg->COMMAND == CMND_REPORT_STATUS)								// handle request for device statistics
-	{
-		__Device.public.BuckBoost->GetValues(__Device.public.OpParamArray);	// download voltage/current measurement into array
-		__Device.public.OpParamArray[MISC_STATUS_BITS] |= ( 0x1C & __Device.public.LiIonCharger->GetStatus());	// save charger/powerpath controller operating mode its into MISC_STATUS_BITS
-		__Device.public.OpParamArray[MISC_STATUS_BITS] |= ( 0xE0 & __Device.public.Reg->RegulatorMode);			// save rectifier operating mode bits into MISC_STATUS_BITS
-
-		//TODO - implement array as argument to send message and not copy by value as SendMessage currently is (see _SendMessage() in message.c)
-		in_msg->SendMessage(0xF1, __Device.public.OpParamArray, OP_PARAM_ARRAY_SIZE);		// foo request response
-	}
-
-	//TODO - if clause is a dummy - implement proper command byte structure
 	if (msg->COMMAND == (CMND_COS_SET_MODE | 0x0F))						// handle request for operating mode change
 		__Device.public.Reg->SetRegulatorMode(0x07 & msg->COMMAND);		// bit val
 
 	//TODO - if clause is a dummy - implement proper command byte structure
 	if (msg->COMMAND == (CMND_COS_SET_MODE | 0x07))						// handle request for operating mode change
-		__Device.public.BuckBoost->PWM = (msg->COMMAND | 0xf00);		// full byte val
+		*(__Device.public.BuckBoost->PWM) = (msg->COMMAND | 0xf00);		// full byte val
 
 	//TODO - if clause is a dummy - implement proper command byte structure
 	if (msg->COMMAND == (CMND_COS_SET_MODE | 0x07))						// handle request for operating mode change
 		__Device.public.LiIonCharger->SetResistor(msg->COMMAND | 0xf00);// full byte val
-
-	return;
 };
 
 void _Cos6V0OutputEnabled(const uint8_t in_val)							// enable/disable the Èos 5V0 output boost converter, 0 - off, 1 - on
@@ -125,19 +108,20 @@ void cos_ctor()															// constructor for concrete class
 	{
 	cli();
 
+	DIDR = (_BV(AIN1D) | _BV(AIN0D) );									// disable digital input buffer on comparator pins
 	ACSR &= ~_BV(ACD);													// clear bit - enable comparator
-	ACSR |= ( _BV(ACIC) | 												// enable input capture function in timer1, needs ICIE1 in TIMSK
+	ACSR |= ( _BV(ACIC) |												// enable input capture function in timer1, needs ICIE1 in TIMSK
 			(_BV(ACIS1) | _BV(ACIS0)) );								// rising edge
 
 	// timer/counter1 - 16bit - frequency measurement by means of zero cross detection of dynamo AC voltage
 	/*
 
 	*/
-	TIMSK = ( _BV(ICIE1) | _BV(TOIE1) );								// Input Capture & Timer1 Overflow interrupt enable
+	TIMSK = ( _BV(ICIE1) );												// Input Capture interrupt enable
+
 	TCCR1B = ( _BV(ICNC1) |												// turn on comparator noise canceler
 			   _BV(ICES1) |												// capture on rising edge
-			   _BV(WGM12) |												// TOP = ICR1, TOV1 set on BOTTOM
-			   _BV(CS12) | _BV(CS10) );									// clkIO/1024 (from pre-scaler), start timer
+			   _BV(CS10) );												// clkIO/1 (from pre-scaler), start timer
 
 	// timer/counter0 - 8bit - buck-boost PWM control
 	TCCR0A = ( _BV(COM0A1) |											// Clear OC1A/OC1B on Compare Match when up counting
@@ -159,11 +143,9 @@ void cos_ctor()															// constructor for concrete class
 	}
 
 	// __Device function pointers
-	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationCOS;// implements device-specific operation depending on bus activity
+	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationCOS;	// implements device-specific operation depending on bus activity
 	__Device.public.mj8x8->HeartbeatPeriodic = &_HeartbeatPeriodicCos;	// override mj8x8_t's own Heartbeat() - the purpose is to make use of the (periodic) watchdog timer
 	__Device.public.Cos6V0OutputEnabled = &_Cos6V0OutputEnabled;		// enabled/disables the 5V0 Boost output controller
-
-	EventHandler->fpointer = &_event_execution_function_cos;			// implements event hander for this device
 
 	// __Device core objects
 	__Device.public.Reg = reg_ctor();									// initializes reg_t object
@@ -182,22 +164,15 @@ cos_t * const Device = &__Device.public;								// set pointer to MsgHandler pub
 
 ISR(PCINT2_vect)														// pin change ISR (PD4) if port expander sees activity
 {
-	;
+	__Device.public.OpParamArray[MISC_STATUS_BITS] = ( MASK_MISC_STATUS_BITS_MCP73871 & __Device.public.LiIonCharger->GetStatus());
 };
 
-ISR(TIMER1_CAPT_vect)													// timer1 input capture interrupt for comparator output
+ISR(TIMER1_CAPT_vect)													// timer1 input capture interrupt for comparator output - once per AC period
 {
 	cli();																// disable interrupts
 
-	__Device.__ICR1.icrl1_low_byte = ICR1L;								// first read in Input Capture low byte
-	__Device.__ICR1.icrl1_high_byte = ICR1H;							// then Input Capture high byte
+	__Device.__ICR1 = ICR1;												// length of one Dynamo AC period in n cycles, as determined by comparator and measured by input capture
+	TCNT1 = 0;															// reset timer1 counter
 
-	//TODO - determine wheel freq. based on ICRs
-	__Device.public.OpParamArray[ACFREQ] = 123;							// sets
 	sei();																// enable interrupts
-};
-
-ISR(TIMER1_OVF_vect)													// timer1 overflow vector
-{
-	++__Device.__timer1_overflow;										// increment
 };

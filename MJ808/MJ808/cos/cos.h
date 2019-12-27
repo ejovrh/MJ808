@@ -9,10 +9,7 @@
 // definitions of device/PCB layout-dependent hardware pins
 #define	COMPARATOR_IN_pin		B,	0,	0								// Comparator input pin - zero cross from dynamo
 #define	COMPARATOR_REF_pin		B,	1,	1								// Comparator reference pin = GND
-
-// TODO: use pullup resistor?
-#define TPS630701_PWM_pin		B,	2,	2								// TPS630701_PWM PWM Control Pin (PS/SYNC)
-
+#define TPS630701_PWM_pin		B,	2,	2								// TPS630701_PWM PWM Control Pin (PS/SYNC) // TODO: use pullup resistor?
 #define	MCP2561_standby_pin		B,	3,	3								// MCP2561 standby, controlled in mcp2515.c
 
 #define	MP3221_EN_pin			D,	2,	2								// Èos 5V0 output stage boost converter enable pin, pulled low
@@ -28,9 +25,8 @@
 #define TPS630701_IOUT_LSB		1										// LMP92064SD Datasheet p.16, COUT_DATA_MSB[7:0]
 #define TPS630701_UOUT_MSB		2										// LMP92064SD Datasheet p.16, COUT_DATA_MSB[7:0]
 #define TPS630701_UOUT_LSB		3										// LMP92064SD Datasheet p.16, COUT_DATA_MSB[7:0]
-#define TPS630701_PWM			4
-#define ACFREQ					5										// length of one Dynamo AC period in n cycles, as determined by comparator and measured by input capture
-#define MISC_STATUS_BITS		6										// byte containing misc. Èos device status bits: rectifier mode, charger mode, 6V0 out
+#define TPS630701_PWM			4										// Buck-Boost PWM input on PS/SYNC
+#define MISC_STATUS_BITS		5										// byte containing misc. Èos device status bits: rectifier mode, charger mode, 6V0 out
 // field 7 (which would be a full byte) is left out because of CAN msg limitations: payload max. 8 bytes, COMMAND takes one --> only 7
 
 // OpParamArray[MISC_STATUS_BITS] bit field:
@@ -38,7 +34,6 @@
 #define MISC_STATUS_BITS_MCP73871_STAT2		6							// MCP73871 LiIon Charger/Powerpath controller mode bits
 #define MISC_STATUS_BITS_MCP73871_STAT1		5							// MCP73871 LiIon Charger/Powerpath controller mode bits
 #define MISC_STATUS_BITS_MCP73871_PG		4							// MCP73871 LiIon Charger/Powerpath controller mode bits
-
 #define MISC_STATUS_BITS_MP3221_ENABLED		3							// MP3221 6V0 out enabled true/false
 #define MISC_STATUS_BITS_AC2				2							// AC rectifier operational mode bits:
 #define MISC_STATUS_BITS_AC1				1							// TODO - define rectifier mode bits
@@ -67,7 +62,8 @@ typedef struct															// struct describing devices on MJ808
 	mcp73871_t *LiIonCharger;											// LiIon Charger & Powerpath controller, powered by 5V0, powers downstream with LiIon cell voltage (2.8-4.2V)
 	reg_t *Reg;															// AC regulator: Graetz bridge, tuning capacitors on/off, Delon voltage doubler on/off
 
-	volatile uint8_t OpParamArray[OP_PARAM_ARRAY_SIZE];					//
+	uint8_t OpParamArray[OP_PARAM_ARRAY_SIZE];					//
+	float ACfreq;
 } cos_t;
 
 void cos_ctor();														// declare constructor for concrete class

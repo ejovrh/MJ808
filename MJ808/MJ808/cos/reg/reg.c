@@ -1,4 +1,3 @@
-
 #include "cos\reg\reg.h"
 #include "cos\mcp23s08\mcp23s08.h"										// SPI port expander
 

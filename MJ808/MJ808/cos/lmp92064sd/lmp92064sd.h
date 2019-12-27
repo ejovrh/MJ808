@@ -3,7 +3,6 @@
 
 #include <inttypes.h>
 
-
 #define LMP92064SD_CONFIG_A		0x0000									// RW, default 0x18, datasheet p.13
 #define LMP92064SD_CONFIG_A_RESET				0x07					//	RW
 #define LMP92064SD_CONFIG_A_DDIR				6						//	RO
