@@ -28,7 +28,7 @@ typedef struct															// "base class" struct for mj8x8 devices
 	ATtiny4313_t *mcu;													// pointer to MCU structure
 
 	void (* const HeartBeat)(message_handler_t * const msg);			// default periodic heartbeat for all devices
-	void (* HeartbeatPeriodic)(void);								// ran by Heartbeat - meant to be overridden by derived classes if needed
+	void (* HeartbeatPeriodic)(void);									// ran by Heartbeat - meant to be overridden by derived classes if needed
 	void (*EmptyBusOperation)(void);									// device's default operation on empty bus, implemented in derived class
 	void (*PopulatedBusOperation)(message_handler_t * const in_msg);	// device operation on populated bus, executed by incoming msg ISR; operates by means of MsgHandler object
 } mj8x8_t;
