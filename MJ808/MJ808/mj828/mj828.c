@@ -2,8 +2,8 @@
 
 #include "mj828\mj828.h"
 
-#include "mj828\mj828_led.c"													// concrete device-specific LED functions
-#include "mj828\mj828_button.c"												// concrete device-specific button functions
+#include "mj828\mj828_led.c"											// concrete device-specific LED functions
+#include "mj828\mj828_button.c"											// concrete device-specific button functions
 
 typedef struct															// mj828_t actual
 {
@@ -52,7 +52,7 @@ void _event_execution_function_mj828(uint8_t val)
 			}
 		break;
 
-		//case 0x08:														//
+		//case 0x08:													//
 			//// next case
 			//EventHandler->UnSetEvent(val);
 		//break;
