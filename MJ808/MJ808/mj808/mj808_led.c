@@ -4,10 +4,10 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-#include "mj808.h"
-#include "led.h"
+#include "mj808\mj808.h"
+#include "led\led.h"
 
-#include "composite_led_actual.c"										// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
+#include "led\composite_led_actual.c"										// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
 
 static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 

@@ -1,6 +1,6 @@
-#include "mj808.h"
-#include "mj808_led.c"													// concrete device-specific LED functions
-#include "mj808_button.c"												// concrete device-specific button functions
+#include "mj808\mj808.h"
+#include "mj808\mj808_led.c"													// concrete device-specific LED functions
+#include "mj808\mj808_button.c"												// concrete device-specific button functions
 
 typedef struct															// mj808_t actual
 {

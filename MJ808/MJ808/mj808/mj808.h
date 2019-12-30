@@ -1,9 +1,9 @@
 #ifndef MJ808_H_
 #define MJ808_H_
 
-#include "mj8x8.h"
-#include "led.h"
-#include "button.h"
+#include "mj8x8\mj8x8.h"
+#include "led\led.h"
+#include "button\button.h"
 
 // definitions of device/PCB layout-dependent hardware pins
 #define	GREEN_LED_pin			D,	0,	0								// green LED

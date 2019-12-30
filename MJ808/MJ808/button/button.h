@@ -3,7 +3,7 @@
 
 #include <inttypes.h>
 
-#include "event.h"
+#include "event\event.h"
 
 #define BUTTON_MIN_PRESS_TIME 20										// number times 25ms duration: 500ms
 #define BUTTON_MAX_PRESS_TIME 120										// number times 25ms duration: 3s

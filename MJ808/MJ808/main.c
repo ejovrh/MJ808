@@ -4,13 +4,13 @@
 #include "main.h"
 
 #if defined(MJ808_)														// mj808 header include
-#include "mj808.h"
+#include "mj808\mj808.h"
 #endif
 #if defined(MJ818_)														// mj818 header include
-#include "mj818.h"
+#include "mj818\mj818.h"
 #endif
 #if defined(MJ828_)														// mj828 header include
-#include "mj828.h"
+#include "mj828\mj828.h"
 #endif
 
 // FIXME - get rid of this here

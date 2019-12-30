@@ -1,7 +1,7 @@
 #include <inttypes.h>
 
-#include "message.h"
-#include "mj8x8.h"
+#include "message\message.h"
+#include "mj8x8\mj8x8.h"
 
 typedef struct															// message_handler_t actual
 {

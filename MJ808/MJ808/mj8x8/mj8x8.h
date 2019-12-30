@@ -5,13 +5,13 @@
 
 #include "gpio.h"														// macros for pin definitions
 
-#include "attiny4313.h"
-#include "mcp2515.h"
+#include "mj8x8\attiny4313.h"
+#include "mj8x8\mcp2515.h"
 
-#include "message.h"
-#include "event.h"
+#include "message\message.h"
+#include "event\event.h"
 
-#include "mj8x8_commands.h"
+#include "mj8x8\mj8x8_commands.h"
 
 // definitions of device/PCB layout-independent hardware pins
 #define SPI_SS_MCP2515_pin		B,	4,	4								// SPI - SS
