@@ -6,6 +6,20 @@ button\button.c
 
 button\button_types_actual.c
 
+cos\ad5160\ad5160.c
+
+cos\cos.c
+
+cos\lmp92064sd\lmp92064sd.c
+
+cos\mcp23s08\mcp23s08.c
+
+cos\mcp73871\mcp73871.c
+
+cos\reg\reg.c
+
+cos\tps630701\tps630701.c
+
 event\event.c
 
 led\composite_led_actual.c
@@ -38,5 +52,5 @@ mj8x8\mcp2515.c
 
 mj8x8\mj8x8.c
 
-mj8x8\uci_spi.c
+uci_spi.c
 

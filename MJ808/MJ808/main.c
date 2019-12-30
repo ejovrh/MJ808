@@ -12,6 +12,12 @@
 #if defined(MJ828_)														// mj828 header include
 #include "mj828\mj828.h"
 #endif
+#if defined(COS_)														// Èos header include
+#include "cos\cos.h"
+#endif
+#if defined(LU_)														// logic unit header include
+#include "lu\lu.h"
+#endif
 
 // FIXME - get rid of this here
 	void helper_handle_rx(void)											// handles incoming message interrupts
@@ -33,6 +39,12 @@ int main(void)
 	#endif
 	#if defined(MJ828_)													// MJ828 - call derived class constructor and tie in base class
 	mj828_ctor();
+	#endif
+	#if defined(COS_)													// Èos - call derived class constructor and tie in base class
+	cos_ctor();
+	#endif
+	#if defined(LU_)													// LU - call derived class constructor and tie in base class
+	lu_ctor();
 	#endif
 
 	message_handler_ctor(Device->mj8x8->can);							// call message handler constructor

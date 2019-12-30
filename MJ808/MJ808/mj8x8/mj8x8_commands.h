@@ -68,8 +68,8 @@
 	#define DEV_0D 3													//	4th logic unit
 		#define MJ828 3													// dashboard
 		#define DASHBOARD 3
-	#define DEV_1A 4													//	dynamo1
-		#define DYN1 4
+	#define DEV_1A 4													//	dynamo1 - Èos
+		#define COS 4
 	#define DEV_1B 5 													//	dynamo2
 		#define DYN2 5
 	#define DEV_1C 6 													//	battery
@@ -142,6 +142,11 @@
 			#define BRAKE_LIGHT 0x03									// brake light (mj818)
 	#define DEV_SENSOR 0x0C												// sensor device
 #define CMND_FW_FLASH 0x70												// command for flashing firmware
+
+#define CMND_COS_SET_MODE 0xE0											// command to set Èos into some operating mode
+
+#define CMND_REPORT_STATUS 0xFF											// command for a device to report status
+
 #define MSG_TIME_SYNC 0x80												// time synchronization message
 
 #define MSG_BUTTON_EVENT 0x90											// message for button events
