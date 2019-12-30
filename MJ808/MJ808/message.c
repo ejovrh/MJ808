@@ -6,9 +6,9 @@
 typedef struct															// message_handler_t actual
 {
 	message_handler_t public;											// public struct
+	// TODO - convert to pointer
 	can_msg_t __msg;													// private - CAN message object
 	can_t *__can;														// private - pointer to can_t struct
-	uint16_t __devices;													// indicator of devices discovered, 16 in total; B0 - 1st device (0A), B1 - 2nd device (0B), ..., B15 - 16th device (3D)
 } __message_handler_t;
 
 extern __message_handler_t __MsgHandler;								// declare message_handler_t actual
@@ -16,9 +16,6 @@ extern __message_handler_t __MsgHandler;								// declare message_handler_t act
 // loads outbound CAN message into local CAN IC and asks it to transmit it onto the bus
 void _SendMessage(const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
 {
-	if (__MsgHandler.__can->in_sleep)									// if the CAN infra. is sleeping
-		__MsgHandler.__can->Sleep(__MsgHandler.__can, 0);				// wake it up
-
 	__MsgHandler.__msg.sidh = __MsgHandler.__can->own_sidh;
 	__MsgHandler.__msg.sidl = __MsgHandler.__can->own_sidl;
 
@@ -29,6 +26,8 @@ void _SendMessage(const uint8_t in_command, const uint8_t in_argument, const uin
 	__MsgHandler.__msg.ARGUMENT = in_argument;							// set argument into message
 	__MsgHandler.__msg.dlc = in_len;									// set DLC
 
+	// TODO - move sleep wakeup into _mcp2515_can_msg_send()
+	__MsgHandler.__can->Sleep(0);										// attempt to wake it up
 	__MsgHandler.__can->RequestToSend(&__MsgHandler.__msg);				// load message into TX buffer and request to send
 };
 
@@ -37,8 +36,7 @@ volatile can_msg_t *_ReceiveMessage(void)
 {
 	__MsgHandler.__can->FetchMessage(&__MsgHandler.__msg);				// fetch the message from some RX buffer into RAM
 	// FIXME - 1st LU doesn't always get listed in devices.All -- very likely the root cause in the quick'n'dirty arduino LU
-	if (__MsgHandler.__msg.sidh & BROADCAST)							// if we get a broadcast message (aka. heartbeat)
-		__MsgHandler.public.devices |= ( 1 << ( (__MsgHandler.__msg.sidh >> 2) & 0x0F ) );// populate devices in canbus_t struct so that we know who else is on the bus
+	__MsgHandler.public.Devices |= ( 1 << ( (__MsgHandler.__msg.sidh >> 2) & 0x0F ) );// populate devices in canbus_t struct so that we know who else is on the bus
 
 	return &__MsgHandler.__msg;											// return pointer to it to someone who will make use of it
 };
@@ -52,7 +50,7 @@ __message_handler_t __MsgHandler =										// instantiate message_handler_t act
 void message_handler_ctor(can_t * const in_can)
 {
 	__MsgHandler.__can = in_can;										// save address of can_t struct in private data member
-	__MsgHandler.public.devices = 0x0000;
+	__MsgHandler.public.Devices = 0x0000;								// default state is empty bus
 };
 
 message_handler_t * const MsgHandler = &__MsgHandler.public ;			// set pointer to MsgHandler public part

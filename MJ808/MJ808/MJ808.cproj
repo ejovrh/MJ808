@@ -71,41 +71,41 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
       <AvrGcc>
-  <avrgcc.common.Device>-mmcu=attiny4313 -B "%24(PackRepoDir)\Atmel\ATtiny_DFP\1.3.229\gcc\dev\attiny4313"</avrgcc.common.Device>
-  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
-  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
-  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
-  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
-  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
-  <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
-  <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
-  <avrgcc.compiler.symbols.DefSymbols>
-    <ListValues>
-      <Value>NDEBUG</Value>
-      <Value>F_CPU=8000000UL</Value>
-      <Value>MJ808_</Value>
-    </ListValues>
-  </avrgcc.compiler.symbols.DefSymbols>
-  <avrgcc.compiler.directories.IncludePaths>
-    <ListValues>
-      <Value>%24(PackRepoDir)\Atmel\ATtiny_DFP\1.3.229\include</Value>
-    </ListValues>
-  </avrgcc.compiler.directories.IncludePaths>
-  <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
-  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
-  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
-  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
-  <avrgcc.linker.libraries.Libraries>
-    <ListValues>
-      <Value>libm</Value>
-    </ListValues>
-  </avrgcc.linker.libraries.Libraries>
-  <avrgcc.assembler.general.IncludePaths>
-    <ListValues>
-      <Value>%24(PackRepoDir)\Atmel\ATtiny_DFP\1.3.229\include</Value>
-    </ListValues>
-  </avrgcc.assembler.general.IncludePaths>
-</AvrGcc>
+        <avrgcc.common.Device>-mmcu=attiny4313 -B "%24(PackRepoDir)\Atmel\ATtiny_DFP\1.3.229\gcc\dev\attiny4313"</avrgcc.common.Device>
+        <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+        <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+        <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+        <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+        <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+        <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+        <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+        <avrgcc.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>NDEBUG</Value>
+            <Value>F_CPU=8000000UL</Value>
+            <Value>MJ808_</Value>
+          </ListValues>
+        </avrgcc.compiler.symbols.DefSymbols>
+        <avrgcc.compiler.directories.IncludePaths>
+          <ListValues>
+            <Value>%24(PackRepoDir)\Atmel\ATtiny_DFP\1.3.229\include</Value>
+          </ListValues>
+        </avrgcc.compiler.directories.IncludePaths>
+        <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
+        <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+        <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+        <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+        <avrgcc.linker.libraries.Libraries>
+          <ListValues>
+            <Value>libm</Value>
+          </ListValues>
+        </avrgcc.linker.libraries.Libraries>
+        <avrgcc.assembler.general.IncludePaths>
+          <ListValues>
+            <Value>%24(PackRepoDir)\Atmel\ATtiny_DFP\1.3.229\include</Value>
+          </ListValues>
+        </avrgcc.assembler.general.IncludePaths>
+      </AvrGcc>
     </ToolchainSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -123,7 +123,7 @@
     <ListValues>
       <Value>DEBUG</Value>
       <Value>F_CPU=8000000UL</Value>
-      <Value>MJ808_</Value>
+      <Value>MJ828_</Value>
     </ListValues>
   </avrgcc.compiler.symbols.DefSymbols>
   <avrgcc.compiler.directories.IncludePaths>
@@ -168,6 +168,15 @@
     <Compile Include="button.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="button_types_actual.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="can_msg.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="composite_led_actual.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="event.c">
       <SubType>compile</SubType>
     </Compile>
@@ -175,6 +184,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mcp2515_hw_defines.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="message.c">
@@ -207,10 +219,19 @@
     <Compile Include="mj808.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="mj808_button.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj808_led.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="mj818.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="mj818.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj818_led.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="mj828.c">
@@ -219,10 +240,19 @@
     <Compile Include="mj828.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="mj828_button.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj828_led.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="mj8x8.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="mj8x8.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mj8x8_commands.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="uci_spi.c">

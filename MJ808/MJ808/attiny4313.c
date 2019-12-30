@@ -32,5 +32,5 @@ ATtiny4313_t *attiny_ctor()
 
 	sei();																// enable interrupts globally
 
-	return &__MCU.public;												// return pointer to ATtiny4313_t public part
+	return &__MCU.public;												// return address of public part; calling code accesses it via pointer
 };

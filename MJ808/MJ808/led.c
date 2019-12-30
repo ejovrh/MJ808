@@ -1,9 +1,7 @@
-#include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-#include "mj8x8.h"
-#include "led.h"
+//#include "led.h"
 
 void _fade(const uint8_t value, volatile uint8_t *ocr)
 {

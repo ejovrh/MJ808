@@ -1,50 +1,18 @@
-#include <avr/sfr_defs.h>
-#include <avr/io.h>
-#include <inttypes.h>
-#include <avr/interrupt.h>
-#include <util/delay.h>
-
 #include "mj818.h"
-#include "gpio.h"
+#include "mj818_led.c"													// concrete device-specific LED functions
 
 typedef struct															// mj818_t actual
 {
 	mj818_t public;														// public struct
-	//	uint8_t foo_private;											// private - some data member
 } __mj818_t;
 
-static __mj818_t __Device __attribute__ ((section (".data")));			// instantiate mj818_t actual, as if it were initialized
-
-void _fade(const uint8_t value, volatile uint8_t *ocr);
-
-// TODO - optimize
-static void _wrapper_fade_mj818(uint8_t value)
-{
-// TODO - optimize
-	_fade(value, &OCR_REAR_LIGHT);
-};
-
-composite_led_t *_virtual_led_ctorMJ818(composite_led_t *self)
-{
-	static ledflags_t LEDFlags __attribute__ ((section (".data")));		// define LEDFlags object and put it into .data
-	static primitive_led_t primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
-
-	self->led = primitive_led;											// assign pointer to LED array
-	self->flags = &LEDFlags;											// tie in LEDFlags struct into led struct
-
-	self->led[Rear].Shine = &_wrapper_fade_mj818;						// LED-specific implementation
-// defines device operation on empty bus
-	return self;
-};
+static __mj818_t __Device __attribute__ ((section (".data")));			// preallocate __Device object in .data
 
 // defines device operation on empty bus
 void _EmptyBusOperationMJ818(void)
 {
 	if (OCR_REAR_LIGHT == 0x00)											// run once
-	{
-		_fade(0x10, &OCR_REAR_LIGHT);									// turn on rear light
-		_fade(0x05, &OCR_BRAKE_LIGHT);									// turn on rear light
-	}
+		__Device.public.led->Shine(0x10);								// operate on component part
 };
 
 // dispatches CAN messages to appropriate sub-component on device
@@ -70,7 +38,8 @@ void _PopulatedBusOperationMJ818(message_handler_t * const in_msg)
 
 void mj818_ctor()
 {
-	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B));								// call base class constructor & tie in object addresses
+	// only SIDH is supplied since with the addressing scheme SIDL is always 0
+	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B));	// call base class constructor & initialize own SID
 
 	// GPIO state definitions
 	{
@@ -109,18 +78,7 @@ void mj818_ctor()
 	sei();
 	}
 
-	static composite_led_t LED __attribute__ ((section (".data")));		// define LED object and put it into .data
-
-	__Device.public.led = _virtual_led_ctorMJ818(&LED);					// call virtual constructor & tie in object addresses
-
-	/*
-	 * self, template of an outgoing CAN message; SID intialized to this device
-	 * NOTE:
-	 *	the MCP2515 uses 2 left-aligned registers to hold filters and SIDs
-	 *	for clarity see the datasheet and a description of any RX0 or TX or filter register
-	 */
-	__Device.public.mj8x8->can->own_sidh = (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B);	// high byte
-	__Device.public.mj8x8->can->own_sidl = ( RCPT_DEV_BLANK | BLANK);																// low byte
+	__Device.public.led = _virtual_led_ctorMJ818();						// call virtual constructor & tie in object addresses
 
 	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;			// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity

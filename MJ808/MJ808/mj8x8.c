@@ -34,7 +34,8 @@ static void _Heartbeat(message_handler_t * const msg)
 
 			#if defined(MJ808_)
 			// TODO - access via object
-			_util_led_mj808(UTIL_LED_RED_BLINK_1X);
+			//Device->led->led[Utility].Shine(UTIL_LED_RED_BLINK_1X);
+			//_util_led_mj808(UTIL_LED_RED_BLINK_1X);
 			#endif
 		}
 	}
@@ -77,7 +78,10 @@ mj8x8_t * mj8x8_ctor(const uint8_t in_own_sidh)
 	__MJ8x8.public.can = can_ctor();									// pass on CAN public part
 	__MJ8x8.public.mcu = attiny_ctor();									// pass on MCU public part
 
-	return &__MJ8x8.public;
+	__MJ8x8.public.can->own_sidh = in_own_sidh;							// high byte
+	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);			// low byte
+
+	return &__MJ8x8.public;												// return address of public part; calling code accesses it via pointer
 };
 
 ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka. active CAN bus device discovery
@@ -114,8 +118,8 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka
 
 	__MJ8x8.public.HeartBeat(MsgHandler);
 
-	if ( (! MsgHandler->devices) && (__MJ8x8.__FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
-		__MJ8x8.public.EmptyBusOperation();								// perform the device-specific default operation
+	if ( (! MsgHandler->Devices) && (__MJ8x8.__FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
+		__MJ8x8.public.EmptyBusOperation();								// perform the device-specific default operation (is overridden in specific device constructor)
 
 	sleep_enable();														// back to sleep
 }
