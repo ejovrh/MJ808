@@ -24,8 +24,18 @@
 
 typedef struct mcp23s08_t												// mcp23s08_t actual struct describing the port expander as a whole
 {
-	void (* SetFoo)(const uint8_t in_val);								// set command for foo
-	uint8_t (* GetBar)(uint8_t in_val);									// get command for bar
+	void (* SetIODir)(const uint8_t in_val);							// sets I/O direction register: 0 - output, 1 - input
+	void (* SetIPOL)(const uint8_t in_val);								// sets input polarity register: 0 - same logic state, 1 - opposite logic state
+	void (* SetGPIntEN)(const uint8_t in_val);							// sets interrupt-on-change control register: 0 - disable interrupt, 1 - enable interrupt
+	void (* SetDEFVal)(const uint8_t in_val);							// sets default compare register for interrupts
+	void (* SetIntCon)(const uint8_t in_val);							// sets interrupt control register: 0 - pin compared to previous value, 1 - pin compared to defval
+	void (* SetIOCon)(const uint8_t in_val);							// sets configuration register
+	void (* SetPullup)(const uint8_t in_val);							// sets pull-up configuration register: 0 - pull-up disabled, 1 - pull-up enabled
+	void (* SetIntF)(const uint8_t in_val);								// sets interrupt flag register: 0 - interrupt not pending, 1 - pin caused interrupt
+	void (* SetIntCap)(const uint8_t in_val);							// sets interrupt capture register: 0 - logic low, 1 - logic high
+	void (* SetPort)(const uint8_t in_val);								// sets port (GPIO) register: 0 - logic low, 1 - logic high
+	void (* SetOLAT)(const uint8_t in_val);								// sets output latch register: 0 - logic low, 1 - logic high
+
 } mcp23s08_t __attribute__((aligned(8)));
 
 mcp23s08_t *mcp23s08_ctor();											// initialize mcp23s08_t actual and set function pointers

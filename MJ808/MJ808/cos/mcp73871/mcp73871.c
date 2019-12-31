@@ -18,7 +18,7 @@ void _SetResistor(const uint8_t in_val)									// sets potentiometer to val - s
 
 uint8_t _GetStatus(void)												// gets the device status (PG, STAT1, STAT2)
 {
-	return __MCP73871.__mcp23s08->GetBar(0x02);							// read GPIO from port expander
+	//return __MCP73871.__mcp23s08->GetBar(0x02);							// read GPIO from port expander
 };
 
 mcp73871_t *mcp73871_ctor(void)											// initializes mcp73871_t object
