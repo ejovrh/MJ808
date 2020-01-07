@@ -11,10 +11,10 @@ typedef struct															// mj8x8_t actual
 {
 	mj8x8_t public;														// public struct
 
-	uint8_t __NumericalCAN_ID;											// private - ordered device number - A0 (0th device) until 3C (15th device), used in Heartbeat()
-	uint8_t __FlagDoHeartbeat : 1;										// private - shall the heartbeat be initiated?
-	uint8_t __BeatIterationCount : 4;									// private - how many times did we wakeup, sleep and wakeup again
-	uint8_t __FlagDoDefaultOperation : 2;								// we are alone on the bus - shall we do our device-specific default operation?
+	uint8_t _NumericalCAN_ID;											// private - ordered device number - A0 (0th device) until 3C (15th device), used in Heartbeat()
+	uint8_t _FlagDoHeartbeat : 1;										// private - shall the heartbeat be initiated?
+	uint8_t _BeatIterationCount : 4;									// private - how many times did we wakeup, sleep and wakeup again
+	uint8_t _FlagDoDefaultOperation : 2;								// we are alone on the bus - shall we do our device-specific default operation?
 } __mj8x8_t;
 
 extern __mj8x8_t __MJ8x8;												// declare mj8x8_t actual
@@ -22,15 +22,13 @@ extern __mj8x8_t __MJ8x8;												// declare mj8x8_t actual
 // provides a periodic heartbeat based on the watchdog timer interrupt
 static void _Heartbeat(message_handler_t * const msg)
 {
-	if (__MJ8x8.__FlagDoHeartbeat)										// if we are in heartbeat mode
+	if (__MJ8x8._FlagDoHeartbeat)										// if we are in heartbeat mode
 	{
-		if (__MJ8x8.__BeatIterationCount == __MJ8x8.__NumericalCAN_ID)	// see if this counter iteration is our turn
+		if (__MJ8x8._BeatIterationCount == __MJ8x8._NumericalCAN_ID)	// see if this counter iteration is our turn
 		{
 			msg->SendMessage(CMND_ANNOUNCE, 0x00, 1);					// broadcast CAN heartbeat message
 
-			__MJ8x8.__FlagDoHeartbeat = 0;								// heartbeat mode of for the remaining counter iterations
-			WDTCR |= (_BV(WDCE) | _BV(WDE));							// WDT change enable sequence
-			WDTCR = ( _BV(WDIE) | _BV(WDP2) | _BV(WDP1) );				// set watchdog timer set to 1s
+			__MJ8x8._FlagDoHeartbeat = 0;								// heartbeat mode of for the remaining counter iterations
 
 			#if defined(MJ808_)
 			// TODO - access via object
@@ -40,15 +38,13 @@ static void _Heartbeat(message_handler_t * const msg)
 		}
 	}
 
-	if ((!__MJ8x8.__BeatIterationCount) && (!__MJ8x8.__FlagDoHeartbeat))// counter roll-over, change from slow to fast
+	if ((!__MJ8x8._BeatIterationCount) && (!__MJ8x8._FlagDoHeartbeat))	// counter roll-over, change from slow to fast
 	{
-		__MJ8x8.__FlagDoHeartbeat = 1;									// set heartbeat mode on
-		++__MJ8x8.__FlagDoDefaultOperation;								// essentially count how many times we are in non-heartbeat count mode
-
-		WDTCR |= (_BV(WDCE) | _BV(WDE));								// WDT change enable sequence
-		WDTCR = ( _BV(WDIE) | _BV(WDP2)  );								// watchdog timer set to 0.25
+		__MJ8x8._FlagDoHeartbeat = 1;									// set heartbeat mode on
+		++__MJ8x8._FlagDoDefaultOperation;								// essentially count how many times we are in non-heartbeat count mode
 	}
-	++__MJ8x8.__BeatIterationCount;										// increment the iteration counter
+
+	++__MJ8x8._BeatIterationCount;										// increment the iteration counter
 };
 
 __mj8x8_t __MJ8x8 =														// instantiate mj8x8_t actual and set function pointers
@@ -56,8 +52,8 @@ __mj8x8_t __MJ8x8 =														// instantiate mj8x8_t actual and set function 
 	.public.HeartBeat = &_Heartbeat,									// implement device-agnostic default behavior - heartbeat
 	.public.HeartbeatPeriodic = &DoNothing,								// every invocation for the heartbeat ISR runs this, implemented by derived classes
 	.public.EmptyBusOperation = &DoNothing,								// implement device-agnostic default behavior - do nothing, usually an override happens
-	.__FlagDoHeartbeat = 1,												// start with discovery mode
-	.__FlagDoDefaultOperation = 0
+	._FlagDoHeartbeat = 1,												// start with discovery mode
+	._FlagDoDefaultOperation = 0
 };
 
 mj8x8_t * mj8x8_ctor(const uint8_t in_own_sidh)
@@ -74,7 +70,7 @@ mj8x8_t * mj8x8_ctor(const uint8_t in_own_sidh)
 	// state initialization of device-unspecific pins
 	}
 
-	__MJ8x8.__NumericalCAN_ID = (uint8_t) ( (in_own_sidh >>2 ) & 0x0F );
+	__MJ8x8._NumericalCAN_ID = (uint8_t) ( (in_own_sidh >>2 ) & 0x0F );
 
 	__MJ8x8.public.can = can_ctor();									// pass on CAN public part
 	__MJ8x8.public.mcu = attiny_ctor();									// pass on MCU public part
@@ -121,7 +117,7 @@ ISR(WDT_OVERFLOW_vect, ISR_NOBLOCK)										// heartbeat of device on bus - aka
 
 	__MJ8x8.public.HeartbeatPeriodic();									// execute something heatbeat-ISR periodic, implemented by derived classes
 
-	if ( (! MsgHandler->Devices) && (__MJ8x8.__FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
+	if ( (! MsgHandler->Devices) && (__MJ8x8._FlagDoDefaultOperation > 1) )		// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
 		__MJ8x8.public.EmptyBusOperation();								// perform the device-specific default operation (is overridden in specific device constructor)
 
 	sleep_enable();														// back to sleep

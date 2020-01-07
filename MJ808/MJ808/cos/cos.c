@@ -1,6 +1,7 @@
 #include "cos\cos.h"
-#include "cos\tps630701\tps630701.h"
-#include "cos\mcp73871\mcp73871.h"
+#include "rect\rect.h"													// rectifier object
+#include "cos\tps630701\tps630701.h"									// Buck-Boost regulator object
+#include "cos\mcp73871\mcp73871.h"										// Li-Ion Charger&Powerpath controller object
 
 #include <util/delay.h>
 #include <avr/interrupt.h>
@@ -33,21 +34,21 @@ void _HeartbeatPeriodicCos(void)										// ran by every watchdog ISR, period s
 	*/
 
 	if (__Device.public.ACfreq < 5.0)									// slow speed - Delon voltage doubler rectifier
-		__Device.public.Reg->SetRegulatorMode(__Device.public.Reg->RegulatorMode & Delon);
+		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & Delon);
 
 	if (__Device.public.ACfreq >= 5.0)									// higher speed - Graetz rectifier
-		__Device.public.Reg->SetRegulatorMode(__Device.public.Reg->RegulatorMode & Graetz);
+		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & Graetz);
 
 	if (__Device.public.ACfreq >= 18.0)									// even higher speed - Graetz & tuning caps, increase load
 	{
-		__Device.public.Reg->SetRegulatorMode(__Device.public.Reg->RegulatorMode & ( Graetz | Tuning) );
+		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & ( Graetz | Tuning) );
 		__Device.public.LiIonCharger->SetResistor(128);
 		*(__Device.public.BuckBoost->PWM) = 0xE0;
 	}
 
 	if (__Device.public.ACfreq >= 45.0)									// even more higher speed - Graetz and even higher load
 	{
-		__Device.public.Reg->SetRegulatorMode(__Device.public.Reg->RegulatorMode & Graetz);
+		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & Graetz);
 		__Device.public.LiIonCharger->SetResistor(255);
 		*(__Device.public.BuckBoost->PWM) = 0xE0;
 	}
@@ -56,7 +57,7 @@ void _HeartbeatPeriodicCos(void)										// ran by every watchdog ISR, period s
 	// TODO - try to average over 250ms
 	__Device.public.BuckBoost->GetValues(__Device.public.OpParamArray);	// download voltage/current measurement into array
 	__Device.public.OpParamArray[MISC_STATUS_BITS] |= ( 0x1C & __Device.public.LiIonCharger->GetStatus());	// save charger/Powerpath controller operating mode its into MISC_STATUS_BITS
-	__Device.public.OpParamArray[MISC_STATUS_BITS] |= ( 0xE0 & __Device.public.Reg->RegulatorMode);			// save rectifier operating mode bits into MISC_STATUS_BITS
+	__Device.public.OpParamArray[MISC_STATUS_BITS] |= ( 0xE0 & __Device.public.Rect->RectifierMode);			// save rectifier operating mode bits into MISC_STATUS_BITS
 
 	// TODO - implement array as argument to send message and not copy by value as SendMessage currently is (see _SendMessage() in message.c)
 	MsgHandler->SendMessage(0x01, *__Device.public.OpParamArray, 7);	// send out operational parameters to the bus
@@ -69,7 +70,7 @@ void _PopulatedBusOperationCOS(message_handler_t * const in_msg)		// received Ms
 
 	//TODO - if clause is a dummy - implement proper command byte structure
 	if (msg->COMMAND == (CMND_COS_SET_MODE | 0x0F))						// handle request for operating mode change
-		__Device.public.Reg->SetRegulatorMode(0x07 & msg->COMMAND);		// bit val
+		__Device.public.Rect->SetRectifierMode(0x07 & msg->COMMAND);	// bit val
 
 	//TODO - if clause is a dummy - implement proper command byte structure
 	if (msg->COMMAND == (CMND_COS_SET_MODE | 0x07))						// handle request for operating mode change
@@ -148,13 +149,13 @@ void cos_ctor()															// constructor for concrete class
 	__Device.public.Cos6V0OutputEnabled = &_Cos6V0OutputEnabled;		// enabled/disables the 5V0 Boost output controller
 
 	// __Device core objects
-	__Device.public.Reg = reg_ctor();									// initializes reg_t object
-	__Device.public.BuckBoost = tps630701_ctor();						// initializes tps630701_t object
-	__Device.public.LiIonCharger = mcp73871_ctor();						// initializes mcp73871_t object
+	__Device.public.Rect = RECT;										// get address of rect_t object
+	__Device.public.BuckBoost = TPS630701;								// get address of tps630701_t object
+	__Device.public.LiIonCharger = MCP73871;							// get address of mcp73871_t object
 
 	// Èos __Device operational initialization on MCU power on
-	__Device.public.Reg->SetRegulatorMode(Delon);						// set regulator into Delon mode - we are very likely to start spinning slow
-	*(__Device.public.BuckBoost->PWM) = 0xFF;							// put Buck-Boost into PWM/PFM (auto) mode
+	__Device.public.Rect->SetRectifierMode(Delon);						// set regulator into Delon mode - we are very likely to start spinning slow
+	*(__Device.public.BuckBoost->PWM) = 0xA0;							// put Buck-Boost into PWM/PFM (auto) mode
 	__Device.public.LiIonCharger->SetResistor(128);						// set resistor value to something
 };
 

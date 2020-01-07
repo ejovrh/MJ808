@@ -16,7 +16,7 @@ cos\mcp23s08\mcp23s08.c
 
 cos\mcp73871\mcp73871.c
 
-cos\reg\reg.c
+cos\rect\rect.c
 
 cos\tps630701\tps630701.c
 

@@ -28,7 +28,7 @@ ATtiny4313_t *attiny_ctor()
 //			 | _BV(PCIE2));												// not used yet - enable pin change IRQ for PCTIN17-11 (further specified in PCMSK2)
 
 	WDTCR |= (_BV(WDCE) | _BV(WDE));									// WDT change enable sequence
-	WDTCR = ( _BV(WDIE) | _BV(WDP2)  );									// watchdog timer set to 0.25s
+	WDTCR = ( _BV(WDIE) | _BV(WDP2)  );									// watchdog timer set to 0.25s, datasheet p. 47
 
 	sei();																// enable interrupts globally
 

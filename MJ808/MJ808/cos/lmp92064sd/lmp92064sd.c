@@ -1,15 +1,9 @@
-#include <avr/io.h>
 #include <util/delay.h>
 
-#include "gpio.h"
 #include "uci_spi.h"
 #include "cos\lmp92064sd\lmp92064sd.h"
 
-#define	SPI_SS_LMP92064SD_pin	D,	6,	6								// LMP92064SD Voltage/Current meter Slave Select, Buck-Boost-out (pre-load)
-
-static lmp92064sd_t __LMP92064SD __attribute__ ((section (".data")));	// declare lmp92064sd_t actual and put into .data
-
-static void __DownloadData(uint8_t *data_array)							// downloads voltage / current measurement from device
+static void _DownloadData(uint8_t * const data_array)					// downloads voltage / current measurement from device into data_array
 {
 	uint8_t i;
 
@@ -22,9 +16,7 @@ static void __DownloadData(uint8_t *data_array)							// downloads voltage / cur
 	gpio_set(SPI_SS_LMP92064SD_pin);									// de-select the slave
 };
 
-lmp92064sd_t *lmp92064sd_ctor()											// initialize lmp92064sd_t object and set function pointers
+lmp92064sd_t LMP92064SD =												// instantiation/initialization of object, saves us the constructor
 {
-	__LMP92064SD.DownloadData = &__DownloadData;						// set function pointer
-
-	return &__LMP92064SD;												// return address of public part
+	.DownloadData = &_DownloadData										// set function pointer
 };										

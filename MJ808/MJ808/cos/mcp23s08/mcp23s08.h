@@ -1,7 +1,14 @@
 #ifndef MCP23S08_H_
 #define MCP23S08_H_
 
+#include <avr/io.h>
 #include <inttypes.h>
+
+#include "gpio.h"														// GPIO macros
+// TODO - move pin definitions out of here
+#define	SPI_SS_MCP23S08_pin		D,	1,	1								// MCP23S08 Port Expander Slave Select
+
+#define MCP23S08_REGISTER_COUNT	11										// 11 configuration registers
 
 #define MCP23S08_IODIR		0x00										// I/O direction register, IO7:0 - 1 input, 0 output
 #define MCP23S08_IPOL		0x01										// Input Polarity port register, IP7:0 - 1 reflects opposite logic state as input pin, 0 same logic
@@ -22,22 +29,29 @@
 #define MCP23S08_GPIO		0x09										// Port register, GP7:0 - 1 logic high, 0 logic low
 #define MCP23S08_OLAT		0x0a										// Output latch register, OL7:0 - 1 logic high, 0 logic low
 
+enum MCP23S08RegisterIndex												// used to reference _register
+{
+	IODIR = 0,															// datasheet p. 10, I/O direction register: 0 - output, 1 - input
+	IPOL = 1,															// datasheet p. 11, input polarity register: 0 - same logic state, 1 - opposite logic state
+	GPINTEN = 2,														// datasheet p. 12, interrupt-on-change control register: 0 - disable interrupt, 1 - enable interrupt
+	DEFVAL = 3,															// datasheet p. 13, default compare register for interrupts
+	INTCON	= 4,														// datasheet p. 14, interrupt control register: 0 - pin compared to previous value, 1 - pin compared to defval
+	IOCON = 5,															// datasheet p. 15, configuration register
+	GPPU = 6,															// datasheet p. 16, pull-up configuration register: 0 - pull-up disabled, 1 - pull-up enabled
+	INTF = 7,															// datasheet p. 17, interrupt flag register: 0 - interrupt not pending, 1 - pin caused interrupt
+	INTCAP	= 8,														// datasheet p. 18, interrupt capture register: 0 - logic low, 1 - logic high
+	GPIO = 9,															// datasheet p. 19, port (GPIO) register: 0 - logic low, 1 - logic high
+	OLAT = 10															// datasheet p. 20, output latch register: 0 - logic low, 1 - logic high
+};
+
 typedef struct mcp23s08_t												// mcp23s08_t actual struct describing the port expander as a whole
 {
-	void (* SetIODir)(const uint8_t in_val);							// sets I/O direction register: 0 - output, 1 - input
-	void (* SetIPOL)(const uint8_t in_val);								// sets input polarity register: 0 - same logic state, 1 - opposite logic state
-	void (* SetGPIntEN)(const uint8_t in_val);							// sets interrupt-on-change control register: 0 - disable interrupt, 1 - enable interrupt
-	void (* SetDEFVal)(const uint8_t in_val);							// sets default compare register for interrupts
-	void (* SetIntCon)(const uint8_t in_val);							// sets interrupt control register: 0 - pin compared to previous value, 1 - pin compared to defval
-	void (* SetIOCon)(const uint8_t in_val);							// sets configuration register
-	void (* SetPullup)(const uint8_t in_val);							// sets pull-up configuration register: 0 - pull-up disabled, 1 - pull-up enabled
-	void (* SetIntF)(const uint8_t in_val);								// sets interrupt flag register: 0 - interrupt not pending, 1 - pin caused interrupt
-	void (* SetIntCap)(const uint8_t in_val);							// sets interrupt capture register: 0 - logic low, 1 - logic high
-	void (* SetPort)(const uint8_t in_val);								// sets port (GPIO) register: 0 - logic low, 1 - logic high
-	void (* SetOLAT)(const uint8_t in_val);								// sets output latch register: 0 - logic low, 1 - logic high
+	void (* const SendCommand)(const uint8_t in_command, const uint8_t in_val);	// sends command and value to MCP23S08
+	uint8_t *(* const GetRegisters)(void);										// downloads device configuration registers into __MCP23S08.Registers[]
 
+	uint8_t Register[MCP23S08_REGISTER_COUNT];							// array for storing downloaded device configuration registers
 } mcp23s08_t __attribute__((aligned(8)));
 
-mcp23s08_t *mcp23s08_ctor();											// initialize mcp23s08_t actual and set function pointers
+extern mcp23s08_t MCP23S08;												// forward declare object
 
 #endif /* MCP23S08_H_ */

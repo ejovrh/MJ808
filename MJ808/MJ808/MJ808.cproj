@@ -198,10 +198,10 @@
     <Compile Include="cos\mcp73871\mcp73871.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="cos\reg\reg.c">
+    <Compile Include="cos\rect\rect.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="cos\reg\reg.h">
+    <Compile Include="cos\rect\rect.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="cos\tps630701\tps630701.c">
@@ -312,7 +312,7 @@
     <Folder Include="cos\lmp92064sd" />
     <Folder Include="cos\mcp23s08" />
     <Folder Include="cos\mcp73871" />
-    <Folder Include="cos\reg" />
+    <Folder Include="cos\rect" />
     <Folder Include="cos\tps630701" />
     <Folder Include="mj828" />
     <Folder Include="mj818" />
