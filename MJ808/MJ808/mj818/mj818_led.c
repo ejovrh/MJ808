@@ -8,9 +8,9 @@
 
 #include "led\composite_led_actual.c"									// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
 
-static primitive_led_t __primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
+static primitive_led_t _primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
-extern void DoNothing(void);
+extern void DoNothing(void);											// forward declare
 
 // TODO - optimize
 static void _wrapper_fade_mj818_rear(uint8_t value)
@@ -47,7 +47,7 @@ static void _component_led_mj818(const uint8_t val)
 
 static __composite_led_t __LED =
 {
-	.public.led = __primitive_led,										// assign pointer to LED array
+	.public.led = _primitive_led,										// assign pointer to LED array
 	.public.Shine = &_component_led_mj818,								// component part ("interface")
 	.flags = 0
 };

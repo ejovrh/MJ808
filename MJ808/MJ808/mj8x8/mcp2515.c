@@ -32,16 +32,16 @@ typedef struct															// can_t actual
 	void (*init)(void);													// private - CAN init
 
 	// preserve byte order for sequential reads/writes
-	uint8_t __canintf;													// contents of CANINTF register, datasheet p. 53
-	uint8_t __eflg;														// contents of EFLG register, datasheet p. 49
-	uint8_t __canstat;													// contents of the CANSTAT register, datasheet p. 61
-	uint8_t __canctrl;													// contents of the CANCTRL register, datasheet p. 60
-	uint8_t	__tec;														// Transmit Error Counter - TEC, datasheet p. 48
-	uint8_t __rec;														// Receive Error Counter - REC, datasheet p. 48
+	uint8_t _canintf;													// contents of CANINTF register, datasheet p. 53
+	uint8_t _eflg;														// contents of EFLG register, datasheet p. 49
+	uint8_t _canstat;													// contents of the CANSTAT register, datasheet p. 61
+	uint8_t _canctrl;													// contents of the CANCTRL register, datasheet p. 60
+	uint8_t	_tec;														// Transmit Error Counter - TEC, datasheet p. 48
+	uint8_t _rec;														// Receive Error Counter - REC, datasheet p. 48
 	// preserve byte order for sequential reads/writes
 
-	uint8_t __in_sleep:1;												// is MCP2561 CAN transceiver in sleep or not
-	uint8_t __icod:3;													// Interrupt Codes
+	uint8_t _in_sleep:1;												// is MCP2561 CAN transceiver in sleep or not
+	uint8_t _icod:3;													// Interrupt Codes
 
 } __can_t;
 
@@ -394,18 +394,18 @@ static void _mcp2515_can_msg_send(volatile can_msg_t * const msg)
 // puts the whole CAN infrastructure to sleep; 1 - sleep, 0 - awake
 static void _can_sleep(const uint8_t in_val)
 {
-	if ( !(__CAN.__in_sleep) && in_val)									// if is awake and set to sleep
+	if ( !(__CAN._in_sleep) && in_val)									// if is awake and set to sleep
 	{
 		_mcp2515_change_opmode(REQOP_SLEEP);							// sleep MCP2515
 		gpio_conf(MCP2561_standby_pin, OUTPUT, HIGH);					// sleep MCP2561
-		__CAN.__in_sleep = 1;											// mark as sleeping
+		__CAN._in_sleep = 1;											// mark as sleeping
 	}
 
-	if (__CAN.__in_sleep && !in_val)									// if is sleeping and set to wake up
+	if (__CAN._in_sleep && !in_val)										// if is sleeping and set to wake up
 	{
 		_mcp2515_opcode_bit_modify(CANINTF, 0xFF, 0x00);				// clear out all interrupt flags so that a wakeup can be asserted (if there are not handled interrupts, a wakeup interrupt will never occur)
 		_mcp2515_opcode_bit_modify(CANINTF, _BV(WAKIF), _BV(WAKIF));	// create a wake up interrupt event -- the sucker will actually go and create a real one and go on to service it
-		__CAN.__in_sleep = 0;											// mark as awake
+		__CAN._in_sleep = 0;											// mark as awake
 	}
 };
 
@@ -471,7 +471,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 			;
 		}
 */
-		if (__CAN.__eflg & _BV(RX0OVR))									// RXB0 overflow - datasheet figure 4.3, p. 26
+		if (__CAN._eflg & _BV(RX0OVR))									// RXB0 overflow - datasheet figure 4.3, p. 26
 		{
 			// FIXME - check for correct RX buffer clearing
 			helper_handle_rx();											// handle the message
@@ -479,7 +479,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 			return;
 		}
 
-		if (__CAN.__eflg & _BV(RX1OVR))									// RXB1 overflow - datasheet figure 4.3, p. 26
+		if (__CAN._eflg & _BV(RX1OVR))									// RXB1 overflow - datasheet figure 4.3, p. 26
 		{
 			helper_handle_rx();											// handle the message
 			_mcp2515_opcode_bit_modify(EFLG, _BV(RX1OVR), 0x00);		// clear the overflow bit
@@ -500,7 +500,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		_mcp2515_opcode_bit_modify(CANINTF, 0xFF, 0x00);				// clear the wakeup flag
 		gpio_conf(MCP2561_standby_pin, OUTPUT, LOW);					// wake up MCP2561
 
-		__CAN.__in_sleep = 0;
+		__CAN._in_sleep = 0;
 	};
 
 	inline void helper_handle_tx(void)									// handles incoming messages
@@ -531,20 +531,20 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 
 	do																	// ICOD loop handler - runs while ICOD != 0
 	{
-		_mcp2515_opcode_read_bytes(TEC, &__CAN.__tec, 2);				// read in TEC and REC
-		_mcp2515_opcode_read_bytes(CANINTF, &__CAN.__canintf, 3);		// read in CANINTF and EFLG
-		_mcp2515_opcode_read_bytes(CANCTRL, &__CAN.__canctrl, 1);
+		_mcp2515_opcode_read_bytes(TEC, &__CAN._tec, 2);				// read in TEC and REC
+		_mcp2515_opcode_read_bytes(CANINTF, &__CAN._canintf, 3);		// read in CANINTF and EFLG
+		_mcp2515_opcode_read_bytes(CANCTRL, &__CAN._canctrl, 1);
 
-		__CAN.__icod =  ((__CAN.__canstat & 0x0E) >> 1);				// right shift so that CANSTAT.U0 cant interfere
+		__CAN._icod =  ((__CAN._canstat & 0x0E) >> 1);					// right shift so that CANSTAT.U0 cant interfere
 
 #if defined(BRANCHTABLE_ICOD)
-		fptr = pgm_read_ptr(&branchtable_icod[__CAN.__icod]);			// get appropriate function pointer from PROGMEM
+		fptr = pgm_read_ptr(&branchtable_icod[__CAN._icod]);			// get appropriate function pointer from PROGMEM
 		(fptr)();
 #endif
 #if !defined(BRANCHTABLE_ICOD)
 
 		// TODO - implement something like a vpointer lookup table or branch table instead of this shit:
-		switch (__CAN.__icod)											// handling of cases depending on ICOD value - sort of priority-style
+		switch (__CAN._icod)											// handling of cases depending on ICOD value - sort of priority-style
 		{																// while loops over ICOD bit values, each case handles an ICOD situation
 			case 0:														// no interrupt
 				break;
@@ -579,7 +579,7 @@ ISR(INT1_vect)															// ISR for INT1 - triggered by CAN message receptio
 		};
 #endif
 
-	} while (__CAN.__icod);
+	} while (__CAN._icod);
 
 	sleep_enable();														// back to sleep
 };

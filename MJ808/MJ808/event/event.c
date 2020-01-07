@@ -15,11 +15,11 @@ extern __event_handler_t __EventHandler;								// declare event_handler_t actua
  *
  *	components: subject, event handler, object
  *		the subject uses Notify() to notify the event handler about an event - e.g. a button press
- *		via Notify() the event handler sets a bit in __index
+ *		via Notify() the event handler sets a bit in _index
  *
  *		on every iteration of the loop in main() the event handler function HandleEvent() is called
- *			upon every call __walker iterates over __index by shifting "1" left and ANDing both variables
- *			once the position of 1 in both variables match, HandleEvent() executes an event handling function and passes __index into it
+ *			upon every call _walker iterates over _index by shifting "1" left and ANDing both variables
+ *			once the position of 1 in both variables match, HandleEvent() executes an event handling function and passes _index into it
  *
  *		the event handling function determines via switch-case what to do to an object (e.g. light a LED)
  *
@@ -33,13 +33,13 @@ extern __event_handler_t __EventHandler;								// declare event_handler_t actua
  *		all values in all case table arrays must be unique
  */
 
-// sets bit at bit_position ( 1 to 8) in byte __index
+// sets bit at bit_position ( 1 to 8) in byte _index
 static void _UnSetEvent(const uint8_t val)
 {
 	__EventHandler._index &= ~val;										// simply clears the bit at position bit_position
 }
 
-// sets bit at bit_position ( 1 to 8) in byte __index - _index will have values 0, 1, 2, 4, 8, 16...128
+// sets bit at bit_position ( 1 to 8) in byte _index - _index will have values 0, 1, 2, 4, 8, 16...128
 static void _Notify(const uint8_t bit_position)
 {
 	__EventHandler._index |= bit_position;								// simply sets the bit at position bit_position
@@ -48,8 +48,8 @@ static void _Notify(const uint8_t bit_position)
 // calls __mjxxx_event_execution_function and passes on argument into it
 static void _HandleEvent(void)
 {
-	__EventHandler._walker = (__EventHandler._walker << 1) | (__EventHandler._walker >> 7 );	// the __walker shifts a "1" cyclically from right to left
-	(*__EventHandler.public.fpointer)(__EventHandler._index & __EventHandler._walker);			//	and ANDs it with __index, thereby passing the result as an argument to __mjxxx_event_execution_function
+	__EventHandler._walker = (__EventHandler._walker << 1) | (__EventHandler._walker >> 7 );	// the _walker shifts a "1" cyclically from right to left
+	(*__EventHandler.public.fpointer)(__EventHandler._index & __EventHandler._walker);			//	and ANDs it with _index, thereby passing the result as an argument to __mjxxx_event_execution_function
 };
 
  __event_handler_t __EventHandler =										// instantiate event_handler_t actual and set function pointers
@@ -58,7 +58,7 @@ static void _HandleEvent(void)
 	.public.Notify = &_Notify,											// notifies about an event by setting the index to a predetermined value (uint8_t array-based lookup table)
 	.public.UnSetEvent = &_UnSetEvent,									// un-does what Nofity() does
 	.public.HandleEvent = &_HandleEvent,								// handles event based on index
-	.__walker = 1														// set the walker to 1 in order to start
+	._walker = 1														// set the walker to 1 in order to start
 };
 
 event_handler_t * const EventHandler = &__EventHandler.public ;			// set const pointer to EventHandler public part
