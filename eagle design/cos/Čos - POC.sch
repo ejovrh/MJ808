@@ -24424,13 +24424,13 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <attribute name="NAME" x="200.66" y="528.32" size="1.778" layer="95"/>
 <attribute name="VALUE" x="200.66" y="525.78" size="1.778" layer="96"/>
 </instance>
-<instance part="R21" gate="G$1" x="172.72" y="490.22" smashed="yes" rot="R90">
-<attribute name="NAME" x="175.26" y="490.22" size="1.778" layer="95"/>
-<attribute name="VALUE" x="175.26" y="487.68" size="1.778" layer="96"/>
+<instance part="R21" gate="G$1" x="147.32" y="482.6" smashed="yes" rot="R90">
+<attribute name="NAME" x="149.86" y="482.6" size="1.778" layer="95"/>
+<attribute name="VALUE" x="149.86" y="480.06" size="1.778" layer="96"/>
 </instance>
-<instance part="C11" gate="G$1" x="160.02" y="490.22" smashed="yes">
-<attribute name="NAME" x="162.56" y="490.22" size="1.778" layer="95"/>
-<attribute name="VALUE" x="162.56" y="487.68" size="1.778" layer="96"/>
+<instance part="C11" gate="G$1" x="200.66" y="485.14" smashed="yes">
+<attribute name="NAME" x="203.2" y="485.14" size="1.778" layer="95"/>
+<attribute name="VALUE" x="203.2" y="482.6" size="1.778" layer="96"/>
 </instance>
 <instance part="TP2_IN" gate="G$1" x="231.14" y="855.98" smashed="yes" rot="R180">
 <attribute name="NAME" x="231.14" y="863.6" size="1.778" layer="95" rot="R90"/>
@@ -24528,9 +24528,9 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <attribute name="NAME" x="294.64" y="820.42" size="1.778" layer="95"/>
 <attribute name="VALUE" x="294.64" y="817.88" size="1.778" layer="96"/>
 </instance>
-<instance part="R23" gate="G$1" x="190.5" y="490.22" smashed="yes" rot="R90">
-<attribute name="NAME" x="193.04" y="490.22" size="1.778" layer="95"/>
-<attribute name="VALUE" x="193.04" y="487.68" size="1.778" layer="96"/>
+<instance part="R23" gate="G$1" x="180.34" y="482.6" smashed="yes" rot="R90">
+<attribute name="NAME" x="182.88" y="482.6" size="1.778" layer="95"/>
+<attribute name="VALUE" x="182.88" y="480.06" size="1.778" layer="96"/>
 </instance>
 <instance part="TP3_OUT" gate="G$1" x="269.24" y="855.98" smashed="yes" rot="R180">
 <attribute name="NAME" x="269.24" y="863.6" size="1.778" layer="95" rot="R90"/>
@@ -25333,8 +25333,8 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <net name="EN" class="9">
 <segment>
 <pinref part="R21" gate="G$1" pin="1"/>
-<wire x1="172.72" y1="485.14" x2="172.72" y2="482.6" width="0.1524" layer="91"/>
-<label x="172.72" y="482.6" size="1.778" layer="95"/>
+<wire x1="147.32" y1="477.52" x2="147.32" y2="474.98" width="0.1524" layer="91"/>
+<label x="147.32" y="474.98" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC6" gate="G$1" pin="14-EN"/>
@@ -25445,8 +25445,8 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 </segment>
 <segment>
 <pinref part="C11" gate="G$1" pin="2"/>
-<wire x1="160.02" y1="485.14" x2="160.02" y2="482.6" width="0.1524" layer="91"/>
-<label x="160.02" y="482.6" size="1.778" layer="95" rot="R180"/>
+<wire x1="200.66" y1="480.06" x2="200.66" y2="477.52" width="0.1524" layer="91"/>
+<label x="200.66" y="474.98" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC6" gate="G$1" pin="6-FB2"/>
@@ -25997,15 +25997,15 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 </segment>
 <segment>
 <pinref part="R23" gate="G$1" pin="1"/>
-<wire x1="190.5" y1="485.14" x2="190.5" y2="482.6" width="0.1524" layer="91" style="longdash"/>
-<label x="190.5" y="482.6" size="1.778" layer="95"/>
+<wire x1="180.34" y1="477.52" x2="180.34" y2="474.98" width="0.1524" layer="91" style="longdash"/>
+<label x="180.34" y="474.98" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="VAUX" class="9">
 <segment>
 <pinref part="C11" gate="G$1" pin="1"/>
-<wire x1="160.02" y1="492.76" x2="160.02" y2="495.3" width="0.1524" layer="91"/>
-<label x="160.02" y="495.3" size="1.778" layer="95"/>
+<wire x1="200.66" y1="487.68" x2="200.66" y2="490.22" width="0.1524" layer="91"/>
+<label x="200.66" y="490.22" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC6" gate="G$1" pin="3-VAUX"/>
@@ -26151,6 +26151,11 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <wire x1="541.02" y1="853.44" x2="553.72" y2="853.44" width="0.1524" layer="91"/>
 <label x="553.72" y="853.44" size="1.778" layer="95" rot="R270"/>
 </segment>
+<segment>
+<pinref part="R21" gate="G$1" pin="2"/>
+<wire x1="147.32" y1="487.68" x2="147.32" y2="490.22" width="0.1524" layer="91"/>
+<label x="147.32" y="490.22" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="V_DC_TP-OUT" class="3">
 <segment>
@@ -26197,14 +26202,9 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <pinref part="TP4_IN" gate="G$1" pin="TP"/>
 </segment>
 <segment>
-<pinref part="R21" gate="G$1" pin="2"/>
-<wire x1="172.72" y1="495.3" x2="172.72" y2="497.84" width="0.1524" layer="91"/>
-<label x="172.72" y="497.84" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="R23" gate="G$1" pin="2"/>
-<wire x1="190.5" y1="495.3" x2="190.5" y2="497.84" width="0.1524" layer="91" style="longdash"/>
-<label x="190.5" y="497.84" size="1.778" layer="95"/>
+<wire x1="180.34" y1="487.68" x2="180.34" y2="490.22" width="0.1524" layer="91" style="longdash"/>
+<label x="180.34" y="490.22" size="1.778" layer="95"/>
 </segment>
 <segment>
 <wire x1="104.14" y1="662.94" x2="104.14" y2="673.1" width="0.1524" layer="91"/>
