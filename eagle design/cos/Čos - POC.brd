@@ -8,7 +8,7 @@
 </settings>
 <grid distance="0.25" unitdist="mm" unit="mm" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="mm" altunit="mm"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="26" fill="1" visible="no" active="yes"/>
 <layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
 <layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
@@ -23,21 +23,21 @@
 <layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
 <layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
 <layer number="15" name="Route15" color="24" fill="1" visible="no" active="yes"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
-<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
-<layer number="30" name="bStop" color="7" fill="6" visible="yes" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
 <layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
 <layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
@@ -46,10 +46,10 @@
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
-<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
-<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
@@ -58,8 +58,8 @@
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -341,6 +341,14 @@ ejovrh rev.1</text>
 <wire x1="5" y1="9.25" x2="5" y2="7.25" width="0.3" layer="42"/>
 <wire x1="7" y1="8.25" x2="7" y2="7.25" width="0.3" layer="42"/>
 <wire x1="7" y1="9.25" x2="7" y2="9" width="0.3" layer="42"/>
+<rectangle x1="2.75" y1="0.71" x2="4.5" y2="3.21" layer="29"/>
+<rectangle x1="0.915" y1="2.375" x2="2.665" y2="4.875" layer="29" rot="R90"/>
+<rectangle x1="32.415" y1="2.375" x2="34.165" y2="4.875" layer="29" rot="R90"/>
+<rectangle x1="30.5" y1="0.54" x2="32.25" y2="3.04" layer="29" rot="R180"/>
+<rectangle x1="30.5" y1="0.97" x2="31.75" y2="2.97" layer="30"/>
+<rectangle x1="32.405" y1="2.875" x2="33.655" y2="4.875" layer="30" rot="R90"/>
+<rectangle x1="1.405" y1="2.875" x2="2.655" y2="4.875" layer="30" rot="R90"/>
+<rectangle x1="3.25" y1="1.03" x2="4.5" y2="3.03" layer="30" rot="R180"/>
 </plain>
 <libraries>
 <library name="rcl" urn="urn:adsk.eagle:library:334">
@@ -5500,7 +5508,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="23,1,0d0c67f866990c6d"/>
 <approved hash="23,15,efec242c20e1eb21"/>
 <approved hash="23,1,657afb08faf06482"/>
-<approved hash="23,1,0ffa198819f40f86"/>
 <approved hash="3,1,d3f1e006e4e3d714"/>
 <approved hash="3,1,07ff840b868b057f"/>
 <approved hash="3,1,973309214deebcbb"/>
@@ -5524,7 +5531,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,04478d8827f8ae37"/>
 <approved hash="3,1,5a4c083e09e95b9b"/>
 <approved hash="3,1,f3860c720c0bf3ff"/>
-<approved hash="3,1,397a4f084f08397a"/>
 <approved hash="3,1,1ebeb4c0b4731e0d"/>
 <approved hash="3,1,6360341d71bf7d36"/>
 <approved hash="3,1,4ddddf6d128e1452"/>
@@ -5534,8 +5540,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,4572e50ce521455f"/>
 <approved hash="3,1,6ad608a417077575"/>
 <approved hash="3,1,e64208430806d52f"/>
-<approved hash="3,1,7a0b0879082c7a5e"/>
-<approved hash="3,1,a5f69788961da463"/>
 <approved hash="3,1,84b6d5d2cbac626c"/>
 <approved hash="3,1,a2506732666fa30d"/>
 <approved hash="3,1,cc7b0848095bfe7e"/>
@@ -5548,7 +5552,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,816dbb1fbb1f816d"/>
 <approved hash="3,1,d24e192c067ccd1e"/>
 <approved hash="3,1,9b6ab918b91e9b6c"/>
-<approved hash="3,1,3bf2558c55e33b9d"/>
 <approved hash="3,1,81903df23d9181f3"/>
 <approved hash="3,1,6af517c7170b04a5"/>
 <approved hash="3,1,15ef3f9120250a5b"/>
@@ -5556,15 +5559,12 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,8dd09f249e9d8c69"/>
 <approved hash="3,1,6df483477f0d7119"/>
 <approved hash="3,1,36a6030edd49525c"/>
-<approved hash="3,1,da7b090809afe8fa"/>
 <approved hash="3,1,db750b080b79e772"/>
 <approved hash="3,1,e1a2c4c1c5c281a0"/>
 <approved hash="3,1,c78908c189577feb"/>
-<approved hash="3,1,55f69f889e1a5464"/>
 <approved hash="3,1,0d0c67f866990c6d"/>
 <approved hash="3,1,d7b90c880c99e5fa"/>
 <approved hash="3,1,8bf8b98ab8368a44"/>
-<approved hash="3,1,5e01147f14215e5f"/>
 <approved hash="3,1,d25c7e8cd4db780b"/>
 <approved hash="3,1,9be60198001e9a60"/>
 <approved hash="3,1,a14b4eba4ee6578e"/>
@@ -5578,9 +5578,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,f96a071b071ee3e5"/>
 <approved hash="3,1,04aade4adb916763"/>
 <approved hash="3,1,238dc36fc0802062"/>
-<approved hash="3,1,aa8ab8f8b7b8a5ca"/>
 <approved hash="3,1,f470008400f1f405"/>
-<approved hash="3,1,096a48984b980a6a"/>
 <approved hash="3,1,7f4811d202427810"/>
 <approved hash="3,1,3a80b4cf90c85bc0"/>
 <approved hash="3,1,118b5a795d2d16df"/>
@@ -5621,16 +5619,13 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,5aa808da08255a57"/>
 <approved hash="3,1,65790b0b090f1b09"/>
 <approved hash="3,1,7b82c1031f0ce9af"/>
-<approved hash="3,1,4afb880989a24b50"/>
 <approved hash="3,1,fdfcfd08fd0afdfe"/>
-<approved hash="3,1,05f3a78da7e2059c"/>
 <approved hash="3,1,6ad708a517017573"/>
 <approved hash="3,1,1ac308b109151b67"/>
 <approved hash="3,1,e2fa38883973e301"/>
 <approved hash="3,1,657afb08faf06482"/>
 <approved hash="3,1,4b7bf909f9164b64"/>
 <approved hash="3,1,4a0bf879f6ee449c"/>
-<approved hash="3,1,7a7235ec35807a1e"/>
 <approved hash="3,1,fc9706e30617fc63"/>
 <approved hash="3,1,7a1003e40c3f75cb"/>
 <approved hash="3,1,8bee50d61af25d5d"/>
@@ -5644,7 +5639,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,89df0120c10eeded"/>
 <approved hash="3,1,59ca1fb81ffc598e"/>
 <approved hash="3,1,226ce70ee64e232c"/>
-<approved hash="3,1,0ffa198819f40f86"/>
 <approved hash="3,1,32af11bcbbee98fd"/>
 <approved hash="3,1,6acd08bf091b6b69"/>
 <approved hash="3,1,9afa388839759b07"/>
@@ -5658,7 +5652,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,92758c158cc793a2"/>
 <approved hash="3,1,78292b5b2c857ff7"/>
 <approved hash="3,1,e63036d2361fe6fd"/>
-<approved hash="3,1,140bde79d13a1b48"/>
 <approved hash="3,1,317d2b0f2a173065"/>
 <approved hash="3,1,5863160613c134b3"/>
 <approved hash="3,1,61da17a810556627"/>
@@ -5679,17 +5672,11 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,7afb09e9098d1ccb"/>
 <approved hash="3,1,be6ae818ef1ab968"/>
 <approved hash="3,1,d4627800789a4e6a"/>
-<approved hash="3,1,4a29885b88c24ab0"/>
 <approved hash="3,1,cf7b930940879dbe"/>
-<approved hash="3,1,e9fb88098819e9eb"/>
 <approved hash="3,1,cd9b088608b4ffff"/>
 <approved hash="3,1,ce722f1eda321445"/>
 <approved hash="3,1,67ef3b10045a0752"/>
-<approved hash="3,1,1c0ba679a93a1348"/>
-<approved hash="3,1,aaeab898bb98a9ea"/>
 <approved hash="3,1,7a48143a149e7aec"/>
-<approved hash="3,1,69eb881989706882"/>
-<approved hash="3,1,090a48f847b8064a"/>
 <approved hash="3,1,d7f608040801d7f3"/>
 <approved hash="3,1,f7e3c1cf2c3b2419"/>
 <approved hash="3,1,4cf29e808178530a"/>
@@ -5705,7 +5692,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,012d3924d6fceef5"/>
 <approved hash="3,1,50f7af50f96106c6"/>
 <approved hash="3,1,47e00b215d1311d2"/>
-<approved hash="3,1,0a0bb079b1aa0bd8"/>
 <approved hash="3,1,555601a2000854fc"/>
 <approved hash="3,1,47fff40bf4744780"/>
 <approved hash="3,1,7500a570a4a974d9"/>
@@ -5933,7 +5919,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="19,1,2a892c833e4b3841"/>
 <approved hash="19,1,2a792a7838b038b1"/>
 <approved hash="19,1,2b0928033acb39c1"/>
-<approved hash="19,1,d80cf0059310391d"/>
 <approved hash="19,1,73067582874a81ce"/>
 <approved hash="19,1,7106700a82c283ce"/>
 <approved hash="19,1,a208a10206ca05c0"/>
@@ -6001,7 +5986,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="19,16,c449c65bc06836ac"/>
 <approved hash="19,16,579947f03c9f7a04"/>
 <approved hash="19,16,090b0a82834a80c3"/>
-<approved hash="19,16,fa2edb7fb2996fa0"/>
 <approved hash="19,16,4d5f5cf87867be37"/>
 <approved hash="19,16,0d070c251c8df66f"/>
 <approved hash="19,16,a204a482034a05cc"/>
@@ -6063,6 +6047,30 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,1,516b0b090bf87a7a"/>
 <approved hash="3,1,75ad07df06e57497"/>
 <approved hash="3,1,e76a39183a1ce46e"/>
+<approved hash="7,40,21dfe19e6191a1d0"/>
+<approved hash="7,40,e854a91529156854"/>
+<approved hash="19,1,de9ff75e12eeb92b"/>
+<approved hash="19,16,fe0fe4dba66d4eb7"/>
+<approved hash="19,16,0b87099b0653044f"/>
+<approved hash="23,1,0b7a1d081d680b1a"/>
+<approved hash="3,1,4afd880f8b4449b6"/>
+<approved hash="3,1,0648bc3abc8d06ff"/>
+<approved hash="3,1,3f60511e51693f17"/>
+<approved hash="3,1,7ee0317e310a7e94"/>
+<approved hash="3,1,0b7a1d081d680b1a"/>
+<approved hash="3,1,e9fc880e8bbaea48"/>
+<approved hash="3,1,7a14086609af7bdd"/>
+<approved hash="3,1,4a36884489414b33"/>
+<approved hash="3,1,5e11146f15b35fcd"/>
+<approved hash="3,1,5a70900e903e5a40"/>
+<approved hash="3,1,aa70980e9839aa47"/>
+<approved hash="3,1,aa82b8f0b9b8abca"/>
+<approved hash="3,1,aaeab898b99cabee"/>
+<approved hash="3,1,090248f049b8084a"/>
+<approved hash="3,1,69ea8818880069f2"/>
+<approved hash="3,1,096a4898499c086e"/>
+<approved hash="3,1,0161a31fa3680116"/>
+<approved hash="3,1,0b7bc109c16a0b18"/>
 </errors>
 </board>
 </drawing>
