@@ -23510,7 +23510,7 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <part name="IC7" library="ATtiny4313 microcontroller" deviceset="ATTINY4313" device="VQFN-20" value="ATTINY4313-MMH">
 <attribute name="SPICEPREFIX" value="X"/>
 </part>
-<part name="IC8" library="PRQV8.00CR1510Y00L - 8MHz resonator" deviceset="PRQV" device="" value="PBRC8.00GR50X000"/>
+<part name="IC8" library="PRQV8.00CR1510Y00L - 8MHz resonator" deviceset="PRQV" device="" value="AWSCR-8.00CELA-C10-T3"/>
 <part name="ICSP" library="5034800600 FPC Connector" deviceset="5034800600" device="" value="5034800600"/>
 <part name="R18" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083331JP / 330Ω"/>
 <part name="R19" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083103JP / 10kΩ"/>
@@ -23841,7 +23841,7 @@ D1-4 - ideal diodes</text>
 <wire x1="617.22" y1="746.76" x2="617.22" y2="-58.42" width="0.1524" layer="97"/>
 <wire x1="617.22" y1="-58.42" x2="-60.96" y2="-58.42" width="0.1524" layer="97"/>
 <wire x1="-60.96" y1="-58.42" x2="-60.96" y2="746.76" width="0.1524" layer="97"/>
-<text x="-45.72" y="1216.66" size="6.4516" layer="97">AC Regulator</text>
+<text x="-45.72" y="1216.66" size="6.4516" layer="97">AC Rectifier</text>
 <text x="-35.56" y="728.98" size="6.4516" layer="97">Load</text>
 <wire x1="238.76" y1="1198.88" x2="238.76" y2="1193.8" width="0.1524" layer="94"/>
 <wire x1="208.28" y1="1198.88" x2="208.28" y2="1193.8" width="0.1524" layer="94"/>
@@ -23871,10 +23871,9 @@ Vout = 5V0</text>
 <wire x1="33.02" y1="650.24" x2="33.02" y2="668.02" width="0.1524" layer="97" style="shortdash"/>
 <text x="99.06" y="662.94" size="1.778" layer="97">5V0</text>
 <text x="99.06" y="655.32" size="1.778" layer="97">GND</text>
-<text x="-7.62" y="652.78" size="1.778" layer="97">Dynamo &amp; AC regulated output</text>
+<text x="-7.62" y="652.78" size="1.778" layer="97">Dynamo AC regulated output</text>
 <wire x1="165.1" y1="668.02" x2="165.1" y2="662.94" width="0.1524" layer="97" style="shortdash"/>
-<wire x1="165.1" y1="662.94" x2="165.1" y2="655.32" width="0.1524" layer="97" style="shortdash"/>
-<wire x1="165.1" y1="655.32" x2="165.1" y2="650.24" width="0.1524" layer="97" style="shortdash"/>
+<wire x1="165.1" y1="662.94" x2="165.1" y2="650.24" width="0.1524" layer="97" style="shortdash"/>
 <wire x1="165.1" y1="650.24" x2="210.82" y2="650.24" width="0.1524" layer="97" style="shortdash"/>
 <wire x1="210.82" y1="650.24" x2="210.82" y2="662.94" width="0.1524" layer="97" style="shortdash"/>
 <wire x1="210.82" y1="662.94" x2="210.82" y2="668.02" width="0.1524" layer="97" style="shortdash"/>
@@ -24047,19 +24046,16 @@ Vout = 5V0</text>
 <wire x1="269.24" y1="665.48" x2="269.24" y2="660.4" width="0.1524" layer="94"/>
 <text x="269.24" y="665.48" size="1.778" layer="94" rot="R90">TP6</text>
 <circle x="-38.1" y="754.38" radius="0.254" width="0.6096" layer="97"/>
-<circle x="160.02" y="645.16" radius="0.254" width="0.6096" layer="97"/>
 <wire x1="279.4" y1="629.92" x2="279.4" y2="614.68" width="0.1524" layer="97" style="shortdash"/>
 <wire x1="279.4" y1="614.68" x2="271.78" y2="614.68" width="0.1524" layer="97" style="shortdash"/>
 <wire x1="271.78" y1="614.68" x2="264.16" y2="614.68" width="0.1524" layer="97" style="shortdash"/>
 <wire x1="264.16" y1="614.68" x2="264.16" y2="622.3" width="0.1524" layer="97" style="shortdash"/>
 <wire x1="264.16" y1="622.3" x2="264.16" y2="629.92" width="0.1524" layer="97" style="shortdash"/>
-<wire x1="264.16" y1="629.92" x2="269.24" y2="629.92" width="0.1524" layer="97" style="shortdash"/>
 <text x="269.24" y="624.84" size="1.778" layer="97" rot="R270">uC
 CAN</text>
 <text x="281.94" y="655.32" size="1.778" layer="97">GND</text>
 <text x="281.94" y="662.94" size="1.778" layer="97">6V0</text>
-<wire x1="269.24" y1="629.92" x2="274.32" y2="629.92" width="0.1524" layer="97" style="shortdash"/>
-<wire x1="274.32" y1="629.92" x2="279.4" y2="629.92" width="0.1524" layer="97" style="shortdash"/>
+<wire x1="264.16" y1="629.92" x2="279.4" y2="629.92" width="0.1524" layer="97" style="shortdash"/>
 <wire x1="33.02" y1="322.58" x2="33.02" y2="452.12" width="0.1524" layer="90"/>
 <wire x1="33.02" y1="452.12" x2="236.22" y2="452.12" width="0.1524" layer="90"/>
 <wire x1="236.22" y1="452.12" x2="469.9" y2="452.12" width="0.1524" layer="90"/>
@@ -24085,22 +24081,12 @@ via the resistor divider</text>
 <wire x1="43.18" y1="386.08" x2="43.18" y2="375.92" width="0.1524" layer="97"/>
 <text x="152.4" y="655.32" size="1.778" layer="97" align="center">Rsense</text>
 <wire x1="147.32" y1="657.86" x2="157.48" y2="657.86" width="0.1524" layer="97"/>
-<wire x1="157.48" y1="657.86" x2="157.48" y2="655.32" width="0.1524" layer="97"/>
-<wire x1="157.48" y1="655.32" x2="157.48" y2="652.78" width="0.1524" layer="97"/>
+<wire x1="157.48" y1="657.86" x2="157.48" y2="652.78" width="0.1524" layer="97"/>
 <wire x1="157.48" y1="652.78" x2="147.32" y2="652.78" width="0.1524" layer="97"/>
 <wire x1="147.32" y1="652.78" x2="147.32" y2="657.86" width="0.1524" layer="97"/>
-<wire x1="157.48" y1="655.32" x2="165.1" y2="655.32" width="0.1524" layer="97"/>
-<circle x="160.02" y="655.32" radius="0.254" width="0.6096" layer="97"/>
 <text x="60.96" y="340.36" size="6.4516" layer="94">TP7</text>
 <text x="109.22" y="642.62" size="1.778" layer="97" rot="R90" align="center">Rdivide</text>
 <text x="106.68" y="665.48" size="1.778" layer="94" rot="R90">TP4</text>
-<wire x1="160.02" y1="645.16" x2="233.68" y2="645.16" width="0.1524" layer="97"/>
-<wire x1="233.68" y1="645.16" x2="233.68" y2="650.24" width="0.1524" layer="97"/>
-<wire x1="269.24" y1="629.92" x2="269.24" y2="645.16" width="0.1524" layer="97"/>
-<wire x1="269.24" y1="645.16" x2="233.68" y2="645.16" width="0.1524" layer="97"/>
-<wire x1="274.32" y1="629.92" x2="274.32" y2="662.94" width="0.1524" layer="97"/>
-<circle x="233.68" y="645.16" radius="0.254" width="0.6096" layer="97"/>
-<circle x="274.32" y="662.94" radius="0.254" width="0.6096" layer="97"/>
 <wire x1="127" y1="627.38" x2="127" y2="622.3" width="0.1524" layer="94"/>
 <text x="127" y="627.38" size="1.778" layer="94">TP7</text>
 <text x="45.72" y="383.54" size="1.778" layer="97" align="top-left">Imax = 2A
@@ -25393,16 +25379,13 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <junction x="40.64" y="355.6"/>
 </segment>
 <segment>
+<wire x1="129.54" y1="624.84" x2="142.24" y2="624.84" width="0.1524" layer="91"/>
+<label x="129.54" y="624.84" size="1.778" layer="95" rot="R270"/>
+</segment>
+<segment>
+<wire x1="144.78" y1="655.32" x2="147.32" y2="655.32" width="0.1524" layer="91"/>
 <wire x1="144.78" y1="655.32" x2="144.78" y2="632.46" width="0.1524" layer="91"/>
 <label x="144.78" y="642.62" size="1.778" layer="95"/>
-<wire x1="129.54" y1="624.84" x2="139.7" y2="624.84" width="0.1524" layer="91"/>
-<label x="129.54" y="624.84" size="1.778" layer="95" rot="R270"/>
-<wire x1="139.7" y1="624.84" x2="142.24" y2="624.84" width="0.1524" layer="91"/>
-<wire x1="139.7" y1="624.84" x2="139.7" y2="655.32" width="0.1524" layer="91"/>
-<wire x1="139.7" y1="655.32" x2="144.78" y2="655.32" width="0.1524" layer="91"/>
-<junction x="139.7" y="624.84"/>
-<junction x="144.78" y="655.32"/>
-<wire x1="144.78" y1="655.32" x2="147.32" y2="655.32" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GND_VIA_INCP" class="1">
@@ -25666,8 +25649,18 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 </segment>
 <segment>
 <label x="160.02" y="640.08" size="1.778" layer="95"/>
-<wire x1="160.02" y1="655.32" x2="160.02" y2="632.46" width="0.1524" layer="91"/>
-<label x="236.22" y="645.16" size="1.778" layer="95"/>
+<wire x1="160.02" y1="655.32" x2="160.02" y2="645.16" width="0.1524" layer="91"/>
+<wire x1="160.02" y1="645.16" x2="160.02" y2="632.46" width="0.1524" layer="91"/>
+<wire x1="157.48" y1="655.32" x2="160.02" y2="655.32" width="0.1524" layer="91"/>
+<junction x="160.02" y="655.32"/>
+<wire x1="160.02" y1="655.32" x2="165.1" y2="655.32" width="0.1524" layer="91"/>
+<wire x1="269.24" y1="629.92" x2="269.24" y2="645.16" width="0.1524" layer="91"/>
+<wire x1="269.24" y1="645.16" x2="236.22" y2="645.16" width="0.1524" layer="91"/>
+<junction x="160.02" y="645.16"/>
+<wire x1="236.22" y1="645.16" x2="160.02" y2="645.16" width="0.1524" layer="91"/>
+<wire x1="236.22" y1="645.16" x2="236.22" y2="650.24" width="0.1524" layer="91"/>
+<junction x="236.22" y="645.16"/>
+<label x="238.76" y="645.16" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC10" gate="G$1" pin="6_INVG"/>
@@ -25881,6 +25874,7 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <segment>
 <wire x1="269.24" y1="609.6" x2="269.24" y2="601.98" width="0.1524" layer="91"/>
 <wire x1="269.24" y1="609.6" x2="269.24" y2="601.98" width="0.1524" layer="91"/>
+<label x="269.24" y="601.98" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$4" class="9">
@@ -26214,6 +26208,14 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <pinref part="R6" gate="G$1" pin="2"/>
 <wire x1="50.8" y1="878.84" x2="50.8" y2="883.92" width="0.1524" layer="91"/>
 <label x="50.8" y="883.92" size="1.778" layer="95" rot="R90"/>
+</segment>
+<segment>
+<wire x1="182.88" y1="632.46" x2="182.88" y2="640.08" width="0.1524" layer="91"/>
+<label x="182.88" y="640.08" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="274.32" y1="629.92" x2="274.32" y2="645.16" width="0.1524" layer="91"/>
+<label x="274.32" y="645.16" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="INT_MCP23S08" class="9">
@@ -26598,6 +26600,13 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <junction x="393.7" y="134.62"/>
 </segment>
 </net>
+<net name="N$9" class="0">
+<segment>
+<pinref part="IC17" gate="G$1" pin="15_GP6"/>
+<wire x1="360.68" y1="383.54" x2="370.84" y2="383.54" width="0.1524" layer="91"/>
+<label x="370.84" y="383.54" size="1.778" layer="95"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
@@ -26624,8 +26633,8 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <approved hash="206,1,261.62,20.32,SPI_MISO,,,,,"/>
 <approved hash="206,1,198.12,368.3,SPI_MISO,,,,,"/>
 <approved hash="206,1,314.96,386.08,SPI_MISO,,,,,"/>
-<approved hash="115,1,269.24,605.79,COMPARATOR_IN,,,,,"/>
 <approved hash="115,1,-7.62,862.33,AFTER_SW_BEFORE_TUNING_CAP,,,,,"/>
+<approved hash="115,1,269.24,605.79,COMPARATOR_IN,,,,,"/>
 </errors>
 </schematic>
 </drawing>
