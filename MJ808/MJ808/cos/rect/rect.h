@@ -5,9 +5,14 @@
 
 enum RegulatorOperatesAs												// enum of AC rectifier operation: Graetz bridge, tuning capacitors on/off, Delon voltage doubler on/off
 {
-	Graetz,																// 0
-	Tuning,																// 1
-	Delon																// 2
+																		// bit2:0 == 0 -- no tuning cap, i.e. naked graetz (w./wo. delon)
+	_2200uF,															// bit 0 - 1st cap - 2200uF tuning cap on
+	_3300uF,															// bit 1 - 2nd cap - ditto, 3300uF cap
+	_4700uF,															// bit 2 - 3rd cap - ditto, 4700uF cap
+
+																		// bit 4:3 - none || graetz || delon || combo
+	_graetz,															// bit 3 - graetz swtich closed
+	_delon																// bit 4 - delon switch closed
 };
 
 typedef struct 															// reg_t struct describing the AC rectifier as a whole

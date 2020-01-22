@@ -423,7 +423,9 @@ __can_t __CAN =															// instantiate can_t actual and set function point
 // object constructor
 can_t * can_ctor()
 {
+#ifndef SIMULATION
 	__CAN.init();														// initialize & configure the MCP2515
+#endif
 
 	return &__CAN.public;												// return address of public part; calling code accesses it via pointer
 };

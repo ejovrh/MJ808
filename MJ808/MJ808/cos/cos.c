@@ -34,21 +34,21 @@ void _HeartbeatPeriodicCos(void)										// ran by every watchdog ISR, period s
 	*/
 
 	if (__Device.public.ACfreq < 5.0)									// slow speed - Delon voltage doubler rectifier
-		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & Delon);
+		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & _BV(_delon));
 
 	if (__Device.public.ACfreq >= 5.0)									// higher speed - Graetz rectifier
-		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & Graetz);
+		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & _BV(_graetz));
 
 	if (__Device.public.ACfreq >= 18.0)									// even higher speed - Graetz & tuning caps, increase load
 	{
-		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & ( Graetz | Tuning) );
+		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & ( _BV(_graetz) | _BV(_4700uF) ) );
 		__Device.public.LiIonCharger->SetResistor(128);
 		*(__Device.public.BuckBoost->PWM) = 0xE0;
 	}
 
 	if (__Device.public.ACfreq >= 45.0)									// even more higher speed - Graetz and even higher load
 	{
-		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & Graetz);
+		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & _BV(_graetz));
 		__Device.public.LiIonCharger->SetResistor(255);
 		*(__Device.public.BuckBoost->PWM) = 0xE0;
 	}
@@ -154,7 +154,7 @@ void cos_ctor()															// constructor for concrete class
 	__Device.public.LiIonCharger = MCP73871;							// get address of mcp73871_t object
 
 	// Èos __Device operational initialization on MCU power on
-	__Device.public.Rect->SetRectifierMode(Delon);						// set regulator into Delon mode - we are very likely to start spinning slow
+	__Device.public.Rect->SetRectifierMode(_delon);						// set regulator manually into Delon mode - we are very likely to start spinning slow
 	*(__Device.public.BuckBoost->PWM) = 0xA0;							// put Buck-Boost into PWM/PFM (auto) mode
 	__Device.public.LiIonCharger->SetResistor(128);						// set resistor value to something
 };
