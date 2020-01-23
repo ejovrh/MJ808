@@ -23904,8 +23904,7 @@ Vout = 5V0</text>
 <wire x1="213.36" y1="662.94" x2="231.14" y2="662.94" width="0.1524" layer="97"/>
 <wire x1="231.14" y1="668.02" x2="261.62" y2="668.02" width="0.1524" layer="97" style="shortdash"/>
 <wire x1="261.62" y1="668.02" x2="261.62" y2="650.24" width="0.1524" layer="97" style="shortdash"/>
-<wire x1="261.62" y1="650.24" x2="233.68" y2="650.24" width="0.1524" layer="97" style="shortdash"/>
-<wire x1="233.68" y1="650.24" x2="231.14" y2="650.24" width="0.1524" layer="97" style="shortdash"/>
+<wire x1="261.62" y1="650.24" x2="231.14" y2="650.24" width="0.1524" layer="97" style="shortdash"/>
 <wire x1="231.14" y1="650.24" x2="231.14" y2="668.02" width="0.1524" layer="97" style="shortdash"/>
 <text x="236.22" y="657.86" size="1.778" layer="97">DC Boost converter
 6V0 out</text>
@@ -24598,13 +24597,13 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <attribute name="NAME" x="386.08" y="149.86" size="1.778" layer="95"/>
 <attribute name="VALUE" x="386.08" y="147.32" size="1.778" layer="96"/>
 </instance>
-<instance part="R28" gate="G$1" x="231.14" y="142.24" smashed="yes" rot="R270">
-<attribute name="NAME" x="233.68" y="142.24" size="1.778" layer="95"/>
-<attribute name="VALUE" x="233.68" y="139.7" size="1.778" layer="96"/>
+<instance part="R28" gate="G$1" x="236.22" y="142.24" smashed="yes" rot="R270">
+<attribute name="NAME" x="238.76" y="142.24" size="1.778" layer="95"/>
+<attribute name="VALUE" x="238.76" y="139.7" size="1.778" layer="96"/>
 </instance>
-<instance part="R29" gate="G$1" x="231.14" y="132.08" smashed="yes" rot="R270">
-<attribute name="NAME" x="233.68" y="132.08" size="1.778" layer="95"/>
-<attribute name="VALUE" x="233.68" y="129.54" size="1.778" layer="96"/>
+<instance part="R29" gate="G$1" x="236.22" y="132.08" smashed="yes" rot="R270">
+<attribute name="NAME" x="238.76" y="132.08" size="1.778" layer="95"/>
+<attribute name="VALUE" x="238.76" y="129.54" size="1.778" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -25044,8 +25043,8 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 </segment>
 <segment>
 <pinref part="R28" gate="G$1" pin="1"/>
-<wire x1="231.14" y1="147.32" x2="231.14" y2="154.94" width="0.1524" layer="91"/>
-<label x="231.14" y="154.94" size="1.778" layer="95"/>
+<wire x1="236.22" y1="147.32" x2="236.22" y2="154.94" width="0.1524" layer="91"/>
+<label x="236.22" y="154.94" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="RESET" class="9">
@@ -25695,8 +25694,8 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 </segment>
 <segment>
 <pinref part="R29" gate="G$1" pin="2"/>
-<wire x1="231.14" y1="127" x2="231.14" y2="119.38" width="0.1524" layer="91"/>
-<label x="231.14" y="119.38" size="1.778" layer="95"/>
+<wire x1="236.22" y1="127" x2="236.22" y2="119.38" width="0.1524" layer="91"/>
+<label x="236.22" y="119.38" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="INVP" class="9">
@@ -26628,11 +26627,11 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <net name="COMPARATOR_REF" class="0">
 <segment>
 <pinref part="IC7" gate="G$1" pin="AIN1/PCINT1-PB1"/>
-<wire x1="190.5" y1="137.16" x2="231.14" y2="137.16" width="0.1524" layer="91"/>
+<wire x1="190.5" y1="137.16" x2="236.22" y2="137.16" width="0.1524" layer="91"/>
 <pinref part="R28" gate="G$1" pin="2"/>
 <pinref part="R29" gate="G$1" pin="1"/>
-<junction x="231.14" y="137.16"/>
-<label x="226.06" y="137.16" size="1.778" layer="95" rot="R90"/>
+<junction x="236.22" y="137.16"/>
+<label x="231.14" y="137.16" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 </nets>
