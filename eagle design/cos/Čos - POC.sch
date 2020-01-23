@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.4.2">
+<eagle version="9.4.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -23668,7 +23668,7 @@ Vpcc=(R2/(R1+R2))*Vin</text>
 <wire x1="210.82" y1="236.22" x2="236.22" y2="236.22" width="0" layer="97"/>
 <text x="441.96" y="91.44" size="1.778" layer="97" align="top-left">Vout=Vfb*(R1+R2)/R2
 </text>
-<text x="15.24" y="1061.72" size="1.778" layer="97">Vzener = 16V</text>
+<text x="2.54" y="1038.86" size="1.778" layer="97">Vzener = 16V</text>
 <text x="284.48" y="998.22" size="2.54" layer="97">ideal diode D1</text>
 <text x="208.28" y="998.22" size="2.54" layer="97">ideal diode D2</text>
 <text x="129.54" y="998.22" size="2.54" layer="97">ideal diode D3</text>
@@ -24304,13 +24304,13 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <attribute name="NAME" x="325.12" y="977.9" size="1.27" layer="95" align="center-left"/>
 <attribute name="VALUE" x="325.12" y="975.36" size="1.27" layer="96" align="center-left"/>
 </instance>
-<instance part="D4" gate="G$1" x="17.78" y="1043.94" smashed="yes" rot="R90">
-<attribute name="NAME" x="20.32" y="1045.718" size="1.778" layer="95"/>
-<attribute name="VALUE" x="20.32" y="1042.797" size="1.778" layer="96"/>
+<instance part="D4" gate="G$1" x="5.08" y="1021.08" smashed="yes" rot="R90">
+<attribute name="NAME" x="7.62" y="1022.858" size="1.778" layer="95"/>
+<attribute name="VALUE" x="7.62" y="1019.937" size="1.778" layer="96"/>
 </instance>
-<instance part="D3" gate="G$1" x="17.78" y="1051.56" smashed="yes" rot="R270">
-<attribute name="NAME" x="20.32" y="1053.338" size="1.778" layer="95"/>
-<attribute name="VALUE" x="20.32" y="1050.417" size="1.778" layer="96"/>
+<instance part="D3" gate="G$1" x="5.08" y="1028.7" smashed="yes" rot="R270">
+<attribute name="NAME" x="7.62" y="1030.478" size="1.778" layer="95"/>
+<attribute name="VALUE" x="7.62" y="1027.557" size="1.778" layer="96"/>
 </instance>
 <instance part="C4" gate="G$1" x="81.28" y="942.34" smashed="yes" rot="R270">
 <attribute name="NAME" x="78.74" y="937.26" size="1.778" layer="95"/>
@@ -24488,13 +24488,13 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <attribute name="NAME" x="96.52" y="1064.26" size="1.778" layer="95" align="center-left"/>
 <attribute name="VALUE" x="96.52" y="1061.72" size="1.778" layer="96" align="center-left"/>
 </instance>
-<instance part="DYNAMO2" gate="G$1" x="-25.4" y="1049.02" smashed="yes" rot="R270">
-<attribute name="NAME" x="-27.94" y="1049.02" size="1.778" layer="95" rot="R180"/>
-<attribute name="TP_SIGNAL_NAME" x="-26.67" y="1046.48" size="1.778" layer="97" rot="R270"/>
+<instance part="DYNAMO2" gate="G$1" x="-20.32" y="1064.26" smashed="yes" rot="R270">
+<attribute name="NAME" x="-22.86" y="1064.26" size="1.778" layer="95" rot="R90"/>
+<attribute name="TP_SIGNAL_NAME" x="-21.59" y="1061.72" size="1.778" layer="97" rot="R270"/>
 </instance>
-<instance part="DYNAMO1" gate="G$1" x="-25.4" y="1043.94" smashed="yes" rot="R270">
-<attribute name="NAME" x="-27.94" y="1043.94" size="1.778" layer="95" rot="R180"/>
-<attribute name="TP_SIGNAL_NAME" x="-26.67" y="1041.4" size="1.778" layer="97" rot="R270"/>
+<instance part="DYNAMO1" gate="G$1" x="-20.32" y="1059.18" smashed="yes" rot="R270">
+<attribute name="NAME" x="-22.86" y="1059.18" size="1.778" layer="95" rot="R270"/>
+<attribute name="TP_SIGNAL_NAME" x="-21.59" y="1056.64" size="1.778" layer="97" rot="R270"/>
 </instance>
 <instance part="IC21" gate="G$1" x="403.86" y="858.52" smashed="yes">
 <attribute name="NAME" x="398.78" y="868.68" size="1.778" layer="95" align="center-left"/>
@@ -24568,14 +24568,14 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <attribute name="NAME" x="393.7" y="119.38" size="1.27" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="393.7" y="116.84" size="1.27" layer="96" font="vector" align="center"/>
 </instance>
-<instance part="FD1" gate="G$2" x="-25.4" y="1031.24" smashed="yes">
-<attribute name="NAME" x="-25.4" y="1032.51" size="1.016" layer="95" font="vector" ratio="12"/>
+<instance part="FD1" gate="G$2" x="-25.4" y="1018.54" smashed="yes">
+<attribute name="NAME" x="-25.4" y="1019.81" size="1.016" layer="95" font="vector" ratio="12"/>
 </instance>
-<instance part="FD2" gate="G$2" x="-25.4" y="1028.7" smashed="yes">
-<attribute name="NAME" x="-25.4" y="1029.97" size="1.016" layer="95" font="vector" ratio="12"/>
+<instance part="FD2" gate="G$2" x="-25.4" y="1016" smashed="yes">
+<attribute name="NAME" x="-25.4" y="1017.27" size="1.016" layer="95" font="vector" ratio="12"/>
 </instance>
-<instance part="FD3" gate="G$2" x="-25.4" y="1026.16" smashed="yes">
-<attribute name="NAME" x="-25.4" y="1027.43" size="1.016" layer="95" font="vector" ratio="12"/>
+<instance part="FD3" gate="G$2" x="-25.4" y="1013.46" smashed="yes">
+<attribute name="NAME" x="-25.4" y="1014.73" size="1.016" layer="95" font="vector" ratio="12"/>
 </instance>
 <instance part="R25" gate="G$1" x="403.86" y="379.73" smashed="yes">
 <attribute name="NAME" x="396.24" y="386.08" size="1.778" layer="95"/>
@@ -25614,7 +25614,7 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <segment>
 <pinref part="C9" gate="G$1" pin="2"/>
 <wire x1="139.7" y1="149.86" x2="139.7" y2="154.94" width="0.1524" layer="91"/>
-<label x="139.7" y="154.94" size="1.778" layer="95"/>
+<label x="139.7" y="154.94" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
 <pinref part="IC8" gate="G$1" pin="GND"/>
@@ -25734,7 +25734,7 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <segment>
 <pinref part="D4" gate="G$1" pin="C"/>
 <pinref part="D3" gate="G$1" pin="C"/>
-<wire x1="17.78" y1="1049.02" x2="17.78" y2="1046.48" width="0.1524" layer="91"/>
+<wire x1="5.08" y1="1026.16" x2="5.08" y2="1023.62" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="DYNAMO_2_AFTER_SW" class="2">
@@ -25776,12 +25776,12 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <net name="DYNAMO_1" class="2">
 <segment>
 <pinref part="D4" gate="G$1" pin="A"/>
-<wire x1="17.78" y1="1041.4" x2="17.78" y2="1038.86" width="0.1524" layer="91"/>
-<label x="17.78" y="1038.86" size="1.778" layer="95"/>
+<wire x1="5.08" y1="1018.54" x2="5.08" y2="1016" width="0.1524" layer="91"/>
+<label x="5.08" y="1016" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="-22.86" y1="1043.94" x2="-17.78" y2="1043.94" width="0.1524" layer="91"/>
-<label x="-17.78" y="1043.94" size="1.778" layer="95"/>
+<wire x1="-17.78" y1="1059.18" x2="-12.7" y2="1059.18" width="0.1524" layer="91"/>
+<label x="-12.7" y="1059.18" size="1.778" layer="95"/>
 <pinref part="DYNAMO1" gate="G$1" pin="TP"/>
 </segment>
 <segment>
@@ -25928,14 +25928,14 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 </net>
 <net name="DYNAMO_2_BEFORE_SW" class="2">
 <segment>
-<wire x1="-22.86" y1="1049.02" x2="-17.78" y2="1049.02" width="0.1524" layer="91"/>
-<label x="-17.78" y="1049.02" size="1.778" layer="95"/>
+<wire x1="-17.78" y1="1064.26" x2="-12.7" y2="1064.26" width="0.1524" layer="91"/>
+<label x="-12.7" y="1064.26" size="1.778" layer="95"/>
 <pinref part="DYNAMO2" gate="G$1" pin="TP"/>
 </segment>
 <segment>
 <pinref part="D3" gate="G$1" pin="A"/>
-<wire x1="17.78" y1="1054.1" x2="17.78" y2="1056.64" width="0.1524" layer="91"/>
-<label x="17.78" y="1056.64" size="1.778" layer="95"/>
+<wire x1="5.08" y1="1031.24" x2="5.08" y2="1033.78" width="0.1524" layer="91"/>
+<label x="5.08" y="1033.78" size="1.778" layer="95"/>
 </segment>
 <segment>
 <wire x1="20.32" y1="889" x2="-7.62" y2="889" width="0.1524" layer="91"/>
@@ -26631,7 +26631,7 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <pinref part="R28" gate="G$1" pin="2"/>
 <pinref part="R29" gate="G$1" pin="1"/>
 <junction x="236.22" y="137.16"/>
-<label x="231.14" y="137.16" size="1.778" layer="95" rot="R90"/>
+<label x="195.58" y="137.16" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>

@@ -16,6 +16,7 @@
 
 #define	MP3221_EN_pin			D,	0,	0								// Èos 5V0 output stage boost converter enable pin, pulled low
 #define	SPI_SS_MCP23S08_pin		D,	1,	1								// MCP23S08 Port Expander Slave Select
+// pin D2 is clockout
 #define INT_MCP2515_pin			D,	3,	3								// MCP2515 CAN Controller interrupt pin
 #define INT_MCP23S08_pin		D,	4,	4								// MCP23S08 Port Expander Interrupt pin
 #define	SPI_SS_AD5160_pin		D,	5,	5								// AD5160 Port Expander Slave Select
@@ -65,7 +66,7 @@ typedef struct															// struct describing devices on MJ808
 	mj8x8_t *mj8x8;														// pointer to the base class
 	tps630701_t *BuckBoost;												// 5V0 out Buck-Boost converter, powered by rectified dynamo, powers LiIon Charger
 	mcp73871_t *LiIonCharger;											// LiIon Charger & Powerpath controller, powered by 5V0, powers downstream with LiIon cell voltage (2.8-4.2V)
-	rect_t *Rect;															// AC regulator: Graetz bridge, tuning capacitors on/off, Delon voltage doubler on/off
+	rect_t *Rect;														// AC regulator: Graetz bridge, tuning capacitors on/off, Delon voltage doubler on/off
 
 	uint8_t OpParamArray[OP_PARAM_ARRAY_SIZE];							//
 	float ACfreq;														//

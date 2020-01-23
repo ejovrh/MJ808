@@ -11,7 +11,7 @@
 verified_TODO: verify PWM output on TPS630701_PWM_pin for range of 0x00 - 0xff
 	- PWM signal can be generated
 
-verified_TODO: TIMER1_OVF_vect triggers sucessfully on timer1 overflow
+verified_TODO: TIMER1_OVF_vect triggers successfully on timer1 overflow
 
 TODO: verify effect on PWM on TPC63701 for constant load (resistor) and varying load (potentiometer)
 
@@ -27,15 +27,17 @@ TODO: verify comparator interrupt timing
 FIXME: ground noise floor triggers too many interrupts; solve by raising the reference pin via resistor network
 
 TODO: verify MP3221 on/off operation via _Cos6V0OutputEnabled()
-	- pin is corrected, mp3321 doesnt turn on (chip issue?)
+	- pin is corrected, mp3321 doesn't turn on (chip issue?)
 	- it runs sporadically, connecting a load produces no useful outcome
 	FIXME: replace with TPS630701 or similar
 
 TODO: verify MCP23S08 GPIO states, interrupts, etc
 
-TODO: verify mosfet AC switches (delon, tuning caps, etc)
+TODO: verify mosfet AC switches (Delon, tuning caps, etc)
 
-FIXME: fix bootstrap problem with graetz mosfet gate pullup
+TODO: verify pin change interrupt on
+
+FIXME: fix bootstrap problem with Graetz mosfet gate pullup
 
 */
 
@@ -138,6 +140,9 @@ void cos_ctor()															// constructor for concrete class
 	gpio_conf(TPS630701_PWM_pin, OUTPUT, HIGH);							// Buck-Boost converter PWM input - low (off), high (on)
 	gpio_conf(MP3221_EN_pin, OUTPUT, LOW);								// 5V0 Boost converter enable pin - low (off), high (on)
 	gpio_conf(SPI_SS_AD5160_pin, OUTPUT, HIGH);							// SPI Slave Select known init state
+	//gpio_conf(INT_MCP23S08_pin, OUTPUT, HIGH);							// SPI Slave Select known init state
+	gpio_conf(SPI_SS_LMP92064SD_pin, OUTPUT, HIGH);						// SPI Slave Select known init state
+	gpio_conf(SPI_SS_MCP2515_pin, OUTPUT, HIGH);						// SPI Slave Select known init state
 
 	gpio_conf(INT_MCP23S08_pin, OUTPUT, LOW);							// temporary pin for verification of stuff
 	// state initialization of device-specific pins
@@ -146,7 +151,7 @@ void cos_ctor()															// constructor for concrete class
 	// hardware initialization
 	{
 	cli();
-
+	//TODO - turn off DIDR and test
 	DIDR = (_BV(AIN1D) | _BV(AIN0D) );									// disable digital input buffer on comparator pins
 	ACSR &= ~_BV(ACD);													// clear bit - enable comparator
 	ACSR |= ( _BV(ACIC) |												// enable input capture function in timer1, needs ICIE1 in TIMSK
@@ -196,8 +201,10 @@ void cos_ctor()															// constructor for concrete class
 	// Èos __Device operational initialization on MCU power on
 	// NOTE: most default states are implemented in hardware by means of pulldown/pullup resistors
 	//__Device.public.Rect->SetRectifierMode(_delon);						// set regulator manually into Delon mode - we are very likely to start spinning slow
-	*(__Device.public.BuckBoost->PWM) = 0xFF;							// put Buck-Boost into PWM/PFM (auto) mode
+	//*(__Device.public.BuckBoost->PWM) = 0xFF;							// put Buck-Boost into PWM/PFM (auto) mode
 	__Device.public.LiIonCharger->SetResistor(128);						// set resistor value to something
+	__Device.public.LiIonCharger->SetMCP23S08(0x00,0x00);				// temporary for functional verification
+
 };
 
 #if defined(COS_)														// all devices have the object name "Device", hence the preprocessor macro
