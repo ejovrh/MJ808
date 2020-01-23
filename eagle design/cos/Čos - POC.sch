@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.4.0">
+<eagle version="9.4.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -23623,6 +23623,8 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <part name="L1" library="XFL4020-152MEC Inductor 1.5uH" deviceset="XFL4020-152MEC" device="" value="XFL4020-152MEC  - 1.5uH"/>
 <part name="Q1" library="Transistor" library_urn="urn:adsk.eagle:library:14522416" deviceset="BSS84" device="" package3d_urn="urn:adsk.eagle:package:10893259/3" value="SI2399DS-T1-GE3"/>
 <part name="C33" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="3.3nF"/>
+<part name="R28" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="250k"/>
+<part name="R29" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="250k"/>
 </parts>
 <sheets>
 <sheet>
@@ -24122,6 +24124,7 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 647-UHD1V221MPD6 - 220uF/35V
 647-UHV1V151MPD - 150uF/35V</text>
 <text x="487.68" y="873.76" size="6.4516" layer="94">TP5</text>
+<text x="45.72" y="779.78" size="6.4516" layer="91">FIXME: pullup to 5V0 wont work - bootstrap problem!</text>
 </plain>
 <instances>
 <instance part="IC14" gate="G$1" x="281.94" y="7.62" smashed="yes">
@@ -24595,6 +24598,14 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <attribute name="NAME" x="386.08" y="149.86" size="1.778" layer="95"/>
 <attribute name="VALUE" x="386.08" y="147.32" size="1.778" layer="96"/>
 </instance>
+<instance part="R28" gate="G$1" x="231.14" y="142.24" smashed="yes" rot="R270">
+<attribute name="NAME" x="233.68" y="142.24" size="1.778" layer="95"/>
+<attribute name="VALUE" x="233.68" y="139.7" size="1.778" layer="96"/>
+</instance>
+<instance part="R29" gate="G$1" x="231.14" y="132.08" smashed="yes" rot="R270">
+<attribute name="NAME" x="233.68" y="132.08" size="1.778" layer="95"/>
+<attribute name="VALUE" x="233.68" y="129.54" size="1.778" layer="96"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -25030,6 +25041,11 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <segment>
 <wire x1="40.64" y1="386.08" x2="40.64" y2="391.16" width="0.1524" layer="91"/>
 <label x="40.64" y="391.16" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R28" gate="G$1" pin="1"/>
+<wire x1="231.14" y1="147.32" x2="231.14" y2="154.94" width="0.1524" layer="91"/>
+<label x="231.14" y="154.94" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="RESET" class="9">
@@ -25602,11 +25618,6 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="139.7" y="154.94" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC7" gate="G$1" pin="AIN1/PCINT1-PB1"/>
-<wire x1="190.5" y1="137.16" x2="195.58" y2="137.16" width="0.1524" layer="91"/>
-<label x="195.58" y="137.16" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="IC8" gate="G$1" pin="GND"/>
 <wire x1="157.48" y1="96.52" x2="157.48" y2="93.98" width="0.1524" layer="91"/>
 <label x="157.48" y="93.98" size="1.778" layer="95"/>
@@ -25681,6 +25692,11 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <pinref part="R24" gate="G$1" pin="2"/>
 <wire x1="381" y1="91.44" x2="381" y2="86.36" width="0.1524" layer="91"/>
 <label x="381" y="86.36" size="1.778" layer="95" rot="R270"/>
+</segment>
+<segment>
+<pinref part="R29" gate="G$1" pin="2"/>
+<wire x1="231.14" y1="127" x2="231.14" y2="119.38" width="0.1524" layer="91"/>
+<label x="231.14" y="119.38" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="INVP" class="9">
@@ -26208,6 +26224,8 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <pinref part="R6" gate="G$1" pin="2"/>
 <wire x1="50.8" y1="878.84" x2="50.8" y2="883.92" width="0.1524" layer="91"/>
 <label x="50.8" y="883.92" size="1.778" layer="95" rot="R90"/>
+<wire x1="45.72" y1="779.78" x2="45.72" y2="883.92" width="0.6096" layer="91"/>
+<wire x1="45.72" y1="883.92" x2="50.8" y2="883.92" width="0.6096" layer="91"/>
 </segment>
 <segment>
 <wire x1="182.88" y1="632.46" x2="182.88" y2="640.08" width="0.1524" layer="91"/>
@@ -26605,6 +26623,16 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <pinref part="IC17" gate="G$1" pin="15_GP6"/>
 <wire x1="360.68" y1="383.54" x2="370.84" y2="383.54" width="0.1524" layer="91"/>
 <label x="370.84" y="383.54" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="COMPARATOR_REF" class="0">
+<segment>
+<pinref part="IC7" gate="G$1" pin="AIN1/PCINT1-PB1"/>
+<wire x1="190.5" y1="137.16" x2="231.14" y2="137.16" width="0.1524" layer="91"/>
+<pinref part="R28" gate="G$1" pin="2"/>
+<pinref part="R29" gate="G$1" pin="1"/>
+<junction x="231.14" y="137.16"/>
+<label x="226.06" y="137.16" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 </nets>
