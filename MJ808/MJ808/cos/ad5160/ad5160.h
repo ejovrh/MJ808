@@ -5,9 +5,7 @@
 
 #include <inttypes.h>
 
-#include "gpio.h"														// GPIO macros
-// TODO - move pin definitions out of here
-#define	SPI_SS_AD5160_pin		D,	5,	5								// AD5160 Port Expander Slave Select
+#include "cos\cos.h"													// caller header file, contains pin definitions for SPI
 
 typedef struct ad5160_t													// ad5160_t actual struct describing the potentiometer as a whole
 {

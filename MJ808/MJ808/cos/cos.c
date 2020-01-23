@@ -6,6 +6,39 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+/* functional tests:
+
+verified_TODO: verify PWM output on TPS630701_PWM_pin for range of 0x00 - 0xff
+	- PWM signal can be generated
+
+verified_TODO: TIMER1_OVF_vect triggers sucessfully on timer1 overflow
+
+TODO: verify effect on PWM on TPC63701 for constant load (resistor) and varying load (potentiometer)
+
+verified_TODO: verify _HeartbeatPeriodicCos(void) operation every 250ms
+	- executes approximately every 250ms
+
+verified_TODO: verify AD5160 resistor operation (SerRestitor() args: 0, 128, 256, etc., derive formula and place in comments
+	- SPI SetResistor() command seems to work; resistance changes are visible in the expected range
+
+TODO: verify LMP92064SD U/I readout
+
+TODO: verify comparator interrupt timing
+FIXME: ground noise floor triggers too many interrupts; solve by raising the reference pin via resistor network
+
+TODO: verify MP3221 on/off operation via _Cos6V0OutputEnabled()
+	- pin is corrected, mp3321 doesnt turn on (chip issue?)
+	- it runs sporadically, connecting a load produces no useful outcome
+	FIXME: replace with TPS630701 or similar
+
+TODO: verify MCP23S08 GPIO states, interrupts, etc
+
+TODO: verify mosfet AC switches (delon, tuning caps, etc)
+
+FIXME: fix bootstrap problem with graetz mosfet gate pullup
+
+*/
+
 typedef struct															// cos_t actual
 {
 	cos_t public;														// public struct
@@ -17,8 +50,6 @@ static __cos_t __Device __attribute__ ((section (".data")));			// preallocate __
 
 void _HeartbeatPeriodicCos(void)										// ran by every watchdog ISR, period should be 250ms
 {
-	__Device.public.ACfreq = (125000.0 / __Device.__ICR1);				// convert cycle count to frequency
-
 	/* on this device the 250ms periodic call is responsible for monitoring the dynamo-generated AC voltage and for adjusting Èos operational parameters.
 	*  operational parameters are:
 	*	- wheel speed (expressed via __Device.public.OpParamArray[ACFREQ])
@@ -33,20 +64,23 @@ void _HeartbeatPeriodicCos(void)										// ran by every watchdog ISR, period s
 	*	operational parameters are stored in the uint8_t OpParamArray[OP_PARAM_ARRAY_SIZE] array - see cos.h
 	*/
 
-	if (__Device.public.ACfreq < 5.0)									// slow speed - Delon voltage doubler rectifier
+	/*
+	//__Device.public.ACfreq = (125000 / __Device.__ICR1);				// convert cycle count to frequency
+
+	if (__Device.public.ACfreq < 5)										// slow speed - Delon voltage doubler rectifier
 		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & _BV(_delon));
 
-	if (__Device.public.ACfreq >= 5.0)									// higher speed - Graetz rectifier
+	if (__Device.public.ACfreq >= 5)									// higher speed - Graetz rectifier
 		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & _BV(_graetz));
 
-	if (__Device.public.ACfreq >= 18.0)									// even higher speed - Graetz & tuning caps, increase load
+	if (__Device.public.ACfreq >= 18)									// even higher speed - Graetz & tuning caps, increase load
 	{
 		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & ( _BV(_graetz) | _BV(_4700uF) ) );
 		__Device.public.LiIonCharger->SetResistor(128);
 		*(__Device.public.BuckBoost->PWM) = 0xE0;
 	}
 
-	if (__Device.public.ACfreq >= 45.0)									// even more higher speed - Graetz and even higher load
+	if (__Device.public.ACfreq >= 45)									// even more higher speed - Graetz and even higher load
 	{
 		__Device.public.Rect->SetRectifierMode(__Device.public.Rect->RectifierMode & _BV(_graetz));
 		__Device.public.LiIonCharger->SetResistor(255);
@@ -62,6 +96,7 @@ void _HeartbeatPeriodicCos(void)										// ran by every watchdog ISR, period s
 	// TODO - implement array as argument to send message and not copy by value as SendMessage currently is (see _SendMessage() in message.c)
 	MsgHandler->SendMessage(0x01, *__Device.public.OpParamArray, 7);	// send out operational parameters to the bus
 	MsgHandler->SendMessage(0x01, __Device.public.ACfreq, 7);			// send out operational parameters to the bus
+	*/
 };
 
 void _PopulatedBusOperationCOS(message_handler_t * const in_msg)		// received MsgHandler object and passes
@@ -97,11 +132,14 @@ void cos_ctor()															// constructor for concrete class
 	// GPIO state definitions
 	{
 	// state initialization of device-specific pins
-	gpio_conf(COMPARATOR_REF_pin, INPUT, NOPULLUP);						// comparator pin as input and no pullups
+	gpio_conf(COMPARATOR_REF_pin, INPUT, HIGH);							// FIXME: should be NOPULLUP; resistor divider on ref. should raise the reference voltage above noise level -- comparator pin as input and no pullups
 	gpio_conf(COMPARATOR_IN_pin, INPUT, NOPULLUP);						// comparator pin as input and no pullups
 	gpio_conf(MCP2561_standby_pin, OUTPUT, LOW);						// MCP2561 standby - low (on), high (off)
 	gpio_conf(TPS630701_PWM_pin, OUTPUT, HIGH);							// Buck-Boost converter PWM input - low (off), high (on)
 	gpio_conf(MP3221_EN_pin, OUTPUT, LOW);								// 5V0 Boost converter enable pin - low (off), high (on)
+	gpio_conf(SPI_SS_AD5160_pin, OUTPUT, HIGH);							// SPI Slave Select known init state
+
+	gpio_conf(INT_MCP23S08_pin, OUTPUT, LOW);							// temporary pin for verification of stuff
 	// state initialization of device-specific pins
 	}
 
@@ -118,17 +156,19 @@ void cos_ctor()															// constructor for concrete class
 	/*
 
 	*/
-	TIMSK = ( _BV(ICIE1) );												// Input Capture interrupt enable
+	TIMSK = ( _BV(ICIE1) | _BV(TOV1) );									// Input Capture interrupt enable
 
 	TCCR1B = ( _BV(ICNC1) |												// turn on comparator noise canceler
 			   _BV(ICES1) |												// capture on rising edge
-			   _BV(CS10) );												// clkIO/1 (from pre-scaler), start timer
+			   _BV(CS11) |
+			   _BV(CS10) );												// clkIO/64 (from pre-scaler), start timer
 
 	// timer/counter0 - 8bit - buck-boost PWM control
 	TCCR0A = ( _BV(COM0A1) |											// Clear OC1A/OC1B on Compare Match when up counting
 			   _BV(WGM00) );											// phase correct 8bit PWM, TOP=0x00FF, update of OCR at TOP, TOV flag set on BOTTOM
 	TCCR0B = _BV(CS01);													// clock pre-scaler: clk/8
 
+	TIFR = 0x00;														// unset all pending interrupts
 
 	if (MCUSR & _BV(WDRF))												// power-up - if we got reset by the watchdog...
 	{
@@ -154,8 +194,9 @@ void cos_ctor()															// constructor for concrete class
 	__Device.public.LiIonCharger = MCP73871;							// get address of mcp73871_t object
 
 	// Èos __Device operational initialization on MCU power on
-	__Device.public.Rect->SetRectifierMode(_delon);						// set regulator manually into Delon mode - we are very likely to start spinning slow
-	*(__Device.public.BuckBoost->PWM) = 0xA0;							// put Buck-Boost into PWM/PFM (auto) mode
+	// NOTE: most default states are implemented in hardware by means of pulldown/pullup resistors
+	//__Device.public.Rect->SetRectifierMode(_delon);						// set regulator manually into Delon mode - we are very likely to start spinning slow
+	*(__Device.public.BuckBoost->PWM) = 0xFF;							// put Buck-Boost into PWM/PFM (auto) mode
 	__Device.public.LiIonCharger->SetResistor(128);						// set resistor value to something
 };
 
@@ -172,8 +213,18 @@ ISR(TIMER1_CAPT_vect)													// timer1 input capture interrupt for comparat
 {
 	cli();																// disable interrupts
 
-	__Device.__ICR1 = ICR1;												// length of one Dynamo AC period in n cycles, as determined by comparator and measured by input capture
+	gpio_toggle(INT_MCP23S08_pin);
+
 	TCNT1 = 0;															// reset timer1 counter
+
+	__Device.__ICR1 = ICR1;												// length of one Dynamo AC period in n cycles, as determined by comparator and measured by input capture
+
+	sei();																// enable interrupts
+};
+
+ISR(TIMER1_OVF_vect)													// timer1 overflow
+{
+	cli();																// disable interrupts
 
 	sei();																// enable interrupts
 };

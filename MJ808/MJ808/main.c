@@ -60,7 +60,7 @@ int main(void)
 
 		if (MCUCR & _BV(SE))											// if sleep is enabled
 			sleep_cpu();												// ...sleep
-	}
+	};
 }
 
 

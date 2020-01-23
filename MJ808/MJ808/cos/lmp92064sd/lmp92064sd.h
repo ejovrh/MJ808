@@ -4,9 +4,7 @@
 #include <avr/io.h>
 #include <inttypes.h>
 
-#include "gpio.h"														// GPIO macros
-// TODO - move pin definitions out of here
-#define	SPI_SS_LMP92064SD_pin	D,	6,	6								// LMP92064SD Voltage/Current meter Slave Select, Buck-Boost-out (pre-load)
+#include "cos\cos.h"													// caller header file, contains pin definitions for SPI
 
 #define LMP92064SD_CONFIG_A					0x0000						// RW, default 0x18, datasheet p.13
 #define LMP92064SD_CONFIG_A_RESET				0x07					//	RW

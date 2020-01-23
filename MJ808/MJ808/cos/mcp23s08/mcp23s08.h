@@ -4,9 +4,7 @@
 #include <avr/io.h>
 #include <inttypes.h>
 
-#include "gpio.h"														// GPIO macros
-// TODO - move pin definitions out of here
-#define	SPI_SS_MCP23S08_pin		D,	1,	1								// MCP23S08 Port Expander Slave Select
+#include "cos\cos.h"													// caller header file, contains pin definitions for SPI
 
 #define MCP23S08_REGISTER_COUNT	11										// 11 configuration registers
 

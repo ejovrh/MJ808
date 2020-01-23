@@ -14,9 +14,12 @@
 #define TPS630701_PWM_pin		B,	2,	2								// TPS630701_PWM PWM Control Pin (PS/SYNC) // TODO: use pullup resistor?
 #define	MCP2561_standby_pin		B,	3,	3								// MCP2561 standby, controlled in mcp2515.c
 
-#define	MP3221_EN_pin			D,	2,	2								// Èos 5V0 output stage boost converter enable pin, pulled low
+#define	MP3221_EN_pin			D,	0,	0								// Èos 5V0 output stage boost converter enable pin, pulled low
+#define	SPI_SS_MCP23S08_pin		D,	1,	1								// MCP23S08 Port Expander Slave Select
 #define INT_MCP2515_pin			D,	3,	3								// MCP2515 CAN Controller interrupt pin
 #define INT_MCP23S08_pin		D,	4,	4								// MCP23S08 Port Expander Interrupt pin
+#define	SPI_SS_AD5160_pin		D,	5,	5								// AD5160 Port Expander Slave Select
+#define	SPI_SS_LMP92064SD_pin	D,	6,	6								// LMP92064SD Voltage/Current meter Slave Select, Buck-Boost-out (pre-load)
 // definitions of device/PCB layout-dependent hardware pins
 
 #define OCR_BUCK_BOOST OCR0A											// Output Compare Register for PWM of BuckBoost regulator
