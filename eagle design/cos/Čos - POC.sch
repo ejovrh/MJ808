@@ -23525,7 +23525,6 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <part name="C16" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="4.7μF"/>
 <part name="R16" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="1k"/>
 <part name="R17" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="270k"/>
-<part name="R22" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="V526-0" package3d_urn="urn:adsk.eagle:package:23590/1" value="thermistor NTC 10k"/>
 <part name="R13" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
 <part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="340k"/>
 <part name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="110k"/>
@@ -23549,8 +23548,8 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <part name="IC9" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
 <part name="IC12" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
 <part name="IC16" library="LM74670 - Smart Diode Rectifier Controller" deviceset="LM74670" device="" value="LM74670QDGKRQ1"/>
-<part name="D4" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="DO214AA" package3d_urn="urn:adsk.eagle:package:43433/2" value="CZRB5353B-HF"/>
-<part name="D3" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="DO214AA" package3d_urn="urn:adsk.eagle:package:43433/2" value="CZRB5353B-HF"/>
+<part name="D4" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="DO214AA" package3d_urn="urn:adsk.eagle:package:43433/2" value="SMBJ5356B-TP"/>
+<part name="D3" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="DO214AA" package3d_urn="urn:adsk.eagle:package:43433/2" value="SMBJ5356B-TP"/>
 <part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
 <part name="C12" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
 <part name="C25" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
@@ -23623,8 +23622,10 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <part name="L1" library="XFL4020-152MEC Inductor 1.5uH" deviceset="XFL4020-152MEC" device="" value="XFL4020-152MEC  - 1.5uH"/>
 <part name="Q1" library="Transistor" library_urn="urn:adsk.eagle:library:14522416" deviceset="BSS84" device="" package3d_urn="urn:adsk.eagle:package:10893259/3" value="SI2399DS-T1-GE3"/>
 <part name="C33" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="3.3nF"/>
-<part name="R28" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="250k"/>
-<part name="R29" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="250k"/>
+<part name="R28" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="500k"/>
+<part name="R29" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
+<part name="LI-1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
+<part name="LI-2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
 </parts>
 <sheets>
 <sheet>
@@ -23668,7 +23669,7 @@ Vpcc=(R2/(R1+R2))*Vin</text>
 <wire x1="210.82" y1="236.22" x2="236.22" y2="236.22" width="0" layer="97"/>
 <text x="441.96" y="91.44" size="1.778" layer="97" align="top-left">Vout=Vfb*(R1+R2)/R2
 </text>
-<text x="2.54" y="1038.86" size="1.778" layer="97">Vzener = 16V</text>
+<text x="2.54" y="1038.86" size="1.778" layer="97">Vzener = 19V</text>
 <text x="284.48" y="998.22" size="2.54" layer="97">ideal diode D1</text>
 <text x="208.28" y="998.22" size="2.54" layer="97">ideal diode D2</text>
 <text x="129.54" y="998.22" size="2.54" layer="97">ideal diode D3</text>
@@ -23969,7 +23970,7 @@ Vout = 5V0</text>
 <wire x1="104.14" y1="1183.64" x2="104.14" y2="1173.48" width="0.1524" layer="97"/>
 <circle x="76.2" y="1173.48" radius="0.254" width="0.6096" layer="97"/>
 <circle x="104.14" y="1173.48" radius="0.254" width="0.6096" layer="97"/>
-<text x="84.582" y="1184.402" size="1.27" layer="97">Vzener = 18V</text>
+<text x="84.582" y="1184.402" size="1.27" layer="97">Vzener = 19V</text>
 <text x="203.2" y="1173.48" size="1.27" layer="94" rot="R270">DELON_1</text>
 <text x="106.68" y="665.48" size="1.778" layer="94" rot="R90">TP4</text>
 <wire x1="106.68" y1="665.48" x2="106.68" y2="660.4" width="0.1524" layer="94"/>
@@ -24123,7 +24124,10 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 647-UHD1V221MPD6 - 220uF/35V
 647-UHV1V151MPD - 150uF/35V</text>
 <text x="487.68" y="873.76" size="6.4516" layer="94">TP5</text>
-<text x="45.72" y="779.78" size="6.4516" layer="91">FIXME: pullup to 5V0 wont work - bootstrap problem!</text>
+<text x="45.72" y="779.78" size="6.4516" layer="99">FIXME: pullup to 5V0 wont work - bootstrap problem!</text>
+<text x="177.8" y="261.62" size="1.778" layer="95">NTC, 10k</text>
+<wire x1="50.8" y1="883.92" x2="50.8" y2="779.78" width="0.1524" layer="99"/>
+<wire x1="50.8" y1="779.78" x2="45.72" y2="779.78" width="0.1524" layer="99"/>
 </plain>
 <instances>
 <instance part="IC14" gate="G$1" x="281.94" y="7.62" smashed="yes">
@@ -24207,10 +24211,6 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <instance part="R17" gate="G$1" x="160.02" y="261.62" smashed="yes" rot="R90">
 <attribute name="NAME" x="162.56" y="264.16" size="1.778" layer="95"/>
 <attribute name="VALUE" x="162.56" y="261.62" size="1.778" layer="96"/>
-</instance>
-<instance part="R22" gate="G$1" x="172.72" y="261.62" smashed="yes" rot="R90">
-<attribute name="NAME" x="175.26" y="264.16" size="1.778" layer="95"/>
-<attribute name="VALUE" x="175.26" y="261.62" size="1.778" layer="96"/>
 </instance>
 <instance part="R13" gate="G$1" x="119.38" y="228.6" smashed="yes" rot="R90">
 <attribute name="NAME" x="121.92" y="231.14" size="1.778" layer="95"/>
@@ -24488,13 +24488,13 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <attribute name="NAME" x="96.52" y="1064.26" size="1.778" layer="95" align="center-left"/>
 <attribute name="VALUE" x="96.52" y="1061.72" size="1.778" layer="96" align="center-left"/>
 </instance>
-<instance part="DYNAMO2" gate="G$1" x="-20.32" y="1064.26" smashed="yes" rot="R270">
-<attribute name="NAME" x="-22.86" y="1064.26" size="1.778" layer="95" rot="R90"/>
-<attribute name="TP_SIGNAL_NAME" x="-21.59" y="1061.72" size="1.778" layer="97" rot="R270"/>
+<instance part="DYNAMO2" gate="G$1" x="-27.94" y="1049.02" smashed="yes" rot="R270">
+<attribute name="NAME" x="-30.48" y="1049.02" size="1.778" layer="95" rot="R90"/>
+<attribute name="TP_SIGNAL_NAME" x="-29.21" y="1046.48" size="1.778" layer="97" rot="R270"/>
 </instance>
-<instance part="DYNAMO1" gate="G$1" x="-20.32" y="1059.18" smashed="yes" rot="R270">
-<attribute name="NAME" x="-22.86" y="1059.18" size="1.778" layer="95" rot="R270"/>
-<attribute name="TP_SIGNAL_NAME" x="-21.59" y="1056.64" size="1.778" layer="97" rot="R270"/>
+<instance part="DYNAMO1" gate="G$1" x="-27.94" y="1043.94" smashed="yes" rot="R270">
+<attribute name="NAME" x="-30.48" y="1043.94" size="1.778" layer="95" rot="R270"/>
+<attribute name="TP_SIGNAL_NAME" x="-29.21" y="1041.4" size="1.778" layer="97" rot="R270"/>
 </instance>
 <instance part="IC21" gate="G$1" x="403.86" y="858.52" smashed="yes">
 <attribute name="NAME" x="398.78" y="868.68" size="1.778" layer="95" align="center-left"/>
@@ -24604,6 +24604,14 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <instance part="R29" gate="G$1" x="236.22" y="132.08" smashed="yes" rot="R270">
 <attribute name="NAME" x="238.76" y="132.08" size="1.778" layer="95"/>
 <attribute name="VALUE" x="238.76" y="129.54" size="1.778" layer="96"/>
+</instance>
+<instance part="LI-1" gate="G$1" x="175.26" y="266.7" smashed="yes" rot="R90">
+<attribute name="NAME" x="180.34" y="266.7" size="1.778" layer="95"/>
+<attribute name="TP_SIGNAL_NAME" x="176.53" y="269.24" size="1.778" layer="97" rot="R90"/>
+</instance>
+<instance part="LI-2" gate="G$1" x="175.26" y="256.54" smashed="yes" rot="R90">
+<attribute name="NAME" x="180.34" y="256.54" size="1.778" layer="95"/>
+<attribute name="TP_SIGNAL_NAME" x="176.53" y="259.08" size="1.778" layer="97" rot="R90"/>
 </instance>
 </instances>
 <busses>
@@ -25308,9 +25316,9 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <segment>
 <pinref part="R16" gate="G$1" pin="2"/>
 <pinref part="R17" gate="G$1" pin="2"/>
-<pinref part="R22" gate="G$1" pin="2"/>
 <wire x1="160.02" y1="266.7" x2="172.72" y2="266.7" width="0.1524" layer="91"/>
 <junction x="160.02" y="266.7"/>
+<pinref part="LI-1" gate="G$1" pin="TP"/>
 </segment>
 </net>
 <net name="6V0_TP-IN" class="7">
@@ -25572,9 +25580,9 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="231.14" y="269.24" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="R22" gate="G$1" pin="1"/>
 <wire x1="172.72" y1="256.54" x2="172.72" y2="254" width="0.1524" layer="91"/>
 <label x="172.72" y="254" size="1.778" layer="95" rot="R270"/>
+<pinref part="LI-2" gate="G$1" pin="TP"/>
 </segment>
 <segment>
 <pinref part="R17" gate="G$1" pin="1"/>
@@ -25780,8 +25788,8 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="5.08" y="1016" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="-17.78" y1="1059.18" x2="-12.7" y2="1059.18" width="0.1524" layer="91"/>
-<label x="-12.7" y="1059.18" size="1.778" layer="95"/>
+<wire x1="-25.4" y1="1043.94" x2="-20.32" y2="1043.94" width="0.1524" layer="91"/>
+<label x="-20.32" y="1043.94" size="1.778" layer="95"/>
 <pinref part="DYNAMO1" gate="G$1" pin="TP"/>
 </segment>
 <segment>
@@ -25928,8 +25936,8 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 </net>
 <net name="DYNAMO_2_BEFORE_SW" class="2">
 <segment>
-<wire x1="-17.78" y1="1064.26" x2="-12.7" y2="1064.26" width="0.1524" layer="91"/>
-<label x="-12.7" y="1064.26" size="1.778" layer="95"/>
+<wire x1="-25.4" y1="1049.02" x2="-20.32" y2="1049.02" width="0.1524" layer="91"/>
+<label x="-20.32" y="1049.02" size="1.778" layer="95"/>
 <pinref part="DYNAMO2" gate="G$1" pin="TP"/>
 </segment>
 <segment>
@@ -26223,8 +26231,6 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <pinref part="R6" gate="G$1" pin="2"/>
 <wire x1="50.8" y1="878.84" x2="50.8" y2="883.92" width="0.1524" layer="91"/>
 <label x="50.8" y="883.92" size="1.778" layer="95" rot="R90"/>
-<wire x1="45.72" y1="779.78" x2="45.72" y2="883.92" width="0.6096" layer="91"/>
-<wire x1="45.72" y1="883.92" x2="50.8" y2="883.92" width="0.6096" layer="91"/>
 </segment>
 <segment>
 <wire x1="182.88" y1="632.46" x2="182.88" y2="640.08" width="0.1524" layer="91"/>
@@ -26655,13 +26661,13 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <approved hash="209,1,457.2,111.76,6V0_TP-OUT,,,,,"/>
 <approved hash="106,1,457.2,111.76,6V0_TP-OUT,,,,,"/>
 <approved hash="106,1,360.68,386.08,N$7,,,,,"/>
+<approved hash="106,1,360.68,383.54,N$9,,,,,"/>
 <approved hash="209,1,492.76,853.44,SOLAR-CELL_TP-IN,,,,,"/>
 <approved hash="106,1,492.76,853.44,SOLAR-CELL_TP-IN,,,,,"/>
 <approved hash="206,1,261.62,20.32,SPI_MISO,,,,,"/>
 <approved hash="206,1,198.12,368.3,SPI_MISO,,,,,"/>
 <approved hash="206,1,314.96,386.08,SPI_MISO,,,,,"/>
 <approved hash="115,1,-7.62,862.33,AFTER_SW_BEFORE_TUNING_CAP,,,,,"/>
-<approved hash="115,1,269.24,605.79,COMPARATOR_IN,,,,,"/>
 </errors>
 </schematic>
 </drawing>
