@@ -91,7 +91,6 @@ void _HeartbeatPeriodicCos(void)										// ran by every watchdog ISR, period s
 
 	// TODO - define message format
 	// TODO - try to average over 250ms
-	__Device.public.BuckBoost->GetValues(__Device.public.OpParamArray);	// download voltage/current measurement into array
 	__Device.public.OpParamArray[MISC_STATUS_BITS] |= ( 0x1C & __Device.public.LiIonCharger->GetStatus());	// save charger/Powerpath controller operating mode its into MISC_STATUS_BITS
 	__Device.public.OpParamArray[MISC_STATUS_BITS] |= ( 0xE0 & __Device.public.Rect->RectifierMode);			// save rectifier operating mode bits into MISC_STATUS_BITS
 
@@ -99,6 +98,8 @@ void _HeartbeatPeriodicCos(void)										// ran by every watchdog ISR, period s
 	MsgHandler->SendMessage(0x01, *__Device.public.OpParamArray, 7);	// send out operational parameters to the bus
 	MsgHandler->SendMessage(0x01, __Device.public.ACfreq, 7);			// send out operational parameters to the bus
 	*/
+	__Device.public.BuckBoost->GetValues();								// download voltage/current measurement into array
+
 };
 
 void _PopulatedBusOperationCOS(message_handler_t * const in_msg)		// received MsgHandler object and passes
@@ -140,11 +141,11 @@ void cos_ctor()															// constructor for concrete class
 	gpio_conf(TPS630701_PWM_pin, OUTPUT, HIGH);							// Buck-Boost converter PWM input - low (off), high (on)
 	gpio_conf(MP3221_EN_pin, OUTPUT, LOW);								// 5V0 Boost converter enable pin - low (off), high (on)
 	gpio_conf(SPI_SS_AD5160_pin, OUTPUT, HIGH);							// SPI Slave Select known init state
-	//gpio_conf(INT_MCP23S08_pin, OUTPUT, HIGH);							// SPI Slave Select known init state
+	gpio_conf(INT_MCP23S08_pin, OUTPUT, HIGH);							// SPI Slave Select known init state
 	gpio_conf(SPI_SS_LMP92064SD_pin, OUTPUT, HIGH);						// SPI Slave Select known init state
 	gpio_conf(SPI_SS_MCP2515_pin, OUTPUT, HIGH);						// SPI Slave Select known init state
 
-	gpio_conf(INT_MCP23S08_pin, OUTPUT, LOW);							// temporary pin for verification of stuff
+	//gpio_conf(INT_MCP23S08_pin, OUTPUT, LOW);							// temporary pin for verification of stuff
 	// state initialization of device-specific pins
 	}
 
@@ -161,7 +162,7 @@ void cos_ctor()															// constructor for concrete class
 	/*
 
 	*/
-	TIMSK = ( _BV(ICIE1) | _BV(TOV1) );									// Input Capture interrupt enable
+	//TIMSK = ( _BV(ICIE1) | _BV(TOV1) );									// Input Capture interrupt enable
 
 	TCCR1B = ( _BV(ICNC1) |												// turn on comparator noise canceler
 			   _BV(ICES1) |												// capture on rising edge
@@ -201,9 +202,9 @@ void cos_ctor()															// constructor for concrete class
 	// Èos __Device operational initialization on MCU power on
 	// NOTE: most default states are implemented in hardware by means of pulldown/pullup resistors
 	//__Device.public.Rect->SetRectifierMode(_delon);						// set regulator manually into Delon mode - we are very likely to start spinning slow
-	//*(__Device.public.BuckBoost->PWM) = 0xFF;							// put Buck-Boost into PWM/PFM (auto) mode
+	*(__Device.public.BuckBoost->PWM) = 0xFF;							// put Buck-Boost into PWM/PFM (auto) mode
 	__Device.public.LiIonCharger->SetResistor(128);						// set resistor value to something
-	__Device.public.LiIonCharger->SetMCP23S08(0x00,0x00);				// temporary for functional verification
+	//__Device.public.LiIonCharger->SetMCP23S08(0x00,0x00);				// temporary for functional verification
 
 };
 
@@ -220,7 +221,7 @@ ISR(TIMER1_CAPT_vect)													// timer1 input capture interrupt for comparat
 {
 	cli();																// disable interrupts
 
-	gpio_toggle(INT_MCP23S08_pin);
+	//gpio_toggle(INT_MCP23S08_pin);
 
 	TCNT1 = 0;															// reset timer1 counter
 

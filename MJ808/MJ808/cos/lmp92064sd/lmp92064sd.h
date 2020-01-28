@@ -43,7 +43,7 @@
 
 typedef struct lmp92064sd_t												// lmp92064sd_t actual struct describing the Voltage/Current meter as a whole
 {
-	void (* const DownloadData)(uint8_t * const data_array);			// writes 4 bytes of tps630701 output voltage/current measurement data into data_array
+	void (* const DownloadData)(volatile uint8_t *data_array);			// writes 4 bytes of tps630701 output voltage/current measurement data into data_array
 } lmp92064sd_t __attribute__((aligned(8)));
 
 extern lmp92064sd_t LMP92064SD;											// forward declare public struct
