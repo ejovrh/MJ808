@@ -15,7 +15,7 @@ static void _DownloadData(volatile uint8_t *data_array)					// downloads voltage
 		_delay_us(1);													// delay a little bit for the transfer to complete
 
 	for (i = 0; i<4; ++i)												// while the SS is held, the address is auto-decremented, thus multiple bytes can be read
-	{*(data_array+i) = 0;
+	{
 		*(data_array+i) = spi_uci_transfer(0xFF);						// put result into destination array
 		_delay_us(1);													// delay a little bit for the transfer to complete
 	}

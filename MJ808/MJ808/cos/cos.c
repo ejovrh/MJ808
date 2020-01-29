@@ -22,9 +22,12 @@ verified_TODO: verify AD5160 resistor operation (SerRestitor() args: 0, 128, 256
 	- SPI SetResistor() command seems to work; resistance changes are visible in the expected range
 
 TODO: verify LMP92064SD U/I readout
+	- check reported voltage and current readings against external measurement
+	- voltage looks reasonable but current readout are still erratic
 
 TODO: verify comparator interrupt timing
 FIXME: ground noise floor triggers too many interrupts; solve by raising the reference pin via resistor network
+done_TODO: check if DIDR enable/disable will help - doesnt help
 
 TODO: verify MP3221 on/off operation via _Cos6V0OutputEnabled()
 	- pin is corrected, mp3321 doesn't turn on (chip issue?)
@@ -35,9 +38,11 @@ TODO: verify MCP23S08 GPIO states, interrupts, etc
 
 TODO: verify mosfet AC switches (Delon, tuning caps, etc)
 
-TODO: verify pin change interrupt on
+TODO: verify pin change interrupt on PD4
 
 FIXME: fix bootstrap problem with Graetz mosfet gate pullup
+
+TODO: verify MCP73871 operation for charge and discharge
 
 */
 
@@ -152,7 +157,7 @@ void cos_ctor()															// constructor for concrete class
 	// hardware initialization
 	{
 	cli();
-	//TODO - turn off DIDR and test
+
 	DIDR = (_BV(AIN1D) | _BV(AIN0D) );									// disable digital input buffer on comparator pins
 	ACSR &= ~_BV(ACD);													// clear bit - enable comparator
 	ACSR |= ( _BV(ACIC) |												// enable input capture function in timer1, needs ICIE1 in TIMSK
@@ -162,7 +167,7 @@ void cos_ctor()															// constructor for concrete class
 	/*
 
 	*/
-	//TIMSK = ( _BV(ICIE1) | _BV(TOV1) );									// Input Capture interrupt enable
+	TIMSK = ( _BV(ICIE1) | _BV(TOV1) );									// Input Capture interrupt enable
 
 	TCCR1B = ( _BV(ICNC1) |												// turn on comparator noise canceler
 			   _BV(ICES1) |												// capture on rising edge
@@ -205,6 +210,7 @@ void cos_ctor()															// constructor for concrete class
 	*(__Device.public.BuckBoost->PWM) = 0xFF;							// put Buck-Boost into PWM/PFM (auto) mode
 	__Device.public.LiIonCharger->SetResistor(128);						// set resistor value to something
 	//__Device.public.LiIonCharger->SetMCP23S08(0x00,0x00);				// temporary for functional verification
+	__Device.public.Cos6V0OutputEnabled(0);
 
 };
 
