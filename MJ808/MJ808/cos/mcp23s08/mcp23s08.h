@@ -7,6 +7,8 @@
 #include "cos\cos.h"													// caller header file, contains pin definitions for SPI
 
 #define MCP23S08_REGISTER_COUNT	11										// 11 configuration registers
+#define MCP23S08_CONTROL_BYTE_READ	0x41								// datasheet p. 8 & schematic (pins A0 and A1)
+#define MCP23S08_CONTROL_BYTE_WRITE	0x40								// ditto
 
 #define MCP23S08_IODIR		0x00										// I/O direction register, IO7:0 - 1 input, 0 output
 #define MCP23S08_IPOL		0x01										// Input Polarity port register, IP7:0 - 1 reflects opposite logic state as input pin, 0 same logic
@@ -44,8 +46,8 @@ enum MCP23S08RegisterIndex												// used to reference _register
 
 typedef struct mcp23s08_t												// mcp23s08_t actual struct describing the port expander as a whole
 {
-	void (* const SendCommand)(const uint8_t in_command, const uint8_t in_val);	// sends command and value to MCP23S08
-	uint8_t *(* const GetRegisters)(void);										// downloads device configuration registers into __MCP23S08.Registers[]
+	void (* const WriteRegister)(const uint8_t in_address, const uint8_t in_val);	// sends register address and value to MCP23S08
+	uint8_t *(* const ReadRegisters)(void);											// downloads device configuration registers into __MCP23S08.Registers[]
 
 	uint8_t Register[MCP23S08_REGISTER_COUNT];							// array for storing downloaded device configuration registers
 } mcp23s08_t __attribute__((aligned(8)));

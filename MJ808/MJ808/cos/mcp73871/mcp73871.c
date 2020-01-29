@@ -16,14 +16,14 @@ void _SetResistor(const uint8_t in_val)									// sets potentiometer to val - s
 	__MCP73871._ad5160->SetWiper(in_val);								// simply write the value
 };
 
-uint8_t _GetStatus(void)												// gets the device status (PG, STAT1, STAT2)
+uint8_t _GetMCP23S08(void)												// gets the device status (PG, STAT1, STAT2)
 {
-	return __MCP73871._mcp23s08->GetRegisters();						// read GPIO from port expander
+	return __MCP73871._mcp23s08->ReadRegisters();						// read GPIO from port expander
 };
 
-void _SetMCP23S08(const uint8_t arg1, const uint8_t arg2)				// temporary for functional verification
+void _SetMCP23S08(const uint8_t in_register, const uint8_t in_arg)		// temporary for functional verification
 {
-	__MCP73871._mcp23s08->SendCommand(arg1, arg2);
+	__MCP73871._mcp23s08->WriteRegister(in_register, in_arg);
 };
 
 __mcp73871_t __MCP73871 =
@@ -31,7 +31,7 @@ __mcp73871_t __MCP73871 =
 	._ad5160 = &AD5160,													// get address of ad5160_t object
 	._mcp23s08 = &MCP23S08,												// get address of mcp23s08_t object
 
-	.public.GetStatus = &_GetStatus,									// gets mcp73871's device status (PG, STAT1, STAT2) via mcp23s08's GPIO
+	.public.GetMCP23S08 = &_GetMCP23S08,								// gets mcp73871's device status (PG, STAT1, STAT2) via mcp23s08's GPIO
 	.public.SetResistor = &_SetResistor,								// sets ad5160 potentiometer to val - see datasheet p. 14
 	.public.SetMCP23S08 = &_SetMCP23S08									// temporary for functional verification
 };

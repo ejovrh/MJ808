@@ -13,7 +13,7 @@ extern __rect_t __RECT;													// forward declare object
 void _SetRectifierMode(const uint8_t in_mode)							// sets the rectifier to desired work mode: pure Graetz, Delon or tuning caps
 {
 	__RECT.public.RectifierMode = in_mode;								// set rectifier mode data member
-	__RECT._mcp23s08->SendCommand(MCP23S08_IODIR, in_mode);				// sets the rectifier to work as indicated by function argument by modification on the port expander
+	__RECT._mcp23s08->WriteRegister(MCP23S08_IODIR, in_mode);				// sets the rectifier to work as indicated by function argument by modification on the port expander
 };
 
 __rect_t __RECT =														// instantiation/initialization of object, saves us the constructor
