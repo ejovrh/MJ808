@@ -23609,8 +23609,6 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <part name="C36" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
 <part name="TP5_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
 <part name="TP5_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP6_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP6_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
 <part name="TP7_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
 <part name="TP7_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
 <part name="IC20" library="MP3221–2.7A, 1.2MHZ, HIGH-EFFICIENCY STEP UP CONVERTER WITH INPUT DISCONNECT" deviceset="MP3221" device="" value="MP3221GJ-P"/>
@@ -23622,7 +23620,7 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <part name="L1" library="XFL4020-152MEC Inductor 1.5uH" deviceset="XFL4020-152MEC" device="" value="XFL4020-152MEC  - 1.5uH"/>
 <part name="Q1" library="Transistor" library_urn="urn:adsk.eagle:library:14522416" deviceset="BSS84" device="" package3d_urn="urn:adsk.eagle:package:10893259/3" value="SI2399DS-T1-GE3"/>
 <part name="C33" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="3.3nF"/>
-<part name="R28" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="500k"/>
+<part name="R28" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="400k"/>
 <part name="R29" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
 <part name="LI-1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
 <part name="LI-2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
@@ -23909,8 +23907,6 @@ Vout = 5V0</text>
 <wire x1="231.14" y1="650.24" x2="231.14" y2="668.02" width="0.1524" layer="97" style="shortdash"/>
 <text x="236.22" y="657.86" size="1.778" layer="97">DC Boost converter
 6V0 out</text>
-<wire x1="261.62" y1="655.32" x2="281.94" y2="655.32" width="0.1524" layer="97"/>
-<wire x1="261.62" y1="662.94" x2="281.94" y2="662.94" width="0.1524" layer="97"/>
 <text x="132.08" y="12.7" size="1.778" layer="91">TODO - consolidate SPI SS pullups</text>
 <text x="30.48" y="873.76" size="1.778" layer="98">SW1</text>
 <text x="-20.32" y="876.3" size="1.778" layer="98">SW2</text>
@@ -24045,8 +24041,6 @@ Vout = 5V0</text>
 <wire x1="38.1" y1="695.96" x2="43.18" y2="695.96" width="0.1524" layer="94"/>
 <text x="43.18" y="695.96" size="1.778" layer="94">TP5</text>
 <circle x="40.64" y="662.94" radius="0.254" width="0.6096" layer="97"/>
-<wire x1="269.24" y1="665.48" x2="269.24" y2="660.4" width="0.1524" layer="94"/>
-<text x="269.24" y="665.48" size="1.778" layer="94" rot="R90">TP6</text>
 <circle x="-38.1" y="754.38" radius="0.254" width="0.6096" layer="97"/>
 <wire x1="279.4" y1="629.92" x2="279.4" y2="614.68" width="0.1524" layer="97" style="shortdash"/>
 <wire x1="279.4" y1="614.68" x2="271.78" y2="614.68" width="0.1524" layer="97" style="shortdash"/>
@@ -24055,8 +24049,6 @@ Vout = 5V0</text>
 <wire x1="264.16" y1="622.3" x2="264.16" y2="629.92" width="0.1524" layer="97" style="shortdash"/>
 <text x="269.24" y="624.84" size="1.778" layer="97" rot="R270">uC
 CAN</text>
-<text x="281.94" y="655.32" size="1.778" layer="97">GND</text>
-<text x="281.94" y="662.94" size="1.778" layer="97">6V0</text>
 <wire x1="264.16" y1="629.92" x2="279.4" y2="629.92" width="0.1524" layer="97" style="shortdash"/>
 <wire x1="33.02" y1="322.58" x2="33.02" y2="452.12" width="0.1524" layer="90"/>
 <wire x1="33.02" y1="452.12" x2="236.22" y2="452.12" width="0.1524" layer="90"/>
@@ -24069,7 +24061,6 @@ CAN</text>
 <text x="228.6" y="873.76" size="6.4516" layer="94">TP2</text>
 <text x="259.08" y="822.96" size="6.4516" layer="94">TP3</text>
 <text x="208.28" y="508" size="6.4516" layer="94">TP4</text>
-<text x="447.04" y="132.08" size="6.4516" layer="94">TP6</text>
 <text x="116.84" y="431.8" size="1.778" layer="97">Full Scale Input Voltage = 2.048V
 8.5V are set to be 2.024V on INVP
 via the resistor divider</text>
@@ -24547,14 +24538,6 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <instance part="TP5_IN" gate="G$1" x="492.76" y="855.98" smashed="yes" rot="R180">
 <attribute name="NAME" x="492.76" y="863.6" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="491.49" y="858.52" size="1.778" layer="97" rot="R180"/>
-</instance>
-<instance part="TP6_IN" gate="G$1" x="452.12" y="114.3" smashed="yes" rot="R180">
-<attribute name="NAME" x="452.12" y="121.92" size="1.778" layer="95" rot="R90"/>
-<attribute name="TP_SIGNAL_NAME" x="450.85" y="116.84" size="1.778" layer="97" rot="R180"/>
-</instance>
-<instance part="TP6_OUT" gate="G$1" x="457.2" y="114.3" smashed="yes" rot="R180">
-<attribute name="NAME" x="457.2" y="121.92" size="1.778" layer="95" rot="R90"/>
-<attribute name="TP_SIGNAL_NAME" x="455.93" y="116.84" size="1.778" layer="97" rot="R180"/>
 </instance>
 <instance part="TP7_IN" gate="G$1" x="43.18" y="345.44" smashed="yes" rot="R90">
 <attribute name="NAME" x="50.8" y="345.44" size="1.778" layer="95"/>
@@ -25321,7 +25304,7 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <pinref part="LI-1" gate="G$1" pin="TP"/>
 </segment>
 </net>
-<net name="6V0_TP-IN" class="7">
+<net name="6V0" class="7">
 <segment>
 <pinref part="D6" gate="G$1" pin="C"/>
 <pinref part="R26" gate="G$1" pin="2"/>
@@ -25332,11 +25315,10 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <wire x1="441.96" y1="111.76" x2="452.12" y2="111.76" width="0.1524" layer="91"/>
 <junction x="441.96" y="111.76"/>
 <label x="452.12" y="111.76" size="1.778" layer="95"/>
-<pinref part="TP6_IN" gate="G$1" pin="TP"/>
 </segment>
 <segment>
-<wire x1="266.7" y1="662.94" x2="266.7" y2="670.56" width="0.1524" layer="91"/>
-<label x="266.7" y="670.56" size="1.778" layer="95" rot="R90"/>
+<wire x1="269.24" y1="660.4" x2="261.62" y2="660.4" width="0.1524" layer="91"/>
+<label x="269.24" y="660.4" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="EN" class="9">
@@ -25705,6 +25687,10 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <wire x1="236.22" y1="127" x2="236.22" y2="119.38" width="0.1524" layer="91"/>
 <label x="236.22" y="119.38" size="1.778" layer="95"/>
 </segment>
+<segment>
+<wire x1="269.24" y1="655.32" x2="261.62" y2="655.32" width="0.1524" layer="91"/>
+<label x="269.24" y="655.32" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="INVP" class="9">
 <segment>
@@ -25994,7 +25980,7 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="208.28" y="1173.48" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="TPS630702_PWM" class="9">
+<net name="TPS630701_PWM" class="9">
 <segment>
 <pinref part="IC6" gate="G$1" pin="1-PS/S"/>
 <wire x1="147.32" y1="515.62" x2="154.94" y2="515.62" width="0.1524" layer="91"/>
@@ -26564,17 +26550,6 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="33.02" y="698.5" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="6V0_TP-OUT" class="7">
-<segment>
-<pinref part="TP6_OUT" gate="G$1" pin="TP"/>
-<wire x1="457.2" y1="111.76" x2="464.82" y2="111.76" width="0.1524" layer="91"/>
-<label x="464.82" y="111.76" size="1.778" layer="95" rot="R90"/>
-</segment>
-<segment>
-<wire x1="271.78" y1="662.94" x2="271.78" y2="670.56" width="0.1524" layer="91"/>
-<label x="271.78" y="670.56" size="1.778" layer="95" rot="R90"/>
-</segment>
-</net>
 <net name="N$7" class="9">
 <segment>
 <pinref part="IC17" gate="G$1" pin="16_GP7"/>
@@ -26658,8 +26633,6 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <approved hash="104,1,157.48,350.52,IC10,2_REFG,GND_VIA_INCP,,,"/>
 <approved hash="104,1,314.96,358.14,IC17,GND,GND_VIA_INCP,,,"/>
 <approved hash="104,1,314.96,360.68,IC17,18_VCC,5V0_TP-OUT,,,"/>
-<approved hash="209,1,457.2,111.76,6V0_TP-OUT,,,,,"/>
-<approved hash="106,1,457.2,111.76,6V0_TP-OUT,,,,,"/>
 <approved hash="106,1,360.68,386.08,N$7,,,,,"/>
 <approved hash="106,1,360.68,383.54,N$9,,,,,"/>
 <approved hash="209,1,492.76,853.44,SOLAR-CELL_TP-IN,,,,,"/>
