@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.4.0">
+<eagle version="9.4.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -23462,6 +23462,58 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 </deviceset>
 </devicesets>
 </library>
+<library name="JST GH Connector">
+<packages>
+<package name="SMT">
+<smd name="P$1" x="-1.25" y="0" dx="1.7" dy="0.6" layer="1" rot="R270"/>
+<smd name="P$2" x="0" y="0" dx="1.7" dy="0.6" layer="1" rot="R270"/>
+<smd name="P$3" x="1.25" y="0" dx="1.7" dy="0.6" layer="1" rot="R270"/>
+<smd name="GND1" x="-3.1" y="-3.35" dx="1" dy="2.8" layer="1"/>
+<smd name="GND2" x="3.1" y="-3.35" dx="1" dy="2.8" layer="1"/>
+<wire x1="-2.5" y1="-4.7" x2="2.5" y2="-4.7" width="0.127" layer="21"/>
+<wire x1="-3.5" y1="-1.9" x2="-3.5" y2="-0.7" width="0.127" layer="21"/>
+<wire x1="-3.5" y1="-0.7" x2="-1.6" y2="-0.7" width="0.127" layer="21"/>
+<wire x1="1.6" y1="-0.7" x2="3.5" y2="-0.7" width="0.127" layer="21"/>
+<wire x1="3.5" y1="-0.7" x2="3.5" y2="-1.9" width="0.127" layer="21"/>
+<text x="0" y="1.5" size="0.75" layer="21" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-5.4" size="0.75" layer="27" font="vector" align="center">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="JST_GH">
+<pin name="P$1" x="5.08" y="2.54" length="middle" rot="R180"/>
+<pin name="P$2" x="5.08" y="0" length="middle" rot="R180"/>
+<pin name="P$3" x="5.08" y="-2.54" length="middle" rot="R180"/>
+<wire x1="-7.62" y1="5.08" x2="0" y2="5.08" width="0.254" layer="94"/>
+<wire x1="0" y1="5.08" x2="0" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="0" y1="-7.62" x2="-7.62" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="-7.62" x2="-7.62" y2="5.08" width="0.254" layer="94"/>
+<text x="-7.62" y="7.62" size="1.27" layer="95">&gt;NAME</text>
+<text x="-7.62" y="-10.16" size="1.27" layer="96">&gt;VALUE</text>
+<pin name="GND" x="5.08" y="-5.08" length="middle" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="JST_GH" prefix="CONN" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="JST_GH" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SMT">
+<connects>
+<connect gate="G$1" pin="GND" pad="GND1 GND2"/>
+<connect gate="G$1" pin="P$1" pad="P$1"/>
+<connect gate="G$1" pin="P$2" pad="P$2"/>
+<connect gate="G$1" pin="P$3" pad="P$3"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -23583,7 +23635,6 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <part name="TP1_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
 <part name="TP4_IN" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
 <part name="TP4_OUT" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="LI+" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
 <part name="IC17" library="MCP23S08 - 8-Bit IO Expander with Serial Interface" deviceset="MCP23S08" device="" value="MCP23S08-E/ML"/>
 <part name="C27" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
 <part name="R20" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
@@ -23616,14 +23667,12 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <part name="FD2" library="Fiducial" deviceset="FID" device="_40MIL"/>
 <part name="FD3" library="Fiducial" deviceset="FID" device="_40MIL"/>
 <part name="R25" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083101JP  / 100Ω"/>
-<part name="LI-" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
 <part name="L1" library="XFL4020-152MEC Inductor 1.5uH" deviceset="XFL4020-152MEC" device="" value="XFL4020-152MEC  - 1.5uH"/>
 <part name="Q1" library="Transistor" library_urn="urn:adsk.eagle:library:14522416" deviceset="BSS84" device="" package3d_urn="urn:adsk.eagle:package:10893259/3" value="SI2399DS-T1-GE3"/>
 <part name="C33" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="3.3nF"/>
 <part name="R28" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="400k"/>
 <part name="R29" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
-<part name="LI-1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
-<part name="LI-2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
+<part name="CONN1" library="JST GH Connector" deviceset="JST_GH" device="" value="JST GH, 3 pole"/>
 </parts>
 <sheets>
 <sheet>
@@ -24116,9 +24165,13 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 647-UHV1V151MPD - 150uF/35V</text>
 <text x="487.68" y="873.76" size="6.4516" layer="94">TP5</text>
 <text x="45.72" y="779.78" size="6.4516" layer="99">FIXME: pullup to 5V0 wont work - bootstrap problem!</text>
-<text x="177.8" y="261.62" size="1.778" layer="95">NTC, 10k</text>
+<text x="187.96" y="309.88" size="1.778" layer="95">NTC, 10k</text>
 <wire x1="50.8" y1="883.92" x2="50.8" y2="779.78" width="0.1524" layer="99"/>
 <wire x1="50.8" y1="779.78" x2="45.72" y2="779.78" width="0.1524" layer="99"/>
+<text x="187.96" y="307.34" size="1.778" layer="97">LiIon,1S,4.2V</text>
+<text x="187.96" y="304.8" size="1.778" layer="97">LiIon GND</text>
+<text x="187.96" y="312.42" size="1.778" layer="97">Device GND</text>
+<text x="167.64" y="256.54" size="1.778" layer="97">TODO: try with 150k</text>
 </plain>
 <instances>
 <instance part="IC14" gate="G$1" x="281.94" y="7.62" smashed="yes">
@@ -24435,10 +24488,6 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <attribute name="NAME" x="218.44" y="541.02" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="217.17" y="535.94" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="LI+" gate="G$1" x="167.64" y="297.18" smashed="yes" rot="R270">
-<attribute name="NAME" x="165.1" y="297.18" size="1.778" layer="95" rot="R180"/>
-<attribute name="TP_SIGNAL_NAME" x="166.37" y="294.64" size="1.778" layer="97" rot="R270"/>
-</instance>
 <instance part="IC17" gate="G$1" x="337.82" y="373.38" smashed="yes">
 <attribute name="NAME" x="320.04" y="393.7" size="1.27" layer="95"/>
 <attribute name="VALUE" x="320.04" y="391.16" size="1.27" layer="96"/>
@@ -24564,10 +24613,6 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <attribute name="NAME" x="396.24" y="386.08" size="1.778" layer="95"/>
 <attribute name="VALUE" x="403.86" y="386.08" size="1.778" layer="96"/>
 </instance>
-<instance part="LI-" gate="G$1" x="167.64" y="307.34" smashed="yes" rot="R270">
-<attribute name="NAME" x="165.1" y="307.34" size="1.778" layer="95" rot="R180"/>
-<attribute name="TP_SIGNAL_NAME" x="166.37" y="304.8" size="1.778" layer="97" rot="R270"/>
-</instance>
 <instance part="L1" gate="G$1" x="132.08" y="558.8" smashed="yes">
 <attribute name="NAME" x="132.08" y="566.42" size="1.778" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="132.08" y="562.61" size="1.778" layer="96" font="vector" align="center"/>
@@ -24588,13 +24633,9 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <attribute name="NAME" x="238.76" y="132.08" size="1.778" layer="95"/>
 <attribute name="VALUE" x="238.76" y="129.54" size="1.778" layer="96"/>
 </instance>
-<instance part="LI-1" gate="G$1" x="175.26" y="266.7" smashed="yes" rot="R90">
-<attribute name="NAME" x="180.34" y="266.7" size="1.778" layer="95"/>
-<attribute name="TP_SIGNAL_NAME" x="176.53" y="269.24" size="1.778" layer="97" rot="R90"/>
-</instance>
-<instance part="LI-2" gate="G$1" x="175.26" y="256.54" smashed="yes" rot="R90">
-<attribute name="NAME" x="180.34" y="256.54" size="1.778" layer="95"/>
-<attribute name="TP_SIGNAL_NAME" x="176.53" y="259.08" size="1.778" layer="97" rot="R90"/>
+<instance part="CONN1" gate="G$1" x="177.8" y="309.88" smashed="yes" rot="MR0">
+<attribute name="NAME" x="177.8" y="317.5" size="1.27" layer="95" rot="MR180"/>
+<attribute name="VALUE" x="185.42" y="317.5" size="1.27" layer="96" rot="MR180"/>
 </instance>
 </instances>
 <busses>
@@ -25176,14 +25217,16 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <segment>
 <pinref part="C16" gate="G$1" pin="1"/>
 <wire x1="172.72" y1="297.18" x2="172.72" y2="299.72" width="0.1524" layer="91"/>
-<label x="172.72" y="299.72" size="1.778" layer="95"/>
-<junction x="172.72" y="297.18"/>
-<pinref part="LI+" gate="G$1" pin="TP"/>
-<wire x1="170.18" y1="297.18" x2="172.72" y2="297.18" width="0.1524" layer="91"/>
+<label x="172.72" y="299.72" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
 <wire x1="182.88" y1="683.26" x2="167.64" y2="683.26" width="0.1524" layer="91"/>
 <label x="167.64" y="683.26" size="1.778" layer="95" rot="R90"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="P$3"/>
+<wire x1="172.72" y1="307.34" x2="157.48" y2="307.34" width="0.1524" layer="91"/>
+<label x="157.48" y="307.34" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="V_LI-ION_OUT" class="5">
@@ -25295,13 +25338,18 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="83.82" y="279.4" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$8" class="9">
+<net name="NTC" class="9">
 <segment>
 <pinref part="R16" gate="G$1" pin="2"/>
 <pinref part="R17" gate="G$1" pin="2"/>
 <wire x1="160.02" y1="266.7" x2="172.72" y2="266.7" width="0.1524" layer="91"/>
 <junction x="160.02" y="266.7"/>
-<pinref part="LI-1" gate="G$1" pin="TP"/>
+<label x="172.72" y="266.7" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="P$2"/>
+<wire x1="172.72" y1="309.88" x2="157.48" y2="309.88" width="0.1524" layer="91"/>
+<label x="157.48" y="309.88" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="6V0" class="7">
@@ -25562,11 +25610,6 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="231.14" y="269.24" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<wire x1="172.72" y1="256.54" x2="172.72" y2="254" width="0.1524" layer="91"/>
-<label x="172.72" y="254" size="1.778" layer="95" rot="R270"/>
-<pinref part="LI-2" gate="G$1" pin="TP"/>
-</segment>
-<segment>
 <pinref part="R17" gate="G$1" pin="1"/>
 <wire x1="160.02" y1="256.54" x2="160.02" y2="254" width="0.1524" layer="91"/>
 <label x="160.02" y="254" size="1.778" layer="95" rot="R270"/>
@@ -25574,7 +25617,7 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <segment>
 <pinref part="C16" gate="G$1" pin="2"/>
 <wire x1="172.72" y1="289.56" x2="172.72" y2="287.02" width="0.1524" layer="91"/>
-<label x="172.72" y="287.02" size="1.778" layer="95"/>
+<label x="172.72" y="287.02" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
 <pinref part="R13" gate="G$1" pin="1"/>
@@ -25673,11 +25716,6 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="251.46" y="-7.62" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<pinref part="LI-" gate="G$1" pin="TP"/>
-<wire x1="170.18" y1="307.34" x2="172.72" y2="307.34" width="0.1524" layer="91"/>
-<label x="172.72" y="307.34" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="R24" gate="G$1" pin="2"/>
 <wire x1="381" y1="91.44" x2="381" y2="86.36" width="0.1524" layer="91"/>
 <label x="381" y="86.36" size="1.778" layer="95" rot="R270"/>
@@ -25690,6 +25728,16 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <segment>
 <wire x1="269.24" y1="655.32" x2="261.62" y2="655.32" width="0.1524" layer="91"/>
 <label x="269.24" y="655.32" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="GND"/>
+<wire x1="172.72" y1="304.8" x2="157.48" y2="304.8" width="0.1524" layer="91"/>
+<label x="157.48" y="304.8" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="P$1"/>
+<wire x1="172.72" y1="312.42" x2="157.48" y2="312.42" width="0.1524" layer="91"/>
+<label x="157.48" y="312.42" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="INVP" class="9">
