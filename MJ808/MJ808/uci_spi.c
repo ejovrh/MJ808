@@ -25,10 +25,17 @@
  *		CPOL 0 - clock idle is low
  *		CPHA 0 - sample on the leading (first) edge of clock signal
  *
+ * mode 1:
+ *		CPOL 0 - clock idle is low
+ *		CPHA 1 - sample on the trailing (last) edge of clock signal
+ *
+ * mode 2:
+ *		CPOL 1 - clock idle is high
+ *		CPHA 0 - sample on the leading (first) edge of clock signal
+ *
  * mode 3:
  *		CPOL 1 - clock idle is high
  *		CPHA 1 - sample on the trailing (second) edge of the clock signal
- *
  */
 
 // sends (and receives) data from the SPI bus

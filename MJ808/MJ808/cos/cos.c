@@ -30,9 +30,7 @@ FIXME: ground noise floor triggers too many interrupts; solve by raising the ref
 done_TODO: check if DIDR enable/disable will help - doesnt help
 
 TODO: verify MP3221 on/off operation via _Cos6V0OutputEnabled()
-	- pin is corrected, mp3321 doesn't turn on (chip issue?)
-	- it runs sporadically, connecting a load produces no useful outcome
-	FIXME: replace with TPS630701 or similar
+	works in principle, just needs liion battery attached
 
 TODO: verify MCP23S08 GPIO states, interrupts, etc
 
@@ -43,6 +41,9 @@ TODO: verify pin change interrupt on PD4
 FIXME: fix bootstrap problem with Graetz mosfet gate pullup
 
 TODO: verify MCP73871 operation for charge and discharge
+	- is suspicious: 500mA discharge over a 20Ohm resistor,
+	- powerpath is not working (20mA in, 500mA out)
+	- Vout without battery seems limited in current (25mA or so)
 
 */
 
@@ -104,7 +105,12 @@ void _HeartbeatPeriodicCos(void)										// ran by every watchdog ISR, period s
 	MsgHandler->SendMessage(0x01, __Device.public.ACfreq, 7);			// send out operational parameters to the bus
 	*/
 	
-	//__Device.public.BuckBoost->GetValues();								// download voltage/current measurement into array
+	__Device.public.BuckBoost->GetValues();								// download voltage/current measurement into array
+		
+	//__Device.public.LiIonCharger->GetMCP23S08();				// temporary for functional verification
+	//__Device.public.LiIonCharger->SetMCP23S08(0x05 ,0x00);
+	//__Device.public.LiIonCharger->GetMCP23S08();				// temporary for functional verification
+
 };
 
 void _PopulatedBusOperationCOS(message_handler_t * const in_msg)		// received MsgHandler object and passes
@@ -150,8 +156,8 @@ void cos_ctor()															// constructor for concrete class
 	gpio_conf(SPI_SS_MCP2515_pin, OUTPUT, HIGH);						// SPI Slave Select known init state
 	gpio_conf(SPI_SS_MCP23S08_pin, OUTPUT, HIGH);						// SPI Slave Select known init state
 
-	gpio_conf(INT_MCP23S08_pin, INPUT, HIGH);							// MCP23S08 interrupt pin; port expander has interrupt pin active low (IOCON register, datasheet p. 15)
-	//gpio_conf(INT_MCP23S08_pin, OUTPUT, LOW);							// temporary pin for verification of stuff
+	//gpio_conf(INT_MCP23S08_pin, INPUT, HIGH);							// MCP23S08 interrupt pin; port expander has interrupt pin active low (IOCON register, datasheet p. 15)
+	gpio_conf(INT_MCP23S08_pin, OUTPUT, LOW);							// temporary pin for verification of stuff
 
 	// state initialization of device-specific pins
 	}
@@ -212,8 +218,6 @@ void cos_ctor()															// constructor for concrete class
 	*(__Device.public.BuckBoost->PWM) = 0xFF;							// put Buck-Boost into PWM/PFM (auto) mode
 	__Device.public.LiIonCharger->SetResistor(128);						// set resistor value to something
 
-	__Device.public.LiIonCharger->SetMCP23S08(0x00,0x80);
-	__Device.public.LiIonCharger->GetMCP23S08();				// temporary for functional verification
 
 	__Device.public.Cos6V0OutputEnabled(0);
 
@@ -232,7 +236,7 @@ ISR(TIMER1_CAPT_vect)													// timer1 input capture interrupt for comparat
 {
 	cli();																// disable interrupts
 
-	//gpio_toggle(INT_MCP23S08_pin);
+	gpio_toggle(INT_MCP23S08_pin);
 
 	TCNT1 = 0;															// reset timer1 counter
 
