@@ -104,12 +104,12 @@ void _HeartbeatPeriodicCos(void)										// ran by every watchdog ISR, period s
 	MsgHandler->SendMessage(0x01, *__Device.public.OpParamArray, 7);	// send out operational parameters to the bus
 	MsgHandler->SendMessage(0x01, __Device.public.ACfreq, 7);			// send out operational parameters to the bus
 	*/
-	
+
 	__Device.public.BuckBoost->GetValues();								// download voltage/current measurement into array
-		
-	//__Device.public.LiIonCharger->GetMCP23S08();				// temporary for functional verification
-	//__Device.public.LiIonCharger->SetMCP23S08(0x05 ,0x00);
-	//__Device.public.LiIonCharger->GetMCP23S08();				// temporary for functional verification
+
+	//__Device.public.LiIonCharger->GetMCP23S08();						// temporary for functional verification
+	//__Device.public.LiIonCharger->SetMCP23S08(0x05 ,0x00);				// temporary for functional verification
+	//__Device.public.LiIonCharger->GetMCP23S08();						// temporary for functional verification
 
 };
 
@@ -216,7 +216,7 @@ void cos_ctor()															// constructor for concrete class
 	// NOTE: most default states are implemented in hardware by means of pulldown/pullup resistors
 	//__Device.public.Rect->SetRectifierMode(_delon);						// set regulator manually into Delon mode - we are very likely to start spinning slow
 	*(__Device.public.BuckBoost->PWM) = 0xFF;							// put Buck-Boost into PWM/PFM (auto) mode
-	__Device.public.LiIonCharger->SetResistor(128);						// set resistor value to something
+	__Device.public.LiIonCharger->SetResistor(99);						// set resistor value to 2k
 
 
 	__Device.public.Cos6V0OutputEnabled(0);
