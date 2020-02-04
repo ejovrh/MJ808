@@ -15646,9 +15646,9 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <instance part="FD3" gate="G$2" x="10.16" y="1056.64" smashed="yes">
 <attribute name="NAME" x="10.16" y="1057.91" size="1.016" layer="95" font="vector" ratio="12"/>
 </instance>
-<instance part="R25" gate="G$1" x="393.7" y="397.51" smashed="yes">
-<attribute name="NAME" x="386.08" y="403.86" size="1.778" layer="95"/>
-<attribute name="VALUE" x="393.7" y="403.86" size="1.778" layer="96"/>
+<instance part="R25" gate="G$1" x="393.7" y="400.05" smashed="yes">
+<attribute name="NAME" x="386.08" y="406.4" size="1.778" layer="95"/>
+<attribute name="VALUE" x="393.7" y="406.4" size="1.778" layer="96"/>
 </instance>
 <instance part="L1" gate="G$1" x="132.08" y="558.8" smashed="yes">
 <attribute name="NAME" x="132.08" y="566.42" size="1.778" layer="95" font="vector" align="center"/>
@@ -17260,8 +17260,8 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 </segment>
 <segment>
 <pinref part="R25" gate="G$1" pin="4"/>
-<wire x1="401.32" y1="396.24" x2="408.94" y2="396.24" width="0.1524" layer="91"/>
-<label x="408.94" y="396.24" size="1.778" layer="95"/>
+<wire x1="401.32" y1="398.78" x2="408.94" y2="398.78" width="0.1524" layer="91"/>
+<label x="408.94" y="398.78" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="GATE_GRAETZ" class="9">
@@ -17278,8 +17278,8 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 </segment>
 <segment>
 <pinref part="R25" gate="G$1" pin="2"/>
-<wire x1="401.32" y1="393.7" x2="408.94" y2="393.7" width="0.1524" layer="91"/>
-<label x="408.94" y="393.7" size="1.778" layer="95"/>
+<wire x1="401.32" y1="396.24" x2="408.94" y2="396.24" width="0.1524" layer="91"/>
+<label x="408.94" y="396.24" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$13" class="9">
@@ -17317,8 +17317,8 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 </segment>
 <segment>
 <pinref part="R25" gate="G$1" pin="6"/>
-<wire x1="401.32" y1="398.78" x2="408.94" y2="398.78" width="0.1524" layer="91"/>
-<label x="408.94" y="398.78" size="1.778" layer="95"/>
+<wire x1="401.32" y1="401.32" x2="408.94" y2="401.32" width="0.1524" layer="91"/>
+<label x="408.94" y="401.32" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="AFTER_SW_BEFORE_TUNING_CAP" class="2">
@@ -17482,35 +17482,14 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 </net>
 <net name="CE" class="9">
 <segment>
-<wire x1="350.52" y1="403.86" x2="360.68" y2="403.86" width="0.1524" layer="91"/>
-<label x="360.68" y="403.86" size="1.778" layer="95"/>
-<pinref part="IC5" gate="G$1" pin="16_GP7"/>
-</segment>
-<segment>
 <pinref part="IC13" gate="A" pin="CE"/>
 <wire x1="243.84" y1="231.14" x2="223.52" y2="231.14" width="0.1524" layer="91"/>
 <label x="223.52" y="231.14" size="1.778" layer="95" rot="R180"/>
 </segment>
-</net>
-<net name="N$6" class="9">
 <segment>
-<pinref part="R25" gate="G$1" pin="5"/>
-<wire x1="386.08" y1="398.78" x2="350.52" y2="398.78" width="0.1524" layer="91"/>
-<pinref part="IC5" gate="G$1" pin="14_GP5"/>
-</segment>
-</net>
-<net name="N$10" class="9">
-<segment>
-<pinref part="R25" gate="G$1" pin="3"/>
-<wire x1="386.08" y1="396.24" x2="350.52" y2="396.24" width="0.1524" layer="91"/>
-<pinref part="IC5" gate="G$1" pin="13_GP4"/>
-</segment>
-</net>
-<net name="N$11" class="9">
-<segment>
-<pinref part="R25" gate="G$1" pin="1"/>
-<wire x1="386.08" y1="393.7" x2="350.52" y2="393.7" width="0.1524" layer="91"/>
+<wire x1="350.52" y1="393.7" x2="360.68" y2="393.7" width="0.1524" layer="91"/>
 <pinref part="IC5" gate="G$1" pin="12_GP3"/>
+<label x="360.68" y="393.7" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$2" class="7">
@@ -17531,13 +17510,6 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <wire x1="383.54" y1="144.78" x2="383.54" y2="134.62" width="0.1524" layer="91"/>
 <wire x1="383.54" y1="134.62" x2="393.7" y2="134.62" width="0.1524" layer="91"/>
 <junction x="393.7" y="134.62"/>
-</segment>
-</net>
-<net name="N$9" class="0">
-<segment>
-<wire x1="350.52" y1="401.32" x2="360.68" y2="401.32" width="0.1524" layer="91"/>
-<label x="360.68" y="401.32" size="1.778" layer="95"/>
-<pinref part="IC5" gate="G$1" pin="15_GP6"/>
 </segment>
 </net>
 <net name="COMPARATOR_REF" class="0">
@@ -17572,6 +17544,34 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <wire x1="279.4" y1="378.46" x2="276.86" y2="378.46" width="0.1524" layer="91"/>
 <junction x="279.4" y="378.46"/>
 <pinref part="IC5" gate="G$1" pin="18_VCC"/>
+</segment>
+</net>
+<net name="N$4" class="0">
+<segment>
+<pinref part="IC5" gate="G$1" pin="16_GP7"/>
+<wire x1="350.52" y1="403.86" x2="360.68" y2="403.86" width="0.1524" layer="91"/>
+<label x="360.68" y="403.86" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$6" class="0">
+<segment>
+<pinref part="IC5" gate="G$1" pin="13_GP4"/>
+<pinref part="R25" gate="G$1" pin="1"/>
+<wire x1="350.52" y1="396.24" x2="386.08" y2="396.24" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$7" class="0">
+<segment>
+<pinref part="IC5" gate="G$1" pin="14_GP5"/>
+<pinref part="R25" gate="G$1" pin="3"/>
+<wire x1="350.52" y1="398.78" x2="386.08" y2="398.78" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$8" class="0">
+<segment>
+<pinref part="IC5" gate="G$1" pin="15_GP6"/>
+<pinref part="R25" gate="G$1" pin="5"/>
+<wire x1="350.52" y1="401.32" x2="386.08" y2="401.32" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
