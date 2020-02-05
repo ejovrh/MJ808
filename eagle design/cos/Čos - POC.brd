@@ -8,7 +8,7 @@
 </settings>
 <grid distance="0.25" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="mm" altunit="mm"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
 <layer number="2" name="Route2" color="26" fill="1" visible="no" active="yes"/>
 <layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
 <layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
@@ -23,21 +23,21 @@
 <layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
 <layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
 <layer number="15" name="Route15" color="24" fill="1" visible="no" active="yes"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
-<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
-<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="yes" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
 <layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
 <layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
@@ -46,10 +46,10 @@
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
-<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
-<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
@@ -58,8 +58,8 @@
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -1688,26 +1688,6 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </package3d>
 </packages3d>
 </library>
-<library name="741X083331JP Resistor Array">
-<packages>
-<package name="0402">
-<smd name="2" x="0.5" y="-0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="4" x="0.5" y="-0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="6" x="0.5" y="0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="8" x="0.5" y="0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="7" x="-0.5" y="0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="5" x="-0.5" y="0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="3" x="-0.5" y="-0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="1" x="-0.5" y="-0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<wire x1="-1" y1="-1" x2="-1" y2="1" width="0.127" layer="21"/>
-<wire x1="-1" y1="1" x2="1" y2="1" width="0.127" layer="21"/>
-<wire x1="1" y1="1" x2="1" y2="-1" width="0.127" layer="21"/>
-<wire x1="1" y1="-1" x2="-1" y2="-1" width="0.127" layer="21"/>
-<text x="0" y="2" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="-2" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
-</package>
-</packages>
-</library>
 <library name="signal testpoint">
 <packages>
 <package name="SMT-1.2MM">
@@ -2431,6 +2411,26 @@ NS Package M08A</description>
 </package>
 </packages>
 </library>
+<library name="74x-1133528 Resistor Array">
+<packages>
+<package name="0402-4R">
+<smd name="2" x="0.5" y="-0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="4" x="0.5" y="-0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="6" x="0.5" y="0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="8" x="0.5" y="0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="7" x="-0.5" y="0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="5" x="-0.5" y="0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="3" x="-0.5" y="-0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="1" x="-0.5" y="-0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<wire x1="-1" y1="-1" x2="-1" y2="1" width="0.127" layer="21"/>
+<wire x1="-1" y1="1" x2="1" y2="1" width="0.127" layer="21"/>
+<wire x1="1" y1="1" x2="1" y2="-1" width="0.127" layer="21"/>
+<wire x1="1" y1="-1" x2="-1" y2="-1" width="0.127" layer="21"/>
+<text x="0" y="2" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-2" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
+</package>
+</packages>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -2685,11 +2685,11 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <element name="ICSP" library="5034800600 FPC Connector" package="SMT" value="5034800600" x="12.5" y="16" smashed="yes">
 <attribute name="NAME" x="9" y="14.75" size="0.75" layer="21" font="vector" rot="R90" align="center"/>
 </element>
-<element name="R18" library="741X083331JP Resistor Array" package="0402" value="741X083331JP / 330Ω" x="11.75" y="14" smashed="yes" rot="MR270">
+<element name="R18" library="74x-1133528 Resistor Array" package="0402-4R" value="741X083331JP / 330Ω" x="11.75" y="14" smashed="yes" rot="MR270">
 <attribute name="NAME" x="13.5" y="14" size="0.75" layer="26" font="vector" rot="MR270" align="center"/>
 <attribute name="VALUE" x="13.75" y="14" size="1.27" layer="28" font="vector" rot="MR270" align="center"/>
 </element>
-<element name="R19" library="741X083331JP Resistor Array" package="0402" value="741X083103JP / 10kΩ" x="9.25" y="14" smashed="yes" rot="MR90">
+<element name="R19" library="74x-1133528 Resistor Array" package="0402-4R" value="741X083103JP / 10kΩ" x="9.25" y="14" smashed="yes" rot="MR90">
 <attribute name="NAME" x="7.5" y="14" size="0.75" layer="26" font="vector" rot="MR90" align="center"/>
 <attribute name="VALUE" x="7.25" y="14" size="1" layer="28" font="vector" rot="MR90" align="center"/>
 </element>
@@ -3109,7 +3109,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <element name="FD3" library="Fiducial" package="FID_040" value="FID_40MIL" x="5.5" y="64.5" smashed="yes">
 <attribute name="BOM" value="" x="5.5" y="64.5" size="1.778" layer="27" display="off"/>
 </element>
-<element name="R25" library="741X083331JP Resistor Array" package="0402" value="741X083101JP  / 100Ω" x="19.75" y="29.5" smashed="yes" rot="R90">
+<element name="R25" library="74x-1133528 Resistor Array" package="0402-4R" value="741X083101JP  / 100Ω" x="19.75" y="29.5" smashed="yes" rot="R90">
 <attribute name="NAME" x="18" y="29.5" size="0.75" layer="25" font="vector" rot="R90" align="center"/>
 <attribute name="VALUE" x="21.75" y="29.5" size="1" layer="27" font="vector" rot="R90" align="center"/>
 </element>
@@ -5445,6 +5445,9 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="3,16,fbe6a767f135adb4"/>
 <approved hash="3,16,5c9af1b5a7e20acd"/>
 <approved hash="3,16,3d3b60ebcad99709"/>
+<approved hash="3,2,d3ae134c139ad378"/>
+<approved hash="3,2,1320f0c2f1921270"/>
+<approved hash="3,2,e237c0ab6d30a23e"/>
 </errors>
 </board>
 </drawing>

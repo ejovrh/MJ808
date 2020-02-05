@@ -8448,80 +8448,6 @@ Source: AVX .. aphvc.pdf</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="741X083331JP Resistor Array">
-<packages>
-<package name="0402">
-<smd name="2" x="0.5" y="-0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="4" x="0.5" y="-0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="6" x="0.5" y="0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="8" x="0.5" y="0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="7" x="-0.5" y="0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="5" x="-0.5" y="0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="3" x="-0.5" y="-0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<smd name="1" x="-0.5" y="-0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
-<wire x1="-1" y1="-1" x2="-1" y2="1" width="0.127" layer="21"/>
-<wire x1="-1" y1="1" x2="1" y2="1" width="0.127" layer="21"/>
-<wire x1="1" y1="1" x2="1" y2="-1" width="0.127" layer="21"/>
-<wire x1="1" y1="-1" x2="-1" y2="-1" width="0.127" layer="21"/>
-<text x="0" y="2" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="-2" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
-</package>
-</packages>
-<symbols>
-<symbol name="R">
-<pin name="7" x="-7.62" y="3.81" visible="pad" length="middle"/>
-<pin name="5" x="-7.62" y="1.27" visible="pad" length="middle"/>
-<pin name="3" x="-7.62" y="-1.27" visible="pad" length="middle"/>
-<pin name="1" x="-7.62" y="-3.81" visible="pad" length="middle"/>
-<pin name="2" x="7.62" y="-3.81" visible="pad" length="middle" rot="R180"/>
-<pin name="4" x="7.62" y="-1.27" visible="pad" length="middle" rot="R180"/>
-<pin name="6" x="7.62" y="1.27" visible="pad" length="middle" rot="R180"/>
-<pin name="8" x="7.62" y="3.81" visible="pad" length="middle" rot="R180"/>
-<text x="-5.08" y="7.62" size="1.778" layer="95">&gt;NAME</text>
-<text x="-5.08" y="-8.89" size="1.778" layer="96">&gt;VALUE</text>
-<wire x1="-2.54" y1="4.7625" x2="-2.54" y2="2.8575" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="2.8575" x2="2.54" y2="2.8575" width="0.254" layer="94"/>
-<wire x1="2.54" y1="2.8575" x2="2.54" y2="4.7625" width="0.254" layer="94"/>
-<wire x1="2.54" y1="4.7625" x2="-2.54" y2="4.7625" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="2.2225" x2="2.54" y2="2.2225" width="0.254" layer="94"/>
-<wire x1="2.54" y1="2.2225" x2="2.54" y2="0.3175" width="0.254" layer="94"/>
-<wire x1="2.54" y1="0.3175" x2="-2.54" y2="0.3175" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="0.3175" x2="-2.54" y2="2.2225" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="-0.3175" x2="-2.54" y2="-2.2225" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="-2.2225" x2="2.54" y2="-2.2225" width="0.254" layer="94"/>
-<wire x1="2.54" y1="-2.2225" x2="2.54" y2="-0.3175" width="0.254" layer="94"/>
-<wire x1="2.54" y1="-0.3175" x2="-2.54" y2="-0.3175" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="-2.8575" x2="2.54" y2="-2.8575" width="0.254" layer="94"/>
-<wire x1="2.54" y1="-2.8575" x2="2.54" y2="-4.7625" width="0.254" layer="94"/>
-<wire x1="2.54" y1="-4.7625" x2="-2.54" y2="-4.7625" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="-4.7625" x2="-2.54" y2="-2.8575" width="0.254" layer="94"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="741X083331JP" prefix="R" uservalue="yes">
-<gates>
-<gate name="G$1" symbol="R" x="0" y="-2.032"/>
-</gates>
-<devices>
-<device name="" package="0402">
-<connects>
-<connect gate="G$1" pin="1" pad="1"/>
-<connect gate="G$1" pin="2" pad="2"/>
-<connect gate="G$1" pin="3" pad="3"/>
-<connect gate="G$1" pin="4" pad="4"/>
-<connect gate="G$1" pin="5" pad="5"/>
-<connect gate="G$1" pin="6" pad="6"/>
-<connect gate="G$1" pin="7" pad="7"/>
-<connect gate="G$1" pin="8" pad="8"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="signal testpoint">
 <packages>
 <package name="SMT-1.2MM">
@@ -14590,6 +14516,80 @@ Source: http://www.linear.com/pc/downloadDocument.do?navId=H0,C1,C1154,C1009,C10
 </deviceset>
 </devicesets>
 </library>
+<library name="74x-1133528 Resistor Array">
+<packages>
+<package name="0402-4R">
+<smd name="2" x="0.5" y="-0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="4" x="0.5" y="-0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="6" x="0.5" y="0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="8" x="0.5" y="0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="7" x="-0.5" y="0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="5" x="-0.5" y="0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="3" x="-0.5" y="-0.25" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<smd name="1" x="-0.5" y="-0.75" dx="0.3" dy="0.65" layer="1" rot="R90"/>
+<wire x1="-1" y1="-1" x2="-1" y2="1" width="0.127" layer="21"/>
+<wire x1="-1" y1="1" x2="1" y2="1" width="0.127" layer="21"/>
+<wire x1="1" y1="1" x2="1" y2="-1" width="0.127" layer="21"/>
+<wire x1="1" y1="-1" x2="-1" y2="-1" width="0.127" layer="21"/>
+<text x="0" y="2" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-2" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="4R">
+<pin name="7" x="-7.62" y="3.81" visible="pad" length="middle"/>
+<pin name="5" x="-7.62" y="1.27" visible="pad" length="middle"/>
+<pin name="3" x="-7.62" y="-1.27" visible="pad" length="middle"/>
+<pin name="1" x="-7.62" y="-3.81" visible="pad" length="middle"/>
+<pin name="2" x="7.62" y="-3.81" visible="pad" length="middle" rot="R180"/>
+<pin name="4" x="7.62" y="-1.27" visible="pad" length="middle" rot="R180"/>
+<pin name="6" x="7.62" y="1.27" visible="pad" length="middle" rot="R180"/>
+<pin name="8" x="7.62" y="3.81" visible="pad" length="middle" rot="R180"/>
+<text x="-5.08" y="7.62" size="1.778" layer="95">&gt;NAME</text>
+<text x="-5.08" y="-8.89" size="1.778" layer="96">&gt;VALUE</text>
+<wire x1="-2.54" y1="4.7625" x2="-2.54" y2="2.8575" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="2.8575" x2="2.54" y2="2.8575" width="0.254" layer="94"/>
+<wire x1="2.54" y1="2.8575" x2="2.54" y2="4.7625" width="0.254" layer="94"/>
+<wire x1="2.54" y1="4.7625" x2="-2.54" y2="4.7625" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="2.2225" x2="2.54" y2="2.2225" width="0.254" layer="94"/>
+<wire x1="2.54" y1="2.2225" x2="2.54" y2="0.3175" width="0.254" layer="94"/>
+<wire x1="2.54" y1="0.3175" x2="-2.54" y2="0.3175" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="0.3175" x2="-2.54" y2="2.2225" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-0.3175" x2="-2.54" y2="-2.2225" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-2.2225" x2="2.54" y2="-2.2225" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-2.2225" x2="2.54" y2="-0.3175" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-0.3175" x2="-2.54" y2="-0.3175" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-2.8575" x2="2.54" y2="-2.8575" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-2.8575" x2="2.54" y2="-4.7625" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-4.7625" x2="-2.54" y2="-4.7625" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-4.7625" x2="-2.54" y2="-2.8575" width="0.254" layer="94"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="741X083331JP" prefix="R" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="4R" x="0" y="-2.032"/>
+</gates>
+<devices>
+<device name="" package="0402-4R">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+<connect gate="G$1" pin="3" pad="3"/>
+<connect gate="G$1" pin="4" pad="4"/>
+<connect gate="G$1" pin="5" pad="5"/>
+<connect gate="G$1" pin="6" pad="6"/>
+<connect gate="G$1" pin="7" pad="7"/>
+<connect gate="G$1" pin="8" pad="8"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -14640,8 +14640,8 @@ Source: http://www.linear.com/pc/downloadDocument.do?navId=H0,C1,C1154,C1009,C10
 </part>
 <part name="IC8" library="PRQV8.00CR1510Y00L - 8MHz resonator" deviceset="PRQV" device="" value="AWSCR-8.00CELA-C10-T3"/>
 <part name="ICSP" library="5034800600 FPC Connector" deviceset="5034800600" device="" value="5034800600"/>
-<part name="R18" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083331JP / 330Ω"/>
-<part name="R19" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083103JP / 10kΩ"/>
+<part name="R18" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083331JP / 330Ω"/>
+<part name="R19" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083103JP / 10kΩ"/>
 <part name="L" library="signal testpoint" deviceset="TP" device="SMT-1.2MM" value="CAN Low"/>
 <part name="H" library="signal testpoint" deviceset="TP" device="SMT-1.2MM" value="CAN High"/>
 <part name="IC13" library="MCP73871 - Powerpath and Charge Controller" deviceset="MCP73871-2AAI/ML" device="" value="MCP73871-2CCI/ML"/>
@@ -14716,7 +14716,7 @@ Source: http://www.linear.com/pc/downloadDocument.do?navId=H0,C1,C1154,C1009,C10
 <part name="FD1" library="Fiducial" deviceset="FID" device="_40MIL"/>
 <part name="FD2" library="Fiducial" deviceset="FID" device="_40MIL"/>
 <part name="FD3" library="Fiducial" deviceset="FID" device="_40MIL"/>
-<part name="R25" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083101JP  / 100Ω"/>
+<part name="R25" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083101JP  / 100Ω"/>
 <part name="L1" library="XFL4020-152MEC Inductor 1.5uH" deviceset="XFL4020-152MEC" device="" value="XFL4020-152MEC  - 1.5uH"/>
 <part name="Q1" library="Transistor" library_urn="urn:adsk.eagle:library:14522416" deviceset="BSS84" device="" package3d_urn="urn:adsk.eagle:package:10893259/3" value="SI2399DS-T1-GE3"/>
 <part name="C33" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="3.3nF"/>
