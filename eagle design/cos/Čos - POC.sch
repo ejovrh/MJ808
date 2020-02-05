@@ -14723,20 +14723,20 @@ Source: http://www.linear.com/pc/downloadDocument.do?navId=H0,C1,C1154,C1009,C10
 <part name="R28" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="400k"/>
 <part name="R29" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
 <part name="CONN1" library="JST GH Connector" deviceset="JST_GH" device="" value="JST GH, 3 pole"/>
-<part name="D7" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device=""/>
-<part name="D8" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device=""/>
-<part name="D9" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device=""/>
-<part name="D10" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device=""/>
+<part name="D7" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device="" value="CUHS20S30,H3F"/>
+<part name="D8" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device="" value="CUHS20S30,H3F"/>
+<part name="D9" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device="" value="CUHS20S30,H3F"/>
+<part name="D10" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device="" value="CUHS20S30,H3F"/>
 <part name="IC3" library="linear" library_urn="urn:adsk.eagle:library:262" deviceset="LT10*" device="S8" package3d_urn="urn:adsk.eagle:package:16404/2" technology="07C" value="LT1001CS8#PBF"/>
 <part name="C1" library="C-Pol" deviceset="C-POL" device="" value="3300μF / 35V / ultralow ESR"/>
 <part name="C2" library="C-Pol" deviceset="C-POL" device="" value="3300μF / 35V / ultralow ESR"/>
 <part name="C4" library="C-Pol" deviceset="C-POL" device="" value="330μF / 35V / ultralow ESR"/>
 <part name="C12" library="C-Pol" deviceset="C-POL" device="" value="330μF / 35V / ultralow ESR"/>
 <part name="C6" library="C-Pol" deviceset="C-POL" device="" value="4700μF / 35V / ultralow ESR"/>
-<part name="IC5" library="MCP23S08 - 8-Bit IO Expander with Serial Interface" deviceset="MCP23S08" device=""/>
-<part name="D1" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device=""/>
-<part name="D2" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device=""/>
-<part name="D5" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device=""/>
+<part name="IC5" library="MCP23S08 - 8-Bit IO Expander with Serial Interface" deviceset="MCP23S08" device="" value="MCP23S08-E/ML"/>
+<part name="D1" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device="" value="CUHS20S30,H3F"/>
+<part name="D2" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device="" value="CUHS20S30,H3F"/>
+<part name="D5" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device="" value="CUHS20S30,H3F"/>
 </parts>
 <sheets>
 <sheet>
@@ -17365,10 +17365,10 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 </sheet>
 </sheets>
 <errors>
-<approved hash="104,1,261.62,-7.62,IC14,GND,GND_VIA_INCP,,,"/>
-<approved hash="104,1,261.62,-5.08,IC14,VDD,5V0_TP-OUT,,,"/>
-<approved hash="104,1,358.14,7.62,IC18,GND,GND_VIA_INCP,,,"/>
-<approved hash="104,1,358.14,10.16,IC18,VCC,5V0_TP-OUT,,,"/>
+<approved hash="104,1,281.94,-2.54,IC14,GND,GND_VIA_INCP,,,"/>
+<approved hash="104,1,281.94,0,IC14,VDD,5V0_TP-OUT,,,"/>
+<approved hash="104,1,378.46,12.7,IC18,GND,GND_VIA_INCP,,,"/>
+<approved hash="104,1,378.46,15.24,IC18,VCC,5V0_TP-OUT,,,"/>
 <approved hash="104,1,243.84,256.54,IC13,IN,5V0_TP-OUT,,,"/>
 <approved hash="104,1,289.56,256.54,IC13,OUT,V_LI-ION_OUT,,,"/>
 <approved hash="104,1,289.56,246.38,IC13,VBAT,V_LI-ION_BATTERY-CELL,,,"/>
@@ -17377,16 +17377,17 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <approved hash="104,1,172.72,350.52,IC10,10_DGND,GND_VIA_INCP,,,"/>
 <approved hash="104,1,165.1,350.52,IC10,7_GND,GND_VIA_INCP,,,"/>
 <approved hash="104,1,157.48,350.52,IC10,2_REFG,GND_VIA_INCP,,,"/>
-<approved hash="104,1,314.96,358.14,IC17,GND,GND_VIA_INCP,,,"/>
-<approved hash="104,1,314.96,360.68,IC17,18_VCC,5V0_TP-OUT,,,"/>
-<approved hash="106,1,360.68,386.08,N$7,,,,,"/>
-<approved hash="106,1,360.68,383.54,N$9,,,,,"/>
-<approved hash="209,1,492.76,853.44,SOLAR-CELL_TP-IN,,,,,"/>
-<approved hash="106,1,492.76,853.44,SOLAR-CELL_TP-IN,,,,,"/>
-<approved hash="206,1,261.62,20.32,SPI_MISO,,,,,"/>
+<approved hash="104,1,124.46,955.04,IC3,V+,5V0_TP-OUT,,,"/>
+<approved hash="104,1,124.46,939.8,IC3,V-,GND_VIA_INCP,,,"/>
+<approved hash="104,1,304.8,375.92,IC5,GND,GND_VIA_INCP,,,"/>
+<approved hash="104,1,304.8,378.46,IC5,18_VCC,N$3,,,"/>
+<approved hash="106,1,350.52,403.86,N$4,,,,,"/>
+<approved hash="209,1,281.94,942.34,SOLAR-CELL_TP-IN,,,,,"/>
+<approved hash="106,1,281.94,942.34,SOLAR-CELL_TP-IN,,,,,"/>
+<approved hash="206,1,281.94,25.4,SPI_MISO,,,,,"/>
 <approved hash="206,1,198.12,368.3,SPI_MISO,,,,,"/>
-<approved hash="206,1,314.96,386.08,SPI_MISO,,,,,"/>
-<approved hash="115,1,-7.62,862.33,AFTER_SW_BEFORE_TUNING_CAP,,,,,"/>
+<approved hash="206,1,304.8,403.86,SPI_MISO,,,,,"/>
+<approved hash="115,1,-7.62,863.6,AFTER_SW_BEFORE_TUNING_CAP,,,,,"/>
 </errors>
 </schematic>
 </drawing>
