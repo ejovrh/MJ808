@@ -13478,58 +13478,6 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </deviceset>
 </devicesets>
 </library>
-<library name="JST GH Connector">
-<packages>
-<package name="SMT">
-<smd name="P$1" x="-1.25" y="0" dx="1.7" dy="0.6" layer="1" rot="R270"/>
-<smd name="P$2" x="0" y="0" dx="1.7" dy="0.6" layer="1" rot="R270"/>
-<smd name="P$3" x="1.25" y="0" dx="1.7" dy="0.6" layer="1" rot="R270"/>
-<smd name="GND1" x="-3.1" y="-3.35" dx="1" dy="2.8" layer="1"/>
-<smd name="GND2" x="3.1" y="-3.35" dx="1" dy="2.8" layer="1"/>
-<wire x1="-2.5" y1="-4.7" x2="2.5" y2="-4.7" width="0.127" layer="21"/>
-<wire x1="-3.5" y1="-1.9" x2="-3.5" y2="-0.7" width="0.127" layer="21"/>
-<wire x1="-3.5" y1="-0.7" x2="-1.6" y2="-0.7" width="0.127" layer="21"/>
-<wire x1="1.6" y1="-0.7" x2="3.5" y2="-0.7" width="0.127" layer="21"/>
-<wire x1="3.5" y1="-0.7" x2="3.5" y2="-1.9" width="0.127" layer="21"/>
-<text x="0" y="1.5" size="0.75" layer="21" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="-5.4" size="0.75" layer="27" font="vector" align="center">&gt;VALUE</text>
-</package>
-</packages>
-<symbols>
-<symbol name="JST_GH">
-<pin name="P$1" x="5.08" y="2.54" length="middle" rot="R180"/>
-<pin name="P$2" x="5.08" y="0" length="middle" rot="R180"/>
-<pin name="P$3" x="5.08" y="-2.54" length="middle" rot="R180"/>
-<wire x1="-7.62" y1="5.08" x2="0" y2="5.08" width="0.254" layer="94"/>
-<wire x1="0" y1="5.08" x2="0" y2="-7.62" width="0.254" layer="94"/>
-<wire x1="0" y1="-7.62" x2="-7.62" y2="-7.62" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="-7.62" x2="-7.62" y2="5.08" width="0.254" layer="94"/>
-<text x="-7.62" y="7.62" size="1.27" layer="95">&gt;NAME</text>
-<text x="-7.62" y="-10.16" size="1.27" layer="96">&gt;VALUE</text>
-<pin name="GND" x="5.08" y="-5.08" length="middle" rot="R180"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="JST_GH" prefix="CONN" uservalue="yes">
-<gates>
-<gate name="G$1" symbol="JST_GH" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="SMT">
-<connects>
-<connect gate="G$1" pin="GND" pad="GND1 GND2"/>
-<connect gate="G$1" pin="P$1" pad="P$1"/>
-<connect gate="G$1" pin="P$2" pad="P$2"/>
-<connect gate="G$1" pin="P$3" pad="P$3"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="CUHS20S30 - Schottky Barrier Diode">
 <packages>
 <package name="US2H">
@@ -14047,6 +13995,58 @@ Source: http://www.linear.com/pc/downloadDocument.do?navId=H0,C1,C1154,C1009,C10
 </deviceset>
 </devicesets>
 </library>
+<library name="505567 - PCB Header">
+<packages>
+<package name="SMT">
+<smd name="P$1" x="1.27" y="-1.25" dx="1.2" dy="0.8" layer="1" rot="R90"/>
+<smd name="P$2" x="-0.02" y="-1.25" dx="1.2" dy="0.8" layer="1" rot="R90"/>
+<smd name="P$3" x="-1.25" y="-1.25" dx="1.2" dy="0.8" layer="1" rot="R90"/>
+<smd name="GND1" x="-2.85" y="1.04" dx="2.15" dy="1.3" layer="1" rot="R90"/>
+<smd name="GND2" x="2.85" y="1.045" dx="2.15" dy="1.3" layer="1" rot="R90"/>
+<wire x1="-3.6" y1="3.4" x2="3.6" y2="3.4" width="0.127" layer="21"/>
+<wire x1="-3.6" y1="-0.8" x2="-3.6" y2="3.4" width="0.127" layer="21"/>
+<wire x1="3.6" y1="-0.8" x2="3.6" y2="3.4" width="0.127" layer="21"/>
+<wire x1="-3.6" y1="-0.8" x2="-1.8" y2="-0.8" width="0.127" layer="21"/>
+<wire x1="3.6" y1="-0.8" x2="1.8" y2="-0.8" width="0.127" layer="21"/>
+<text x="0" y="-2.5" size="0.75" layer="21" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="4.25" size="0.75" layer="27" font="vector" align="center">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="505567">
+<pin name="P$1" x="12.7" y="2.54" length="middle" rot="R180"/>
+<pin name="P$2" x="12.7" y="0" length="middle" rot="R180"/>
+<pin name="P$3" x="12.7" y="-2.54" length="middle" rot="R180"/>
+<wire x1="7.62" y1="7.62" x2="-2.54" y2="7.62" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="7.62" x2="-2.54" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-5.08" x2="7.62" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="7.62" y1="-5.08" x2="7.62" y2="7.62" width="0.254" layer="94"/>
+<text x="-2.54" y="10.16" size="1.778" layer="95">&gt;NAME</text>
+<text x="-2.54" y="-10.16" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="GND" x="12.7" y="5.08" length="middle" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="505567" prefix="CONN" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="505567" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SMT">
+<connects>
+<connect gate="G$1" pin="GND" pad="GND1 GND2"/>
+<connect gate="G$1" pin="P$1" pad="P$1"/>
+<connect gate="G$1" pin="P$2" pad="P$2"/>
+<connect gate="G$1" pin="P$3" pad="P$3"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -14163,7 +14163,6 @@ Source: http://www.linear.com/pc/downloadDocument.do?navId=H0,C1,C1154,C1009,C10
 <part name="L1" library="XFL4020-152MEC Inductor 1.5uH" deviceset="XFL4020-152MEC" device="" value="XFL4020-152MEC  - 1.5uH"/>
 <part name="R20" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="400k"/>
 <part name="R21" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
-<part name="CONN4" library="JST GH Connector" deviceset="JST_GH" device="" value="JST GH, 3 pole"/>
 <part name="D3" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device="" value="CUHS20S30,H3F"/>
 <part name="D4" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device="" value="CUHS20S30,H3F"/>
 <part name="D5" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device="" value="CUHS20S30,H3F"/>
@@ -14193,6 +14192,7 @@ Source: http://www.linear.com/pc/downloadDocument.do?navId=H0,C1,C1154,C1009,C10
 <part name="C13" library="C-Pol" deviceset="C-POL" device="" value="330μF / 35V / ultralow ESR"/>
 <part name="IC2" library="LBA710 - Solid State Relay Form AB - NO&amp;NC" deviceset="LBA710" device="" value="LBA710S"/>
 <part name="IC8" library="LBA710 - Solid State Relay Form AB - NO&amp;NC" deviceset="LBA710" device="" value="LBA710S"/>
+<part name="LI-ION" library="505567 - PCB Header" deviceset="505567" device="" value="505567-0371"/>
 </parts>
 <sheets>
 <sheet>
@@ -14953,10 +14953,6 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <attribute name="NAME" x="274.32" y="121.92" size="1.778" layer="95"/>
 <attribute name="VALUE" x="274.32" y="119.38" size="1.778" layer="96"/>
 </instance>
-<instance part="CONN4" gate="G$1" x="177.8" y="309.88" smashed="yes" rot="MR0">
-<attribute name="NAME" x="177.8" y="317.5" size="1.27" layer="95" rot="MR180"/>
-<attribute name="VALUE" x="185.42" y="317.5" size="1.27" layer="96" rot="MR180"/>
-</instance>
 <instance part="D3" gate="G$1" x="99.06" y="1033.78" smashed="yes" rot="R90">
 <attribute name="NAME" x="96.52" y="1033.78" size="1.778" layer="95" font="vector" rot="R90" align="center"/>
 <attribute name="VALUE" x="101.6" y="1033.78" size="1.778" layer="96" font="vector" rot="R90" align="center"/>
@@ -15072,6 +15068,10 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <instance part="IC8" gate="G$1" x="289.56" y="850.9" smashed="yes">
 <attribute name="NAME" x="271.78" y="866.14" size="1.778" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="274.32" y="835.66" size="1.778" layer="96" font="vector" align="center"/>
+</instance>
+<instance part="LI-ION" gate="G$1" x="182.88" y="309.88" smashed="yes" rot="R180">
+<attribute name="NAME" x="175.26" y="317.5" size="1.778" layer="95"/>
+<attribute name="VALUE" x="175.26" y="299.72" size="1.778" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -15638,9 +15638,9 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="167.64" y="683.26" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="CONN4" gate="G$1" pin="P$3"/>
-<wire x1="172.72" y1="307.34" x2="157.48" y2="307.34" width="0.1524" layer="91"/>
+<wire x1="170.18" y1="307.34" x2="157.48" y2="307.34" width="0.1524" layer="91"/>
 <label x="157.48" y="307.34" size="1.778" layer="95" rot="R180"/>
+<pinref part="LI-ION" gate="G$1" pin="P$1"/>
 </segment>
 </net>
 <net name="V_LI-ION_OUT" class="5">
@@ -15762,9 +15762,9 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="172.72" y="266.7" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="CONN4" gate="G$1" pin="P$2"/>
-<wire x1="172.72" y1="309.88" x2="157.48" y2="309.88" width="0.1524" layer="91"/>
+<wire x1="170.18" y1="309.88" x2="157.48" y2="309.88" width="0.1524" layer="91"/>
 <label x="157.48" y="309.88" size="1.778" layer="95" rot="R180"/>
+<pinref part="LI-ION" gate="G$1" pin="P$2"/>
 </segment>
 </net>
 <net name="6V0" class="7">
@@ -16090,14 +16090,9 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="269.24" y="655.32" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="CONN4" gate="G$1" pin="GND"/>
-<wire x1="172.72" y1="304.8" x2="157.48" y2="304.8" width="0.1524" layer="91"/>
+<wire x1="170.18" y1="304.8" x2="157.48" y2="304.8" width="0.1524" layer="91"/>
 <label x="157.48" y="304.8" size="1.778" layer="95" rot="R180"/>
-</segment>
-<segment>
-<pinref part="CONN4" gate="G$1" pin="P$1"/>
-<wire x1="172.72" y1="312.42" x2="157.48" y2="312.42" width="0.1524" layer="91"/>
-<label x="157.48" y="312.42" size="1.778" layer="95" rot="R180"/>
+<pinref part="LI-ION" gate="G$1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="IC1" gate="G$1" pin="V-"/>
@@ -16188,6 +16183,11 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <pinref part="IC8" gate="G$1" pin="4_CATHODE2"/>
 <wire x1="264.16" y1="843.28" x2="248.92" y2="843.28" width="0.1524" layer="91"/>
 <label x="248.92" y="843.28" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<wire x1="170.18" y1="312.42" x2="157.48" y2="312.42" width="0.1524" layer="91"/>
+<label x="157.48" y="312.42" size="1.778" layer="95" rot="R180"/>
+<pinref part="LI-ION" gate="G$1" pin="P$3"/>
 </segment>
 </net>
 <net name="INVP" class="9">
