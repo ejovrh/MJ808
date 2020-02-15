@@ -13700,18 +13700,17 @@ Source: http://www.linear.com/pc/downloadDocument.do?navId=H0,C1,C1154,C1009,C10
 <package name="TH">
 <pad name="POS" x="-1.27" y="0" drill="1"/>
 <pad name="NEG" x="1.27" y="0" drill="1"/>
-<wire x1="-2.1825" y1="1" x2="0" y2="1" width="0.127" layer="21"/>
-<wire x1="0" y1="1" x2="2.1825" y2="1" width="0.127" layer="21"/>
-<wire x1="2.1825" y1="1" x2="2.1825" y2="-2.5" width="0.127" layer="21"/>
-<wire x1="2.1825" y1="-2.5" x2="0" y2="-2.5" width="0.127" layer="21"/>
-<wire x1="0" y1="-2.5" x2="-2.1825" y2="-2.5" width="0.127" layer="21"/>
-<wire x1="-2.1825" y1="-2.5" x2="-2.1825" y2="1" width="0.127" layer="21"/>
-<wire x1="0" y1="1" x2="0" y2="-2.5" width="0.127" layer="21"/>
+<wire x1="-2.1825" y1="1.25" x2="0" y2="1.25" width="0.127" layer="21"/>
+<wire x1="0" y1="1.25" x2="2.1825" y2="1.25" width="0.127" layer="21"/>
+<wire x1="2.1825" y1="1.25" x2="2.1825" y2="-2" width="0.127" layer="21"/>
+<wire x1="2.1825" y1="-2" x2="0" y2="-2" width="0.127" layer="21"/>
+<wire x1="0" y1="-2" x2="-2.1825" y2="-2" width="0.127" layer="21"/>
+<wire x1="-2.1825" y1="-2" x2="-2.1825" y2="1.25" width="0.127" layer="21"/>
+<wire x1="0" y1="1.25" x2="0" y2="-2" width="0.127" layer="21"/>
 <text x="0" y="2" size="0.75" layer="25" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="-3.5" size="0.75" layer="27" font="vector" align="center">&gt;VALUE</text>
-<wire x1="0.635" y1="-1.5875" x2="1.905" y2="-1.5875" width="0.127" layer="21"/>
-<wire x1="-1.27" y1="-0.9525" x2="-1.27" y2="-2.2225" width="0.127" layer="21"/>
-<wire x1="-1.905" y1="-1.5875" x2="-0.635" y2="-1.5875" width="0.127" layer="21"/>
+<text x="0" y="-2.75" size="0.75" layer="27" font="vector" align="center">&gt;VALUE</text>
+<text x="-1.25" y="-1.25" size="1" layer="21" font="vector" align="center">+</text>
+<text x="1.25" y="-1.25" size="1" layer="21" font="vector" align="center">-</text>
 </package>
 </packages>
 <symbols>

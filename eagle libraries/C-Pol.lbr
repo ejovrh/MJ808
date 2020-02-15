@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="12.5" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
+<grid distance="0.25" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="yes"/>
@@ -76,18 +76,17 @@
 <package name="TH">
 <pad name="POS" x="-1.27" y="0" drill="1"/>
 <pad name="NEG" x="1.27" y="0" drill="1"/>
-<wire x1="-2.1825" y1="1" x2="0" y2="1" width="0.127" layer="21"/>
-<wire x1="0" y1="1" x2="2.1825" y2="1" width="0.127" layer="21"/>
-<wire x1="2.1825" y1="1" x2="2.1825" y2="-2.5" width="0.127" layer="21"/>
-<wire x1="2.1825" y1="-2.5" x2="0" y2="-2.5" width="0.127" layer="21"/>
-<wire x1="0" y1="-2.5" x2="-2.1825" y2="-2.5" width="0.127" layer="21"/>
-<wire x1="-2.1825" y1="-2.5" x2="-2.1825" y2="1" width="0.127" layer="21"/>
-<wire x1="0" y1="1" x2="0" y2="-2.5" width="0.127" layer="21"/>
+<wire x1="-2.1825" y1="1.25" x2="0" y2="1.25" width="0.127" layer="21"/>
+<wire x1="0" y1="1.25" x2="2.1825" y2="1.25" width="0.127" layer="21"/>
+<wire x1="2.1825" y1="1.25" x2="2.1825" y2="-2" width="0.127" layer="21"/>
+<wire x1="2.1825" y1="-2" x2="0" y2="-2" width="0.127" layer="21"/>
+<wire x1="0" y1="-2" x2="-2.1825" y2="-2" width="0.127" layer="21"/>
+<wire x1="-2.1825" y1="-2" x2="-2.1825" y2="1.25" width="0.127" layer="21"/>
+<wire x1="0" y1="1.25" x2="0" y2="-2" width="0.127" layer="21"/>
 <text x="0" y="2" size="0.75" layer="25" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="-3.5" size="0.75" layer="27" font="vector" align="center">&gt;VALUE</text>
-<wire x1="0.635" y1="-1.5875" x2="1.905" y2="-1.5875" width="0.127" layer="21"/>
-<wire x1="-1.27" y1="-0.9525" x2="-1.27" y2="-2.2225" width="0.127" layer="21"/>
-<wire x1="-1.905" y1="-1.5875" x2="-0.635" y2="-1.5875" width="0.127" layer="21"/>
+<text x="0" y="-2.75" size="0.75" layer="27" font="vector" align="center">&gt;VALUE</text>
+<text x="-1.25" y="-1.25" size="1" layer="21" font="vector" align="center">+</text>
+<text x="1.25" y="-1.25" size="1" layer="21" font="vector" align="center">-</text>
 </package>
 </packages>
 <symbols>

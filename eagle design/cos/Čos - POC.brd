@@ -1969,18 +1969,17 @@ NS Package M08A</description>
 <package name="TH">
 <pad name="POS" x="-1.27" y="0" drill="1"/>
 <pad name="NEG" x="1.27" y="0" drill="1"/>
-<wire x1="-2.1825" y1="1" x2="0" y2="1" width="0.127" layer="21"/>
-<wire x1="0" y1="1" x2="2.1825" y2="1" width="0.127" layer="21"/>
-<wire x1="2.1825" y1="1" x2="2.1825" y2="-2.5" width="0.127" layer="21"/>
-<wire x1="2.1825" y1="-2.5" x2="0" y2="-2.5" width="0.127" layer="21"/>
-<wire x1="0" y1="-2.5" x2="-2.1825" y2="-2.5" width="0.127" layer="21"/>
-<wire x1="-2.1825" y1="-2.5" x2="-2.1825" y2="1" width="0.127" layer="21"/>
-<wire x1="0" y1="1" x2="0" y2="-2.5" width="0.127" layer="21"/>
+<wire x1="-2.1825" y1="1.25" x2="0" y2="1.25" width="0.127" layer="21"/>
+<wire x1="0" y1="1.25" x2="2.1825" y2="1.25" width="0.127" layer="21"/>
+<wire x1="2.1825" y1="1.25" x2="2.1825" y2="-2" width="0.127" layer="21"/>
+<wire x1="2.1825" y1="-2" x2="0" y2="-2" width="0.127" layer="21"/>
+<wire x1="0" y1="-2" x2="-2.1825" y2="-2" width="0.127" layer="21"/>
+<wire x1="-2.1825" y1="-2" x2="-2.1825" y2="1.25" width="0.127" layer="21"/>
+<wire x1="0" y1="1.25" x2="0" y2="-2" width="0.127" layer="21"/>
 <text x="0" y="2" size="0.75" layer="25" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="-3.5" size="0.75" layer="27" font="vector" align="center">&gt;VALUE</text>
-<wire x1="0.635" y1="-1.5875" x2="1.905" y2="-1.5875" width="0.127" layer="21"/>
-<wire x1="-1.27" y1="-0.9525" x2="-1.27" y2="-2.2225" width="0.127" layer="21"/>
-<wire x1="-1.905" y1="-1.5875" x2="-0.635" y2="-1.5875" width="0.127" layer="21"/>
+<text x="0" y="-2.75" size="0.75" layer="27" font="vector" align="center">&gt;VALUE</text>
+<text x="-1.25" y="-1.25" size="1" layer="21" font="vector" align="center">+</text>
+<text x="1.25" y="-1.25" size="1" layer="21" font="vector" align="center">-</text>
 </package>
 </packages>
 </library>
@@ -2725,16 +2724,16 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <attribute name="VALUE" x="19.405" y="64.937" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="C19" library="C-Pol" package="TH" value="3300μF / 35V / ultralow ESR" x="4.25" y="57.75" smashed="yes">
-<attribute name="NAME" x="7.25" y="56.25" size="0.75" layer="25" font="vector" rot="R90" align="center"/>
+<attribute name="NAME" x="7.25" y="56.75" size="0.75" layer="25" font="vector" rot="R90" align="center"/>
 <attribute name="VALUE" x="4.25" y="54.25" size="0.75" layer="27" font="vector" align="center"/>
 </element>
-<element name="C18" library="C-Pol" package="TH" value="3300μF / 35V / ultralow ESR" x="4.25" y="59.75" smashed="yes" rot="R180">
+<element name="C18" library="C-Pol" package="TH" value="3300μF / 35V / ultralow ESR" x="4.25" y="60.25" smashed="yes" rot="R180">
 <attribute name="NAME" x="7.25" y="61.25" size="0.75" layer="25" font="vector" rot="R270" align="center"/>
-<attribute name="VALUE" x="4.25" y="63.25" size="0.75" layer="27" font="vector" rot="R180" align="center"/>
+<attribute name="VALUE" x="4.25" y="63.75" size="0.75" layer="27" font="vector" rot="R180" align="center"/>
 </element>
-<element name="C14" library="C-Pol" package="TH" value="330μF / 35V / ultralow ESR" x="30.75" y="59.75" smashed="yes" rot="R180">
-<attribute name="NAME" x="27.75" y="57.75" size="0.75" layer="25" font="vector" rot="R270" align="center"/>
-<attribute name="VALUE" x="30.75" y="63.25" size="0.75" layer="27" font="vector" rot="R180" align="center"/>
+<element name="C14" library="C-Pol" package="TH" value="330μF / 35V / ultralow ESR" x="30.75" y="60.25" smashed="yes" rot="R180">
+<attribute name="NAME" x="27.75" y="58" size="0.75" layer="25" font="vector" rot="R270" align="center"/>
+<attribute name="VALUE" x="30.75" y="63.75" size="0.75" layer="27" font="vector" rot="R180" align="center"/>
 </element>
 <element name="C23" library="C-Pol" package="TH" value="4700μF / 35V / ultralow ESR" x="30.5" y="49.5" smashed="yes" rot="R180">
 <attribute name="NAME" x="31.75" y="47.75" size="0.75" layer="25" font="vector" rot="R180" align="center"/>
@@ -3902,13 +3901,13 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <contactref element="R19" pad="1"/>
 <contactref element="C19" pad="POS"/>
 <contactref element="C18" pad="POS"/>
-<wire x1="5.52" y1="59.75" x2="6.4973875" y2="59.75" width="0.65" layer="16"/>
-<wire x1="7.095" y1="59.1523875" x2="6.4973875" y2="59.75" width="0.65" layer="16"/>
+<wire x1="5.52" y1="60.25" x2="5.9973875" y2="60.25" width="0.65" layer="16"/>
+<wire x1="7.095" y1="59.1523875" x2="5.9973875" y2="60.25" width="0.65" layer="16"/>
 <wire x1="7.095" y1="59.1523875" x2="7.095" y2="57.155" width="0.65" layer="16"/>
 <wire x1="7.095" y1="57.155" x2="7.25" y2="57" width="0.65" layer="16"/>
-<wire x1="5.2073875" y1="59.75" x2="5.52" y2="59.75" width="0.65" layer="2"/>
+<wire x1="5.52" y1="60.0626125" x2="5.52" y2="60.25" width="0.65" layer="2"/>
 <wire x1="2.98" y1="57.75" x2="3.2073875" y2="57.75" width="0.65" layer="2"/>
-<wire x1="5.2073875" y1="59.75" x2="3.2073875" y2="57.75" width="0.65" layer="2"/>
+<wire x1="5.52" y1="60.0626125" x2="3.2073875" y2="57.75" width="0.65" layer="2"/>
 </signal>
 <signal name="DYNAMO2_DELON" class="2">
 <contactref element="C14" pad="POS"/>
@@ -3917,7 +3916,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="26.56" y1="54.98" x2="30.73" y2="54.98" width="0.9" layer="1"/>
 <wire x1="32.02" y1="56.27" x2="32.02" y2="57.75" width="0.9" layer="1"/>
 <wire x1="30.73" y1="54.98" x2="32.02" y2="56.27" width="0.9" layer="1"/>
-<wire x1="32.02" y1="57.75" x2="32.02" y2="59.75" width="0.9" layer="1"/>
+<wire x1="32.02" y1="57.75" x2="32.02" y2="60.25" width="0.9" layer="1"/>
 </signal>
 <signal name="TPS630701_PWM" class="9">
 <contactref element="IC3" pad="1-PS/S"/>
@@ -4135,13 +4134,13 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <contactref element="IC2" pad="5_DRAIN2-1"/>
 <contactref element="C18" pad="NEG"/>
 <via x="16" y="55.5" extent="1-16" drill="0.3"/>
-<wire x1="2.98" y1="59.75" x2="2.98" y2="60.48" width="0.9" layer="15"/>
-<wire x1="2.98" y1="60.48" x2="4" y2="61.5" width="0.9" layer="15"/>
-<wire x1="4" y1="61.5" x2="7.25" y2="61.5" width="0.9" layer="15"/>
+<wire x1="2.98" y1="60.25" x2="2.98" y2="60.98" width="0.9" layer="15"/>
+<wire x1="2.98" y1="60.98" x2="4" y2="62" width="0.9" layer="15"/>
+<wire x1="4" y1="62" x2="6.75" y2="62" width="0.9" layer="15"/>
 <wire x1="16" y1="56" x2="14.75" y2="57.25" width="0.9" layer="15"/>
 <wire x1="16" y1="56" x2="16" y2="55.5" width="0.9" layer="15"/>
 <wire x1="14.75" y1="57.25" x2="11.5" y2="57.25" width="0.9" layer="15"/>
-<wire x1="7.25" y1="61.5" x2="11.5" y2="57.25" width="0.9" layer="15"/>
+<wire x1="6.75" y1="62" x2="11.5" y2="57.25" width="0.9" layer="15"/>
 <wire x1="16.06" y1="55.48" x2="16.04" y2="55.5" width="0.65" layer="1"/>
 <wire x1="16" y1="55.5" x2="16.04" y2="55.5" width="0.65" layer="1"/>
 <wire x1="16.06" y1="54.98" x2="16.06" y2="55.48" width="0.65" layer="1"/>
