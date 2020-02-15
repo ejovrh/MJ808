@@ -14,7 +14,7 @@
 #define TPS630701_PWM_pin		B,	2,	2								// TPS630701_PWM PWM Control Pin (PS/SYNC) // TODO: use pullup resistor?
 #define	MCP2561_standby_pin		B,	3,	3								// MCP2561 standby, controlled in mcp2515.c
 
-#define	MP3221_EN_pin			D,	0,	0								// Èos 5V0 output stage boost converter enable pin, pulled low
+#define	Vout_EN_pin			D,	0,	0									// Èos 5V0 output stage boost converter enable pin, pulled low
 #define	SPI_SS_MCP23S08_pin		D,	1,	1								// MCP23S08 Port Expander Slave Select
 // pin D2 is clockout
 #define INT_MCP2515_pin			D,	3,	3								// MCP2515 CAN Controller interrupt pin
@@ -61,10 +61,10 @@
 
 typedef struct															// struct describing devices on MJ808
 {
-	void (* Cos6V0OutputEnabled)(const uint8_t in_val);					// enable/disable the Èos 5V0 output boost converter
+	void (* CosVOutEnable)(const uint8_t in_val);						// enable/disable the Èos output boost converter
 
 	mj8x8_t *mj8x8;														// pointer to the base class
-	tps630701_t *BuckBoost;												// 5V0 out Buck-Boost converter, powered by rectified dynamo, powers LiIon Charger
+	tps630701_t *BuckBoost;												// Vout Buck-Boost converter, powered by rectified dynamo, powers LiIon Charger
 	mcp73871_t *LiIonCharger;											// LiIon Charger & Powerpath controller, powered by 5V0, powers downstream with LiIon cell voltage (2.8-4.2V)
 	rect_t *Rect;														// AC regulator: Graetz bridge, tuning capacitors on/off, Delon voltage doubler on/off
 

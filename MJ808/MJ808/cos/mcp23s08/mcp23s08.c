@@ -29,7 +29,7 @@ uint8_t *_ReadRegisters(void)											// downloads device configuration regist
 	spi_uci_transfer(MCP23S08_IODIR);									// start with the first configuration register
 	_delay_us(1);
 
-	for (i=0; i <= 11; ++i)							// loop over all the MCP23S08's registers
+	for (i=0; i <= MCP23S08_REGISTER_COUNT; ++i)						// loop over all the MCP23S08's registers
 	{																	//	prerequisite is sequential operation mode bit enabled
 		MCP23S08.Register[i] = spi_uci_transfer(0xFF);					// get each register and store in struct
 		_delay_us(1);

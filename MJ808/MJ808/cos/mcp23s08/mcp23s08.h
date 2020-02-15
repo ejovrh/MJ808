@@ -29,6 +29,16 @@
 #define MCP23S08_GPIO		0x09										// Port register, GP7:0 - 1 logic high, 0 logic low
 #define MCP23S08_OLAT		0x0a										// Output latch register, OL7:0 - 1 logic high, 0 logic low
 
+// TODO - update once rev.2 board is in use
+#define MCP23S08__MCP73871_STAT1_pin			0						// MCP23S08 IO0
+#define MCP23S08__MCP73871_STAT2_pin			1						// MCP23S08 IO1
+#define MCP23S08__MCP73871_PG_pin				2						// MCP23S08 IO2
+#define MCP23S08__MCP73871_CE_pin				3						// MCP23S08 IO3
+#define MCP23S08__MCP73871_DELON_pin			4						// MCP23S08 IO4
+#define MCP23S08__MCP73871_GRAETZ_pin			5						// MCP23S08 IO5
+#define MCP23S08__MCP73871_TUNING_pin			6						// MCP23S08 IO6
+#define MCP23S08__MCP73871_TUNING_BYPASS_pin	7						// MCP23S08 IO7
+
 enum MCP23S08RegisterIndex												// used to reference _register
 {
 	IODIR = 0,															// datasheet p. 10, I/O direction register: 0 - output, 1 - input

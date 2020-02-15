@@ -14158,7 +14158,7 @@ Source: http://www.linear.com/pc/downloadDocument.do?navId=H0,C1,C1154,C1009,C10
 <part name="FD1" library="Fiducial" deviceset="FID" device="_40MIL"/>
 <part name="FD2" library="Fiducial" deviceset="FID" device="_40MIL"/>
 <part name="FD3" library="Fiducial" deviceset="FID" device="_40MIL"/>
-<part name="R22" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083101JP  / 100Ω"/>
+<part name="R22" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083221JP / 220Ω"/>
 <part name="L1" library="XFL4020-152MEC Inductor 1.5uH" deviceset="XFL4020-152MEC" device="" value="XFL4020-152MEC  - 1.5uH"/>
 <part name="R20" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="400k"/>
 <part name="R21" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
@@ -14192,6 +14192,7 @@ Source: http://www.linear.com/pc/downloadDocument.do?navId=H0,C1,C1154,C1009,C10
 <part name="IC2" library="LBA710 - Solid State Relay Form AB - NO&amp;NC" deviceset="LBA710" device="" value="LBA710S"/>
 <part name="IC8" library="LBA710 - Solid State Relay Form AB - NO&amp;NC" deviceset="LBA710" device="" value="LBA710S"/>
 <part name="LI-ION" library="505567 - PCB Header" deviceset="505567" device="" value="505567-0371"/>
+<part name="R26" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
 </parts>
 <sheets>
 <sheet>
@@ -15071,6 +15072,10 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <instance part="LI-ION" gate="G$1" x="182.88" y="309.88" smashed="yes" rot="R180">
 <attribute name="NAME" x="175.26" y="317.5" size="1.778" layer="95"/>
 <attribute name="VALUE" x="175.26" y="299.72" size="1.778" layer="96"/>
+</instance>
+<instance part="R26" gate="G$1" x="825.5" y="111.76" smashed="yes" rot="R90">
+<attribute name="NAME" x="828.04" y="111.76" size="1.778" layer="95"/>
+<attribute name="VALUE" x="828.04" y="109.22" size="1.778" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -16126,7 +16131,7 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <segment>
 <pinref part="C34" gate="G$1" pin="2"/>
 <wire x1="817.88" y1="86.36" x2="817.88" y2="83.82" width="0.1524" layer="91"/>
-<label x="817.88" y="81.28" size="1.778" layer="95"/>
+<label x="817.88" y="83.82" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC13" gate="G$1" pin="6-FB2"/>
@@ -16187,6 +16192,11 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <wire x1="170.18" y1="312.42" x2="157.48" y2="312.42" width="0.1524" layer="91"/>
 <label x="157.48" y="312.42" size="1.778" layer="95" rot="R180"/>
 <pinref part="LI-ION" gate="G$1" pin="P$3"/>
+</segment>
+<segment>
+<pinref part="R26" gate="G$1" pin="1"/>
+<wire x1="825.5" y1="106.68" x2="825.5" y2="101.6" width="0.1524" layer="91"/>
+<label x="825.5" y="101.6" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="INVP" class="9">
@@ -16646,7 +16656,7 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <label x="33.02" y="698.5" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="CE" class="9">
+<net name="MCP73871_CE" class="9">
 <segment>
 <pinref part="IC7" gate="A" pin="CE"/>
 <wire x1="243.84" y1="231.14" x2="223.52" y2="231.14" width="0.1524" layer="91"/>
@@ -16797,6 +16807,11 @@ Rsense = 0.08192V / 2A = 40.96 mOhm</text>
 <pinref part="IC5" gate="G$1" pin="RXD/PCINT11-PD0"/>
 <wire x1="226.06" y1="147.32" x2="231.14" y2="147.32" width="0.1524" layer="91"/>
 <label x="231.14" y="147.32" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R26" gate="G$1" pin="2"/>
+<wire x1="825.5" y1="116.84" x2="825.5" y2="121.92" width="0.1524" layer="91"/>
+<label x="825.5" y="121.92" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="DYNAMO2_BEFORE_G/D" class="2">

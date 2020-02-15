@@ -2,6 +2,7 @@
 #include "rect\rect.h"													// rectifier object
 #include "cos\tps630701\tps630701.h"									// Buck-Boost regulator object
 #include "cos\mcp73871\mcp73871.h"										// Li-Ion Charger&Powerpath controller object
+#include "cos\mcp23s08\mcp23s08.h"										// port expander register defines
 
 #include <util/delay.h>
 #include <avr/interrupt.h>
@@ -18,7 +19,7 @@ TODO: verify effect on PWM on TPC63701 for constant load (resistor) and varying 
 verified_TODO: verify _HeartbeatPeriodicCos(void) operation every 250ms
 	- executes approximately every 250ms
 
-verified_TODO: verify AD5160 resistor operation (SerRestitor() args: 0, 128, 256, etc., derive formula and place in comments
+verified_TODO: verify AD5160 resistor operation (SetRestitor() args: 0, 128, 256, etc., derive formula and place in comments
 	- SPI SetResistor() command seems to work; resistance changes are visible in the expected range
 
 TODO: verify LMP92064SD U/I readout
@@ -40,10 +41,7 @@ TODO: verify pin change interrupt on PD4
 
 FIXME: fix bootstrap problem with Graetz mosfet gate pullup
 
-TODO: verify MCP73871 operation for charge and discharge
-	- is suspicious: 500mA discharge over a 20Ohm resistor,
-	- powerpath is not working (20mA in, 500mA out)
-	- Vout without battery seems limited in current (25mA or so)
+verified_TODO: verify MCP73871 operation for charge and discharge
 
 */
 
@@ -107,9 +105,7 @@ void _HeartbeatPeriodicCos(void)										// ran by every watchdog ISR, period s
 
 	__Device.public.BuckBoost->GetValues();								// download voltage/current measurement into array
 
-	//__Device.public.LiIonCharger->GetMCP23S08();						// temporary for functional verification
-	//__Device.public.LiIonCharger->SetMCP23S08(0x05 ,0x00);				// temporary for functional verification
-	//__Device.public.LiIonCharger->GetMCP23S08();						// temporary for functional verification
+	__Device.public.LiIonCharger->GetMCP23S08();						// temporary for functional verification
 
 };
 
@@ -130,12 +126,12 @@ void _PopulatedBusOperationCOS(message_handler_t * const in_msg)		// received Ms
 		__Device.public.LiIonCharger->SetResistor(msg->COMMAND | 0xf00);// full byte val
 };
 
-void _Cos6V0OutputEnabled(const uint8_t in_val)							// enable/disable the Èos 5V0 output boost converter, 0 - off, 1 - on
+void _CosVOutEnable(const uint8_t in_val)								// enable/disable the Èos 5V0 output boost converter, 0 - off, 1 - on
 {
 	if (in_val)															// if non-zero
-		gpio_set(MP3221_EN_pin);										// turn on
+		gpio_set(Vout_EN_pin);											// turn on
 	else
-		gpio_clr(MP3221_EN_pin);										// turn off
+		gpio_clr(Vout_EN_pin);											// turn off
 };
 
 void cos_ctor()															// constructor for concrete class
@@ -150,7 +146,7 @@ void cos_ctor()															// constructor for concrete class
 	gpio_conf(COMPARATOR_IN_pin, INPUT, NOPULLUP);						// comparator pin as input and no pullups
 	gpio_conf(MCP2561_standby_pin, OUTPUT, LOW);						// MCP2561 standby - low (on), high (off)
 	gpio_conf(TPS630701_PWM_pin, OUTPUT, HIGH);							// Buck-Boost converter PWM input - low (off), high (on)
-	gpio_conf(MP3221_EN_pin, OUTPUT, LOW);								// 5V0 Boost converter enable pin - low (off), high (on)
+	gpio_conf(Vout_EN_pin, OUTPUT, LOW);								// 5V0 Boost converter enable pin - low (off), high (on)
 	gpio_conf(SPI_SS_AD5160_pin, OUTPUT, HIGH);							// SPI Slave Select known init state
 	gpio_conf(SPI_SS_LMP92064SD_pin, OUTPUT, HIGH);						// SPI Slave Select known init state
 	gpio_conf(SPI_SS_MCP2515_pin, OUTPUT, HIGH);						// SPI Slave Select known init state
@@ -196,8 +192,8 @@ void cos_ctor()															// constructor for concrete class
 		WDTCR = 0x00;													// disable the thing completely
 	}
 
-	GIMSK |= _BV(PCIE2);												// enable pin change interrupts on PCINT17..11 (INT_MCP23S08_pin - PD4)
-	PCMSK2 = _BV(PCINT15);												// enable pin change for switch @ pin D4
+	//GIMSK |= _BV(PCIE2);												// enable pin change interrupts on PCINT17..11 (INT_MCP23S08_pin - PD4)
+	//PCMSK2 = _BV(PCINT15);												// enable pin change for switch @ pin D4
 
 	sei();
 	}
@@ -205,7 +201,7 @@ void cos_ctor()															// constructor for concrete class
 	// __Device function pointers
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationCOS;	// implements device-specific operation depending on bus activity
 	__Device.public.mj8x8->HeartbeatPeriodic = &_HeartbeatPeriodicCos;	// override mj8x8_t's own Heartbeat() - the purpose is to make use of the (periodic) watchdog timer
-	__Device.public.Cos6V0OutputEnabled = &_Cos6V0OutputEnabled;		// enabled/disables the 5V0 Boost output controller
+	__Device.public.CosVOutEnable = &_CosVOutEnable;					// enabled/disables the 5V0 Boost output controller
 
 	// __Device core objects
 	__Device.public.Rect = RECT;										// get address of rect_t object
@@ -216,10 +212,27 @@ void cos_ctor()															// constructor for concrete class
 	// NOTE: most default states are implemented in hardware by means of pulldown/pullup resistors
 	//__Device.public.Rect->SetRectifierMode(_delon);						// set regulator manually into Delon mode - we are very likely to start spinning slow
 	*(__Device.public.BuckBoost->PWM) = 0xFF;							// put Buck-Boost into PWM/PFM (auto) mode
-	__Device.public.LiIonCharger->SetResistor(99);						// set resistor value to 2k
+	__Device.public.LiIonCharger->SetResistor(48);						// set resistor value to 2k
+
+	/*
+	port expander IO config:
+		MCP23S08__MCP73871_STAT1_pin
+		MCP23S08__MCP73871_STAT2_pin
+		MCP23S08__MCP73871_PG_pin
+		MCP23S08__MCP73871_CE_pin
+		MCP23S08__MCP73871_DELON_pin
+		MCP23S08__MCP73871_GRAETZ_pin
+		MCP23S08__MCP73871_TUNING_pin
+		MCP23S08__MCP73871_TUNING_BYPASS_pin
+	*/
+
+	//__Device.public.LiIonCharger->SetMCP23S08(IODIR, 0x07);				// initialize IO direction
+	//__Device.public.LiIonCharger->SetMCP23S08(GPINTEN, 0x07);			// enable interrupts for pin0:2
+	//__Device.public.LiIonCharger->SetMCP23S08(GPPU, 0x07);				// enable interrupts for pin0:2
 
 
-	__Device.public.Cos6V0OutputEnabled(0);
+
+	__Device.public.CosVOutEnable(0);
 
 };
 
@@ -229,7 +242,7 @@ cos_t * const Device = &__Device.public;								// set pointer to MsgHandler pub
 
 ISR(PCINT2_vect)														// pin change ISR (PD4) if port expander sees activity
 {
-	//__Device.public.OpParamArray[MISC_STATUS_BITS] = ( MASK_MISC_STATUS_BITS_MCP73871 & __Device.public.LiIonCharger->GetMCP23S08());
+	__Device.public.LiIonCharger->GetMCP23S08();						// download pin states
 };
 
 ISR(TIMER1_CAPT_vect)													// timer1 input capture interrupt for comparator output - once per AC period

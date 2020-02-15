@@ -38,6 +38,11 @@ void _GetValues(void)													// download current and voltage measurement in
 		0x0154h is 340 decimal; full range is 3840 decimal
 		340/3840 = 0.089; 3840 is 81.92mV = 0.08192V, thus 340 is approx. 0.08192V * 0.089 = 0.007V
 		U/R = I gives 0.007V / 0.043? = 0.163A (rather large, but the PCB in question is known to fluctuate)
+
+
+	two example charging cycle measurements:
+	array indices 0,1 - current: 0x0423h (1059d), 0x02ceh (718d): 1059d equals 571mA, 718 equals 387mA
+	array indices 2,3 - voltage: 0x0917h (2327d), 0x0922h (2338d): 2327d equals 4.93V, 2338 equals 4.96V
 */
 
 	__TPS630701._lmp92064sd->DownloadData(__TPS630701.public.OutValues);
