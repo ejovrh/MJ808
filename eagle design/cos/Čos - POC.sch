@@ -14100,14 +14100,14 @@ Source: http://www.linear.com/pc/downloadDocument.do?navId=H0,C1,C1154,C1009,C10
 <part name="R16" library="74x-1133528 Resistor Array" deviceset="741X083331JP" device="" value="741X083103JP / 10kΩ"/>
 <part name="L" library="signal testpoint" deviceset="TP" device="SMT-1.2MM" value="CAN Low"/>
 <part name="H" library="signal testpoint" deviceset="TP" device="SMT-1.2MM" value="CAN High"/>
-<part name="IC7" library="MCP73871 - Powerpath and Charge Controller" deviceset="MCP73871-2AAI/ML" device="" value="MCP73871-2CCI/ML"/>
+<part name="IC7" library="MCP73871 - Powerpath and Charge Controller" deviceset="MCP73871-2AAI/ML" device="" value="MCP73871-1CCI/ML"/>
 <part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="47k"/>
 <part name="C20" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="10μF"/>
 <part name="C24" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="4.7μF"/>
 <part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="4.7μF"/>
 <part name="R13" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="1k"/>
 <part name="R14" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="150k"/>
-<part name="R9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
+<part name="R9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
 <part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="270k"/>
 <part name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="110k"/>
 <part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="47k"/>
@@ -14227,7 +14227,7 @@ Ireg = 1000v/Rprog1
 </text>
 <text x="129.54" y="231.14" size="1.778" layer="97" align="top-left">p.23, 4.7 Charge Termination
 Iterm = 1000V/Rprog3
-1mA=1000V/100kΩ</text>
+100mA=1000V/10kΩ</text>
 <text x="86.36" y="289.56" size="1.778" layer="97" align="top-left">p.17, Voltage Proportional Charge Control
 Vpcc=(R2/(R1+R2))*Vin</text>
 <text x="205.74" y="238.76" size="1.778" layer="97" rot="R180" align="top-left">P.18, 3.4</text>
