@@ -406,18 +406,6 @@
 </net>
 <net name="CANH" class="3">
 <segment>
-<pinref part="CONN1" gate="G$1" pin="P$1"/>
-<wire x1="33.02" y1="180.34" x2="40.64" y2="180.34" width="0.1524" layer="91"/>
-<label x="40.64" y="180.34" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="CAN" gate="A" pin="2"/>
-<wire x1="25.4" y1="137.16" x2="33.02" y2="137.16" width="0.1524" layer="91"/>
-<label x="33.02" y="137.16" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="CANL" class="3">
-<segment>
 <pinref part="CONN1" gate="G$1" pin="P$8"/>
 <wire x1="33.02" y1="198.12" x2="40.64" y2="198.12" width="0.1524" layer="91"/>
 <label x="40.64" y="198.12" size="1.778" layer="95"/>
@@ -426,6 +414,18 @@
 <pinref part="CAN" gate="A" pin="1"/>
 <wire x1="25.4" y1="134.62" x2="33.02" y2="134.62" width="0.1524" layer="91"/>
 <label x="33.02" y="134.62" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="CANL" class="3">
+<segment>
+<pinref part="CONN1" gate="G$1" pin="P$1"/>
+<wire x1="33.02" y1="180.34" x2="40.64" y2="180.34" width="0.1524" layer="91"/>
+<label x="40.64" y="180.34" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="CAN" gate="A" pin="2"/>
+<wire x1="25.4" y1="137.16" x2="33.02" y2="137.16" width="0.1524" layer="91"/>
+<label x="33.02" y="137.16" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V0" class="2">
