@@ -4,10 +4,8 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
 
 
 # 0. this all is still under development
-
-
-	front and rear lamps do work together and can be used on a bike.
-	logic unit and auxiliary devices are still WIP.
+front and rear lamps do work together and can be used on a bike.
+logic unit and auxiliary devices are still WIP.
 
 
 # 1. abstract:	
@@ -23,16 +21,11 @@ this undertaking is an attempt to redesign the MJ808/MJ818 lights by:
 	
 	
 # 2. light system topology (in ascii art):
-
-
-	"==" and "||" denote the CAN bus, power lines are omitted.
+**==** and **||** denote the CAN bus, power lines are omitted.
 
 ## 2.1 - current working setup
-	
-	
-	front and rear lights are interconnected via the CAN bus; the front light activates the rear light.
-
-		front light	- rear light
+front and rear lights are interconnected via the CAN bus; the front light activates the rear light.
+	front light	- rear light
 		------------------------------------------------
 		mj808 ======  mj818
 	
