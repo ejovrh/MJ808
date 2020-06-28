@@ -57,27 +57,27 @@ the only reasonable way to achieve this is to start from scratch.
 
 	
 # 5. required software for building
-- eagle for PCB layout & schematics
-- atmel studio (or keil) for the code
-- [atmel ICE](https://www.microchip.com/DevelopmentTools/ProductDetails/ATATMEL-ICE) or something similar
-- some cheapo arduino for quick and dirty CAN testing (the arduino acts as an improvised control unit)
-- SMD soldering equipment and skills
+- eagle for PCB layout & schematics,
+- atmel studio (or keil) for the code,
+- [atmel ICE](https://www.microchip.com/DevelopmentTools/ProductDetails/ATATMEL-ICE) or something similar,
+- some cheapo arduino for quick and dirty CAN testing (the arduino acts as an improvised control unit) and
+- SMD soldering equipment and skills.
 	
 	
 # 6. repo structure
-- /datasheets/: contains what the name suggests
-- /dwg/: AutoCAD drawings & STLs of various sub-components
+- /datasheets/: contains what the name suggests,
+- /dwg/: AutoCAD drawings & STLs of various sub-components,
 - /eagle designs/: contains subfolders with eagle designs (.brd, .sch & BOMs) of various sub-components
-	- cos/: a dynamo thing, WIP
-	- mj808/: the front light
-	- mj818/: the rear light
-	- mj828/: a small handlebar mounted UI (nothing fancy), WIP
-	- drawings for the atmel ICE <-> light PCB programming adapter
-- /eagle libraries/: contains eagle libraries of electical components used
-- /gerber/: gerber files for PCB production
-	- [mj808](https://oshpark.com/shared_projects/OMSOAv0N)
+	- cos/: a dynamo thing, WIP,
+	- mj808/: the front light,
+	- mj818/: the rear light,
+	- mj828/: a small handlebar mounted UI (nothing fancy), WIP and
+	- drawings for the atmel ICE <-> light PCB programming adapter.
+- /eagle libraries/: contains eagle libraries of electical components used.
+- /gerber/: gerber files for PCB production,
+	- [mj808](https://oshpark.com/shared_projects/OMSOAv0N),
 	- [mj818](https://oshpark.com/shared_projects/NvGHYtoJ)
-- /MJ808/: C source code for everything
+- /MJ808/: C source code for everything.
 
 	
 # 7. hardware
@@ -88,9 +88,9 @@ core components:
 - [Attiny4313](https://www.microchip.com/wwwproducts/en/ATtiny4313) 8bit microcontroller, 
 - [MCP2515](https://www.microchip.com/wwwproducts/en/en010406) CAN controller,
 - [MCP2561](https://www.microchip.com/wwwproducts/en/MCP2561) CAN transciever,
-- [MAX16819](https://www.maximintegrated.com/en/products/power/led-drivers/MAX16819.html) & [MAX16820](https://www.maximintegrated.com/en/products/power/led-drivers/MAX16820.html) LED drivers
+- [MAX16819](https://www.maximintegrated.com/en/products/power/led-drivers/MAX16819.html) & [MAX16820](https://www.maximintegrated.com/en/products/power/led-drivers/MAX16820.html) LED drivers,
 - [LDK320](https://www.st.com/en/power-management/ldk320.html) 5V LDO,
-- 0402 passives,
+- 0402 passives and
 - Cree [XM-L](https://www.cree.com/led-components/products/xlamp-leds-discrete/xlamp-xm-l) and [XP-E](https://www.cree.com/led-components/products/xlamp-leds-discrete/xlamp-xp-e) high power LEDs.
 
 when chosing components the primary criterium was size, since everything needed to fit into existing housings.
@@ -102,7 +102,7 @@ the language of choice is C, written in an object-oriented fashion:
 - concrete implementations (e.g. [mj808](https://github.com/ejovrh/MJ808/tree/master/MJ808/MJ808/mj808) ) translate into derived classes (again C-structs),
 - methods are generally implemented via function pointers ([e.g. CAN driver message operations](https://github.com/ejovrh/MJ808/blob/master/MJ808/MJ808/mj8x8/mcp2515.h)),
 - behaviour is sometimes achieved with [OO interfaces](https://github.com/ejovrh/MJ808/tree/master/MJ808/MJ808/led), 
-- polymorphism is implemented manually via constructors ([ctor in mj808_t](https://github.com/ejovrh/MJ808/blob/master/MJ808/MJ808/mj808/mj808.c),
+- polymorphism is implemented manually via constructors ([ctor in mj808_t](https://github.com/ejovrh/MJ808/blob/master/MJ808/MJ808/mj808/mj808.c)) and
 - information is hidden by nesting C-structs and placing them into either [.c](https://github.com/ejovrh/MJ808/blob/master/MJ808/MJ808/mj808/mj808.c) or [.h](https://github.com/ejovrh/MJ808/blob/master/MJ808/MJ808/mj808/mj808.h) files.
 
 due to memory limitations there are only hints of SOLID and design patterns to be found.
