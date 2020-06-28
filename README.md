@@ -30,7 +30,7 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
 
 	"==" and "||" denote the CAN bus, power lines are omitted.
 
-	## 2.1 - current working setup
+## 2.1 - current working setup
 	
 	
 	front and rear lights are interconnected via the CAN bus; the front light activates the rear light.
@@ -39,7 +39,7 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
 		------------------------------------------------
 		mj808 ======  mj818
 	
-	## 2.2 - WIP setup
+## 2.2 - WIP setup
 	
 	
 	front and rear lights are extended in their functionality by other auxiliary devices interconnected via the CAN bus
