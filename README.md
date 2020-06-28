@@ -1,6 +1,6 @@
 # keywords:
 
-Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear light, CAN bus, MCP2515, MCP2561
+Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear light, CAN bus, [MCP2515](https://www.microchip.com/wwwproducts/en/en010406), [MCP2561](https://www.microchip.com/wwwproducts/en/MCP2561)
 
 
 # 0. this all is still under development
@@ -26,14 +26,14 @@ this undertaking is an attempt to redesign the MJ808/MJ818 lights by:
 ## 2.1 - current working setup
 front and rear lights are interconnected via the CAN bus; the front light activates the rear light.
 
-	front light	-	rear light
+	front light - rear light
 	------------------------------------------------
 	mj808 ======  mj818
 	
 ## 2.2 - WIP setup
 front and rear lights are extended in their functionality by other auxiliary devices interconnected via the CAN bus
 	
-	front light	- controlling unit - rear light
+	front light - controlling unit - rear light
 	------------------------------------------------
 	mj808 ====== control unit w. battery ====== mj818
                       ||		||
@@ -43,7 +43,7 @@ front and rear lights are extended in their functionality by other auxiliary dev
 	
 	
 # 3. description of the original light:
-google "magicshine mj818" / "magicshine mj808" for an idea what the lights are and look like.
+google [magicshine mj-818](https://www.google.com/search?q=magicshine+mj-818) / [magicshine mj-808](https://www.google.com/search?q=magicshine+mj-808) for an idea what the lights are and look like.
 	
 these are decent made-in-china bicycle lights operated off a 2S2P Li-Lion battery pack.
 their functionality, apart from producing light, sucks.
@@ -58,7 +58,7 @@ the only reasonable way to achieve this is to start from scratch.
 # 5. required software for building
 - eagle for PCB layout & schematics
 - atmel studio (or keil) for the code
-- atmel ICE or something similar
+- [atmel ICE](https://www.microchip.com/DevelopmentTools/ProductDetails/ATATMEL-ICE) or something similar
 - some cheapo arduino for quick and dirty CAN testing (the arduino acts as an improvised control unit)
 - SMD soldering equipment and skills
 	
@@ -74,6 +74,17 @@ the only reasonable way to achieve this is to start from scratch.
 	- drawings for the atmel ICE <-> light PCB programming adapter
 - /eagle libraries/: contains eagle libraries of electical components used
 - /gerber/: gerber files for PCB production
+	- [mj808](https://oshpark.com/shared_projects/OMSOAv0N)
+	- [mj818](https://oshpark.com/shared_projects/NvGHYtoJ)
 - /MJ808/: C source code for everything
 
 	
+# 7. hardware
+look in [/datasheets/](https://github.com/ejovrh/MJ808/tree/master/datasheets) for a complete lists of used hardware.
+core components:
+- [Attiny4313](https://www.microchip.com/wwwproducts/en/ATtiny4313) 8bit microcontroller,
+- [MCP2515](https://www.microchip.com/wwwproducts/en/en010406) CAN controller,
+- [MCP2561](https://www.microchip.com/wwwproducts/en/MCP2561) CAN transciever,
+- [MAX16819](https://www.maximintegrated.com/en/products/power/led-drivers/MAX16819.html) & [MAX16820](https://www.maximintegrated.com/en/products/power/led-drivers/MAX16820.html) LED drivers
+
+
