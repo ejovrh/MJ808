@@ -1,16 +1,16 @@
-keywords:
+# keywords:
 
 Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear light, CAN bus, MCP2515, MCP2561
 
 
-0. this all is still under development
+# 0. this all is still under development
 
 
 	front and rear lamps do work together and can be used on a bike.
 	logic unit and auxiliary devices are still WIP.
 
 
-1. abstract:	
+# 1. abstract:	
 
 
 	this undertaking is an attempt to redesign the MJ808/MJ818 lights by:
@@ -25,12 +25,12 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
 	- developing further auxiliary devices which extend functionality of the lights.
 	
 	
-2. light system topology (in ascii art):
+# 2. light system topology (in ascii art):
 
 
 	"==" and "||" denote the CAN bus, power lines are omitted.
 
-	2.1 - current working setup
+	## 2.1 - current working setup
 	
 	
 	front and rear lights are interconnected via the CAN bus; the front light activates the rear light.
@@ -39,7 +39,7 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
 		------------------------------------------------
 		mj808 ======  mj818
 	
-	2.2 - WIP setup
+	## 2.2 - WIP setup
 	
 	
 	front and rear lights are extended in their functionality by other auxiliary devices interconnected via the CAN bus
@@ -53,7 +53,7 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
                       dynamo
 	
 	
-3. description of the original light:
+# 3. description of the original light:
 
 
 	google "magicshine mj818" / "magicshine mj808" for an idea what the lights are and look like.
@@ -62,7 +62,7 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
 	their functionality, apart from producing light, sucks.
 
 	
-4. motivation:
+# 4. motivation:
 
 
 	operating mode selection, strobing and high power consumption on the original lights is what i would like to have different.
@@ -70,7 +70,7 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
 	the only reasonable way to achieve this is to start from scratch.
 
 	
-5. required software for building
+# 5. required software for building
 
 
 	- eagle for PCB layout & schematics
@@ -80,7 +80,7 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
 	- SMD soldering equipment and skills
 	
 	
-6. repo structure
+# 6. repo structure
 
 
 	- /datasheets/: contains what the name suggests
