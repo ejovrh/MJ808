@@ -27,21 +27,19 @@ this undertaking is an attempt to redesign the MJ808/MJ818 lights by:
 front and rear lights are interconnected via the CAN bus; the front light activates the rear light.
 
 	front light	- rear light
-		------------------------------------------------
-		mj808 ======  mj818
+	------------------------------------------------
+	mj808 ======  mj818
 	
 ## 2.2 - WIP setup
+front and rear lights are extended in their functionality by other auxiliary devices interconnected via the CAN bus
 	
-	
-	front and rear lights are extended in their functionality by other auxiliary devices interconnected via the CAN bus
-	
-		front light	-		controlling unit		-	rear light
-		------------------------------------------------
-		mj808 ====== control unit w. battery ====== mj818
-                       ||		||
-                       ||		||		
-                       ||		future device(s)
-                      dynamo
+	front light	-		controlling unit		-	rear light
+	------------------------------------------------
+	mj808 ====== control unit w. battery ====== mj818
+                      ||		||
+                      ||		||		
+                      ||	future device(s)
+                    dynamo
 	
 	
 # 3. description of the original light:
