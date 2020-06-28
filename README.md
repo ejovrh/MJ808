@@ -1,4 +1,5 @@
 keywords:
+
 Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear light, CAN bus, MCP2515, MCP2561
 
 
@@ -13,6 +14,7 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
 
 
 	this undertaking is an attempt to redesign the MJ808/MJ818 lights by:
+	
 		- designing a custom PCB w. driver/controller ICs,
 		- writing firmware the above controller IC,
 		- encapsulating the above in MJ808's/MJ818's original housing,
@@ -41,6 +43,7 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
 	
 	
 	front and rear lights are extended in their functionality by other auxiliary devices interconnected via the CAN bus
+	
 		front light	-		controlling unit		-	rear light
 		------------------------------------------------
 		mj808 ====== control unit w. battery ====== mj818
@@ -63,6 +66,7 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
 
 
 	operating mode selection, strobing and high power consumption on the original lights is what i would like to have different.
+	
 	the only reasonable way to achieve this is to start from scratch.
 
 	
@@ -86,7 +90,7 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
 		- mj808/: the front light
 		- mj818/: the rear light
 		- mj828/: a small handlebar mounted UI (nothing fancy), WIP
-		- drawings for the atmel ICE <-> lighjt PCB programming adapter
+		- drawings for the atmel ICE <-> light PCB programming adapter
 		
 	- /eagle libraries/: contains eagle libraries of electical components used
 	- /gerber/: gerber files for PCB production
