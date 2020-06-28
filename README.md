@@ -15,14 +15,14 @@ Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear ligh
 
 	this undertaking is an attempt to redesign the MJ808/MJ818 lights by:
 	
-		- designing a custom PCB w. driver/controller ICs,
-		- writing firmware the above controller IC,
-		- encapsulating the above in MJ808's/MJ818's original housing,
-		- combining:
-				the rear light (MJ818), 
-				the front light (MJ808) and 
-				a control unit into an interconnected smart bicycle light system.
-		- developing further auxiliary devices which extend functionality of the lights.
+	- designing a custom PCB w. driver/controller ICs,
+	- writing firmware the above controller IC,
+	- encapsulating the above in MJ808's/MJ818's original housing,
+	- combining:
+		- the rear light (MJ818), 
+		- the front light (MJ808) and 
+		- a control unit into an interconnected smart bicycle light system.
+	- developing further auxiliary devices which extend functionality of the lights.
 	
 	
 2. light system topology (in ascii art):
