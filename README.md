@@ -26,14 +26,14 @@ this undertaking is an attempt to redesign the MJ808/MJ818 lights by:
 ## 2.1 - current working setup
 front and rear lights are interconnected via the CAN bus; the front light activates the rear light.
 
-	front light	- rear light
+	front light	-	rear light
 	------------------------------------------------
 	mj808 ======  mj818
 	
 ## 2.2 - WIP setup
 front and rear lights are extended in their functionality by other auxiliary devices interconnected via the CAN bus
 	
-	front light	-		controlling unit		-	rear light
+	front light	- controlling unit - rear light
 	------------------------------------------------
 	mj808 ====== control unit w. battery ====== mj818
                       ||		||
@@ -67,11 +67,11 @@ the only reasonable way to achieve this is to start from scratch.
 - /datasheets/: contains what the name suggests
 - /dwg/: AutoCAD drawings & STLs of various sub-components
 - /eagle designs/: contains subfolders with eagle designs (.brd, .sch & BOMs) of various sub-components
- - cos/: a dynamo thing, WIP
- - mj808/: the front light
- - mj818/: the rear light
- - mj828/: a small handlebar mounted UI (nothing fancy), WIP
- - drawings for the atmel ICE <-> light PCB programming adapter
+	- cos/: a dynamo thing, WIP
+	- mj808/: the front light
+	- mj818/: the rear light
+	- mj828/: a small handlebar mounted UI (nothing fancy), WIP
+	- drawings for the atmel ICE <-> light PCB programming adapter
 - /eagle libraries/: contains eagle libraries of electical components used
 - /gerber/: gerber files for PCB production
 - /MJ808/: C source code for everything
