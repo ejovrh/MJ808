@@ -97,6 +97,7 @@ when chosing components the primary criterium was size, since everything needed 
 maximizing light output to the extreme was not a design factor.
 
 # 8. software
+## 8.1 general overview
 the language of choice is C, written in an object-oriented fashion:
 - common core components translate into an [abstract base class](https://github.com/ejovrh/MJ808/tree/master/MJ808/MJ808/mj8x8) (implemented via C-structs), 
 - concrete implementations (e.g. [mj808](https://github.com/ejovrh/MJ808/tree/master/MJ808/MJ808/mj808) ) translate into derived classes (again C-structs),
@@ -108,3 +109,6 @@ the language of choice is C, written in an object-oriented fashion:
 due to memory limitations there are only hints of SOLID and design patterns to be found.
 
 code is commented in a reasonable manner.
+
+## 8.2 detailed description
+TODO
