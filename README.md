@@ -81,10 +81,19 @@ the only reasonable way to achieve this is to start from scratch.
 	
 # 7. hardware
 look in [/datasheets/](https://github.com/ejovrh/MJ808/tree/master/datasheets) for a complete lists of used hardware.
+
 core components:
 - [Attiny4313](https://www.microchip.com/wwwproducts/en/ATtiny4313) 8bit microcontroller,
 - [MCP2515](https://www.microchip.com/wwwproducts/en/en010406) CAN controller,
 - [MCP2561](https://www.microchip.com/wwwproducts/en/MCP2561) CAN transciever,
 - [MAX16819](https://www.maximintegrated.com/en/products/power/led-drivers/MAX16819.html) & [MAX16820](https://www.maximintegrated.com/en/products/power/led-drivers/MAX16820.html) LED drivers
+- [LDK320](https://www.st.com/en/power-management/ldk320.html) 5V LDO,
+- 0402 passives
 
+when chosing components the primary criterium was size, since everything needed to fit into existing housings.
+
+# 8. software
+the language of choice was C, written in an object-oriented fashion.
+core components are structs behaving like base classes, actual implementations are structs behaving like derived classes.
+functionality is implemented via heavy use of function pointers in order to mimic methods.
 
