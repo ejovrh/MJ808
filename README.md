@@ -83,17 +83,27 @@ the only reasonable way to achieve this is to start from scratch.
 look in [/datasheets/](https://github.com/ejovrh/MJ808/tree/master/datasheets) for a complete lists of used hardware.
 
 core components:
-- [Attiny4313](https://www.microchip.com/wwwproducts/en/ATtiny4313) 8bit microcontroller,
+- 4-layer PCB manufactured via [OSH Park](https://oshpark.com/),
+- [Attiny4313](https://www.microchip.com/wwwproducts/en/ATtiny4313) 8bit microcontroller, 
 - [MCP2515](https://www.microchip.com/wwwproducts/en/en010406) CAN controller,
 - [MCP2561](https://www.microchip.com/wwwproducts/en/MCP2561) CAN transciever,
 - [MAX16819](https://www.maximintegrated.com/en/products/power/led-drivers/MAX16819.html) & [MAX16820](https://www.maximintegrated.com/en/products/power/led-drivers/MAX16820.html) LED drivers
 - [LDK320](https://www.st.com/en/power-management/ldk320.html) 5V LDO,
-- 0402 passives
+- 0402 passives,
+- Cree [XM-L](https://www.cree.com/led-components/products/xlamp-leds-discrete/xlamp-xm-l) and [XP-E](https://www.cree.com/led-components/products/xlamp-leds-discrete/xlamp-xp-e) high power LEDs.
 
 when chosing components the primary criterium was size, since everything needed to fit into existing housings.
+maximizing light output to the extreme was not a design factor.
 
 # 8. software
-the language of choice was C, written in an object-oriented fashion.
-core components are structs behaving like base classes, actual implementations are structs behaving like derived classes.
-functionality is implemented via heavy use of function pointers in order to mimic methods.
+the language of choice is C, written in an object-oriented fashion:
+- common core components translate into an [abstract base class](https://github.com/ejovrh/MJ808/tree/master/MJ808/MJ808/mj8x8) (implemented via C-structs), 
+- concrete implementations (e.g. [mj808](https://github.com/ejovrh/MJ808/tree/master/MJ808/MJ808/mj808) ) translate into derived classes (again C-structs),
+- methods are generally implemented via function pointers,
+- behaviour is sometimes achieved with [OO interfaces](https://github.com/ejovrh/MJ808/tree/master/MJ808/MJ808/led), 
+- polymorphism is implemented manually via constructors,
+- information is hidden by nesting C-structs and placing them into either .c or .h files.
 
+due to memory limitations there are only hints of SOLID and design patterns to be found.
+
+code is commented in a reasonable manner.
