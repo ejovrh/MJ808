@@ -6,15 +6,17 @@
 #include "button\button.h"
 
 // definitions of device/PCB layout-specific hardware pins
-#define MCP2561_standby_pin		B,	3,	3								// MCP2561 standby
+#define MCP2561_standby_pin						B,	3,	3				// MCP2561 standby
 
-#define PUSHBUTTON1_pin			D,	0,	0								// Pushbutton 1 - sw1
-#define PUSHBUTTON2_pin			D,	1,	1								// Pushbutton 2 - sw2
+#define PUSHBUTTON_pin							D,	0,	0				// Pushbutton
+#define PHOTOTRANSISTOR_COLLECTOR_pin			D,	1,	1				// Phototransistor Collector
+#define HIGH_IN_pin								D,	4,	4				// brake lever high beam signal
+#define BREAK_IN_pin							D,	5,	5				// brake lever break light signal
 
-#define LED_CP4_pin				D,	6,	6								// LED Charlie-plexed pin4
-#define LED_CP3_pin				B,	0,	0								// LED Charlie-plexed pin3
-#define LED_CP2_pin				B,	1,	1								// LED Charlie-plexed pin2
-#define LED_CP1_pin				B,	2,	2								// LED Charlie-plexed pin1
+#define LED_CP4_pin								D,	6,	6				// LED Charlie-plexed pin4
+#define LED_CP3_pin								B,	0,	0				// LED Charlie-plexed pin3
+#define LED_CP2_pin								B,	1,	1				// LED Charlie-plexed pin2
+#define LED_CP1_pin								B,	2,	2				// LED Charlie-plexed pin1
 // definitions of device/PCB layout-specific hardware pins
 
 enum mj828_leds															// enum of lights on this device

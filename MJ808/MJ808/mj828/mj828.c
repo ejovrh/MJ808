@@ -91,8 +91,13 @@ void mj828_ctor()
 	{
 	// state initialization of device-specific pins
 
-	gpio_conf(PUSHBUTTON1_pin, INPUT, LOW);								// SPST-NO - high on press, low on release
-	gpio_conf(PUSHBUTTON2_pin, INPUT, LOW);								// SPST-NO - high on press, low on release
+	gpio_conf(PUSHBUTTON_pin, INPUT, LOW);								// SPST-NO - high on press, low on release
+	// TODO - verify phototransistor operation
+	gpio_conf(PHOTOTRANSISTOR_COLLECTOR_pin, INPUT, LOW);				// high on light, low on darkness
+	// TODO - verify brake lever operation
+	gpio_conf(HIGH_IN_pin, INPUT, LOW);									// brake lever high beam - high - on press, low - off
+	gpio_conf(BREAK_IN_pin, INPUT, LOW);								// brake lever brake light - high - on press, low - off
+
 
 	gpio_conf(LED_CP1_pin, INPUT, LOW);									// Charlie-plexed pin1
 	gpio_conf(LED_CP2_pin, INPUT, LOW);									// Charlie-plexed pin2
