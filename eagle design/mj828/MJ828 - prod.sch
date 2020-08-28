@@ -7445,15 +7445,15 @@ Source: www.kingbright.com</description>
 <plain>
 <text x="231.14" y="195.58" size="1.778" layer="90">power supply for everything</text>
 <text x="261.62" y="78.74" size="1.778" layer="90">CAN infrastructure</text>
-<wire x1="0" y1="228.6" x2="81.28" y2="228.6" width="0.1524" layer="90"/>
+<wire x1="2.54" y1="228.6" x2="81.28" y2="228.6" width="0.1524" layer="90"/>
 <wire x1="81.28" y1="228.6" x2="307.34" y2="228.6" width="0.1524" layer="90"/>
 <wire x1="307.34" y1="228.6" x2="436.88" y2="228.6" width="0.1524" layer="90"/>
 <wire x1="436.88" y1="228.6" x2="436.88" y2="101.6" width="0.1524" layer="90"/>
 <wire x1="436.88" y1="101.6" x2="436.88" y2="0" width="0.1524" layer="90"/>
 <wire x1="436.88" y1="0" x2="81.28" y2="0" width="0.1524" layer="90"/>
 <wire x1="81.28" y1="0" x2="0" y2="0" width="0.1524" layer="90"/>
-<wire x1="0" y1="0" x2="0" y2="228.6" width="0.1524" layer="90"/>
-<wire x1="81.28" y1="0" x2="81.28" y2="101.6" width="0.1524" layer="90"/>
+<wire x1="81.28" y1="0" x2="81.28" y2="76.2" width="0.1524" layer="90"/>
+<wire x1="81.28" y1="76.2" x2="81.28" y2="101.6" width="0.1524" layer="90"/>
 <wire x1="81.28" y1="101.6" x2="307.34" y2="101.6" width="0.1524" layer="90"/>
 <wire x1="436.88" y1="101.6" x2="307.34" y2="101.6" width="0.1524" layer="90"/>
 <wire x1="307.34" y1="101.6" x2="307.34" y2="228.6" width="0.1524" layer="90"/>
@@ -7478,6 +7478,21 @@ Uf = 3.2V, If = 0.02A
 5V-3.2V=1.8V
 1.8V/0.02A=90Ω
 rounded to 100Ω</text>
+<text x="-53.34" y="58.42" size="1.778" layer="91" align="top-left">phototransistor: 
+    R in darkness in the 1+MΩ range, 
+    in full daylight in the &lt;10kΩ range 
+
+transition to daylight is at around 30kΩ
+    the sun is about to rise bove the horizon,
+    the sky already is casting shadows
+
+transition to night is ....</text>
+<wire x1="0" y1="0" x2="-76.2" y2="0" width="0.1524" layer="90"/>
+<wire x1="-76.2" y1="0" x2="-76.2" y2="76.2" width="0.1524" layer="90"/>
+<wire x1="-76.2" y1="76.2" x2="0" y2="76.2" width="0.1524" layer="90"/>
+<wire x1="0" y1="76.2" x2="81.28" y2="76.2" width="0.1524" layer="90"/>
+<wire x1="0" y1="76.2" x2="0" y2="228.6" width="0.1524" layer="90"/>
+<wire x1="0" y1="228.6" x2="2.54" y2="228.6" width="0.1524" layer="90"/>
 </plain>
 <instances>
 <instance part="IC6" gate="G$1" x="248.92" y="50.8" smashed="yes">
