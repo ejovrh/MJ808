@@ -7479,12 +7479,14 @@ Uf = 3.2V, If = 0.02A
 1.8V/0.02A=90Ω
 rounded to 100Ω</text>
 <text x="-53.34" y="58.42" size="1.778" layer="91" align="top-left">phototransistor: 
-    R in darkness in the 1+MΩ range, 
+    R in darkness in the &gt;1MΩ range, 
     in full daylight in the &lt;10kΩ range 
 
-transition to daylight is at around 30kΩ
+transition to daylight is at around 25-30kΩ
     the sun is about to rise bove the horizon,
     the sky already is casting shadows
+
+at ~20kΩ the sun is already above the horizon
 
 transition to night is ....</text>
 <wire x1="0" y1="0" x2="-76.2" y2="0" width="0.1524" layer="90"/>
@@ -7493,6 +7495,9 @@ transition to night is ....</text>
 <wire x1="0" y1="76.2" x2="81.28" y2="76.2" width="0.1524" layer="90"/>
 <wire x1="0" y1="76.2" x2="0" y2="228.6" width="0.1524" layer="90"/>
 <wire x1="0" y1="228.6" x2="2.54" y2="228.6" width="0.1524" layer="90"/>
+<text x="170.18" y="180.34" size="5.08" layer="90">TODO: pulldown for brake/high beam signals</text>
+<text x="43.18" y="40.64" size="1.9304" layer="91">nighttime: R &gt; 1MΩ
+daylight: R&lt;15kΩ</text>
 </plain>
 <instances>
 <instance part="IC6" gate="G$1" x="248.92" y="50.8" smashed="yes">
