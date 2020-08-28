@@ -9,12 +9,12 @@ void _debounce(__individual_button_t * const in_button, event_handler_t * const 
 		++in_button->__hold_counter;									// start to count (used to determine long button press; not used for debouncing)
 
 
-		++in_button->__state;											// debouncing by means of bit shifting - redux
+		++in_button->__state;											// debouncing by means of bit shifting - revised (below is the original commented out code)
 
 																		// debouncing by means of bit shifting
-		//in_button._state ^ 0x03;										// XOR what we currently have in state
-		//in_button._state <<= 1;										// left shift so that if we have 0x01 this becomes 0x02
-		//in_button._state |= 0x01;										// OR what we have with 0x01 so that 0x02 becomes 0x03
+		//in_button->__state ^ 0x03;									// XOR what we currently have in state
+		//in_button->__state <<= 1;										// left shift so that if we have 0x01 this becomes 0x02
+		//in_button->__state |= 0x01;									// OR what we have with 0x01 so that 0x02 becomes 0x03
 	}
 
 	/*	rationale of debouncing:
