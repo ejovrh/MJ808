@@ -7483,12 +7483,12 @@ rounded to 100Ω</text>
     R in darkness in the &gt;1MΩ range, 
     in full daylight in the &lt;10kΩ range 
 
-transition to daylight is at around 25-30kΩ
+transition to daylight is at around 25-30kΩ, clear sky
     the sun is about to rise bove the horizon,
     the sky already is casting shadows
     at ~20kΩ the sun is already above the horizon
 
-transition to night is also around 30kΩ
+transition to night is also around 30kΩ, clear sky
     at ~10-15kΩ the sun is still visible
     at ~30kΩ the sun is about to set below the horizon, no shadows anymore
     at &gt;50kΩ it is twilight
@@ -7719,6 +7719,16 @@ daylight: R&lt;10kΩ</text>
 <wire x1="27.94" y1="12.7" x2="43.18" y2="12.7" width="0.1524" layer="91"/>
 <label x="43.18" y="12.7" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="R2" gate="G$1" pin="3"/>
+<wire x1="110.49" y1="58.42" x2="104.14" y2="58.42" width="0.1524" layer="91"/>
+<pinref part="R2" gate="G$1" pin="1"/>
+<wire x1="110.49" y1="55.88" x2="104.14" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="104.14" y1="55.88" x2="104.14" y2="58.42" width="0.1524" layer="91"/>
+<wire x1="104.14" y1="55.88" x2="101.6" y2="55.88" width="0.1524" layer="91"/>
+<junction x="104.14" y="55.88"/>
+<label x="101.6" y="55.88" size="1.778" layer="95" rot="R180"/>
+</segment>
 </net>
 <net name="ICSP_DO/MOSI" class="3">
 <segment>
@@ -7895,14 +7905,14 @@ daylight: R&lt;10kΩ</text>
 <wire x1="358.14" y1="53.34" x2="381" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="R2" gate="G$1" pin="2"/>
-<wire x1="125.73" y1="55.88" x2="134.62" y2="55.88" width="0.1524" layer="91"/>
-<label x="134.62" y="55.88" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="IC3" gate="G$1" pin="PCINT17/ICPI-PD6"/>
 <wire x1="157.48" y1="185.42" x2="162.56" y2="185.42" width="0.1524" layer="91"/>
 <label x="162.56" y="185.42" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R2" gate="G$1" pin="6"/>
+<wire x1="125.73" y1="60.96" x2="134.62" y2="60.96" width="0.1524" layer="91"/>
+<label x="134.62" y="60.96" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V0" class="2">
@@ -7936,7 +7946,7 @@ daylight: R&lt;10kΩ</text>
 <label x="45.72" y="195.58" size="1.778" layer="95"/>
 </segment>
 <segment>
-<label x="100.33" y="63.5" size="1.778" layer="95"/>
+<label x="100.33" y="63.5" size="1.778" layer="95" rot="R180"/>
 <wire x1="105.41" y1="63.5" x2="104.14" y2="63.5" width="0.1524" layer="91"/>
 <wire x1="104.14" y1="63.5" x2="100.33" y2="63.5" width="0.1524" layer="91"/>
 <pinref part="R2" gate="G$1" pin="5"/>
@@ -7945,14 +7955,6 @@ daylight: R&lt;10kΩ</text>
 <junction x="104.14" y="63.5"/>
 <pinref part="R2" gate="G$1" pin="7"/>
 <wire x1="110.49" y1="63.5" x2="104.14" y2="63.5" width="0.1524" layer="91"/>
-<pinref part="R2" gate="G$1" pin="3"/>
-<wire x1="110.49" y1="58.42" x2="104.14" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="104.14" y1="58.42" x2="104.14" y2="60.96" width="0.1524" layer="91"/>
-<junction x="104.14" y="60.96"/>
-<pinref part="R2" gate="G$1" pin="1"/>
-<wire x1="110.49" y1="55.88" x2="104.14" y2="55.88" width="0.1524" layer="91"/>
-<wire x1="104.14" y1="55.88" x2="104.14" y2="58.42" width="0.1524" layer="91"/>
-<junction x="104.14" y="58.42"/>
 </segment>
 <segment>
 <pinref part="IC5" gate="G$1" pin="VOUT"/>
@@ -8014,9 +8016,9 @@ daylight: R&lt;10kΩ</text>
 <label x="287.02" y="35.56" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R2" gate="G$1" pin="4"/>
-<wire x1="125.73" y1="58.42" x2="134.62" y2="58.42" width="0.1524" layer="91"/>
-<label x="134.62" y="58.42" size="1.778" layer="95"/>
+<pinref part="R2" gate="G$1" pin="8"/>
+<wire x1="125.73" y1="63.5" x2="134.62" y2="63.5" width="0.1524" layer="91"/>
+<label x="134.62" y="63.5" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="CP2" class="3">
@@ -8230,6 +8232,11 @@ daylight: R&lt;10kΩ</text>
 <wire x1="38.1" y1="157.48" x2="45.72" y2="157.48" width="0.1524" layer="91"/>
 <label x="45.72" y="157.48" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="R2" gate="G$1" pin="2"/>
+<wire x1="125.73" y1="55.88" x2="134.62" y2="55.88" width="0.1524" layer="91"/>
+<label x="134.62" y="55.88" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="HIGH_IN" class="3">
 <segment>
@@ -8241,6 +8248,11 @@ daylight: R&lt;10kΩ</text>
 <pinref part="FPC" gate="G$1" pin="P$3"/>
 <wire x1="38.1" y1="154.94" x2="45.72" y2="154.94" width="0.1524" layer="91"/>
 <label x="45.72" y="154.94" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R2" gate="G$1" pin="4"/>
+<wire x1="125.73" y1="58.42" x2="134.62" y2="58.42" width="0.1524" layer="91"/>
+<label x="134.62" y="58.42" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="PHOTOTRANSISTOR" class="3">
