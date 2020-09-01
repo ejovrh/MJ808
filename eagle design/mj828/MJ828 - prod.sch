@@ -7445,13 +7445,13 @@ Source: www.kingbright.com</description>
 <plain>
 <text x="231.14" y="195.58" size="1.778" layer="90">power supply for everything</text>
 <text x="261.62" y="78.74" size="1.778" layer="90">CAN infrastructure</text>
-<wire x1="2.54" y1="228.6" x2="81.28" y2="228.6" width="0.1524" layer="90"/>
+<wire x1="0" y1="228.6" x2="81.28" y2="228.6" width="0.1524" layer="90"/>
 <wire x1="81.28" y1="228.6" x2="307.34" y2="228.6" width="0.1524" layer="90"/>
 <wire x1="307.34" y1="228.6" x2="436.88" y2="228.6" width="0.1524" layer="90"/>
 <wire x1="436.88" y1="228.6" x2="436.88" y2="101.6" width="0.1524" layer="90"/>
 <wire x1="436.88" y1="101.6" x2="436.88" y2="0" width="0.1524" layer="90"/>
 <wire x1="436.88" y1="0" x2="81.28" y2="0" width="0.1524" layer="90"/>
-<wire x1="81.28" y1="0" x2="0" y2="0" width="0.1524" layer="90"/>
+<wire x1="81.28" y1="0" x2="-76.2" y2="0" width="0.1524" layer="90"/>
 <wire x1="81.28" y1="0" x2="81.28" y2="76.2" width="0.1524" layer="90"/>
 <wire x1="81.28" y1="76.2" x2="81.28" y2="101.6" width="0.1524" layer="90"/>
 <wire x1="81.28" y1="101.6" x2="307.34" y2="101.6" width="0.1524" layer="90"/>
@@ -7478,26 +7478,30 @@ Uf = 3.2V, If = 0.02A
 5V-3.2V=1.8V
 1.8V/0.02A=90Ω
 rounded to 100Ω</text>
-<text x="-53.34" y="58.42" size="1.778" layer="91" align="top-left">phototransistor: 
+<text x="-60.96" y="60.96" size="1.778" layer="91" align="top-left">phototransistor: 
+(measurements were taken in late august in zagreb)
     R in darkness in the &gt;1MΩ range, 
     in full daylight in the &lt;10kΩ range 
 
 transition to daylight is at around 25-30kΩ
     the sun is about to rise bove the horizon,
     the sky already is casting shadows
+    at ~20kΩ the sun is already above the horizon
 
-at ~20kΩ the sun is already above the horizon
+transition to night is also around 30kΩ
+    at ~10-15kΩ the sun is still visible
+    at ~30kΩ the sun is about to set below the horizon, no shadows anymore
+    at &gt;50kΩ it is twilight
 
-transition to night is ....</text>
-<wire x1="0" y1="0" x2="-76.2" y2="0" width="0.1524" layer="90"/>
+noon, overcast, rain
+    3-4kΩ, with darker clouds 5kΩ</text>
 <wire x1="-76.2" y1="0" x2="-76.2" y2="76.2" width="0.1524" layer="90"/>
 <wire x1="-76.2" y1="76.2" x2="0" y2="76.2" width="0.1524" layer="90"/>
 <wire x1="0" y1="76.2" x2="81.28" y2="76.2" width="0.1524" layer="90"/>
 <wire x1="0" y1="76.2" x2="0" y2="228.6" width="0.1524" layer="90"/>
-<wire x1="0" y1="228.6" x2="2.54" y2="228.6" width="0.1524" layer="90"/>
 <text x="170.18" y="180.34" size="5.08" layer="90">TODO: pulldown for brake/high beam signals</text>
 <text x="43.18" y="40.64" size="1.9304" layer="91">nighttime: R &gt; 1MΩ
-daylight: R&lt;15kΩ</text>
+daylight: R&lt;10kΩ</text>
 </plain>
 <instances>
 <instance part="IC6" gate="G$1" x="248.92" y="50.8" smashed="yes">
