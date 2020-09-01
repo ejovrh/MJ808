@@ -41,12 +41,14 @@ static void __LED_green(const uint8_t state)							// green LED on/off
 
 static void __LED_blue1(const uint8_t state)							// blue1 LED on/off
 {
+	// FIXME - blue1 lights both blue1 and batt1
 	gpio_conf(LED_CP2_pin, OUTPUT, HIGH);								// pin b1 - anode
 
 	if (state)															// on
-		gpio_conf(LED_CP3_pin, OUTPUT, LOW);							// pin b0 - cathode
+	// FIXME - like below it is inverted
+		gpio_conf(LED_CP4_pin, OUTPUT, HIGH);							// pin b0 - cathode
 	else																// off
-		gpio_conf(LED_CP3_pin, OUTPUT, HIGH);							// pin b0 - cathode
+		gpio_conf(LED_CP4_pin, OUTPUT, LOW);							// pin b0 - cathode
 }
 
 static void __LED_yellow(const uint8_t state)							// yellow LED on/off

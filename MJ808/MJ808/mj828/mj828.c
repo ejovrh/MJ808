@@ -21,46 +21,69 @@ void _event_execution_function_mj828(uint8_t val)
 			EventHandler->UnSetEvent(val);
 		break;
 
-		case 0x02:														//
-			Device->led->Shine(Red);
+		case 0x02:														// pushbutton hold
+			Device->led->Shine(Green);
 
-			if (Device->button->button[Right].Toggle)
+			if (Device->button->button[Pushbutton].Hold)
 			{
 				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x20, 2);
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);		// turn on rear light
 			}
 			else
 			{
 				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);		// turn off rear light
 			}
 			EventHandler->UnSetEvent(val);
 		break;
 
-		case 0x04:														//
-			if (Device->button->button[Left].Momentary)
+		case 0x04:														// high beam momentary
+			if (Device->button->button[HighBeam].Momentary)
 			{
 				// FIXME - on button hold, multiple events are triggered and flapping occurs
 				Device->led->Shine(Blue);
-				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xF8, 2);
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xF8, 2);	// high beam on
 
 			}
 			else
 			{
-				Device->led->Shine(Blue);
-				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);	// high beam off
 
-				EventHandler->UnSetEvent(val);
+				//EventHandler->UnSetEvent(val);
 			}
+			EventHandler->UnSetEvent(val);
 		break;
 
-		//case 0x08:													//
+		case 0x08:														// brake light momentary
+			if (Device->button->button[BrakeLight].Momentary)
+			{
+				// FIXME - on button hold, multiple events are triggered and flapping occurs
+				Device->led->Shine(Green);
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT) , 0xFF, 2);
+Device->led->Shine(Red);
+			}
+			else
+			{
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT) , 0x00, 2);
+
+				//EventHandler->UnSetEvent(val);
+			}
+
+
+			// next case
+			EventHandler->UnSetEvent(val);
+		break;
+
+		case 0x16:														// phototransistor action
+			// TODO
+			EventHandler->UnSetEvent(val);
+		break;
+
+		//case 0x32:														//next free case
 			//// next case
 			//EventHandler->UnSetEvent(val);
 		//break;
 
-		//case 0x16:
-		//// next case
-		//EventHandler->UnSetEvent(val);
-		//break;
 
 		default:														// no value passed
 			EventHandler->UnSetEvent(val);								// do nothing
@@ -85,7 +108,7 @@ void _PopulatedBusOperationMJ828(message_handler_t * const in_msg)
 void mj828_ctor()
 {
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
-	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D));	// call base class constructor & initialize own SID
+	__Device.public.mj8x8 = mj8x8_ctor(MJ828_CAN_ID);					// call base class constructor & initialize own SID
 
 	// GPIO state definitions
 	{
@@ -144,6 +167,7 @@ void mj828_ctor()
 
 	__Device.public.led = _virtual_led_ctorMJ828();						// call virtual constructor & tie in object addresses
 	__Device.public.button = _virtual_button_ctorMJ828();				// call virtual constructor & tie in object addresses
+	__Device.public.phototransistor = Phototransistor;					// call constructor & tie in object address
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
 
@@ -151,7 +175,7 @@ void mj828_ctor()
 
 	// FIXME - if below flag is 0, it doesn't work properly: at least one LED has to be on for the thing to work
 	// also: if any other than Green is on, it doesn't shine properly
-	__Device.public.led->Shine(GREEN);									// crude power indicator
+	__Device.public.led->Shine(Blue);									// crude power indicator
 };
 
 #if defined(MJ828_)														// all devices have the object name "Device", hence the preprocessor macro
