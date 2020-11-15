@@ -7340,25 +7340,22 @@ Source: www.kingbright.com</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="3312 - Trim Poti">
+<library name="3313 - Trim Poti">
 <packages>
-<package name="3312">
-<smd name="2_WIPER" x="0" y="1.25" dx="1" dy="0.9" layer="1"/>
-<smd name="1_CCW" x="-0.58" y="-1.25" dx="0.65" dy="0.9" layer="1"/>
-<smd name="3_CW" x="0.58" y="-1.25" dx="0.65" dy="0.9" layer="1"/>
-<wire x1="0.5" y1="1.5" x2="1.25" y2="1.5" width="0.127" layer="21"/>
-<wire x1="1.25" y1="1.5" x2="1.25" y2="-1.5" width="0.127" layer="21"/>
-<wire x1="-0.5" y1="1.5" x2="-1.25" y2="1.5" width="0.127" layer="21"/>
-<wire x1="-1.25" y1="1.5" x2="-1.25" y2="-1.5" width="0.127" layer="21"/>
-<wire x1="1" y1="-1.5" x2="1.25" y2="-1.5" width="0.127" layer="21"/>
-<wire x1="-1.25" y1="-1.5" x2="-1" y2="-1.5" width="0.127" layer="21"/>
-<wire x1="-0.25" y1="-1.5" x2="0.25" y2="-1.5" width="0.127" layer="21"/>
+<package name="3313">
+<smd name="2_WIPER" x="0" y="1.7" dx="1.6" dy="1.6" layer="1"/>
+<smd name="3_CW" x="-1.155" y="-1.7" dx="1.1" dy="1.6" layer="1"/>
+<smd name="1_CCW" x="1.155" y="-1.7" dx="1.1" dy="1.6" layer="1"/>
 <text x="0" y="2.25" size="0.75" layer="25" font="vector" rot="R180" align="center">&gt;NAME</text>
 <text x="0" y="-2.25" size="0.75" layer="27" font="vector" rot="R180" align="center">&gt;VALUE</text>
+<wire x1="-1.6" y1="1.8" x2="-1.6" y2="-1.8" width="0.127" layer="21"/>
+<wire x1="1.6" y1="1.8" x2="1.6" y2="-1.8" width="0.127" layer="21"/>
+<wire x1="-1.6" y1="1.8" x2="1.6" y2="1.8" width="0.127" layer="21"/>
+<wire x1="-1.6" y1="-1.8" x2="1.6" y2="-1.8" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
-<symbol name="3312">
+<symbol name="3313">
 <pin name="1_CCW" x="-10.16" y="0" visible="pad" length="middle"/>
 <pin name="3_CW" x="10.16" y="0" visible="pad" length="middle" rot="R180"/>
 <pin name="2_WIPER" x="0" y="5.08" visible="pad" length="middle" rot="R270"/>
@@ -7370,12 +7367,12 @@ Source: www.kingbright.com</description>
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="3312" prefix="R" uservalue="yes">
+<deviceset name="3313" prefix="R" uservalue="yes">
 <gates>
-<gate name="G$1" symbol="3312" x="0" y="0"/>
+<gate name="G$1" symbol="3313" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="3312">
+<device name="" package="3313">
 <connects>
 <connect gate="G$1" pin="1_CCW" pad="1_CCW"/>
 <connect gate="G$1" pin="2_WIPER" pad="2_WIPER"/>
@@ -7437,8 +7434,8 @@ Source: www.kingbright.com</description>
 <part name="FPC" library="1042500820 - Board to Board Connector, 8p - Header" deviceset="104250-0820" device="" value="104250-0820"/>
 <part name="IC2" library="MAX6818 CMOS Switch debouncer" deviceset="MAX6816" device="" value="MAX6816EUS+T"/>
 <part name="IC1" library="SFH 320 FA - IR Phototransistor" deviceset="SFH320FA" device="" value="SFH 320 FA-Z"/>
-<part name="R1" library="3312 - Trim Poti" deviceset="3312" device="" value="3312J-1-503E"/>
 <part name="R4" library="741X083331JP Resistor Array" deviceset="741X083331JP" device="" value="741X083151JP / 150Ω"/>
+<part name="R6" library="3313 - Trim Poti" deviceset="3313" device="" value="3313J-1-104E - 100k"/>
 </parts>
 <sheets>
 <sheet>
@@ -7499,9 +7496,11 @@ noon, overcast, rain
 <wire x1="-76.2" y1="76.2" x2="0" y2="76.2" width="0.1524" layer="90"/>
 <wire x1="0" y1="76.2" x2="81.28" y2="76.2" width="0.1524" layer="90"/>
 <wire x1="0" y1="76.2" x2="0" y2="228.6" width="0.1524" layer="90"/>
-<text x="170.18" y="180.34" size="5.08" layer="90">TODO: pulldown for brake/high beam signals</text>
+<text x="170.18" y="180.34" size="5.08" layer="90">TODO: verify pulldown for brake/high beam signals via hall sensors</text>
 <text x="43.18" y="40.64" size="1.9304" layer="91">nighttime: R &gt; 1MΩ
 daylight: R&lt;10kΩ</text>
+<text x="38.1" y="63.5" size="1.778" layer="91">3313J-1-204E - 200k</text>
+<text x="38.1" y="58.42" size="1.778" layer="91">3313J-1-104E - 100k</text>
 </plain>
 <instances>
 <instance part="IC6" gate="G$1" x="248.92" y="50.8" smashed="yes">
@@ -7544,13 +7543,13 @@ daylight: R&lt;10kΩ</text>
 <attribute name="NAME" x="25.4" y="210.82" size="1.27" layer="95"/>
 <attribute name="VALUE" x="25.4" y="182.88" size="1.27" layer="95"/>
 </instance>
-<instance part="R3" gate="G$1" x="180.34" y="85.09" smashed="yes">
-<attribute name="NAME" x="172.72" y="91.44" size="1.778" layer="95"/>
-<attribute name="VALUE" x="180.34" y="91.44" size="1.778" layer="96"/>
+<instance part="R3" gate="G$1" x="129.54" y="85.09" smashed="yes">
+<attribute name="NAME" x="121.92" y="91.44" size="1.778" layer="95"/>
+<attribute name="VALUE" x="129.54" y="91.44" size="1.778" layer="96"/>
 </instance>
-<instance part="R2" gate="G$1" x="118.11" y="59.69" smashed="yes">
-<attribute name="NAME" x="110.49" y="66.04" size="1.778" layer="95"/>
-<attribute name="VALUE" x="118.11" y="66.04" size="1.778" layer="96"/>
+<instance part="R2" gate="G$1" x="130.81" y="44.45" smashed="yes">
+<attribute name="NAME" x="123.19" y="50.8" size="1.778" layer="95"/>
+<attribute name="VALUE" x="130.81" y="50.8" size="1.778" layer="96"/>
 </instance>
 <instance part="SW" gate="G$1" x="45.72" y="121.92" smashed="yes">
 <attribute name="NAME" x="43.18" y="129.54" size="1.27" layer="95"/>
@@ -7608,13 +7607,13 @@ daylight: R&lt;10kΩ</text>
 <attribute name="NAME" x="30.48" y="22.86" size="1.778" layer="95"/>
 <attribute name="VALUE" x="30.48" y="17.78" size="1.778" layer="96"/>
 </instance>
-<instance part="R1" gate="G$1" x="27.94" y="50.8" smashed="yes" rot="R270">
-<attribute name="NAME" x="25.4" y="55.88" size="1.778" layer="95" font="vector" rot="R270" align="center-left"/>
-<attribute name="VALUE" x="22.86" y="55.88" size="1.778" layer="96" font="vector" rot="R270" align="center-left"/>
-</instance>
 <instance part="R4" gate="G$1" x="346.71" y="110.49" smashed="yes">
 <attribute name="NAME" x="339.09" y="116.84" size="1.778" layer="95"/>
 <attribute name="VALUE" x="346.71" y="116.84" size="1.778" layer="96"/>
+</instance>
+<instance part="R6" gate="G$1" x="27.94" y="50.8" smashed="yes" rot="R270">
+<attribute name="NAME" x="25.4" y="55.88" size="1.778" layer="95" font="vector" rot="R270" align="center-left"/>
+<attribute name="VALUE" x="22.86" y="55.88" size="1.778" layer="96" font="vector" rot="R270" align="center-left"/>
 </instance>
 </instances>
 <busses>
@@ -7721,13 +7720,13 @@ daylight: R&lt;10kΩ</text>
 </segment>
 <segment>
 <pinref part="R2" gate="G$1" pin="3"/>
-<wire x1="110.49" y1="58.42" x2="104.14" y2="58.42" width="0.1524" layer="91"/>
+<wire x1="123.19" y1="43.18" x2="116.84" y2="43.18" width="0.1524" layer="91"/>
 <pinref part="R2" gate="G$1" pin="1"/>
-<wire x1="110.49" y1="55.88" x2="104.14" y2="55.88" width="0.1524" layer="91"/>
-<wire x1="104.14" y1="55.88" x2="104.14" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="104.14" y1="55.88" x2="101.6" y2="55.88" width="0.1524" layer="91"/>
-<junction x="104.14" y="55.88"/>
-<label x="101.6" y="55.88" size="1.778" layer="95" rot="R180"/>
+<wire x1="123.19" y1="40.64" x2="116.84" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="40.64" x2="116.84" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="40.64" x2="114.3" y2="40.64" width="0.1524" layer="91"/>
+<junction x="116.84" y="40.64"/>
+<label x="114.3" y="40.64" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="ICSP_DO/MOSI" class="3">
@@ -7743,8 +7742,8 @@ daylight: R&lt;10kΩ</text>
 </segment>
 <segment>
 <pinref part="R3" gate="G$1" pin="3"/>
-<wire x1="172.72" y1="83.82" x2="160.02" y2="83.82" width="0.1524" layer="91"/>
-<label x="160.02" y="83.82" size="1.778" layer="95" rot="R180"/>
+<wire x1="121.92" y1="83.82" x2="109.22" y2="83.82" width="0.1524" layer="91"/>
+<label x="109.22" y="83.82" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="ICSP_DI/MISO" class="3">
@@ -7760,8 +7759,8 @@ daylight: R&lt;10kΩ</text>
 </segment>
 <segment>
 <pinref part="R3" gate="G$1" pin="5"/>
-<wire x1="172.72" y1="86.36" x2="160.02" y2="86.36" width="0.1524" layer="91"/>
-<label x="160.02" y="86.36" size="1.778" layer="95" rot="R180"/>
+<wire x1="121.92" y1="86.36" x2="109.22" y2="86.36" width="0.1524" layer="91"/>
+<label x="109.22" y="86.36" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="ICSP_SCK" class="3">
@@ -7777,8 +7776,8 @@ daylight: R&lt;10kΩ</text>
 </segment>
 <segment>
 <pinref part="R3" gate="G$1" pin="1"/>
-<wire x1="172.72" y1="81.28" x2="160.02" y2="81.28" width="0.1524" layer="91"/>
-<label x="160.02" y="81.28" size="1.778" layer="95" rot="R180"/>
+<wire x1="121.92" y1="81.28" x2="109.22" y2="81.28" width="0.1524" layer="91"/>
+<label x="109.22" y="81.28" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="SPI_SS" class="3">
@@ -7789,8 +7788,8 @@ daylight: R&lt;10kΩ</text>
 </segment>
 <segment>
 <pinref part="R3" gate="G$1" pin="7"/>
-<wire x1="172.72" y1="88.9" x2="160.02" y2="88.9" width="0.1524" layer="91"/>
-<label x="160.02" y="88.9" size="1.778" layer="95" rot="R180"/>
+<wire x1="121.92" y1="88.9" x2="109.22" y2="88.9" width="0.1524" layer="91"/>
+<label x="109.22" y="88.9" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
 <pinref part="IC6" gate="G$1" pin="!CS!"/>
@@ -7911,8 +7910,8 @@ daylight: R&lt;10kΩ</text>
 </segment>
 <segment>
 <pinref part="R2" gate="G$1" pin="6"/>
-<wire x1="125.73" y1="60.96" x2="134.62" y2="60.96" width="0.1524" layer="91"/>
-<label x="134.62" y="60.96" size="1.778" layer="95"/>
+<wire x1="138.43" y1="45.72" x2="147.32" y2="45.72" width="0.1524" layer="91"/>
+<label x="147.32" y="45.72" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V0" class="2">
@@ -7946,15 +7945,15 @@ daylight: R&lt;10kΩ</text>
 <label x="45.72" y="195.58" size="1.778" layer="95"/>
 </segment>
 <segment>
-<label x="100.33" y="63.5" size="1.778" layer="95" rot="R180"/>
-<wire x1="105.41" y1="63.5" x2="104.14" y2="63.5" width="0.1524" layer="91"/>
-<wire x1="104.14" y1="63.5" x2="100.33" y2="63.5" width="0.1524" layer="91"/>
+<label x="113.03" y="48.26" size="1.778" layer="95" rot="R180"/>
+<wire x1="118.11" y1="48.26" x2="116.84" y2="48.26" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="48.26" x2="113.03" y2="48.26" width="0.1524" layer="91"/>
 <pinref part="R2" gate="G$1" pin="5"/>
-<wire x1="110.49" y1="60.96" x2="104.14" y2="60.96" width="0.1524" layer="91"/>
-<wire x1="104.14" y1="60.96" x2="104.14" y2="63.5" width="0.1524" layer="91"/>
-<junction x="104.14" y="63.5"/>
+<wire x1="123.19" y1="45.72" x2="116.84" y2="45.72" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="45.72" x2="116.84" y2="48.26" width="0.1524" layer="91"/>
+<junction x="116.84" y="48.26"/>
 <pinref part="R2" gate="G$1" pin="7"/>
-<wire x1="110.49" y1="63.5" x2="104.14" y2="63.5" width="0.1524" layer="91"/>
+<wire x1="123.19" y1="48.26" x2="116.84" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="IC5" gate="G$1" pin="VOUT"/>
@@ -7966,8 +7965,8 @@ daylight: R&lt;10kΩ</text>
 </segment>
 <segment>
 <pinref part="R3" gate="G$1" pin="8"/>
-<wire x1="187.96" y1="88.9" x2="198.12" y2="88.9" width="0.1524" layer="91"/>
-<label x="198.12" y="88.9" size="1.778" layer="95"/>
+<wire x1="137.16" y1="88.9" x2="147.32" y2="88.9" width="0.1524" layer="91"/>
+<label x="147.32" y="88.9" size="1.778" layer="95"/>
 </segment>
 <segment>
 <wire x1="58.42" y1="88.9" x2="63.5" y2="88.9" width="0.1524" layer="91"/>
@@ -7980,9 +7979,9 @@ daylight: R&lt;10kΩ</text>
 <label x="45.72" y="165.1" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="R1" gate="G$1" pin="2_WIPER"/>
 <wire x1="33.02" y1="50.8" x2="43.18" y2="50.8" width="0.1524" layer="91"/>
 <label x="43.18" y="50.8" size="1.778" layer="95"/>
+<pinref part="R6" gate="G$1" pin="2_WIPER"/>
 </segment>
 </net>
 <net name="CP3" class="3">
@@ -8017,8 +8016,8 @@ daylight: R&lt;10kΩ</text>
 </segment>
 <segment>
 <pinref part="R2" gate="G$1" pin="8"/>
-<wire x1="125.73" y1="63.5" x2="134.62" y2="63.5" width="0.1524" layer="91"/>
-<label x="134.62" y="63.5" size="1.778" layer="95"/>
+<wire x1="138.43" y1="48.26" x2="147.32" y2="48.26" width="0.1524" layer="91"/>
+<label x="147.32" y="48.26" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="CP2" class="3">
@@ -8074,8 +8073,8 @@ daylight: R&lt;10kΩ</text>
 </segment>
 <segment>
 <pinref part="R3" gate="G$1" pin="4"/>
-<wire x1="187.96" y1="83.82" x2="198.12" y2="83.82" width="0.1524" layer="91"/>
-<label x="198.12" y="83.82" size="1.778" layer="95"/>
+<wire x1="137.16" y1="83.82" x2="147.32" y2="83.82" width="0.1524" layer="91"/>
+<label x="147.32" y="83.82" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SPI_MISO" class="3">
@@ -8086,8 +8085,8 @@ daylight: R&lt;10kΩ</text>
 </segment>
 <segment>
 <pinref part="R3" gate="G$1" pin="6"/>
-<wire x1="187.96" y1="86.36" x2="198.12" y2="86.36" width="0.1524" layer="91"/>
-<label x="198.12" y="86.36" size="1.778" layer="95"/>
+<wire x1="137.16" y1="86.36" x2="147.32" y2="86.36" width="0.1524" layer="91"/>
+<label x="147.32" y="86.36" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="CP4" class="3">
@@ -8193,8 +8192,8 @@ daylight: R&lt;10kΩ</text>
 </segment>
 <segment>
 <pinref part="R3" gate="G$1" pin="2"/>
-<wire x1="187.96" y1="81.28" x2="198.12" y2="81.28" width="0.1524" layer="91"/>
-<label x="198.12" y="81.28" size="1.778" layer="95"/>
+<wire x1="137.16" y1="81.28" x2="147.32" y2="81.28" width="0.1524" layer="91"/>
+<label x="147.32" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SW_OUT" class="3">
@@ -8234,8 +8233,8 @@ daylight: R&lt;10kΩ</text>
 </segment>
 <segment>
 <pinref part="R2" gate="G$1" pin="2"/>
-<wire x1="125.73" y1="55.88" x2="134.62" y2="55.88" width="0.1524" layer="91"/>
-<label x="134.62" y="55.88" size="1.778" layer="95"/>
+<wire x1="138.43" y1="40.64" x2="147.32" y2="40.64" width="0.1524" layer="91"/>
+<label x="147.32" y="40.64" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="HIGH_IN" class="3">
@@ -8251,8 +8250,8 @@ daylight: R&lt;10kΩ</text>
 </segment>
 <segment>
 <pinref part="R2" gate="G$1" pin="4"/>
-<wire x1="125.73" y1="58.42" x2="134.62" y2="58.42" width="0.1524" layer="91"/>
-<label x="134.62" y="58.42" size="1.778" layer="95"/>
+<wire x1="138.43" y1="43.18" x2="147.32" y2="43.18" width="0.1524" layer="91"/>
+<label x="147.32" y="43.18" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="PHOTOTRANSISTOR" class="3">
@@ -8264,11 +8263,11 @@ daylight: R&lt;10kΩ</text>
 <segment>
 <pinref part="IC1" gate="G$1" pin="COLLECTOR"/>
 <label x="43.18" y="33.02" size="1.778" layer="95"/>
-<pinref part="R1" gate="G$1" pin="3_CW"/>
 <wire x1="27.94" y1="40.64" x2="27.94" y2="33.02" width="0.1524" layer="91"/>
 <wire x1="27.94" y1="33.02" x2="27.94" y2="27.94" width="0.1524" layer="91"/>
 <wire x1="27.94" y1="33.02" x2="43.18" y2="33.02" width="0.1524" layer="91"/>
 <junction x="27.94" y="33.02"/>
+<pinref part="R6" gate="G$1" pin="3_CW"/>
 </segment>
 </net>
 <net name="D_BLUE" class="2">
