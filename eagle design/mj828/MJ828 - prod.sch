@@ -7501,6 +7501,8 @@ noon, overcast, rain
 daylight: R&lt;10kΩ</text>
 <text x="38.1" y="63.5" size="1.778" layer="91">3313J-1-204E - 200k</text>
 <text x="38.1" y="58.42" size="1.778" layer="91">3313J-1-104E - 100k</text>
+<text x="175.26" y="190.5" size="1.778" layer="91">active low</text>
+<text x="175.26" y="187.96" size="1.778" layer="91">active low</text>
 </plain>
 <instances>
 <instance part="IC6" gate="G$1" x="248.92" y="50.8" smashed="yes">
