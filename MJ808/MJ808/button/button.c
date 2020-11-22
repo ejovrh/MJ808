@@ -37,14 +37,7 @@ void _debounce(__individual_button_t * const in_button, event_handler_t * const 
 	 *			- "hold_error" - held constantly (e.g. by error) - after a timeout revert to original state
 	 */
 																		// CHECKME - random spikes (not true button press events) every 25ms might be an issue
-	//if ( in_button->__inverse ^ ( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
-
- 	#if defined(MJ828_)													// inverted
- 	if (	!( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
- 	#endif
- 	#if defined(MJ808_)													// non-inverted
- 	if (	( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
- 	#endif
+	if ( in_button->__inverse ^ ( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
 	{												// button is pressed
 		local_advance_counter();										// debouncing happens here
 		// order is important
@@ -63,9 +56,7 @@ void _debounce(__individual_button_t * const in_button, event_handler_t * const 
 			return;														// get out
 		}
 	}
-#if ( defined(MJ808_) | defined(MJ828_) )
 	else											// button is released
-#endif
 	{
 		if (in_button->__is_at_default)									// if we are in zero state
 			return;														// no need to do anything

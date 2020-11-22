@@ -18,18 +18,18 @@ void _event_execution_function_mj808(const uint8_t val)
 		case 0x01:	// button error: - do the error thing
 			Device->led->Shine(0);
 			EventHandler->UnSetEvent(val);
-			return;
+			break;
 
 		case 0x02:	// button hold
 			Device->led->Shine(! __LED.flags);							// button press event for the whole device (front LED and util. LED) - shine according to toggled flag
 			EventHandler->UnSetEvent(val);
-		break;
+			break;
 
 		// next cases: 0x08, 0x16, etc.
 
 		default:	// 0x00
 			EventHandler->UnSetEvent(val);
-			return;
+			break;
 	}
 };
 

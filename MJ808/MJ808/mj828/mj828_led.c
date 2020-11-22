@@ -10,6 +10,7 @@
 #include "led\composite_led_actual.c"									// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
 
 static primitive_led_t primitive_led[8] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
+static uint8_t (*fptr)(const uint8_t in_val);							// declare pointer for function pointers in branchtable_led[]
 
 static void __mj828_led_gpio_init(void)
 {
@@ -99,25 +100,21 @@ static void __LED_batt4(const uint8_t state)							// blue5 LED on/off
 		gpio_conf(LED_CP1_pin, OUTPUT, HIGH);							// pin b2 - cathode
 }
 
+static void (* const branchtable_led[])(const uint8_t in_val) PROGMEM =		// array of function pointers for basic LED handling in PROGMEM
+{
+	&__LED_red,															// index 0
+	&__LED_green,														// index 1
+	&__LED_blue,														//	and so on...
+	&__LED_yellow,
+	&__LED_batt1,
+	&__LED_batt2,
+	&__LED_batt3,
+	&__LED_batt4
+};
+
 // private function, used only by the charlieplexing_handler() function
 static void __glow(uint8_t led, uint8_t state)
 {
-	if (!state)															// if we get 0x00 (off argument) - do nothing and get out
-		return;
-
-	static uint8_t (*fptr)(const uint8_t in_val);						// declare pointer for function pointers in branchtable_led[]
-	static void (* const branchtable_led[])(const uint8_t in_val) PROGMEM =		// array of function pointers for basic LED handling in PROGMEM
-	{
-		&__LED_red,														// index 0
-		&__LED_green,													// index 1
-		&__LED_blue,													//	and so on...
-		&__LED_yellow,
-		&__LED_batt1,
-		&__LED_batt2,
-		&__LED_batt3,
-		&__LED_batt4
-	};
-
 	__mj828_led_gpio_init();											// set LED pins to initial state
 
 	// TODO - implement blinking

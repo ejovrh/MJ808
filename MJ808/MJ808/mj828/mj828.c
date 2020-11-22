@@ -56,7 +56,7 @@ void _event_execution_function_mj828(uint8_t val)
 
 		case 0x08:														// TODO - brake light momentary
 			// FIXME: momentary case does not work properly
-			Device->led->Shine(Red);
+			//Device->led->Shine(Red);
 
 			if (Device->button->button[BrakeLight].Momentary)
 			{
@@ -184,9 +184,7 @@ void mj828_ctor()
 
 	EventHandler->fpointer = &_event_execution_function_mj828;			// implements event hander for this device
 
-	// FIXME - if below flag is 0, it doesn't work properly: at least one LED has to be on for the thing to work
-	// also: if any other than Green is on, it doesn't shine properly
-	__Device.public.led->Shine(Blue);									// crude power indicator
+	//__Device.public.led->Shine(Yellow);								// crude power indicator
 };
 
 #if defined(MJ828_)														// all devices have the object name "Device", hence the preprocessor macro
