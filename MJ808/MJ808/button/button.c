@@ -33,19 +33,21 @@ void _debounce(__individual_button_t * const in_button, event_handler_t * const 
 	 *		valid states:
 	 *			- "Momentary" - key is pressed (and held for a short time), while button is pressed - one state, when it is released back to the original state
 	 *			- "Toggle" - toggled on/off state, once per key press the state changes and remains changed until next press
-	 *			- "Hold" - held for e.g 1s to turn something on/off, akin to Momentary but a longer press is needed to change from one state to another
+	 *			- "HoldToggle" - held for e.g 1s to turn something on/off, akin to Momentary but a longer press is needed to change from one state to another
 	 *			- "hold_error" - held constantly (e.g. by error) - after a timeout revert to original state
 	 */
 																		// CHECKME - random spikes (not true button press events) every 25ms might be an issue
-	#if defined(MJ828_)													// inverted
-	if (	!( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
-	#endif
-	#if defined(MJ808_)													// non-inverted
-	if (	( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
-	#endif
+	//if ( in_button->__inverse ^ ( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
+
+ 	#if defined(MJ828_)													// inverted
+ 	if (	!( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
+ 	#endif
+ 	#if defined(MJ808_)													// non-inverted
+ 	if (	( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
+ 	#endif
 	{												// button is pressed
 		local_advance_counter();										// debouncing happens here
-
+		// order is important
 		if (in_button->__hold_counter >= BUTTON_MAX_PRESS_TIME)			// too long button press -> error state
 		{																// turn everything off
 			in_button->__state = 0;										// reset state
@@ -57,7 +59,7 @@ void _debounce(__individual_button_t * const in_button, event_handler_t * const 
 		    in_event->Notify(in_button->__ButtonCaseptr[CaseErrorHold]);// notify event handler of button press
 
 			in_button->public.Toggle = 0;								// toggled due to error state -> reset to default value
-			in_button->public.Hold = 0;									// mark as hold_temp off
+			in_button->public.HoldToggle = 0;							// mark as hold_temp off
 			return;														// get out
 		}
 	}
@@ -89,7 +91,7 @@ void _debounce(__individual_button_t * const in_button, event_handler_t * const 
 			if (!in_button->__was_pressed)								// previous state (prevent flapping on/off)
 			{
 				// order is important
-				in_button->public.Hold = !in_button->public.Hold;		// set "hold_temp" state
+				in_button->public.HoldToggle = !in_button->public.HoldToggle;		// set "hold_temp" state
 				in_event->Notify(in_button->__ButtonCaseptr[CaseHold]);	// notify event handler of button press
 			}
 

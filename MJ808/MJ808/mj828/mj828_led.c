@@ -39,16 +39,14 @@ static void __LED_green(const uint8_t state)							// green LED on/off
 		gpio_conf(LED_CP2_pin, OUTPUT, HIGH);							// pin b1 - cathode
 }
 
-static void __LED_blue1(const uint8_t state)							// blue1 LED on/off
+static void __LED_blue(const uint8_t state)								// blue1 LED on/off
 {
-	// FIXME - blue1 lights both blue1 and batt1
 	gpio_conf(LED_CP2_pin, OUTPUT, HIGH);								// pin b1 - anode
 
 	if (state)															// on
-	// FIXME - like below it is inverted
-		gpio_conf(LED_CP4_pin, OUTPUT, HIGH);							// pin b0 - cathode
-	else																// off
 		gpio_conf(LED_CP4_pin, OUTPUT, LOW);							// pin b0 - cathode
+	else																// off
+		gpio_conf(LED_CP4_pin, OUTPUT, HIGH);							// pin b0 - cathode
 }
 
 static void __LED_yellow(const uint8_t state)							// yellow LED on/off
@@ -61,7 +59,7 @@ static void __LED_yellow(const uint8_t state)							// yellow LED on/off
 		gpio_conf(LED_CP2_pin, OUTPUT, HIGH);							// pin b1 - cathode
 }
 
-static void __LED_blue2(const uint8_t state)							// blue2 LED on/off
+static void __LED_batt1(const uint8_t state)							// blue2 LED on/off
 {
 	gpio_conf(LED_CP4_pin, OUTPUT, HIGH);								// pin d6 - anode
 
@@ -71,7 +69,7 @@ static void __LED_blue2(const uint8_t state)							// blue2 LED on/off
 		gpio_conf(LED_CP3_pin, OUTPUT, HIGH);							// pin b0 - cathode
 }
 
-static void __LED_blue3(const uint8_t state)							// blue3 LED on/off
+static void __LED_batt2(const uint8_t state)							// blue3 LED on/off
 {
 	gpio_conf(LED_CP3_pin, OUTPUT, HIGH);								// pin b0 - anode
 
@@ -81,7 +79,7 @@ static void __LED_blue3(const uint8_t state)							// blue3 LED on/off
 		gpio_conf(LED_CP4_pin, OUTPUT, HIGH);							// pin d6 - cathode
 }
 
-static void __LED_blue4(const uint8_t state)							// blue4 LED on/off
+static void __LED_batt3(const uint8_t state)							// blue4 LED on/off
 {
 	gpio_conf(LED_CP1_pin, OUTPUT, HIGH);								// pin b2 - anode
 
@@ -91,7 +89,7 @@ static void __LED_blue4(const uint8_t state)							// blue4 LED on/off
 		gpio_conf(LED_CP4_pin, OUTPUT, HIGH);							// pin d6 - cathode
 }
 
-static void __LED_blue5(const uint8_t state)							// blue5 LED on/off
+static void __LED_batt4(const uint8_t state)							// blue5 LED on/off
 {
 	gpio_conf(LED_CP4_pin, OUTPUT, HIGH);								// pin d6 - anode
 
@@ -112,12 +110,12 @@ static void __glow(uint8_t led, uint8_t state)
 	{
 		&__LED_red,														// index 0
 		&__LED_green,													// index 1
-		&__LED_blue1,													//	and so on...
+		&__LED_blue,													//	and so on...
 		&__LED_yellow,
-		&__LED_blue2,
-		&__LED_blue3,
-		&__LED_blue4,
-		&__LED_blue5
+		&__LED_batt1,
+		&__LED_batt2,
+		&__LED_batt3,
+		&__LED_batt4
 	};
 
 	__mj828_led_gpio_init();											// set LED pins to initial state

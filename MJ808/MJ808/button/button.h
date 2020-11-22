@@ -8,7 +8,7 @@
 #define BUTTON_MIN_PRESS_TIME 20										// number times 25ms duration: 500ms
 #define BUTTON_MAX_PRESS_TIME 120										// number times 25ms duration: 3s
 
-enum button_casetable_index												// represents index of FooButtonCaseTable[] (uniquely defined in device button constructor)
+enum button_casetable_index												// represents index of FooButtonCaseTable[] (uniquely defined in actual device button constructor)
 {
 	CaseMomentary,														// array index 0 -- momentary press of pushbutton
 	CaseToggle,															// array index 1 -- momentary press of button toggles
@@ -17,11 +17,13 @@ enum button_casetable_index												// represents index of FooButtonCaseTable
 };
 
 typedef struct 															// struct describing a generic pushbutton
-{																		//	flags can be consumed by the public
+{																		// flags can be consumed by the public
+
 	uint8_t Momentary :1;												// flag indicating if button is pressed right now
-	uint8_t Toggle :1;													// flag indicating the toggle state
-	uint8_t Hold :1;													// flag indicating a button press for a duration of BUTTON_MIN_PRESS_TIME (up to BUTTON_MAX_PRESS_TIME) seconds, followed by button release
+	uint8_t Toggle :1;													// flag indicating the toggle state - short press: state A, another short press: state B, then repeat
+	uint8_t HoldToggle :1;												// flag indicating a button press for a duration of BUTTON_MIN_PRESS_TIME (up to BUTTON_MAX_PRESS_TIME) seconds, followed by button release: same as Toggle, but needs to be held for BUTTON_MIN_PRESS_TIME seconds
 	uint8_t ErrorHold :1;												// flag indicating constant button press (by error, object leaning on pushbutton, etc.)
+
 } individual_button_t;
 
 typedef struct button_t

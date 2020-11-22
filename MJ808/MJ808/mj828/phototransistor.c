@@ -21,7 +21,7 @@ uint8_t _GetPinState(void)
 
 __phototransistor_t __Phototransistor =									// instantiate event_handler_t actual and set function pointers
 {
-	.public.GetPinState = &_GetPinState,								// returns pin state: high - daylight, low - darkness
+	.public.GetPinState = &_GetPinState,								// returns pin state: high - darkness, low - daylight (IR)
 	.__active = 0
 } ;
 

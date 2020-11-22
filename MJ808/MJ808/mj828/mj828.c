@@ -24,7 +24,7 @@ void _event_execution_function_mj828(uint8_t val)
 		case 0x02:														// pushbutton hold
 			Device->led->Shine(Green);
 
-			if (Device->button->button[Pushbutton].Hold)
+			if (Device->button->button[Pushbutton].HoldToggle)
 			{
 				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x20, 2);
 				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);		// turn on rear light
@@ -37,38 +37,42 @@ void _event_execution_function_mj828(uint8_t val)
 			EventHandler->UnSetEvent(val);
 		break;
 
-		case 0x04:														// high beam momentary
+		case 0x04:														// TODO - high beam momentary
 			if (Device->button->button[HighBeam].Momentary)
 			{
 				// FIXME - on button hold, multiple events are triggered and flapping occurs
-				Device->led->Shine(Blue);
-				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xF8, 2);	// high beam on
+				//Device->led->Shine(Blue);
+				//MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xF8, 2);	// high beam on
 
 			}
 			else
 			{
-				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);	// high beam off
+				//MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);	// high beam off
 
 				//EventHandler->UnSetEvent(val);
 			}
 			EventHandler->UnSetEvent(val);
 		break;
 
-		case 0x08:														// brake light momentary
+		case 0x08:														// TODO - brake light momentary
+			// FIXME: momentary case does not work properly
+			Device->led->Shine(Red);
+
 			if (Device->button->button[BrakeLight].Momentary)
 			{
+				//__Device.public.led->Shine(DASHBOARD_LED_RED_ON);
+
 				// FIXME - on button hold, multiple events are triggered and flapping occurs
-				Device->led->Shine(Green);
-				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT) , 0xFF, 2);
-Device->led->Shine(Red);
+
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT) , 0x00, 2);
 			}
 			else
 			{
-				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT) , 0x00, 2);
+				//__Device.public.led->Shine(DASHBOARD_LED_RED_OFF);
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT) , 0x80, 2);
 
 				//EventHandler->UnSetEvent(val);
 			}
-
 
 			// next case
 			EventHandler->UnSetEvent(val);
@@ -100,7 +104,14 @@ void _PopulatedBusOperationMJ828(message_handler_t * const in_msg)
 	if ( (msg->COMMAND & MASK_COMMAND) == CMND_DASHBOARD )				// dashboard command
 	{
 		__Device.public.led->Shine(((msg->COMMAND & 0x0E) >> 1));		// flag LED at appropriate index as whatever the command says
+		return;
+	}
 
+	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
+	if (msg->COMMAND & MSG_BUTTON_EVENT_BUTTON0_OFF)					// if either button on or button off command
+	{
+		Device->button->button[Pushbutton].HoldToggle = !Device->button->button[Pushbutton].HoldToggle;					// toggle pushbutton state
+		Device->led->Shine(Green);										// toggle green dashboard LED
 		return;
 	}
 };
@@ -118,8 +129,8 @@ void mj828_ctor()
 	// TODO - verify phototransistor operation
 	gpio_conf(PHOTOTRANSISTOR_COLLECTOR_pin, INPUT, LOW);				// high on light, low on darkness
 	// TODO - verify brake lever operation
-	gpio_conf(HIGH_IN_pin, INPUT, LOW);									// brake lever high beam - high - on press, low - off
-	gpio_conf(BREAK_IN_pin, INPUT, LOW);								// brake lever brake light - high - on press, low - off
+	gpio_conf(HIGH_IN_pin, INPUT, HIGH);								// brake lever high beam - high - off (low B), low - on (high B)
+	gpio_conf(BREAK_IN_pin, INPUT, HIGH);								// brake lever brake light - high - off (low B), low - on (high B)
 
 
 	gpio_conf(LED_CP1_pin, INPUT, LOW);									// Charlie-plexed pin1

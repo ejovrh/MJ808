@@ -12,9 +12,9 @@
 #define MCP2561_standby_pin						D,	6,	6				// MCP2561 standby
 
 #define PUSHBUTTON_pin							D,	0,	0				// Pushbutton
-#define PHOTOTRANSISTOR_COLLECTOR_pin			D,	1,	1				// Phototransistor Collector
-#define HIGH_IN_pin								D,	4,	4				// brake lever high beam signal
-#define BREAK_IN_pin							D,	5,	5				// brake lever break light signal
+#define PHOTOTRANSISTOR_COLLECTOR_pin			D,	1,	1				// IR Phototransistor Collector - high - darkness, low - daylight
+#define HIGH_IN_pin								D,	4,	4				// active low hall-effect switch, brake lever high beam signal
+#define BREAK_IN_pin							D,	5,	5				// active low hall-effect switch, brake lever break light signal
 
 #define LED_CP4_pin								B,	0,	0				// LED Charlie-plexed pin4
 #define LED_CP3_pin								B,	1,	1				// LED Charlie-plexed pin3
@@ -27,7 +27,7 @@ enum mj828_leds															// enum of lights on this device
 	Red,																// 0 - brake light  on/off
 	Green,																// 1 - lights on/off
 	Blue,																// 2 - high beam on/off
-	Yellow,																// 3 - auto mode on/off (turn lights on via phototrans.)
+	Yellow,																// 3 - auto mode on/off (turn lights on via phototransistor)
 	Battery_LED1,														// 4 - battery indicator
 	Battery_LED2,														// 5 - battery indicator
 	Battery_LED3,														// 6 - battery indicator

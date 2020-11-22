@@ -15,26 +15,26 @@ static void _debounce_wrapper()
 
 static uint8_t PushButtonCaseTable[] =									// array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
 {
-	0x00,	// 0 - not defined
-	0x00,	// 1 - not defined
-	0x02,	// 2 - jump case 0x02 - hold event							// turn lights on/off
-	0x01	// 3 - not defined
+	0x00,	// 0 - "momentary" not defined
+	0x00,	// 1 - "toggle" not defined
+	0x02,	// 2 - "hold" - jump to case 0x02 in _event_execution_function_mj828			// turn lights on/off
+	0x01	// 3 - "error hold" not defined
 };
 
 static uint8_t HighBeamCaseTable[] =									// array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
 {
-	0x04,	// 0 - jump case 0x04 - momentary event						// turn high beam on for the duration of the brake lever actuation
-	0x00,	// 1 - not defined
-	0x00,	// 2 - not defined
-	0x01	// 3 - not defined
+	0x04,	// 0 - "momentary" - jump to case 0x04 in _event_execution_function_mj828 		// turn high beam on for the duration of the brake lever actuation
+	0x00,	// 1 - "toggle" not defined
+	0x00,	// 2 - "hold" not defined
+	0x01	// 3 - "error hold" not defined
 };
 
 static uint8_t BrakeLightCaseTable[] =									// array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
 {
-	0x08,	// 0 - jump case 0x08 - momentary event						// turn brake light on for the duration of the brake lever actuation
-	0x00,	// 1 - not defined
-	0x00,	// 2 - not defined
-	0x01	// 3 - not defined
+	0x08,	// 0 - "momentary" - jump to case 0x08 in _event_execution_function_mj828		// turn brake light on for the duration of the brake lever actuation
+	0x00,	// 1 - "toggle" not defined
+	0x00,	// 2 - "hold" not defined
+	0x01	// 3 - "error hold" not defined
 };
 
 //FIXME - left button doesn't work anymore as previously
@@ -44,19 +44,23 @@ static __individual_button_t __button_actual[] =						// instantiate array of ac
 	{
 		.__PIN = (uint8_t *) 0x30,										// 0x020 offset plus address - PIND register
 		.__pin_number = 0,												// pushbutton is connected to pin D0
-		.__ButtonCaseptr = PushButtonCaseTable							// button press-to-case binding
+		.__ButtonCaseptr = PushButtonCaseTable,							// button press-to-case binding
+		.__inverse = 1
 	},
 	// index 1 - HighBeam
 	{
 		.__PIN = (uint8_t *) 0x30,										// 0x020 offset plus address - PIND register
 		.__pin_number = 4,												// high beam signal is connected to pin D4
-		.__ButtonCaseptr = HighBeamCaseTable							// button press-to-case binding
+		.__ButtonCaseptr = HighBeamCaseTable,							// button press-to-case binding
+		.__inverse = 0
+
 	},
 	// index 2 - BrakeLight
 	{
 		.__PIN = (uint8_t *) 0x30,										// 0x020 offset plus address - PIND register
 		.__pin_number = 5,												// brake light signal is connected to pin D5
-		.__ButtonCaseptr = BrakeLightCaseTable							// button press-to-case binding
+		.__ButtonCaseptr = BrakeLightCaseTable,							// button press-to-case binding
+		.__inverse = 0
 	}
 };
 

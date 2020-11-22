@@ -21,7 +21,7 @@ void _event_execution_function_mj808(const uint8_t val)
 			return;
 
 		case 0x02:	// button hold
-			Device->led->Shine(Device->button->button[Center].Hold);
+			Device->led->Shine(! __LED.flags);							// button press event for the whole device (front LED and util. LED) - shine according to toggled flag
 			EventHandler->UnSetEvent(val);
 		break;
 
@@ -41,20 +41,23 @@ void _PopulatedBusOperationMJ808(message_handler_t * const in_msg)
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if ( (msg->COMMAND & CMND_UTIL_LED) == CMND_UTIL_LED)				// utility LED command
 	{
-		__Device.public.led->led[Utility].Shine(msg->COMMAND);			// glowy thingy
+		__Device.public.led->led[Utility].Shine(msg->COMMAND);			// direct command for the util. LED
 		return;
 	}
 
-	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT) )		// front positional light - low beam
+	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
+	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT) )		// direct command for front positional light - low beam
 	{
-		// CHECKME - does it work?
-		__Device.public.led->led[Front].Shine(msg->ARGUMENT);
-		// TODO - access via object
-//		_wrapper_fade_mj808(msg->ARGUMENT);								// fade front light to CAN msg. argument value
+		if (__LED.flags)												// if the whole device is on and a direct command comes in....
+			Device->led->led[Utility].Shine(UTIL_LED_GREEN_OFF);		// turn green LED off, sort of to indicate a command override
+
+		__Device.public.led->led[Front].Shine(msg->ARGUMENT);			// fade front light to CAN msg. argument value
+
 		return;
 	}
 
-	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) ) // front positional light - high beam
+	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
+	if (msg->COMMAND == ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) ) // direct command for front positional light - high beam
 	{
 		// TODO - implement timer based safeguard when OCR > OCR_MAX
 		if (msg->ARGUMENT > OCR_MAX_FRONT_LIGHT)						// safeguard against too high a value (heating of MOSFet)

@@ -7,6 +7,7 @@ typedef struct															// individual_button_t actual
 	uint8_t __state : 2;												// something akin to a "counter" used for debouncing
 	uint8_t __was_pressed :1;											// flag indicating if button was released after a stable state (used to remember previous state)
 	uint8_t __is_at_default :1;											// 1 - default values, 0 otherwise
+	uint8_t __inverse:1;												// 0 - normal, 1 - inverse logic
 
 	uint8_t *__ButtonCaseptr;											// pointer to array in which button events are bound to switch-case statements in __mjxxx_button_execution_function
 	volatile uint8_t *__PIN;											// PIN register address of button pin

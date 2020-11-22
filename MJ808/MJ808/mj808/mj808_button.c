@@ -14,10 +14,10 @@ static void _debounce_wrapper()
 
 static uint8_t __ButtonCenterCaseTable[] =								// array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
 {
-	0x00,	// 0 - not defined
-	0x00,	// 1 - not defined
-	0x02,	// 2 - jump case 0x02 - button Hold
-	0x01,	// 3 - jump case 0x01 - error event
+	0x00,	// 0 - "momentary" not defined
+	0x00,	// 1 - "toggle" not defined
+	0x02,	// 2 - "hold" - jump to case 0x02 in _event_execution_function_mj808()
+	0x01,	// 3 - "error hold" - jump to case 0x01 in _event_execution_function_mj808()
 };
 
 static __individual_button_t __button_actual[] =						// instantiate array of actual button struct
@@ -26,7 +26,8 @@ static __individual_button_t __button_actual[] =						// instantiate array of ac
 	{
 		.__PIN = (uint8_t *) 0x30,										// 0x020 offset plus address - PIND register
 		.__pin_number = 4,												// sw1 is connected to pin D4
-		.__ButtonCaseptr = __ButtonCenterCaseTable						// button press-to-case binding
+		.__ButtonCaseptr = __ButtonCenterCaseTable,						// button press-to-case binding
+		.__inverse = 1
 	}
 };
 
