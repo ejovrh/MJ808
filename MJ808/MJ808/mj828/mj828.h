@@ -4,7 +4,6 @@
 #include "mj8x8\mj8x8.h"
 #include "led\led.h"
 #include "button\button.h"
-#include "phototransistor.h"
 
 #define MJ828_CAN_ID	(PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D)
 
@@ -37,8 +36,9 @@ enum mj828_leds															// enum of lights on this device
 enum mj828_buttons														// enum of buttons on this device
 {
 	Pushbutton,															// pushbutton on device
-	HighBeam,															// brake lever pressed forward
-	BrakeLight															// brake lever in brake position
+	HighBeam,															// brake lever pressed forward - active low
+	BrakeLight,															// brake lever in brake position - active low
+	PhotoTransisitor													// phototransistor - light low
 };
 
 typedef struct															// struct describing devices on MJ828
@@ -46,7 +46,6 @@ typedef struct															// struct describing devices on MJ828
 	mj8x8_t *mj8x8;														// pointer to the base class
 	composite_led_t *led;												// pointer to LED structure
 	button_t *button;													// array of button_t - two buttons
-	phototransistor_t *phototransistor;									// pointer to phototransistor structure
 } mj828_t;
 
 void mj828_ctor();														// declare constructor for concrete class

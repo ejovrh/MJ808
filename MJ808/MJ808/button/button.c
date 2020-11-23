@@ -37,7 +37,12 @@ void _debounce(__individual_button_t * const in_button, event_handler_t * const 
 	 *			- "hold_error" - held constantly (e.g. by error) - after a timeout revert to original state
 	 */
 																		// CHECKME - random spikes (not true button press events) every 25ms might be an issue
-	if ( in_button->__inverse ^ ( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
+
+	if (  ( *(in_button->__PIN) & (1<<in_button->__pin_number))	^ ((1<<in_button->__pin_number)) )	// if in the given PIN register the given button is pressed
+	/* run in debug mode, watch the following to see how it works:
+			// "(*(((__button_actual)[0]).__PIN) & ( 1<< ((__button_actual)[0]).__pin_number)) ^(1<<(((__button_actual)[0]).__pin_number))" - non-inverse example
+			// "(*(((__button_actual)[2]).__PIN) & ( 1<< ((__button_actual)[2]).__pin_number)) ^(1<<(((__button_actual)[2]).__pin_number))" - inverse example
+	*/
 	{												// button is pressed
 		local_advance_counter();										// debouncing happens here
 		// order is important
@@ -45,11 +50,12 @@ void _debounce(__individual_button_t * const in_button, event_handler_t * const 
 		{																// turn everything off
 			in_button->__state = 0;										// reset state
 			in_button->public.Momentary = 0;							// mark as currently not pressed
+			//in_event->Notify(in_button->__ButtonCaseptr[CaseMomentary]);	// notify event handler of button press
 			in_button->__was_pressed = 1;								// mark button as "was pressed" - this is the previous state in the next iteration
 
 			// order is important
 			in_button->public.ErrorHold = 1;							// mark as error state
-		    in_event->Notify(in_button->__ButtonCaseptr[CaseErrorHold]);// notify event handler of button press
+		    //in_event->Notify(in_button->__ButtonCaseptr[CaseErrorHold]);// notify event handler of button press
 
 			in_button->public.Toggle = 0;								// toggled due to error state -> reset to default value
 			in_button->public.HoldToggle = 0;							// mark as hold_temp off
@@ -61,15 +67,21 @@ void _debounce(__individual_button_t * const in_button, event_handler_t * const 
 		if (in_button->__is_at_default)									// if we are in zero state
 			return;														// no need to do anything
 
-																		// button is released
+		//if ( in_button->public.Momentary)
+		//{
+			//in_button->public.Momentary = 0;							// set "is_pressed" state
+			//in_event->Notify(in_button->__ButtonCaseptr[CaseMomentary]);// notify event handler of button press
+		//}											
+
+													// button is released
 																		// button is not pressed - reset everything to default values
 		in_button->__state = 0;											// reset state
 		in_button->public.Momentary = 0;								// mark as currently not pressed
+		in_event->Notify(in_button->__ButtonCaseptr[CaseMomentary]);	// notify event handler of button press
 
 		in_button->__was_pressed = 1;									// mark button as "was pressed" - this is the previous state in the next iteration
 		in_button->public.ErrorHold = 0;								// release error flag, since button is now released
 		in_button->__hold_counter = 0;									// set counter back to 0
-		in_button->public.Momentary = 0;								// mark as currently not pressed
 		in_button->__is_at_default = 1;
 		return;															// finish
 	}
@@ -98,7 +110,7 @@ void _debounce(__individual_button_t * const in_button, event_handler_t * const 
 		}
 
 		// order is important
-		if (!in_button->public.Momentary)
+		if (in_button->__was_pressed && !in_button->public.Momentary)
 		{
 			in_button->public.Momentary = 1;							// set "is_pressed" state
 			in_event->Notify(in_button->__ButtonCaseptr[CaseMomentary]);// notify event handler of button press

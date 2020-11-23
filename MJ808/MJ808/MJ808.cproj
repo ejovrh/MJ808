@@ -229,12 +229,6 @@
     <Compile Include="mj828\mj828_led.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="mj828\phototransistor.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="mj828\phototransistor.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="mj8x8\attiny4313.c">
       <SubType>compile</SubType>
     </Compile>

@@ -10,7 +10,7 @@
 
 enum button_casetable_index												// represents index of FooButtonCaseTable[] (uniquely defined in actual device button constructor)
 {
-	CaseMomentary,														// array index 0 -- momentary press of pushbutton
+	CaseMomentary,														// array index 0 -- momentary presssed pushbutton
 	CaseToggle,															// array index 1 -- momentary press of button toggles
 	CaseHold,															// array index 2 -- longer press of button toggles
 	CaseErrorHold														// array index 3 -- lean against tree and thereby depress button unintentionally

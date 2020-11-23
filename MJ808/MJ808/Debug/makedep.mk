@@ -32,8 +32,6 @@ mj828\mj828_button.c
 
 mj828\mj828_led.c
 
-mj828\phototransistor.c
-
 mj8x8\attiny4313.c
 
 mj8x8\mcp2515.c

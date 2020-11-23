@@ -37,41 +37,34 @@ void _event_execution_function_mj828(uint8_t val)
 			EventHandler->UnSetEvent(val);
 		break;
 
-		case 0x04:														// TODO - high beam momentary
-			if (Device->button->button[HighBeam].Momentary)
-			{
-				// FIXME - on button hold, multiple events are triggered and flapping occurs
-				//Device->led->Shine(Blue);
-				//MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xF8, 2);	// high beam on
-
-			}
-			else
-			{
-				//MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);	// high beam off
-
-				//EventHandler->UnSetEvent(val);
-			}
-			EventHandler->UnSetEvent(val);
-		break;
+		//case 0x04:														// TODO - high beam momentary
+			//if (Device->button->button[HighBeam].Momentary)
+			//{
+				//// FIXME - on button hold, multiple events are triggered and flapping occurs
+				////Device->led->Shine(Blue);
+				////MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0xF8, 2);	// high beam on
+//
+			//}
+			//else
+			//{
+				////MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) , 0x00, 2);	// high beam off
+//
+			//}
+			//EventHandler->UnSetEvent(val);
+		//break;
 
 		case 0x08:														// TODO - brake light momentary
-			// FIXME: momentary case does not work properly
-			//Device->led->Shine(Red);
+				Device->led->Shine(Red);
 
 			if (Device->button->button[BrakeLight].Momentary)
 			{
-				//__Device.public.led->Shine(DASHBOARD_LED_RED_ON);
-
-				// FIXME - on button hold, multiple events are triggered and flapping occurs
-
-				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT) , 0x00, 2);
+				//MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT) , 0x00, 2);
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | UTIL_LED_RED_ON) , 0x00, 1);
 			}
 			else
 			{
-				//__Device.public.led->Shine(DASHBOARD_LED_RED_OFF);
-				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT) , 0x80, 2);
-
-				//EventHandler->UnSetEvent(val);
+				//MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT) , 0x80, 2);
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | UTIL_LED_RED_OFF) , 0x00, 1);
 			}
 
 			// next case
@@ -79,7 +72,19 @@ void _event_execution_function_mj828(uint8_t val)
 		break;
 
 		case 0x16:														// phototransistor action
-			// TODO
+			//Device->led->Shine(Yellow);
+			
+			if (Device->button->button[PhotoTransisitor].Momentary)
+			{
+				Device->led->Shine(Green);
+			}
+			else
+			{
+				Device->led->Shine(Yellow);
+			}
+
+
+
 			EventHandler->UnSetEvent(val);
 		break;
 
@@ -127,7 +132,7 @@ void mj828_ctor()
 
 	gpio_conf(PUSHBUTTON_pin, INPUT, LOW);								// SPST-NO - high on press, low on release
 	// TODO - verify phototransistor operation
-	gpio_conf(PHOTOTRANSISTOR_COLLECTOR_pin, INPUT, LOW);				// high on light, low on darkness
+	gpio_conf(PHOTOTRANSISTOR_COLLECTOR_pin, INPUT, LOW);				// high on darkness, low on light
 	// TODO - verify brake lever operation
 	gpio_conf(HIGH_IN_pin, INPUT, HIGH);								// brake lever high beam - high - off (low B), low - on (high B)
 	gpio_conf(BREAK_IN_pin, INPUT, HIGH);								// brake lever brake light - high - off (low B), low - on (high B)
@@ -178,7 +183,6 @@ void mj828_ctor()
 
 	__Device.public.led = _virtual_led_ctorMJ828();						// call virtual constructor & tie in object addresses
 	__Device.public.button = _virtual_button_ctorMJ828();				// call virtual constructor & tie in object addresses
-	__Device.public.phototransistor = Phototransistor;					// call constructor & tie in object address
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
 
