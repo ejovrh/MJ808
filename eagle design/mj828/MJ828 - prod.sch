@@ -7440,7 +7440,7 @@ Source: www.kingbright.com</description>
 <sheets>
 <sheet>
 <plain>
-<text x="231.14" y="195.58" size="1.778" layer="90">power supply for everything</text>
+<text x="231.14" y="154.94" size="1.778" layer="90">power supply for everything</text>
 <text x="261.62" y="78.74" size="1.778" layer="90">CAN infrastructure</text>
 <wire x1="0" y1="228.6" x2="81.28" y2="228.6" width="0.1524" layer="90"/>
 <wire x1="81.28" y1="228.6" x2="307.34" y2="228.6" width="0.1524" layer="90"/>
@@ -7496,13 +7496,14 @@ noon, overcast, rain
 <wire x1="-76.2" y1="76.2" x2="0" y2="76.2" width="0.1524" layer="90"/>
 <wire x1="0" y1="76.2" x2="81.28" y2="76.2" width="0.1524" layer="90"/>
 <wire x1="0" y1="76.2" x2="0" y2="228.6" width="0.1524" layer="90"/>
-<text x="170.18" y="180.34" size="5.08" layer="90">TODO: verify pulldown for brake/high beam signals via hall sensors</text>
+<text x="-71.12" y="2.54" size="5.08" layer="90">TODO: pulldown for phototransistor collector?</text>
 <text x="43.18" y="40.64" size="1.9304" layer="91">nighttime: R &gt; 1MΩ
 daylight: R&lt;10kΩ</text>
 <text x="38.1" y="63.5" size="1.778" layer="91">3313J-1-204E - 200k</text>
 <text x="38.1" y="58.42" size="1.778" layer="91">3313J-1-104E - 100k</text>
 <text x="175.26" y="190.5" size="1.778" layer="91">active low</text>
 <text x="175.26" y="187.96" size="1.778" layer="91">active low</text>
+<text x="190.5" y="198.12" size="1.778" layer="91">daylight low</text>
 </plain>
 <instances>
 <instance part="IC6" gate="G$1" x="248.92" y="50.8" smashed="yes">
@@ -7719,16 +7720,6 @@ daylight: R&lt;10kΩ</text>
 <pinref part="IC1" gate="G$1" pin="EMITTER"/>
 <wire x1="27.94" y1="12.7" x2="43.18" y2="12.7" width="0.1524" layer="91"/>
 <label x="43.18" y="12.7" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="R2" gate="G$1" pin="3"/>
-<wire x1="123.19" y1="43.18" x2="116.84" y2="43.18" width="0.1524" layer="91"/>
-<pinref part="R2" gate="G$1" pin="1"/>
-<wire x1="123.19" y1="40.64" x2="116.84" y2="40.64" width="0.1524" layer="91"/>
-<wire x1="116.84" y1="40.64" x2="116.84" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="116.84" y1="40.64" x2="114.3" y2="40.64" width="0.1524" layer="91"/>
-<junction x="116.84" y="40.64"/>
-<label x="114.3" y="40.64" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="ICSP_DO/MOSI" class="3">
@@ -7956,6 +7947,14 @@ daylight: R&lt;10kΩ</text>
 <junction x="116.84" y="48.26"/>
 <pinref part="R2" gate="G$1" pin="7"/>
 <wire x1="123.19" y1="48.26" x2="116.84" y2="48.26" width="0.1524" layer="91"/>
+<pinref part="R2" gate="G$1" pin="3"/>
+<wire x1="123.19" y1="43.18" x2="116.84" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="43.18" x2="116.84" y2="45.72" width="0.1524" layer="91"/>
+<junction x="116.84" y="45.72"/>
+<pinref part="R2" gate="G$1" pin="1"/>
+<wire x1="123.19" y1="40.64" x2="116.84" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="40.64" x2="116.84" y2="43.18" width="0.1524" layer="91"/>
+<junction x="116.84" y="43.18"/>
 </segment>
 <segment>
 <pinref part="IC5" gate="G$1" pin="VOUT"/>
