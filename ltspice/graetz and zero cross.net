@@ -1,0 +1,29 @@
+* C:\Users\hrvoje\Documents\vsite\MJ808_cos\ltspice\graetz and zero cross.asc
+V1 dynamo1 dynamo2 SINE(0 60 112)
+R1 V_REGULATED_TP2-IN 0 120
+D1 dynamo2 V_RECT_TP1-IN RB500SM-30
+D2 0 dynamo2 RB500SM-30
+D3 0 dynamo1 RB500SM-30
+D4 dynamo1 V_RECT_TP1-IN RB500SM-30
+C1 V_REGULATED_TP2-IN 0 4800u
+D5 V_RECT_TP1-IN V_REGULATED_TP2-IN RB500SM-30
+XU2 N003 N001 V_REGULATED_TP2-IN 0 N002 LT1716
+V2 5V0 0 5
+R3 N001 0 100k
+R4 N003 dynamo1 30k
+R5 N002 N001 47k
+D6 0 N003 1N4148
+M1 N002 5V0 ZeroCross ZeroCross NMOS
+R2 V_REGULATED_TP2-IN N002 100k
+R7 5V0 ZeroCross 10k
+C2 V_REGULATED_TP2-IN 0 4800u
+.model D D
+.lib C:\Users\hrvoje\Documents\LTspiceXVII\lib\cmp\standard.dio
+.model NMOS NMOS
+.model PMOS PMOS
+.lib C:\Users\hrvoje\Documents\LTspiceXVII\lib\cmp\standard.mos
+.tran .1
+* stock dynamo: 3W, 6V: 500mA over a 12Ohm load\nwheel circumference: approx. 2m, 28 poles\n \nspeed [m/s] - speed [km/h] - freq. [Hz]\n2 - 3.6 - 56\n4 - 14.4 - 112\n6 - 21,6 - 168\n8 - 28,8 - 224\n10 - 36,0 - 280\n12 - 43.2 - 336\n14 - 50,4 - 392\n16 - 57,6 - 448\n20 - 72.7 - 560
+.lib LTC1.lib
+.backanno
+.end
