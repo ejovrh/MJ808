@@ -9613,34 +9613,20 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <class number="0" name="GND" width="0.5" drill="0.3">
 <clearance class="0" value="0.2"/>
 </class>
-<class number="1" name="GND_VIA_INCP" width="0.5" drill="0.3">
-<clearance class="1" value="0.2"/>
+<class number="1" name="DYNAMO_OUT" width="0.9" drill="0">
+<clearance class="1" value="0.5"/>
 </class>
-<class number="2" name="DYNAMO_OUT" width="0.9" drill="0.3">
-<clearance class="2" value="0.5"/>
+<class number="2" name="V_DC" width="0.3" drill="0.3">
+<clearance class="2" value="0.2"/>
 </class>
-<class number="3" name="V_DC" width="0.3" drill="0.3">
+<class number="3" name="V_REGULATED" width="0.3" drill="0.3">
 <clearance class="3" value="0.2"/>
 </class>
-<class number="4" name="V_REGULATED" width="0.3" drill="0.3">
+<class number="4" name="5V0" width="0.3" drill="0.3">
 <clearance class="4" value="0.2"/>
 </class>
-<class number="5" name="V_LI-ION" width="0.3" drill="0.3">
+<class number="5" name="signal" width="0.3" drill="0.3">
 <clearance class="5" value="0.2"/>
-</class>
-<class number="6" name="5V0" width="0.3" drill="0.3">
-<clearance class="6" value="0.2"/>
-</class>
-<class number="7" name="6V0" width="0.3" drill="0.3">
-<clearance class="7" value="0.2"/>
-</class>
-<class number="8" name="SOLAR-CELL" width="0.3" drill="0.3">
-<clearance class="8" value="0.2"/>
-</class>
-<class number="9" name="signal" width="0.3" drill="0.3">
-<clearance class="9" value="0.2"/>
-</class>
-<class number="10" name="LI_ION-CELL" width="0" drill="0">
 </class>
 </classes>
 <parts>
@@ -9687,6 +9673,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="JP5" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
 <part name="TP3" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
 <part name="C6" library="C-Pol" deviceset="C-POL" device="" value="4700μF / 35V / ultralow ESR"/>
+<part name="TP4" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
 </parts>
 <sheets>
 <sheet>
@@ -10047,6 +10034,10 @@ LED current ~0.8mA, Uf=1.235V</text>
 <attribute name="NAME" x="378.46" y="543.56" size="1.778" layer="95" rot="R90" align="center"/>
 <attribute name="VALUE" x="388.62" y="528.32" size="1.778" layer="96" rot="R90" align="center"/>
 </instance>
+<instance part="TP4" gate="G$1" x="429.26" y="548.64" smashed="yes" rot="R90">
+<attribute name="NAME" x="429.26" y="551.18" size="1.778" layer="95"/>
+<attribute name="TP_SIGNAL_NAME" x="430.53" y="551.18" size="1.778" layer="97" rot="R90"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -10136,7 +10127,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="383.54" y="530.86" size="1.778" layer="95" rot="R270"/>
 </segment>
 </net>
-<net name="ZENER_COMMON" class="2">
+<net name="ZENER_COMMON" class="1">
 <segment>
 <pinref part="D2" gate="G$1" pin="C"/>
 <pinref part="D1" gate="G$1" pin="C"/>
@@ -10148,7 +10139,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="129.54" y="718.82" size="0.4064" layer="95" rot="R270"/>
 </segment>
 </net>
-<net name="DYNAMO2_GRAETZ" class="2">
+<net name="DYNAMO2_GRAETZ" class="1">
 <segment>
 <wire x1="218.44" y1="695.96" x2="218.44" y2="716.28" width="0.1524" layer="91"/>
 <label x="218.44" y="713.74" size="1.778" layer="95"/>
@@ -10173,7 +10164,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="292.1" y="287.02" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="DYNAMO1" class="2">
+<net name="DYNAMO1" class="1">
 <segment>
 <pinref part="D4" gate="G$1" pin="C"/>
 <pinref part="D5" gate="G$1" pin="A"/>
@@ -10203,7 +10194,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <junction x="114.3" y="708.66"/>
 </segment>
 </net>
-<net name="DYNAMO2_BEFORE_TUNING-CAP_SW" class="2">
+<net name="DYNAMO2_BEFORE_TUNING-CAP_SW" class="1">
 <segment>
 <wire x1="152.4" y1="708.66" x2="144.78" y2="708.66" width="0.1524" layer="91"/>
 <label x="139.7" y="708.66" size="0.8128" layer="95" rot="R270" align="top-left"/>
@@ -10243,7 +10234,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="129.54" y="269.24" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="TUNING_CAP_BIAS" class="9">
+<net name="TUNING_CAP_BIAS" class="1">
 <segment>
 <pinref part="R10" gate="G$1" pin="1"/>
 <wire x1="287.02" y1="508" x2="276.86" y2="508" width="0.1524" layer="91"/>
@@ -10260,7 +10251,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="177.8" y="708.66" size="0.8128" layer="95" rot="R270"/>
 </segment>
 </net>
-<net name="DYNAMO2_DELON" class="2">
+<net name="DYNAMO2_DELON" class="1">
 <segment>
 <wire x1="289.56" y1="576.58" x2="279.4" y2="576.58" width="0.1524" layer="91"/>
 <label x="279.4" y="576.58" size="1.778" layer="95" rot="R180"/>
@@ -10363,7 +10354,8 @@ LED current ~0.8mA, Uf=1.235V</text>
 <segment>
 <pinref part="TP10" gate="G$1" pin="TP"/>
 <wire x1="416.56" y1="548.64" x2="426.72" y2="548.64" width="0.1524" layer="91"/>
-<label x="426.72" y="548.64" size="1.778" layer="95"/>
+<label x="426.72" y="548.64" size="1.778" layer="95" rot="R90"/>
+<pinref part="TP4" gate="G$1" pin="TP"/>
 </segment>
 <segment>
 <label x="281.94" y="736.6" size="1.778" layer="95" rot="R90"/>
@@ -10392,7 +10384,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <junction x="248.92" y="731.52"/>
 </segment>
 </net>
-<net name="DYNAMO2_AFTER_TUNING-CAP_SW" class="2">
+<net name="DYNAMO2_AFTER_TUNING-CAP_SW" class="1">
 <segment>
 <wire x1="162.56" y1="708.66" x2="172.72" y2="708.66" width="0.1524" layer="91"/>
 <label x="170.18" y="708.66" size="0.8128" layer="95" rot="R270" align="top-left"/>
@@ -10413,7 +10405,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="129.54" y="254" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="DYNAMO2_BEFORE_G/D" class="2">
+<net name="DYNAMO2_BEFORE_G/D" class="1">
 <segment>
 <label x="190.5" y="716.28" size="0.8128" layer="95" rot="R90"/>
 <wire x1="182.88" y1="708.66" x2="190.5" y2="708.66" width="0.1524" layer="91"/>
@@ -10460,7 +10452,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="292.1" y="269.24" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="ANODE_DELON" class="9">
+<net name="ANODE_DELON" class="5">
 <segment>
 <pinref part="IC3" gate="G$1" pin="3_ANODE2"/>
 <wire x1="320.04" y1="355.6" x2="304.8" y2="355.6" width="0.1524" layer="91"/>
@@ -10472,7 +10464,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="170.18" y="363.22" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="ANODE_TUNING-CAP" class="9">
+<net name="ANODE_TUNING-CAP" class="5">
 <segment>
 <pinref part="IC2" gate="G$1" pin="3_ANODE2"/>
 <wire x1="320.04" y1="393.7" x2="304.8" y2="393.7" width="0.1524" layer="91"/>
@@ -10484,7 +10476,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="170.18" y="378.46" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="ANODE_TUNING-CAP_BYPASS" class="9">
+<net name="ANODE_TUNING-CAP_BYPASS" class="5">
 <segment>
 <pinref part="IC2" gate="G$1" pin="1_ANODE1"/>
 <wire x1="320.04" y1="403.86" x2="304.8" y2="403.86" width="0.1524" layer="91"/>
@@ -10496,7 +10488,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="170.18" y="386.08" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="ANODE_GRAETZ" class="9">
+<net name="ANODE_GRAETZ" class="5">
 <segment>
 <pinref part="IC3" gate="G$1" pin="1_ANODE1"/>
 <wire x1="320.04" y1="365.76" x2="304.8" y2="365.76" width="0.1524" layer="91"/>
@@ -10530,7 +10522,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="139.7" y="497.84" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
-<net name="OUT" class="0">
+<net name="OUT" class="5">
 <segment>
 <pinref part="IC1" gate="G$1" pin="1"/>
 <wire x1="170.18" y1="495.3" x2="180.34" y2="495.3" width="0.1524" layer="91"/>
@@ -10545,7 +10537,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="170.18" y="482.6" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="ZEROCROSS" class="0">
+<net name="ZEROCROSS" class="5">
 <segment>
 <pinref part="Q1" gate="G$1" pin="S"/>
 <pinref part="R9" gate="G$1" pin="1"/>
@@ -10559,7 +10551,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="76.2" y="71.12" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="5V0" class="0">
+<net name="5V0" class="4">
 <segment>
 <pinref part="Q1" gate="G$1" pin="G"/>
 <pinref part="R9" gate="G$1" pin="2"/>
@@ -10593,28 +10585,28 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="76.2" y="104.14" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$4" class="0">
+<net name="N$4" class="5">
 <segment>
 <pinref part="R3" gate="G$1" pin="1"/>
 <wire x1="139.7" y1="386.08" x2="132.08" y2="386.08" width="0.1524" layer="91"/>
 <pinref part="JP1" gate="A" pin="2"/>
 </segment>
 </net>
-<net name="N$5" class="0">
+<net name="N$5" class="5">
 <segment>
 <pinref part="R4" gate="G$1" pin="1"/>
 <wire x1="139.7" y1="378.46" x2="132.08" y2="378.46" width="0.1524" layer="91"/>
 <pinref part="JP2" gate="A" pin="2"/>
 </segment>
 </net>
-<net name="N$6" class="0">
+<net name="N$6" class="5">
 <segment>
 <pinref part="R5" gate="G$1" pin="1"/>
 <wire x1="139.7" y1="370.84" x2="132.08" y2="370.84" width="0.1524" layer="91"/>
 <pinref part="JP3" gate="A" pin="2"/>
 </segment>
 </net>
-<net name="N$7" class="0">
+<net name="N$7" class="5">
 <segment>
 <pinref part="R6" gate="G$1" pin="1"/>
 <wire x1="139.7" y1="363.22" x2="132.08" y2="363.22" width="0.1524" layer="91"/>
