@@ -8092,13 +8092,13 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <attribute name="NAME" x="55.499" y="62.484" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="60.579" y="62.484" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="J1" gate="G$1" x="-66.04" y="104.14" smashed="yes">
-<attribute name="NAME" x="-68.58" y="108.204" size="1.27" layer="95"/>
-<attribute name="VALUE" x="-68.58" y="96.52" size="1.27" layer="96"/>
+<instance part="J1" gate="G$1" x="-43.18" y="45.72" smashed="yes">
+<attribute name="NAME" x="-45.72" y="49.784" size="1.27" layer="95"/>
+<attribute name="VALUE" x="-45.72" y="38.1" size="1.27" layer="96"/>
 </instance>
-<instance part="J2" gate="G$1" x="-66.04" y="86.36" smashed="yes">
-<attribute name="NAME" x="-68.58" y="92.964" size="1.27" layer="95"/>
-<attribute name="VALUE" x="-68.58" y="78.74" size="1.27" layer="96"/>
+<instance part="J2" gate="G$1" x="-43.18" y="27.94" smashed="yes">
+<attribute name="NAME" x="-45.72" y="34.544" size="1.27" layer="95"/>
+<attribute name="VALUE" x="-45.72" y="20.32" size="1.27" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -8115,8 +8115,8 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 </segment>
 <segment>
 <pinref part="J1" gate="G$1" pin="2"/>
-<wire x1="-58.42" y1="104.14" x2="-50.8" y2="104.14" width="0.1524" layer="91"/>
-<label x="-50.8" y="104.14" size="1.778" layer="95"/>
+<wire x1="-35.56" y1="45.72" x2="-27.94" y2="45.72" width="0.1524" layer="91"/>
+<label x="-27.94" y="45.72" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="!ON!" class="2">
@@ -8127,8 +8127,8 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 </segment>
 <segment>
 <pinref part="J1" gate="G$1" pin="3"/>
-<wire x1="-58.42" y1="101.6" x2="-50.8" y2="101.6" width="0.1524" layer="91"/>
-<label x="-50.8" y="101.6" size="1.778" layer="95"/>
+<wire x1="-35.56" y1="43.18" x2="-27.94" y2="43.18" width="0.1524" layer="91"/>
+<label x="-27.94" y="43.18" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -8144,8 +8144,8 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 </segment>
 <segment>
 <pinref part="J2" gate="G$1" pin="1"/>
-<wire x1="-58.42" y1="88.9" x2="-50.8" y2="88.9" width="0.1524" layer="91"/>
-<label x="-50.8" y="88.9" size="1.778" layer="95"/>
+<wire x1="-35.56" y1="30.48" x2="-27.94" y2="30.48" width="0.1524" layer="91"/>
+<label x="-27.94" y="30.48" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="OUT" class="1">
@@ -8156,11 +8156,11 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 </segment>
 <segment>
 <pinref part="J2" gate="G$1" pin="2"/>
-<wire x1="-58.42" y1="86.36" x2="-50.8" y2="86.36" width="0.1524" layer="91"/>
-<label x="-50.8" y="86.36" size="1.778" layer="95"/>
+<wire x1="-35.56" y1="27.94" x2="-27.94" y2="27.94" width="0.1524" layer="91"/>
+<label x="-27.94" y="27.94" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="VCC" class="1">
+<net name="5V0" class="1">
 <segment>
 <pinref part="IC1" gate="G$1" pin="5_IN"/>
 <wire x1="53.34" y1="55.88" x2="53.34" y2="60.96" width="0.1524" layer="91"/>
@@ -8176,15 +8176,15 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 </segment>
 <segment>
 <pinref part="J2" gate="G$1" pin="3"/>
-<wire x1="-58.42" y1="83.82" x2="-50.8" y2="83.82" width="0.1524" layer="91"/>
-<label x="-50.8" y="83.82" size="1.778" layer="95"/>
+<wire x1="-35.56" y1="25.4" x2="-27.94" y2="25.4" width="0.1524" layer="91"/>
+<label x="-27.94" y="25.4" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SETI" class="1">
 <segment>
 <pinref part="J1" gate="G$1" pin="1"/>
-<wire x1="-58.42" y1="106.68" x2="-50.8" y2="106.68" width="0.1524" layer="91"/>
-<label x="-50.8" y="106.68" size="1.778" layer="95"/>
+<wire x1="-35.56" y1="48.26" x2="-27.94" y2="48.26" width="0.1524" layer="91"/>
+<label x="-27.94" y="48.26" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC1" gate="G$1" pin="3_SETI"/>
