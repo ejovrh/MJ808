@@ -8,34 +8,34 @@
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="no"/>
-<layer number="2" name="Route2" color="26" fill="1" visible="yes" active="no"/>
-<layer number="3" name="Route3" color="4" fill="3" visible="yes" active="no"/>
-<layer number="4" name="Route4" color="1" fill="4" visible="yes" active="no"/>
-<layer number="5" name="Route5" color="4" fill="4" visible="yes" active="no"/>
-<layer number="6" name="Route6" color="1" fill="8" visible="yes" active="no"/>
-<layer number="7" name="Route7" color="4" fill="8" visible="yes" active="no"/>
-<layer number="8" name="Route8" color="1" fill="2" visible="yes" active="no"/>
-<layer number="9" name="Route9" color="4" fill="2" visible="yes" active="no"/>
-<layer number="10" name="Route10" color="1" fill="7" visible="yes" active="no"/>
-<layer number="11" name="Route11" color="4" fill="7" visible="yes" active="no"/>
-<layer number="12" name="Route12" color="1" fill="5" visible="yes" active="no"/>
-<layer number="13" name="Route13" color="4" fill="5" visible="yes" active="no"/>
-<layer number="14" name="Route14" color="1" fill="6" visible="yes" active="no"/>
-<layer number="15" name="Route15" color="24" fill="1" visible="yes" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="no"/>
-<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="no"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="no"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="no"/>
-<layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="no"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="no"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="no"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="no"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="no"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="no"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="no"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="no"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="no"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
+<layer number="2" name="Route2" color="26" fill="1" visible="no" active="no"/>
+<layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
+<layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
+<layer number="5" name="Route5" color="4" fill="4" visible="no" active="no"/>
+<layer number="6" name="Route6" color="1" fill="8" visible="no" active="no"/>
+<layer number="7" name="Route7" color="4" fill="8" visible="no" active="no"/>
+<layer number="8" name="Route8" color="1" fill="2" visible="no" active="no"/>
+<layer number="9" name="Route9" color="4" fill="2" visible="no" active="no"/>
+<layer number="10" name="Route10" color="1" fill="7" visible="no" active="no"/>
+<layer number="11" name="Route11" color="4" fill="7" visible="no" active="no"/>
+<layer number="12" name="Route12" color="1" fill="5" visible="no" active="no"/>
+<layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
+<layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
+<layer number="15" name="Route15" color="24" fill="1" visible="no" active="no"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="no" active="no"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="no" active="no"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="no"/>
+<layer number="20" name="Dimension" color="24" fill="1" visible="no" active="no"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="no"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="no"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="no"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="no"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="no" active="no"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="no" active="no"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="no"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="no"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="no"/>
@@ -44,8 +44,8 @@
 <layer number="34" name="bFinish" color="6" fill="6" visible="no" active="no"/>
 <layer number="35" name="tGlue" color="7" fill="4" visible="no" active="no"/>
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="no"/>
-<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="no"/>
-<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="no"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="no"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="no"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="no"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="no"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="no"/>
@@ -53,19 +53,19 @@
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="no"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="no"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="no"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="no"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="no"/>
-<layer number="48" name="Document" color="7" fill="1" visible="yes" active="no"/>
-<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="no"/>
-<layer number="50" name="dxf" color="7" fill="1" visible="yes" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="no"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="no"/>
-<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="yes" active="no"/>
-<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="yes" active="no"/>
-<layer number="56" name="wert" color="7" fill="1" visible="yes" active="no"/>
-<layer number="57" name="tCAD" color="7" fill="1" visible="yes" active="no"/>
-<layer number="59" name="tCarbon" color="7" fill="1" visible="yes" active="no"/>
-<layer number="60" name="bCarbon" color="7" fill="1" visible="yes" active="no"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="no"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="no"/>
+<layer number="48" name="Document" color="7" fill="1" visible="no" active="no"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="no" active="no"/>
+<layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
+<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
+<layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
+<layer number="57" name="tCAD" color="7" fill="1" visible="no" active="no"/>
+<layer number="59" name="tCarbon" color="7" fill="1" visible="no" active="no"/>
+<layer number="60" name="bCarbon" color="7" fill="1" visible="no" active="no"/>
 <layer number="88" name="SimResults" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="89" name="SimProbes" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
@@ -9685,21 +9685,21 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="760R"/>
 <part name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="760R"/>
 <part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="760R"/>
-<part name="JP3" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
-<part name="JP4" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
-<part name="JP5" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
-<part name="JP6" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
-<part name="JP7" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
-<part name="JP8" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
-<part name="JP2" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
-<part name="JP1" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
+<part name="TCAP_BYPASS" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
+<part name="TCAP" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
+<part name="GRAETZ" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
+<part name="DELON" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
+<part name="SW3_NC" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
+<part name="SW4_NO" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
+<part name="SW2_NO" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
+<part name="SW1_NC" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="JP1Q" device="" package3d_urn="urn:adsk.eagle:package:15455/1"/>
 <part name="C6" library="C-Pol" deviceset="C-POL" device="SMD" value="4700μF / 35V / ultralow ESR"/>
-<part name="TP3" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
-<part name="TP4" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
-<part name="TP8" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
-<part name="TP7" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
-<part name="TP10" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
-<part name="TP9" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
+<part name="DYN1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
+<part name="DYN2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
+<part name="ZC" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
+<part name="5V0" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
+<part name="GND" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
+<part name="VREG" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
 </parts>
 <sheets>
 <sheet>
@@ -9710,7 +9710,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="81.28" y1="622.3" x2="81.28" y2="462.28" width="0.1524" layer="97"/>
 <wire x1="81.28" y1="622.3" x2="457.2" y2="622.3" width="0.1524" layer="97"/>
 <text x="274.32" y="482.6" size="2.54" layer="97" align="center">Tuning Capacitor Bank</text>
-<text x="274.32" y="546.1" size="2.54" layer="97" align="center">Delon Voltage Doubler</text>
+<text x="274.32" y="538.48" size="2.54" layer="97" align="center">Delon Voltage Doubler</text>
 <text x="185.42" y="546.1" size="2.54" layer="97" align="center">Grätz bridge</text>
 <wire x1="104.14" y1="690.88" x2="109.22" y2="690.88" width="0.1524" layer="94"/>
 <wire x1="109.22" y1="690.88" x2="106.68" y2="695.96" width="0.1524" layer="94"/>
@@ -9840,6 +9840,7 @@ Vout:5V0</text>
 <text x="337.82" y="571.5" size="6.4516" layer="94" rot="R90">TP1</text>
 <text x="416.56" y="571.5" size="6.4516" layer="94" rot="R90">TP2</text>
 <text x="294.64" y="561.34" size="1.778" layer="97" rot="R180">647-UPW1V472MHD - 4700uF/35V
+647-UHE1V332MHD6 - 3300uF/35V 
 647-UHD1V471MPD - 470uF/35V
 647-UHD1V331MPD - 330uF/35V
 647-UHD1V221MPD6 - 220uF/35V
@@ -9874,8 +9875,7 @@ Vout:5V0</text>
 <text x="144.78" y="355.6" size="2.54" layer="97" align="center">LED resistors &amp; jumpers for manual switch actuation</text>
 <text x="345.44" y="332.74" size="2.54" layer="97" align="center">switching elements, 
 optically actuated MOSFets</text>
-<text x="142.24" y="238.76" size="2.54" layer="97" align="center">jumpers for switch bypass</text>
-<text x="299.72" y="238.76" size="2.54" layer="97" align="center">jumpers for switch bypass</text>
+<text x="147.32" y="299.72" size="2.54" layer="97" align="center">jumpers for solid state relay override</text>
 <text x="116.84" y="398.78" size="1.778" layer="97">Uf=1.2V, If=5mA
 R=(5V-1.2V)/5mA=3.8V/0.005A=760 Ohm</text>
 <text x="238.76" y="347.98" size="1.778" layer="97">form A (NO); datasheet p. 3
@@ -9893,6 +9893,10 @@ LED current ~0.8mA, Uf=1.235V</text>
 <text x="416.56" y="718.82" size="1.778" layer="97" rot="R180" align="top-right">Dynamo AC rectified &amp; smoothed to:
 0V&gt;Vdc&gt;18V</text>
 <text x="411.48" y="685.8" size="1.778" layer="97">zero-cross signal requires 5V0 input for level translation</text>
+<wire x1="111.76" y1="304.8" x2="332.74" y2="304.8" width="0.1524" layer="97"/>
+<wire x1="332.74" y1="304.8" x2="332.74" y2="218.44" width="0.1524" layer="97"/>
+<wire x1="332.74" y1="218.44" x2="111.76" y2="218.44" width="0.1524" layer="97"/>
+<wire x1="111.76" y1="218.44" x2="111.76" y2="304.8" width="0.1524" layer="97"/>
 </plain>
 <instances>
 <instance part="D2" gate="G$1" x="106.68" y="568.96" smashed="yes" rot="R90">
@@ -10019,63 +10023,63 @@ LED current ~0.8mA, Uf=1.235V</text>
 <attribute name="NAME" x="140.97" y="364.7186" size="1.778" layer="95"/>
 <attribute name="VALUE" x="146.05" y="364.998" size="1.778" layer="96"/>
 </instance>
-<instance part="JP3" gate="A" x="124.46" y="386.08" smashed="yes" rot="R270">
+<instance part="TCAP_BYPASS" gate="A" x="124.46" y="386.08" smashed="yes" rot="R270">
 <attribute name="NAME" x="119.38" y="388.62" size="1.778" layer="95"/>
 <attribute name="VALUE" x="119.38" y="381.635" size="1.778" layer="96"/>
 </instance>
-<instance part="JP4" gate="A" x="124.46" y="378.46" smashed="yes" rot="R270">
+<instance part="TCAP" gate="A" x="124.46" y="378.46" smashed="yes" rot="R270">
 <attribute name="NAME" x="119.38" y="381" size="1.778" layer="95"/>
 <attribute name="VALUE" x="119.38" y="374.015" size="1.778" layer="96"/>
 </instance>
-<instance part="JP5" gate="A" x="124.46" y="370.84" smashed="yes" rot="R270">
+<instance part="GRAETZ" gate="A" x="124.46" y="370.84" smashed="yes" rot="R270">
 <attribute name="NAME" x="119.38" y="373.38" size="1.778" layer="95"/>
 <attribute name="VALUE" x="119.38" y="366.395" size="1.778" layer="96"/>
 </instance>
-<instance part="JP6" gate="A" x="124.46" y="363.22" smashed="yes" rot="R270">
+<instance part="DELON" gate="A" x="124.46" y="363.22" smashed="yes" rot="R270">
 <attribute name="NAME" x="119.38" y="365.76" size="1.778" layer="95"/>
 <attribute name="VALUE" x="119.38" y="358.775" size="1.778" layer="96"/>
 </instance>
-<instance part="JP7" gate="A" x="284.48" y="294.64" smashed="yes">
-<attribute name="NAME" x="281.94" y="289.56" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="288.925" y="289.56" size="1.778" layer="96" rot="R90"/>
+<instance part="SW3_NC" gate="A" x="284.48" y="281.94" smashed="yes">
+<attribute name="NAME" x="281.94" y="276.86" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="288.925" y="276.86" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="JP8" gate="A" x="284.48" y="261.62" smashed="yes">
-<attribute name="NAME" x="281.94" y="256.54" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="288.925" y="256.54" size="1.778" layer="96" rot="R90"/>
+<instance part="SW4_NO" gate="A" x="284.48" y="248.92" smashed="yes">
+<attribute name="NAME" x="281.94" y="243.84" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="288.925" y="243.84" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="JP2" gate="A" x="121.92" y="261.62" smashed="yes">
-<attribute name="NAME" x="119.38" y="256.54" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="126.365" y="256.54" size="1.778" layer="96" rot="R90"/>
+<instance part="SW2_NO" gate="A" x="121.92" y="248.92" smashed="yes">
+<attribute name="NAME" x="119.38" y="243.84" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="126.365" y="243.84" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="JP1" gate="A" x="121.92" y="294.64" smashed="yes">
-<attribute name="NAME" x="119.38" y="289.56" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="126.365" y="289.56" size="1.778" layer="96" rot="R90"/>
+<instance part="SW1_NC" gate="A" x="121.92" y="281.94" smashed="yes">
+<attribute name="NAME" x="119.38" y="276.86" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="126.365" y="276.86" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="C6" gate="G$1" x="383.54" y="543.56" smashed="yes" rot="R90">
 <attribute name="NAME" x="378.46" y="543.56" size="1.778" layer="95" rot="R90" align="center"/>
 <attribute name="VALUE" x="388.62" y="528.32" size="1.778" layer="96" rot="R90" align="center"/>
 </instance>
-<instance part="TP3" gate="G$1" x="396.24" y="721.36" smashed="yes" rot="R270">
+<instance part="DYN1" gate="G$1" x="396.24" y="721.36" smashed="yes" rot="R270">
 <attribute name="NAME" x="393.7" y="721.36" size="1.778" layer="95" rot="R180"/>
 <attribute name="TP_SIGNAL_NAME" x="394.97" y="718.82" size="1.778" layer="97" rot="R270"/>
 </instance>
-<instance part="TP4" gate="G$1" x="396.24" y="713.74" smashed="yes" rot="R270">
+<instance part="DYN2" gate="G$1" x="396.24" y="713.74" smashed="yes" rot="R270">
 <attribute name="NAME" x="393.7" y="713.74" size="1.778" layer="95" rot="R180"/>
 <attribute name="TP_SIGNAL_NAME" x="394.97" y="711.2" size="1.778" layer="97" rot="R270"/>
 </instance>
-<instance part="TP8" gate="G$1" x="439.42" y="698.5" smashed="yes">
+<instance part="ZC" gate="G$1" x="439.42" y="698.5" smashed="yes">
 <attribute name="NAME" x="439.42" y="695.96" size="1.778" layer="95" rot="R270"/>
 <attribute name="TP_SIGNAL_NAME" x="441.96" y="697.23" size="1.778" layer="97"/>
 </instance>
-<instance part="TP7" gate="G$1" x="439.42" y="736.6" smashed="yes" rot="R180">
+<instance part="5V0" gate="G$1" x="439.42" y="736.6" smashed="yes" rot="R180">
 <attribute name="NAME" x="439.42" y="739.14" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="436.88" y="737.87" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="TP10" gate="G$1" x="485.14" y="713.74" smashed="yes" rot="R90">
+<instance part="GND" gate="G$1" x="485.14" y="713.74" smashed="yes" rot="R90">
 <attribute name="NAME" x="487.68" y="713.74" size="1.778" layer="95"/>
 <attribute name="TP_SIGNAL_NAME" x="486.41" y="716.28" size="1.778" layer="97" rot="R90"/>
 </instance>
-<instance part="TP9" gate="G$1" x="485.14" y="721.36" smashed="yes" rot="R90">
+<instance part="VREG" gate="G$1" x="485.14" y="721.36" smashed="yes" rot="R90">
 <attribute name="NAME" x="487.68" y="721.36" size="1.778" layer="95"/>
 <attribute name="TP_SIGNAL_NAME" x="486.41" y="723.9" size="1.778" layer="97" rot="R90"/>
 </instance>
@@ -10170,7 +10174,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <segment>
 <wire x1="457.2" y1="713.74" x2="482.6" y2="713.74" width="0.1524" layer="91"/>
 <label x="469.9" y="713.74" size="1.778" layer="95" rot="R270"/>
-<pinref part="TP10" gate="G$1" pin="TP"/>
+<pinref part="GND" gate="G$1" pin="TP"/>
 </segment>
 </net>
 <net name="ZENER_COMMON" class="1">
@@ -10205,9 +10209,9 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="190.5" y="571.5" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="JP7" gate="A" pin="1"/>
-<wire x1="284.48" y1="287.02" x2="292.1" y2="287.02" width="0.1524" layer="91"/>
-<label x="292.1" y="287.02" size="1.778" layer="95"/>
+<pinref part="SW3_NC" gate="A" pin="1"/>
+<wire x1="284.48" y1="274.32" x2="292.1" y2="274.32" width="0.1524" layer="91"/>
+<label x="292.1" y="274.32" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="DYNAMO1" class="1">
@@ -10240,7 +10244,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 </segment>
 <segment>
 <wire x1="414.02" y1="721.36" x2="398.78" y2="721.36" width="0.1524" layer="91"/>
-<pinref part="TP3" gate="G$1" pin="TP"/>
+<pinref part="DYN1" gate="G$1" pin="TP"/>
 <label x="406.4" y="721.36" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
@@ -10277,18 +10281,18 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="106.68" y="558.8" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="A" pin="2"/>
-<wire x1="121.92" y1="302.26" x2="129.54" y2="302.26" width="0.1524" layer="91"/>
-<label x="129.54" y="302.26" size="1.778" layer="95"/>
+<pinref part="SW1_NC" gate="A" pin="2"/>
+<wire x1="121.92" y1="289.56" x2="129.54" y2="289.56" width="0.1524" layer="91"/>
+<label x="129.54" y="289.56" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="JP2" gate="A" pin="2"/>
-<wire x1="121.92" y1="269.24" x2="129.54" y2="269.24" width="0.1524" layer="91"/>
-<label x="129.54" y="269.24" size="1.778" layer="95"/>
+<pinref part="SW2_NO" gate="A" pin="2"/>
+<wire x1="121.92" y1="256.54" x2="129.54" y2="256.54" width="0.1524" layer="91"/>
+<label x="129.54" y="256.54" size="1.778" layer="95"/>
 </segment>
 <segment>
 <wire x1="414.02" y1="713.74" x2="398.78" y2="713.74" width="0.1524" layer="91"/>
-<pinref part="TP4" gate="G$1" pin="TP"/>
+<pinref part="DYN2" gate="G$1" pin="TP"/>
 <label x="403.86" y="713.74" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
@@ -10334,9 +10338,9 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="388.62" y="350.52" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="JP8" gate="A" pin="1"/>
-<wire x1="284.48" y1="254" x2="292.1" y2="254" width="0.1524" layer="91"/>
-<label x="292.1" y="254" size="1.778" layer="95"/>
+<pinref part="SW4_NO" gate="A" pin="1"/>
+<wire x1="284.48" y1="241.3" x2="292.1" y2="241.3" width="0.1524" layer="91"/>
+<label x="292.1" y="241.3" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="V_RECT_TP1-IN" class="3">
@@ -10433,7 +10437,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <segment>
 <wire x1="482.6" y1="721.36" x2="457.2" y2="721.36" width="0.1524" layer="91"/>
 <label x="469.9" y="721.36" size="1.778" layer="95" rot="R90"/>
-<pinref part="TP9" gate="G$1" pin="TP"/>
+<pinref part="VREG" gate="G$1" pin="TP"/>
 </segment>
 </net>
 <net name="V_RECT_TP1-OUT" class="3">
@@ -10466,9 +10470,9 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="276.86" y="518.16" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="JP2" gate="A" pin="1"/>
-<wire x1="121.92" y1="254" x2="129.54" y2="254" width="0.1524" layer="91"/>
-<label x="129.54" y="254" size="1.778" layer="95"/>
+<pinref part="SW2_NO" gate="A" pin="1"/>
+<wire x1="121.92" y1="241.3" x2="129.54" y2="241.3" width="0.1524" layer="91"/>
+<label x="129.54" y="241.3" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="DYNAMO2_BEFORE_G/D" class="1">
@@ -10503,19 +10507,19 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="276.86" y="497.84" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="A" pin="1"/>
-<wire x1="121.92" y1="287.02" x2="129.54" y2="287.02" width="0.1524" layer="91"/>
-<label x="129.54" y="287.02" size="1.778" layer="95"/>
+<pinref part="SW1_NC" gate="A" pin="1"/>
+<wire x1="121.92" y1="274.32" x2="129.54" y2="274.32" width="0.1524" layer="91"/>
+<label x="129.54" y="274.32" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="JP7" gate="A" pin="2"/>
-<wire x1="284.48" y1="302.26" x2="292.1" y2="302.26" width="0.1524" layer="91"/>
-<label x="292.1" y="302.26" size="1.778" layer="95"/>
+<pinref part="SW3_NC" gate="A" pin="2"/>
+<wire x1="284.48" y1="289.56" x2="292.1" y2="289.56" width="0.1524" layer="91"/>
+<label x="292.1" y="289.56" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="JP8" gate="A" pin="2"/>
-<wire x1="284.48" y1="269.24" x2="292.1" y2="269.24" width="0.1524" layer="91"/>
-<label x="292.1" y="269.24" size="1.778" layer="95"/>
+<pinref part="SW4_NO" gate="A" pin="2"/>
+<wire x1="284.48" y1="256.54" x2="292.1" y2="256.54" width="0.1524" layer="91"/>
+<label x="292.1" y="256.54" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="ANODE_DELON" class="5">
@@ -10619,7 +10623,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <segment>
 <wire x1="439.42" y1="701.04" x2="439.42" y2="708.66" width="0.1524" layer="91"/>
 <label x="439.42" y="701.04" size="1.778" layer="95"/>
-<pinref part="TP8" gate="G$1" pin="TP"/>
+<pinref part="ZC" gate="G$1" pin="TP"/>
 </segment>
 </net>
 <net name="5V0" class="4">
@@ -10633,17 +10637,17 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="205.74" y="513.08" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="JP6" gate="A" pin="1"/>
+<pinref part="DELON" gate="A" pin="1"/>
 <wire x1="116.84" y1="363.22" x2="116.84" y2="370.84" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="370.84" x2="116.84" y2="378.46" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="378.46" x2="116.84" y2="386.08" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="386.08" x2="104.14" y2="386.08" width="0.1524" layer="91"/>
 <label x="104.14" y="386.08" size="1.778" layer="95" rot="R90"/>
-<pinref part="JP3" gate="A" pin="1"/>
+<pinref part="TCAP_BYPASS" gate="A" pin="1"/>
 <junction x="116.84" y="386.08"/>
-<pinref part="JP4" gate="A" pin="1"/>
+<pinref part="TCAP" gate="A" pin="1"/>
 <junction x="116.84" y="378.46"/>
-<pinref part="JP5" gate="A" pin="1"/>
+<pinref part="GRAETZ" gate="A" pin="1"/>
 <junction x="116.84" y="370.84"/>
 </segment>
 <segment>
@@ -10657,35 +10661,35 @@ LED current ~0.8mA, Uf=1.235V</text>
 <segment>
 <wire x1="439.42" y1="726.44" x2="439.42" y2="734.06" width="0.1524" layer="91"/>
 <label x="439.42" y="728.98" size="1.778" layer="95"/>
-<pinref part="TP7" gate="G$1" pin="TP"/>
+<pinref part="5V0" gate="G$1" pin="TP"/>
 </segment>
 </net>
 <net name="N$4" class="5">
 <segment>
 <pinref part="R3" gate="G$1" pin="1"/>
 <wire x1="139.7" y1="386.08" x2="132.08" y2="386.08" width="0.1524" layer="91"/>
-<pinref part="JP3" gate="A" pin="2"/>
+<pinref part="TCAP_BYPASS" gate="A" pin="2"/>
 </segment>
 </net>
 <net name="N$5" class="5">
 <segment>
 <pinref part="R4" gate="G$1" pin="1"/>
 <wire x1="139.7" y1="378.46" x2="132.08" y2="378.46" width="0.1524" layer="91"/>
-<pinref part="JP4" gate="A" pin="2"/>
+<pinref part="TCAP" gate="A" pin="2"/>
 </segment>
 </net>
 <net name="N$6" class="5">
 <segment>
 <pinref part="R5" gate="G$1" pin="1"/>
 <wire x1="139.7" y1="370.84" x2="132.08" y2="370.84" width="0.1524" layer="91"/>
-<pinref part="JP5" gate="A" pin="2"/>
+<pinref part="GRAETZ" gate="A" pin="2"/>
 </segment>
 </net>
 <net name="N$7" class="5">
 <segment>
 <pinref part="R6" gate="G$1" pin="1"/>
 <wire x1="139.7" y1="363.22" x2="132.08" y2="363.22" width="0.1524" layer="91"/>
-<pinref part="JP6" gate="A" pin="2"/>
+<pinref part="DELON" gate="A" pin="2"/>
 </segment>
 </net>
 </nets>
@@ -10700,14 +10704,14 @@ LED current ~0.8mA, Uf=1.235V</text>
 <approved hash="206,1,320.04,350.52,GND,,,,,"/>
 <approved hash="209,1,416.56,548.64,V_REGULATED_TP2-OUT,,,,,"/>
 <approved hash="209,1,482.6,721.36,V_REGULATED_TP2-OUT,,,,,"/>
-<approved hash="113,1,124.46,387.576,JP3,,,,,"/>
-<approved hash="113,1,124.46,379.956,JP4,,,,,"/>
-<approved hash="113,1,124.46,372.336,JP5,,,,,"/>
-<approved hash="113,1,124.46,364.716,JP6,,,,,"/>
-<approved hash="113,1,282.984,294.64,JP7,,,,,"/>
-<approved hash="113,1,282.984,261.62,JP8,,,,,"/>
-<approved hash="113,1,120.424,261.62,JP2,,,,,"/>
-<approved hash="113,1,120.424,294.64,JP1,,,,,"/>
+<approved hash="113,1,125.343,387.576,TCAP_BYPASS,,,,,"/>
+<approved hash="113,1,124.46,379.956,TCAP,,,,,"/>
+<approved hash="113,1,124.46,372.336,GRAETZ,,,,,"/>
+<approved hash="113,1,124.46,364.716,DELON,,,,,"/>
+<approved hash="113,1,282.984,281.94,SW3_NC,,,,,"/>
+<approved hash="113,1,282.984,248.92,SW4_NO,,,,,"/>
+<approved hash="113,1,120.424,248.92,SW2_NO,,,,,"/>
+<approved hash="113,1,120.424,281.94,SW1_NC,,,,,"/>
 </errors>
 </schematic>
 </drawing>
