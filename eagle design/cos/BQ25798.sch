@@ -8337,6 +8337,76 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="MX-67503-1230 USB Mini-B SMT straight socket">
+<packages>
+<package name="SMT">
+<smd name="D+" x="0" y="0" dx="2.25" dy="0.5" layer="1"/>
+<smd name="ID" x="0" y="-0.8" dx="2.25" dy="0.5" layer="1"/>
+<smd name="D-" x="0" y="0.8" dx="2.25" dy="0.5" layer="1"/>
+<smd name="GND1" x="0" y="-1.6" dx="2.25" dy="0.5" layer="1"/>
+<smd name="VBUS" x="0" y="1.6" dx="2.25" dy="0.5" layer="1"/>
+<smd name="GND4" x="0" y="4.9" dx="3.5" dy="2" layer="1" roundness="50"/>
+<smd name="GND3" x="0" y="-4.9" dx="3.5" dy="2" layer="1" roundness="50"/>
+<smd name="GND5" x="-4.25" y="4.9" dx="3.5" dy="2" layer="1" roundness="50"/>
+<smd name="GND2" x="-4.25" y="-4.9" dx="3.5" dy="2" layer="1" roundness="50"/>
+<rectangle x1="-6.2" y1="-3.1" x2="-4.8" y2="3.1" layer="41"/>
+<wire x1="-6" y1="4" x2="3" y2="4" width="0.127" layer="21"/>
+<wire x1="3" y1="4" x2="3" y2="-4" width="0.127" layer="21"/>
+<wire x1="3" y1="-4" x2="-6" y2="-4" width="0.127" layer="21"/>
+<wire x1="-6" y1="-4" x2="-6" y2="4" width="0.127" layer="21"/>
+<text x="4" y="4" size="1.27" layer="25">&gt;NAME</text>
+<text x="4" y="-4" size="1.27" layer="27">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="USB_D">
+<wire x1="0" y1="7.62" x2="2.54" y2="5.08" width="0.254" layer="94"/>
+<wire x1="2.54" y1="5.08" x2="2.54" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-15.24" x2="0" y2="-17.78" width="0.254" layer="94"/>
+<wire x1="0" y1="-17.78" x2="-7.62" y2="-17.78" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="-17.78" x2="-10.16" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-15.24" x2="-10.16" y2="5.08" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="5.08" x2="-7.62" y2="7.62" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="7.62" x2="0" y2="7.62" width="0.254" layer="94"/>
+<text x="-7.62" y="10.16" size="1.27" layer="95">&gt;NAME</text>
+<text x="-7.62" y="-20.32" size="1.27" layer="96">&gt;VALUE</text>
+<pin name="D-" x="5.08" y="2.54" length="middle" rot="R180"/>
+<pin name="D+" x="5.08" y="0" length="middle" rot="R180"/>
+<pin name="ID" x="5.08" y="-2.54" length="middle" direction="nc" rot="R180"/>
+<pin name="GND1" x="5.08" y="-5.08" length="middle" rot="R180"/>
+<pin name="VBUS" x="5.08" y="5.08" length="middle" direction="pwr" rot="R180"/>
+<pin name="GND2" x="5.08" y="-7.62" length="middle" rot="R180"/>
+<pin name="GND3" x="5.08" y="-10.16" length="middle" rot="R180"/>
+<pin name="GND4" x="5.08" y="-12.7" length="middle" rot="R180"/>
+<pin name="GND5" x="5.08" y="-15.24" length="middle" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="MX-67503-1230" prefix="CONN">
+<gates>
+<gate name="G$1" symbol="USB_D" x="5.08" y="5.08"/>
+</gates>
+<devices>
+<device name="" package="SMT">
+<connects>
+<connect gate="G$1" pin="D+" pad="D+"/>
+<connect gate="G$1" pin="D-" pad="D-"/>
+<connect gate="G$1" pin="GND1" pad="GND1"/>
+<connect gate="G$1" pin="GND2" pad="GND2"/>
+<connect gate="G$1" pin="GND3" pad="GND3"/>
+<connect gate="G$1" pin="GND4" pad="GND4"/>
+<connect gate="G$1" pin="GND5" pad="GND5"/>
+<connect gate="G$1" pin="ID" pad="ID"/>
+<connect gate="G$1" pin="VBUS" pad="VBUS"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -8435,6 +8505,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <part name="SUPPLY8" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY9" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY10" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="CONN1" library="MX-67503-1230 USB Mini-B SMT straight socket" deviceset="MX-67503-1230" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -8700,6 +8771,10 @@ VILIM_HIZ = 1V + 800m. × IINDPM</text>
 <instance part="SUPPLY10" gate="G$1" x="25.4" y="-104.14" smashed="yes">
 <attribute name="VALUE" x="25.273" y="-100.965" size="1.778" layer="96" align="bottom-center"/>
 </instance>
+<instance part="CONN1" gate="G$1" x="116.84" y="142.24" smashed="yes" rot="R270">
+<attribute name="NAME" x="101.6" y="154.94" size="1.27" layer="95"/>
+<attribute name="VALUE" x="101.6" y="152.4" size="1.27" layer="96"/>
+</instance>
 </instances>
 <busses>
 <bus name="I2C:I2C_SCL,I2C_SDA">
@@ -8724,8 +8799,8 @@ VILIM_HIZ = 1V + 800m. × IINDPM</text>
 </bus>
 <bus name="USB:GND,USB_D-,USB_D+,V_USB">
 <segment>
-<wire x1="55.88" y1="127" x2="73.66" y2="127" width="0.762" layer="92"/>
-<label x="73.66" y="127" size="1.778" layer="95"/>
+<wire x1="55.88" y1="127" x2="121.92" y2="127" width="0.762" layer="92"/>
+<label x="121.92" y="127" size="1.778" layer="95"/>
 </segment>
 <segment>
 <wire x1="-40.64" y1="43.18" x2="-40.64" y2="60.96" width="0.762" layer="92"/>
@@ -8951,6 +9026,26 @@ VILIM_HIZ = 1V + 800m. × IINDPM</text>
 <wire x1="55.88" y1="109.22" x2="55.88" y2="127" width="0.1524" layer="91"/>
 <junction x="55.88" y="109.22"/>
 </segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="GND5"/>
+<wire x1="101.6" y1="137.16" x2="101.6" y2="127" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="GND4"/>
+<wire x1="104.14" y1="137.16" x2="104.14" y2="127" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="GND3"/>
+<wire x1="106.68" y1="137.16" x2="106.68" y2="127" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="GND2"/>
+<wire x1="109.22" y1="137.16" x2="109.22" y2="127" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="GND1"/>
+<wire x1="111.76" y1="137.16" x2="111.76" y2="127" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="PROG" class="3">
 <segment>
@@ -9151,6 +9246,10 @@ VILIM_HIZ = 1V + 800m. × IINDPM</text>
 <junction x="-17.78" y="60.96"/>
 <label x="-35.56" y="60.96" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="VBUS"/>
+<wire x1="121.92" y1="137.16" x2="121.92" y2="127" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="I2C_SDA" class="0">
 <segment>
@@ -9195,11 +9294,19 @@ VILIM_HIZ = 1V + 800m. × IINDPM</text>
 <pinref part="IC5" gate="G$1" pin="7_D-"/>
 <wire x1="60.96" y1="96.52" x2="60.96" y2="127" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="D-"/>
+<wire x1="119.38" y1="137.16" x2="119.38" y2="127" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="USB_D+" class="0">
 <segment>
 <pinref part="IC5" gate="G$1" pin="6_D+"/>
 <wire x1="66.04" y1="96.52" x2="66.04" y2="127" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="D+"/>
+<wire x1="116.84" y1="137.16" x2="116.84" y2="127" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="3V3" class="2">
