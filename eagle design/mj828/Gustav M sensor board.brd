@@ -3,12 +3,12 @@
 <eagle version="9.4.0">
 <drawing>
 <settings>
-<setting alwaysvectorfont="no"/>
+<setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.25" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.1" altunitdist="mm" altunit="mm"/>
+<grid distance="0.5" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.1" altunitdist="mm" altunit="mm"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
 <layer number="3" name="Route3" color="17" fill="1" visible="no" active="no"/>
 <layer number="4" name="Route4" color="18" fill="1" visible="no" active="no"/>
@@ -23,21 +23,21 @@
 <layer number="13" name="Route13" color="21" fill="1" visible="no" active="no"/>
 <layer number="14" name="Route14" color="22" fill="1" visible="no" active="no"/>
 <layer number="15" name="Route15" color="23" fill="1" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
-<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
-<layer number="30" name="bStop" color="7" fill="6" visible="yes" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
 <layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
 <layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
@@ -46,10 +46,10 @@
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
-<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
-<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
@@ -58,8 +58,8 @@
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -171,29 +171,29 @@
 </layers>
 <board>
 <plain>
-<wire x1="21" y1="5" x2="15" y2="-1" width="0" layer="20" curve="-90"/>
-<wire x1="15" y1="-1" x2="9" y2="5" width="0" layer="20" curve="-90"/>
-<hole x="15" y="5" drill="4"/>
-<text x="12.5" y="21.25" size="1" layer="22" font="vector" rot="MR90" align="center">BRAKE</text>
-<text x="2.75" y="30" size="1" layer="21" font="vector" rot="R300" align="center">HIGH</text>
-<text x="4.5" y="27" size="0.75" layer="22" font="vector" rot="MR240" align="center">Gustav M sensor
+<wire x1="6" y1="0" x2="0" y2="-6" width="0" layer="20" curve="-90"/>
+<wire x1="0" y1="-6" x2="-6" y2="0" width="0" layer="20" curve="-90"/>
+<hole x="0" y="0" drill="4"/>
+<text x="-2.5" y="14.25" size="1" layer="22" font="vector" rot="MR90" align="center">BRAKE</text>
+<text x="-12.25" y="25" size="1" layer="21" font="vector" rot="R300" align="center">HIGH</text>
+<text x="-10.5" y="22" size="0.75" layer="22" font="vector" rot="MR240" align="center">Gustav M sensor
 ejovrh rev.1</text>
-<wire x1="10" y1="14" x2="20" y2="14" width="0.5" layer="21" style="shortdash"/>
-<wire x1="-1.00345" y1="36.041884375" x2="-0.96359375" y2="36.067675" width="0" layer="20"/>
-<wire x1="-0.96359375" y1="36.067675" x2="2.56266875" y2="35.213415625" width="0" layer="20" curve="-93.046312"/>
-<wire x1="2.56266875" y1="35.213415625" x2="8.135215625" y2="25.5064" width="0" layer="20"/>
-<wire x1="8.135215625" y1="25.5064" x2="10.736975" y2="24" width="0" layer="20" curve="60.140975"/>
-<wire x1="10.736975" y1="24" x2="18" y2="24" width="0" layer="20"/>
-<wire x1="8.59699375" y1="14.696865625" x2="-1.80948125" y2="32.69139375" width="0" layer="20"/>
-<wire x1="-1.80948125" y1="32.69139375" x2="-1.00345" y2="36.041884375" width="0" layer="20" curve="-87.136165"/>
-<wire x1="8.59699375" y1="14.696865625" x2="9" y2="13.194990625" width="0" layer="20" curve="-30.041349"/>
-<wire x1="9" y1="13.194990625" x2="9" y2="5" width="0" layer="20"/>
-<wire x1="18" y1="24" x2="21" y2="21" width="0" layer="20" curve="-90"/>
-<wire x1="21" y1="21" x2="21" y2="5" width="0" layer="20"/>
-<wire x1="9" y1="23" x2="9" y2="15" width="0.5" layer="22" style="shortdash"/>
-<dimension x1="9" y1="14" x2="9" y2="37.970034375" x3="-3" y3="34.75" textsize="1.778" layer="47" dtype="angle"/>
-<dimension x1="9" y1="24" x2="9" y2="41.923446875" x3="0" y3="39.5" textsize="1.778" layer="47" dtype="angle"/>
-<dimension x1="-3" y1="34.75" x2="2.251290625" y2="25.750753125" x3="6" y3="40" textsize="1.778" layer="47" dtype="angle"/>
+<wire x1="-5" y1="9" x2="5" y2="9" width="0.5" layer="21" style="shortdash"/>
+<wire x1="-6.40300625" y1="9.696865625" x2="-17.645571875" y2="29.10256875" width="0" layer="20"/>
+<wire x1="-17.645571875" y1="29.10256875" x2="-17.001559375" y2="31.78426875" width="0" layer="20" curve="-87.178937"/>
+<wire x1="-17.001559375" y1="31.78426875" x2="-16.1182625" y2="32.35584375" width="0" layer="20"/>
+<wire x1="-16.1182625" y1="32.35584375" x2="-13.298709375" y2="31.6750625" width="0" layer="20" curve="-92.961768"/>
+<wire x1="-13.298709375" y1="31.6750625" x2="-6.864784375" y2="20.5064" width="0" layer="20"/>
+<wire x1="-6.864784375" y1="20.5064" x2="-4.263025" y2="19" width="0" layer="20" curve="60.140975"/>
+<wire x1="-4.263025" y1="19" x2="3" y2="19" width="0" layer="20"/>
+<wire x1="-6.40300625" y1="9.696865625" x2="-6" y2="8.194990625" width="0" layer="20" curve="-30.041349"/>
+<wire x1="-6" y1="8.194990625" x2="-6" y2="0" width="0" layer="20"/>
+<wire x1="3" y1="19" x2="6" y2="16" width="0" layer="20" curve="-90"/>
+<wire x1="6" y1="16" x2="6" y2="0" width="0" layer="20"/>
+<wire x1="-6" y1="18" x2="-6" y2="10" width="0.5" layer="22" style="shortdash"/>
+<dimension x1="-6" y1="9" x2="-6" y2="32.970034375" x3="-18" y3="29.75" textsize="1.778" layer="47" dtype="angle"/>
+<dimension x1="-6" y1="19" x2="-6" y2="36.923446875" x3="-15" y3="34.5" textsize="1.778" layer="47" dtype="angle"/>
+<dimension x1="-18" y1="29.75" x2="-12.748709375" y2="20.750753125" x3="-9" y3="35" textsize="1.778" layer="47" dtype="angle"/>
 </plain>
 <libraries>
 <library name="signal testpoint">
@@ -408,71 +408,70 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 </pass>
 </autorouter>
 <elements>
-<element name="GND" library="signal testpoint" package="TH-0.9MM" value="8V4 Battery +" x="18" y="9" smashed="yes">
-<attribute name="NAME" x="18" y="15.5" size="1" layer="21" font="vector" rot="R90" align="center-left"/>
+<element name="GND" library="signal testpoint" package="TH-0.9MM" value="8V4 Battery +" x="3" y="4" smashed="yes">
+<attribute name="NAME" x="3" y="10.5" size="1" layer="21" font="vector" rot="R90" align="center-left"/>
 </element>
-<element name="5V0" library="signal testpoint" package="TH-0.9MM" value="8V4 Battery +" x="16" y="9" smashed="yes">
-<attribute name="NAME" x="16" y="15.5" size="1" layer="21" font="vector" rot="R90" align="center-left"/>
+<element name="5V0" library="signal testpoint" package="TH-0.9MM" value="8V4 Battery +" x="1" y="4" smashed="yes">
+<attribute name="NAME" x="1" y="10.5" size="1" layer="21" font="vector" rot="R90" align="center-left"/>
 </element>
-<element name="BRAKE" library="signal testpoint" package="TH-0.9MM" value="8V4 Battery +" x="14" y="9" smashed="yes">
-<attribute name="NAME" x="14" y="15.5" size="1" layer="21" font="vector" rot="R90" align="center-left"/>
+<element name="BRAKE" library="signal testpoint" package="TH-0.9MM" value="8V4 Battery +" x="-1" y="4" smashed="yes">
+<attribute name="NAME" x="-1" y="10.5" size="1" layer="21" font="vector" rot="R90" align="center-left"/>
 </element>
-<element name="HIGH" library="signal testpoint" package="TH-0.9MM" value="8V4 Battery +" x="12" y="9" smashed="yes">
-<attribute name="NAME" x="12" y="15.5" size="1" layer="21" font="vector" rot="R90" align="center-left"/>
+<element name="HIGH" library="signal testpoint" package="TH-0.9MM" value="8V4 Battery +" x="-3" y="4" smashed="yes">
+<attribute name="NAME" x="-3" y="10.5" size="1" layer="21" font="vector" rot="R90" align="center-left"/>
 </element>
-<element name="IC1" library="AH1913 - Hall Effect Sensor Switch" package="SC59-3" value="AH1913-W-7" x="1" y="33" smashed="yes" rot="R300">
-<attribute name="NAME" x="-0.125003125" y="34.94855625" size="0.75" layer="21" font="vector" rot="R30" align="center"/>
-<attribute name="VALUE" x="2.1" y="31.094746875" size="0.75" layer="27" font="vector" rot="R30" align="center"/>
+<element name="IC1" library="AH1913 - Hall Effect Sensor Switch" package="SC59-3" value="AH1913-W-7" x="-15" y="29.7" smashed="yes" rot="R300">
+<attribute name="NAME" x="-13.625003125" y="27.64855625" size="0.75" layer="21" font="vector" rot="R30" align="center"/>
+<attribute name="VALUE" x="-13.9" y="27.794746875" size="0.75" layer="27" font="vector" rot="R30" align="center"/>
 </element>
-<element name="IC2" library="AH1913 - Hall Effect Sensor Switch" package="SC59-3" value="AH1913-W-7" x="15" y="21.25" smashed="yes" rot="MR0">
-<attribute name="NAME" x="17.2" y="21.25" size="0.75" layer="22" font="vector" rot="MR90" align="center"/>
-<attribute name="VALUE" x="12.8" y="21.25" size="0.75" layer="28" font="vector" rot="MR90" align="center"/>
+<element name="IC2" library="AH1913 - Hall Effect Sensor Switch" package="SC59-3" value="AH1913-W-7" x="0" y="16.25" smashed="yes" rot="MR0">
+<attribute name="NAME" x="2.2" y="16.25" size="0.75" layer="22" font="vector" rot="MR90" align="center"/>
+<attribute name="VALUE" x="-2.2" y="16.25" size="0.75" layer="28" font="vector" rot="MR90" align="center"/>
 </element>
 </elements>
 <signals>
 <signal name="GND">
 <contactref element="GND" pad="TP$1"/>
 <contactref element="IC1" pad="3_GND"/>
-<via x="15" y="22.5" extent="1-16" drill="0.35"/>
-<via x="2.125" y="33.625" extent="1-16" drill="0.35"/>
+<via x="0" y="17.5" extent="1-16" drill="0.35"/>
+<via x="-13.975" y="30.325" extent="1-16" drill="0.35"/>
 <contactref element="IC2" pad="3_GND"/>
-<polygon width="0.508" layer="1">
-<vertex x="-9" y="38.5"/>
-<vertex x="22" y="38.5"/>
-<vertex x="22" y="-2"/>
-<vertex x="-9" y="-2"/>
+<polygon width="0.508" layer="1" spacing="0.2" isolate="0.5">
+<vertex x="-18.5" y="33.25"/>
+<vertex x="11" y="33.25"/>
+<vertex x="11" y="-7"/>
+<vertex x="-18.5" y="-7"/>
 </polygon>
-<polygon width="0.508" layer="16">
-<vertex x="-9" y="38.5"/>
-<vertex x="22" y="38.5"/>
-<vertex x="22" y="-2"/>
-<vertex x="-9" y="-2"/>
+<polygon width="0.508" layer="16" spacing="0.2" isolate="0.5">
+<vertex x="-22.5" y="33.25"/>
+<vertex x="7" y="33.25"/>
+<vertex x="7" y="-7"/>
+<vertex x="-22.5" y="-7"/>
 </polygon>
-<via x="12.75" y="14.75" extent="1-16" drill="0.35"/>
+<via x="-2.25" y="9.75" extent="1-16" drill="0.35"/>
 </signal>
 <signal name="BRAKE">
 <contactref element="BRAKE" pad="TP$1"/>
 <contactref element="IC2" pad="2_OUT"/>
-<wire x1="14" y1="9" x2="14" y2="20.02" width="0.508" layer="16"/>
-<wire x1="14" y1="20.02" x2="14.02" y2="20.04" width="0.508" layer="16"/>
+<wire x1="-1" y1="4" x2="-1" y2="15.02" width="0.508" layer="16"/>
+<wire x1="-1" y1="15.02" x2="-0.98" y2="15.04" width="0.508" layer="16"/>
 </signal>
 <signal name="5V0">
 <contactref element="5V0" pad="TP$1"/>
 <contactref element="IC1" pad="1_VCC"/>
-<wire x1="16" y1="9" x2="16" y2="20.02" width="0.508" layer="16"/>
+<wire x1="1" y1="4" x2="1" y2="15.02" width="0.508" layer="16"/>
 <contactref element="IC2" pad="1_VCC"/>
-<wire x1="16" y1="20.02" x2="16.02" y2="20.04" width="0.508" layer="16"/>
-<wire x1="-0.557890625" y1="33.27834375" x2="0.844384375" y2="33.27834375" width="0.508" layer="1"/>
-<wire x1="16" y1="18.25" x2="16" y2="9" width="0.508" layer="1"/>
-<wire x1="14.0013625" y1="20.2486375" x2="16" y2="18.25" width="0.508" layer="1"/>
-<wire x1="8.747821875" y1="20.2486375" x2="14.0013625" y2="20.2486375" width="0.508" layer="1"/>
-<wire x1="0.844384375" y1="33.27834375" x2="8.747821875" y2="20.2486375" width="0.508" layer="1"/>
+<wire x1="1" y1="15.02" x2="1.02" y2="15.04" width="0.508" layer="16"/>
+<wire x1="-16.557890625" y1="29.97834375" x2="-15.2" y2="29.97834375" width="0.508" layer="1"/>
+<wire x1="-8.180246875" y1="18.675228125" x2="-15.2" y2="29.97834375" width="0.508" layer="1"/>
+<wire x1="1" y1="4" x2="1" y2="9.49498125" width="0.508" layer="1"/>
+<wire x1="1" y1="9.49498125" x2="-8.180246875" y2="18.675228125" width="0.508" layer="1"/>
 </signal>
 <signal name="HIGH">
 <contactref element="HIGH" pad="TP$1"/>
 <contactref element="IC1" pad="2_OUT"/>
-<wire x1="12" y1="12.75" x2="12" y2="9" width="0.508" layer="1"/>
-<wire x1="0.44210625" y1="31.54629375" x2="12" y2="12.75" width="0.508" layer="1"/>
+<wire x1="-3" y1="7.823728125" x2="-3" y2="4" width="0.508" layer="1"/>
+<wire x1="-15.55789375" y1="28.24629375" x2="-3" y2="7.823728125" width="0.508" layer="1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
