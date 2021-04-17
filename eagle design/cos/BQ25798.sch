@@ -10040,7 +10040,9 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <text x="114.3" y="43.18" size="1.778" layer="97">max. 5A</text>
 <text x="22.86" y="30.48" size="1.778" layer="97">Fsw = 750 kHz</text>
 <text x="121.92" y="-15.24" size="1.778" layer="97" rot="R270">thermistor calculation: DS p. 41</text>
-<text x="7.62" y="12.7" size="0.8128" layer="98" rot="R180">DS p.24 - 2s@750kHz</text>
+<text x="-2.54" y="10.16" size="0.8128" layer="98">DS p.24
+1S@750KhZ - 4.7K
+2s@750kHz - 8.2K</text>
 <text x="81.28" y="12.7" size="0.8128" layer="98" rot="R180">DS p.26 - VILIM_HIZ = 1V + 800 mΩ × ILIM</text>
 <text x="86.36" y="-12.7" size="0.8128" layer="98">DS p.41</text>
 <text x="53.34" y="5.08" size="0.8128" layer="98">DS p.43</text>
@@ -11302,6 +11304,10 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 </schematic>
 </drawing>
 <compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
 <note version="8.2" severity="warning">
 Since Version 8.2, EAGLE supports online libraries. The ids
 of those online libraries will not be understood (or retained)
