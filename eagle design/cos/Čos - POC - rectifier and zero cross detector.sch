@@ -12961,7 +12961,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <class number="3" name="V_REGULATED" width="0.3" drill="0.3">
 <clearance class="3" value="0.2"/>
 </class>
-<class number="4" name="5V0" width="0.3" drill="0.3">
+<class number="4" name="Vcc" width="0.3" drill="0.3">
 <clearance class="4" value="0.2"/>
 </class>
 <class number="5" name="signal" width="0.3" drill="0.3">
@@ -13011,7 +13011,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="DYN1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
 <part name="DYN2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
 <part name="ZC" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
-<part name="5V0" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
+<part name="VCC" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
 <part name="GND" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
 <part name="VREG" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
 <part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603" package3d_urn="urn:adsk.eagle:package:23616/2" value="0.12μF/50V"/>
@@ -13228,6 +13228,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <text x="231.14" y="525.78" size="1.27" layer="90" align="center">band-pass filter</text>
 <text x="127" y="525.78" size="1.27" layer="90" align="center">comparator circuitry</text>
 <text x="238.76" y="485.14" size="1.27" layer="90" align="center">fcutoff = 132.7 Hz</text>
+<text x="116.84" y="393.7" size="1.778" layer="97">R=(3.3V-1.2V)/5mA=2.1V/0.005A=420 Ohm</text>
 </plain>
 <instances>
 <instance part="D2" gate="G$1" x="106.68" y="568.96" smashed="yes" rot="R90">
@@ -13398,7 +13399,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <attribute name="NAME" x="439.42" y="695.96" size="1.778" layer="95" rot="R270"/>
 <attribute name="TP_SIGNAL_NAME" x="441.96" y="697.23" size="1.778" layer="97"/>
 </instance>
-<instance part="5V0" gate="G$1" x="439.42" y="736.6" smashed="yes" rot="R180">
+<instance part="VCC" gate="G$1" x="439.42" y="736.6" smashed="yes" rot="R180">
 <attribute name="NAME" x="439.42" y="739.14" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="436.88" y="737.87" size="1.778" layer="97" rot="R180"/>
 </instance>
@@ -13970,7 +13971,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <label x="238.76" y="495.3" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
-<net name="5V0" class="4">
+<net name="VCC" class="4">
 <segment>
 <pinref part="Q1" gate="G$1" pin="G"/>
 <pinref part="R9" gate="G$1" pin="2"/>
@@ -14005,7 +14006,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <segment>
 <wire x1="439.42" y1="726.44" x2="439.42" y2="734.06" width="0.1524" layer="91"/>
 <label x="439.42" y="728.98" size="1.778" layer="95"/>
-<pinref part="5V0" gate="G$1" pin="TP"/>
+<pinref part="VCC" gate="G$1" pin="TP"/>
 </segment>
 </net>
 <net name="N$4" class="5">
