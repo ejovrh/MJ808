@@ -13791,6 +13791,12 @@ LED current ~0.8mA, Uf=1.235V</text>
 <wire x1="350.52" y1="518.16" x2="350.52" y2="472.44" width="0.1524" layer="90" style="shortdash"/>
 <wire x1="350.52" y1="472.44" x2="271.78" y2="472.44" width="0.1524" layer="90" style="shortdash"/>
 <wire x1="271.78" y1="472.44" x2="271.78" y2="518.16" width="0.1524" layer="90" style="shortdash"/>
+<text x="243.84" y="711.2" size="1.778" layer="91">yellow</text>
+<text x="243.84" y="723.9" size="1.778" layer="91">blue</text>
+<text x="243.84" y="690.88" size="1.778" layer="91">blue</text>
+<text x="187.96" y="708.66" size="1.778" layer="91" rot="R90">green</text>
+<text x="167.64" y="708.66" size="1.778" layer="91" rot="R90">green</text>
+<text x="177.8" y="708.66" size="1.778" layer="91" rot="R270">white</text>
 </plain>
 <instances>
 <instance part="D2" gate="G$1" x="106.68" y="568.96" smashed="yes" rot="R90">
@@ -14360,7 +14366,7 @@ LED current ~0.8mA, Uf=1.235V</text>
 <wire x1="177.8" y1="708.66" x2="180.34" y2="708.66" width="0.1524" layer="91"/>
 <wire x1="177.8" y1="708.66" x2="177.8" y2="721.36" width="0.1524" layer="91"/>
 <junction x="177.8" y="708.66"/>
-<label x="177.8" y="708.66" size="0.8128" layer="95" rot="R270"/>
+<label x="176.53" y="708.66" size="0.8128" layer="95" rot="R270"/>
 </segment>
 </net>
 <net name="DYNAMO2_DELON" class="1">
