@@ -10055,6 +10055,20 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <text x="88.9" y="66.04" size="0.8128" layer="98">DS p.122</text>
 <text x="53.34" y="2.54" size="0.8128" layer="98">DS p.4</text>
 <text x="53.34" y="-2.54" size="0.8128" layer="98">DS p.4</text>
+<text x="-144.78" y="-12.7" size="1.778" layer="97" rot="R180" align="top-left">PB11</text>
+<wire x1="-132.08" y1="0" x2="-144.78" y2="0" width="0.1524" layer="97"/>
+<wire x1="-132.08" y1="-2.54" x2="-144.78" y2="-2.54" width="0.1524" layer="97"/>
+<wire x1="-132.08" y1="-5.08" x2="-144.78" y2="-5.08" width="0.1524" layer="97"/>
+<wire x1="-132.08" y1="-7.62" x2="-144.78" y2="-7.62" width="0.1524" layer="97"/>
+<wire x1="-132.08" y1="-10.16" x2="-144.78" y2="-10.16" width="0.1524" layer="97"/>
+<wire x1="-132.08" y1="-12.7" x2="-144.78" y2="-12.7" width="0.1524" layer="97"/>
+<wire x1="-132.08" y1="-15.24" x2="-144.78" y2="-15.24" width="0.1524" layer="97"/>
+<text x="-144.78" y="0" size="1.778" layer="97" rot="R180" align="top-left">PC9</text>
+<text x="-144.78" y="-2.54" size="1.778" layer="97" rot="R180" align="top-left">PC8</text>
+<text x="-144.78" y="-7.62" size="1.778" layer="97" rot="R180" align="top-left">PA9</text>
+<text x="-144.78" y="-5.08" size="1.778" layer="97" rot="R180" align="top-left">PC7</text>
+<text x="-144.78" y="-15.24" size="1.778" layer="97" rot="R180" align="top-left">PC3</text>
+<text x="-144.78" y="-10.16" size="1.778" layer="97" rot="R180" align="top-left">PB10</text>
 </plain>
 <instances>
 <instance part="IC6" gate="G$1" x="63.5" y="43.18" smashed="yes">
@@ -11173,11 +11187,11 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <label x="91.44" y="-99.06" size="0.8128" layer="95"/>
 </segment>
 </net>
-<net name="!PG!" class="3">
+<net name="LMR34206_!PG!" class="3">
 <segment>
 <pinref part="IC5" gate="G$1" pin="!PG!"/>
-<wire x1="86.36" y1="-106.68" x2="109.22" y2="-106.68" width="0.1524" layer="91"/>
-<label x="109.22" y="-106.68" size="1.778" layer="95"/>
+<wire x1="86.36" y1="-106.68" x2="104.14" y2="-106.68" width="0.1524" layer="91"/>
+<label x="104.14" y="-106.68" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="R14" gate="G$1" pin="2"/>
@@ -11185,8 +11199,8 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <label x="-50.8" y="-60.96" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="-132.08" y1="-15.24" x2="-106.68" y2="-15.24" width="0.1524" layer="91"/>
-<label x="-129.54" y="-15.24" size="1.778" layer="95"/>
+<wire x1="-132.08" y1="-15.24" x2="-114.3" y2="-15.24" width="0.1524" layer="91"/>
+<label x="-114.3" y="-15.24" size="1.778" layer="95"/>
 <pinref part="J1" gate="G$1" pin="7"/>
 </segment>
 </net>
