@@ -22,6 +22,7 @@
 #include "adc.h"
 #include "i2c.h"
 #include "spi.h"
+#include "tim.h"
 #include "usart.h"
 #include "usb.h"
 #include "gpio.h"
@@ -29,6 +30,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "string.h"
+#include "bq25798.h"						// Texas Instruments BQ25798 device driver
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -38,6 +41,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -48,6 +52,13 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+bq25798_t const *bq25798;
+uint8_t buf[12] = "";
+const char *HelloWorld = "hello world\r\n";
+
+__IO uint8_t FlagBlueButtonInterrupt = 0;
+__IO uint8_t FlagBQ25798Interrupt = 0;
 
 /* USER CODE END PV */
 
@@ -69,9 +80,11 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	char *HelloWorld = "hello world\r\n\0";
-	uint8_t i;
+
+	bq25798 = bq25798_ctor(&hi2c2);
+
   /* USER CODE END 1 */
+
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -97,14 +110,28 @@ int main(void)
   MX_SPI2_Init();
   MX_USB_PCD_Init();
   MX_USART2_UART_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  for (i=0; i<strlen(HelloWorld); ++i)
-  {
-	  LL_USART_TransmitData8(USART2, *(HelloWorld+i));
-	  while(!LL_USART_IsActiveFlag_TC(USART2));
-  }
 
-  /* USER CODE END 2 */
+   HAL_UART_Transmit_IT(&huart2, (uint8_t *) HelloWorld, strlen(HelloWorld));
+
+   buf[0] = REG00_Minimal_System_Voltage;
+   bq25798->Read(buf, 1);
+
+   buf[0] = REG00_Minimal_System_Voltage;
+   buf[1] = 0x05;
+   bq25798->Write(buf, 1);
+
+//   buf[0] = REG0E_Timer_Control;
+//   buf[1] = 0x02;
+//   bq25798->Write(buf, 2);
+
+   buf[0] = REG01_Charge_Voltage_Limit;
+   buf[1] = 0x00;
+   buf[2] = 0x06;
+   bq25798->Write(buf, 3);
+
+   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -113,7 +140,27 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+	  if (FlagBlueButtonInterrupt)
+	  {
+		  buf[0] = REG00_Minimal_System_Voltage;
+		  bq25798->Read(buf, 1);
+
+		  buf[0] = REG01_Charge_Voltage_Limit;
+		  bq25798->Read(buf, 3);
+
+		//	  buf[0] = REG0E_Timer_Control;
+		//	  bq25798->Read(buf, 1);
+
+		  FlagBlueButtonInterrupt = 0;
+	  }
+
+	  if (FlagBQ25798Interrupt)
+	  {
+		  FlagBQ25798Interrupt = 0;
+	  }
   }
+
   /* USER CODE END 3 */
 }
 
@@ -123,56 +170,64 @@ int main(void)
   */
 void SystemClock_Config(void)
 {
-  LL_FLASH_SetLatency(LL_FLASH_LATENCY_1);
-  while(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_1)
-  {
-  }
-  LL_RCC_HSI_Enable();
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
-   /* Wait till HSI is ready */
-  while(LL_RCC_HSI_IsReady() != 1)
-  {
-
-  }
-  LL_RCC_HSI_SetCalibTrimming(16);
-  LL_RCC_HSI14_Enable();
-
-   /* Wait till HSI14 is ready */
-  while(LL_RCC_HSI14_IsReady() != 1)
-  {
-
-  }
-  LL_RCC_HSI14_SetCalibTrimming(16);
-  LL_RCC_HSI48_Enable();
-
-   /* Wait till HSI48 is ready */
-  while(LL_RCC_HSI48_IsReady() != 1)
-  {
-
-  }
-  LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
-  LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
-  LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_HSI48);
-
-   /* Wait till System clock is ready */
-  while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI48)
-  {
-
-  }
-  LL_SetSystemCoreClock(48000000);
-
-   /* Update the time base */
-  if (HAL_InitTick (TICK_INT_PRIORITY) != HAL_OK)
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSI14
+                              |RCC_OSCILLATORTYPE_HSI48;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
+  RCC_OscInitStruct.HSI14State = RCC_HSI14_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.HSI14CalibrationValue = 16;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
-  LL_RCC_HSI14_EnableADCControl();
-  LL_RCC_SetUSARTClockSource(LL_RCC_USART2_CLKSOURCE_SYSCLK);
-  LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_HSI);
-  LL_RCC_SetUSBClockSource(LL_RCC_USB_CLKSOURCE_HSI48);
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI48;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB|RCC_PERIPHCLK_USART2
+                              |RCC_PERIPHCLK_I2C1;
+  PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_SYSCLK;
+  PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_HSI;
+  PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
+
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  {
+    Error_Handler();
+  }
 }
 
 /* USER CODE BEGIN 4 */
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if (GPIO_Pin == BlueButton_Pin)
+	{
+		HAL_GPIO_TogglePin(AFE1_LED_ROLE_GPIO_Port, AFE1_LED_ROLE_Pin);
+		FlagBlueButtonInterrupt = 1;
+	}
+
+	if (GPIO_Pin == PQ25798_INT_Pin)
+	{
+		HAL_GPIO_TogglePin(AFE1_LED_CC_GPIO_Port, AFE1_LED_CC_Pin);
+	}
+};
 
 /* USER CODE END 4 */
 
@@ -184,10 +239,10 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+ // __disable_irq();
+  //while (1)
+  //{
+  //}
   /* USER CODE END Error_Handler_Debug */
 }
 
