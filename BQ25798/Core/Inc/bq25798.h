@@ -252,13 +252,10 @@
 
 typedef struct 																						// struct describing devices on BQ25798
 {
-	void (* Write)(uint8_t * const buf, const uint8_t len);											// function pointer for Write method
-	void (* Read)(uint8_t * const buf, const uint8_t len);											// function pointer for Read method
-	void (* Init)(void);																			// function pointer for Init method
+	void (* Write)(const uint8_t addr, const uint16_t val, const uint8_t len);											// function pointer for Write method
+	uint16_t (* Read)(const uint8_t addr, const uint8_t len);											// function pointer for Read method
 } bq25798_t;
 
 bq25798_t * bq25798_ctor(I2C_HandleTypeDef * const in_hi2c);
-
-extern bq25798_t * const Device;																	// declare pointer to public struct part
 
 #endif /* INC_BQ25798_H_ */

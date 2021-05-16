@@ -30,7 +30,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "string.h"
-#include "bq25798.h"						// Texas Instruments BQ25798 device driver
+#include "bq25798.h"																				// Texas Instruments BQ25798 device driver
 
 /* USER CODE END Includes */
 
@@ -54,11 +54,11 @@
 /* USER CODE BEGIN PV */
 
 bq25798_t const *bq25798;
-uint8_t buf[12] = "";
 const char *HelloWorld = "hello world\r\n";
 
 __IO uint8_t FlagBlueButtonInterrupt = 0;
 __IO uint8_t FlagBQ25798Interrupt = 0;
+__IO uint16_t retval = 0;
 
 /* USER CODE END PV */
 
@@ -84,7 +84,6 @@ int main(void)
 	bq25798 = bq25798_ctor(&hi2c2);
 
   /* USER CODE END 1 */
-
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -115,23 +114,12 @@ int main(void)
 
    HAL_UART_Transmit_IT(&huart2, (uint8_t *) HelloWorld, strlen(HelloWorld));
 
-   buf[0] = REG00_Minimal_System_Voltage;
-   bq25798->Read(buf, 1);
+   retval = bq25798->Read(REG48_Part_Information, 1);
 
-   buf[0] = REG00_Minimal_System_Voltage;
-   buf[1] = 0x05;
-   bq25798->Write(buf, 1);
+   bq25798->Write(REG01_Charge_Voltage_Limit, 0x01F4, 2);
+   retval = bq25798->Read(REG01_Charge_Voltage_Limit, 2);
 
-//   buf[0] = REG0E_Timer_Control;
-//   buf[1] = 0x02;
-//   bq25798->Write(buf, 2);
-
-   buf[0] = REG01_Charge_Voltage_Limit;
-   buf[1] = 0x00;
-   buf[2] = 0x06;
-   bq25798->Write(buf, 3);
-
-   /* USER CODE END 2 */
+  /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -143,14 +131,8 @@ int main(void)
 
 	  if (FlagBlueButtonInterrupt)
 	  {
-		  buf[0] = REG00_Minimal_System_Voltage;
-		  bq25798->Read(buf, 1);
-
-		  buf[0] = REG01_Charge_Voltage_Limit;
-		  bq25798->Read(buf, 3);
-
-		//	  buf[0] = REG0E_Timer_Control;
-		//	  bq25798->Read(buf, 1);
+		  retval = bq25798->Read(REG00_Minimal_System_Voltage, 1);
+		  retval = bq25798->Read(REG01_Charge_Voltage_Limit, 2);
 
 		  FlagBlueButtonInterrupt = 0;
 	  }
