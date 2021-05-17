@@ -58,6 +58,8 @@ const char *HelloWorld = "hello world\r\n";
 
 __IO uint8_t FlagBlueButtonInterrupt = 0;
 __IO uint8_t FlagBQ25798Interrupt = 0;
+__IO uint8_t FlagTimer2Interrupt = 0;
+
 __IO uint16_t retval = 0;
 
 /* USER CODE END PV */
@@ -81,7 +83,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-	bq25798 = bq25798_ctor(&hi2c2);
+	bq25798 = bq25798_ctor(&hi2c2);																	//
 
   /* USER CODE END 1 */
 
@@ -110,14 +112,14 @@ int main(void)
   MX_USB_PCD_Init();
   MX_USART2_UART_Init();
   MX_TIM3_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
-   HAL_UART_Transmit_IT(&huart2, (uint8_t *) HelloWorld, strlen(HelloWorld));
+  HAL_TIM_Base_Start(&htim2);																		//
 
-   retval = bq25798->Read(REG48_Part_Information, 1);
+  HAL_UART_Transmit_IT(&huart2, (uint8_t *) HelloWorld, strlen(HelloWorld));						//
 
-   bq25798->Write(REG01_Charge_Voltage_Limit, 0x01F4, 2);
-   retval = bq25798->Read(REG01_Charge_Voltage_Limit, 2);
+  //retval = bq25798->Read(REG48_Part_Information, 1);												//
 
   /* USER CODE END 2 */
 
@@ -131,8 +133,10 @@ int main(void)
 
 	  if (FlagBlueButtonInterrupt)
 	  {
-		  retval = bq25798->Read(REG00_Minimal_System_Voltage, 1);
-		  retval = bq25798->Read(REG01_Charge_Voltage_Limit, 2);
+		  //retval = bq25798->Read(REG10_Charger_Control_1, 1);
+		  retval = bq25798->Read(REG0A_Re_charge_Control, 1);
+		  bq25798->Write(REG0A_Re_charge_Control, 0x06);
+		  retval = bq25798->Read(REG0A_Re_charge_Control, 1);
 
 		  FlagBlueButtonInterrupt = 0;
 	  }
@@ -140,6 +144,13 @@ int main(void)
 	  if (FlagBQ25798Interrupt)
 	  {
 		  FlagBQ25798Interrupt = 0;
+	  }
+
+	  if (FlagTimer2Interrupt)
+	  {
+		  //bq25798->Write(REG10_Charger_Control_1, 0x08);
+
+		  FlagTimer2Interrupt = 0;
 	  }
   }
 
@@ -159,12 +170,9 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSI14
-                              |RCC_OSCILLATORTYPE_HSI48;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI14|RCC_OSCILLATORTYPE_HSI48;
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
   RCC_OscInitStruct.HSI14State = RCC_HSI14_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.HSI14CalibrationValue = 16;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -186,7 +194,7 @@ void SystemClock_Config(void)
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB|RCC_PERIPHCLK_USART2
                               |RCC_PERIPHCLK_I2C1;
   PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_SYSCLK;
-  PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_HSI;
+  PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_SYSCLK;
   PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
 
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
@@ -202,15 +210,27 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	if (GPIO_Pin == BlueButton_Pin)
 	{
 		HAL_GPIO_TogglePin(AFE1_LED_ROLE_GPIO_Port, AFE1_LED_ROLE_Pin);
+
 		FlagBlueButtonInterrupt = 1;
 	}
 
 	if (GPIO_Pin == PQ25798_INT_Pin)
 	{
 		HAL_GPIO_TogglePin(AFE1_LED_CC_GPIO_Port, AFE1_LED_CC_Pin);
+
+		FlagBQ25798Interrupt = 1;
 	}
 };
 
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim == &htim2 )
+	{
+		HAL_GPIO_TogglePin(AFE1_LED_Vbus_GPIO_Port, AFE1_LED_Vbus_Pin);
+
+		FlagTimer2Interrupt = 1;
+	}
+};
 /* USER CODE END 4 */
 
 /**

@@ -47,21 +47,26 @@ uint16_t __Read(const uint8_t addr, const uint8_t len)
     	return (__Device.__buffer[0]);
 };
 
-void __Write(const uint8_t addr, const uint16_t val, const uint8_t len)
+void __Write(const uint8_t addr, const uint16_t val)
 {
+	uint8_t __len;																					// holds the number of bytes to be transferred via I2C
 	__Device.__buffer[0] = addr;																	// store register address
 
-	if (len == 2)																					// if we want to write 2 bytes
+	if (val > 0x00FF)																				// if we want to write 2 bytes
 	{
+		__len = 3;																					// set number of bytes - reg. addr (one byte) plus 2 bytes of payload (effectively one uint16_t)
 		__Device.__buffer[1] = (val & 0xFF00) >> 8;													// put uint16_t's high byte into position
 		__Device.__buffer[2] = (uint8_t) val;														// put uint16_t's low byte into position
 	}
 	else																							// else we write only one byte
+	{
+		__len = 2;																					// set number of bytes - reg. addr. plus one byte of payload
 		__Device.__buffer[1] = (uint8_t) val;														// put only lower uint16_t byte into position
+	}
 
     do
     {
-      if(HAL_I2C_Master_Transmit_IT(__Device.__hi2c, (uint16_t) BQ25798_I2C_ADDRESS_LSHIFTED, __Device.__buffer, (uint16_t) len) != HAL_OK)
+      if(HAL_I2C_Master_Transmit_IT(__Device.__hi2c, (uint16_t) BQ25798_I2C_ADDRESS_LSHIFTED, __Device.__buffer, (uint16_t) __len) != HAL_OK)
         Error_Handler();
 
       while (HAL_I2C_GetState(__Device.__hi2c) != HAL_I2C_STATE_READY)

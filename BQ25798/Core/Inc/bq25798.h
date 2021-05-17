@@ -252,7 +252,7 @@
 
 typedef struct 																						// struct describing devices on BQ25798
 {
-	void (* Write)(const uint8_t addr, const uint16_t val, const uint8_t len);											// function pointer for Write method
+	void (* Write)(const uint8_t addr, const uint16_t val);											// function pointer for Write method
 	uint16_t (* Read)(const uint8_t addr, const uint8_t len);											// function pointer for Read method
 } bq25798_t;
 
