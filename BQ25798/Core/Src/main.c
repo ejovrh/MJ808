@@ -83,8 +83,6 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-	bq25798 = bq25798_ctor(&hi2c2);																	//
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -119,8 +117,9 @@ int main(void)
 
   HAL_UART_Transmit_IT(&huart2, (uint8_t *) HelloWorld, strlen(HelloWorld));						//
 
-  //retval = bq25798->Read(REG48_Part_Information, 1);												//
+  bq25798 = bq25798_ctor(&hi2c2);																	//
 
+  //HAL_UART_Receive_IT (&huart2, UART1_rxBuffer, 12);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -133,10 +132,7 @@ int main(void)
 
 	  if (FlagBlueButtonInterrupt)
 	  {
-		  //retval = bq25798->Read(REG10_Charger_Control_1, 1);
-		  retval = bq25798->Read(REG0A_Re_charge_Control, 1);
-		  bq25798->Write(REG0A_Re_charge_Control, 0x06);
-		  retval = bq25798->Read(REG0A_Re_charge_Control, 1);
+		  retval = bq25798->Read(REG1C_Charger_Status_1, 1);
 
 		  FlagBlueButtonInterrupt = 0;
 	  }
@@ -148,7 +144,7 @@ int main(void)
 
 	  if (FlagTimer2Interrupt)
 	  {
-		  //bq25798->Write(REG10_Charger_Control_1, 0x08);
+		  bq25798->Write(REG10_Charger_Control_1, 0x08);
 
 		  FlagTimer2Interrupt = 0;
 	  }

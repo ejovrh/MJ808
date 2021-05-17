@@ -50,11 +50,12 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, AFE1_LED_ROLE_Pin|AFE1_LED_CC_Pin|AFE0_LED_ROLE_Pin|PQ25798_CE_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOC, AFE1_LED_ROLE_Pin|AFE1_LED_CC_Pin|AFE0_LED_ROLE_Pin|PQ25798_CE_Pin
+                          |PQ25798_QON_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, SAFE_RST_Pin|AFE0_TX_EN_Pin|AFE0_RESET_Pin|PQ25798_QON_Pin
-                          |AFE0_SRC_EN_Pin|Rectifier_3_Pin|AFE0_SNK_EN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, SAFE_RST_Pin|AFE0_TX_EN_Pin|AFE0_RESET_Pin|AFE0_SRC_EN_Pin
+                          |Rectifier_3_Pin|AFE0_SNK_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, AFE0_ABSIDE_Pin|AFE0_ALERT_Pin|Rectifier_1_Pin|DRP_Pin
