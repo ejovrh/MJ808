@@ -216,7 +216,7 @@
 <wire x1="1" y1="5.75" x2="1" y2="7.25" width="0.127" layer="22"/>
 <wire x1="1" y1="7.25" x2="4" y2="7.25" width="0.127" layer="22"/>
 <text x="0.25" y="-9.75" size="0.75" layer="21" font="vector" rot="R180" align="center">ejovrh v.4c</text>
-<text x="4" y="-2" size="0.75" layer="26" font="vector" rot="MR270" align="center">CTD</text>
+<text x="4.5" y="-1.75" size="0.75" layer="26" font="vector" rot="MR270" align="center">CTD</text>
 <text x="5.5" y="-1.75" size="0.75" layer="26" font="vector" rot="MR270" align="center">AND</text>
 <text x="-1.75" y="-10" size="0.75" layer="26" font="vector" rot="MR0" align="center">CAN</text>
 <polygon width="0.0254" layer="42">
@@ -1782,7 +1782,7 @@ by R. Vogg  15.March.2002</description>
 <clearance class="3" value="0.19"/>
 </class>
 </classes>
-<designrules name="oshpark-4layer *">
+<designrules name="oshpark-4layer">
 <description language="en">&lt;b&gt;OSH Park Design Rules&lt;/b&gt;
 &lt;p&gt;
 Please make sure your boards conform to these design rules.
@@ -1840,8 +1840,8 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <param name="psElongationOffset" value="100"/>
 <param name="mvStopFrame" value="1"/>
 <param name="mvCreamFrame" value="0"/>
-<param name="mlMinStopFrame" value="2.5mil"/>
-<param name="mlMaxStopFrame" value="2.5mil"/>
+<param name="mlMinStopFrame" value="1.5mil"/>
+<param name="mlMaxStopFrame" value="1.5mil"/>
 <param name="mlMinCreamFrame" value="0mil"/>
 <param name="mlMaxCreamFrame" value="0mil"/>
 <param name="mlViaStopLimit" value="0mil"/>
@@ -1849,7 +1849,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <param name="srMinRoundness" value="0mil"/>
 <param name="srMaxRoundness" value="0mil"/>
 <param name="slThermalIsolate" value="10mil"/>
-<param name="slThermalsForVias" value="1"/>
+<param name="slThermalsForVias" value="0"/>
 <param name="dpMaxLengthDifference" value="10mm"/>
 <param name="dpGapFactor" value="2.5"/>
 <param name="checkAngle" value="0"/>
@@ -2312,7 +2312,6 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 </polygon>
 <via x="5.1" y="-7.4" extent="1-16" drill="0.35"/>
 <via x="5.1" y="-5.6" extent="1-16" drill="0.35"/>
-<wire x1="4.775" y1="-5.525" x2="4.775" y2="-5.6" width="0.254" layer="16"/>
 <wire x1="5.1" y1="-6.5" x2="5.425" y2="-6.5" width="0.254" layer="16"/>
 <wire x1="5.425" y1="-6.5" x2="5.425" y2="-5.525" width="0.254" layer="16"/>
 <via x="2.5" y="-7.5" extent="1-16" drill="0.35"/>
@@ -2648,44 +2647,8 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 </mfgpreviewcolors>
 <errors>
 <approved hash="21,19,1a04180618061a04"/>
-<approved hash="21,19,18d91aa524a558a7"/>
-<approved hash="5,16,6fce14b7ef20404a"/>
-<approved hash="5,16,95192e0906a99dae"/>
-<approved hash="5,1,74cd122da228d032"/>
-<approved hash="5,1,b1f34b3b8283515f"/>
-<approved hash="5,1,a78f744bbdf34723"/>
-<approved hash="5,1,e1e31f1354daa6ea"/>
-<approved hash="5,1,6bfdfe633050b1f5"/>
 <approved hash="5,1,0dce645138113571"/>
-<approved hash="5,1,08542d9cd231e0e9"/>
-<approved hash="5,1,163e24fedb53fe83"/>
-<approved hash="5,1,0851cfca3dd9c1a7"/>
-<approved hash="5,1,103ccfca245cfba6"/>
-<approved hash="5,1,a6074be41201ffe0"/>
-<approved hash="5,1,86874be405508303"/>
-<approved hash="5,1,94e10372e329ada9"/>
-<approved hash="5,1,4bbf9b6b0274d15f"/>
-<approved hash="5,1,31e5bfed2a4eb07d"/>
-<approved hash="5,1,b45f4bbfa0735c13"/>
-<approved hash="5,1,5463cc6b02648e6b"/>
-<approved hash="5,1,90da6ecdd47e2871"/>
-<approved hash="5,1,90da6ecdd47e2871"/>
-<approved hash="5,1,80ddeca7051e4866"/>
-<approved hash="5,1,80db2803d7ae4866"/>
-<approved hash="5,1,315deca7051ad8e2"/>
-<approved hash="5,1,551d0aeaccf62b94"/>
-<approved hash="5,1,8682a34f5ce26e3f"/>
-<approved hash="5,1,9470bceb5f467ccd"/>
-<approved hash="5,1,3ebff8c61355f620"/>
-<approved hash="5,1,d73ff8c61357dca5"/>
-<approved hash="19,1,ac56ad863ba83a78"/>
-<approved hash="19,1,d456d5bc73927278"/>
-<approved hash="19,1,5451558423aa227f"/>
-<approved hash="19,1,11920e2e281037ac"/>
 <approved hash="19,1,9a139b61b94fb83d"/>
-<approved hash="19,1,7b00c8cac56c5e5d"/>
-<approved hash="19,1,6e106e1e3830383e"/>
-<approved hash="19,16,91ef9010ae3eafc1"/>
 <approved hash="19,16,129212823cac3cbc"/>
 <approved hash="19,16,925796c0a8eeac79"/>
 <approved hash="19,16,96af9210843e8081"/>
@@ -2693,286 +2656,18 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="19,16,9693968480aa80bd"/>
 <approved hash="19,16,96af9210843e8081"/>
 <approved hash="19,16,9693968480aa80bd"/>
-<approved hash="19,16,5ede5b8abda4b8f0"/>
-<approved hash="19,16,740863848d1477d4"/>
-<approved hash="19,16,ba11ba160038003f"/>
-<approved hash="19,16,ae9792a800863cb9"/>
-<approved hash="19,16,a5194aa7601477f4"/>
-<approved hash="6,16,f151f15c33f933f4"/>
-<approved hash="6,16,00072baf3806908c"/>
 <approved hash="3,1,738c61f26122735c"/>
-<approved hash="4,1,1bfa0d5c46474b9e"/>
-<approved hash="4,1,c67744b659601d8b"/>
-<approved hash="4,1,8c0d96c9d979a9a9"/>
-<approved hash="4,1,d8e32192b5437b8e"/>
-<approved hash="4,1,7e0795532638eab0"/>
-<approved hash="4,1,1441840c9fa0b5b1"/>
-<approved hash="4,1,ec9db676e2208f41"/>
-<approved hash="4,1,11c84e43becd839e"/>
-<approved hash="4,1,87bf196a42968027"/>
-<approved hash="4,1,097f04a5ae2cbb03"/>
-<approved hash="4,1,21642501b079b6a7"/>
-<approved hash="4,1,d462a46b446f1feb"/>
-<approved hash="4,1,cc2a710ea508082c"/>
-<approved hash="4,1,fbbf3487ad8070b8"/>
-<approved hash="4,1,e4fe042dcee14fe3"/>
-<approved hash="4,2,1bfa0d5c46474b9e"/>
-<approved hash="4,2,c67744b659601d8b"/>
-<approved hash="4,2,8c0d96c9d979a9a9"/>
-<approved hash="4,2,d8e32192b5437b8e"/>
-<approved hash="4,2,1441840c9fa0b5b1"/>
-<approved hash="4,2,7e0795532638eab0"/>
-<approved hash="4,2,ec9db676e2208f41"/>
-<approved hash="4,2,11c84e43becd839e"/>
-<approved hash="4,2,87bf196a42968027"/>
-<approved hash="4,2,097f04a5ae2cbb03"/>
-<approved hash="4,2,21642501b079b6a7"/>
-<approved hash="4,2,d462a46b446f1feb"/>
-<approved hash="4,2,cc2a710ea508082c"/>
-<approved hash="4,2,fbbf3487ad8070b8"/>
-<approved hash="4,2,e4fe042dcee14fe3"/>
-<approved hash="4,16,e4fe042dcee14fe3"/>
-<approved hash="4,16,c67744b659601d8b"/>
-<approved hash="4,16,8c0d96c9d979a9a9"/>
-<approved hash="4,16,1bfa0d5c46474b9e"/>
-<approved hash="4,16,d8e32192b5437b8e"/>
-<approved hash="4,16,1441840c9fa0b5b1"/>
-<approved hash="4,16,ec9db676e2208f41"/>
-<approved hash="4,16,11c84e43becd839e"/>
-<approved hash="4,16,87bf196a42968027"/>
-<approved hash="4,16,097f04a5ae2cbb03"/>
-<approved hash="4,16,7e0795532638eab0"/>
-<approved hash="4,16,21642501b079b6a7"/>
-<approved hash="4,16,d462a46b446f1feb"/>
-<approved hash="4,16,cc2a710ea508082c"/>
-<approved hash="4,16,fbbf3487ad8070b8"/>
-<approved hash="4,15,e4fe042dcee14fe3"/>
-<approved hash="4,15,c67744b659601d8b"/>
-<approved hash="4,15,1bfa0d5c46474b9e"/>
-<approved hash="4,15,8c0d96c9d979a9a9"/>
-<approved hash="4,15,d8e32192b5437b8e"/>
-<approved hash="4,15,1441840c9fa0b5b1"/>
-<approved hash="4,15,ec9db676e2208f41"/>
-<approved hash="4,15,11c84e43becd839e"/>
-<approved hash="4,15,87bf196a42968027"/>
-<approved hash="4,15,097f04a5ae2cbb03"/>
-<approved hash="4,15,7e0795532638eab0"/>
-<approved hash="4,15,21642501b079b6a7"/>
-<approved hash="4,15,d462a46b446f1feb"/>
-<approved hash="4,15,cc2a710ea508082c"/>
-<approved hash="4,15,fbbf3487ad8070b8"/>
-<approved hash="4,1,b1c5940d40a5175e"/>
-<approved hash="4,2,b1c5940d40a5175e"/>
-<approved hash="4,15,b1c5940d40a5175e"/>
-<approved hash="4,16,b1c5940d40a5175e"/>
-<approved hash="19,16,69e8db12345b50b7"/>
-<approved hash="19,16,d530094c304f0237"/>
-<approved hash="19,16,cada80f11c23d4e4"/>
-<approved hash="19,16,889bfe278e027a52"/>
-<approved hash="19,16,9c5c7671e215ce24"/>
-<approved hash="19,16,6841543468d8aaa3"/>
-<approved hash="6,16,9212521126eae6e9"/>
-<approved hash="5,1,0f5b3f21c1b0f288"/>
-<approved hash="19,1,708fb870f803b892"/>
-<approved hash="19,1,939794acaa82adb9"/>
-<approved hash="19,1,939694ab9a859db8"/>
-<approved hash="19,1,ae9692ae048038b8"/>
-<approved hash="19,1,d91ed9efa3c1a330"/>
-<approved hash="19,1,56916aac1c8220bf"/>
-<approved hash="19,1,d696ea944cba70b8"/>
-<approved hash="19,16,53d3ed8ef398ad9f"/>
-<approved hash="6,16,26eae6e992125211"/>
-<approved hash="4,1,2ab3b782ea314847"/>
-<approved hash="4,2,2ab3b782ea314847"/>
-<approved hash="4,3,d8e32192b5437b8e"/>
-<approved hash="4,3,1441840c9fa0b5b1"/>
-<approved hash="4,3,b1c5940d40a5175e"/>
-<approved hash="4,3,fbbf3487ad8070b8"/>
-<approved hash="4,3,e4fe042dcee14fe3"/>
-<approved hash="4,3,7e0795532638eab0"/>
-<approved hash="4,3,cc2a710ea508082c"/>
-<approved hash="4,3,11c84e43becd839e"/>
-<approved hash="4,3,097f04a5ae2cbb03"/>
-<approved hash="4,3,21642501b079b6a7"/>
-<approved hash="4,3,87bf196a42968027"/>
-<approved hash="4,3,8c0d96c9d979a9a9"/>
-<approved hash="4,4,d8e32192b5437b8e"/>
-<approved hash="4,4,1441840c9fa0b5b1"/>
-<approved hash="4,4,b1c5940d40a5175e"/>
-<approved hash="4,4,fbbf3487ad8070b8"/>
-<approved hash="4,4,e4fe042dcee14fe3"/>
-<approved hash="4,4,7e0795532638eab0"/>
-<approved hash="4,4,cc2a710ea508082c"/>
-<approved hash="4,4,11c84e43becd839e"/>
-<approved hash="4,4,097f04a5ae2cbb03"/>
-<approved hash="4,4,21642501b079b6a7"/>
-<approved hash="4,4,87bf196a42968027"/>
-<approved hash="4,4,8c0d96c9d979a9a9"/>
-<approved hash="4,5,d8e32192b5437b8e"/>
-<approved hash="4,5,1441840c9fa0b5b1"/>
-<approved hash="4,5,b1c5940d40a5175e"/>
-<approved hash="4,5,fbbf3487ad8070b8"/>
-<approved hash="4,5,e4fe042dcee14fe3"/>
-<approved hash="4,5,7e0795532638eab0"/>
-<approved hash="4,5,cc2a710ea508082c"/>
-<approved hash="4,5,11c84e43becd839e"/>
-<approved hash="4,5,097f04a5ae2cbb03"/>
-<approved hash="4,5,21642501b079b6a7"/>
-<approved hash="4,5,87bf196a42968027"/>
-<approved hash="4,5,8c0d96c9d979a9a9"/>
-<approved hash="4,6,d8e32192b5437b8e"/>
-<approved hash="4,6,1441840c9fa0b5b1"/>
-<approved hash="4,6,b1c5940d40a5175e"/>
-<approved hash="4,6,fbbf3487ad8070b8"/>
-<approved hash="4,6,e4fe042dcee14fe3"/>
-<approved hash="4,6,7e0795532638eab0"/>
-<approved hash="4,6,cc2a710ea508082c"/>
-<approved hash="4,6,11c84e43becd839e"/>
-<approved hash="4,6,097f04a5ae2cbb03"/>
-<approved hash="4,6,21642501b079b6a7"/>
-<approved hash="4,6,87bf196a42968027"/>
-<approved hash="4,6,8c0d96c9d979a9a9"/>
-<approved hash="4,7,d8e32192b5437b8e"/>
-<approved hash="4,7,1441840c9fa0b5b1"/>
-<approved hash="4,7,b1c5940d40a5175e"/>
-<approved hash="4,7,fbbf3487ad8070b8"/>
-<approved hash="4,7,e4fe042dcee14fe3"/>
-<approved hash="4,7,7e0795532638eab0"/>
-<approved hash="4,7,cc2a710ea508082c"/>
-<approved hash="4,7,11c84e43becd839e"/>
-<approved hash="4,7,097f04a5ae2cbb03"/>
-<approved hash="4,7,21642501b079b6a7"/>
-<approved hash="4,7,87bf196a42968027"/>
-<approved hash="4,7,8c0d96c9d979a9a9"/>
-<approved hash="4,8,d8e32192b5437b8e"/>
-<approved hash="4,8,1441840c9fa0b5b1"/>
-<approved hash="4,8,b1c5940d40a5175e"/>
-<approved hash="4,8,fbbf3487ad8070b8"/>
-<approved hash="4,8,e4fe042dcee14fe3"/>
-<approved hash="4,8,7e0795532638eab0"/>
-<approved hash="4,8,cc2a710ea508082c"/>
-<approved hash="4,8,11c84e43becd839e"/>
-<approved hash="4,8,097f04a5ae2cbb03"/>
-<approved hash="4,8,21642501b079b6a7"/>
-<approved hash="4,8,87bf196a42968027"/>
-<approved hash="4,8,8c0d96c9d979a9a9"/>
-<approved hash="4,9,d8e32192b5437b8e"/>
-<approved hash="4,9,1441840c9fa0b5b1"/>
-<approved hash="4,9,b1c5940d40a5175e"/>
-<approved hash="4,9,fbbf3487ad8070b8"/>
-<approved hash="4,9,e4fe042dcee14fe3"/>
-<approved hash="4,9,7e0795532638eab0"/>
-<approved hash="4,9,cc2a710ea508082c"/>
-<approved hash="4,9,11c84e43becd839e"/>
-<approved hash="4,9,097f04a5ae2cbb03"/>
-<approved hash="4,9,21642501b079b6a7"/>
-<approved hash="4,9,87bf196a42968027"/>
-<approved hash="4,9,8c0d96c9d979a9a9"/>
-<approved hash="4,10,d8e32192b5437b8e"/>
-<approved hash="4,10,1441840c9fa0b5b1"/>
-<approved hash="4,10,b1c5940d40a5175e"/>
-<approved hash="4,10,fbbf3487ad8070b8"/>
-<approved hash="4,10,e4fe042dcee14fe3"/>
-<approved hash="4,10,7e0795532638eab0"/>
-<approved hash="4,10,cc2a710ea508082c"/>
-<approved hash="4,10,11c84e43becd839e"/>
-<approved hash="4,10,097f04a5ae2cbb03"/>
-<approved hash="4,10,21642501b079b6a7"/>
-<approved hash="4,10,87bf196a42968027"/>
-<approved hash="4,10,8c0d96c9d979a9a9"/>
-<approved hash="4,11,8c0d96c9d979a9a9"/>
-<approved hash="4,11,d8e32192b5437b8e"/>
-<approved hash="4,11,1441840c9fa0b5b1"/>
-<approved hash="4,11,b1c5940d40a5175e"/>
-<approved hash="4,11,fbbf3487ad8070b8"/>
-<approved hash="4,11,e4fe042dcee14fe3"/>
-<approved hash="4,11,7e0795532638eab0"/>
-<approved hash="4,11,cc2a710ea508082c"/>
-<approved hash="4,11,11c84e43becd839e"/>
-<approved hash="4,11,097f04a5ae2cbb03"/>
-<approved hash="4,11,21642501b079b6a7"/>
-<approved hash="4,11,87bf196a42968027"/>
-<approved hash="4,12,8c0d96c9d979a9a9"/>
-<approved hash="4,12,d8e32192b5437b8e"/>
-<approved hash="4,12,1441840c9fa0b5b1"/>
-<approved hash="4,12,b1c5940d40a5175e"/>
-<approved hash="4,12,fbbf3487ad8070b8"/>
-<approved hash="4,12,e4fe042dcee14fe3"/>
-<approved hash="4,12,7e0795532638eab0"/>
-<approved hash="4,12,cc2a710ea508082c"/>
-<approved hash="4,12,11c84e43becd839e"/>
-<approved hash="4,12,097f04a5ae2cbb03"/>
-<approved hash="4,12,21642501b079b6a7"/>
-<approved hash="4,12,87bf196a42968027"/>
-<approved hash="4,13,8c0d96c9d979a9a9"/>
-<approved hash="4,13,d8e32192b5437b8e"/>
-<approved hash="4,13,1441840c9fa0b5b1"/>
-<approved hash="4,13,b1c5940d40a5175e"/>
-<approved hash="4,13,fbbf3487ad8070b8"/>
-<approved hash="4,13,e4fe042dcee14fe3"/>
-<approved hash="4,13,7e0795532638eab0"/>
-<approved hash="4,13,cc2a710ea508082c"/>
-<approved hash="4,13,11c84e43becd839e"/>
-<approved hash="4,13,097f04a5ae2cbb03"/>
-<approved hash="4,13,21642501b079b6a7"/>
-<approved hash="4,13,87bf196a42968027"/>
-<approved hash="4,14,8c0d96c9d979a9a9"/>
-<approved hash="4,14,d8e32192b5437b8e"/>
-<approved hash="4,14,1441840c9fa0b5b1"/>
-<approved hash="4,14,b1c5940d40a5175e"/>
-<approved hash="4,14,fbbf3487ad8070b8"/>
-<approved hash="4,14,e4fe042dcee14fe3"/>
-<approved hash="4,14,7e0795532638eab0"/>
-<approved hash="4,14,cc2a710ea508082c"/>
-<approved hash="4,14,11c84e43becd839e"/>
-<approved hash="4,14,097f04a5ae2cbb03"/>
-<approved hash="4,14,21642501b079b6a7"/>
-<approved hash="4,14,87bf196a42968027"/>
-<approved hash="4,15,2ab3b782ea314847"/>
-<approved hash="4,16,2ab3b782ea314847"/>
-<approved hash="5,1,afc74b3b8280a493"/>
-<approved hash="5,1,5243744baaaa6b6c"/>
-<approved hash="5,1,163e08cac167fe83"/>
-<approved hash="5,1,28844cace786f13e"/>
-<approved hash="5,1,9869f86b02648e18"/>
-<approved hash="5,1,947080df49727ccd"/>
-<approved hash="5,1,a7f7ca633050b186"/>
-<approved hash="5,1,a652c27f6783ffe8"/>
-<approved hash="5,1,80db0437cd9a4866"/>
-<approved hash="5,1,a6ed8ef879779eac"/>
-<approved hash="5,1,b22e4c0ea6e25a82"/>
-<approved hash="5,1,4c0e9b6b0274d72e"/>
 <approved hash="5,16,07f3bb1929ca0aa8"/>
 <approved hash="5,16,7a49e255d005a336"/>
-<approved hash="5,1,d6b8ceea182a4c85"/>
-<approved hash="19,1,df2257903c12c187"/>
 <approved hash="19,1,579150a8268621bf"/>
-<approved hash="19,1,56d168581e7620ff"/>
-<approved hash="19,1,d6d6e8604e4e70f8"/>
-<approved hash="19,1,aed6905a067438f8"/>
 <approved hash="19,1,579450adaa83adba"/>
 <approved hash="19,1,f91ef9e5bbcbbb30"/>
 <approved hash="19,1,fe886adef2dd9f21"/>
-<approved hash="19,16,7ad7006c264d883a"/>
-<approved hash="19,16,bc31a293f111ec30"/>
-<approved hash="19,16,22e18dd581a3c927"/>
-<approved hash="19,16,859a41aa0fdf650c"/>
 <approved hash="19,16,b411b41e0c300c3f"/>
-<approved hash="19,16,27d1cf176486708f"/>
 <approved hash="19,16,8af8fd94508b67c7"/>
 <approved hash="21,19,7c017e037e037c01"/>
-<approved hash="19,1,9a3ce75f7e0078e5"/>
 <approved hash="19,1,e19516880b200809"/>
 <approved hash="19,16,cc79fa17223b3555"/>
-<approved hash="19,16,29285222e87f039b"/>
-<approved hash="19,16,cc3eb282e97e172c"/>
-<approved hash="19,16,d733eab474d971fd"/>
-<approved hash="19,16,aed7905c02723cf9"/>
-<approved hash="19,16,b080e76e47dd90dd"/>
-<approved hash="19,16,a2398f06a20e81ff"/>
-<approved hash="19,16,4aed8df612c2f364"/>
-<approved hash="19,1,f762eefe71e391b0"/>
-<approved hash="5,1,995fa9ad2e0a1efc"/>
 <approved hash="19,16,7e0388edc9d35ede"/>
 <approved hash="19,16,8bb933874a00b7f0"/>
 <approved hash="19,16,416f5b7546c26365"/>
@@ -2980,10 +2675,11 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="19,16,b5bc4503d071412d"/>
 <approved hash="19,16,90a8e9ac8c71c29b"/>
 <approved hash="19,16,01b2f036c4da54fd"/>
-<approved hash="5,16,53e093f50e1a0e0d"/>
 <approved hash="19,1,edf650e3d9b9dfa1"/>
 <approved hash="19,1,fc0b91ba48d3d858"/>
 <approved hash="5,16,2d908ef19066c234"/>
+<approved hash="23,1,178a9a93f823f03d"/>
+<approved hash="23,16,7df376024d81257f"/>
 </errors>
 </board>
 </drawing>
