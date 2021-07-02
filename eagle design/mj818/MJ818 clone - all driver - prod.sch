@@ -11592,7 +11592,7 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="12.7" y1="220.98" x2="73.66" y2="220.98" width="0.1524" layer="90"/>
 <wire x1="73.66" y1="220.98" x2="73.66" y2="180.34" width="0.1524" layer="90"/>
 <text x="15.24" y="215.9" size="1.778" layer="90">ICSP connector</text>
-<text x="45.72" y="15.24" size="1.778" layer="90">Rcs = 203mV / Iled
+<text x="45.72" y="12.7" size="1.778" layer="90">Rcs = 203mV / Iled
        = 0,203/0,02 ~ 10Ohm</text>
 <text x="45.72" y="20.32" size="1.778" layer="90">R3, R4, R5 = Rcs</text>
 </plain>
