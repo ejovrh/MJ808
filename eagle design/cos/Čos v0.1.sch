@@ -11408,6 +11408,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <sheets>
 <sheet>
 <plain>
+<text x="40.64" y="83.82" size="1.778" layer="96" rot="R180">Vzener: approx. &lt;=20V</text>
 </plain>
 <instances>
 <instance part="D101" gate="G$1" x="50.8" y="73.66" smashed="yes" rot="R90">
@@ -11556,6 +11557,8 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <sheets>
 <sheet>
 <plain>
+<text x="63.5" y="68.58" size="1.778" layer="96" rot="R270">EMZS350ARA471MHA0G</text>
+<text x="109.22" y="66.04" size="1.778" layer="96" rot="R270">EMVA101ADA220MHA0G</text>
 </plain>
 <instances>
 <instance part="D101" gate="G$1" x="86.36" y="81.28" smashed="yes" rot="R180">
