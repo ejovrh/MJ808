@@ -40,7 +40,7 @@ int main(void)
 	#if defined(MJ828_)													// MJ828 - call derived class constructor and tie in base class
 	mj828_ctor();
 	#endif
-	#if defined(COS_)													// Èos - call derived class constructor and tie in base class
+	#if defined(COS_)													// Cos - call derived class constructor and tie in base class
 	cos_ctor();
 	#endif
 	#if defined(LU_)													// LU - call derived class constructor and tie in base class

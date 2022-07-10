@@ -256,8 +256,8 @@
 <wire x1="9.15" y1="-6.1" x2="9.2" y2="-6" width="1" layer="29"/>
 <text x="0" y="10.5" size="0.75" layer="21" font="vector" align="center">GND</text>
 <text x="5" y="9" size="0.75" layer="21" font="vector" align="center">BAT+</text>
-<text x="-6" y="-8" size="0.75" layer="21" font="vector" align="center">H</text>
-<text x="-4.25" y="-9.25" size="0.75" layer="21" font="vector" align="center">L</text>
+<text x="-3.5" y="-9" size="0.75" layer="21" font="vector" align="center">H</text>
+<text x="-5.75" y="-4.25" size="0.75" layer="21" font="vector" align="center">L</text>
 </plain>
 <libraries>
 <library name="rcl" urn="urn:adsk.eagle:library:334">
