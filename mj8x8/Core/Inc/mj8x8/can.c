@@ -7,38 +7,38 @@
 // PRT - #define	SPI_SS_MCP2515_pin		B,	4,	4								// SPI - SS
 
 #if defined(MJ828_)
-#define MCP2561_standby_pin		B,	3,	3								// MCP2561 standby
+// PRT - #define MCP2561_standby_pin		B,	3,	3								// MCP2561 standby
 #endif
 #if defined(MJ808_) || defined(MJ818_)
-#define	MCP2561_standby_pin		B,	1,	1								// MCP2561 standby
+// PRT - #define	MCP2561_standby_pin		B,	1,	1								// MCP2561 standby
 #endif
 #if defined(COS_)
-#define	MCP2561_standby_pin		B,	2,	2								// MCP2561 standby
+// PRT - #define	MCP2561_standby_pin		B,	2,	2								// MCP2561 standby
 #endif
 
 extern void DoNothing(void);
 extern void helper_handle_rx(void);
 
-typedef struct															// can_t actual
+typedef struct	// can_t actual
 {
-	can_t public;														// public struct
-	void (*init)(void);													// private - CAN init
+	can_t public;  // public struct
+	void (*init)(void);  // private - CAN init
 
 	// preserve byte order for sequential reads/writes
-	uint8_t __canintf;						// contents of CANINTF register, datasheet p. 53
-	uint8_t __eflg;									// contents of EFLG register, datasheet p. 49
-	uint8_t __canstat;				// contents of the CANSTAT register, datasheet p. 61
-	uint8_t __canctrl;				// contents of the CANCTRL register, datasheet p. 60
-	uint8_t __tec;								// Transmit Error Counter - TEC, datasheet p. 48
-	uint8_t __rec;								// Receive Error Counter - REC, datasheet p. 48
+	uint8_t __canintf;	// contents of CANINTF register, datasheet p. 53
+	uint8_t __eflg;  // contents of EFLG register, datasheet p. 49
+	uint8_t __canstat;	// contents of the CANSTAT register, datasheet p. 61
+	uint8_t __canctrl;	// contents of the CANCTRL register, datasheet p. 60
+	uint8_t __tec;	// Transmit Error Counter - TEC, datasheet p. 48
+	uint8_t __rec;	// Receive Error Counter - REC, datasheet p. 48
 	// preserve byte order for sequential reads/writes
 
-	uint8_t __in_sleep :1;					// is MCP2561 CAN transceiver in sleep or not
-	uint8_t __icod :3;													// Interrupt Codes
+	uint8_t __in_sleep :1;	// is MCP2561 CAN transceiver in sleep or not
+	uint8_t __icod :3;	// Interrupt Codes
 
 } __can_t;
 
-extern __can_t     __CAN;													// declare can_t actual
+extern __can_t         __CAN;  // declare can_t actual
 /* the basic building blocks of interaction with the MCP2515:
  * opcodes -low level instructions- which the hardware executes
  *	they are meant to be "private" and not be used in main() directly
@@ -388,8 +388,8 @@ extern __can_t     __CAN;													// declare can_t actual
 //			__CAN.__in_sleep = 0;											// mark as awake
 //		}
 //}
-__can_t     __CAN
-=					// instantiate can_t actual and set function pointers
+__can_t         __CAN
+=  // instantiate can_t actual and set function pointers
 {
 // PRT - 	.public.Sleep = &_can_sleep,		// set up function pointer for public methods
 // PRT - 	.public.RequestToSend = &_mcp2515_can_msg_send,						// ditto
@@ -403,11 +403,10 @@ __can_t     __CAN
 // object constructor
 can_t* can_ctor()
 {
-	__CAN.init();														// initialize & configure the MCP2515
+	__CAN.init();  // initialize & configure the MCP2515
 
 	return &__CAN.public;  // return address of public part; calling code accesses it via pointer
 }
-;
 
 //ISR( INT1_vect)  // ISR for INT1 - triggered by CAN message reception of the MCP2515
 //{

@@ -46,21 +46,21 @@ int main(void)
 		}
 }
 
-#if ( defined(MJ808_) | defined(MJ828_) )								// ISR for timers 1 A compare match - button handling
-ISR1( TIMER1_COMPA_vect)						// timer/counter 1 - button debounce - 25ms
+#if ( defined(MJ808_) | defined(MJ828_) )	// ISR for timers 1 A compare match - button handling
+ISR1( TIMER1_COMPA_vect)	// timer/counter 1 - button debounce - 25ms
 {
 	// code to be executed every 25ms
-	sleep_disable();													// wakey wakey
+	sleep_disable();	// wakey wakey
 
-	Device->button->deBounce();											// call the debouncer
+	Device->button->deBounce();  // call the debouncer
 
-	sleep_enable();														// back to sleep
+	sleep_enable();  // back to sleep
 }
 
-#if defined(MJ828_)														// ISR for timer0 - 16.25ms - charlieplexing timer
-ISR2( TIMER0_COMPA_vect)		// timer/counter0 - 16.25ms - charlieplexed blinking
+#if defined(MJ828_)	// ISR for timer0 - 16.25ms - charlieplexing timer
+ISR2( TIMER0_COMPA_vect)	// timer/counter0 - 16.25ms - charlieplexed blinking
 {
-	Device->led->Handler();  // handles LEDs according to CAN message (of type CMND_UTIL_LED)
+	Device->led->Handler();	// handles LEDs according to CAN message (of type CMND_UTIL_LED)
 }
 #endif
 

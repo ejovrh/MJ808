@@ -1,27 +1,27 @@
 #include "main.h"
 #include "mj828\mj828.h"
 
-#include "mj828\mj828_led.c"											// concrete device-specific LED functions
-#include "mj828\mj828_button.c"											// concrete device-specific button functions
+#include "mj828\mj828_led.c"	// concrete device-specific LED functions
+#include "mj828\mj828_button.c"	// concrete device-specific button functions
 
-typedef struct															// mj828_t actual
+typedef struct	// mj828_t actual
 {
-	mj828_t public;														// public struct
+	mj828_t public;  // public struct
 } __mj828_t;
 
-static __mj828_t      __Device      __attribute__ ((section (".data")));	// preallocate __Device object in .data
+static __mj828_t       __Device       __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
 void _event_execution_function_mj828(uint8_t val)
 {
 	switch(val)
 		// based on array value at position #foo of array e.g. FooButtonCaseTable[]
 		{
-		case 0x01:														// error button press
+		case 0x01:	// error button press
 			// TODO - implement device function on button error press
 			EventHandler->UnSetEvent(val);
 			break;
 
-		case 0x02:														//
+		case 0x02:	//
 			Device->led->Shine(Red);
 
 			if(Device->button->button[Right].Toggle)
@@ -35,7 +35,7 @@ void _event_execution_function_mj828(uint8_t val)
 			EventHandler->UnSetEvent(val);
 			break;
 
-		case 0x04:														//
+		case 0x04:	//
 			if(Device->button->button[Left].Momentary)
 				{
 					// FIXME - on button hold, multiple events are triggered and flapping occurs
@@ -62,8 +62,8 @@ void _event_execution_function_mj828(uint8_t val)
 			//EventHandler->UnSetEvent(val);
 			//break;
 
-		default:														// no value passed
-			EventHandler->UnSetEvent(val);								// do nothing
+		default:	// no value passed
+			EventHandler->UnSetEvent(val);	// do nothing
 			break;
 		}
 }
@@ -71,10 +71,10 @@ void _event_execution_function_mj828(uint8_t val)
 // toggles a bit in the LED flags variable; charlieplexer in tun makes it shine
 void _PopulatedBusOperationMJ828(message_handler_t *const in_msg)
 {
-	volatile can_msg_t *msg = in_msg->ReceiveMessage();			// CAN message object
+	volatile can_msg_t *msg = in_msg->ReceiveMessage();  // CAN message object
 
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
-	if((msg->COMMAND& MASK_COMMAND) == CMND_DASHBOARD )				// dashboard command
+	if((msg->COMMAND& MASK_COMMAND) == CMND_DASHBOARD )  // dashboard command
 		{
 			__Device.public.led->Shine(((msg->COMMAND & 0x0E) >> 1));  // flag LED at appropriate index as whatever the command says
 
@@ -126,9 +126,9 @@ void mj828_ctor()
 
 	// FIXME - if below flag is 0, it doesn't work properly: at least one LED has to be on for the thing to work
 	// also: if any other than Green is on, it doesn't shine properly
-	__Device.public.led->Shine(GREEN);									// crude power indicator
+	__Device.public.led->Shine(GREEN);	// crude power indicator
 }
 
-#if defined(MJ828_)														// all devices have the object name "Device", hence the preprocessor macro
+#if defined(MJ828_)	// all devices have the object name "Device", hence the preprocessor macro
 mj828_t *const Device = &__Device.public;	// set pointer to MsgHandler public part
 #endif

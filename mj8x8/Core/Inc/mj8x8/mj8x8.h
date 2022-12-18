@@ -15,10 +15,10 @@
 // PRT - definitions of device/PCB layout-independent hardware pins
 // definitions of device/PCB layout-independent hardware pins
 
-typedef struct													// "base class" struct for mj8x8 devices
+typedef struct	// "base class" struct for mj8x8 devices
 {
-	can_t *can;															// pointer to the CAN structure
-//	ATtiny4313_t *mcu;													// pointer to MCU structure
+	can_t *can;  // pointer to the CAN structure
+//	ATtiny4313_t *mcu;	// pointer to MCU structure
 
 	void (*const HeartBeat)(message_handler_t *const msg);	// default periodic heartbeat for all devices
 	void (*HeartbeatPeriodic)(void);	// ran by Heartbeat - meant to be overridden by derived classes if needed

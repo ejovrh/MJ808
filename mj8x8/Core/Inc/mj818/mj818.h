@@ -5,25 +5,23 @@
 #include "led\led.h"
 
 // definitions of device/PCB layout-dependent hardware pins
-#define MCP2561_standby_pin		B,	1,	1								// MCP2561 standby
-#define PWM_rear_light_pin		B,	2,	2								// PWM - brake light
-#define PWM_brake_light_pin		B,	3,	3								// PWM - brake light
+// PRT - definitions of device/PCB layout-dependent hardware pins
 // definitions of device/PCB layout-dependent hardware pins
 
-enum mj818_leds															// enum of lights on this device
+enum mj818_leds  // enum of lights on this device
 {
 	  Rear,
 	  Brake
 };
 
-typedef struct														// struct describing devices on MJ818
+typedef struct	// struct describing devices on MJ818
 {
-	mj8x8_t *mj8x8;														// pointer to the base class
-	composite_led_t *led;												// pointer to LED structure
+	mj8x8_t *mj8x8;  // pointer to the base class
+	composite_led_t *led;  // pointer to LED structure
 } mj818_t;
 
-void mj818_ctor();										// declare constructor for concrete class
+void mj818_ctor();	// declare constructor for concrete class
 
-extern mj818_t *const Device;						// declare pointer to public struct part
+extern mj818_t *const Device;  // declare pointer to public struct part
 
 #endif /* CORE_INC_MJ818_MJ818_H_ */

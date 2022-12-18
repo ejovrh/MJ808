@@ -1,14 +1,14 @@
 #include "main.h"
 #include "mj808\mj808.h"
-#include "mj808\mj808_led.c"											// concrete device-specific LED functions
-#include "mj808\mj808_button.c"											// concrete device-specific button functions
+#include "mj808\mj808_led.c"	// concrete device-specific LED functions
+#include "mj808\mj808_button.c"	// concrete device-specific button functions
 
-typedef struct															// mj808_t actual
+typedef struct	// mj808_t actual
 {
-	mj808_t public;														// public struct
+	mj808_t public;  // public struct
 } __mj808_t;
 
-static __mj808_t        __Device           __attribute__ ((section (".data")));  // preallocate __Device object in .data
+static __mj808_t   __Device	  __attribute__ ((section (".data")));  // preallocate __Device object in .data
 
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 // cases in this switch-case statement must be unique for all events on this device
@@ -37,12 +37,12 @@ void _event_execution_function_mj808(const uint8_t val)
 // received MsgHandler object and passes
 void _PopulatedBusOperationMJ808(message_handler_t *const in_msg)
 {
-	volatile can_msg_t *msg = in_msg->ReceiveMessage();			// CAN message object
+	volatile can_msg_t *msg = in_msg->ReceiveMessage();  // CAN message object
 
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
-	if((msg->COMMAND& CMND_UTIL_LED) == CMND_UTIL_LED)				// utility LED command
+	if((msg->COMMAND& CMND_UTIL_LED) == CMND_UTIL_LED)	// utility LED command
 		{
-			__Device.public.led->led[Utility].Shine(msg->COMMAND);		// glowy thingy
+			__Device.public.led->led[Utility].Shine(msg->COMMAND);	// glowy thingy
 			return;
 		}
 
@@ -51,7 +51,7 @@ void _PopulatedBusOperationMJ808(message_handler_t *const in_msg)
 			// CHECKME - does it work?
 			__Device.public.led->led[Front].Shine(msg->ARGUMENT);
 			// TODO - access via object
-//		_wrapper_fade_mj808(msg->ARGUMENT);								// fade front light to CAN msg. argument value
+//		_wrapper_fade_mj808(msg->ARGUMENT);	// fade front light to CAN msg. argument value
 			return;
 		}
 
@@ -96,9 +96,9 @@ void mj808_ctor()
 	EventHandler->fpointer = &_event_execution_function_mj808;	// implements event hander for this device
 
 	// TODO - access via object
-	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);		// crude "I'm finished" indicator
+	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);  // crude "I'm finished" indicator
 }
 
-#if defined(MJ808_)														// all devices have the object name "Device", hence the preprocessor macro
+#if defined(MJ808_)	// all devices have the object name "Device", hence the preprocessor macro
 mj808_t *const Device = &__Device.public;  // set pointer to MsgHandler public part
 #endif
