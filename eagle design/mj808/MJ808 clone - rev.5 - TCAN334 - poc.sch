@@ -12236,10 +12236,10 @@ by R. Vogg  15.March.2002</description>
 <wire x1="-10.16" y1="5.08" x2="10.16" y2="5.08" width="0.254" layer="94"/>
 <wire x1="10.16" y1="5.08" x2="10.16" y2="-7.62" width="0.254" layer="94"/>
 <wire x1="10.16" y1="-7.62" x2="-10.16" y2="-7.62" width="0.254" layer="94"/>
-<pin name="2_IN1" x="-15.24" y="0" length="middle"/>
-<pin name="1_GND" x="-15.24" y="-2.54" length="middle"/>
-<pin name="OUT1_3" x="15.24" y="0" length="middle" rot="R180"/>
-<pin name="VCC_4" x="15.24" y="-2.54" length="middle" rot="R180"/>
+<pin name="2_IN" x="-15.24" y="0" length="middle" direction="in"/>
+<pin name="1_GND" x="-15.24" y="-2.54" length="middle" direction="pwr"/>
+<pin name="OUT_3" x="15.24" y="0" length="middle" direction="out" rot="R180"/>
+<pin name="VCC_4" x="15.24" y="-2.54" length="middle" direction="pwr" rot="R180"/>
 <text x="-10.16" y="7.62" size="1.778" layer="95">&gt;NAME</text>
 <text x="-10.16" y="-10.16" size="1.778" layer="96">&gt;VALUE</text>
 </symbol>
@@ -12253,8 +12253,8 @@ by R. Vogg  15.March.2002</description>
 <device name="" package="4SOT143">
 <connects>
 <connect gate="G$1" pin="1_GND" pad="1_GND"/>
-<connect gate="G$1" pin="2_IN1" pad="2_IN"/>
-<connect gate="G$1" pin="OUT1_3" pad="3_OUT"/>
+<connect gate="G$1" pin="2_IN" pad="2_IN"/>
+<connect gate="G$1" pin="OUT_3" pad="3_OUT"/>
 <connect gate="G$1" pin="VCC_4" pad="4_VCC"/>
 </connects>
 <technologies>
@@ -14274,9 +14274,9 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <instance part="SUPPLY3" gate="G$1" x="73.66" y="7.62" smashed="yes">
 <attribute name="VALUE" x="73.66" y="5.715" size="1.778" layer="96" align="center"/>
 </instance>
-<instance part="IC2" gate="G$1" x="91.44" y="73.66" smashed="yes" rot="MR0">
-<attribute name="NAME" x="101.6" y="81.28" size="1.778" layer="95" rot="MR0"/>
-<attribute name="VALUE" x="101.6" y="63.5" size="1.778" layer="96" rot="MR0"/>
+<instance part="IC2" gate="G$1" x="88.9" y="73.66" smashed="yes" rot="MR0">
+<attribute name="NAME" x="99.06" y="81.28" size="1.778" layer="95" rot="MR0"/>
+<attribute name="VALUE" x="99.06" y="63.5" size="1.778" layer="96" rot="MR0"/>
 </instance>
 <instance part="SUPPLY1" gate="G$1" x="109.22" y="68.58" smashed="yes">
 <attribute name="VALUE" x="109.22" y="66.675" size="1.778" layer="96" align="center"/>
@@ -14301,7 +14301,7 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <segment>
 <pinref part="IC2" gate="G$1" pin="1_GND"/>
 <pinref part="SUPPLY1" gate="G$1" pin="GND"/>
-<wire x1="109.22" y1="71.12" x2="106.68" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="109.22" y1="71.12" x2="104.14" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="SW101" gate="G$1" pin="P$2"/>
@@ -14312,21 +14312,21 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <net name="SWITCH_IN" class="4">
 <segment>
 <pinref part="SW101" gate="G$1" pin="P$1"/>
-<pinref part="IC2" gate="G$1" pin="2_IN1"/>
-<wire x1="106.68" y1="73.66" x2="111.76" y2="73.66" width="0.1524" layer="91"/>
+<pinref part="IC2" gate="G$1" pin="2_IN"/>
+<wire x1="104.14" y1="73.66" x2="111.76" y2="73.66" width="0.1524" layer="91"/>
 <label x="114.3" y="73.66" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="SWITCH" class="0">
 <segment>
-<wire x1="76.2" y1="73.66" x2="63.5" y2="73.66" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="73.66" x2="63.5" y2="73.66" width="0.1524" layer="91"/>
 <label x="63.5" y="73.66" size="1.778" layer="95" rot="R180" xref="yes"/>
-<pinref part="IC2" gate="G$1" pin="OUT1_3"/>
+<pinref part="IC2" gate="G$1" pin="OUT_3"/>
 </segment>
 </net>
 <net name="3V3" class="0">
 <segment>
-<wire x1="76.2" y1="71.12" x2="63.5" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="71.12" x2="63.5" y2="71.12" width="0.1524" layer="91"/>
 <label x="63.5" y="71.12" size="1.778" layer="95" rot="R180" xref="yes"/>
 <pinref part="IC2" gate="G$1" pin="VCC_4"/>
 </segment>
@@ -14715,6 +14715,8 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <approved hash="104,1@LED_DRIVER_FRONT,93.98,96.52,IC6,IN,BAT+,,,"/>
 <approved hash="204,1@LED_DRIVER_FRONT,93.98,104.14,IC6,VCC,,,,"/>
 <approved hash="104,1@LED_DRIVER_FRONT,119.38,93.98,IC6,CS,LED_AN,,,"/>
+<approved hash="104,1@PUSHBUTTON,104.14,71.12,IC2,1_GND,GND,,,"/>
+<approved hash="104,1@PUSHBUTTON,73.66,71.12,IC2,VCC_4,3V3,,,"/>
 <approved hash="213,1,147.32,101.6,CAN_RX,in,,,,"/>
 <approved hash="213,1,193.04,121.92,SWITCH,in,,,,"/>
 </errors>
