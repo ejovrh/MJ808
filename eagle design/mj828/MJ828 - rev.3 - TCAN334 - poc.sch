@@ -12156,10 +12156,10 @@ by R. Vogg  15.March.2002</description>
 <wire x1="-10.16" y1="5.08" x2="10.16" y2="5.08" width="0.254" layer="94"/>
 <wire x1="10.16" y1="5.08" x2="10.16" y2="-7.62" width="0.254" layer="94"/>
 <wire x1="10.16" y1="-7.62" x2="-10.16" y2="-7.62" width="0.254" layer="94"/>
-<pin name="2_IN1" x="-15.24" y="0" length="middle"/>
-<pin name="1_GND" x="-15.24" y="-2.54" length="middle"/>
-<pin name="OUT1_3" x="15.24" y="0" length="middle" rot="R180"/>
-<pin name="VCC_4" x="15.24" y="-2.54" length="middle" rot="R180"/>
+<pin name="2_IN" x="-15.24" y="0" length="middle" direction="in"/>
+<pin name="1_GND" x="-15.24" y="-2.54" length="middle" direction="pwr"/>
+<pin name="OUT_3" x="15.24" y="0" length="middle" direction="out" rot="R180"/>
+<pin name="VCC_4" x="15.24" y="-2.54" length="middle" direction="pwr" rot="R180"/>
 <text x="-10.16" y="7.62" size="1.778" layer="95">&gt;NAME</text>
 <text x="-10.16" y="-10.16" size="1.778" layer="96">&gt;VALUE</text>
 </symbol>
@@ -12173,8 +12173,8 @@ by R. Vogg  15.March.2002</description>
 <device name="" package="4SOT143">
 <connects>
 <connect gate="G$1" pin="1_GND" pad="1_GND"/>
-<connect gate="G$1" pin="2_IN1" pad="2_IN"/>
-<connect gate="G$1" pin="OUT1_3" pad="3_OUT"/>
+<connect gate="G$1" pin="2_IN" pad="2_IN"/>
+<connect gate="G$1" pin="OUT_3" pad="3_OUT"/>
 <connect gate="G$1" pin="VCC_4" pad="4_VCC"/>
 </connects>
 <technologies>
@@ -16313,7 +16313,7 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <net name="SWITCH_IN" class="0">
 <segment>
 <pinref part="SW" gate="G$1" pin="P$1"/>
-<pinref part="IC2" gate="G$1" pin="2_IN1"/>
+<pinref part="IC2" gate="G$1" pin="2_IN"/>
 <wire x1="104.14" y1="71.12" x2="109.22" y2="71.12" width="0.1524" layer="91"/>
 <label x="109.22" y="71.12" size="1.778" layer="95" rot="R90"/>
 </segment>
@@ -16337,7 +16337,7 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 </net>
 <net name="SWITCH" class="0">
 <segment>
-<pinref part="IC2" gate="G$1" pin="OUT1_3"/>
+<pinref part="IC2" gate="G$1" pin="OUT_3"/>
 <wire x1="73.66" y1="71.12" x2="60.96" y2="71.12" width="0.1524" layer="91"/>
 <label x="60.96" y="71.12" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
@@ -17165,6 +17165,8 @@ rounded to 100Ω</text>
 <approved hash="104,1@STM32,129.54,111.76,IC2,VCCD_18,3V3,,,"/>
 <approved hash="104,1@CAN_INFRA,68.58,60.96,IC1,2_GND,GND,,,"/>
 <approved hash="104,1@CAN_INFRA,68.58,63.5,IC1,3_VCC,3V3,,,"/>
+<approved hash="104,1@PUSHBUTTON,104.14,68.58,IC2,1_GND,GND,,,"/>
+<approved hash="104,1@PUSHBUTTON,73.66,68.58,IC2,VCC_4,3V3,,,"/>
 <approved hash="213,1,177.8,101.6,BREAK_IN,in,,,,"/>
 <approved hash="213,1,147.32,101.6,CAN_RX,in,,,,"/>
 <approved hash="213,1,180.34,101.6,HIGH_IN,in,,,,"/>
