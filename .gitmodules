@@ -1,0 +1,12 @@
+[submodule "mj8x8/Drivers/stm32f0xx_hal_driver"]
+	path = mj8x8/Drivers/stm32f0xx_hal_driver
+	url = https://github.com/STMicroelectronics/stm32f0xx_hal_driver.git
+[submodule "mj8x8/Drivers/cmsis_device_f0"]
+	path = mj8x8/Drivers/cmsis_device_f0
+	url = https://github.com/STMicroelectronics/cmsis_device_f0.git
+[submodule "test/STM32CubeF0"]
+	path = test/STM32CubeF0
+	url = https://github.com/STMicroelectronics/STM32CubeF0.git
+[submodule "mj8x8/STM32CubeF0"]
+	path = mj8x8/STM32CubeF0
+	url = https://github.com/STMicroelectronics/STM32CubeF0.git
