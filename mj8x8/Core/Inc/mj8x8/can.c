@@ -1,5 +1,4 @@
-//#include "gpio.h"
-//#include "uci_spi.h"
+#include "main.h"
 #include "can.h"
 
 // TODO - move pin definitions out of here
@@ -38,7 +37,7 @@ typedef struct	// can_t actual
 
 } __can_t;
 
-extern __can_t         __CAN;  // declare can_t actual
+extern __can_t                      __CAN;	// declare can_t actual
 /* the basic building blocks of interaction with the MCP2515:
  * opcodes -low level instructions- which the hardware executes
  *	they are meant to be "private" and not be used in main() directly
@@ -388,7 +387,7 @@ extern __can_t         __CAN;  // declare can_t actual
 //			__CAN.__in_sleep = 0;											// mark as awake
 //		}
 //}
-__can_t         __CAN
+__can_t        __CAN
 =  // instantiate can_t actual and set function pointers
 {
 // PRT - 	.public.Sleep = &_can_sleep,		// set up function pointer for public methods
@@ -397,14 +396,68 @@ __can_t         __CAN
 // PRT - 	.public.ChangeOpMode = &_mcp2515_change_opmode,						// ditto
 // PRT - 	.public.ReadBytes = &_mcp2515_opcode_read_bytes,					// ditto
 // PRT - 	.public.BitModify = &_mcp2515_opcode_bit_modify,					// ditto
-// PRT - 	.init = &__mcp2515_init												// ditto
 };
+
+// TODO - clean up CAN init
+void HAL_CAN_MspInit(CAN_HandleTypeDef *canHandle)
+{
+
+	GPIO_InitTypeDef GPIO_InitStruct =
+		{0};
+	if(canHandle->Instance == CAN)
+		{
+			/* USER CODE BEGIN CAN_MspInit 0 */
+
+			/* USER CODE END CAN_MspInit 0 */
+			/* CAN clock enable */
+			__HAL_RCC_CAN1_CLK_ENABLE();
+
+			__HAL_RCC_GPIOA_CLK_ENABLE();
+			/**CAN GPIO Configuration
+			 PA11     ------> CAN_RX
+			 PA12     ------> CAN_TX
+			 */
+			GPIO_InitStruct.Pin = GPIO_PIN_11 | GPIO_PIN_12;
+			GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+			GPIO_InitStruct.Pull = GPIO_NOPULL;
+			GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+			GPIO_InitStruct.Alternate = GPIO_AF4_CAN;
+			HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+			/* CAN interrupt Init */
+			HAL_NVIC_SetPriority(CEC_CAN_IRQn, 0, 0);
+			HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
+			/* USER CODE BEGIN CAN_MspInit 1 */
+
+			/* USER CODE END CAN_MspInit 1 */
+		}
+}
+
+// CAN init, as generated via ioc file
+inline static void _STM32CANInit(void)
+{
+	CAN_HandleTypeDef hcan;  //
+	hcan.Instance = CAN;	//
+	hcan.Init.Prescaler = 8;	//
+	hcan.Init.Mode = CAN_MODE_NORMAL;  //
+	hcan.Init.SyncJumpWidth = CAN_SJW_1TQ;	//
+	hcan.Init.TimeSeg1 = CAN_BS1_16TQ;	//
+	hcan.Init.TimeSeg2 = CAN_BS2_3TQ;  //
+	hcan.Init.TimeTriggeredMode = DISABLE;	//
+	hcan.Init.AutoBusOff = DISABLE;  //
+	hcan.Init.AutoWakeUp = DISABLE;  //
+	hcan.Init.AutoRetransmission = DISABLE;  //
+	hcan.Init.ReceiveFifoLocked = DISABLE;	//
+	hcan.Init.TransmitFifoPriority = DISABLE;  //
+	HAL_CAN_Init(&hcan);	// initialize the CAN peripheral
+}
 
 // object constructor
 can_t* can_ctor()
 {
-	__CAN.init();  // initialize & configure the MCP2515
-
+	// TODO - verify & implement TCAN334 driver
+	_STM32CANInit();  // initialize & configure STM32 CAN hardware
+// TODO - call mspinit
 	return &__CAN.public;  // return address of public part; calling code accesses it via pointer
 }
 

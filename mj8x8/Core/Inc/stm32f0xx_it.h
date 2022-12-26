@@ -7,4 +7,6 @@ void SVC_Handler(void);  // declaration of system service call via SWI instructi
 void PendSV_Handler(void);	// declaration of pendable request for system service handler
 void SysTick_Handler(void);  // declaration of  systick handler
 
+// TODO - implement & verify CAN interrupt handler
+
 #endif /* __STM32F0xx_IT_H */

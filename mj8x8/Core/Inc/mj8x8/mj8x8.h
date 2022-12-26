@@ -1,15 +1,9 @@
 #ifndef CORE_INC_MJ808_MJ8X8_H_
 #define CORE_INC_MJ808_MJ8X8_H_
 
-#include <inttypes.h>
-
-//#include "mj8x8\attiny4313.h"
 #include "mj8x8\can.h"
-
-#include "message\message.h"
-#include "event\event.h" // CHECKME - is needed ???
-
 #include "mj8x8\mj8x8_commands.h"
+#include "message\message.h"
 
 // definitions of device/PCB layout-independent hardware pins
 // PRT - definitions of device/PCB layout-independent hardware pins
@@ -18,7 +12,6 @@
 typedef struct	// "base class" struct for mj8x8 devices
 {
 	can_t *can;  // pointer to the CAN structure
-//	ATtiny4313_t *mcu;	// pointer to MCU structure
 
 	void (*const HeartBeat)(message_handler_t *const msg);	// default periodic heartbeat for all devices
 	void (*HeartbeatPeriodic)(void);	// ran by Heartbeat - meant to be overridden by derived classes if needed

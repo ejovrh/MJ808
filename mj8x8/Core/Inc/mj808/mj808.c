@@ -8,7 +8,7 @@ typedef struct	// mj808_t actual
 	mj808_t public;  // public struct
 } __mj808_t;
 
-static __mj808_t   __Device	  __attribute__ ((section (".data")));  // preallocate __Device object in .data
+static __mj808_t    __Device	   __attribute__ ((section (".data")));  // preallocate __Device object in .data
 
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 // cases in this switch-case statement must be unique for all events on this device
@@ -70,22 +70,18 @@ void _PopulatedBusOperationMJ808(message_handler_t *const in_msg)
 
 void mj808_ctor()
 {
+	// general device non-specific low-level hardware init & config
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A));	// call base class constructor & initialize own SID
 
-	// GPIO state definitions
+	// device-specific GPIO state definitions
 		{
-			// state initialisation of device-specific pins
-// PRT - state initialisation of device-specific pins
-			// state initialisation of device-specific pins
+
 		}
 
-	// hardware initialisation
+	// device-specific hardware initialisation
 		{
-			// PRT			cli();
 
-// PRT - mj808 hardware initialisation
-			// PRT			sei();
 		}
 
 	__Device.public.led = _virtual_led_ctorMJ808();  // call virtual constructor & tie in object addresses

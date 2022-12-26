@@ -7,7 +7,7 @@ typedef struct	// mj818_t actual
 	mj818_t public;  // public struct
 } __mj818_t;
 
-static __mj818_t          __Device          __attribute__ ((section (".data")));	// preallocate __Device object in .data
+static __mj818_t           __Device           __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
 // defines device operation on empty bus
 void _EmptyBusOperationMJ818(void)
@@ -44,27 +44,14 @@ void mj818_ctor()
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B));	// call base class constructor & initialize own SID
 
-	// GPIO state definitions
+	// device-specific GPIO state definitions
 		{
-			// state initialization of device-specific pins
-			// PRT - state initialization of device-specific pins
-			// state initialization of device-specific pins
+
 		}
 
-	// hardware initialization
+	// device-specific hardware initialisation
 		{
-			// PRT -			cli();
 
-			// OCR init for rear lights - have lights off
-			// PRT -OCR init for rear lights - have lights off
-
-			// timer/counter1 - 16bit - brake light PWM
-			// PRT - timer brake light PWM
-
-			// timer/counter0 - 8bit - rear light PWM
-			// PRT - timer rear light PWM
-
-			// PRT -			sei();
 		}
 
 	__Device.public.led = _virtual_led_ctorMJ818();  // call virtual constructor & tie in object addresses

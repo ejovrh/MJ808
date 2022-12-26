@@ -1,6 +1,4 @@
 #include "main.h"
-#include <inttypes.h>
-
 #include "mj8x8.h"
 
 extern void DoNothing(void);
@@ -15,7 +13,7 @@ typedef struct	// mj8x8_t actual
 	uint8_t __FlagDoDefaultOperation :2;	// we are alone on the bus - shall we do our device-specific default operation?
 } __mj8x8_t;
 
-extern __mj8x8_t       __MJ8x8;  // declare mj8x8_t actual
+extern __mj8x8_t                   __MJ8x8;	// declare mj8x8_t actual
 // provides a periodic heartbeat based on the watchdog timer interrupt
 static
 void _Heartbeat(message_handler_t *const msg)
@@ -46,29 +44,80 @@ void _Heartbeat(message_handler_t *const msg)
 // PRT			WDTCR |= (_BV(WDCE) | _BV(WDE));						// WDT change enable sequence
 // PRT			WDTCR = (_BV(WDIE) | _BV(WDP2));						// watchdog timer set to 0.25
 		}
-	++__MJ8x8.__BeatIterationCount;							// increment the iteration counter
+	++__MJ8x8.__BeatIterationCount;  // increment the iteration counter
 }
 
-__mj8x8_t	 __MJ8x8 =  // instantiate mj8x8_t actual and set function pointers
-	{.public.HeartBeat = &_Heartbeat,  // implement device-agnostic default behavior - heartbeat
+__mj8x8_t                      __MJ8x8 =  // instantiate mj8x8_t actual and set function pointers
+	{.public.HeartBeat = &_Heartbeat,  // implement device-agnostic default behaviour - heartbeat
 	.public.HeartbeatPeriodic = &DoNothing,  // every invocation for the heartbeat ISR runs this, implemented by derived classes
-	.public.EmptyBusOperation = &DoNothing,  // implement device-agnostic default behavior - do nothing, usually an override happens
+	.public.EmptyBusOperation = &DoNothing,  // implement device-agnostic default behaviour - do nothing, usually an override happens
 	.__FlagDoHeartbeat = 1,  // start with discovery mode
 	.__FlagDoDefaultOperation = 0};
 
+// system clock config, as generated via ioc file
+static inline void _SystemClockConfig(void)
+{
+	RCC_OscInitTypeDef RCC_OscInitStruct =
+		{0};  // instantiate and initialize
+	RCC_ClkInitTypeDef RCC_ClkInitStruct =
+		{0};  // instantiate and initialize
+
+	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;	// no external crystal
+	RCC_OscInitStruct.HSIState = RCC_HSI_ON;	// turn it on
+	RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;  //
+	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;	// no PLL
+	HAL_RCC_OscConfig(&RCC_OscInitStruct);  //
+
+	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1;  //
+	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;	//
+	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;	//
+	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;  //
+	HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0);  //
+}
+
+// GPIO init - all to analog, as generated via ioc file
+static inline void _GPIOInit(void)
+{
+	GPIO_InitTypeDef GPIO_InitStruct =
+		{0};
+
+	__HAL_RCC_GPIOA_CLK_ENABLE();  // enable peripheral clocks
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+	__HAL_RCC_GPIOF_CLK_ENABLE();
+
+	// GPIO init is done in two steps:
+	//	1. set all to analog in order to reduce power consumption (done here)
+	//	2. init actual used pins on specific device (done in device-specific constructor)
+
+	// port A
+	GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_11 | GPIO_PIN_12 | GPIO_PIN_15;  // all pins minus SWD
+	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;  // set to analog
+	GPIO_InitStruct.Pull = GPIO_NOPULL;  // no Push-Pull
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);  // commit it
+
+	// port B
+	GPIO_InitStruct.Pin = GPIO_PIN_All;  // all pins on port
+	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+	// port F
+	GPIO_InitStruct.Pin = GPIO_PIN_All;
+	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+}
+
+// general device non-specific low-level hardware init & config
 mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 {
-	// GPIO state definitions
-		{
-			// state initialization of device-unspecific pins
-// PRT - state initialization of device-unspecific pins
-			// state initialization of device-unspecific pins
-		}
+	HAL_Init();  // Reset of all peripherals, Initializes the Flash interface and the Systick
+	_SystemClockConfig();  // initialize the system cloc
+	_GPIOInit();	// initialize the GPIOs
 
-	__MJ8x8.__NumericalCAN_ID = (uint8_t) ((in_own_sidh >> 2) & 0x0F);
+	__MJ8x8.__NumericalCAN_ID = (uint8_t) ((in_own_sidh >> 2) & 0x0F);	// set the CAN id.
 
 	__MJ8x8.public.can = can_ctor();	// pass on CAN public part
-//	__MJ8x8.public.mcu = attiny_ctor();	// pass on MCU public part
 
 	__MJ8x8.public.can->own_sidh = in_own_sidh;  // high byte
 	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);	// low byte

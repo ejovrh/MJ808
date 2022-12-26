@@ -9,7 +9,7 @@ typedef struct	// mj828_t actual
 	mj828_t public;  // public struct
 } __mj828_t;
 
-static __mj828_t       __Device       __attribute__ ((section (".data")));	// preallocate __Device object in .data
+static __mj828_t        __Device        __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
 void _event_execution_function_mj828(uint8_t val)
 {
@@ -87,34 +87,14 @@ void mj828_ctor()
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D));  // call base class constructor & initialize own SID
 
-	// GPIO state definitions
+	// device-specific GPIO state definitions
 		{
-			// state initialization of device-specific pins
-// PRT - state initialization of device-specific pins
-			// state initialization of device-specific pins
+
 		}
 
-	// hardware initialization
+	// device-specific hardware initialisation
 		{
-//PRT -			cli();
 
-			// timer/counter1 - 16bit (and timer/counter0 - 8bit) - pushbutton timing (charlieplexed timing)
-			/* timing of OCR1A in ms
-			 0xffff - 65.4ms
-			 0x6180 - 25ms
-			 0x2780 - 10ms
-			 */
-// PRT - pushbutton timing (charlieplexed timing)
-			// timer/counter0 - 8bit - charlieplexing timer - 25ms
-			/* timing of OCR0A in ms
-			 0xff - 32.5ms
-			 0x0f - 16.25ms
-			 */
-// PRT - charlieplexing timer - 25ms
-			// TODO - setup of pin change interrupts for pushbuttons
-//	PCMSK2 = (_BV(PCINT11) |											// enable pin change for sw1 @ pin D0
-//			  _BV(PCINT12));											// enable pin change for sw2 @ pin D1
-// PRT -			sei();
 		}
 
 	__Device.public.led = _virtual_led_ctorMJ828();  // call virtual constructor & tie in object addresses
