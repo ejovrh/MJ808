@@ -1,6 +1,9 @@
 #ifndef MJ828_BUTTON_C_
 #define MJ828_BUTTON_C_
 
+#include "main.h"
+#if defined(MJ828_)	// if this particular device is active
+
 #include "mj828\mj828.h"
 #include "button\button_types_actual.c"	// various __*button_t types - for convenience in one place for all LED devices
 
@@ -55,5 +58,7 @@ static button_t* _virtual_button_ctorMJ828(void)
 
 	return &__Button.public;	// return address of public part; calling code accesses it via pointer
 }
+
+#endif // MJ828_
 
 #endif /* MJ828_BUTTON_C_ */

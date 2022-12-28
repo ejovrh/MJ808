@@ -1,8 +1,10 @@
 #ifndef MJ828_LED_C_
 #define MJ828_LED_C_
 
-#include <inttypes.h>
+#include "main.h"
+#if defined(MJ828_)	// if this particular device is active
 
+#include <inttypes.h>
 #include "mj828\mj828.h"
 #include "led\led.h"
 
@@ -168,7 +170,7 @@ static void _component_led_mj828(const uint8_t val)
 	// PRT -	__LED.flags ^= _BV(val);											// just toggle
 }
 
-static __composite_led_t              __LED =
+static __composite_led_t               __LED =
 	{.public.led = __primitive_led, .public.Shine = &_component_led_mj828, .public.Handler = &_charlieplexing_handler, .flags = 0};
 
 // implementation of virtual constructor for LEDs
@@ -176,5 +178,7 @@ static composite_led_t* _virtual_led_ctorMJ828()
 {
 	return &__LED.public;  // return address of public part; calling code accesses it via pointer
 }
+
+#endif // MJ828_
 
 #endif /* MJ828_LED_C_ */

@@ -6,7 +6,10 @@
 #include "message\message.h"
 
 // definitions of device/PCB layout-independent hardware pins
-// PRT - definitions of device/PCB layout-independent hardware pins
+#define CAN_RX_Pin GPIO_PIN_11
+#define CAN_RX_GPIO_Port GPIOA
+#define CAN_TX_Pin GPIO_PIN_12
+#define CAN_TX_GPIO_Port GPIOA
 // definitions of device/PCB layout-independent hardware pins
 
 typedef struct	// "base class" struct for mj8x8 devices

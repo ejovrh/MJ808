@@ -18,6 +18,8 @@
 extern void DoNothing(void);
 extern void helper_handle_rx(void);
 
+CAN_HandleTypeDef hcan;
+
 typedef struct	// can_t actual
 {
 	can_t public;  // public struct
@@ -37,7 +39,7 @@ typedef struct	// can_t actual
 
 } __can_t;
 
-extern __can_t                      __CAN;	// declare can_t actual
+extern __can_t __CAN;  // declare can_t actual
 /* the basic building blocks of interaction with the MCP2515:
  * opcodes -low level instructions- which the hardware executes
  *	they are meant to be "private" and not be used in main() directly
@@ -47,8 +49,9 @@ extern __can_t                      __CAN;	// declare can_t actual
  *	they are all described in the datasheet in chapter 12 - SPI interface
  */
 //bit modify - opcode 0x05 - a means for setting specific registers, ch. 12.10 & figure 12-1
-//static void _mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte)
-//{
+static
+void _mcp2515_opcode_bit_modify(const uint8_t addr, const uint8_t mask, const uint8_t byte)
+{
 //	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
 //	spi_uci_transfer(MCP2515_OPCODE_BIT_MODIFY);		// send the bit modify command
 //	spi_uci_transfer(addr);												// set the register address
@@ -56,10 +59,12 @@ extern __can_t                      __CAN;	// declare can_t actual
 //	spi_uci_transfer(byte);	// set the data byte - i.e. 1'ed becomes 1, 0 becomes 0
 //	_delay_us(1);								// delay a little bit for the transfer to complete
 //	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-//}
+	return;
+}
+
 // read - opcode 0x03 - reads len byt	es at addr and returns them via *data (ch 12.3,  p 65)
-//static void _mcp2515_opcode_read_bytes(const uint8_t addr, volatile uint8_t *data, const uint8_t len)
-//{
+static void _mcp2515_opcode_read_bytes(const uint8_t addr, volatile uint8_t *data, const uint8_t len)
+{
 //	uint8_t i;
 //
 //	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
@@ -72,19 +77,23 @@ extern __can_t                      __CAN;	// declare can_t actual
 //			_delay_us(1);						// delay a little bit for the transfer to complete
 //		}
 //	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-//}
+	return;
+}
+
 // wrapper for single byte-read
-//static uint8_t __mcp2515_opcode_read_byte(const uint8_t addr)
-//{
+static uint8_t __mcp2515_opcode_read_byte(const uint8_t addr)
+{
 //	uint8_t retval;
 //
 //	_mcp2515_opcode_read_bytes(addr, &retval, 1);
 //
 //	return retval;
-//}
+	return 0;
+}
+
 // changes MCP2515 operation modes (and flushes any pending transmissions)
-//static void _mcp2515_change_opmode(const uint8_t mode)
-//{
+static void _mcp2515_change_opmode(const uint8_t mode)
+{
 //	do
 //		{
 //			_mcp2515_opcode_bit_modify(CANCTRL, _BV(ABAT), _BV(ABAT));	// set abort flag
@@ -93,10 +102,12 @@ extern __can_t                      __CAN;	// declare can_t actual
 //	while((__mcp2515_opcode_read_byte(CANSTAT) & 0xE0) != mode);	// loop if OPMOD2:0 bits from CANSTAT differ from the requested mode bits
 //
 //	_mcp2515_opcode_bit_modify(CANCTRL, _BV(ABAT), 0x00);			// unset abort flag
-//}
+	return;
+}
+
 // reset - opcode 0xC0 - resets the MCP2515 (ch. 12.2, p 65)
-//static void __mcp2515_opcode_reset(void)
-//{
+static void __mcp2515_opcode_reset(void)
+{
 //	_mcp2515_opcode_bit_modify(EFLG, 0xC0, 0x00);		// set RX1OVR and RX0OVR to 0
 //	_mcp2515_opcode_bit_modify(CANINTF, 0xFF, 0x00);	// set all interrupt flags to 0
 //
@@ -108,10 +119,12 @@ extern __can_t                      __CAN;	// declare can_t actual
 //	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
 //
 //	_delay_us(5);											// wait a while for the reset to take effect
-//}
+	return;
+}
+
 // initialization & configuration after power on
-//static void __mcp2515_init(void)
-//{
+static void __mcp2515_init(void)
+{
 //	__mcp2515_opcode_reset();				// reset first, must be held for at least 2us
 //	_mcp2515_change_opmode(REQOP_CONFIG);	// set device into config mode, turn off clock out & prescaler stuff
 //
@@ -199,11 +212,13 @@ extern __can_t                      __CAN;	// declare can_t actual
 //
 //	_mcp2515_change_opmode(REQOP_NORMAL);  // put into normal mode
 //	//mcp2515_opcode_bit_modify(CANCTRL, 0xE0, 0x40); // put into loopback mode
-//}
+	return;
+}
+
 // read RX buffer - opcode 0x90 - loads a RX buffer identified by the bit mask 'buffer' into '*data', ch. 12.4, p 65
 // datasheet p.66 and table 12.3
-//static void __mcp2515_opcode_read_rx_buffer(const uint8_t buffer, volatile uint8_t *data, const uint8_t len)
-//{
+static void __mcp2515_opcode_read_rx_buffer(const uint8_t buffer, volatile uint8_t *data, const uint8_t len)
+{
 //	uint8_t i;
 //
 //	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
@@ -219,10 +234,12 @@ extern __can_t                      __CAN;	// declare can_t actual
 //
 //	_delay_us(1);								// delay a little bit for the transfer to complete
 //	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-//}
+	return;
+}
+
 // rx status - opcode 0xB0 - returns byte with received message RX filter and type info, ch. 12.9
-//static uint8_t __mcp2515_opcode_rx_status(void)
-//{
+static uint8_t __mcp2515_opcode_rx_status(void)
+{
 //	uint8_t retval;
 //
 //	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
@@ -232,10 +249,12 @@ extern __can_t                      __CAN;	// declare can_t actual
 //	_delay_us(1);								// delay a little bit for the transfer to complete
 //
 //	return retval;
-//}
+	return 0;
+}
+
 // read status - opcode 0xA0 - returns byte with status bits for msg RX & TX, ch. 12.8 & table 12.9
-//static uint8_t __mcp2515_opcode_read_status(void)
-//{
+static uint8_t __mcp2515_opcode_read_status(void)
+{
 //	uint8_t retval;
 //
 //	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
@@ -245,10 +264,12 @@ extern __can_t                      __CAN;	// declare can_t actual
 //	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
 //
 //	return retval;
-//}
+	return 0;
+}
+
 // RTS - opcode 0x80 - sends RTS for 'buffer', table ch. 12.7 & 12.1
-//static void __mcp2515_opcode_rts(const uint8_t buffer)
-//{
+static void __mcp2515_opcode_rts(const uint8_t buffer)
+{
 //	if(buffer == 0)									// we didn't specify any buffer to do a RTS on
 //		return;															// hence, do nothing
 //
@@ -256,11 +277,14 @@ extern __can_t                      __CAN;	// declare can_t actual
 //	spi_uci_transfer(MCP2515_OPCODE_RTS | buffer);	// send RTS command & the buffer (bit mask)
 //	_delay_us(1);								// delay a little bit for the transfer to complete
 //	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-//}
+	return;
+}
+
 // load TX buffer - opcode 0x40 - loads '*data' into TX buffer identified by the bit mask 'buffer'
 // ch12.6 & table 12.5
-//static void __mcp2515_opcode_load_tx_buffer(const uint8_t buffer, volatile const uint8_t *data, const uint8_t len)
-//{
+static
+void __mcp2515_opcode_load_tx_buffer(const uint8_t buffer, volatile const uint8_t *data, const uint8_t len)
+{
 //	uint8_t i;
 //	gpio_clr(SPI_SS_MCP2515_pin);										// select the slave
 //
@@ -278,10 +302,12 @@ extern __can_t                      __CAN;	// declare can_t actual
 //
 //	_delay_us(1);								// delay a little bit for the transfer to complete
 //	gpio_set(SPI_SS_MCP2515_pin);										// de-select the slave
-//}
+	return;
+}
+
 // fetches a received CAN message from the MCP2515, triggered by RX interrupt
-//static void _mcp2515_can_msg_receive(volatile can_msg_t *const msg)
-//{
+static void _mcp2515_can_msg_receive(volatile can_msg_t *const msg)
+{
 //	/* mode of operation - see figure 4.2 on p.26
 //	 *	1. identify RX buffer
 //	 *	2.	select the appropriate buffer(s) in a loop
@@ -312,11 +338,13 @@ extern __can_t                      __CAN;	// declare can_t actual
 //	// step 4: fetch message bytes from the RXBn registers
 //	// for convenience, all bytes are fetched - the unused extended identifier and all possibly unused data bytes
 //	__mcp2515_opcode_read_rx_buffer(rx_buffer_addr, &(msg->sidh), 13);
-//}
+	return;
+}
+
 // provide data to MCP2515 and flag for TX over the CAN bus
 //	provide not more than 4 bytes of data and len !!!
-//static void _mcp2515_can_msg_send(volatile can_msg_t *const msg)
-//{
+static void _mcp2515_can_msg_send(volatile can_msg_t *const msg)
+{
 //	/* mode of operation - see figure 3.1 on p.17
 //	 *	1. find an empty TX buffer
 //	 *	2.	select that buffer
@@ -369,34 +397,35 @@ extern __can_t                      __CAN;	// declare can_t actual
 //	// step 5
 //	_mcp2515_opcode_bit_modify(CANINTF, (rts_mask << 2), 0x00);	// CHECKME - unset the TX IRQ flags
 //	_delay_us(5);  // CHECKME: give other mj8x8s time to digest the new message, in case they are receiving
-//}
+	return;
+}
+
 // puts the whole CAN infrastructure to sleep; 1 - sleep, 0 - awake
-//static void _can_sleep(const uint8_t in_val)
-//{
-//	if(!(__CAN.__in_sleep) && in_val)							// if is awake and set to sleep
-//		{
+static void _can_sleep(const uint8_t in_val)
+{
+	if(!(__CAN.__in_sleep) && in_val)  // if is awake and set to sleep
+		{
 //			_mcp2515_change_opmode(REQOP_SLEEP);							// sleep MCP2515
 //			gpio_conf(MCP2561_standby_pin, OUTPUT, HIGH);					// sleep MCP2561
-//			__CAN.__in_sleep = 1;											// mark as sleeping
-//		}
-//
-//	if(__CAN.__in_sleep && !in_val)						// if is sleeping and set to wake up
-//		{
+			__CAN.__in_sleep = 1;  // mark as sleeping
+		}
+
+	if(__CAN.__in_sleep && !in_val)  // if is sleeping and set to wake up
+		{
 //			_mcp2515_opcode_bit_modify(CANINTF, 0xFF, 0x00);	// clear out all interrupt flags so that a wakeup can be asserted (if there are not handled interrupts, a wakeup interrupt will never occur)
 //			_mcp2515_opcode_bit_modify(CANINTF, _BV(WAKIF), _BV(WAKIF));	// create a wake up interrupt event -- the sucker will actually go and create a real one and go on to service it
-//			__CAN.__in_sleep = 0;											// mark as awake
-//		}
-//}
-__can_t        __CAN
-=  // instantiate can_t actual and set function pointers
-{
-// PRT - 	.public.Sleep = &_can_sleep,		// set up function pointer for public methods
-// PRT - 	.public.RequestToSend = &_mcp2515_can_msg_send,						// ditto
-// PRT - 	.public.FetchMessage = &_mcp2515_can_msg_receive,					// ditto
-// PRT - 	.public.ChangeOpMode = &_mcp2515_change_opmode,						// ditto
-// PRT - 	.public.ReadBytes = &_mcp2515_opcode_read_bytes,					// ditto
-// PRT - 	.public.BitModify = &_mcp2515_opcode_bit_modify,					// ditto
-};
+			__CAN.__in_sleep = 0;  // mark as awake
+		}
+}
+
+__can_t           __CAN =  // instantiate can_t actual and set function pointers
+	{.public.Sleep = &_can_sleep,  // set up function pointer for public methods
+	.public.RequestToSend = &_mcp2515_can_msg_send,  // ditto
+	.public.FetchMessage = &_mcp2515_can_msg_receive,  // ditto
+	.public.ChangeOpMode = &_mcp2515_change_opmode,  // ditto
+	.public.ReadBytes = &_mcp2515_opcode_read_bytes,  // ditto
+	.public.BitModify = &_mcp2515_opcode_bit_modify,  // ditto
+	};
 
 // TODO - clean up CAN init
 void HAL_CAN_MspInit(CAN_HandleTypeDef *canHandle)
@@ -424,12 +453,6 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef *canHandle)
 			GPIO_InitStruct.Alternate = GPIO_AF4_CAN;
 			HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-			/* CAN interrupt Init */
-			HAL_NVIC_SetPriority(CEC_CAN_IRQn, 0, 0);
-			HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
-			/* USER CODE BEGIN CAN_MspInit 1 */
-
-			/* USER CODE END CAN_MspInit 1 */
 		}
 }
 
@@ -449,7 +472,8 @@ inline static void _STM32CANInit(void)
 	hcan.Init.AutoRetransmission = DISABLE;  //
 	hcan.Init.ReceiveFifoLocked = DISABLE;	//
 	hcan.Init.TransmitFifoPriority = DISABLE;  //
-	HAL_CAN_Init(&hcan);	// initialize the CAN peripheral
+	// HAL_CAN_Init(&hcan);	// TODO - initialize the CAN peripheral
+	__HAL_RCC_CAN1_CLK_ENABLE();
 }
 
 // object constructor
@@ -458,7 +482,14 @@ can_t* can_ctor()
 	// TODO - verify & implement TCAN334 driver
 	_STM32CANInit();  // initialize & configure STM32 CAN hardware
 // TODO - call mspinit
+
 	return &__CAN.public;  // return address of public part; calling code accesses it via pointer
+}
+
+//	CAN global interrupts
+void CEC_CAN_IRQHandler(void)
+{
+	HAL_CAN_IRQHandler(&hcan);	// TODO - implement & verify CAN message interrupts/reception
 }
 
 //ISR( INT1_vect)  // ISR for INT1 - triggered by CAN message reception of the MCP2515

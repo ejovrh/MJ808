@@ -1,6 +1,9 @@
 #ifndef CORE_INC_MJ828_MJ828_H_
 #define CORE_INC_MJ828_MJ828_H_
 
+#include "main.h"
+#if defined(MJ828_)	// if this particular device is active
+
 #include "mj8x8\mj8x8.h"
 #include "led\led.h"
 #include "button\button.h"
@@ -37,5 +40,7 @@ typedef struct	// struct describing devices on MJ828
 void mj828_ctor();	// declare constructor for concrete class
 
 extern mj828_t *const Device;  // declare pointer to public struct part
+
+#endif // MJ828_
 
 #endif /* CORE_INC_MJ828_MJ828_H_ */

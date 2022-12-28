@@ -1,8 +1,11 @@
 #ifndef MJ808_BUTTON_C_
 #define MJ808_BUTTON_C_
 
+#include "main.h"
+#if defined(MJ808_)	// if this particular device is active
+
 #include "mj808\mj808.h"
-#include "button\button_types_actual.c"									// various __*button_t types - for convenience in one place for all LED devices
+#include "button\button_types_actual.c"	// various __*button_t types - for convenience in one place for all LED devices
 
 extern void _debounce(__individual_button_t *in_button, event_handler_t *const in_event);
 
@@ -19,7 +22,7 @@ static uint8_t __ButtonCenterCaseTable[] =	// array value at position #foo gets 
 	0x01,  // 3 - jump case 0x01 - error event
 	};
 
-static __individual_button_t       __button_actual [] =  // instantiate array of actual button struct
+static __individual_button_t __button_actual [] =  // instantiate array of actual button struct
 	{
 	// index 0 - that one button...
 		{.__PIN = (uint8_t*) 0x30,	// 0x020 offset plus address - PIND register
@@ -38,5 +41,7 @@ static button_t* _virtual_button_ctorMJ808()
 
 	return &__Button.public;	// return address of public part; calling code accesses it via pointer
 }
+
+#endif // MJ808_
 
 #endif /* MJ808_BUTTON_C_ */

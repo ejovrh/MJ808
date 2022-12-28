@@ -19,4 +19,6 @@ typedef struct can_t	// can_t struct describing the CAN device as a whole
 
 can_t* can_ctor();	// CAN object constructor - does function pointer & hardware initialization
 
+void CEC_CAN_IRQHandler(void);  // TODO - implement & verify CAN message interrupts/reception
+
 #endif /* CORE_INC_MJ8X8_CAN_H_ */

@@ -1,6 +1,9 @@
 #ifndef CORE_INC_MJ818_MJ818_H_
 #define CORE_INC_MJ818_MJ818_H_
 
+#include "main.h"
+#if defined(MJ818_)	// if this particular device is active
+
 #include "mj8x8\mj8x8.h"
 #include "led\led.h"
 
@@ -22,6 +25,9 @@ typedef struct	// struct describing devices on MJ818
 
 void mj818_ctor();	// declare constructor for concrete class
 
+// all devices have the object name "Device", hence the preprocessor macro
 extern mj818_t *const Device;  // declare pointer to public struct part
+
+#endif // MJ818_
 
 #endif /* CORE_INC_MJ818_MJ818_H_ */

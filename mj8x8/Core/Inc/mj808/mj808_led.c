@@ -1,6 +1,9 @@
 #ifndef MJ808_LED_C_
 #define MJ808_LED_C_
 
+#include "main.h"
+#if defined(MJ808_)	// if this particular device is active
+
 #include "mj808\mj808.h"
 #include "led\led.h"
 
@@ -81,7 +84,7 @@ static void _component_led_mj808(const uint8_t val)
 		__component_led_mj808_device_off();
 }
 
-static __composite_led_t           __LED =
+static __composite_led_t __LED =
 	{.public.led = __primitive_led,  // assign pointer to LED array
 	.public.Shine = &_component_led_mj808,	// component part ("interface")
 	.flags = 0	//
@@ -96,5 +99,7 @@ static composite_led_t* _virtual_led_ctorMJ808()
 
 	return &__LED.public;  // return address of public part; calling code accesses it via pointer
 }
+
+#endif // MJ808_
 
 #endif /* MJ808_LED_C_ */

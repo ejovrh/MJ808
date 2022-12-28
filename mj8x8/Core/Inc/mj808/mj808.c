@@ -1,14 +1,20 @@
 #include "main.h"
+#if defined(MJ808_)	// if this particular device is active
+
 #include "mj808\mj808.h"
 #include "mj808\mj808_led.c"	// concrete device-specific LED functions
 #include "mj808\mj808_button.c"	// concrete device-specific button functions
+
+#define EXTI0_1_IRQn 5	// FIXME - should be included somehow, but isnt..
 
 typedef struct	// mj808_t actual
 {
 	mj808_t public;  // public struct
 } __mj808_t;
 
-static __mj808_t    __Device	   __attribute__ ((section (".data")));  // preallocate __Device object in .data
+static __mj808_t __Device __attribute__ ((section (".data")));  // preallocate __Device object in .data
+
+TIM_HandleTypeDef htim2;
 
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 // cases in this switch-case statement must be unique for all events on this device
@@ -68,21 +74,93 @@ void _PopulatedBusOperationMJ808(message_handler_t *const in_msg)
 		}
 }
 
+// GPIO init - device specific
+static inline void _GPIOInit(void)
+{
+	GPIO_InitTypeDef GPIO_InitStruct =
+		{0};
+
+	HAL_GPIO_WritePin(TCAN334_Shutdown_GPIO_Port, TCAN334_Shutdown_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOB, TCAN334_Standby_Pin, GPIO_PIN_SET);
+
+	HAL_GPIO_WritePin(GPIOB, RedLED_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOB, GreenLED_Pin, GPIO_PIN_SET);
+
+	GPIO_InitStruct.Pin = TCAN334_Shutdown_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(TCAN334_Shutdown_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = Switch_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	HAL_GPIO_Init(Switch_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = TCAN334_Standby_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(TCAN334_Standby_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = RedLED_Pin | GreenLED_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = FrontLED_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	GPIO_InitStruct.Alternate = GPIO_AF2_TIM2;
+	HAL_GPIO_Init(FrontLED_GPIO_Port, &GPIO_InitStruct);
+}
+
+// Timer2 init - front light PWM
+static inline void _Timer2Init(void)
+{
+	TIM_ClockConfigTypeDef sClockSourceConfig =
+		{0};
+	TIM_MasterConfigTypeDef sMasterConfig =
+		{0};
+	TIM_OC_InitTypeDef sConfigOC =
+		{0};
+
+	htim2.Instance = TIM2;	// timer2
+	htim2.Init.Prescaler = 10;	// TODO - figure out precise value
+	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;	// up counting
+	htim2.Init.Period = 7999;  // TODO - figure out precise value
+	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;	// no division
+	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;	// no pre-load
+	__HAL_RCC_TIM2_CLK_ENABLE();	// start the clock
+
+	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;	// we shall run from our internal oscillator
+	HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);  // commit it
+	HAL_TIM_PWM_Init(&htim2);  // commit it
+
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);	// commit it
+
+	sConfigOC.OCMode = TIM_OCMODE_PWM1;
+	sConfigOC.Pulse = 0;	// change by writing to TIM2->CCR2
+	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+	HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2);  // commit it
+
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);  // start the timer
+}
+
+// device-specific constructor
 void mj808_ctor()
 {
 	// general device non-specific low-level hardware init & config
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A));	// call base class constructor & initialize own SID
 
-	// device-specific GPIO state definitions
-		{
-
-		}
-
-	// device-specific hardware initialisation
-		{
-
-		}
+	_Timer2Init();	// initialize Timer2 - PWM for front light
+	_GPIOInit();	// initialize device-specific GPIOs
 
 	__Device.public.led = _virtual_led_ctorMJ808();  // call virtual constructor & tie in object addresses
 	__Device.public.button = _virtual_button_ctorMJ808();  // call virtual constructor & tie in object addresses
@@ -91,10 +169,40 @@ void mj808_ctor()
 
 	EventHandler->fpointer = &_event_execution_function_mj808;	// implements event hander for this device
 
+	// interrupt init
+	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
+
 	// TODO - access via object
 	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);  // crude "I'm finished" indicator
 }
 
-#if defined(MJ808_)	// all devices have the object name "Device", hence the preprocessor macro
+// device-specific interrupt handlers
+// pushbutton EXTI0 interrupt handler
+void EXTI0_1_IRQHandler(void)
+{
+	HAL_GPIO_EXTI_IRQHandler(Switch_Pin);
+}
+
+// pushbutton ISR
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	/* original code:
+	 // code to be executed every 25ms
+	 sleep_disable();	// wakey wakey
+
+	 Device->button->deBounce();  // call the debouncer
+
+	 sleep_enable();  // back to sleep
+	 */
+
+	// TODO - implement mj808 pushbutton ISR
+	HAL_GPIO_TogglePin(GreenLED_GPIO_Port, GreenLED_Pin);
+	TIM2->CCR2 += 1;
+}
+// device-specific interrupt handlers
+
+// all devices have the object name "Device", hence the preprocessor macro
 mj808_t *const Device = &__Device.public;  // set pointer to MsgHandler public part
-#endif
+
+#endif // MJ808_

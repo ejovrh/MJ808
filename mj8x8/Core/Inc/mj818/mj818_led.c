@@ -1,6 +1,9 @@
 #ifndef MJ818_LED_C_
 #define MJ818_LED_C_
 
+#include "main.h"
+#if defined(MJ818_)	// if this particular device is active
+
 #include "mj818\mj818.h"
 #include "led\led.h"
 
@@ -60,5 +63,7 @@ static composite_led_t* _virtual_led_ctorMJ818()
 
 	return &__LED.public;  // return address of public part; calling code accesses it via pointer
 }
+
+#endif // MJ818_
 
 #endif /* MJ808_LED_C_ */
