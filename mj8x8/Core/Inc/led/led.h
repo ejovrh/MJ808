@@ -8,7 +8,7 @@ typedef struct	// struct describing a primitive LED - the leaf
 
 typedef struct composite_led_t	// struct describing the aggregate of all LEDs on a device - the composite
 {
-	void (*Handler)(void);	//
+	void (*Handler)(void);	// TODO - why is this here?
 	void (*Shine)(const uint8_t in_val);	// virtual function for LED operation of composite LEDs
 	primitive_led_t *led;  // "virtual" pointer to array of primitive LEDs - pointer to leaves
 

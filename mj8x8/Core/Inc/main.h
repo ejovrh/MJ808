@@ -3,6 +3,10 @@
 
 #include "stm32f0xx_hal.h"	// include HAL layer
 
+#if !defined(_BV)
+#define _BV(x) (1<<(x))
+#endif
+
 #define MJ808_	// what device to compile for
 
 //void DoNothing(void)	// a function that does nothing

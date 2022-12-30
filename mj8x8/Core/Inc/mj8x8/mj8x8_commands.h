@@ -8,23 +8,24 @@
  */
 
 // OCR defines
-// PRT - #define OCR_FRONT_LIGHT OCR0A											// Output Compare Register for PWM of front light
-// PRT - #define OCR_REAR_LIGHT OCR0A											// Output Compare Register for PWM of rear light
-// PRT - #define OCR_BRAKE_LIGHT OCR1A											// Output Compare Register for PWM of brake light
+#define OCR_FRONT_LIGHT TIM2->CCR2	// Output Compare Register for PWM of front light
+#define OCR_REAR_LIGHT TIM2->CCR1	// Output Compare Register for PWM of rear light
+#define OCR_BRAKE_LIGHT TIM3->CCR4	// Output Compare Register for PWM of brake light
+
 // TODO - update current measurements for latest boards
 /* MJ818 - rear & brake light
  timer/counter 0 and timer/counter 1 both operate in 8bit mode
  hex val. - duty cycle - current back light - current brake light
  0x00 - 0% (off)				-	20 mA -	20 mA
- 0x10 - 6.26%					-	20 mA - 20 mA
- 0x20 - 12.5%					-	20 mA -	30
- 0x40 - 25.05%					-	30 mA -	50
- 0x80 - 50.1%					-	50 mA -	90
- 0xA0 - 62.6%					-	50 mA -	110
- 0xC0 - 75.15%					-	60 mA -	130
- 0xE0 - 87.84%					-	70 mA -	150
- 0xF0 - 94.12%					- 70 mA -	160
- 0xFF - 100% (max)			-	80 mA -	170
+ 0x10 - 6.26%						-	20 mA - 20 mA
+ 0x20 - 12.5%						-	20 mA -	30 mA
+ 0x40 - 25.05%					-	30 mA -	50 mA
+ 0x80 - 50.1%						-	50 mA -	90 mA
+ 0xA0 - 62.6%						-	50 mA -	110 mA
+ 0xC0 - 75.15%					-	60 mA -	130 mA
+ 0xE0 - 87.84%					-	70 mA -	150 mA
+ 0xF0 - 94.12%					- 70 mA -	160 mA
+ 0xFF - 100% (max)			-	80 mA -	170 mA
 
  0xFF OCR0A MAX. SAFE COUNT WITH REV2 BOARD
  0x80 OCR1A MAX. SAFE COUNT WITH REV2 BOARD
@@ -34,11 +35,11 @@
  timer/counter 0 and timer/counter 1 both operate in 8bit mode
  hex val. - duty cycle - current front light
  0x00 - 0% (off)				-	20 mA
- 0x10 - 6.26%					-	20 mA
- 0x20 - 12.5%					-	30 mA
+ 0x10 - 6.26%						-	20 mA
+ 0x20 - 12.5%						-	30 mA
  0x40 - 25.05%					-	60 mA
- 0x80 - 50.1%					-	100 mA
- 0xA0 - 62.6%					-	120 mA
+ 0x80 - 50.1%						-	100 mA
+ 0xA0 - 62.6%						-	120 mA
  0xC0 - 75.15%					-	150 mA
  0xE0 - 87.84%					-	170 mA
  0xF0 - 94.12%					-	180 mA
@@ -98,22 +99,22 @@
 #define BLUE5 0x07
 #define CMND_UTIL_LED 0x10	// command for utility LED operation (color, on, off, blink)
 
-#define UTIL_LED_GREEN_OFF 0x10	// utility LED - off
-#define UTIL_LED_GREEN_BLINK_1X 0x11	// utility LED - blink
-#define UTIL_LED_GREEN_BLINK_2X 0x12	// utility LED - blink
-#define UTIL_LED_GREEN_BLINK_3X 0x13	// utility LED - blink
-#define UTIL_LED_GREEN_BLINK_4X 0x14	// utility LED - blink
-#define UTIL_LED_GREEN_BLINK_5X 0x15	// utility LED - blink
-#define UTIL_LED_GREEN_BLINK_6X 0x16	// utility LED - blink
-#define UTIL_LED_GREEN_ON 0x17	// utility LED - on
-#define UTIL_LED_RED_OFF 0x18	// utility LED - off
-#define UTIL_LED_RED_BLINK_1X 0x19	// utility LED - blink
-#define UTIL_LED_RED_BLINK_2X 0x1A	// utility LED - blink
-#define UTIL_LED_RED_BLINK_3X 0x1B	// utility LED - blink
-#define UTIL_LED_RED_BLINK_4X 0x1C	// utility LED - blink
-#define UTIL_LED_RED_BLINK_5X 0x1D	// utility LED - blink
-#define UTIL_LED_RED_BLINK_6X 0x1E	// utility LED - blink
-#define UTIL_LED_RED_ON 0x1F	// utility LED - on
+#define UTIL_LED_RED_OFF 0x10	// utility LED - off
+#define UTIL_LED_RED_BLINK_1X 0x11	// utility LED - blink
+#define UTIL_LED_RED_BLINK_2X 0x12	// utility LED - blink
+#define UTIL_LED_RED_BLINK_3X 0x13	// utility LED - blink
+#define UTIL_LED_RED_BLINK_4X 0x14	// utility LED - blink
+#define UTIL_LED_RED_BLINK_5X 0x15	// utility LED - blink
+#define UTIL_LED_RED_BLINK_6X 0x16	// utility LED - blink
+#define UTIL_LED_RED_ON 0x17	// utility LED - on
+#define UTIL_LED_GREEN_OFF 0x18	// utility LED - off
+#define UTIL_LED_GREEN_BLINK_1X 0x19	// utility LED - blink
+#define UTIL_LED_GREEN_BLINK_2X 0x1A	// utility LED - blink
+#define UTIL_LED_GREEN_BLINK_3X 0x1B	// utility LED - blink
+#define UTIL_LED_GREEN_BLINK_4X 0x1C	// utility LED - blink
+#define UTIL_LED_GREEN_BLINK_5X 0x1D	// utility LED - blink
+#define UTIL_LED_GREEN_BLINK_6X 0x1E	// utility LED - blink
+#define UTIL_LED_GREEN_ON 0x1F	// utility LED - on
 
 #define CMND_DASHBOARD	0x20	// dashboard ?
 #define DASHBOARD_LED_RED_OFF		0x20	// dashboard red LED off

@@ -17,7 +17,7 @@ extern void _fade(const uint8_t value, volatile uint8_t *ocr);
 // TODO - optimize
 static void _wrapper_fade_mj808(const uint8_t value)
 {
-	// PRT - 	_fade(value, &OCR_FRONT_LIGHT);
+	_fade(value, &OCR_FRONT_LIGHT);
 }
 
 // TODO - optimize & should be static and the caller in question should use an object
@@ -26,30 +26,33 @@ static void _util_led_mj808(uint8_t in_val)
 {
 	uint8_t led = 0;	// holds the pin of the LED: D0 - green (default), D1 - red
 
-// PRT - 	if(in_val & _BV(B3))						// determine B3 value: red or green (default)
-// PRT -	led = 1;															// red
+	if(in_val & _BV(B3))	// if the 4th bit is set, the command is for a red led, otherwise it is green
+		led = 1;	// red
+
+	// the led variable is relevant for bit-shifting, since the red and green LEDs are pin-wise next door neighbours;
+	//	RedLED_Pin shifted left by one is the green LED
 
 	in_val &= 7;	// clear everything except B2:0, which is the blink count (1-6)
 
 	if(in_val == 0x00)	// B3:B0 is 0 - turn off
 		{
-			// PRT - 			PORTD |= (1 << led);												// clear bit
+			HAL_GPIO_WritePin(GPIOB, (RedLED_Pin << led), GPIO_PIN_SET);  // set high to turn off
 			return;
 		}
 
 	if(in_val == 0x07)	// B3:B0 is 7 - turn on
 		{
-			// PRT - 			PORTD &= ~(1 << led);												// set bit
+			HAL_GPIO_WritePin(GPIOB, (RedLED_Pin << led), GPIO_PIN_RESET);  // set low to turn on
 			return;
 		}
 
 	while(in_val--)  // blink loop
 		{
-			// TODO - util_led() - get rid of _delay_ms()
-			// PRT -			_delay_ms(BLINK_DELAY);								// waste a few cycles (non-blocking)
-			// PRT - 			PORTD ^= (1 << led);												// toggle the led pin
-			// PRT - _delay_ms(BLINK_DELAY);								// waste a few cycles (non-blocking)
-			// PRT - 			PORTD ^= (1 << led);												// toggle the led pin
+			// TODO - util_led() - get rid of blocking HAL_Delay();
+			HAL_Delay(BLINK_DELAY);
+			HAL_GPIO_TogglePin(GPIOB, (RedLED_Pin << led));  // toggle the led pin
+			HAL_Delay(BLINK_DELAY);
+			HAL_GPIO_TogglePin(GPIOB, (RedLED_Pin << led));  // toggle the led pin
 		}
 }
 
@@ -84,7 +87,7 @@ static void _component_led_mj808(const uint8_t val)
 		__component_led_mj808_device_off();
 }
 
-static __composite_led_t __LED =
+static __composite_led_t              __LED =
 	{.public.led = __primitive_led,  // assign pointer to LED array
 	.public.Shine = &_component_led_mj808,	// component part ("interface")
 	.flags = 0	//
@@ -95,7 +98,7 @@ static composite_led_t* _virtual_led_ctorMJ808()
 {
 	__LED.public.led[Utility].Shine = &_util_led_mj808;  // LED-specific implementation
 	__LED.public.led[Front].Shine = &_wrapper_fade_mj808;  // LED-specific implementation
-	__LED.public.Handler = &DoNothing;	//
+	__LED.public.Handler = &DoNothing;	// TODO - why is this here?
 
 	return &__LED.public;  // return address of public part; calling code accesses it via pointer
 }

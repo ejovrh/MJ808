@@ -12,7 +12,7 @@ typedef struct	// mj808_t actual
 	mj808_t public;  // public struct
 } __mj808_t;
 
-static __mj808_t __Device __attribute__ ((section (".data")));  // preallocate __Device object in .data
+static __mj808_t                __Device                __attribute__ ((section (".data")));  // preallocate __Device object in .data
 
 TIM_HandleTypeDef htim2;
 
@@ -65,11 +65,9 @@ void _PopulatedBusOperationMJ808(message_handler_t *const in_msg)
 		{
 			// TODO - implement timer based safeguard when OCR > OCR_MAX
 			if (msg->ARGUMENT > OCR_MAX_FRONT_LIGHT)// safeguard against too high a value (heating of MOSFet)
-// PRT			OCR_FRONT_LIGHT = OCR_MAX_FRONT_LIGHT;
-			;
+			OCR_FRONT_LIGHT = OCR_MAX_FRONT_LIGHT;
 			else
-// PRT			OCR_FRONT_LIGHT = msg->ARGUMENT;
-			;
+			OCR_FRONT_LIGHT = msg->ARGUMENT;
 			return;
 		}
 }
@@ -80,28 +78,13 @@ static inline void _GPIOInit(void)
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
 
-	HAL_GPIO_WritePin(TCAN334_Shutdown_GPIO_Port, TCAN334_Shutdown_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOB, TCAN334_Standby_Pin, GPIO_PIN_SET);
-
-	HAL_GPIO_WritePin(GPIOB, RedLED_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOB, GreenLED_Pin, GPIO_PIN_SET);
-
-	GPIO_InitStruct.Pin = TCAN334_Shutdown_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(TCAN334_Shutdown_GPIO_Port, &GPIO_InitStruct);
+	HAL_GPIO_WritePin(GPIOB, RedLED_Pin, GPIO_PIN_SET);  //	high - LED off
+	HAL_GPIO_WritePin(GPIOB, GreenLED_Pin, GPIO_PIN_SET);  // high - LED off
 
 	GPIO_InitStruct.Pin = Switch_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	HAL_GPIO_Init(Switch_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = TCAN334_Standby_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(TCAN334_Standby_GPIO_Port, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = RedLED_Pin | GreenLED_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -111,9 +94,9 @@ static inline void _GPIOInit(void)
 
 	GPIO_InitStruct.Pin = FrontLED_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+	GPIO_InitStruct.Pull = GPIO_PULLDOWN;  // activate pulldown resistor
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	GPIO_InitStruct.Alternate = GPIO_AF2_TIM2;
+	GPIO_InitStruct.Alternate = GPIO_AF2_TIM2;	// alternate function2: timer2 channel 2 PWM output
 	HAL_GPIO_Init(FrontLED_GPIO_Port, &GPIO_InitStruct);
 }
 
@@ -144,7 +127,7 @@ static inline void _Timer2Init(void)
 	HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);	// commit it
 
 	sConfigOC.OCMode = TIM_OCMODE_PWM1;
-	sConfigOC.Pulse = 0;	// change by writing to TIM2->CCR2
+	sConfigOC.Pulse = LED_OFF;	// change by writing to TIM2->CCR2
 	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 	HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2);  // commit it
@@ -187,17 +170,16 @@ void EXTI0_1_IRQHandler(void)
 // pushbutton ISR
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	/* original code:
-	 // code to be executed every 25ms
-	 sleep_disable();	// wakey wakey
 
-	 Device->button->deBounce();  // call the debouncer
+	// code to be executed every 25ms
+	// TODO - sleep_disable();  // wakey wakey
 
-	 sleep_enable();  // back to sleep
-	 */
+	Device->button->deBounce();  // call the debouncer
+
+	// TODO - sleep_enable();  // back to sleep
 
 	// TODO - implement mj808 pushbutton ISR
-	HAL_GPIO_TogglePin(GreenLED_GPIO_Port, GreenLED_Pin);
+
 	TIM2->CCR2 += 1;
 }
 // device-specific interrupt handlers

@@ -3,6 +3,7 @@
 
 void _fade(const uint8_t value, volatile uint8_t *ocr)
 {
+	// TODO - implement fading so that the human eye sees it as uniform
 // PRT - 	cli();	// if without cli(), *ocr gets corrupted; im suspecting an ISR while ocr is incrementin/decrementing
 	//	hence an atomic fade()
 
