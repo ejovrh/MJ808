@@ -12,15 +12,16 @@
 static primitive_led_t __primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
 extern void DoNothing(void);
-extern void _fade(const uint8_t value, volatile uint8_t *ocr);
 
 // TODO - optimize
 static void _wrapper_fade_mj808(const uint8_t value)
 {
-	_fade(value, &OCR_FRONT_LIGHT);
+	OCR_FRONT_LIGHT = value;
+	return;
+//	_fade(value, &OCR_FRONT_LIGHT);
 }
 
-// TODO - optimize & should be static and the caller in question should use an object
+// TODO - optimise & should be static and the caller in question should use an object
 // concrete utility LED handling function
 static void _util_led_mj808(uint8_t in_val)
 {
@@ -59,7 +60,7 @@ static void _util_led_mj808(uint8_t in_val)
 static void __component_led_mj808_device_on(void)
 {
 	Device->led->led[Utility].Shine(UTIL_LED_GREEN_ON);  // green LED on
-	Device->led->led[Front].Shine(0x20);	// front light on - low key; gets overwritten by LU command, since it comes in a bit later
+	Device->led->led[Front].Shine(20);  // front light on - low key; gets overwritten by LU command, since it comes in a bit later
 
 	//send the messages out, UDP-style. no need to check if the device is actually online
 	MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);	// convey button press via CAN and the logic unit will do its own thing
@@ -87,8 +88,9 @@ static void _component_led_mj808(const uint8_t val)
 		__component_led_mj808_device_off();
 }
 
-static __composite_led_t              __LED =
-	{.public.led = __primitive_led,  // assign pointer to LED array
+static __composite_led_t __LED =
+	{  //
+	.public.led = __primitive_led,  // assign pointer to LED array
 	.public.Shine = &_component_led_mj808,	// component part ("interface")
 	.flags = 0	//
 	};

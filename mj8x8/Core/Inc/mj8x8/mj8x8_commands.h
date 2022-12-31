@@ -31,19 +31,21 @@
  0x80 OCR1A MAX. SAFE COUNT WITH REV2 BOARD
 
  */
+
 /* MJ808 - front light
- timer/counter 0 and timer/counter 1 both operate in 8bit mode
- hex val. - duty cycle - current front light
- 0x00 - 0% (off)				-	20 mA
- 0x10 - 6.26%						-	20 mA
- 0x20 - 12.5%						-	30 mA
- 0x40 - 25.05%					-	60 mA
- 0x80 - 50.1%						-	100 mA
- 0xA0 - 62.6%						-	120 mA
- 0xC0 - 75.15%					-	150 mA
- 0xE0 - 87.84%					-	170 mA
- 0xF0 - 94.12%					-	180 mA
- 0xFF - 100% (max)			-	200 mA
+ current sense resistor is: WSLT2010R2200FEB18 / 0.22Ohm 1W
+ decimal val. - duty cycle - current front light
+ 00 - 0% (off)		-	4 mA
+ 10 - 10%					-	20 mA
+ 20 - 20%					-	83 mA
+ 30 - 30%					-	120 mA
+ 40 - 40%					-	169 mA
+ 50 - 50%					-	197 mA
+ 60 - 60%					-	246 mA
+ 70 - 70%					-	295 mA
+ 80 - 80%					-	327 mA
+ 90 - 90%					-	396 mA
+ 100 - 100% (max)	-	417 mA
 
  0x80 MAX. SAFE COUNT WITH REV2 BOARD -- with this the FET is dangerously hot
  0x40 is less stressing

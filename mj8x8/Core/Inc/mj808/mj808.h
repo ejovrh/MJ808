@@ -9,13 +9,13 @@
 #include "button\button.h"
 
 // definitions of device/PCB layout-dependent hardware pins
-#define TCAN334_Shutdown_Pin GPIO_PIN_4
-#define TCAN334_Shutdown_GPIO_Port GPIOA
+#define TCAN334_Shutdown_Pin GPIO_PIN_4	//	defined here but initialised in mj8x8.c
+#define TCAN334_Shutdown_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
 #define Switch_Pin GPIO_PIN_0
 #define Switch_GPIO_Port GPIOB
 #define Switch_EXTI_IRQn EXTI0_1_IRQn
-#define TCAN334_Standby_Pin GPIO_PIN_1
-#define TCAN334_Standby_GPIO_Port GPIOB
+#define TCAN334_Standby_Pin GPIO_PIN_1	//	defined here but initialised in mj8x8.c
+#define TCAN334_Standby_GPIO_Port GPIOB	//	defined here but initialised in mj8x8.c
 #define FrontLED_Pin GPIO_PIN_3
 #define FrontLED_GPIO_Port GPIOB
 #define RedLED_Pin GPIO_PIN_4

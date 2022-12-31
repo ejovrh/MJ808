@@ -5,16 +5,17 @@
 #include "mj808\mj808_led.c"	// concrete device-specific LED functions
 #include "mj808\mj808_button.c"	// concrete device-specific button functions
 
-#define EXTI0_1_IRQn 5	// FIXME - should be included somehow, but isnt..
+#define EXTI0_1_IRQn 5	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
 
 typedef struct	// mj808_t actual
 {
 	mj808_t public;  // public struct
 } __mj808_t;
 
-static __mj808_t                __Device                __attribute__ ((section (".data")));  // preallocate __Device object in .data
+static __mj808_t __Device __attribute__ ((section (".data")));  // preallocate __Device object in .data
 
-TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim2;	// front light PWM on channel 2
+volatile uint8_t state;  // TODO - get rid of this by means of implementing a proper button handler
 
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 // cases in this switch-case statement must be unique for all events on this device
@@ -101,7 +102,7 @@ static inline void _GPIOInit(void)
 }
 
 // Timer2 init - front light PWM
-static inline void _Timer2Init(void)
+static inline void _TimerInit(void)
 {
 	TIM_ClockConfigTypeDef sClockSourceConfig =
 		{0};
@@ -110,10 +111,10 @@ static inline void _Timer2Init(void)
 	TIM_OC_InitTypeDef sConfigOC =
 		{0};
 
-	htim2.Instance = TIM2;	// timer2
-	htim2.Init.Prescaler = 10;	// TODO - figure out precise value
+	htim2.Instance = TIM2;	// timer2 - front light PWM
+	htim2.Init.Prescaler = 0;  // scale by 1
 	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;	// up counting
-	htim2.Init.Period = 7999;  // TODO - figure out precise value
+	htim2.Init.Period = 99;  // count to 100
 	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;	// no division
 	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;	// no pre-load
 	__HAL_RCC_TIM2_CLK_ENABLE();	// start the clock
@@ -127,7 +128,8 @@ static inline void _Timer2Init(void)
 	HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);	// commit it
 
 	sConfigOC.OCMode = TIM_OCMODE_PWM1;
-	sConfigOC.Pulse = LED_OFF;	// change by writing to TIM2->CCR2
+	sConfigOC.Pulse = LED_OFF;	// 0 to 100% duty cycle in decimal numbers
+
 	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 	HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2);  // commit it
@@ -142,7 +144,7 @@ void mj808_ctor()
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A));	// call base class constructor & initialize own SID
 
-	_Timer2Init();	// initialize Timer2 - PWM for front light
+	_TimerInit();  // initialize Timers - PWM for front light and button handling
 	_GPIOInit();	// initialize device-specific GPIOs
 
 	__Device.public.led = _virtual_led_ctorMJ808();  // call virtual constructor & tie in object addresses
@@ -153,35 +155,41 @@ void mj808_ctor()
 	EventHandler->fpointer = &_event_execution_function_mj808;	// implements event hander for this device
 
 	// interrupt init
-	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);
-	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
+	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // EXTI0 - pushbutton handling
+	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);  // EXTI0 - pushbutton handling
+
+	state = 0;
 
 	// TODO - access via object
-	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);  // crude "I'm finished" indicator
+	//_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);  // crude "I'm finished" indicator
 }
 
 // device-specific interrupt handlers
-// pushbutton EXTI0 interrupt handler
+// pushbutton ISR
+
 void EXTI0_1_IRQHandler(void)
 {
 	HAL_GPIO_EXTI_IRQHandler(Switch_Pin);
-}
-
-// pushbutton ISR
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
 
 	// code to be executed every 25ms
 	// TODO - sleep_disable();  // wakey wakey
 
-	Device->button->deBounce();  // call the debouncer
+	// TODO - remove this by means of implementing button handling
+	if(state == 0)
+		state = 1;
+	else
+		state = 0;
+
+	Device->led->Shine(state);
+	//Device->button->deBounce();  // call the debouncer
 
 	// TODO - sleep_enable();  // back to sleep
 
 	// TODO - implement mj808 pushbutton ISR
 
-	TIM2->CCR2 += 1;
+//	TIM2->CCR2 += 5;
 }
+
 // device-specific interrupt handlers
 
 // all devices have the object name "Device", hence the preprocessor macro

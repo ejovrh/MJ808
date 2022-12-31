@@ -16,7 +16,7 @@ typedef struct	// mj8x8_t actual
 
 TIM_HandleTypeDef htim1;	// Timer1 object
 
-extern __mj8x8_t    __MJ8x8;  // declare mj8x8_t actual
+extern __mj8x8_t __MJ8x8;  // declare mj8x8_t actual
 static inline
 void _DoNothing(void)  // a function that does nothing
 {
@@ -51,7 +51,7 @@ void _Heartbeat(message_handler_t *const msg)
 	++__MJ8x8.__BeatIterationCount;  // increment the iteration counter
 }
 
-__mj8x8_t                                                                                                                                                                                             __MJ8x8 =  // instantiate mj8x8_t actual and set function pointers
+__mj8x8_t __MJ8x8 =  // instantiate mj8x8_t actual and set function pointers
 	{.public.HeartBeat = &_Heartbeat,  // implement device-agnostic default behaviour - heartbeat
 	.public.HeartbeatPeriodic = &_DoNothing,  // every invocation for the heartbeat ISR runs this, implemented by derived classes
 	.public.EmptyBusOperation = &_DoNothing,  // implement device-agnostic default behaviour - do nothing, usually an override happens
@@ -191,51 +191,45 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 
 // device non-specific interrupt handlers
 
-// TIM1 break, update, trigger and commutation interrupts
+// timer 1 ISR - 125ms interrupt
 void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 {
-	HAL_TIM_IRQHandler(&htim1);
-}
+	HAL_TIM_IRQHandler(&htim1);  // service the interrupt
 
-// Period elapsed callback in non-blocking mode
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-	if(htim == &htim1)	// timer1 - 125ms interrupt
-		{
-			/* heartbeat of device on bus - aka. active CAN bus device discovery
-			 *
-			 * method of operation:
-			 *	- on the CAN bus there is room for max. 16 devices - in numeric form devices #0 up to #15
-			 *	- each device has its own unique NumericalCAN_ID, which is derived from its unique CAN bus ID
-			 *
-			 *	- on each watchdog timer iteration, BeatIterationCount is incremented (it is able to roll over from 0xf to 0x0)
-			 *	- when BeatIterationCount is equal to the device's NumericalCAN_ID, a heartbeat message is sent, otherwise nothing is done
-			 *
-			 *	- there are two modes: fast count and slow count - each set via WDTCR, the WatchDog Timer Control Register
-			 *		- fast count is performed when a heartbeat is supposed to be sent
-			 *			this mode speeds up the heartbeat procedure itself
-			 *
-			 *		- slow count is performed when no heartbeat is supposed to be sent
-			 *			this mode acts as a delay for heartbeat messages themselves
-			 *
-			 *	i.e. start in heartbeat mode, count fast to one's own ID, send the message and then exit heartbeat mode,
-			 *		continue counting slow until a counter rollover occurs and enter heartbeat mode again.
-			 *
-			 *	each device on the bus does this procedure.
-			 *	after one complete iteration each device should have received some other device's heartbeat message.
-			 *	on each and every message reception the senders ID is recorded in the canbus_t struct. thereby one device keeps track of its neighbors on the bus.
-			 *
-			 *	if there are no devices on the bus, a device-specific default operation is executed.
-			 */
+	// execute code
 
-			// TODO - implement sleep cycles for processor and CAN bus hardware
-			// PRT -	sleep_disable();	// wakey wakey
-			__MJ8x8.public.HeartBeat(MsgHandler);  // execute the heartbeat
-			__MJ8x8.public.HeartbeatPeriodic();  // execute something heatbeat-ISR periodic, implemented by derived classes
+	/* heartbeat of device on bus - aka. active CAN bus device discovery
+	 *
+	 * method of operation:
+	 *	- on the CAN bus there is room for max. 16 devices - in numeric form devices #0 up to #15
+	 *	- each device has its own unique NumericalCAN_ID, which is derived from its unique CAN bus ID
+	 *
+	 *	- on each watchdog timer iteration, BeatIterationCount is incremented (it is able to roll over from 0xf to 0x0)
+	 *	- when BeatIterationCount is equal to the device's NumericalCAN_ID, a heartbeat message is sent, otherwise nothing is done
+	 *
+	 *	- there are two modes: fast count and slow count - each set via WDTCR, the WatchDog Timer Control Register
+	 *		- fast count is performed when a heartbeat is supposed to be sent
+	 *			this mode speeds up the heartbeat procedure itself
+	 *
+	 *		- slow count is performed when no heartbeat is supposed to be sent
+	 *			this mode acts as a delay for heartbeat messages themselves
+	 *
+	 *	i.e. start in heartbeat mode, count fast to one's own ID, send the message and then exit heartbeat mode,
+	 *		continue counting slow until a counter rollover occurs and enter heartbeat mode again.
+	 *
+	 *	each device on the bus does this procedure.
+	 *	after one complete iteration each device should have received some other device's heartbeat message.
+	 *	on each and every message reception the senders ID is recorded in the canbus_t struct. thereby one device keeps track of its neighbors on the bus.
+	 *
+	 *	if there are no devices on the bus, a device-specific default operation is executed.
+	 */
+	// TODO - implement sleep cycles for processor and CAN bus hardware
+	// PRT -	sleep_disable();	// wakey wakey
+	__MJ8x8.public.HeartBeat(MsgHandler);  // execute the heartbeat
+	__MJ8x8.public.HeartbeatPeriodic();  // execute something heatbeat-ISR periodic, implemented by derived classes
 
-			if((!MsgHandler->Devices) && (__MJ8x8.__FlagDoDefaultOperation > 1))	// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
-				__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
+	if((!MsgHandler->Devices) && (__MJ8x8.__FlagDoDefaultOperation > 1))	// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
+		__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
 
-			// PRT -	sleep_enable();	// back to sleep
-		}
+	// PRT -	sleep_enable();	// back to sleep
 }
