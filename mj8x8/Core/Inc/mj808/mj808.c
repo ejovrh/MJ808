@@ -81,6 +81,20 @@ static inline void _GPIOInit(void)
 
 	HAL_GPIO_WritePin(GPIOB, RedLED_Pin, GPIO_PIN_SET);  //	high - LED off
 	HAL_GPIO_WritePin(GPIOB, GreenLED_Pin, GPIO_PIN_SET);  // high - LED off
+	HAL_GPIO_WritePin(TCAN334_Shutdown_GPIO_Port, TCAN334_Shutdown_Pin, GPIO_PIN_SET);	// high - put device into shutdown
+	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, GPIO_PIN_SET);	// high - put device into standby
+
+	GPIO_InitStruct.Pin = TCAN334_Shutdown_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(TCAN334_Shutdown_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = TCAN334_Standby_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(TCAN334_Standby_GPIO_Port, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = Switch_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
@@ -101,7 +115,7 @@ static inline void _GPIOInit(void)
 	HAL_GPIO_Init(FrontLED_GPIO_Port, &GPIO_InitStruct);
 }
 
-// Timer2 init - front light PWM
+// Timer init - device specific
 static inline void _TimerInit(void)
 {
 	TIM_ClockConfigTypeDef sClockSourceConfig =
@@ -111,7 +125,8 @@ static inline void _TimerInit(void)
 	TIM_OC_InitTypeDef sConfigOC =
 		{0};
 
-	htim2.Instance = TIM2;	// timer2 - front light PWM
+	// Timer2 init - front light PWM
+	htim2.Instance = TIM2;
 	htim2.Init.Prescaler = 0;  // scale by 1
 	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;	// up counting
 	htim2.Init.Period = 99;  // count to 100
@@ -129,11 +144,9 @@ static inline void _TimerInit(void)
 
 	sConfigOC.OCMode = TIM_OCMODE_PWM1;
 	sConfigOC.Pulse = LED_OFF;	// 0 to 100% duty cycle in decimal numbers
-
 	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 	HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2);  // commit it
-
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);  // start the timer
 }
 
@@ -144,7 +157,7 @@ void mj808_ctor()
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A));	// call base class constructor & initialize own SID
 
-	_TimerInit();  // initialize Timers - PWM for front light and button handling
+	_TimerInit();  // initialize Timers
 	_GPIOInit();	// initialize device-specific GPIOs
 
 	__Device.public.led = _virtual_led_ctorMJ808();  // call virtual constructor & tie in object addresses

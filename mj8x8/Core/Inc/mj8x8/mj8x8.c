@@ -16,7 +16,7 @@ typedef struct	// mj8x8_t actual
 
 TIM_HandleTypeDef htim1;	// Timer1 object
 
-extern __mj8x8_t __MJ8x8;  // declare mj8x8_t actual
+extern __mj8x8_t  __MJ8x8;	// declare mj8x8_t actual
 static inline
 void _DoNothing(void)  // a function that does nothing
 {
@@ -51,7 +51,7 @@ void _Heartbeat(message_handler_t *const msg)
 	++__MJ8x8.__BeatIterationCount;  // increment the iteration counter
 }
 
-__mj8x8_t __MJ8x8 =  // instantiate mj8x8_t actual and set function pointers
+__mj8x8_t  __MJ8x8 =  // instantiate mj8x8_t actual and set function pointers
 	{.public.HeartBeat = &_Heartbeat,  // implement device-agnostic default behaviour - heartbeat
 	.public.HeartbeatPeriodic = &_DoNothing,  // every invocation for the heartbeat ISR runs this, implemented by derived classes
 	.public.EmptyBusOperation = &_DoNothing,  // implement device-agnostic default behaviour - do nothing, usually an override happens
@@ -119,21 +119,6 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	GPIO_InitStruct.Alternate = GPIO_AF4_CAN;
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = TCAN334_Shutdown_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(TCAN334_Shutdown_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = TCAN334_Standby_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(TCAN334_Standby_GPIO_Port, &GPIO_InitStruct);
-
-	HAL_GPIO_WritePin(TCAN334_Shutdown_GPIO_Port, TCAN334_Shutdown_Pin, GPIO_PIN_SET);	// high - put device into shutdown
-	HAL_GPIO_WritePin(GPIOB, TCAN334_Standby_Pin, GPIO_PIN_SET);	// high - put device into standby
 }
 
 // Timer1 init 250ms periodic - heartbeat

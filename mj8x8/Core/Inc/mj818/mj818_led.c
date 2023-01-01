@@ -13,33 +13,32 @@ static primitive_led_t __primitive_led[2] __attribute__ ((section (".data")));	/
 
 extern void DoNothing(void);
 
-// TODO - optimize
+//
 static void _wrapper_fade_mj818_rear(uint8_t value)
-{
-// TODO - optimize
-// PRT - _fade(value, &OCR_REAR_LIGHT);
+{  //	TODO - implement _fade(val, &OCR_REAR_LIGHT);
 	;
 }
 
+//
 static void _wrapper_fade_mj818_brake(uint8_t value)
-{
-	// TODO - optimize
-	// PRT - 	_fade(value, &OCR_BRAKE_LIGHT);
+{  //	TODO - implement _fade(val, &OCR_BRAKE_LIGHT);
 	;
 }
 
 static inline void __component_led_mj818_device_on(const uint8_t val)
 {
-	// PRT - 	_fade(val, &OCR_BRAKE_LIGHT);
-	// PRT - 	_fade(val, &OCR_REAR_LIGHT);
-	;
+	//	TODO - implement _fade(val, both lights);
+
+	OCR_BRAKE_LIGHT = val;
+	OCR_REAR_LIGHT = val;
 }
 
 static inline void __component_led_mj818_device_off(void)
 {
-	// PRT - 	_fade(0x00, &OCR_BRAKE_LIGHT);
-	// PRT - 	_fade(0x00, &OCR_REAR_LIGHT);
-	;
+	//	TODO - implement _fade(val, both lights);
+
+	OCR_BRAKE_LIGHT = 0;
+	OCR_REAR_LIGHT = 0;
 }
 
 static void _component_led_mj818(const uint8_t val)
@@ -50,10 +49,12 @@ static void _component_led_mj818(const uint8_t val)
 		__component_led_mj818_device_off();
 }
 
-static __composite_led_t        __LED =
-	{.public.led = __primitive_led,  // assign pointer to LED array
+static __composite_led_t __LED =
+	{  //
+	.public.led = __primitive_led,  // assign pointer to LED array
 	.public.Shine = &_component_led_mj818,	// component part ("interface")
-	.flags = 0};
+	.flags = 0	//
+	};
 
 static composite_led_t* _virtual_led_ctorMJ818()
 {

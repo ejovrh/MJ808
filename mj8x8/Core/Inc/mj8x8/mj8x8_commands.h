@@ -12,24 +12,36 @@
 #define OCR_REAR_LIGHT TIM2->CCR1	// Output Compare Register for PWM of rear light
 #define OCR_BRAKE_LIGHT TIM3->CCR4	// Output Compare Register for PWM of brake light
 
-// TODO - update current measurements for latest boards
 /* MJ818 - rear & brake light
- timer/counter 0 and timer/counter 1 both operate in 8bit mode
- hex val. - duty cycle - current back light - current brake light
- 0x00 - 0% (off)				-	20 mA -	20 mA
- 0x10 - 6.26%						-	20 mA - 20 mA
- 0x20 - 12.5%						-	20 mA -	30 mA
- 0x40 - 25.05%					-	30 mA -	50 mA
- 0x80 - 50.1%						-	50 mA -	90 mA
- 0xA0 - 62.6%						-	50 mA -	110 mA
- 0xC0 - 75.15%					-	60 mA -	130 mA
- 0xE0 - 87.84%					-	70 mA -	150 mA
- 0xF0 - 94.12%					- 70 mA -	160 mA
- 0xFF - 100% (max)			-	80 mA -	170 mA
+ current sense resistor is: 10R/0.5W
+ decimal val. - duty cycle - current rear light
+ 00 - 0% (off)		-	4 mA
+ 10 - 10%					-	4 mA
+ 20 - 20%					-	7 mA
+ 30 - 30%					-	9 mA
+ 40 - 40%					-	11 mA
+ 50 - 50%					-	13 mA
+ 60 - 60%					-	15 mA
+ 70 - 70%					-	17 mA
+ 80 - 80%					-	20 mA
+ 90 - 90%					-	23 mA
+ 100 - 100% (max)	-	25 mA
 
- 0xFF OCR0A MAX. SAFE COUNT WITH REV2 BOARD
- 0x80 OCR1A MAX. SAFE COUNT WITH REV2 BOARD
+ current sense resistor is: WSLT2010R2200FEB18 / 0.22Ohm 1W
+ decimal val. - duty cycle - current brake light
+ 00 - 0% (off)		-	4 mA
+ 10 - 10%					-	16 mA
+ 20 - 20%					-	60 mA
+ 30 - 30%					-	115 mA
+ 40 - 40%					-	176 mA
+ 50 - 50%					-	178 mA
+ 60 - 60%					-	235 mA
+ 70 - 70%					-	278 mA
+ 80 - 80%					-	296 mA
+ 90 - 90%					-	330 mA
+ 100 - 100% (max)	-	335 mA
 
+ 75% is MAX. SAFE COUNT
  */
 
 /* MJ808 - front light
@@ -47,8 +59,7 @@
  90 - 90%					-	396 mA
  100 - 100% (max)	-	417 mA
 
- 0x80 MAX. SAFE COUNT WITH REV2 BOARD -- with this the FET is dangerously hot
- 0x40 is less stressing
+ 75% is MAX. SAFE COUNT
  */
 
 // maximum safe values for light OCRs
