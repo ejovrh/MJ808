@@ -14,7 +14,6 @@ typedef struct	// mj808_t actual
 
 static __mj808_t __Device __attribute__ ((section (".data")));  // preallocate __Device object in .data
 
-TIM_HandleTypeDef htim2;	// front light PWM on channel 2
 volatile uint8_t state;  // TODO - get rid of this by means of implementing a proper button handler
 
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
@@ -118,6 +117,8 @@ static inline void _GPIOInit(void)
 // Timer init - device specific
 static inline void _TimerInit(void)
 {
+	TIM_HandleTypeDef htim2;	// front light PWM on channel 2
+
 	TIM_ClockConfigTypeDef sClockSourceConfig =
 		{0};
 	TIM_MasterConfigTypeDef sMasterConfig =

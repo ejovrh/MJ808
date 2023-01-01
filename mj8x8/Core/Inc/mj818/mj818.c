@@ -11,14 +11,11 @@ typedef struct	// mj818_t actual
 
 static __mj818_t __Device __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
-TIM_HandleTypeDef htim2;
-TIM_HandleTypeDef htim3;
-
 // defines device operation on empty bus
 void _EmptyBusOperationMJ818(void)
 {
 	if(OCR_REAR_LIGHT == 00)	// run once
-		__Device.public.led->Shine(0x10);  // operate on component part
+		__Device.public.led->Shine(10);  // operate on component part
 }
 
 // dispatches CAN messages to appropriate sub-component on device
@@ -81,6 +78,9 @@ static inline void _GPIOInit(void)
 // Timer init - device specific
 static inline void _TimerInit(void)
 {
+	TIM_HandleTypeDef htim2;	// rear light PWM on channel 1
+	TIM_HandleTypeDef htim3;	// brake light PWM on channel 4
+
 	TIM_ClockConfigTypeDef sClockSourceConfig =
 		{0};
 	TIM_MasterConfigTypeDef sMasterConfig =

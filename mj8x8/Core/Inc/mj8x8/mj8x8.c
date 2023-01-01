@@ -4,6 +4,8 @@
 #define TIM1_BRK_UP_TRG_COM_IRQn 13	// FIXME - should be included somehow, but isnt..
 #define CEC_CAN_IRQn	30
 
+static TIM_HandleTypeDef htim1;  // Timer1 object
+
 typedef struct	// mj8x8_t actual
 {
 	mj8x8_t public;  // public struct
@@ -14,9 +16,7 @@ typedef struct	// mj8x8_t actual
 	uint8_t __FlagDoDefaultOperation :2;	// we are alone on the bus - shall we do our device-specific default operation?
 } __mj8x8_t;
 
-TIM_HandleTypeDef htim1;	// Timer1 object
-
-extern __mj8x8_t  __MJ8x8;	// declare mj8x8_t actual
+extern __mj8x8_t __MJ8x8;	// declare mj8x8_t actual
 static inline
 void _DoNothing(void)  // a function that does nothing
 {
@@ -51,8 +51,9 @@ void _Heartbeat(message_handler_t *const msg)
 	++__MJ8x8.__BeatIterationCount;  // increment the iteration counter
 }
 
-__mj8x8_t  __MJ8x8 =  // instantiate mj8x8_t actual and set function pointers
-	{.public.HeartBeat = &_Heartbeat,  // implement device-agnostic default behaviour - heartbeat
+__mj8x8_t __MJ8x8 =  // instantiate mj8x8_t actual and set function pointers
+	{  //
+	.public.HeartBeat = &_Heartbeat,  // implement device-agnostic default behaviour - heartbeat
 	.public.HeartbeatPeriodic = &_DoNothing,  // every invocation for the heartbeat ISR runs this, implemented by derived classes
 	.public.EmptyBusOperation = &_DoNothing,  // implement device-agnostic default behaviour - do nothing, usually an override happens
 	.__FlagDoHeartbeat = 1,  // start with discovery mode
