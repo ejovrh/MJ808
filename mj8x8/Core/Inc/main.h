@@ -7,12 +7,14 @@
 #define _BV(x) (1<<(x))
 #endif
 
-#define MJ808_	// what device to compile for
+// TODO - investigate option bytes - RM0091 - 4.1.2 - in order to automatically determine a connected device
 
-//void DoNothing(void)	// a function that does nothing
-//{
-//	return;
-//}
+#define MJ828_	// what device to compile for
+
+__weak void DoNothing(void)  // a function that does nothing
+{
+	return;
+}
 
 #if defined(MJ808_)	// front light header include
 #include "mj808/mj808.h"

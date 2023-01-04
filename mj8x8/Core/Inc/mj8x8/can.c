@@ -15,7 +15,7 @@
 // PRT - #define	MCP2561_standby_pin		B,	2,	2								// MCP2561 standby
 #endif
 
-extern void DoNothing(void);
+//extern void DoNothing(void);
 extern void helper_handle_rx(void);
 
 CAN_HandleTypeDef hcan;
@@ -39,7 +39,7 @@ typedef struct	// can_t actual
 
 } __can_t;
 
-extern __can_t __CAN;  // declare can_t actual
+extern __can_t __CAN;	// declare can_t actual
 /* the basic building blocks of interaction with the MCP2515:
  * opcodes -low level instructions- which the hardware executes
  *	they are meant to be "private" and not be used in main() directly
@@ -418,7 +418,7 @@ static void _can_sleep(const uint8_t in_val)
 		}
 }
 
-__can_t           __CAN =  // instantiate can_t actual and set function pointers
+__can_t __CAN =  // instantiate can_t actual and set function pointers
 	{.public.Sleep = &_can_sleep,  // set up function pointer for public methods
 	.public.RequestToSend = &_mcp2515_can_msg_send,  // ditto
 	.public.FetchMessage = &_mcp2515_can_msg_receive,  // ditto

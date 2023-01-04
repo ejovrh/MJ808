@@ -17,15 +17,14 @@ typedef struct	// mj8x8_t actual
 } __mj8x8_t;
 
 extern __mj8x8_t __MJ8x8;	// declare mj8x8_t actual
-static inline
-void _DoNothing(void)  // a function that does nothing
+
+static inline void _DoNothing(void)  // a function that does nothing
 {
 	return;
 }
 
 // provides a periodic heartbeat based on the watchdog timer interrupt
-static
-void _Heartbeat(message_handler_t *const msg)
+static void _Heartbeat(message_handler_t *const msg)
 {
 	if(__MJ8x8.__FlagDoHeartbeat)  // if we are in heartbeat mode
 		{
@@ -56,6 +55,7 @@ __mj8x8_t __MJ8x8 =  // instantiate mj8x8_t actual and set function pointers
 	.public.HeartBeat = &_Heartbeat,  // implement device-agnostic default behaviour - heartbeat
 	.public.HeartbeatPeriodic = &_DoNothing,  // every invocation for the heartbeat ISR runs this, implemented by derived classes
 	.public.EmptyBusOperation = &_DoNothing,  // implement device-agnostic default behaviour - do nothing, usually an override happens
+	.public.SystemInterrupt = &_DoNothing,	//	__weak declaration - re-declare in device-specific constructor
 	.__FlagDoHeartbeat = 1,  // start with discovery mode
 	.__FlagDoDefaultOperation = 0  // control flag
 	};
@@ -87,9 +87,8 @@ static inline void _GPIOInit(void)
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
 
-	__HAL_RCC_GPIOA_CLK_ENABLE();  // enable peripheral clocks
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-	__HAL_RCC_GPIOF_CLK_ENABLE();
+	__HAL_RCC_GPIOA_CLK_ENABLE();  // enable peripheral clock
+	__HAL_RCC_CAN1_CLK_ENABLE();	// enable CAN bus clock
 
 	// GPIO init is done in two steps:
 	//	1. set all to analog in order to reduce power consumption (done here)
@@ -131,9 +130,9 @@ static inline void _Timer1Init(void)
 		{0};
 
 	htim1.Instance = TIM1;
-	htim1.Init.Prescaler = 7999;	// 8MHz / 7999+1 = 1000Hz update rate
+	htim1.Init.Prescaler = 799;  // 8MHz / 799+1 = 10kHz update rate
 	htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim1.Init.Period = 249;	// with above prescaler we have a 250ms interrupt frequency
+	htim1.Init.Period = 149;  // with above pre-scaler and a period of 24, we have an 2.5ms interrupt frequency
 	htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim1.Init.RepetitionCounter = 0;
 	htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -148,6 +147,13 @@ static inline void _Timer1Init(void)
 	HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig);
 
 	HAL_TIM_Base_Start_IT(&htim1);	// start the timer
+}
+
+// placeholder function - called from actual TIM1_BRK_UP_TRG_COM_IRQHandler() ISR
+__weak void _SystemInterrupt(void)
+{
+	// re-declare in actual device to tie in device-specific code into this 1ms interrupt ISR
+	asm("NOP"); // do nothing
 }
 
 // general device non-specific low-level hardware init & config
@@ -165,6 +171,8 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 
 	__MJ8x8.public.can->own_sidh = in_own_sidh;  // high byte
 	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);	// low byte
+	__MJ8x8.public.SystemInterrupt = &_SystemInterrupt;  //	__weak declaration - re-declare in device-specific constructor
+	__disable_irq();	// disable interrupts - the actual device constructor will enable them...
 
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 0, 0);
@@ -176,13 +184,13 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 }
 
 // device non-specific interrupt handlers
-
 // timer 1 ISR - 125ms interrupt
 void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&htim1);  // service the interrupt
 
 	// execute code
+	__MJ8x8.public.SystemInterrupt();  //	call the placeholder function - in its raw form it does an asm(nop). any actual device can re-decalre it
 
 	/* heartbeat of device on bus - aka. active CAN bus device discovery
 	 *
@@ -219,3 +227,4 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 
 	// PRT -	sleep_enable();	// back to sleep
 }
+// device non-specific interrupt handlers

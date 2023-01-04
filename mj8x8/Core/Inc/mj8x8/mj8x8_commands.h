@@ -105,11 +105,11 @@
 #define RED 0x00
 #define GREEN 0x01
 #define YELLOW 0x02
-#define BLUE1 0x03
-#define BLUE2 0x04
-#define BLUE3 0x05
-#define BLUE4 0x06
-#define BLUE5 0x07
+#define BLUE 0x03
+#define BATT1 0x04
+#define BATT2 0x05
+#define BATT3 0x06
+#define BATT4 0x07
 #define CMND_UTIL_LED 0x10	// command for utility LED operation (color, on, off, blink)
 
 #define UTIL_LED_RED_OFF 0x10	// utility LED - off

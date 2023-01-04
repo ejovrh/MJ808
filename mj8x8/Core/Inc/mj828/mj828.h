@@ -9,23 +9,48 @@
 #include "button\button.h"
 
 // definitions of device/PCB layout-specific hardware pins
-// PRT - definitions of device/PCB layout-specific hardware pins
+#define TCAN334_Standby_Pin GPIO_PIN_8
+#define TCAN334_Standby_GPIO_Port GPIOB
+#define TCAN334_Shutdown_Pin GPIO_PIN_1
+#define TCAN334_Shutdown_GPIO_Port GPIOF
+#define LeverFront_Pin GPIO_PIN_1
+#define LeverFront_GPIO_Port GPIOA
+#define LeverFront_EXTI_IRQn EXTI0_1_IRQn
+#define LeverBrake_Pin GPIO_PIN_2
+#define LeverBrake_GPIO_Port GPIOA
+#define LeverBrake_EXTI_IRQn EXTI2_3_IRQn
+#define VBat_Pin GPIO_PIN_3
+#define VBat_GPIO_Port GPIOA
+#define Pushbutton_Pin GPIO_PIN_0
+#define Pushbutton_GPIO_Port GPIOB
+#define Pushbutton_EXTI_IRQn EXTI0_1_IRQn
+#define Phototransistor_Pin GPIO_PIN_1
+#define Phototransistor_GPIO_Port GPIOB
+#define CP4_Pin GPIO_PIN_15
+#define CP4_GPIO_Port GPIOA
+#define CP2_Pin GPIO_PIN_3
+#define CP2_GPIO_Port GPIOB
+#define CP3_Pin GPIO_PIN_4
+#define CP3_GPIO_Port GPIOB
+#define CP1_Pin GPIO_PIN_5
+#define CP1_GPIO_Port GPIOB
 // definitions of device/PCB layout-specific hardware pins
 
 enum mj828_leds  // enum of lights on this device
 {
 	  Red,	// 0
 	  Green,	// 1
-	  Blue,  // 2
-	  Yellow,  // 3
-	  Battery_LED1,  // 4
-	  Battery_LED2,  // 5
-	  Battery_LED3,  // 6
-	  Battery_LED4	// 7
+	  Yellow,  // 2
+	  Blue,  // 3
+	  Battery1,  // 4
+	  Battery2,  // 5
+	  Battery3,  // 6
+	  Battery4	// 7
 };
 
 enum mj828_buttons	// enum of buttons on this device
 {
+	  // TODO - implement brake/high beam buttons
 	  Right,
 	  Left
 };

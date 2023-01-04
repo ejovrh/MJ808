@@ -78,6 +78,8 @@ static inline void _GPIOInit(void)
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
 
+	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
+
 	HAL_GPIO_WritePin(GPIOB, RedLED_Pin, GPIO_PIN_SET);  //	high - LED off
 	HAL_GPIO_WritePin(GPIOB, GreenLED_Pin, GPIO_PIN_SET);  // high - LED off
 	HAL_GPIO_WritePin(TCAN334_Shutdown_GPIO_Port, TCAN334_Shutdown_Pin, GPIO_PIN_SET);	// high - put device into shutdown
@@ -95,10 +97,10 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(TCAN334_Standby_GPIO_Port, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = Switch_Pin;
+	GPIO_InitStruct.Pin = Pushbutton_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	HAL_GPIO_Init(Switch_GPIO_Port, &GPIO_InitStruct);
+	HAL_GPIO_Init(Pushbutton_GPIO_Port, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = RedLED_Pin | GreenLED_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -169,21 +171,24 @@ void mj808_ctor()
 	EventHandler->fpointer = &_event_execution_function_mj808;	// implements event hander for this device
 
 	// interrupt init
-	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // EXTI0 - pushbutton handling
-	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);  // EXTI0 - pushbutton handling
+	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // EXTI0 - Pushbutton handling
+	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 
-	state = 0;
+	state = 0;	// used for testing the pushbutton
+
+	__enable_irq();  // enable interrupts
 
 	// TODO - access via object
-	//_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);  // crude "I'm finished" indicator
+	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);  // crude "I'm finished" indicator
 }
 
 // device-specific interrupt handlers
 // pushbutton ISR
-
 void EXTI0_1_IRQHandler(void)
 {
-	HAL_GPIO_EXTI_IRQHandler(Switch_Pin);
+	HAL_GPIO_EXTI_IRQHandler(Pushbutton_Pin);  // service the interrupt
+
+	// execute code
 
 	// code to be executed every 25ms
 	// TODO - sleep_disable();  // wakey wakey
@@ -201,9 +206,7 @@ void EXTI0_1_IRQHandler(void)
 
 	// TODO - implement mj808 pushbutton ISR
 
-//	TIM2->CCR2 += 5;
 }
-
 // device-specific interrupt handlers
 
 // all devices have the object name "Device", hence the preprocessor macro

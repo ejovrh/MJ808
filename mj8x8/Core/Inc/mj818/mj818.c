@@ -45,6 +45,8 @@ static inline void _GPIOInit(void)
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
 
+	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
+
 	HAL_GPIO_WritePin(TCAN334_Shutdown_GPIO_Port, TCAN334_Shutdown_Pin, GPIO_PIN_SET);	// high - put device into shutdown
 	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, GPIO_PIN_SET);	// high - put device into standby
 
@@ -152,6 +154,8 @@ void mj818_ctor()
 
 	// interrupt init
 	// none
+
+	__enable_irq();  // enable interrupts
 }
 
 // device-specific interrupt handlers
