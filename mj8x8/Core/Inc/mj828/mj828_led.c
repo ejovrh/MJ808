@@ -11,46 +11,25 @@
 #include "led\composite_led_actual.c"	// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
 
 static primitive_led_t __primitive_led[8] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
+static __composite_led_t __LED;  // forward declaration of object
 
-// TODO - improve GPIO initialisations below as they do work, yet are ugly
-static void __mj828_led_gpio_init(void)
+static GPIO_InitTypeDef GPIO_InitStruct =  // GPIO initialisation structure
+	{0};
+
+// switches a given pin on a port to output
+static inline void ___SetPinToOutput(GPIO_TypeDef *inPort, const uint16_t inPin)
 {
-	static GPIO_InitTypeDef GPIO_InitStruct =
-		{0};
-
-	GPIO_InitStruct.Pin = CP1_Pin | CP2_Pin | CP3_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pin = inPin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = CP4_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_RESET);
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(inPort, &GPIO_InitStruct);
 }
 
-static void __LED_red(const uint8_t state)	// red LED on/off
+static void __LED_red(const uint8_t state)  // red LED on/off
 {
-	GPIO_InitTypeDef GPIO_InitStruct =
-		{0};
-
-	GPIO_InitStruct.Pin = CP2_Pin;	// anode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(CP2_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = CP1_Pin;	// cathode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-
-	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_SET);	// anode high
+	___SetPinToOutput(CP2_GPIO_Port, CP2_Pin);  // anode
+	___SetPinToOutput(CP1_GPIO_Port, CP1_Pin);  // cathode
 
 	if(state)
 		// on
@@ -59,26 +38,13 @@ static void __LED_red(const uint8_t state)	// red LED on/off
 		// off
 		HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_SET);	// cathode high
 
-	HAL_GPIO_Init(CP1_GPIO_Port, &GPIO_InitStruct);  // cathode commit
+	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_SET);	// anode high
 }
 
 static void __LED_green(const uint8_t state)	// green LED on/off
 {
-	GPIO_InitTypeDef GPIO_InitStruct =
-		{0};
-
-	GPIO_InitStruct.Pin = CP1_Pin;	// anode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(CP1_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = CP2_Pin;	// cathode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-
-	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_SET);	// anode high
+	___SetPinToOutput(CP1_GPIO_Port, CP1_Pin);  // anode
+	___SetPinToOutput(CP2_GPIO_Port, CP2_Pin);  // cathode
 
 	if(state)
 		// on
@@ -87,26 +53,13 @@ static void __LED_green(const uint8_t state)	// green LED on/off
 		// off
 		HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_SET);	// cathode high
 
-	HAL_GPIO_Init(CP2_GPIO_Port, &GPIO_InitStruct);  // cathode commit
+	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_SET);	// anode high
 }
 
 static void __LED_blue(const uint8_t state)  // blue1 LED on/off
 {
-	GPIO_InitTypeDef GPIO_InitStruct =
-		{0};
-
-	GPIO_InitStruct.Pin = CP2_Pin;	// anode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(CP2_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = CP4_Pin;	// cathode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-
-	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_SET);	// CP2 - anode
+	___SetPinToOutput(CP2_GPIO_Port, CP2_Pin);  // anode
+	___SetPinToOutput(CP4_GPIO_Port, CP4_Pin);  // cathode
 
 	if(state)
 		// on
@@ -115,26 +68,13 @@ static void __LED_blue(const uint8_t state)  // blue1 LED on/off
 		// off
 		HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// CP4 - cathode
 
-	HAL_GPIO_Init(CP4_GPIO_Port, &GPIO_InitStruct);  // cathode commit
+	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_SET);	// CP2 - anode
 }
 
 static void __LED_yellow(const uint8_t state)  // yellow LED on/off
 {
-	GPIO_InitTypeDef GPIO_InitStruct =
-		{0};
-
-	GPIO_InitStruct.Pin = CP3_Pin;	// anode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(CP3_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = CP2_Pin;	// cathode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-
-	HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_SET);	// CP3 - anode
+	___SetPinToOutput(CP3_GPIO_Port, CP3_Pin);  // anode
+	___SetPinToOutput(CP2_GPIO_Port, CP2_Pin);  // cathode
 
 	if(state)
 		// on
@@ -143,26 +83,13 @@ static void __LED_yellow(const uint8_t state)  // yellow LED on/off
 		// off
 		HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_SET);	// CP2 - cathode
 
-	HAL_GPIO_Init(CP2_GPIO_Port, &GPIO_InitStruct);  // cathode commit
+	HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_SET);	// CP3 - anode
 }
 
 static void __LED_batt1(const uint8_t state)	// blue2 LED on/off
 {
-	GPIO_InitTypeDef GPIO_InitStruct =
-		{0};
-
-	GPIO_InitStruct.Pin = CP4_Pin;	// anode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(CP4_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = CP3_Pin;	// cathode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-
-	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// CP4 - anode
+	___SetPinToOutput(CP4_GPIO_Port, CP4_Pin);  // anode
+	___SetPinToOutput(CP3_GPIO_Port, CP3_Pin);  // cathode
 
 	if(state)
 		// on
@@ -171,26 +98,13 @@ static void __LED_batt1(const uint8_t state)	// blue2 LED on/off
 		// off
 		HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_SET);	// CP3 - cathode
 
-	HAL_GPIO_Init(CP3_GPIO_Port, &GPIO_InitStruct);  // cathode commit
+	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// CP4 - anode
 }
 
 static void __LED_batt2(const uint8_t state)	// blue3 LED on/off
 {
-	GPIO_InitTypeDef GPIO_InitStruct =
-		{0};
-
-	GPIO_InitStruct.Pin = CP3_Pin;	// anode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(CP3_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = CP4_Pin;	// cathode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-
-	HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_SET);	// CP3 - anode
+	___SetPinToOutput(CP3_GPIO_Port, CP3_Pin);  // anode
+	___SetPinToOutput(CP4_GPIO_Port, CP4_Pin);  // cathode
 
 	if(state)
 		// on
@@ -199,26 +113,13 @@ static void __LED_batt2(const uint8_t state)	// blue3 LED on/off
 		// off
 		HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// CP4 - cathode
 
-	HAL_GPIO_Init(CP4_GPIO_Port, &GPIO_InitStruct);  // cathode commit
+	HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_SET);	// CP3 - anode
 }
 
 static void __LED_batt3(const uint8_t state)	// blue4 LED on/off
 {
-	GPIO_InitTypeDef GPIO_InitStruct =
-		{0};
-
-	GPIO_InitStruct.Pin = CP1_Pin;	// anode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(CP1_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = CP4_Pin;	// cathode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-
-	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_SET);	// CP1 - anode
+	___SetPinToOutput(CP1_GPIO_Port, CP1_Pin);  // anode
+	___SetPinToOutput(CP4_GPIO_Port, CP4_Pin);  // cathode
 
 	if(state)
 		// on
@@ -227,26 +128,13 @@ static void __LED_batt3(const uint8_t state)	// blue4 LED on/off
 		// off
 		HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// CP4 - cathode
 
-	HAL_GPIO_Init(CP4_GPIO_Port, &GPIO_InitStruct);  // cathode commit
+	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_SET);	// CP1 - anode
 }
 
 static void __LED_batt4(const uint8_t state)	// blue5 LED on/off
 {
-	GPIO_InitTypeDef GPIO_InitStruct =
-		{0};
-
-	GPIO_InitStruct.Pin = CP4_Pin;	// anode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(CP4_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = CP1_Pin;	// cathode
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-
-	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// CP4 - anode
+	___SetPinToOutput(CP4_GPIO_Port, CP4_Pin);  // anode
+	___SetPinToOutput(CP1_GPIO_Port, CP1_Pin);  // cathode
 
 	if(state)
 		// on
@@ -255,15 +143,7 @@ static void __LED_batt4(const uint8_t state)	// blue5 LED on/off
 		// off
 		HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_SET);	// CP1 - cathode
 
-	HAL_GPIO_Init(CP1_GPIO_Port, &GPIO_InitStruct);  // cathode commit
-}
-
-// private function, used only by the charlieplexing_handler() function
-static void __glow(uint8_t led, uint8_t state)
-{
-	__mj828_led_gpio_init();	// set LED pins to initial state
-
-	__LED.public.led[led].Shine(state);
+	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// CP4 - anode
 }
 
 // handles the time-based charlieplexing stuff
@@ -282,7 +162,23 @@ static void _charlieplexing_handler()
 
 	static uint8_t i = 0;  // persistent iterator across function calls loops over all LEDs on device
 
-	__glow(i, (__LED.flags & _BV(i)));	// pass glow the LED number and the appropriate bit in the flag struct
+	// set LED pins to initial state
+	GPIO_InitStruct.Pin = CP1_Pin | CP2_Pin | CP3_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = CP4_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_RESET);
+
+	__LED.public.led[i].Shine((__LED.flags & _BV(i)));	// pass glow the LED number and the appropriate bit in the flag struct
 
 	// !!!!
 	(i >= 7) ? i = 0 : ++i;  // count up to 7 and then restart from zero (we have 8 LEDs)

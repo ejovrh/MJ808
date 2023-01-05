@@ -16,7 +16,7 @@ typedef struct	// mj828_t actual
 	mj828_t public;  // public struct
 } __mj828_t;
 
-static __mj828_t __Device __attribute__ ((section (".data")));	// preallocate __Device object in .data
+static __mj828_t   __Device   __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
 void _event_execution_function_mj828(uint8_t val)
 {
@@ -221,19 +221,15 @@ void mj828_ctor()
 
 	__enable_irq();  // enable interrupts
 
-	// FIXME - if below flag is 0, it doesn't work properly: at least one LED has to be on for the thing to work
-	// also: if any other than Green is on, it doesn't shine properly
 	// crude power indicator - argument is the 0-indexed LED that shall be lit up
-	__Device.public.led->Shine(Battery4);
-	__Device.public.led->Shine(Battery3);
-	__Device.public.led->Shine(Battery2);
-	__Device.public.led->Shine(Battery1);
-	__Device.public.led->Shine(Blue);
-	__Device.public.led->Shine(Yellow);
 	__Device.public.led->Shine(Red);
 	__Device.public.led->Shine(Green);
-
-	//	__Device.public.led->led[Yellow].Shine(1);	// FIXME - doesn't work
+	__Device.public.led->Shine(Yellow);
+	__Device.public.led->Shine(Blue);
+	__Device.public.led->Shine(Battery1);
+	__Device.public.led->Shine(Battery2);
+	__Device.public.led->Shine(Battery3);
+	__Device.public.led->Shine(Battery4);
 }
 
 // device-specific interrupt handlers
