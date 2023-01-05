@@ -153,6 +153,13 @@ static inline void _TimerInit(void)
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);  // start the timer
 }
 
+// re-declaration of __weak function in mj8x8.c for interrupt extension
+void _SystemInterrupt(void)
+{
+	if((__Device.public.mj8x8->SysIRQCounter % 10) == 0)  // every 25ms
+			Device->button->deBounce();  // call the debouncer
+}
+
 // device-specific constructor
 void mj808_ctor()
 {

@@ -187,11 +187,16 @@ void _ADCInit(void)
 	HAL_ADC_ConfigChannel(&hadc, &sConfig);
 }
 
-// redeclaration of __weak function in mj8x8.c
+// re-declaration of __weak function in mj8x8.c for interrupt extension
 void _SystemInterrupt(void)  // timer/counter0 - 16.25ms - charlieplexed blinking
 {
-	// timer1 - 10ms - charlieplexed blinking
+	// timer1 - 2.5ms - charlieplexed blinking
 	Device->led->Handler();  // handles LEDs according to CAN message (of type CMND_UTIL_LED)
+
+	if((__Device.public.mj8x8->SysIRQCounter % 10) == 0)  // every 25ms
+		{
+			Device->button->deBounce();  // call the debouncer
+		}
 }
 
 void mj828_ctor()
