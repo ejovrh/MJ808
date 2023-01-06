@@ -14,7 +14,7 @@ static __mj818_t __Device __attribute__ ((section (".data")));	// preallocate __
 // defines device operation on empty bus
 void _EmptyBusOperationMJ818(void)
 {
-	if(OCR_REAR_LIGHT == 00)	// run once
+	if(OCR_REAR_LIGHT == 0)  // run once
 		__Device.public.led->Shine(10);  // operate on component part
 }
 
@@ -139,6 +139,13 @@ static inline void _TimerInit(void)
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);  // start the timer
 }
 
+// interrupt extension, triggered by timer 1 ISR - 2.5ms interrupt in mj8x8
+void _SystemInterrupt(void)
+{
+	if((Device->mj8x8->SysIRQCounter % 4) == 0)  //	10ms
+		Device->led->Handler();  // handles LEDs fading
+}
+
 void mj818_ctor()
 {
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
@@ -151,6 +158,7 @@ void mj818_ctor()
 
 	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;	// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
+	__Device.public.mj8x8->SystemInterrupt = &_SystemInterrupt;  // implement device-specific system interrupt code
 
 	// interrupt init
 	// none

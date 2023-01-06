@@ -187,16 +187,16 @@ void _ADCInit(void)
 	HAL_ADC_ConfigChannel(&hadc, &sConfig);
 }
 
-// re-declaration of __weak function in mj8x8.c for interrupt extension
-void _SystemInterrupt(void)  // timer/counter0 - 16.25ms - charlieplexed blinking
+// interrupt extension, triggered by timer 1 ISR - 2.5ms interrupt in mj8x8
+void _SystemInterrupt(void)
 {
-	// timer1 - 2.5ms - charlieplexed blinking
-	Device->led->Handler();  // handles LEDs according to CAN message (of type CMND_UTIL_LED)
+	// charlieplexed blinking
+	Device->led->Handler();  // handles LED charlieplexing for multiple LEDs
 
-	if((__Device.public.mj8x8->SysIRQCounter % 10) == 0)  // every 25ms
-		{
+//	if((__Device.public.mj8x8->SysIRQCounter % 10) == 0)  // every 25ms
+//		{
 			Device->button->deBounce();  // call the debouncer
-		}
+//		}
 }
 
 void mj828_ctor()
@@ -211,6 +211,7 @@ void mj828_ctor()
 	__Device.public.button = _virtual_button_ctorMJ828();  // call virtual constructor & tie in object addresses
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
+	__Device.public.mj8x8->SystemInterrupt = &_SystemInterrupt;  // implement device-specific system interrupt code
 
 	EventHandler->fpointer = &_event_execution_function_mj828;	// implements event hander for this device
 

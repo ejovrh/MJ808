@@ -4,11 +4,12 @@
 typedef struct	// struct describing a primitive LED - the leaf
 {
 	void (*Shine)(const uint8_t in_val);	// virtual function for LED operation of a primitive (i.e.) single LED
+	uint8_t ocr;	// OCR value for fading of primitive LEDs
 } primitive_led_t;
 
 typedef struct composite_led_t	// struct describing the aggregate of all LEDs on a device - the composite
 {
-	void (*Handler)(void);	// timer-based periodic LED control function (e.g. charlieplexing)
+	void (*Handler)(void);	// needed for time-based LED handling
 	void (*Shine)(const uint8_t in_val);	// virtual function for LED operation of composite LEDs
 	primitive_led_t *led;  // "virtual" pointer to array of primitive LEDs - pointer to leaves
 

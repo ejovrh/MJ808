@@ -11,56 +11,66 @@
 
 static primitive_led_t __primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
-extern void DoNothing(void);
-
-//
-static void _wrapper_fade_mj818_rear(uint8_t value)
-{  //	TODO - implement _fade(val, &OCR_REAR_LIGHT);
-	;
-}
-
-//
-static void _wrapper_fade_mj818_brake(uint8_t value)
-{  //	TODO - implement _fade(val, &OCR_BRAKE_LIGHT);
-	;
-}
-
-static inline void __component_led_mj818_device_on(const uint8_t val)
+// called indirectly by timer1 (_SystemInterrupt()), handles the fading
+static void _FadeHandler(void)
 {
-	//	TODO - implement _fade(val, both lights);
+	if(Device->led->led[Rear].ocr > OCR_REAR_LIGHT)  // fade up
+		++OCR_REAR_LIGHT;
 
-	OCR_BRAKE_LIGHT = val;
-	OCR_REAR_LIGHT = val;
+	if(Device->led->led[Brake].ocr > OCR_BRAKE_LIGHT)  // fade up
+		++OCR_BRAKE_LIGHT;
+
+	if(Device->led->led[Rear].ocr < OCR_REAR_LIGHT)  // fade down
+		--OCR_REAR_LIGHT;
+
+	if(Device->led->led[Brake].ocr < OCR_BRAKE_LIGHT)  // fade down
+		--OCR_BRAKE_LIGHT;
 }
 
-static inline void __component_led_mj818_device_off(void)
+// set OCR value to fade to
+static void _primitiveRearLED(uint8_t value)
 {
-	//	TODO - implement _fade(val, both lights);
-
-	OCR_BRAKE_LIGHT = 0;
-	OCR_REAR_LIGHT = 0;
+	Device->led->led[Rear].ocr = value;  // set OCR value, the handler will do the rest
 }
 
-static void _component_led_mj818(const uint8_t val)
+// set OCR value to fade to
+static void _primitiveBrakeLED(uint8_t value)
+{
+	Device->led->led[Brake].ocr = value;	// set OCR value, the handler will do the rest
+}
+
+static inline void __componentLED_On(const uint8_t val)
+{
+	Device->led->led[Brake].Shine(val);  // brake LED on - low key gets overwritten by LU command, since it comes in a bit later
+	Device->led->led[Rear].Shine(val);  // rear light on
+}
+
+static inline void __componentLED_Off(void)
+{
+	Device->led->led[Brake].Shine(0);  // brake LED off
+	Device->led->led[Rear].Shine(0);  // rear light off
+}
+
+static void _componentLED(const uint8_t val)
 {
 	if(val)  // true - on, false - off
-		__component_led_mj818_device_on(val);  // delegate indirectly to the leaves
+		__componentLED_On(val);  // delegate indirectly to the leaves
 	else
-		__component_led_mj818_device_off();
+		__componentLED_Off();
 }
 
 static __composite_led_t __LED =
 	{  //
 	.public.led = __primitive_led,  // assign pointer to LED array
-	.public.Shine = &_component_led_mj818,	// component part ("interface")
-	.flags = 0	//
+	.public.Shine = &_componentLED,  // component part ("interface")
+	.flags = 0  //
 	};
 
 static composite_led_t* _virtual_led_ctorMJ818()
 {
-	__LED.public.led[Rear].Shine = &_wrapper_fade_mj818_rear;  // LED-specific implementation
-	__LED.public.led[Brake].Shine = &_wrapper_fade_mj818_brake;  // LED-specific implementation
-	__LED.public.Handler = &DoNothing;	// do noting
+	__LED.public.led[Rear].Shine = &_primitiveRearLED;  // LED-specific implementation
+	__LED.public.led[Brake].Shine = &_primitiveBrakeLED;  // LED-specific implementation
+	__LED.public.Handler = &_FadeHandler;  // timer-based periodic LED control function
 
 	return &__LED.public;  // return address of public part; calling code accesses it via pointer
 }

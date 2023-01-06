@@ -120,7 +120,7 @@ static inline void _GPIOInit(void)
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
-// Timer1 init 250ms periodic - heartbeat
+// Timer1 init - 2.5ms periodic
 static inline void _Timer1Init(void)
 {
 	TIM_ClockConfigTypeDef sClockSourceConfig =
@@ -148,13 +148,6 @@ static inline void _Timer1Init(void)
 	HAL_TIM_Base_Start_IT(&htim1);	// start the timer
 }
 
-// placeholder function - called from actual TIM1_BRK_UP_TRG_COM_IRQHandler() ISR
-__weak void _SystemInterrupt(void)
-{
-	// re-declare in actual device to tie in device-specific code into this 1ms interrupt ISR
-	asm("NOP"); // do nothing
-}
-
 // general device non-specific low-level hardware init & config
 mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 {
@@ -172,7 +165,7 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 
 	__MJ8x8.public.can->own_sidh = in_own_sidh;  // high byte
 	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);	// low byte
-	__MJ8x8.public.SystemInterrupt = &_SystemInterrupt;  //	__weak declaration - re-declare in device-specific constructor
+	__MJ8x8.public.SystemInterrupt = &_DoNothing;  //	do nothing, actual implementation may be done in specific device constructor
 	__MJ8x8.public.SysIRQCounter = 0;  // initialise the counter
 
 	// interrupt init
@@ -184,53 +177,51 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	return &__MJ8x8.public;  // return address of public part; calling code accesses it via pointer
 }
 
-// device non-specific interrupt handlers
-// timer 1 ISR - 2.5ms interrupt
+// timer 1 ISR - 2.5ms interrupt - device non-specific interrupt handlers
 void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&htim1);  // service the interrupt
+	// TODO - implement sleep cycles for processor and CAN bus hardware
+	// PRT -	sleep_disable();	// wakey wakey
 
 	// execute code
 	__MJ8x8.public.SystemInterrupt();  //	call the placeholder function - in its raw form it does an asm(nop). any actual device can re-decalre it
 
-	if((__MJ8x8.public.SysIRQCounter % 50) == 0)  // every 125ms
-		{	/* heartbeat of device on bus - aka. active CAN bus device discovery
-			 *
-			 *	- on the CAN bus there is room for max. 16 devices - in numeric form devices #0 up to #15
-			 *	- each device has its own unique NumericalCAN_ID, which is derived from its unique CAN bus ID
-			 *
-			 *	- on each watchdog timer iteration, BeatIterationCount is incremented (it is able to roll over from 0xf to 0x0)
-			 *	- when BeatIterationCount is equal to the device's NumericalCAN_ID, a heartbeat message is sent, otherwise nothing is done
-			 *
-			 *	- there are two modes: fast count and slow count - each set via WDTCR, the WatchDog Timer Control Register
-			 *		- fast count is performed when a heartbeat is supposed to be sent
-			 *			this mode speeds up the heartbeat procedure itself
-			 *
-			 *		- slow count is performed when no heartbeat is supposed to be sent
-			 *			this mode acts as a delay for heartbeat messages themselves
-			 *
-			 *	i.e. start in heartbeat mode, count fast to one's own ID, send the message and then exit heartbeat mode,
-			 *		continue counting slow until a counter rollover occurs and enter heartbeat mode again.
-			 *
-			 *	each device on the bus does this procedure.
-			 *	after one complete iteration each device should have received some other device's heartbeat message.
-			 *	on each and every message reception the senders ID is recorded in the canbus_t struct. thereby one device keeps track of its neighbors on the bus.
-			 *
-			 *	if there are no devices on the bus, a device-specific default operation is executed.
-			 */
-
-			// TODO - implement sleep cycles for processor and CAN bus hardware
-			// PRT -	sleep_disable();	// wakey wakey
+	if((__MJ8x8.public.SysIRQCounter % 50) == 0)  // heartbeat - every 125ms
+		{ /* heartbeat of device on bus - aka. active CAN bus device discovery
+		 *
+		 *	- on the CAN bus there is room for max. 16 devices - in numeric form devices #0 up to #15
+		 *	- each device has its own unique NumericalCAN_ID, which is derived from its unique CAN bus ID
+		 *
+		 *	- on each watchdog timer iteration, BeatIterationCount is incremented (it is able to roll over from 0xf to 0x0)
+		 *	- when BeatIterationCount is equal to the device's NumericalCAN_ID, a heartbeat message is sent, otherwise nothing is done
+		 *
+		 *	- there are two modes: fast count and slow count - each set via WDTCR, the WatchDog Timer Control Register
+		 *		- fast count is performed when a heartbeat is supposed to be sent
+		 *			this mode speeds up the heartbeat procedure itself
+		 *
+		 *		- slow count is performed when no heartbeat is supposed to be sent
+		 *			this mode acts as a delay for heartbeat messages themselves
+		 *
+		 *	i.e. start in heartbeat mode, count fast to one's own ID, send the message and then exit heartbeat mode,
+		 *		continue counting slow until a counter rollover occurs and enter heartbeat mode again.
+		 *
+		 *	each device on the bus does this procedure.
+		 *	after one complete iteration each device should have received some other device's heartbeat message.
+		 *	on each and every message reception the senders ID is recorded in the canbus_t struct. thereby one device keeps track of its neighbors on the bus.
+		 *
+		 *	if there are no devices on the bus, a device-specific default operation is executed.
+		 */
 			__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
 			__MJ8x8.public.HeartBeat(MsgHandler);  // execute the heartbeat
 
 			if((!MsgHandler->Devices) && (__MJ8x8.__FlagDoDefaultOperation > 1))	// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
 				__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
-
-			// PRT -	sleep_enable();	// back to sleep
 		}
 
 	// 1 count == 2.5 ms -- 200 counts = 500ms
 	(__MJ8x8.public.SysIRQCounter == 199) ? __MJ8x8.public.SysIRQCounter = 0 : __MJ8x8.public.SysIRQCounter++;  // count from 0 to 199 (200 counts) and then restart from zero
+
+	// PRT -	sleep_enable();	// back to sleep
 }
 // device non-specific interrupt handlers

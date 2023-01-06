@@ -46,25 +46,23 @@ void _PopulatedBusOperationMJ808(message_handler_t *const in_msg)
 	volatile can_msg_t *msg = in_msg->ReceiveMessage();  // CAN message object
 
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
-	if((msg->COMMAND& CMND_UTIL_LED) == CMND_UTIL_LED)	// utility LED command
+	if((msg->COMMAND& CMND_UTIL_LED) == CMND_UTIL_LED)  // utility LED command
 		{
 			__Device.public.led->led[Utility].Shine(msg->COMMAND);	// glowy thingy
 			return;
 		}
 
-	if(msg->COMMAND== ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT) )	// front positional light - low beam
+	if(msg->COMMAND== (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT))  // front positional light - low beam
 		{
 			// CHECKME - does it work?
 			__Device.public.led->led[Front].Shine(msg->ARGUMENT);
-			// TODO - access via object
-//		_wrapper_fade_mj808(msg->ARGUMENT);	// fade front light to CAN msg. argument value
 			return;
 		}
 
-	if(msg->COMMAND== ( CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH) )  // front positional light - high beam
+	if(msg->COMMAND== (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH))  // front positional light - high beam
 		{
 			// TODO - implement timer based safeguard when OCR > OCR_MAX
-			if (msg->ARGUMENT > OCR_MAX_FRONT_LIGHT)// safeguard against too high a value (heating of MOSFet)
+			if(msg->ARGUMENT > OCR_MAX_FRONT_LIGHT)// safeguard against too high a value (heating of MOSFet)
 			OCR_FRONT_LIGHT = OCR_MAX_FRONT_LIGHT;
 			else
 			OCR_FRONT_LIGHT = msg->ARGUMENT;
@@ -153,11 +151,11 @@ static inline void _TimerInit(void)
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);  // start the timer
 }
 
-// re-declaration of __weak function in mj8x8.c for interrupt extension
+// interrupt extension, triggered by timer 1 ISR - 2.5ms interrupt in mj8x8
 void _SystemInterrupt(void)
 {
-	if((__Device.public.mj8x8->SysIRQCounter % 10) == 0)  // every 25ms
-			Device->button->deBounce();  // call the debouncer
+	if((Device->mj8x8->SysIRQCounter % 4) == 0)  //	10ms
+		Device->led->Handler();  // handles LEDs fading
 }
 
 // device-specific constructor
@@ -174,6 +172,7 @@ void mj808_ctor()
 	__Device.public.button = _virtual_button_ctorMJ808();  // call virtual constructor & tie in object addresses
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;	// implements device-specific operation depending on bus activity
+	__Device.public.mj8x8->SystemInterrupt = &_SystemInterrupt;  // implement device-specific system interrupt code
 
 	EventHandler->fpointer = &_event_execution_function_mj808;	// implements event hander for this device
 
@@ -181,12 +180,11 @@ void mj808_ctor()
 	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // EXTI0 - Pushbutton handling
 	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 
-	state = 0;	// used for testing the pushbutton
+	state = 0;	// TODO - remove used for testing the pushbutton
 
 	__enable_irq();  // enable interrupts
 
-	// TODO - access via object
-	_util_led_mj808(UTIL_LED_GREEN_BLINK_1X);  // crude "I'm finished" indicator
+	Device->led->led[Utility].Shine(UTIL_LED_GREEN_BLINK_1X);  // crude "I'm finished" indicator
 }
 
 // device-specific interrupt handlers
@@ -196,9 +194,8 @@ void EXTI0_1_IRQHandler(void)
 	HAL_GPIO_EXTI_IRQHandler(Pushbutton_Pin);  // service the interrupt
 
 	// execute code
-
-	// code to be executed every 25ms
 	// TODO - sleep_disable();  // wakey wakey
+	//Device->button->button[Pushbutton]->Handler();  // call the button handler
 
 	// TODO - remove this by means of implementing button handling
 	if(state == 0)
@@ -207,12 +204,8 @@ void EXTI0_1_IRQHandler(void)
 		state = 0;
 
 	Device->led->Shine(state);
-	//Device->button->deBounce();  // call the debouncer
 
 	// TODO - sleep_enable();  // back to sleep
-
-	// TODO - implement mj808 pushbutton ISR
-
 }
 // device-specific interrupt handlers
 
