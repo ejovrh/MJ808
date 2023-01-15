@@ -4,7 +4,6 @@
 #include "main.h"
 #if defined(MJ828_)	// if this particular device is active
 
-#include <inttypes.h>
 #include "mj828\mj828.h"
 #include "led\led.h"
 
@@ -12,166 +11,149 @@
 
 static primitive_led_t __primitive_led[8] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 static __composite_led_t __LED;  // forward declaration of object
-
-static GPIO_InitTypeDef GPIO_InitStruct =  // GPIO initialisation structure
+static
+GPIO_InitTypeDef GPIO_InitStruct =  // GPIO initialisation structure
 	{0};
 
 // switches a given pin on a port to output
-static inline void ___SetPinToOutput(GPIO_TypeDef *inPort, const uint16_t inPin)
+static inline void ___SetPinToOutput(GPIO_InitTypeDef *a, GPIO_TypeDef *inPort, const uint16_t inPin)
 {
-	GPIO_InitStruct.Pin = inPin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(inPort, &GPIO_InitStruct);
+	a->Pin = inPin;
+	a->Mode = GPIO_MODE_OUTPUT_PP;
+	a->Pull = GPIO_NOPULL;
+	a->Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(inPort, &*a);
 }
 
-static void __primitiveRedLED(const uint8_t state)  // red LED on/off
+// sets all charlieplexing GPIOs back to Hi-Z (initial state)
+static inline void __SetAllGPIOtoAnalog(GPIO_InitTypeDef *a)
 {
-	___SetPinToOutput(CP2_GPIO_Port, CP2_Pin);  // anode
-	___SetPinToOutput(CP1_GPIO_Port, CP1_Pin);  // cathode
+	// set LED pins to initial state
+	a->Pin = CP1_Pin | CP2_Pin | CP3_Pin;
+	a->Mode = GPIO_MODE_ANALOG;
+	a->Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(GPIOB, &*a);
 
-	if(state)
-		// on
-		HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_RESET);	// cathode low
-	else
-		// off
-		HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_SET);	// cathode high
-
-	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_SET);	// anode high
+	a->Pin = CP4_Pin;
+	a->Mode = GPIO_MODE_ANALOG;
+	a->Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(GPIOA, &*a);
 }
 
-static void __primitiveGreenLED(const uint8_t state)	// green LED on/off
+// handler for physical LED
+static void __primitiveRedLEDHanlder(const uint8_t state)  // red LED on/off
 {
-	___SetPinToOutput(CP1_GPIO_Port, CP1_Pin);  // anode
-	___SetPinToOutput(CP2_GPIO_Port, CP2_Pin);  // cathode
+	// state == 1 - on
+	// state == 0 - off
+	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, (!state));  // cathode
+	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_SET);	// anode
 
-	if(state)
-		// on
-		HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_RESET);	// cathode low
-	else
-		// off
-		HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_SET);	// cathode high
-
-	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_SET);	// anode high
+	___SetPinToOutput(&GPIO_InitStruct, CP2_GPIO_Port, CP2_Pin);  // anode
+	___SetPinToOutput(&GPIO_InitStruct, CP1_GPIO_Port, CP1_Pin);  // cathode
 }
 
-static void __primitiveBlueLED(const uint8_t state)  // blue1 LED on/off
+// handler for physical LED
+static void __primitiveGreenLEDHandler(const uint8_t state)  // green LED on/off
 {
-	___SetPinToOutput(CP2_GPIO_Port, CP2_Pin);  // anode
-	___SetPinToOutput(CP4_GPIO_Port, CP4_Pin);  // cathode
+	// state == 1 - on
+	// state == 0 - off
+	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, (!state));	// cathode
+	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_SET);	// anode
 
-	if(state)
-		// on
-		HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_RESET);	// CP4 - cathode
-	else
-		// off
-		HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// CP4 - cathode
-
-	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_SET);	// CP2 - anode
+	___SetPinToOutput(&GPIO_InitStruct, CP1_GPIO_Port, CP1_Pin);  // anode
+	___SetPinToOutput(&GPIO_InitStruct, CP2_GPIO_Port, CP2_Pin);  // cathode
 }
 
-static void __primitiveYellowLED(const uint8_t state)  // yellow LED on/off
+// handler for physical LED
+static void __primitiveBlueLEDHandler(const uint8_t state)  // blue1 LED on/off
 {
-	___SetPinToOutput(CP3_GPIO_Port, CP3_Pin);  // anode
-	___SetPinToOutput(CP2_GPIO_Port, CP2_Pin);  // cathode
+	// state == 1 - on
+	// state == 0 - off
+	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, (!state));	// cathode
+	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_SET);	// anode
 
-	if(state)
-		// on
-		HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_RESET);	// CP2 - cathode
-	else
-		// off
-		HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_SET);	// CP2 - cathode
-
-	HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_SET);	// CP3 - anode
+	___SetPinToOutput(&GPIO_InitStruct, CP2_GPIO_Port, CP2_Pin);  // anode
+	___SetPinToOutput(&GPIO_InitStruct, CP4_GPIO_Port, CP4_Pin);  // cathode
 }
 
-static void __primitiveBatt1LED(const uint8_t state)	// blue2 LED on/off
+// handler for physical LED
+static void __primitiveYellowLEDHandler(const uint8_t state)  // yellow LED on/off
 {
-	___SetPinToOutput(CP4_GPIO_Port, CP4_Pin);  // anode
-	___SetPinToOutput(CP3_GPIO_Port, CP3_Pin);  // cathode
+	// state == 1 - on
+	// state == 0 - off
+	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, (!state));	// cathode
+	HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_SET);	// anode
 
-	if(state)
-		// on
-		HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_RESET);	// CP3 - cathode
-	else
-		// off
-		HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_SET);	// CP3 - cathode
-
-	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// CP4 - anode
+	___SetPinToOutput(&GPIO_InitStruct, CP3_GPIO_Port, CP3_Pin);  // anode
+	___SetPinToOutput(&GPIO_InitStruct, CP2_GPIO_Port, CP2_Pin);  // cathode
 }
 
-static void __primitiveBatt2LED(const uint8_t state)	// blue3 LED on/off
+// handler for physical LED
+static void __primitiveBatt1LEDHandler(const uint8_t state)  // blue2 LED on/off
 {
-	___SetPinToOutput(CP3_GPIO_Port, CP3_Pin);  // anode
-	___SetPinToOutput(CP4_GPIO_Port, CP4_Pin);  // cathode
+	// state == 1 - on
+	// state == 0 - off
+	HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, (!state));	// cathode
+	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// anode
 
-	if(state)
-		// on
-		HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_RESET);	// CP4 - cathode
-	else
-		// off
-		HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// CP4 - cathode
-
-	HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_SET);	// CP3 - anode
+	___SetPinToOutput(&GPIO_InitStruct, CP4_GPIO_Port, CP4_Pin);  // anode
+	___SetPinToOutput(&GPIO_InitStruct, CP3_GPIO_Port, CP3_Pin);  // cathode
 }
 
-static void __primitiveBatt3LED(const uint8_t state)	// blue4 LED on/off
+// handler for physical LED
+static void __primitiveBatt2LEDHandler(const uint8_t state)  // blue3 LED on/off
 {
-	___SetPinToOutput(CP1_GPIO_Port, CP1_Pin);  // anode
-	___SetPinToOutput(CP4_GPIO_Port, CP4_Pin);  // cathode
+	// state == 1 - on
+	// state == 0 - off
+	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, (!state));	// cathode
+	HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_SET);	// anode
 
-	if(state)
-		// on
-		HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_RESET);	// CP4 - cathode
-	else
-		// off
-		HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// CP4 - cathode
-
-	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_SET);	// CP1 - anode
+	___SetPinToOutput(&GPIO_InitStruct, CP3_GPIO_Port, CP3_Pin);  // anode
+	___SetPinToOutput(&GPIO_InitStruct, CP4_GPIO_Port, CP4_Pin);  // cathode
 }
 
-static void __primitiveBatt4LED(const uint8_t state)	// blue5 LED on/off
+// handler for physical LED
+static void __primitiveBatt3LEDHandler(const uint8_t state)  // blue4 LED on/off
 {
-	___SetPinToOutput(CP4_GPIO_Port, CP4_Pin);  // anode
-	___SetPinToOutput(CP1_GPIO_Port, CP1_Pin);  // cathode
+	// state == 1 - on
+	// state == 0 - off
+	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, (!state));	// cathode
+	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_SET);	// anode
 
-	if(state)
-		// on
-		HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_RESET);	// CP1 - cathode
-	else
-		// off
-		HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_SET);	// CP1 - cathode
+	___SetPinToOutput(&GPIO_InitStruct, CP1_GPIO_Port, CP1_Pin);  // anode
+	___SetPinToOutput(&GPIO_InitStruct, CP4_GPIO_Port, CP4_Pin);  // cathode
+}
 
-	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// CP4 - anode
+// handler for physical LED
+static void __primitiveBatt4LEDHandler(const uint8_t state)  // blue5 LED on/off
+{
+	// state == 1 - on
+	// state == 0 - off
+	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, (!state));	// cathode
+	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_SET);	// anode
+
+	___SetPinToOutput(&GPIO_InitStruct, CP4_GPIO_Port, CP4_Pin);  // anode
+	___SetPinToOutput(&GPIO_InitStruct, CP1_GPIO_Port, CP1_Pin);  // cathode
 }
 
 // handles the time-based charlieplexing stuff
-static void _charlieplexing_handler()
+static void _CharliePlexingHandler()
 {
 	/* charlieplexing handler rationale
-	 * with charlieplexing, the rationale is that only a single LED can be lit at any time so that  GPIO current limits are not exhausted
+	 * with charlieplexing, the rationale is that only a single LED can be lit at any time so that GPIO current limits are not exhausted
 	 * if e.g. two or more LEDs have to be lit, they must be lit one after the other in rapid succession;
 	 * if this is done fast enough (below 20ms), the human eye will perceive both as lit at the same time
 	 *
 	 * the handler is to be called from a timer ISR periodically
+	 * i is a static walker variable, running repeatedly from 0 to 7, thereby indicating which LED in numerical order (as defined in __primitive_led[8]) shall be lit up
 	 */
 
-	if(!__LED.flags)	// if there is any LED to glow at all
-		return;
-
+//	if(!__LED.flags)	// if there is any LED to glow at all
+//		return;
 	static uint8_t i = 0;  // persistent iterator across function calls loops over all LEDs on device
 
 	// set LED pins to initial state
-	GPIO_InitStruct.Pin = CP1_Pin | CP2_Pin | CP3_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = CP4_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	__SetAllGPIOtoAnalog(&GPIO_InitStruct);
 
 	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_RESET);
@@ -185,7 +167,7 @@ static void _charlieplexing_handler()
 }
 
 // toggles a bit in the LED flags variable; charlieplexer in turn makes it shine
-static void _componentLED(const uint8_t val)
+static void _componentLEDHandler(const uint8_t val)
 {
 	// val is a zero-indexed bit-value indicating the LED that shall be lit up
 	__LED.flags ^= _BV(val);	// just toggle
@@ -193,23 +175,23 @@ static void _componentLED(const uint8_t val)
 
 static __composite_led_t __LED =
 	{  //
-	.public.led = __primitive_led,	// addresses one single LED
-	.public.Shine = &_componentLED,  // addresses all the device's LEDs
-	.public.Handler = &_charlieplexing_handler,  // timer-based periodic LED control function (e.g. charlieplexing)
+	.public.led = __primitive_led,	// addresses one single LED - should not be used directly
+	.public.Shine = &_componentLEDHandler,  // addresses all the device's LEDs
+	.public.Handler = &_CharliePlexingHandler,  // timer-based periodic LED control function (e.g. charlieplexing)
 	.flags = 0	// bitwise representation of 8 LEDs
 	};
 
 // implementation of virtual constructor for LEDs
 static composite_led_t* _virtual_led_ctorMJ828()
 {
-	__LED.public.led[Red].Shine = &__primitiveRedLED;  // control function for one single LED
-	__LED.public.led[Yellow].Shine = &__primitiveYellowLED;
-	__LED.public.led[Green].Shine = &__primitiveGreenLED;
-	__LED.public.led[Blue].Shine = &__primitiveBlueLED;
-	__LED.public.led[Battery1].Shine = &__primitiveBatt1LED;
-	__LED.public.led[Battery2].Shine = &__primitiveBatt2LED;
-	__LED.public.led[Battery3].Shine = &__primitiveBatt3LED;
-	__LED.public.led[Battery4].Shine = &__primitiveBatt4LED;
+	__LED.public.led[Red].Shine = &__primitiveRedLEDHanlder;  // control function for one single LED
+	__LED.public.led[Green].Shine = &__primitiveGreenLEDHandler;
+	__LED.public.led[Yellow].Shine = &__primitiveYellowLEDHandler;
+	__LED.public.led[Blue].Shine = &__primitiveBlueLEDHandler;
+	__LED.public.led[Battery1].Shine = &__primitiveBatt1LEDHandler;
+	__LED.public.led[Battery2].Shine = &__primitiveBatt2LEDHandler;
+	__LED.public.led[Battery3].Shine = &__primitiveBatt3LEDHandler;
+	__LED.public.led[Battery4].Shine = &__primitiveBatt4LEDHandler;
 
 	return &__LED.public;  // return address of public part; calling code accesses it via pointer
 }

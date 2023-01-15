@@ -28,7 +28,16 @@ void _event_execution_function_mj808(const uint8_t val)
 			return;
 
 		case 0x02:	// button hold
-			Device->led->Shine(Device->button->button[Center].Hold);
+			Device->led->Shine(Device->button->button[Pushbutton].Hold);	// turn the device off
+			EventHandler->UnSetEvent(val);
+			break;
+
+		case 0x04:	// button toggle
+			if(Device->button->button[Pushbutton].Toggle)  // do something
+				Device->led->led[Utility].Shine(UTIL_LED_RED_ON);
+			else
+				Device->led->led[Utility].Shine(UTIL_LED_RED_OFF);
+
 			EventHandler->UnSetEvent(val);
 			break;
 
@@ -96,7 +105,7 @@ static inline void _GPIOInit(void)
 	HAL_GPIO_Init(TCAN334_Standby_GPIO_Port, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = Pushbutton_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;  // catch button press and release
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	HAL_GPIO_Init(Pushbutton_GPIO_Port, &GPIO_InitStruct);
 
@@ -156,6 +165,9 @@ void _SystemInterrupt(void)
 {
 	if((Device->mj8x8->SysIRQCounter % 4) == 0)  //	10ms
 		Device->led->Handler();  // handles LEDs fading
+
+	if((Device->mj8x8->SysIRQCounter % 10) == 0)	// 25ms
+		Device->button->Handler();	// handle button press
 }
 
 // device-specific constructor
@@ -191,19 +203,12 @@ void mj808_ctor()
 // pushbutton ISR
 void EXTI0_1_IRQHandler(void)
 {
-	HAL_GPIO_EXTI_IRQHandler(Pushbutton_Pin);  // service the interrupt
-
-	// execute code
 	// TODO - sleep_disable();  // wakey wakey
-	//Device->button->button[Pushbutton]->Handler();  // call the button handler
 
-	// TODO - remove this by means of implementing button handling
-	if(state == 0)
-		state = 1;
-	else
-		state = 0;
+	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// identify the exact interrupt source
+		Device->button->button[Pushbutton].Momentary = !Device->button->button[Pushbutton].Momentary;  // toggle the value so that both press and release are caught
 
-	Device->led->Shine(state);
+	HAL_GPIO_EXTI_IRQHandler(Pushbutton_Pin);  // service the interrupt
 
 	// TODO - sleep_enable();  // back to sleep
 }

@@ -24,6 +24,7 @@ int main(void)
 
 	while(1)  // THE loop...
 		{
+			// TODO - make event handler timer-based
 			EventHandler->HandleEvent();	// execute the event handling function with argument taken from case table array
 		}
 }

@@ -2,31 +2,15 @@
 #include "button.h"
 
 // button debouncer for devices with buttons
-void _debounce(__individual_button_t *const in_button, event_handler_t *const in_event)
+void __HandleButton(__individual_button_t *const in_button, event_handler_t *const in_event)
 {
-	inline void local_advance_counter(void)  // local helper function which advances the debounce "timer"
-	{
-		++in_button->__hold_counter;	// start to count (used to determine long button press; not used for debouncing)
-
-		++in_button->__state;  // debouncing by means of bit shifting - redux
-
-		// debouncing by means of bit shifting
-		//in_button._state ^ 0x03;										// XOR what we currently have in state
-		//in_button._state <<= 1;										// left shift so that if we have 0x01 this becomes 0x02
-		//in_button._state |= 0x01;										// OR what we have with 0x01 so that 0x02 becomes 0x03
-	}
-
-	/*	rationale of debouncing:
-	 *		- the ISR fires every 25ms, which means the sample rate of a button press is once per 25ms
-	 *		- if the button is held for only one iteration (bounce state) we have 0x01 and on the next iteration state is reset to 0x00 [1st 25ms]
-	 *		- if the button is held for two iterations, on the first iteration state is 0x01 and on the second 0x03 [2nd 25ms]
-	 *		- after 2 iterations 50ms have passed -> we call that a stable state
+	/*	rationale of button handling:
+	 * TODO - write button handler rationale
 	 *
 	 *		detecting the stable state boils down to:
 	 *			- counting the duration of the stable state in 25ms intervals
-	 *			- comparing a bit-shifted number (count of 25ms intervals) to another value (BUTTON_MIN_PRESS_TIME or BUTTON_MAX_PRESS_TIME)
+	 *			- comparing the count of 25ms intervals to another value (BUTTON_MIN_PRESS_TIME or BUTTON_MAX_PRESS_TIME)
 	 *
-	 *		the debouncer does only that - it debounces
 	 *
 	 *		the state marker marks the button state for external code to make sense of it
 	 *		valid states:
@@ -35,15 +19,10 @@ void _debounce(__individual_button_t *const in_button, event_handler_t *const in
 	 *			- "Hold" - held for e.g 1s to turn something on/off, akin to Momentary but a longer press is needed to change from one state to another
 	 *			- "hold_error" - held constantly (e.g. by error) - after a timeout revert to original state
 	 */
-	// CHECKME - random spikes (not true button press events) every 25ms might be an issue
-#if defined(MJ828_)	// inverted
-	if (	!( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
-	#endif
-#if defined(MJ808_)	// non-inverted
-	if (	( *(in_button->__PIN) & (1<<in_button->__pin_number))	)	// if in the given PIN register the given button is pressed
-	#endif
+
+	if(in_button->public.Momentary)  // if in the given PIN register the given button is pressed
 		{  // button is pressed
-			local_advance_counter();	// debouncing happens here
+			++in_button->__hold_counter;	// start to count (used to determine long button press
 
 			if(in_button->__hold_counter >= BUTTON_MAX_PRESS_TIME)	// too long button press -> error state
 				{  // turn everything off
@@ -60,9 +39,7 @@ void _debounce(__individual_button_t *const in_button, event_handler_t *const in
 					return;  // get out
 				}
 		}
-#if ( defined(MJ808_) | defined(MJ828_) )
-	else											// button is released
-#endif
+	else	// button is released
 		{
 			if(in_button->__is_at_default)	// if we are in zero state
 				return;  // no need to do anything
@@ -81,7 +58,8 @@ void _debounce(__individual_button_t *const in_button, event_handler_t *const in
 		}
 
 	// state markers
-	if(in_button->__state == 0x03 && !in_button->public.ErrorHold)	// if we have a non-error steady state
+//	if(in_button->__state == 0x03 && !in_button->public.ErrorHold)	// if we have a non-error steady state
+	if(!in_button->public.ErrorHold)	// if we have a non-error steady state
 		{
 			if(in_button->__hold_counter >= BUTTON_MIN_PRESS_TIME)	// pressed for a valid amount of time
 				{
@@ -114,4 +92,3 @@ void _debounce(__individual_button_t *const in_button, event_handler_t *const in
 			in_button->__is_at_default = 0;
 		}
 }
-;

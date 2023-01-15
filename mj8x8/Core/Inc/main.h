@@ -8,6 +8,7 @@
 #endif
 
 // TODO - investigate option bytes - RM0091 - 4.1.2 - in order to automatically determine a connected device
+// TODO - investigate systick as core timer interrupt source ) e.g. heartbeat), so that other timers are free
 
 #define MJ828_	// what device to compile for
 

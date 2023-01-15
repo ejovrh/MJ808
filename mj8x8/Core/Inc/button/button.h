@@ -18,15 +18,15 @@ enum button_casetable_index  // represents index of FooButtonCaseTable[] (unique
 
 typedef struct	// struct describing a generic pushbutton
 {  //	flags can be consumed by the public
-	uint8_t Momentary :1;  // flag indicating if button is pressed right now
-	uint8_t Toggle :1;	// flag indicating the toggle state
-	uint8_t Hold :1;	// flag indicating a button press for a duration of BUTTON_MIN_PRESS_TIME (up to BUTTON_MAX_PRESS_TIME) seconds, followed by button release
-	uint8_t ErrorHold :1;  // flag indicating constant button press (by error, object leaning on pushbutton, etc.)
+	volatile uint8_t Momentary :1;  // flag indicating if button is pressed right now
+	volatile uint8_t Toggle :1;  // flag indicating the toggle state
+	volatile uint8_t Hold :1;  // flag indicating a button press for a duration of BUTTON_MIN_PRESS_TIME (up to BUTTON_MAX_PRESS_TIME) seconds, followed by button release
+	volatile uint8_t ErrorHold :1;  // flag indicating constant button press (by error, object leaning on pushbutton, etc.)
 } individual_button_t;
 
 typedef struct button_t
 {
-	void (*deBounce)(void);  // button debouncer
+	void (*Handler)(void);  // button handler
 	individual_button_t *button;	// "virtual" pointer to array of buttons present on particular device
 
 //button_t *(*virtual_button_ctor)(struct button_t * const self);	// "virtual" pointer to array of button present on particular device

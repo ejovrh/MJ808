@@ -50,9 +50,9 @@ enum mj828_leds  // enum of lights on this device
 
 enum mj828_buttons	// enum of buttons on this device
 {
-	  // TODO - implement brake/high beam buttons
-	  Right,
-	  Left
+	  PushButton,
+	  LeverBrake,
+	  LeverFront
 };
 
 typedef struct	// struct describing devices on MJ828

@@ -32,7 +32,7 @@ enum mj808_leds  // enum of lights on this device
 
 enum mj808_buttons	// enum of buttons on this device
 {
-	  Center
+	  Pushbutton
 };
 
 typedef struct	// struct describing devices on MJ808
