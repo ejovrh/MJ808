@@ -40,6 +40,8 @@ extern __event_handler_t __EventHandler;  // declare event_handler_t actual
 static void _UnSetEvent(const uint8_t val)
 {
 	__EventHandler.__index &= ~val;  // simply clears the bit at position bit_position
+
+	// TODO - if __index is empty, stop execution (timer)
 }
 
 // sets bit at bit_position ( 1 to 8) in byte __index - _index will have values 0, 1, 2, 4, 8, 16...128

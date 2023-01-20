@@ -22,9 +22,11 @@ int main(void)
 
 	message_handler_ctor(Device->mj8x8->can);  // call message handler constructor
 
-	while(1)  // THE loop...
-		{
-			// TODO - make event handler timer-based
-			EventHandler->HandleEvent();	// execute the event handling function with argument taken from case table array
-		}
+	HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
+	HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);  // go to sleep
+
+//	while(1)  // THE loop...
+//		{
+//			;
+//		}
 }

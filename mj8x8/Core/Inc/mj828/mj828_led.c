@@ -148,8 +148,9 @@ static void _CharliePlexingHandler()
 	 * i is a static walker variable, running repeatedly from 0 to 7, thereby indicating which LED in numerical order (as defined in __primitive_led[8]) shall be lit up
 	 */
 
-//	if(!__LED.flags)	// if there is any LED to glow at all
-//		return;
+	if(!__LED.flags)	// if there is any LED to glow at all
+		return;
+
 	static uint8_t i = 0;  // persistent iterator across function calls loops over all LEDs on device
 
 	// set LED pins to initial state
