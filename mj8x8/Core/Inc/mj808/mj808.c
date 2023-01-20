@@ -20,32 +20,42 @@ volatile uint8_t state;  // TODO - get rid of this by means of implementing a pr
 // cases in this switch-case statement must be unique for all events on this device
 void _event_execution_function_mj808(const uint8_t val)
 {
+	EventHandler->UnSetEvent(val);
+
 	switch(val)
 		{
 		case 0x01:	// button error: - do the error thing
 			Device->led->Shine(0);
-			EventHandler->UnSetEvent(val);
 			return;
 
 		case 0x02:	// button hold
-			Device->led->Shine(Device->button->button[Pushbutton].Hold);	// turn the device off
-			EventHandler->UnSetEvent(val);
+			Device->led->Shine(Device->button->button[PushButton]->Hold);  // turn the device off
 			break;
 
 		case 0x04:	// button toggle
-			if(Device->button->button[Pushbutton].Toggle)  // do something
+			if(Device->button->button[PushButton]->Toggle)  // do something
 				Device->led->led[Utility].Shine(UTIL_LED_RED_ON);
 			else
 				Device->led->led[Utility].Shine(UTIL_LED_RED_OFF);
-
-			EventHandler->UnSetEvent(val);
 			break;
 
-			// next cases: 0x08, 0x16, etc.
+//		case 0x08:	// next case
+//			break;
 
-		default:	// 0x00
-			EventHandler->UnSetEvent(val);
-			return;
+//		case 0x10:	// next case
+//			break;
+
+//		case 0x20:	// next case
+//			break;
+
+//		case 0x20:	// next case
+//			break;
+
+//		case 0x80:	// next case
+//			break;
+
+		default:	// no value passed
+			break;
 		}
 }
 
@@ -203,14 +213,11 @@ void mj808_ctor()
 // pushbutton ISR
 void EXTI0_1_IRQHandler(void)
 {
-	// TODO - sleep_disable();  // wakey wakey
-
-	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// identify the exact interrupt source
-		Device->button->button[Pushbutton].Momentary = !Device->button->button[Pushbutton].Momentary;  // toggle the value so that both press and release are caught
+	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// interrupt source detection
+// Pushbutton: released - pin high, pressed - pin low
+		Device->button->button[PushButton]->Mark(!(HAL_GPIO_ReadPin(Pushbutton_GPIO_Port, Pushbutton_Pin)));  // mark state change
 
 	HAL_GPIO_EXTI_IRQHandler(Pushbutton_Pin);  // service the interrupt
-
-	// TODO - sleep_enable();  // back to sleep
 }
 // device-specific interrupt handlers
 

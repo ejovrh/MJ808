@@ -4,6 +4,8 @@
 #include "main.h"
 #if defined(MJ808_)	// if this particular device is active
 
+#define BUTTON_COUNT 1	// how many buttons are there
+
 #include "mj8x8\mj8x8.h"
 #include "led\led.h"
 #include "button\button.h"
@@ -32,7 +34,7 @@ enum mj808_leds  // enum of lights on this device
 
 enum mj808_buttons	// enum of buttons on this device
 {
-	  Pushbutton
+	  PushButton
 };
 
 typedef struct	// struct describing devices on MJ808
