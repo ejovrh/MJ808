@@ -50,9 +50,9 @@ enum mj828_leds  // enum of lights on this device
 
 enum mj828_buttons	// enum of buttons on this device
 {
-	  PushButton,
-	  LeverBrake,
-	  LeverFront
+	  PushButton,  //	pushbutton on lamp bpdy
+	  LeverFront,  // left brake lever pushed forward
+	  LeverBrake	// left brake lever in braking action
 };
 
 typedef struct	// struct describing devices on MJ828

@@ -153,7 +153,7 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 {
 	__disable_irq();	// disable interrupts - the actual device constructor will enable them...
 
-	HAL_Init();  // Reset of all peripherals, Initializes the Flash interface and the Systick
+//	HAL_Init();  // Reset of all peripherals, Initializes the Flash interface and the Systick
 
 	_SystemClockConfig();  // initialize the system clock
 	_GPIOInit();	// initialize device non-specific GPIOs
@@ -186,6 +186,7 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 
 	// execute code
 	__MJ8x8.public.SystemInterrupt();  //	call the placeholder function - in its raw form it does an asm(nop). any actual device can re-decalre it
+	EventHandler->HandleEvent();	// execute the event handling function with argument taken from case table
 
 	if((__MJ8x8.public.SysIRQCounter % 50) == 0)  // heartbeat - every 125ms
 		{ /* heartbeat of device on bus - aka. active CAN bus device discovery

@@ -18,69 +18,50 @@ typedef struct	// mj828_t actual
 
 static __mj828_t __Device __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
+// defines device operation on empty bus
+void _EmptyBusOperationMJ828(void)
+{
+	;  // TODO - define mj828 empty bus operation
+}
+
 void _event_execution_function_mj828(uint8_t val)
 {
+	EventHandler->UnSetEvent(val);
+
 	switch(val)
 		// based on array value at position #foo of array e.g. FooButtonCaseTable[]
 		{
 		case 0x01:	// error button press
 			// TODO - implement device function on button error press
-			EventHandler->UnSetEvent(val);
 			break;
 
-		case 0x02:	// braking action
+		case 0x02:	// lever back - braking action
 			Device->led->Shine(Red);
-
-			if(Device->button->button[LeverBrake].Momentary)
-				{
-					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH), 0x20, 2);
-				}
-			else
-				{
-					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH), 0x00, 2);
-				}
-			EventHandler->UnSetEvent(val);
 			break;
 
-		case 0x04:	// high beam
-			if(Device->button->button[LeverFront].Momentary)
-				{
-					// FIXME - on button hold, multiple events are triggered and flapping occurs
-					Device->led->Shine(Blue);
-					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH), 0xF8, 2);
-
-				}
-			else
-				{
-					Device->led->Shine(Blue);
-					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH), 0x00, 2);
-				}
-			EventHandler->UnSetEvent(val);
-
+		case 0x04:	// lever front - high beam
+			Device->led->Shine(Blue);
 			break;
 
 		case 0x08:	// pushbutton press
-			if(Device->button->button[PushButton].Momentary)
-				{
-					// FIXME - on button hold, multiple events are triggered and flapping occurs
-					Device->led->Shine(Yellow);
-					break;
-				}
-//			else
-//				{
-//					Device->led->Shine(Yellow);
-//				}
-//			EventHandler->UnSetEvent(val);
-
+			Device->led->Shine(Yellow);
 			break;
 
-			//case 0x16:	//
-			//// next case
-			//EventHandler->UnSetEvent(val);
-			//break;
+		case 0x10:	// pushbutton hold
+			Device->led->Shine(Green);
+			break;
+
+		case 0x20:	// next case
+			Device->led->Shine(Battery4);
+			break;
+
+//		case 0x20:	// next case
+//			break;
+
+//		case 0x80:	// next case
+//			break;
 
 		default:	// no value passed
-			EventHandler->UnSetEvent(val);	// do nothing
 			break;
 		}
 }
@@ -90,7 +71,7 @@ void _PopulatedBusOperationMJ828(message_handler_t *const in_msg)
 {
 	volatile can_msg_t *msg = in_msg->ReceiveMessage();  // CAN message object
 
-	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
+// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if((msg->COMMAND& MASK_COMMAND) == CMND_DASHBOARD )  // dashboard command
 		{
 			__Device.public.led->Shine(((msg->COMMAND & 0x0E) >> 1));  // flag LED at appropriate index as whatever the command says
@@ -199,7 +180,6 @@ void _ADCInit(void)
 // interrupt extension, triggered by timer 1 ISR - 2.5ms interrupt in mj8x8
 void _SystemInterrupt(void)
 {
-	// charlieplexed blinking
 	Device->led->Handler();  // handles LED charlieplexing for multiple LEDs
 
 	if((Device->mj8x8->SysIRQCounter % 10) == 0)	// 25ms
@@ -217,6 +197,7 @@ void mj828_ctor()
 	__Device.public.led = _virtual_led_ctorMJ828();  // call virtual constructor & tie in object addresses
 	__Device.public.button = _virtual_button_ctorMJ828();  // call virtual constructor & tie in object addresses
 
+//	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ828;	// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
 	__Device.public.mj8x8->SystemInterrupt = &_SystemInterrupt;  // implement device-specific system interrupt code
 
@@ -233,65 +214,46 @@ void mj828_ctor()
 	HAL_NVIC_EnableIRQ(ADC1_IRQn);
 
 	__enable_irq();  // enable interrupts
-
-	// crude power indicator - argument is the 0-indexed LED that shall be lit up
-//	__Device.public.led->Shine(Red);
-//	__Device.public.led->Shine(Green);
-//	__Device.public.led->Shine(Yellow);
-//	__Device.public.led->Shine(Blue);
-//	__Device.public.led->Shine(Battery1);
-//	__Device.public.led->Shine(Battery2);
-//	__Device.public.led->Shine(Battery3);
-	__Device.public.led->Shine(Battery4);
-
 }
 
 // device-specific interrupt handlers
 // pushbutton & lever front ISR
 void EXTI0_1_IRQHandler(void)
 {
-	// multiple EXTIs share this ISR
-	// pushbutton: released - pin high, pressed - pin low
-	// lever front: magnet - high, no magnet - low
+	/* multiple EXTIs share this ISR
+	 * pushbutton: released - pin high, pressed - pin low
+	 * lever front: magnet - high, no magnet - low
+	 */
 
-	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))
-		{
-			if(HAL_GPIO_ReadPin(Pushbutton_GPIO_Port, Pushbutton_Pin))  // rising (transition to released  state)
-				Device->button->button[PushButton].Momentary = 0;  // toggle the value so that both press and release are caught
-			else
-				// falling (transition to pressed  state)
-				Device->button->button[PushButton].Momentary = 1;  // toggle the value so that both press and release are caught
-		}
-//		Device->button->button[PushButton].Start = !Device->button->button[PushButton].Start;  // toggle the value so that both press and release are caught
+	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// interrupt source detection
+// Pushbutton: released - pin high, pressed - pin low
+		Device->button->button[PushButton]->Mark(!(HAL_GPIO_ReadPin(Pushbutton_GPIO_Port, Pushbutton_Pin)));  // mark state change
 
-	if(__HAL_GPIO_EXTI_GET_IT(LeverFront_Pin))
-		Device->button->button[LeverFront].Momentary = !Device->button->button[LeverFront].Momentary;  // toggle the value so that both press and release are caught
+	if(__HAL_GPIO_EXTI_GET_IT(LeverFront_Pin))	// interrupt source detection
+// front lever: released (no magnet) - pin high, pressed (magnet) - pin low
+		Device->button->button[LeverFront]->Mark(!(HAL_GPIO_ReadPin(LeverFront_GPIO_Port, LeverFront_Pin)));  // mark state change
 
 	HAL_GPIO_EXTI_IRQHandler(Pushbutton_Pin);  // service the interrupt
 	HAL_GPIO_EXTI_IRQHandler(LeverFront_Pin);  // service the interrupt
-
-	// execute code
 }
 
 // lever brake ISR
 void EXTI2_3_IRQHandler(void)
 {
-	// lever brake: magnet - high, no magnet - low
-
-	if(__HAL_GPIO_EXTI_GET_IT(LeverBrake_Pin))	// identify the exact interrupt source
-		Device->button->button[LeverBrake].Momentary = !Device->button->button[LeverBrake].Momentary;  // toggle the value (will catch press and then release)
+	if(__HAL_GPIO_EXTI_GET_IT(LeverBrake_Pin))	// interrupt source detection
+// lever brake: released (no magnet) - pin high, pressed (magnet) - pin low
+		Device->button->button[LeverBrake]->Mark(!(HAL_GPIO_ReadPin(LeverBrake_GPIO_Port, LeverBrake_Pin)));  // mark state change
 
 	HAL_GPIO_EXTI_IRQHandler(LeverBrake_Pin);  // service the interrupt
-
 }
 
 // ADC ISR
 void ADC1_IRQHandler(void)
 {
-	HAL_ADC_IRQHandler(&hadc);  // service the interrupt
-
 	// execute code
 	// TODO - implement ADC code
+
+	HAL_ADC_IRQHandler(&hadc);  // service the interrupt
 }
 // device-specific interrupt handlers
 

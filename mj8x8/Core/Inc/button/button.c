@@ -4,91 +4,45 @@
 // button debouncer for devices with buttons
 void __HandleButton(__individual_button_t *const in_button, event_handler_t *const in_event)
 {
-	/*	rationale of button handling:
-	 * TODO - write button handler rationale
-	 *
-	 *		detecting the stable state boils down to:
-	 *			- counting the duration of the stable state in 25ms intervals
-	 *			- comparing the count of 25ms intervals to another value (BUTTON_MIN_PRESS_TIME or BUTTON_MAX_PRESS_TIME)
-	 *
-	 *
-	 *		the state marker marks the button state for external code to make sense of it
-	 *		valid states:
-	 *			- "Momentary" - key is pressed (and held for a short time), while button is pressed - one state, when it is released back to the original state
-	 *			- "Toggle" - toggled on/off state, once per key press the state changes and remains changed until next press
-	 *			- "Hold" - held for e.g 1s to turn something on/off, akin to Momentary but a longer press is needed to change from one state to another
-	 *			- "hold_error" - held constantly (e.g. by error) - after a timeout revert to original state
-	 */
+	// TODO - write button handler rationale
 
-	if(in_button->public.Momentary)  // if in the given PIN register the given button is pressed
-		{  // button is pressed
-			++in_button->__hold_counter;	// start to count (used to determine long button press
+	if(in_button->__state)  // 1 - pressed down
+		{
+			++in_button->__hold_counter;	// button is pressed. start to count (used to determine long button press)
 
-			if(in_button->__hold_counter >= BUTTON_MAX_PRESS_TIME)	// too long button press -> error state
-				{  // turn everything off
-					in_button->__state = 0;  // reset state
-					in_button->public.Momentary = 0;	// mark as currently not pressed
-					in_button->__was_pressed = 1;  // mark button as "was pressed" - this is the previous state in the next iteration
-
-					// order is important
-					in_button->public.ErrorHold = 1;	// mark as error state
-					in_event->Notify(in_button->__ButtonCaseptr[CaseErrorHold]);	// notify event handler of button press
-
-					in_button->public.Toggle = 0;  // toggled due to error state -> reset to default value
-					in_button->public.Hold = 0;  // mark as hold_temp off
-					return;  // get out
+			// BUTTON PRESSED DOWN (meta-stable)
+			if(!in_button->public.Momentary)
+				{
+					in_button->public.Momentary = 1;
+					in_event->Notify(in_button->__ButtonCaseptr[CaseMomentary]);	// notify event handler of button press
 				}
 		}
-	else	// button is released
+	else
 		{
-			if(in_button->__is_at_default)	// if we are in zero state
-				return;  // no need to do anything
-
-			// button is released
-			// button is not pressed - reset everything to default values
-			in_button->__state = 0;  // reset state
-			in_button->public.Momentary = 0;	// mark as currently not pressed
-
-			in_button->__was_pressed = 1;  // mark button as "was pressed" - this is the previous state in the next iteration
-			in_button->public.ErrorHold = 0;	// release error flag, since button is now released
-			in_button->__hold_counter = 0;	// set counter back to 0
-			in_button->public.Momentary = 0;	// mark as currently not pressed
-			in_button->__is_at_default = 1;
-			return;  // finish
-		}
-
-	// state markers
-//	if(in_button->__state == 0x03 && !in_button->public.ErrorHold)	// if we have a non-error steady state
-	if(!in_button->public.ErrorHold)	// if we have a non-error steady state
-		{
-			if(in_button->__hold_counter >= BUTTON_MIN_PRESS_TIME)	// pressed for a valid amount of time
+			// BUTTON PRESS TOGGLE (stable states)
+			if(in_button->__hold_counter > 4 && in_button->__hold_counter < 20)
 				{
-					if(!in_button->__was_pressed)  // previous state (prevent flapping on/off)
-						{
-							// order is important
-							in_button->public.Hold = !in_button->public.Hold;  // set "hold_temp" state
-							in_event->Notify(in_button->__ButtonCaseptr[CaseHold]);  // notify event handler of button press
-						}
-
-					in_button->__was_pressed = 1;  // mark the button as being pressed
+					in_button->public.Toggle = !in_button->public.Toggle;
+					in_event->Notify(in_button->__ButtonCaseptr[CaseToggle]);  // notify event handler of button press
+					in_button->__hold_counter = 0;
 					return;
 				}
 
-			if(in_button->__was_pressed)	// previous state (prevent flapping on/off)
+			// BUTTON PRESS HOLD (stable states)
+			if(in_button->__hold_counter > 30)  // more than 750ms
 				{
-					// order is important
-					in_button->public.Toggle = !in_button->public.Toggle;  // set "toggle" state
-					in_event->Notify(in_button->__ButtonCaseptr[CaseToggle]);  // notify event handler of button press
+					in_button->public.Hold = !in_button->public.Hold;
+					in_event->Notify(in_button->__ButtonCaseptr[CaseHold]);  // notify event handler of button press
+					in_button->__hold_counter = 0;
+					return;
 				}
 
-			// order is important
-			if(!in_button->public.Momentary)
+			// BUTTON RELEASED (Stable)
+			if(in_button->public.Momentary)
 				{
-					in_button->public.Momentary = 1;	// set "is_pressed" state
+					in_button->public.Momentary = 0;
+					HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, GPIO_PIN_RESET);
 					in_event->Notify(in_button->__ButtonCaseptr[CaseMomentary]);	// notify event handler of button press
 				}
-
-			in_button->__was_pressed = 0;  // mark the button as being pressed
-			in_button->__is_at_default = 0;
 		}
 }
