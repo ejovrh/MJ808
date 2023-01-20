@@ -35,6 +35,7 @@ typedef struct	// struct describing a generic pushbutton
 typedef struct button_t
 {
 	void (*Handler)(void);  // button handler
+	// FIXME - BUTTON_COUNT is defined in mj828.h (and elsewhere), yet it isnt known unless defined in this file
 	individual_button_t *button[BUTTON_COUNT];  // "virtual" pointer to array of buttons present on particular device
 
 //button_t *(*virtual_button_ctor)(struct button_t * const self);	// "virtual" pointer to array of button present on particular device

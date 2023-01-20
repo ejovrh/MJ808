@@ -41,7 +41,6 @@ void __HandleButton(__individual_button_t *const in_button, event_handler_t *con
 			if(in_button->public.Momentary)
 				{
 					in_button->public.Momentary = 0;
-					HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, GPIO_PIN_RESET);
 					in_event->Notify(in_button->__ButtonCaseptr[CaseMomentary]);	// notify event handler of button press
 				}
 		}

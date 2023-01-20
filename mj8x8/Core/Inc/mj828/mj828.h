@@ -4,6 +4,8 @@
 #include "main.h"
 #if defined(MJ828_)	// if this particular device is active
 
+#define BUTTON_COUNT 3	// how many buttons are there
+
 #include "mj8x8\mj8x8.h"
 #include "led\led.h"
 #include "button\button.h"
