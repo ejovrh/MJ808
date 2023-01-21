@@ -182,7 +182,6 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&htim1);  // service the interrupt
 	// TODO - implement sleep cycles for processor and CAN bus hardware
-	// PRT -	sleep_disable();	// wakey wakey
 
 	// execute code
 	__MJ8x8.public.SystemInterrupt();  //	call the placeholder function - in its raw form it does an asm(nop). any actual device can re-decalre it
@@ -222,7 +221,5 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 
 	// 1 count == 2.5 ms -- 200 counts = 500ms
 	(__MJ8x8.public.SysIRQCounter == 199) ? __MJ8x8.public.SysIRQCounter = 0 : __MJ8x8.public.SysIRQCounter++;  // count from 0 to 199 (200 counts) and then restart from zero
-
-	// PRT -	sleep_enable();	// back to sleep
 }
 // device non-specific interrupt handlers

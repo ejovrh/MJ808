@@ -14,8 +14,6 @@ typedef struct	// mj808_t actual
 
 static __mj808_t __Device __attribute__ ((section (".data")));  // preallocate __Device object in .data
 
-volatile uint8_t state;  // TODO - get rid of this by means of implementing a proper button handler
-
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 // cases in this switch-case statement must be unique for all events on this device
 void _event_execution_function_mj808(const uint8_t val)
@@ -201,8 +199,6 @@ void mj808_ctor()
 	// interrupt init
 	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // EXTI0 - Pushbutton handling
 	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
-
-	state = 0;	// TODO - remove used for testing the pushbutton
 
 	__enable_irq();  // enable interrupts
 

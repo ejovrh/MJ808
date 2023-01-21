@@ -27,7 +27,6 @@ static inline void _primitiveFrontLED(const uint8_t value)
 	Device->led->led[Front].ocr = value;	// set OCR value, the handler will do the rest
 }
 
-// TODO - optimise & should be static and the caller in question should use an object
 // concrete utility LED handling function
 static void _primitiveUtilityLED(uint8_t in_val)
 {
@@ -93,7 +92,7 @@ static void _componentLED(const uint8_t val)
 		__componentLED_Off();
 }
 
-static __composite_led_t                                       __LED =
+static __composite_led_t __LED =
 	{  //
 	.public.led = __primitive_led,  // assign pointer to LED array
 	.public.Shine = &_componentLED,  // component part ("interface")
