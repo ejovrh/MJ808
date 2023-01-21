@@ -9,6 +9,8 @@
 
 #include "led\composite_led_actual.c"	// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
 
+extern TIM_HandleTypeDef htim14;  // Timer14 object;
+
 static primitive_led_t __primitive_led[8] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 static __composite_led_t __LED;  // forward declaration of object
 static
@@ -149,7 +151,11 @@ static void _CharliePlexingHandler()
 	 */
 
 	if(!__LED.flags)	// if there is any LED to glow at all
-		return;
+		{
+			HAL_TIM_Base_Stop_IT(&htim14);  // stop the timer
+			__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
+			return;
+		}
 
 	static uint8_t i = 0;  // persistent iterator across function calls loops over all LEDs on device
 
@@ -170,8 +176,14 @@ static void _CharliePlexingHandler()
 // toggles a bit in the LED flags variable; charlieplexer in turn makes it shine
 static void _componentLEDHandler(const uint8_t val)
 {
+	__HAL_RCC_TIM14_CLK_ENABLE();  // start the clock
+	htim14.Instance->PSC = 799;  // reconfigure after peripheral was powered down
+	htim14.Instance->ARR = 19;
+	HAL_TIM_Base_Start_IT(&htim14);  // start the timer
+
 	// val is a zero-indexed bit-value indicating the LED that shall be lit up
 	__LED.flags ^= _BV(val);	// just toggle
+
 }
 
 static __composite_led_t __LED =

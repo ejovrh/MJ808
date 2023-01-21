@@ -1,4 +1,5 @@
 #include "event.h"
+#include "stm32f0xx_hal.h"
 
 // a function that does nothing
 void DoNothing(void)
@@ -13,7 +14,9 @@ typedef struct	// event_handler_t actual
 	uint8_t __index;	// private - bit-wise flags for events (see _HandleEvent())
 } __event_handler_t;
 
+extern TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
 extern __event_handler_t __EventHandler;  // declare event_handler_t actual
+
 /* theory of operation
  *
  *	components: subject, event handler, object
@@ -41,13 +44,19 @@ static void _UnSetEvent(const uint8_t val)
 {
 	__EventHandler.__index &= ~val;  // simply clears the bit at position bit_position
 
-	// TODO - if __index is empty, stop execution (timer)
+	if(__EventHandler.__index == 0)
+		HAL_TIM_Base_Stop_IT(&htim17);  // start the timer
 }
 
 // sets bit at bit_position ( 1 to 8) in byte __index - _index will have values 0, 1, 2, 4, 8, 16...128
 static void _Notify(const uint8_t bit_position)
 {
 	__EventHandler.__index |= bit_position;  // simply sets the bit at position bit_position
+
+	__HAL_RCC_TIM17_CLK_ENABLE();  // start the clock
+	htim17.Instance->PSC = 799;  // reconfigure after peripheral was powered down
+	htim17.Instance->ARR = 24;
+	HAL_TIM_Base_Start_IT(&htim17);  // start the timer
 }
 
 // calls __mjxxx_event_execution_function and passes on argument into it
@@ -55,6 +64,12 @@ static void _HandleEvent(void)
 {
 	__EventHandler.__walker = (__EventHandler.__walker << 1) | (__EventHandler.__walker >> 7);  // the __walker shifts a "1" cyclically from right to left
 	(*__EventHandler.public.fpointer)(__EventHandler.__index & __EventHandler.__walker);	//	and ANDs it with __index, thereby passing the result as an argument to __mjxxx_event_execution_function
+
+	if(__EventHandler.__index == 0)
+		{
+			HAL_TIM_Base_Stop_IT(&htim17);  // stop the timer
+			__HAL_RCC_TIM17_CLK_DISABLE();  // stop the clock
+		}
 }
 
 __event_handler_t __EventHandler =  // instantiate event_handler_t actual and set function pointers

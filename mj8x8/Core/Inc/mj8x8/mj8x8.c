@@ -2,7 +2,7 @@
 #include "mj8x8.h"
 
 #define TIM1_BRK_UP_TRG_COM_IRQn 13	// FIXME - should be included somehow, but isnt..
-#define CEC_CAN_IRQn	30
+#define CEC_CAN_IRQn 30	// FIXME - should be included somehow, but isnt..
 
 static TIM_HandleTypeDef htim1;  // Timer1 object
 
@@ -120,8 +120,8 @@ static inline void _GPIOInit(void)
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
-// Timer1 init - 2.5ms periodic
-static inline void _Timer1Init(void)
+// Timer init - CAN bus heartbeat - 125ms
+static inline void _TimerInit(void)
 {
 	TIM_ClockConfigTypeDef sClockSourceConfig =
 		{0};
@@ -131,7 +131,7 @@ static inline void _Timer1Init(void)
 	htim1.Instance = TIM1;
 	htim1.Init.Prescaler = 799;  // 8MHz / 799+1 = 10kHz update rate
 	htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim1.Init.Period = 24;  // with above pre-scaler and a period of 24, we have an 2.5ms interrupt frequency
+	htim1.Init.Period = 1249;  // with above pre-scaler and a period of 1249, we have an 125ms interrupt frequency
 	htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim1.Init.RepetitionCounter = 0;
 	htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -157,7 +157,7 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 
 	_SystemClockConfig();  // initialize the system clock
 	_GPIOInit();	// initialize device non-specific GPIOs
-	_Timer1Init();	// initialize Timer1 - heartbeat
+	_TimerInit();  // initialize Timer - heartbeat
 
 	__MJ8x8.__NumericalCAN_ID = (uint8_t) ((in_own_sidh >> 2) & 0x0F);	// set the CAN id.
 
@@ -166,60 +166,52 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	__MJ8x8.public.can->own_sidh = in_own_sidh;  // high byte
 	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);	// low byte
 	__MJ8x8.public.SystemInterrupt = &_DoNothing;  //	do nothing, actual implementation may be done in specific device constructor
-	__MJ8x8.public.SysIRQCounter = 0;  // initialise the counter
 
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
+
 	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
 
 	return &__MJ8x8.public;  // return address of public part; calling code accesses it via pointer
 }
 
-// timer 1 ISR - 2.5ms interrupt - device non-specific interrupt handlers
+// timer 1 ISR - 125ms interrupt - CAN bus heartbeat
 void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&htim1);  // service the interrupt
 	// TODO - implement sleep cycles for processor and CAN bus hardware
 
-	// execute code
-	__MJ8x8.public.SystemInterrupt();  //	call the placeholder function - in its raw form it does an asm(nop). any actual device can re-decalre it
-	EventHandler->HandleEvent();	// execute the event handling function with argument taken from case table
+	/* heartbeat of device on bus - aka. active CAN bus device discovery
+	 *
+	 *	- on the CAN bus there is room for max. 16 devices - in numeric form devices #0 up to #15
+	 *	- each device has its own unique NumericalCAN_ID, which is derived from its unique CAN bus ID
+	 *
+	 *	- on each watchdog timer iteration, BeatIterationCount is incremented (it is able to roll over from 0xf to 0x0)
+	 *	- when BeatIterationCount is equal to the device's NumericalCAN_ID, a heartbeat message is sent, otherwise nothing is done
+	 *
+	 *	- there are two modes: fast count and slow count - each set via WDTCR, the WatchDog Timer Control Register
+	 *		- fast count is performed when a heartbeat is supposed to be sent
+	 *			this mode speeds up the heartbeat procedure itself
+	 *
+	 *		- slow count is performed when no heartbeat is supposed to be sent
+	 *			this mode acts as a delay for heartbeat messages themselves
+	 *
+	 *	i.e. start in heartbeat mode, count fast to one's own ID, send the message and then exit heartbeat mode,
+	 *		continue counting slow until a counter rollover occurs and enter heartbeat mode again.
+	 *
+	 *	each device on the bus does this procedure.
+	 *	after one complete iteration each device should have received some other device's heartbeat message.
+	 *	on each and every message reception the senders ID is recorded in the canbus_t struct. thereby one device keeps track of its neighbors on the bus.
+	 *
+	 *	if there are no devices on the bus, a device-specific default operation is executed.
+	 */
+	__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
+	__MJ8x8.public.HeartBeat(MsgHandler);  // execute the heartbeat
 
-	if((__MJ8x8.public.SysIRQCounter % 50) == 0)  // heartbeat - every 125ms
-		{ /* heartbeat of device on bus - aka. active CAN bus device discovery
-		 *
-		 *	- on the CAN bus there is room for max. 16 devices - in numeric form devices #0 up to #15
-		 *	- each device has its own unique NumericalCAN_ID, which is derived from its unique CAN bus ID
-		 *
-		 *	- on each watchdog timer iteration, BeatIterationCount is incremented (it is able to roll over from 0xf to 0x0)
-		 *	- when BeatIterationCount is equal to the device's NumericalCAN_ID, a heartbeat message is sent, otherwise nothing is done
-		 *
-		 *	- there are two modes: fast count and slow count - each set via WDTCR, the WatchDog Timer Control Register
-		 *		- fast count is performed when a heartbeat is supposed to be sent
-		 *			this mode speeds up the heartbeat procedure itself
-		 *
-		 *		- slow count is performed when no heartbeat is supposed to be sent
-		 *			this mode acts as a delay for heartbeat messages themselves
-		 *
-		 *	i.e. start in heartbeat mode, count fast to one's own ID, send the message and then exit heartbeat mode,
-		 *		continue counting slow until a counter rollover occurs and enter heartbeat mode again.
-		 *
-		 *	each device on the bus does this procedure.
-		 *	after one complete iteration each device should have received some other device's heartbeat message.
-		 *	on each and every message reception the senders ID is recorded in the canbus_t struct. thereby one device keeps track of its neighbors on the bus.
-		 *
-		 *	if there are no devices on the bus, a device-specific default operation is executed.
-		 */
-			__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
-			__MJ8x8.public.HeartBeat(MsgHandler);  // execute the heartbeat
-
-			if((!MsgHandler->Devices) && (__MJ8x8.__FlagDoDefaultOperation > 1))	// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
-				__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
-		}
-
-	// 1 count == 2.5 ms -- 200 counts = 500ms
-	(__MJ8x8.public.SysIRQCounter == 199) ? __MJ8x8.public.SysIRQCounter = 0 : __MJ8x8.public.SysIRQCounter++;  // count from 0 to 199 (200 counts) and then restart from zero
+	if((!MsgHandler->Devices) && (__MJ8x8.__FlagDoDefaultOperation > 1))	// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
+		__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
 }
+
 // device non-specific interrupt handlers
