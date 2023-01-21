@@ -1,4 +1,5 @@
 #include "event.h"
+#include "stm32f0xx_hal.h"
 
 // a function that does nothing
 void DoNothing(void)
@@ -13,7 +14,9 @@ typedef struct	// event_handler_t actual
 	uint8_t __index;	// private - bit-wise flags for events (see _HandleEvent())
 } __event_handler_t;
 
+extern TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
 extern __event_handler_t __EventHandler;  // declare event_handler_t actual
+
 /* theory of operation
  *
  *	components: subject, event handler, object
@@ -41,12 +44,14 @@ static void _UnSetEvent(const uint8_t val)
 {
 	__EventHandler.__index &= ~val;  // simply clears the bit at position bit_position
 
-	// TODO - if __index is empty, stop execution (timer)
+	if(__EventHandler.__index == 0)
+		HAL_TIM_Base_Stop_IT(&htim17);  // start the timer
 }
 
 // sets bit at bit_position ( 1 to 8) in byte __index - _index will have values 0, 1, 2, 4, 8, 16...128
 static void _Notify(const uint8_t bit_position)
 {
+	HAL_TIM_Base_Start_IT(&htim17);  // start the timer
 	__EventHandler.__index |= bit_position;  // simply sets the bit at position bit_position
 }
 
