@@ -87,7 +87,7 @@ static inline void _GPIOInit(void)
 		{0};
 
 	__HAL_RCC_GPIOA_CLK_ENABLE();  // enable peripheral clock
-	__HAL_RCC_CAN1_CLK_ENABLE();	// enable CAN bus clock
+//	__HAL_RCC_CAN1_CLK_ENABLE();	// enable CAN bus clock
 
 	// GPIO init is done in two steps:
 	//	1. set all to analog in order to reduce power consumption (done here)

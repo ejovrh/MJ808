@@ -6,7 +6,14 @@
 #include "mj808\mj808_button.c"	// concrete device-specific button functions
 
 #define EXTI0_1_IRQn 5	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
+#define TIM14_IRQn 19	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
+#define TIM16_IRQn 21	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
+#define TIM17_IRQn 22	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
 
+TIM_HandleTypeDef htim2;	// front light PWM on channel 2
+TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
+TIM_HandleTypeDef htim16;  // Timer16 object - button handling - 25ms
+TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
 typedef struct	// mj808_t actual
 {
 	mj808_t public;  // public struct
@@ -134,8 +141,6 @@ static inline void _GPIOInit(void)
 // Timer init - device specific
 static inline void _TimerInit(void)
 {
-	TIM_HandleTypeDef htim2;	// front light PWM on channel 2
-
 	TIM_ClockConfigTypeDef sClockSourceConfig =
 		{0};
 	TIM_MasterConfigTypeDef sMasterConfig =
@@ -150,7 +155,7 @@ static inline void _TimerInit(void)
 	htim2.Init.Period = 99;  // count to 100
 	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;	// no division
 	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;	// no pre-load
-	__HAL_RCC_TIM2_CLK_ENABLE();	// start the clock
+//	__HAL_RCC_TIM2_CLK_ENABLE();	// start the clock
 
 	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;	// we shall run from our internal oscillator
 	HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);  // commit it
@@ -166,16 +171,63 @@ static inline void _TimerInit(void)
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 	HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2);  // commit it
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);  // start the timer
+
+	// timer 17 - event handling - 2.5ms
+	htim17.Instance = TIM17;
+	htim17.Init.Prescaler = 799;  // 8MHz / 799+1 = 10kHz update rate
+	htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim17.Init.Period = 24;  // with above pre-scaler and a period of 24, we have an 2.5ms interrupt frequency
+	htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim17.Init.RepetitionCounter = 0;
+	htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+	HAL_TIM_ConfigClockSource(&htim17, &sClockSourceConfig);
+	HAL_TIM_OC_Init(&htim17);
+
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	HAL_TIMEx_MasterConfigSynchronization(&htim17, &sMasterConfig);
+
+	// timer 16 - button handling - 25ms
+	htim16.Instance = TIM16;
+	htim16.Init.Prescaler = 799;  // 8MHz / 799+1 = 10kHz update rate
+	htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim16.Init.Period = 249;  // with above pre-scaler and a period of 249, we have an 25ms interrupt frequency
+	htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim16.Init.RepetitionCounter = 0;
+	htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+	HAL_TIM_ConfigClockSource(&htim16, &sClockSourceConfig);
+	HAL_TIM_OC_Init(&htim16);
+
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	HAL_TIMEx_MasterConfigSynchronization(&htim16, &sMasterConfig);
+
+	// timer14 - LED handling - 20ms
+	htim14.Instance = TIM14;
+	htim14.Init.Prescaler = 799;  // 8MHz / 799+1 = 10kHz update rate
+	htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim14.Init.Period = 199;  // with above pre-scaler and a period of 19, we have an 2ms interrupt frequency
+	htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim14.Init.RepetitionCounter = 0;
+	htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+	HAL_TIM_ConfigClockSource(&htim14, &sClockSourceConfig);
+	HAL_TIM_OC_Init(&htim14);
+
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	HAL_TIMEx_MasterConfigSynchronization(&htim14, &sMasterConfig);
 }
 
 // interrupt extension, triggered by timer 1 ISR - 2.5ms interrupt in mj8x8
 void _SystemInterrupt(void)
 {
-	if((Device->mj8x8->SysIRQCounter % 4) == 0)  //	10ms
-		Device->led->Handler();  // handles LEDs fading
-
-	if((Device->mj8x8->SysIRQCounter % 10) == 0)	// 25ms
-		Device->button->Handler();	// handle button press
+	;
 }
 
 // device-specific constructor
@@ -185,8 +237,8 @@ void mj808_ctor()
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A));	// call base class constructor & initialize own SID
 
-	_TimerInit();  // initialize Timers
 	_GPIOInit();	// initialize device-specific GPIOs
+	_TimerInit();  // initialize Timers
 
 	__Device.public.led = _virtual_led_ctorMJ808();  // call virtual constructor & tie in object addresses
 	__Device.public.button = _virtual_button_ctorMJ808();  // call virtual constructor & tie in object addresses
@@ -200,6 +252,15 @@ void mj808_ctor()
 	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // EXTI0 - Pushbutton handling
 	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 
+	HAL_NVIC_SetPriority(TIM14_IRQn, 0, 0);  // charlieplexed LED handler timer (on demand)
+	HAL_NVIC_EnableIRQ(TIM14_IRQn);
+
+	HAL_NVIC_SetPriority(TIM16_IRQn, 0, 0);  // button handler timer (on demand)
+	HAL_NVIC_EnableIRQ(TIM16_IRQn);
+
+	HAL_NVIC_SetPriority(TIM17_IRQn, 0, 0);  // event handler timer (on demand)
+	HAL_NVIC_EnableIRQ(TIM17_IRQn);
+
 	__enable_irq();  // enable interrupts
 
 	Device->led->led[Utility].Shine(UTIL_LED_GREEN_BLINK_1X);  // crude "I'm finished" indicator
@@ -209,11 +270,44 @@ void mj808_ctor()
 // pushbutton ISR
 void EXTI0_1_IRQHandler(void)
 {
+	__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
+	htim16.Instance->PSC = 799;  // reconfigure after peripheral was powered down
+	htim16.Instance->ARR = 249;
+	HAL_TIM_Base_Start_IT(&htim16);  // start the timer
+
 	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// interrupt source detection
 // Pushbutton: released - pin high, pressed - pin low
 		Device->button->button[PushButton]->Mark(!(HAL_GPIO_ReadPin(Pushbutton_GPIO_Port, Pushbutton_Pin)));  // mark state change
 
 	HAL_GPIO_EXTI_IRQHandler(Pushbutton_Pin);  // service the interrupt
+}
+
+// timer 14 ISR - 10ms interrupt - LED handling (activated on demand)
+void TIM14_IRQHandler(void)
+{
+	HAL_TIM_IRQHandler(&htim14);  // service the interrupt
+	Device->led->Handler();  // handles front LED fading
+}
+
+// timer 16 ISR - 25ms interrupt - button handling (activated on demand)
+void TIM16_IRQHandler(void)
+{
+	HAL_TIM_IRQHandler(&htim16);  // service the interrupt
+
+	Device->button->Handler();	// handle button press
+
+	if(!Device->button->button[PushButton]->Momentary)	// if button not pressed
+		{
+			HAL_TIM_Base_Stop_IT(&htim16);  // stop the timer
+			__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
+		}
+}
+
+// timer 17 ISR - 10ms interrupt - event handler (activated on demand)
+void TIM17_IRQHandler(void)
+{
+	HAL_TIM_IRQHandler(&htim17);  // service the interrupt
+	EventHandler->HandleEvent();	// execute the event handling function with argument taken from case table
 }
 // device-specific interrupt handlers
 

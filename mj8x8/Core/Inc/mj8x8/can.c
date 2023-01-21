@@ -428,34 +428,6 @@ __can_t __CAN =  // instantiate can_t actual and set function pointers
 	};
 
 // TODO - clean up CAN init
-void HAL_CAN_MspInit(CAN_HandleTypeDef *canHandle)
-{
-
-	GPIO_InitTypeDef GPIO_InitStruct =
-		{0};
-	if(canHandle->Instance == CAN)
-		{
-			/* USER CODE BEGIN CAN_MspInit 0 */
-
-			/* USER CODE END CAN_MspInit 0 */
-			/* CAN clock enable */
-			__HAL_RCC_CAN1_CLK_ENABLE();
-
-			__HAL_RCC_GPIOA_CLK_ENABLE();
-			/**CAN GPIO Configuration
-			 PA11     ------> CAN_RX
-			 PA12     ------> CAN_TX
-			 */
-			GPIO_InitStruct.Pin = GPIO_PIN_11 | GPIO_PIN_12;
-			GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-			GPIO_InitStruct.Pull = GPIO_NOPULL;
-			GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-			GPIO_InitStruct.Alternate = GPIO_AF4_CAN;
-			HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-		}
-}
-
 // CAN init, as generated via ioc file
 inline static void _STM32CANInit(void)
 {
@@ -473,7 +445,7 @@ inline static void _STM32CANInit(void)
 	hcan.Init.ReceiveFifoLocked = DISABLE;	//
 	hcan.Init.TransmitFifoPriority = DISABLE;  //
 	// HAL_CAN_Init(&hcan);	// TODO - initialize the CAN peripheral
-	__HAL_RCC_CAN1_CLK_ENABLE();
+//	__HAL_RCC_CAN1_CLK_ENABLE();
 }
 
 // object constructor
