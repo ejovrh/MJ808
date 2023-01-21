@@ -94,7 +94,6 @@ static inline void _GPIOInit(void)
 
 	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
 	__HAL_RCC_GPIOF_CLK_ENABLE();  // enable peripheral clock
-	__HAL_RCC_ADC1_CLK_ENABLE();	// enable ADC clock
 
 	HAL_GPIO_WritePin(TCAN334_Shutdown_GPIO_Port, TCAN334_Shutdown_Pin, GPIO_PIN_SET);	// high - put device into shutdown
 	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, GPIO_PIN_SET);	// high - put device into standby
@@ -293,13 +292,15 @@ void mj828_ctor()
 // timer 14 ISR - 2ms interrupt - charlieplexed LED handling (activated on demand)
 void TIM14_IRQHandler(void)
 {
-	Device->led->Handler();  // handles LED charlieplexing for multiple LEDs
 	HAL_TIM_IRQHandler(&htim14);  // service the interrupt
+	Device->led->Handler();  // handles LED charlieplexing for multiple LEDs
 }
 
 // timer 16 ISR - 25ms interrupt - button handling (activated on demand)
 void TIM16_IRQHandler(void)
 {
+	HAL_TIM_IRQHandler(&htim16);  // service the interrupt
+
 	Device->button->Handler();	// handle button press
 
 	if(!Device->button->button[PushButton]->Momentary)	// if button not pressed
@@ -319,15 +320,13 @@ void TIM16_IRQHandler(void)
 			HAL_TIM_Base_Stop_IT(&htim16);  // stop the timer
 			__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
 		}
-
-	HAL_TIM_IRQHandler(&htim16);  // service the interrupt
 }
 
 // timer 17 ISR - 10ms interrupt - event handler (activated on demand)
 void TIM17_IRQHandler(void)
 {
-	EventHandler->HandleEvent();	// execute the event handling function with argument taken from case table
 	HAL_TIM_IRQHandler(&htim17);  // service the interrupt
+	EventHandler->HandleEvent();	// execute the event handling function with argument taken from case table
 }
 
 // EXTI pushbutton & lever front ISR
