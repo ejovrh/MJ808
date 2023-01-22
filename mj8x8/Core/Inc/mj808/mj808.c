@@ -282,7 +282,7 @@ void EXTI0_1_IRQHandler(void)
 	HAL_GPIO_EXTI_IRQHandler(Pushbutton_Pin);  // service the interrupt
 }
 
-// timer 14 ISR - 10ms interrupt - LED handling (activated on demand)
+// timer 14 ISR - 20ms interrupt - LED handling (activated on demand)
 void TIM14_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&htim14);  // service the interrupt

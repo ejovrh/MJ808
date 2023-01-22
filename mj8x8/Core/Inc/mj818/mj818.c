@@ -4,6 +4,14 @@
 #include "mj818\mj818.h"
 #include "mj818\mj818_led.c"	// concrete device-specific LED functions
 
+#define TIM14_IRQn 19	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
+
+TIM_HandleTypeDef htim2;	// rear light PWM on channel 1
+TIM_HandleTypeDef htim3;	// brake light PWM on channel 4
+TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
+
+TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms - FIXME - should not be here
+
 typedef struct	// mj818_t actual
 {
 	mj818_t public;  // public struct
@@ -80,9 +88,6 @@ static inline void _GPIOInit(void)
 // Timer init - device specific
 static inline void _TimerInit(void)
 {
-	TIM_HandleTypeDef htim2;	// rear light PWM on channel 1
-	TIM_HandleTypeDef htim3;	// brake light PWM on channel 4
-
 	TIM_ClockConfigTypeDef sClockSourceConfig =
 		{0};
 	TIM_MasterConfigTypeDef sMasterConfig =
@@ -97,7 +102,6 @@ static inline void _TimerInit(void)
 	htim2.Init.Period = 99;  // count to 100
 	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;	// no division
 	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;	// no pre-load
-	__HAL_RCC_TIM2_CLK_ENABLE();	// start the clock
 
 	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;	// we shall run from our internal oscillator
 	HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);  // commit it
@@ -121,7 +125,6 @@ static inline void _TimerInit(void)
 	htim3.Init.Period = 99;
 	htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-	__HAL_RCC_TIM3_CLK_ENABLE();	// start the clock
 
 	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;	// we shall run from our internal oscillator
 	HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig);  // commit it
@@ -137,13 +140,29 @@ static inline void _TimerInit(void)
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 	HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_4);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);  // start the timer
+
+	// timer14 - LED handling - 20ms
+	htim14.Instance = TIM14;
+	htim14.Init.Prescaler = 799;  // 8MHz / 799+1 = 10kHz update rate
+	htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim14.Init.Period = 199;  // with above pre-scaler and a period of 19, we have an 2ms interrupt frequency
+	htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim14.Init.RepetitionCounter = 0;
+	htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+	HAL_TIM_ConfigClockSource(&htim14, &sClockSourceConfig);
+	HAL_TIM_OC_Init(&htim14);
+
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	HAL_TIMEx_MasterConfigSynchronization(&htim14, &sMasterConfig);
 }
 
 // interrupt extension, triggered by timer 1 ISR - 2.5ms interrupt in mj8x8
 void _SystemInterrupt(void)
 {
-	if((Device->mj8x8->SysIRQCounter % 4) == 0)  //	10ms
-		Device->led->Handler();  // handles LEDs fading
+	;
 }
 
 void mj818_ctor()
@@ -161,13 +180,19 @@ void mj818_ctor()
 	__Device.public.mj8x8->SystemInterrupt = &_SystemInterrupt;  // implement device-specific system interrupt code
 
 	// interrupt init
-	// none
+	HAL_NVIC_SetPriority(TIM14_IRQn, 0, 0);  // charlieplexed LED handler timer (on demand)
+	HAL_NVIC_EnableIRQ(TIM14_IRQn);
 
 	__enable_irq();  // enable interrupts
 }
 
 // device-specific interrupt handlers
-// none
+// timer 14 ISR - 20ms interrupt - LED handling (activated on demand)
+void TIM14_IRQHandler(void)
+{
+	HAL_TIM_IRQHandler(&htim14);  // service the interrupt
+	Device->led->Handler();  // handles front LED fading
+}
 // device-specific interrupt handlers
 
 // all devices have the object name "Device", hence the preprocessor macro
