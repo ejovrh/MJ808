@@ -16711,13 +16711,18 @@ rounded to 100Ω</text>
 <part name="VOLTAGE_DIVIDER" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A5L-LOC" device="" value="VOLTAGE_DIVIDER"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
-<part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="100k"/>
+<part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="270k"/>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 </parts>
 <sheets>
 <sheet>
 <plain>
 <text x="88.9" y="20.32" size="1.778" layer="90">Voltage Divider for Battery Measurement</text>
+<text x="101.6" y="53.34" size="1.778" layer="97" align="top-left">ideal calculation of divider:
+
+BAT+ -- Vbat+ 
+8.4V -- 2.27 (4.2 per cell)
+6.0V -- 1.622 (3.0 per cell)</text>
 </plain>
 <instances>
 <instance part="VOLTAGE_DIVIDER" gate="G$1" x="0" y="0" smashed="yes">

@@ -9,6 +9,7 @@
 #include "mj8x8\mj8x8.h"
 #include "led\led.h"
 #include "button\button.h"
+#include "adc\adc.h"
 
 // definitions of device/PCB layout-specific hardware pins
 #define TCAN334_Standby_Pin GPIO_PIN_8
@@ -50,6 +51,13 @@ enum mj828_leds  // enum of lights on this device
 	  Battery4	// 7
 };
 
+enum mj828_adcchannels
+{
+	  Vbat,  // battery voltage - PA3
+	  Light,	// Phototransistor - PB1
+	  Temperature  // internal temperature sensor
+};
+
 enum mj828_buttons	// enum of buttons on this device
 {
 	  PushButton,  //	pushbutton on lamp bpdy
@@ -62,6 +70,7 @@ typedef struct	// struct describing devices on MJ828
 	mj8x8_t *mj8x8;  // pointer to the base class
 	composite_led_t *led;  // pointer to LED structure
 	button_t *button;  // array of button_t - two buttons
+	adc_t *adc;  // ADC on device
 } mj828_t;
 
 void mj828_ctor();	// declare constructor for concrete class

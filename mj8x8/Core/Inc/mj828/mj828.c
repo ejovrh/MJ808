@@ -4,18 +4,20 @@
 #include "mj828\mj828.h"
 #include "mj828\mj828_led.c"	// concrete device-specific LED functions
 #include "mj828\mj828_button.c"	// concrete device-specific button functions
+#include "mj828\mj828_adc.c"	// concrete device-specific ADC functions
 
 #define EXTI0_1_IRQn 5	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
 #define EXTI2_3_IRQn 6	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
-#define ADC1_IRQn 12	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
+//#define TIM2_IRQn 15	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
 #define TIM14_IRQn 19	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
 #define TIM16_IRQn 21	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
 #define TIM17_IRQn 22	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
 
+TIM_HandleTypeDef htim2;  // Timer2 object - ADC conversion - 500ms
 TIM_HandleTypeDef htim14;  // Timer14 object - charlieplexed LED handling - 2ms
 TIM_HandleTypeDef htim16;  // Timer16 object - button handling - 25ms
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
-static ADC_HandleTypeDef hadc;	// ADC object
+extern ADC_HandleTypeDef hadc;  // ADC object
 
 typedef struct	// mj828_t actual
 {
@@ -151,37 +153,6 @@ static inline void _GPIOInit(void)
 	HAL_GPIO_Init(Phototransistor_GPIO_Port, &GPIO_InitStruct);
 }
 
-// ADC init - device specific
-void _ADCInit(void)
-{
-	ADC_ChannelConfTypeDef sConfig =
-		{0};
-
-	hadc.Instance = ADC1;
-	hadc.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
-	hadc.Init.Resolution = ADC_RESOLUTION_12B;
-	hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-	hadc.Init.ScanConvMode = ADC_SCAN_DIRECTION_FORWARD;
-	hadc.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
-	hadc.Init.LowPowerAutoWait = DISABLE;
-	hadc.Init.LowPowerAutoPowerOff = DISABLE;
-	hadc.Init.ContinuousConvMode = DISABLE;
-	hadc.Init.DiscontinuousConvMode = DISABLE;
-	hadc.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-	hadc.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-	hadc.Init.DMAContinuousRequests = DISABLE;
-	hadc.Init.Overrun = ADC_OVR_DATA_PRESERVED;
-	HAL_ADC_Init(&hadc);
-
-	sConfig.Channel = ADC_CHANNEL_3;	//	Battery voltage
-	sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
-	sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
-	HAL_ADC_ConfigChannel(&hadc, &sConfig);
-
-	sConfig.Channel = ADC_CHANNEL_9;	//	Phototransistor
-	HAL_ADC_ConfigChannel(&hadc, &sConfig);
-}
-
 // interrupt extension, triggered by timer 1 ISR - 2.5ms interrupt in mj8x8
 void _SystemInterrupt(void)
 {
@@ -246,6 +217,22 @@ static inline void _TimerInit(void)
 	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
 	HAL_TIMEx_MasterConfigSynchronization(&htim14, &sMasterConfig);
+
+	htim2.Instance = TIM2;
+	htim2.Init.Prescaler = 799;
+	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim2.Init.Period = 5000;
+	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	__HAL_RCC_TIM2_CLK_ENABLE();
+	HAL_TIM_Base_Init(&htim2);
+
+	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+	HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);
+
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);
 }
 
 void mj828_ctor()
@@ -254,11 +241,11 @@ void mj828_ctor()
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D));  // call base class constructor & initialize own SID
 
 	_GPIOInit();	// initialize device-specific GPIOs
-	_ADCInit();  // initialize device-specific ADC
 	_TimerInit();  // initialize timers
 
 	__Device.public.led = _virtual_led_ctorMJ828();  // call virtual constructor & tie in object addresses
 	__Device.public.button = _virtual_button_ctorMJ828();  // call virtual constructor & tie in object addresses
+	__Device.public.adc = adc_ctor();  // call ADC constructor
 
 //	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ828;	// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
@@ -282,8 +269,10 @@ void mj828_ctor()
 	HAL_NVIC_SetPriority(EXTI2_3_IRQn, 0, 0);  // EXTI2 - LeverBrake handling
 	HAL_NVIC_EnableIRQ(EXTI2_3_IRQn);
 
-	HAL_NVIC_SetPriority(ADC1_IRQn, 0, 0);	// ADC interrupt handling
-	HAL_NVIC_EnableIRQ(ADC1_IRQn);
+//	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);  //
+//	HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
+	HAL_TIM_Base_Start(&htim2);
 
 	__enable_irq();  // enable interrupts
 }
@@ -372,8 +361,8 @@ void EXTI2_3_IRQHandler(void)
 // ADC ISR
 void ADC1_IRQHandler(void)
 {
-	// TODO - implement ADC code
-	HAL_GPIO_TogglePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin);
+	if((__HAL_ADC_GET_FLAG(&hadc, ADC_FLAG_EOC) && __HAL_ADC_GET_IT_SOURCE(&hadc, ADC_IT_EOC)))
+		Device->adc->ReadChannels();	// on every ISR iteration, read out and store in ADC object
 
 	HAL_ADC_IRQHandler(&hadc);  // service the interrupt
 }
