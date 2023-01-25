@@ -12,7 +12,7 @@
 extern TIM_HandleTypeDef htim14;  // Timer14 object;
 
 static primitive_led_t __primitive_led[8] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
-static __composite_led_t __LED;  // forward declaration of object
+static __composite_led_t   __LED;	// forward declaration of object
 static
 GPIO_InitTypeDef GPIO_InitStruct =  // GPIO initialisation structure
 	{0};
@@ -154,7 +154,6 @@ static void _CharliePlexingHandler()
 		{
 			HAL_TIM_Base_Stop_IT(&htim14);  // stop the timer
 			__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
-			return;
 		}
 
 	static uint8_t i = 0;  // persistent iterator across function calls loops over all LEDs on device

@@ -32,6 +32,29 @@ void _EmptyBusOperationMJ828(void)
 	;  // TODO - define mj828 empty bus operation
 }
 
+// display battery charge status depending on ADC read
+void _DisplayBatteryVoltage(void)
+{
+	volatile uint16_t temp = Device->adc->GetVal(Vbat);
+
+	if(temp <= 1845)	// 4.2V
+		Device->led->Shine(Red);
+
+	if(temp > 1845)  // 4.2V
+		Device->led->Shine(Battery1);
+
+	if(temp > 2373)  // 5.4V
+		Device->led->Shine(Battery2);
+
+	if(temp > 2900)  // 6.6V
+		Device->led->Shine(Battery3);
+
+	if(temp > 3429)  // 7.8V
+		Device->led->Shine(Battery4);
+}
+
+// executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
+// cases in this switch-case statement must be unique for all events on this device
 void _event_execution_function_mj828(uint8_t val)
 {
 	EventHandler->UnSetEvent(val);
@@ -52,7 +75,7 @@ void _event_execution_function_mj828(uint8_t val)
 			break;
 
 		case 0x08:	// pushbutton press
-			Device->led->Shine(Yellow);
+			_DisplayBatteryVoltage();  // light up BatteryX LEDs according to voltage read at Vbat
 			break;
 
 		case 0x10:	// pushbutton hold
@@ -60,7 +83,7 @@ void _event_execution_function_mj828(uint8_t val)
 			break;
 
 		case 0x20:	// next case
-			Device->led->Shine(Battery4);
+			Device->led->Shine(Yellow);
 			break;
 
 //		case 0x20:	// next case

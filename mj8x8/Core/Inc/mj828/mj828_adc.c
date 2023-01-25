@@ -28,7 +28,7 @@ static void _ReadChannels(void)
 }
 
 // returns value stored at index i
-static inline uint8_t _GetVal(const uint8_t i)
+static inline uint16_t _GetVal(const uint8_t i)
 {
 	return __ADC.__channel[i];
 }

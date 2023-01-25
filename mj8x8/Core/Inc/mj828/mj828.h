@@ -60,7 +60,7 @@ enum mj828_adcchannels
 
 enum mj828_buttons	// enum of buttons on this device
 {
-	  PushButton,  //	pushbutton on lamp bpdy
+	  PushButton,  //	pushbutton on lamp body
 	  LeverFront,  // left brake lever pushed forward
 	  LeverBrake	// left brake lever in braking action
 };
