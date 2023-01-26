@@ -230,6 +230,75 @@ void _SystemInterrupt(void)
 	;
 }
 
+// stops timer identified by argument
+static void _StopTimer(TIM_HandleTypeDef *timer)
+{
+	HAL_TIM_Base_Stop_IT(timer);  // stop the timer
+
+	if(timer->Instance == TIM2)  // front led PWM
+		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
+
+	if(timer->Instance == TIM14)	// led handling
+		__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
+
+	if(timer->Instance == TIM16)	// button handling
+		__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
+
+	if(timer->Instance == TIM17)	// event handling
+		__HAL_RCC_TIM17_CLK_DISABLE();  // stop the clock
+}
+
+// starts timer identified by argument
+static void _StartTimer(TIM_HandleTypeDef *timer)
+{
+	if(timer->Instance == TIM2)  // front LED PWM
+		{
+			TIM_OC_InitTypeDef sConfigOC =
+				{0};
+
+			// Timer2 init - front light PWM
+			timer->Instance = TIM2;
+			timer->Init.Prescaler = 0;  // scale by 1
+			timer->Init.CounterMode = TIM_COUNTERMODE_UP;  // up counting
+			timer->Init.Period = 99;  // count to 100
+			timer->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;  // no division
+			timer->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;  // no pre-load
+			__HAL_RCC_TIM2_CLK_ENABLE();	// start the clock
+			HAL_TIM_PWM_Init(timer);  // commit it
+
+			sConfigOC.OCMode = TIM_OCMODE_PWM1;
+			sConfigOC.Pulse = LED_OFF;	// 0 to 100% duty cycle in decimal numbers
+			sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+			sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_2);  // commit it
+			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_2);  // start the timer
+			return;
+		}
+
+	if(timer->Instance == TIM14)	// led handling
+		{
+			__HAL_RCC_TIM14_CLK_ENABLE();  // start the clock
+			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
+			timer->Instance->ARR = 199;
+		}
+
+	if(timer->Instance == TIM16)	// button handling
+		{
+			__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
+			htim16.Instance->PSC = 799;  // reconfigure after peripheral was powered down
+			htim16.Instance->ARR = 249;
+		}
+
+	if(timer->Instance == TIM17)	// event handling
+		{
+			__HAL_RCC_TIM17_CLK_ENABLE();  // start the clock
+			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
+			timer->Instance->ARR = 24;
+		}
+
+	HAL_TIM_Base_Start_IT(timer);  // start the timer
+}
+
 // device-specific constructor
 void mj808_ctor()
 {
@@ -242,6 +311,9 @@ void mj808_ctor()
 
 	__Device.public.led = _virtual_led_ctorMJ808();  // call virtual constructor & tie in object addresses
 	__Device.public.button = _virtual_button_ctorMJ808();  // call virtual constructor & tie in object addresses
+
+	__Device.public.StopTimer = &_StopTimer;	//
+	__Device.public.StartTimer = &_StartTimer;	//
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;	// implements device-specific operation depending on bus activity
 	__Device.public.mj8x8->SystemInterrupt = &_SystemInterrupt;  // implement device-specific system interrupt code
@@ -270,10 +342,7 @@ void mj808_ctor()
 // pushbutton ISR
 void EXTI0_1_IRQHandler(void)
 {
-	__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
-	htim16.Instance->PSC = 799;  // reconfigure after peripheral was powered down
-	htim16.Instance->ARR = 249;
-	HAL_TIM_Base_Start_IT(&htim16);  // start the timer
+	Device->StartTimer(&htim16);  // start the timer
 
 	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// interrupt source detection
 // Pushbutton: released - pin high, pressed - pin low
@@ -297,10 +366,7 @@ void TIM16_IRQHandler(void)
 	Device->button->Handler();	// handle button press
 
 	if(!Device->button->button[PushButton]->Momentary)	// if button not pressed
-		{
-			HAL_TIM_Base_Stop_IT(&htim16);  // stop the timer
-			__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
-		}
+		Device->StopTimer(&htim16);  // stop the timer
 }
 
 // timer 17 ISR - 10ms interrupt - event handler (activated on demand)

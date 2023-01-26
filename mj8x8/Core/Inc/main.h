@@ -9,7 +9,7 @@
 
 // TODO - investigate option bytes - RM0091 - 4.1.2 - in order to automatically determine a connected device
 
-#define MJ828_	// what device to compile for
+#define MJ808_	// what device to compile for
 
 __weak void DoNothing(void)  // a function that does nothing
 {

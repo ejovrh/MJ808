@@ -22,10 +22,7 @@ static void _FadeHandler(void)
 			++OCR_FRONT_LIGHT;
 
 			if(OCR_FRONT_LIGHT == Device->led->led[Front].ocr)
-				{
-					HAL_TIM_Base_Stop_IT(&htim14);  // stop the timer
-					__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
-				}
+				Device->StopTimer(&htim14);  // stop the timer
 		}
 
 	if(Device->led->led[Front].ocr < OCR_FRONT_LIGHT)  // fade down
@@ -34,9 +31,8 @@ static void _FadeHandler(void)
 
 			if(OCR_FRONT_LIGHT == 0)
 				{
-					HAL_TIM_Base_Stop_IT(&htim14);  // stop the timer
-					__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
-					__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
+					Device->StopTimer(&htim14);  // stop the timer
+					Device->StopTimer(&htim2);  // stop the timer
 				}
 		}
 }
@@ -83,25 +79,7 @@ static void _primitiveUtilityLED(uint8_t in_val)
 
 static void __componentLED_On(void)
 {
-	TIM_OC_InitTypeDef sConfigOC =
-		{0};
-
-	// Timer2 init - front light PWM
-	htim2.Instance = TIM2;
-	htim2.Init.Prescaler = 0;  // scale by 1
-	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;	// up counting
-	htim2.Init.Period = 99;  // count to 100
-	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;	// no division
-	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;	// no pre-load
-	__HAL_RCC_TIM2_CLK_ENABLE();	// start the clock
-	HAL_TIM_PWM_Init(&htim2);  // commit it
-
-	sConfigOC.OCMode = TIM_OCMODE_PWM1;
-	sConfigOC.Pulse = LED_OFF;	// 0 to 100% duty cycle in decimal numbers
-	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-	HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2);  // commit it
-	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);  // start the timer
+	Device->StartTimer(&htim2);  // start the timer
 
 	Device->led->led[Utility].Shine(UTIL_LED_GREEN_ON);  // green LED on
 	Device->led->led[Front].Shine(20);  // front light on - low key; gets overwritten by LU command, since it comes in a bit later
@@ -126,15 +104,12 @@ static void __componentLED_Off(void)
 // delegates operations from LED component downwards to LED leaves
 static void _componentLED(const uint8_t val)
 {
-	__HAL_RCC_TIM14_CLK_ENABLE();  // start the clock
-	htim14.Instance->PSC = 799;  // reconfigure after peripheral was powered down
-	htim14.Instance->ARR = 199;
-	HAL_TIM_Base_Start_IT(&htim14);  // start the timer
-
 	if(val)  // true - on, false - off
 		__componentLED_On();	// delegate indirectly to the leaves
 	else
 		__componentLED_Off();
+
+	Device->StartTimer(&htim14);  // start the timer
 }
 
 static __composite_led_t __LED =

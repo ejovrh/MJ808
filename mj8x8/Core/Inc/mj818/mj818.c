@@ -165,6 +165,102 @@ void _SystemInterrupt(void)
 	;
 }
 
+// stops timer identified by argument
+static void _StopTimer(TIM_HandleTypeDef *timer)
+{
+	HAL_TIM_Base_Stop_IT(timer);  // stop the timer
+
+	if(timer->Instance == TIM2)  // led handling
+		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
+
+	if(timer->Instance == TIM3)  // led handling
+		__HAL_RCC_TIM3_CLK_DISABLE();  // stop the clock
+
+	if(timer->Instance == TIM14)	// led handling
+		__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
+
+	if(timer->Instance == TIM16)	// button handling
+		__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
+
+	if(timer->Instance == TIM17)	// event handling
+		__HAL_RCC_TIM17_CLK_DISABLE();  // stop the clock
+}
+
+// starts timer identified by argument
+static void _StartTimer(TIM_HandleTypeDef *timer)
+{
+	if(timer->Instance == TIM2)  // front LED PWM
+		{
+			TIM_OC_InitTypeDef sConfigOC =
+				{0};
+
+			// Timer2 init - rear light PWM
+			timer->Instance = TIM2;
+			timer->Init.Prescaler = 0;  // scale by 1
+			timer->Init.CounterMode = TIM_COUNTERMODE_UP;  // up counting
+			timer->Init.Period = 99;  // count to 100
+			timer->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;  // no division
+			timer->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;  // no pre-load
+			__HAL_RCC_TIM2_CLK_ENABLE();	// start the clock
+			HAL_TIM_PWM_Init(timer);  // commit it
+
+			sConfigOC.OCMode = TIM_OCMODE_PWM1;
+			sConfigOC.Pulse = LED_OFF;  // 0 to 100% duty cycle in decimal numbers
+			sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+			sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_1);  // commit it
+			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_1);  // start the timer
+			return;
+		}
+
+	if(timer->Instance == TIM3)  // brake LED PWM
+		{
+			TIM_OC_InitTypeDef sConfigOC =
+				{0};
+
+			// timer3 - brake light PWM
+			timer->Instance = TIM3;
+			timer->Init.Prescaler = 0;
+			timer->Init.CounterMode = TIM_COUNTERMODE_UP;
+			timer->Init.Period = 99;
+			timer->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+			timer->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+			__HAL_RCC_TIM3_CLK_ENABLE();	// start the clock
+			HAL_TIM_PWM_Init(timer);  // commit it
+
+			sConfigOC.OCMode = TIM_OCMODE_PWM1;
+			sConfigOC.Pulse = LED_OFF;
+			sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+			sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_4);
+			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_4);  // start the timer
+			return;
+		}
+
+	if(timer->Instance == TIM14)	// led handling
+		{
+			__HAL_RCC_TIM14_CLK_ENABLE();  // start the clock
+			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
+			timer->Instance->ARR = 199;
+		}
+
+	if(timer->Instance == TIM16)	// button handling
+		{
+			__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
+			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
+			timer->Instance->ARR = 249;
+		}
+
+	if(timer->Instance == TIM17)	// event handling
+		{
+			__HAL_RCC_TIM17_CLK_ENABLE();  // start the clock
+			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
+			timer->Instance->ARR = 24;
+		}
+
+	HAL_TIM_Base_Start_IT(timer);  // start the timer
+}
+
 void mj818_ctor()
 {
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
@@ -174,6 +270,9 @@ void mj818_ctor()
 	_GPIOInit();	// initialize device-specific GPIOs
 
 	__Device.public.led = _virtual_led_ctorMJ818();  // call virtual constructor & tie in object addresses
+
+	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
+	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
 	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;	// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity

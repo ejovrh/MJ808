@@ -71,6 +71,9 @@ typedef struct	// struct describing devices on MJ828
 	composite_led_t *led;  // pointer to LED structure
 	button_t *button;  // array of button_t - two buttons
 	adc_t *adc;  // ADC on device
+
+	void (*StopTimer)(TIM_HandleTypeDef *timer);	// stops timer identified by argument
+	void (*StartTimer)(TIM_HandleTypeDef *timer);  // starts timer identified by argument
 } mj828_t;
 
 void mj828_ctor();	// declare constructor for concrete class

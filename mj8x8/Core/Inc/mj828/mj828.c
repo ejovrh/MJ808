@@ -6,12 +6,12 @@
 #include "mj828\mj828_button.c"	// concrete device-specific button functions
 #include "mj828\mj828_adc.c"	// concrete device-specific ADC functions
 
-#define EXTI0_1_IRQn 5	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
-#define EXTI2_3_IRQn 6	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
-//#define TIM2_IRQn 15	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
-#define TIM14_IRQn 19	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
-#define TIM16_IRQn 21	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
-#define TIM17_IRQn 22	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
+#define EXTI0_1_IRQn 5	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
+#define EXTI2_3_IRQn 6	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
+//#define TIM2_IRQn 15	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
+#define TIM14_IRQn 19	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
+#define TIM16_IRQn 21	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
+#define TIM17_IRQn 22	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
 
 TIM_HandleTypeDef htim2;  // Timer2 object - ADC conversion - 500ms
 TIM_HandleTypeDef htim14;  // Timer14 object - charlieplexed LED handling - 2ms
@@ -241,6 +241,7 @@ static inline void _TimerInit(void)
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
 	HAL_TIMEx_MasterConfigSynchronization(&htim14, &sMasterConfig);
 
+	// timer2 - ADC sampling - 500ms
 	htim2.Instance = TIM2;
 	htim2.Init.Prescaler = 799;
 	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -258,6 +259,47 @@ static inline void _TimerInit(void)
 	HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);
 }
 
+// stops timer identified by argument
+static void _StopTimer(TIM_HandleTypeDef *timer)
+{
+	HAL_TIM_Base_Stop_IT(timer);  // stop the timer
+
+	if(timer->Instance == TIM14)	// charlieplexing
+		__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
+
+	if(timer->Instance == TIM16)	// button handling
+		__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
+
+	if(timer->Instance == TIM17)	// event handling
+		__HAL_RCC_TIM17_CLK_DISABLE();  // stop the clock
+}
+
+// starts timer identified by argument
+static void _StartTimer(TIM_HandleTypeDef *timer)
+{
+	timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
+
+	if(timer->Instance == TIM14)	// charlieplexing
+		{
+			__HAL_RCC_TIM14_CLK_ENABLE();  // start the clock
+			timer->Instance->ARR = 19;
+		}
+
+	if(timer->Instance == TIM16)	// button handling
+		{
+			__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
+			timer->Instance->ARR = 249;
+		}
+
+	if(timer->Instance == TIM17)	// event handling
+		{
+			__HAL_RCC_TIM17_CLK_ENABLE();  // start the clock
+			timer->Instance->ARR = 24;
+		}
+
+	HAL_TIM_Base_Start_IT(timer);  // start the timer
+}
+
 void mj828_ctor()
 {
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
@@ -269,6 +311,9 @@ void mj828_ctor()
 	__Device.public.led = _virtual_led_ctorMJ828();  // call virtual constructor & tie in object addresses
 	__Device.public.button = _virtual_button_ctorMJ828();  // call virtual constructor & tie in object addresses
 	__Device.public.adc = adc_ctor();  // call ADC constructor
+
+	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
+	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
 //	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ828;	// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
@@ -316,22 +361,13 @@ void TIM16_IRQHandler(void)
 	Device->button->Handler();	// handle button press
 
 	if(!Device->button->button[PushButton]->Momentary)	// if button not pressed
-		{
-			HAL_TIM_Base_Stop_IT(&htim16);  // stop the timer
-			__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
-		}
+		Device->StopTimer(&htim16);  // stop the timer
 
 	if(Device->button->button[LeverFront]->Momentary)  // if button not pressed
-		{
-			HAL_TIM_Base_Stop_IT(&htim16);  // stop the timer
-			__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
-		}
+		Device->StopTimer(&htim16);  // stop the timer
 
 	if(Device->button->button[LeverBrake]->Momentary)
-		{
-			HAL_TIM_Base_Stop_IT(&htim16);  // stop the timer
-			__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
-		}
+		Device->StopTimer(&htim16);  // stop the timer
 }
 
 // timer 17 ISR - 10ms interrupt - event handler (activated on demand)
@@ -349,10 +385,7 @@ void EXTI0_1_IRQHandler(void)
 	 * lever front: magnet - high, no magnet - low
 	 */
 
-	__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
-	htim16.Instance->PSC = 799;  // reconfigure after peripheral was powered down
-	htim16.Instance->ARR = 249;
-	HAL_TIM_Base_Start_IT(&htim16);  // start the timer
+	Device->StartTimer(&htim16);  // start the timer
 
 	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// interrupt source detection
 // Pushbutton: released - pin high, pressed - pin low
@@ -369,10 +402,7 @@ void EXTI0_1_IRQHandler(void)
 // lever brake ISR
 void EXTI2_3_IRQHandler(void)
 {
-	__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
-	htim16.Instance->PSC = 799;  // reconfigure after peripheral was powered down
-	htim16.Instance->ARR = 249;
-	HAL_TIM_Base_Start_IT(&htim16);  // start the timer
+	Device->StartTimer(&htim16);  // start the timer
 
 	if(__HAL_GPIO_EXTI_GET_IT(LeverBrake_Pin))	// interrupt source detection
 // lever brake: released (no magnet) - pin high, pressed (magnet) - pin low

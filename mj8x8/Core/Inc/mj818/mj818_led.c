@@ -32,18 +32,13 @@ static void _FadeHandler(void)
 
 	if(OCR_FRONT_LIGHT == 0 && OCR_REAR_LIGHT == 0)
 		{
-			// TODO - check timer stop in fade via CAN commands
-			HAL_TIM_Base_Stop_IT(&htim14);  // stop the timer
-			__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
-			__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
-			__HAL_RCC_TIM3_CLK_DISABLE();  // stop the clock
+		Device->StopTimer(&htim14);  // stop the timer
+		Device->StopTimer(&htim2);  // stop the timer
+		Device->StopTimer(&htim3);  // stop the timer
 		}
 
 	if(OCR_BRAKE_LIGHT == Device->led->led[Brake].ocr && OCR_REAR_LIGHT == Device->led->led[Rear].ocr)
-		{
-			HAL_TIM_Base_Stop_IT(&htim14);  // stop the timer
-			__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
-		}
+		Device->StopTimer(&htim14);  // stop the timer
 }
 
 // set OCR value to fade to
@@ -60,6 +55,10 @@ static void _primitiveBrakeLED(uint8_t value)
 
 static inline void __componentLED_On(const uint8_t val)
 {
+
+	Device->StartTimer(&htim2);  // start the timer
+	Device->StartTimer(&htim3);  // start the timer
+
 	TIM_OC_InitTypeDef sConfigOC =
 		{0};
 
@@ -117,10 +116,7 @@ static void _componentLED(const uint8_t val)
 			return;
 		}
 
-	__HAL_RCC_TIM14_CLK_ENABLE();  // start the clock
-	htim14.Instance->PSC = 799;  // reconfigure after peripheral was powered down
-	htim14.Instance->ARR = 199;
-	HAL_TIM_Base_Start_IT(&htim14);  // start the timer
+	Device->StartTimer(&htim14);  // start the timer
 }
 
 static __composite_led_t __LED =

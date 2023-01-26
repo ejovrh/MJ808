@@ -29,6 +29,9 @@ typedef struct	// struct describing devices on MJ818
 {
 	mj8x8_t *mj8x8;  // pointer to the base class
 	composite_led_t *led;  // pointer to LED structure
+
+	void (*StopTimer)(TIM_HandleTypeDef *timer);	// stops timer identified by argument
+	void (*StartTimer)(TIM_HandleTypeDef *timer);  // starts timer identified by argument
 } mj818_t;
 
 void mj818_ctor();	// declare constructor for concrete class
