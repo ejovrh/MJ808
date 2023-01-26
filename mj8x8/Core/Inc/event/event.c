@@ -1,11 +1,19 @@
+#include "main.h"
+
 #include "event.h"
 #include "stm32f0xx_hal.h"
 
 // a function that does nothing
-void DoNothing(void)
-{
-	return;
-}
+extern void DoNothing(void);
+
+#include "main.h"
+#if defined(MJ828_)	// if this particular device is active
+extern mj828_t *const Device;
+#endif
+
+#if defined(MJ808_)	// if this particular device is active
+extern mj808_t *const Device;
+#endif
 
 typedef struct	// event_handler_t actual
 {
@@ -45,18 +53,14 @@ static void _UnSetEvent(const uint8_t val)
 	__EventHandler.__index &= ~val;  // simply clears the bit at position bit_position
 
 	if(__EventHandler.__index == 0)
-		HAL_TIM_Base_Stop_IT(&htim17);  // start the timer
+		Device->StopTimer(&htim17);  // stop the timer
 }
 
 // sets bit at bit_position ( 1 to 8) in byte __index - _index will have values 0, 1, 2, 4, 8, 16...128
 static void _Notify(const uint8_t bit_position)
 {
 	__EventHandler.__index |= bit_position;  // simply sets the bit at position bit_position
-
-	__HAL_RCC_TIM17_CLK_ENABLE();  // start the clock
-	htim17.Instance->PSC = 799;  // reconfigure after peripheral was powered down
-	htim17.Instance->ARR = 24;
-	HAL_TIM_Base_Start_IT(&htim17);  // start the timer
+	Device->StartTimer(&htim17);  // start the timer
 }
 
 // calls __mjxxx_event_execution_function and passes on argument into it

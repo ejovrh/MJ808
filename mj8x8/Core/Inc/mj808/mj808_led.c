@@ -22,10 +22,7 @@ static void _FadeHandler(void)
 			++OCR_FRONT_LIGHT;
 
 			if(OCR_FRONT_LIGHT == Device->led->led[Front].ocr)
-				{
-					HAL_TIM_Base_Stop_IT(&htim14);  // stop the timer
-					__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
-				}
+				Device->StopTimer(&htim14);  // stop the timer
 		}
 
 	if(Device->led->led[Front].ocr < OCR_FRONT_LIGHT)  // fade down
@@ -33,11 +30,7 @@ static void _FadeHandler(void)
 			--OCR_FRONT_LIGHT;
 
 			if(OCR_FRONT_LIGHT == 0)
-				{
-					HAL_TIM_Base_Stop_IT(&htim14);  // stop the timer
-					__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
-					__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
-				}
+				Device->StartTimer(&htim14);  // start the timer
 		}
 }
 

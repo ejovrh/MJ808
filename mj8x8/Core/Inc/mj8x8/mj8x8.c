@@ -154,6 +154,7 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	__disable_irq();	// disable interrupts - the actual device constructor will enable them...
 
 //	HAL_Init();  // Reset of all peripherals, Initializes the Flash interface and the Systick
+	HAL_SuspendTick();	// stop systick interrupts since they are not needed
 
 	_SystemClockConfig();  // initialize the system clock
 	_GPIOInit();	// initialize device non-specific GPIOs
