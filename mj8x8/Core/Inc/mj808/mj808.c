@@ -238,7 +238,7 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 	if(timer->Instance == TIM2)  // front led PWM
 		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
 
-	if(timer->Instance == TIM14)	// led handling
+	if(timer->Instance == TIM14)  // led handling
 		__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
 
 	if(timer->Instance == TIM16)	// button handling
@@ -263,11 +263,11 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 			timer->Init.Period = 99;  // count to 100
 			timer->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;  // no division
 			timer->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;  // no pre-load
-			__HAL_RCC_TIM2_CLK_ENABLE();	// start the clock
+			__HAL_RCC_TIM2_CLK_ENABLE();  // start the clock
 			HAL_TIM_PWM_Init(timer);  // commit it
 
 			sConfigOC.OCMode = TIM_OCMODE_PWM1;
-			sConfigOC.Pulse = LED_OFF;	// 0 to 100% duty cycle in decimal numbers
+			sConfigOC.Pulse = LED_OFF;  // 0 to 100% duty cycle in decimal numbers
 			sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 			sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_2);  // commit it
@@ -302,8 +302,8 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 // device-specific constructor
 void mj808_ctor()
 {
-	// general device non-specific low-level hardware init & config
-	// only SIDH is supplied since with the addressing scheme SIDL is always 0
+// general device non-specific low-level hardware init & config
+// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A));	// call base class constructor & initialize own SID
 
 	_GPIOInit();	// initialize device-specific GPIOs
@@ -320,7 +320,7 @@ void mj808_ctor()
 
 	EventHandler->fpointer = &_event_execution_function_mj808;	// implements event hander for this device
 
-	// interrupt init
+// interrupt init
 	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // EXTI0 - Pushbutton handling
 	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 
