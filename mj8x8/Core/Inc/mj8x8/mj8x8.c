@@ -1,10 +1,11 @@
 #include "main.h"
 #include "mj8x8.h"
 
-#define TIM1_BRK_UP_TRG_COM_IRQn 13	// FIXME - should be included somehow, but isnt..
-#define CEC_CAN_IRQn 30	// FIXME - should be included somehow, but isnt..
+#define TIM1_BRK_UP_TRG_COM_IRQn 13	// FIXME - should be included somehow, but isn't..
+#define CEC_CAN_IRQn 30	// FIXME - should be included somehow, but isn't..
 
 static TIM_HandleTypeDef htim1;  // Timer1 object
+static IWDG_HandleTypeDef hiwdg;  // Independent Watchdog object
 
 typedef struct	// mj8x8_t actual
 {
@@ -80,6 +81,16 @@ static inline void _SystemClockConfig(void)
 	HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0);  //
 }
 
+// IWDG init
+void _IWDGInit(void)
+{
+	hiwdg.Instance = IWDG;
+	hiwdg.Init.Prescaler = IWDG_PRESCALER_4;	// 40kHz / 4 = 10kHz
+	hiwdg.Init.Window = 4095;
+	hiwdg.Init.Reload = 4095;  // 4095/10kHz = 409.5ms
+	HAL_IWDG_Init(&hiwdg);
+}
+
 // GPIO init - device non-specific
 static inline void _GPIOInit(void)
 {
@@ -148,6 +159,28 @@ static inline void _TimerInit(void)
 	HAL_TIM_Base_Start_IT(&htim1);	// start the timer
 }
 
+// stops timer identified by argument
+static void _StopTimer(TIM_HandleTypeDef *timer)
+{
+	HAL_TIM_Base_Stop_IT(timer);  // stop the timer
+
+	if(timer->Instance == TIM1)  // hearbeat
+		__HAL_RCC_TIM1_CLK_DISABLE();  // stop the clock
+}
+
+// starts timer identified by argument
+static void _StartTimer(TIM_HandleTypeDef *timer)
+{
+	if(timer->Instance == TIM1)  // heartbeat
+		{
+			__HAL_RCC_TIM1_CLK_ENABLE();  // start the clock
+			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
+			timer->Instance->ARR = 1249;
+		}
+
+	HAL_TIM_Base_Start_IT(timer);  // start the timer
+}
+
 // general device non-specific low-level hardware init & config
 mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 {
@@ -157,12 +190,16 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	HAL_SuspendTick();	// stop systick interrupts since they are not needed
 
 	_SystemClockConfig();  // initialize the system clock
+	_IWDGInit();	// initialise the independent watchdog
 	_GPIOInit();	// initialize device non-specific GPIOs
 	_TimerInit();  // initialize Timer - heartbeat
 
 	__MJ8x8.__NumericalCAN_ID = (uint8_t) ((in_own_sidh >> 2) & 0x0F);	// set the CAN id.
 
 	__MJ8x8.public.can = can_ctor();	// pass on CAN public part
+
+	__MJ8x8.public.StopTimer = &_StopTimer;  // stops timer identified by argument
+	__MJ8x8.public.StartTimer = &_StartTimer;  // starts timer identified by argument
 
 	__MJ8x8.public.can->own_sidh = in_own_sidh;  // high byte
 	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);	// low byte
@@ -181,6 +218,8 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 // timer 1 ISR - 125ms interrupt - CAN bus heartbeat
 void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 {
+	HAL_IWDG_Refresh(&hiwdg);  // refresh the watchdog
+
 	HAL_TIM_IRQHandler(&htim1);  // service the interrupt
 	// TODO - implement sleep cycles for processor and CAN bus hardware
 
