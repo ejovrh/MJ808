@@ -37,7 +37,7 @@ void _DisplayBatteryVoltage(void)
 {
 	volatile uint16_t temp = Device->adc->GetVal(Vbat);
 
-	if(temp <= 1845)	// 4.2V
+	if(temp <= 1845 && temp > 1)	// 4.2V
 		Device->led->Shine(Red);
 
 	if(temp > 1845)  // 4.2V
@@ -57,14 +57,25 @@ void _DisplayBatteryVoltage(void)
 // cases in this switch-case statement must be unique for all events on this device
 void _event_execution_function_mj828(uint8_t val)
 {
-	EventHandler->UnSetEvent(val);
+	EventHandler->UnSetEvent(val);	//
+
+	Device->mj8x8->FlagActive = (  //	set device to state according to button press
+	(  //
+	Device->button->button[PushButton]->byte ||  // ORed byte values indicate _some_ button press is active
+	Device->button->button[LeverFront]->byte ||  //
+	Device->button->button[LeverBrake]->byte) > 0  // translate the above fact into true or false
+	//
+	);
 
 	switch(val)
 		// based on array value at position #foo of array e.g. FooButtonCaseTable[]
 		{
-		case 0x01:	// error button press
-			// TODO - implement device function on button error press
-			break;
+		case 0x00:	// not defined
+			return;
+
+		case 0x01:	// button error: - do the error thing
+			__Device.public.led = _virtual_led_ctorMJ828();  // reset the LED component
+			return;
 
 		case 0x02:	// lever back - braking action
 			Device->led->Shine(Red);
@@ -86,11 +97,23 @@ void _event_execution_function_mj828(uint8_t val)
 			Device->led->Shine(Yellow);
 			break;
 
-//		case 0x20:	// next case
-//			break;
+			//		case 0x08:	// next case
+			//			break;
 
-//		case 0x80:	// next case
-//			break;
+			//		case 0x10:	// next case
+			//			break;
+
+			//		case 0x20:	// next case
+			//			break;
+
+			//		case 0x20:	// next case
+			//			break;
+
+			//		case 0x80:	// next case
+			//			break;
+
+			//		case 0x80:	// next case
+			//			break;
 
 		default:	// no value passed
 			break;
@@ -277,23 +300,24 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 // starts timer identified by argument
 static void _StartTimer(TIM_HandleTypeDef *timer)
 {
-	timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
-
 	if(timer->Instance == TIM14)	// charlieplexing
 		{
 			__HAL_RCC_TIM14_CLK_ENABLE();  // start the clock
+			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
 			timer->Instance->ARR = 19;
 		}
 
 	if(timer->Instance == TIM16)	// button handling
 		{
 			__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
+			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
 			timer->Instance->ARR = 249;
 		}
 
 	if(timer->Instance == TIM17)	// event handling
 		{
 			__HAL_RCC_TIM17_CLK_ENABLE();  // start the clock
+			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
 			timer->Instance->ARR = 24;
 		}
 
@@ -322,13 +346,13 @@ void mj828_ctor()
 	EventHandler->fpointer = &_event_execution_function_mj828;	// implements event hander for this device
 
 	// interrupt init
-	HAL_NVIC_SetPriority(TIM14_IRQn, 0, 0);  // charlieplexed LED handler timer (on demand)
+	HAL_NVIC_SetPriority(TIM14_IRQn, 4, 0);  // charlieplexed LED handler timer (on demand)
 	HAL_NVIC_EnableIRQ(TIM14_IRQn);
 
-	HAL_NVIC_SetPriority(TIM16_IRQn, 0, 0);  // button handler timer (on demand)
+	HAL_NVIC_SetPriority(TIM16_IRQn, 2, 0);  // button handler timer (on demand)
 	HAL_NVIC_EnableIRQ(TIM16_IRQn);
 
-	HAL_NVIC_SetPriority(TIM17_IRQn, 0, 0);  // event handler timer (on demand)
+	HAL_NVIC_SetPriority(TIM17_IRQn, 3, 0);  // event handler timer (on demand)
 	HAL_NVIC_EnableIRQ(TIM17_IRQn);
 
 	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // EXTI0 & EXTI1 - Pushbutton & LeverBrake handling
@@ -340,9 +364,7 @@ void mj828_ctor()
 //	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);  //
 //	HAL_NVIC_EnableIRQ(TIM2_IRQn);
 
-	HAL_TIM_Base_Start(&htim2);
-
-	__enable_irq();  // enable interrupts
+	HAL_TIM_Base_Start(&htim2);  // ADC timer
 }
 
 // device-specific interrupt handlers

@@ -5,15 +5,16 @@
 #include "mj808\mj808_led.c"	// concrete device-specific LED functions
 #include "mj808\mj808_button.c"	// concrete device-specific button functions
 
-#define EXTI0_1_IRQn 5	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
-#define TIM14_IRQn 19	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
-#define TIM16_IRQn 21	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
-#define TIM17_IRQn 22	// FIXME - EXTI0_1_IRQn should be included somehow, but isnt..
+#define EXTI0_1_IRQn 5	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
+#define TIM14_IRQn 19	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
+#define TIM16_IRQn 21	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
+#define TIM17_IRQn 22	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
 
 TIM_HandleTypeDef htim2;	// front light PWM on channel 2
 TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 TIM_HandleTypeDef htim16;  // Timer16 object - button handling - 25ms
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
+
 typedef struct	// mj808_t actual
 {
 	mj808_t public;  // public struct
@@ -25,16 +26,21 @@ static __mj808_t __Device __attribute__ ((section (".data")));  // preallocate _
 // cases in this switch-case statement must be unique for all events on this device
 void _event_execution_function_mj808(const uint8_t val)
 {
-	EventHandler->UnSetEvent(val);
+	EventHandler->UnSetEvent(val);	//
+
+	Device->mj8x8->FlagActive = ((Device->button->button[PushButton]->byte > 0) | __HAL_RCC_TIM2_IS_CLK_ENABLED());  // set device to state according to button press, take also timer2 into account
 
 	switch(val)
 		{
+		case 0x00:	// not defined
+			return;
+
 		case 0x01:	// button error: - do the error thing
-			Device->led->Shine(0);
+			__Device.public.led = _virtual_led_ctorMJ808();  // reset the LED component
 			return;
 
 		case 0x02:	// button hold
-			Device->led->Shine(Device->button->button[PushButton]->Hold);  // turn the device off
+			Device->led->Shine(Device->button->button[PushButton]->Hold);  // turn the device on/off
 			break;
 
 		case 0x04:	// button toggle
@@ -54,6 +60,9 @@ void _event_execution_function_mj808(const uint8_t val)
 //			break;
 
 //		case 0x20:	// next case
+//			break;
+
+//		case 0x80:	// next case
 //			break;
 
 //		case 0x80:	// next case
@@ -275,7 +284,7 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 			return;
 		}
 
-	if(timer->Instance == TIM14)	// led handling
+	if(timer->Instance == TIM14)	// LED fading
 		{
 			__HAL_RCC_TIM14_CLK_ENABLE();  // start the clock
 			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
@@ -312,8 +321,8 @@ void mj808_ctor()
 	__Device.public.led = _virtual_led_ctorMJ808();  // call virtual constructor & tie in object addresses
 	__Device.public.button = _virtual_button_ctorMJ808();  // call virtual constructor & tie in object addresses
 
-	__Device.public.StopTimer = &_StopTimer;	//
-	__Device.public.StartTimer = &_StartTimer;	//
+	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
+	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;	// implements device-specific operation depending on bus activity
 	__Device.public.mj8x8->SystemInterrupt = &_SystemInterrupt;  // implement device-specific system interrupt code
@@ -324,25 +333,21 @@ void mj808_ctor()
 	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // EXTI0 - Pushbutton handling
 	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 
-	HAL_NVIC_SetPriority(TIM14_IRQn, 0, 0);  // charlieplexed LED handler timer (on demand)
+	HAL_NVIC_SetPriority(TIM14_IRQn, 0, 0);  // LED fade timer (on demand)
 	HAL_NVIC_EnableIRQ(TIM14_IRQn);
 
-	HAL_NVIC_SetPriority(TIM16_IRQn, 0, 0);  // button handler timer (on demand)
+	HAL_NVIC_SetPriority(TIM16_IRQn, 2, 0);  // button handler timer (on demand)
 	HAL_NVIC_EnableIRQ(TIM16_IRQn);
 
-	HAL_NVIC_SetPriority(TIM17_IRQn, 0, 0);  // event handler timer (on demand)
+	HAL_NVIC_SetPriority(TIM17_IRQn, 3, 0);  // event handler timer (on demand)
 	HAL_NVIC_EnableIRQ(TIM17_IRQn);
-
-	__enable_irq();  // enable interrupts
-
-	Device->led->led[Utility].Shine(UTIL_LED_GREEN_BLINK_1X);  // crude "I'm finished" indicator
 }
 
 // device-specific interrupt handlers
 // pushbutton ISR
 void EXTI0_1_IRQHandler(void)
 {
-	Device->StartTimer(&htim16);  // start the timer
+	Device->StartTimer(&htim16);  // start the button handling timer
 
 	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// interrupt source detection
 // Pushbutton: released - pin high, pressed - pin low

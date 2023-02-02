@@ -79,6 +79,7 @@ static void _primitiveUtilityLED(uint8_t in_val)
 
 static void __componentLED_On(void)
 {
+	Device->StartTimer(&htim14);  // start the timer
 	Device->StartTimer(&htim2);  // start the timer
 
 	Device->led->led[Utility].Shine(UTIL_LED_GREEN_ON);  // green LED on
@@ -92,6 +93,8 @@ static void __componentLED_On(void)
 
 static void __componentLED_Off(void)
 {
+	Device->StartTimer(&htim14);  // start the timer
+
 	Device->led->led[Utility].Shine(UTIL_LED_GREEN_OFF);	// green LED off
 	Device->led->led[Front].Shine(0);  // front light off
 
@@ -108,8 +111,6 @@ static void _componentLED(const uint8_t val)
 		__componentLED_On();	// delegate indirectly to the leaves
 	else
 		__componentLED_Off();
-
-	Device->StartTimer(&htim14);  // start the timer
 }
 
 static __composite_led_t __LED =

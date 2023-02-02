@@ -159,38 +159,26 @@ static inline void _TimerInit(void)
 	HAL_TIM_Base_Start_IT(&htim1);	// start the timer
 }
 
-// stops timer identified by argument
-static void _StopTimer(TIM_HandleTypeDef *timer)
+// puts device to sleep
+static void _Sleep(void)
 {
-	HAL_TIM_Base_Stop_IT(timer);  // stop the timer
-
-	if(timer->Instance == TIM1)  // hearbeat
-		__HAL_RCC_TIM1_CLK_DISABLE();  // stop the clock
-}
-
-// starts timer identified by argument
-static void _StartTimer(TIM_HandleTypeDef *timer)
-{
-	if(timer->Instance == TIM1)  // heartbeat
+	if(__MJ8x8.public.FlagActive)
+		HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
+	else
 		{
-			__HAL_RCC_TIM1_CLK_ENABLE();  // start the clock
-			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
-			timer->Instance->ARR = 1249;
+			HAL_PWR_DisableSleepOnExit();
+			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // go into stop mode
 		}
-
-	HAL_TIM_Base_Start_IT(timer);  // start the timer
 }
 
 // general device non-specific low-level hardware init & config
 mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 {
-	__disable_irq();	// disable interrupts - the actual device constructor will enable them...
-
 //	HAL_Init();  // Reset of all peripherals, Initializes the Flash interface and the Systick
-	HAL_SuspendTick();	// stop systick interrupts since they are not needed
+//	HAL_SuspendTick();	// stop systick interrupts since they are not needed
 
 	_SystemClockConfig();  // initialize the system clock
-	_IWDGInit();	// initialise the independent watchdog
+//	_IWDGInit();	// initialise the independent watchdog
 	_GPIOInit();	// initialize device non-specific GPIOs
 	_TimerInit();  // initialize Timer - heartbeat
 
@@ -198,27 +186,28 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 
 	__MJ8x8.public.can = can_ctor();	// pass on CAN public part
 
-	__MJ8x8.public.StopTimer = &_StopTimer;  // stops timer identified by argument
-	__MJ8x8.public.StartTimer = &_StartTimer;  // starts timer identified by argument
+	__MJ8x8.public.Sleep = &_Sleep;  // puts device to sleep
+
+	__MJ8x8.public.FlagActive = 0;	// mark the device as inactive by default (will go immediately into sleep/stop move after initialisation)
 
 	__MJ8x8.public.can->own_sidh = in_own_sidh;  // high byte
 	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);	// low byte
 	__MJ8x8.public.SystemInterrupt = &_DoNothing;  //	do nothing, actual implementation may be done in specific device constructor
 
 	// interrupt init
-	HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 1, 0);
 	HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
 
-	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 1, 1);
 	HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
-
+	HAL_DBGMCU_EnableDBGStopMode();
 	return &__MJ8x8.public;  // return address of public part; calling code accesses it via pointer
 }
 
 // timer 1 ISR - 125ms interrupt - CAN bus heartbeat
 void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 {
-	HAL_IWDG_Refresh(&hiwdg);  // refresh the watchdog
+//	HAL_IWDG_Refresh(&hiwdg);  // refresh the watchdog
 
 	HAL_TIM_IRQHandler(&htim1);  // service the interrupt
 	// TODO - implement sleep cycles for processor and CAN bus hardware
@@ -252,6 +241,8 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 
 	if((!MsgHandler->Devices) && (__MJ8x8.__FlagDoDefaultOperation > 1))	// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
 		__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
+
+	Device->mj8x8->Sleep();  // go into an appropriate sleep state as allowed by FlagActive
 }
 
 // device non-specific interrupt handlers

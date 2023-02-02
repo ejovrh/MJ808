@@ -263,6 +263,7 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 
 void mj818_ctor()
 {
+// TODO - test stop mode properly once CAN infra is working
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B));	// call base class constructor & initialize own SID
 
@@ -276,13 +277,11 @@ void mj818_ctor()
 
 	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;	// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
-	__Device.public.mj8x8->SystemInterrupt = &_SystemInterrupt;  // implement device-specific system interrupt code
+	__Device.public.mj8x8->FlagActive = 1;	// active by default
 
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM14_IRQn, 0, 0);  // charlieplexed LED handler timer (on demand)
 	HAL_NVIC_EnableIRQ(TIM14_IRQn);
-
-	__enable_irq();  // enable interrupts
 }
 
 // device-specific interrupt handlers

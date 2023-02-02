@@ -189,6 +189,8 @@ static __composite_led_t __LED =
 // implementation of virtual constructor for LEDs
 static composite_led_t* _virtual_led_ctorMJ828()
 {
+	__LED.flags = 0;	// zero the flags
+
 	__LED.public.led[Red].Shine = &__primitiveRedLEDHanlder;  // control function for one single LED
 	__LED.public.led[Green].Shine = &__primitiveGreenLEDHandler;
 	__LED.public.led[Yellow].Shine = &__primitiveYellowLEDHandler;

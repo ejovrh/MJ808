@@ -7,10 +7,10 @@ typedef struct	// individual_button_t actual
 {
 	individual_button_t public;  // public struct
 
-	uint8_t __state :1;  // counter used for button press timing
+	uint16_t __state :1;  // counter used for button press timing
 
 	uint8_t *__ButtonCaseptr;  // pointer to array in which button events are bound to switch-case statements in __mjxxx_button_execution_function
-	uint8_t __hold_counter :7;  // counter to count button press duration for hold_X states
+	uint16_t __hold_counter :15;  // counter to count button press duration for hold_X states
 } __individual_button_t;
 
 typedef struct	// button_t actual
