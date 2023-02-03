@@ -4,7 +4,11 @@
 // button debouncer for devices with buttons
 void __HandleButton(__individual_button_t *const in_button, event_handler_t *const in_event)
 {
-	// TODO - write button handler rationale
+	/* button handler rationale
+	 * buttons are EXIT-based. e.g. EXTI0 will mark a button as pressed via Mark() and start a button handling timer
+	 * 	which will call this function periodically.
+	 * upon button release a 2nd Mark() call starts the state determination which is then communicated to the event handler.
+	 */
 
 	if(in_button->__state)  // 1 - pressed down
 		{
