@@ -4,8 +4,6 @@
 #include "mj818\mj818.h"
 #include "mj818\mj818_led.c"	// concrete device-specific LED functions
 
-#define TIM14_IRQn 19	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
-
 TIM_HandleTypeDef htim2;	// rear light PWM on channel 1
 TIM_HandleTypeDef htim3;	// brake light PWM on channel 4
 TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
