@@ -5,11 +5,6 @@
 #include "mj808\mj808_led.c"	// concrete device-specific LED functions
 #include "mj808\mj808_button.c"	// concrete device-specific button functions
 
-#define EXTI0_1_IRQn 5	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
-#define TIM14_IRQn 19	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
-#define TIM16_IRQn 21	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
-#define TIM17_IRQn 22	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
-
 TIM_HandleTypeDef htim2;	// front light PWM on channel 2
 TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 TIM_HandleTypeDef htim16;  // Timer16 object - button handling - 25ms

@@ -1,9 +1,6 @@
 #include "main.h"
 #include "mj8x8.h"
 
-#define TIM1_BRK_UP_TRG_COM_IRQn 13	// FIXME - should be included somehow, but isn't..
-#define CEC_CAN_IRQn 30	// FIXME - should be included somehow, but isn't..
-
 static TIM_HandleTypeDef htim1;  // Timer1 object
 static IWDG_HandleTypeDef hiwdg;  // Independent Watchdog object
 

@@ -9,9 +9,6 @@
 
 #define ADC_BUF_SIZE 3	// 3 channels to read
 
-#define DMA1_Channel1_IRQn 9	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
-#define ADC1_IRQn 12	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
-
 static ADC_HandleTypeDef hadc;  // ADC object
 
 static __adc_t __ADC;  // forward declaration of object

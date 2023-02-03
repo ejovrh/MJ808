@@ -6,13 +6,6 @@
 #include "mj828\mj828_button.c"	// concrete device-specific button functions
 #include "mj828\mj828_adc.c"	// concrete device-specific ADC functions
 
-#define EXTI0_1_IRQn 5	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
-#define EXTI2_3_IRQn 6	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
-//#define TIM2_IRQn 15	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
-#define TIM14_IRQn 19	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
-#define TIM16_IRQn 21	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
-#define TIM17_IRQn 22	// FIXME - EXTI0_1_IRQn should be included somehow, but isn't..
-
 TIM_HandleTypeDef htim2;  // Timer2 object - ADC conversion - 500ms
 TIM_HandleTypeDef htim14;  // Timer14 object - charlieplexed LED handling - 2ms
 TIM_HandleTypeDef htim16;  // Timer16 object - button handling - 25ms
