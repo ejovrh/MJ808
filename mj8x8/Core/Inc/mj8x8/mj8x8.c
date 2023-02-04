@@ -1,4 +1,5 @@
 #include "mj8x8.h"
+#include "can.h"
 
 static TIM_HandleTypeDef htim1;  // Timer1 object
 static IWDG_HandleTypeDef hiwdg;  // Independent Watchdog object
@@ -87,7 +88,6 @@ static inline void _GPIOInit(void)
 		{0};
 
 	__HAL_RCC_GPIOA_CLK_ENABLE();  // enable peripheral clock
-//	__HAL_RCC_CAN1_CLK_ENABLE();	// enable CAN bus clock
 
 	// GPIO init is done in two steps:
 	//	1. set all to analog in order to reduce power consumption (done here)
@@ -186,9 +186,6 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 1, 0);
 	HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
-
-	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 1, 1);
-	HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
 
 //	HAL_DBGMCU_EnableDBGStopMode();
 

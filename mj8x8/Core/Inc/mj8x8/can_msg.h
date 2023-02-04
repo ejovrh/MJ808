@@ -1,8 +1,6 @@
 #ifndef CORE_INC_MJ8X8_CAN_MSG_H_
 #define CORE_INC_MJ8X8_CAN_MSG_H_
 
-#include <inttypes.h>
-
 #pragma once
 
 #define CAN_MAX_MSG_LEN 8	// 8 bytes are the max. length of a CAN message
@@ -18,7 +16,7 @@ typedef struct	// can_msg_t struct describing a generic CAN message
 	uint8_t eid0;  // Extended Identifier - not used here
 	uint8_t dlc;	// Data Length Code
 	uint8_t data[CAN_MAX_MSG_LEN];	// Data, length identified by DLC
-	uint8_t rx_status;	// holds RX and TX status metadata
+	uint8_t rx_status;	// holds RX and TX status meta-data
 // preserve byte order for sequential reads/writes
 } can_msg_t __attribute__((aligned(8)));
 

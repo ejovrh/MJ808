@@ -1,8 +1,8 @@
 #ifndef CORE_INC_MJ8X8_CAN_H_
 #define CORE_INC_MJ8X8_CAN_H_
 
+#include <inttypes.h>
 #include "can_msg.h"
-//#include "mcp2515_hw_defines.h"
 
 typedef struct can_t	// can_t struct describing the CAN device as a whole
 {
@@ -17,8 +17,6 @@ typedef struct can_t	// can_t struct describing the CAN device as a whole
 	void (*const BitModify)(const uint8_t addr, const uint8_t mask, const uint8_t byte);	// modifies bit identified by "byte" according to "mask" in some register
 } can_t __attribute__((aligned(8)));
 
-can_t* can_ctor();	// CAN object constructor - does function pointer & hardware initialization
-
-void CEC_CAN_IRQHandler(void);  // TODO - implement & verify CAN message interrupts/reception
+can_t* can_ctor();	// CAN object constructor - does function pointer & hardware initialisation
 
 #endif /* CORE_INC_MJ8X8_CAN_H_ */
