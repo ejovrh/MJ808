@@ -1,4 +1,3 @@
-#include "main.h"
 #include "mj8x8.h"
 
 static TIM_HandleTypeDef htim1;  // Timer1 object
@@ -31,12 +30,6 @@ static void _Heartbeat(message_handler_t *const msg)
 					msg->SendMessage(CMND_ANNOUNCE, 0x00, 1);  // broadcast CAN heartbeat message
 
 					__MJ8x8.__FlagDoHeartbeat = 0;	// heartbeat mode of for the remaining counter iterations
-
-#if defined(MJ808_)
-					// TODO - access via object
-					//Device->led->led[Utility].Shine(UTIL_LED_RED_BLINK_1X);
-					//_util_led_mj808(UTIL_LED_RED_BLINK_1X);
-#endif
 				}
 		}
 
@@ -170,9 +163,6 @@ static void _Sleep(void)
 // general device non-specific low-level hardware init & config
 mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 {
-//	HAL_Init();  // Reset of all peripherals, Initializes the Flash interface and the Systick
-//	HAL_SuspendTick();	// stop systick interrupts since they are not needed
-
 	_SystemClockConfig();  // initialize the system clock
 //	_IWDGInit();	// initialise the independent watchdog
 	_GPIOInit();	// initialize device non-specific GPIOs
@@ -189,13 +179,19 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	__MJ8x8.public.can->own_sidh = in_own_sidh;  // high byte
 	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);	// low byte
 
+	HAL_NVIC_DisableIRQ(SysTick_IRQn);	// get rid of SysTick
+	HAL_NVIC_ClearPendingIRQ(SysTick_IRQn);
+	HAL_SuspendTick();
+
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 1, 0);
 	HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
 
 	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 1, 1);
 	HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
-	HAL_DBGMCU_EnableDBGStopMode();
+
+//	HAL_DBGMCU_EnableDBGStopMode();
+
 	return &__MJ8x8.public;  // return address of public part; calling code accesses it via pointer
 }
 
@@ -237,7 +233,7 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 	if((!MsgHandler->Devices) && (__MJ8x8.__FlagDoDefaultOperation > 1))	// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
 		__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
 
-	Device->mj8x8->Sleep();  // go into an appropriate sleep state as allowed by FlagActive
+	__MJ8x8.public.Sleep();  // go into an appropriate sleep state as allowed by FlagActive
 }
 
 // device non-specific interrupt handlers
