@@ -1,10 +1,8 @@
 #ifndef MJ828_BUTTON_C_
 #define MJ828_BUTTON_C_
 
-#include "main.h"
 #if defined(MJ828_)	// if this particular device is active
 
-#include "mj828\mj828.h"
 #include "button\button_types_actual.c"	// various __*button_t types - for convenience in one place for all LED devices
 
 extern void __HandleButton(__individual_button_t *const in_button, event_handler_t *const in_event);
@@ -74,7 +72,7 @@ static __individual_button_t __button_actual [BUTTON_COUNT] =
 	{0};  // initialize array of 3 structs, one for each of the 3 device buttons
 
 // implementation of virtual constructor for buttons
-static button_t* _virtual_button_ctorMJ828(void)
+button_t* _virtual_button_ctorMJ828(void)
 {
 	__button_actual[PushButton].__ButtonCaseptr = PushButtonCaseTable;	// set the casetable
 	__button_actual[LeverFront].__ButtonCaseptr = LeverFrontCaseTable;	// ditto

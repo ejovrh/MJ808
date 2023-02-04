@@ -1,11 +1,9 @@
 #ifndef MJ828_ADC_C_
 #define MJ828_ADC_C_
 
-#include "main.h"
 #if defined(MJ828_)	// if this particular device is active
 
 #include "adc\adc_actual.c"
-#include "mj828\mj828.h"
 
 #define ADC_BUF_SIZE 3	// 3 channels to read
 
@@ -69,7 +67,7 @@ static void _ADCInit(void)
 	HAL_ADC_Start_IT(&hadc);
 }
 
-static adc_t* adc_ctor(void)
+adc_t* adc_ctor(void)
 {
 	_ADCInit();  // initialize ADC
 

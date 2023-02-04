@@ -1,10 +1,8 @@
 #ifndef MJ808_LED_C_
 #define MJ808_LED_C_
 
-#include "main.h"
 #if defined(MJ808_)	// if this particular device is active
 
-#include "mj808\mj808.h"
 #include "led\led.h"
 
 #include "led\composite_led_actual.c"	// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
@@ -121,7 +119,7 @@ static __composite_led_t __LED =
 	};
 
 // implementation of virtual constructor for LEDs
-static composite_led_t* _virtual_led_ctorMJ808()
+composite_led_t* _virtual_led_ctorMJ808()
 {
 	__LED.public.led[Utility].Shine = &_primitiveUtilityLED;  // LED-specific implementation
 	__LED.public.led[Utility].ocr = 0;	// TODO - not needed yet but it has potential...

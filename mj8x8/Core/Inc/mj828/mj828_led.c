@@ -1,10 +1,8 @@
 #ifndef MJ828_LED_C_
 #define MJ828_LED_C_
 
-#include "main.h"
 #if defined(MJ828_)	// if this particular device is active
 
-#include "mj828\mj828.h"
 #include "led\led.h"
 
 #include "led\composite_led_actual.c"	// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
@@ -187,7 +185,7 @@ static __composite_led_t __LED =
 	};
 
 // implementation of virtual constructor for LEDs
-static composite_led_t* _virtual_led_ctorMJ828()
+composite_led_t* _virtual_led_ctorMJ828()
 {
 	__LED.flags = 0;	// zero the flags
 

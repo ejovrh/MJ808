@@ -1,10 +1,8 @@
 #ifndef MJ818_LED_C_
 #define MJ818_LED_C_
 
-#include "main.h"
 #if defined(MJ818_)	// if this particular device is active
 
-#include "mj818\mj818.h"
 #include "led\led.h"
 
 #include "led\composite_led_actual.c"	// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
@@ -86,7 +84,7 @@ static __composite_led_t __LED =
 	.flags = 0  //
 	};
 
-static composite_led_t* _virtual_led_ctorMJ818()
+composite_led_t* _virtual_led_ctorMJ818()
 {
 	__LED.public.led[Rear].Shine = &_primitiveRearLED;  // LED-specific implementation
 	__LED.public.led[Brake].Shine = &_primitiveBrakeLED;  // LED-specific implementation
