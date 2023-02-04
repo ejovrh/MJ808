@@ -228,12 +228,6 @@ static inline void _TimerInit(void)
 	HAL_TIMEx_MasterConfigSynchronization(&htim14, &sMasterConfig);
 }
 
-// interrupt extension, triggered by timer 1 ISR - 2.5ms interrupt in mj8x8
-void _SystemInterrupt(void)
-{
-	;
-}
-
 // stops timer identified by argument
 static void _StopTimer(TIM_HandleTypeDef *timer)
 {
@@ -320,7 +314,6 @@ void mj808_ctor()
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;	// implements device-specific operation depending on bus activity
-	__Device.public.mj8x8->SystemInterrupt = &_SystemInterrupt;  // implement device-specific system interrupt code
 
 	EventHandler->fpointer = &_event_execution_function_mj808;	// implements event hander for this device
 

@@ -24,7 +24,6 @@ typedef struct	// "base class" struct for mj8x8 devices
 	void (*const HeartBeat)(message_handler_t *const msg);	// default periodic heartbeat for all devices
 	void (*EmptyBusOperation)(void);	// device's default operation on empty bus, implemented in derived class
 	void (*PopulatedBusOperation)(message_handler_t *const in_msg);  // device operation on populated bus, executed by incoming msg ISR; operates by means of MsgHandler object
-	void (*SystemInterrupt)(void);	//	__weak declaration - re-declare in device-specific constructor
 
 	void (*Sleep)(void);	// sleep commands - quite common to each device
 } mj8x8_t;

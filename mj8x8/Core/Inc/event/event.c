@@ -3,10 +3,6 @@
 #include "event.h"
 #include "stm32f0xx_hal.h"
 
-// a function that does nothing
-extern void DoNothing(void);
-
-#include "main.h"
 #if defined(MJ828_)	// if this particular device is active
 extern mj828_t *const Device;
 #endif
@@ -46,6 +42,12 @@ extern __event_handler_t __EventHandler;  // declare event_handler_t actual
  *		each subject ought to have its own case table
  *		all values in all case table arrays must be unique
  */
+// a function that does nothing
+
+static inline void _DoNothing(void)
+{
+	return;
+}
 
 // sets bit at bit_position ( 1 to 8) in byte __index
 static void _UnSetEvent(const uint8_t val)
@@ -78,7 +80,7 @@ static void _HandleEvent(void)
 
 __event_handler_t __EventHandler =  // instantiate event_handler_t actual and set function pointers
 	{  //
-	.public.fpointer = &DoNothing,	// default -- if not initialize: do nothing
+	.public.fpointer = &_DoNothing,  // default -- if not initialize: do nothing
 	.public.Notify = &_Notify,	// notifies about an event by setting the index to a predetermined value (uint8_t array-based lookup table)
 	.public.UnSetEvent = &_UnSetEvent,	// un-does what Nofity() does
 	.public.HandleEvent = &_HandleEvent  // handles event based on index

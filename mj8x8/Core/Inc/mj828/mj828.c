@@ -192,12 +192,6 @@ static inline void _GPIOInit(void)
 	HAL_GPIO_Init(Phototransistor_GPIO_Port, &GPIO_InitStruct);
 }
 
-// interrupt extension, triggered by timer 1 ISR - 2.5ms interrupt in mj8x8
-void _SystemInterrupt(void)
-{
-	;
-}
-
 // Timer init - timer17 10ms periodic (event handler),
 static inline void _TimerInit(void)
 {
@@ -334,7 +328,6 @@ void mj828_ctor()
 
 //	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ828;	// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
-	__Device.public.mj8x8->SystemInterrupt = &_SystemInterrupt;  // implement device-specific system interrupt code
 
 	EventHandler->fpointer = &_event_execution_function_mj828;	// implements event hander for this device
 

@@ -52,7 +52,6 @@ __mj8x8_t __MJ8x8 =  // instantiate mj8x8_t actual and set function pointers
 	{  //
 	.public.HeartBeat = &_Heartbeat,  // implement device-agnostic default behaviour - heartbeat
 	.public.EmptyBusOperation = &_DoNothing,  // implement device-agnostic default behaviour - do nothing, usually an override happens
-	.public.SystemInterrupt = &_DoNothing,	//	__weak declaration - re-declare in device-specific constructor
 	.__FlagDoHeartbeat = 1,  // start with discovery mode
 	.__FlagDoDefaultOperation = 0  // control flag
 	};
@@ -189,7 +188,6 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 
 	__MJ8x8.public.can->own_sidh = in_own_sidh;  // high byte
 	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);	// low byte
-	__MJ8x8.public.SystemInterrupt = &_DoNothing;  //	do nothing, actual implementation may be done in specific device constructor
 
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 1, 0);

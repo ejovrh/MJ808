@@ -157,12 +157,6 @@ static inline void _TimerInit(void)
 	HAL_TIMEx_MasterConfigSynchronization(&htim14, &sMasterConfig);
 }
 
-// interrupt extension, triggered by timer 1 ISR - 2.5ms interrupt in mj8x8
-void _SystemInterrupt(void)
-{
-	;
-}
-
 // stops timer identified by argument
 static void _StopTimer(TIM_HandleTypeDef *timer)
 {
