@@ -253,7 +253,7 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 	HAL_TIM_Base_Start_IT(timer);  // start the timer
 }
 
-void mj818_ctor()
+void mj818_ctor(void)
 {
 // TODO - test stop mode properly once CAN infra is working
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0

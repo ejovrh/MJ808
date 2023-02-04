@@ -298,7 +298,7 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 }
 
 // device-specific constructor
-void mj808_ctor()
+void mj808_ctor(void)
 {
 // general device non-specific low-level hardware init & config
 // only SIDH is supplied since with the addressing scheme SIDL is always 0

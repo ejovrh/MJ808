@@ -311,7 +311,7 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 	HAL_TIM_Base_Start_IT(timer);  // start the timer
 }
 
-void mj828_ctor()
+void mj828_ctor(void)
 {
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D));  // call base class constructor & initialize own SID
