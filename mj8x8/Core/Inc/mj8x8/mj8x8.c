@@ -192,6 +192,7 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	return &__MJ8x8.public;  // return address of public part; calling code accesses it via pointer
 }
 
+// device non-specific interrupt handlers
 // timer 1 ISR - 125ms interrupt - CAN bus heartbeat
 void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 {
@@ -232,5 +233,3 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 
 	__MJ8x8.public.Sleep();  // go into an appropriate sleep state as allowed by FlagActive
 }
-
-// device non-specific interrupt handlers
