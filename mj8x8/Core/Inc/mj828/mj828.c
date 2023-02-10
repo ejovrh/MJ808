@@ -30,19 +30,19 @@ void _DisplayBatteryVoltage(void)
 {
 	volatile uint16_t temp = Device->adc->GetVal(Vbat);
 
-	if(temp <= 1845 && temp > 1)	// 4.2V
+	if(temp <= 1302 && temp > 1)	// 4.2V
 		Device->led->Shine(Red);
 
-	if(temp > 1845)  // 4.2V
+	if(temp > 1302)  // 4.2V
 		Device->led->Shine(Battery1);
 
-	if(temp > 2373)  // 5.4V
+	if(temp > 1675)  // 5.4V
 		Device->led->Shine(Battery2);
 
-	if(temp > 2900)  // 6.6V
+	if(temp > 2048)  // 6.6V
 		Device->led->Shine(Battery3);
 
-	if(temp > 3429)  // 7.8V
+	if(temp > 2421)  // 7.8V
 		Device->led->Shine(Battery4);
 }
 
