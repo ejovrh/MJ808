@@ -108,8 +108,6 @@ static inline void _GPIOInit(void)
 
 	HAL_GPIO_WritePin(GPIOB, RedLED_Pin, GPIO_PIN_SET);  //	high - LED off
 	HAL_GPIO_WritePin(GPIOB, GreenLED_Pin, GPIO_PIN_SET);  // high - LED off
-	HAL_GPIO_WritePin(TCAN334_Shutdown_GPIO_Port, TCAN334_Shutdown_Pin, GPIO_PIN_SET);	// high - put device into shutdown
-	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, GPIO_PIN_SET);	// high - put device into standby
 
 	GPIO_InitStruct.Pin = TCAN334_Shutdown_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;

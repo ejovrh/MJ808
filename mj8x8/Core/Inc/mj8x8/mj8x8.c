@@ -152,17 +152,21 @@ static inline void _TimerInit(void)
 static void _Sleep(void)
 {
 	if(__MJ8x8.public.FlagActive)
-		HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
+		;
+//		HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
 	else
 		{
-			HAL_PWR_DisableSleepOnExit();
-			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // go into stop mode
+			;
+//			HAL_PWR_DisableSleepOnExit();
+//			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // go into stop mode
 		}
 }
 
 // general device non-specific low-level hardware init & config
 mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 {
+	HAL_Init();  // systick is needed for CAN
+
 	_SystemClockConfig();  // initialize the system clock
 //	_IWDGInit();	// initialise the independent watchdog
 	_GPIOInit();	// initialize device non-specific GPIOs

@@ -12,10 +12,10 @@
 #include "adc\adc.h"
 
 // definitions of device/PCB layout-specific hardware pins
-#define TCAN334_Standby_Pin GPIO_PIN_8
-#define TCAN334_Standby_GPIO_Port GPIOB
 #define TCAN334_Shutdown_Pin GPIO_PIN_1
 #define TCAN334_Shutdown_GPIO_Port GPIOF
+#define TCAN334_Standby_Pin GPIO_PIN_8
+#define TCAN334_Standby_GPIO_Port GPIOB
 #define LeverFront_Pin GPIO_PIN_1
 #define LeverFront_GPIO_Port GPIOA
 #define LeverFront_EXTI_IRQn EXTI0_1_IRQn

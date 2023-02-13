@@ -9,14 +9,14 @@
 #include "event\event.h"
 
 // definitions of device/PCB layout-dependent hardware pins
+#define TCAN334_Shutdown_Pin GPIO_PIN_4
+#define TCAN334_Shutdown_GPIO_Port GPIOB
 #define TCAN334_Standby_Pin GPIO_PIN_5
 #define TCAN334_Standby_GPIO_Port GPIOA
 #define BrakeLED_Pin GPIO_PIN_1
 #define BrakeLED_GPIO_Port GPIOB
 #define RearLED_Pin GPIO_PIN_15
 #define RearLED_GPIO_Port GPIOA
-#define TCAN334_Shutdown_Pin GPIO_PIN_4
-#define TCAN334_Shutdown_GPIO_Port GPIOB
 // definitions of device/PCB layout-dependent hardware pins
 
 enum mj818_leds  // enum of lights on this device

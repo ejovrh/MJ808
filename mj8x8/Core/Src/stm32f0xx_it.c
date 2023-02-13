@@ -28,3 +28,8 @@ void PendSV_Handler(void)  // This function handles Pendable request for system 
 {
 	;
 }
+
+void SysTick_Handler(void)
+{
+	HAL_IncTick();
+}

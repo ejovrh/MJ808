@@ -136,9 +136,6 @@ static inline void _GPIOInit(void)
 	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
 	__HAL_RCC_GPIOF_CLK_ENABLE();  // enable peripheral clock
 
-	HAL_GPIO_WritePin(TCAN334_Shutdown_GPIO_Port, TCAN334_Shutdown_Pin, GPIO_PIN_SET);	// high - put device into shutdown
-	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, GPIO_PIN_SET);	// high - put device into standby
-
 	GPIO_InitStruct.Pin = TCAN334_Shutdown_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
