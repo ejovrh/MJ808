@@ -2,7 +2,7 @@
 
 int main(void)
 {
-	__disable_irq();	// disable interrupts - the actual device constructor will enable them...
+	__disable_irq();	// disable interrupts until end of all initialisations
 
 	event_handler_ctor();  // call event handler constructor; the Device constructor further down has the chance to override EventHandler.fpointer and implement its own handler
 

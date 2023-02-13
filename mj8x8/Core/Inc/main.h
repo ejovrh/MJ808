@@ -9,7 +9,7 @@
 
 // TODO - investigate option bytes - RM0091 - 4.1.2 - in order to automatically determine a connected device
 
-#define MJ808_	// what device to compile for
+#define MJ828_	// what device to compile for
 
 #if defined(MJ808_)	// front light header include
 #include "mj808/mj808.h"

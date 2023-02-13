@@ -72,10 +72,22 @@ void _event_execution_function_mj828(uint8_t val)
 
 		case 0x02:	// lever back - braking action
 			Device->led->Shine(Red);
+
+			if(Device->button->button[LeverBrake]->Momentary)
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT), 0x20, 2);
+			else
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT), 0x00, 2);
+
 			break;
 
 		case 0x04:	// lever front - high beam
 			Device->led->Shine(Blue);
+
+			if(Device->button->button[LeverFront]->Momentary)
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH), 100, 2);
+			else
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT), 0, 2);
+
 			break;
 
 		case 0x08:	// pushbutton press
@@ -84,10 +96,22 @@ void _event_execution_function_mj828(uint8_t val)
 
 		case 0x10:	// pushbutton hold
 			Device->led->Shine(Green);
+
+			if(Device->button->button[PushButton]->Hold)
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH), 20, 2);
+			else
+				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT), 0, 2);
+
 			break;
 
 		case 0x20:	// next case
 			Device->led->Shine(Yellow);
+
+			if(Device->button->button[PushButton]->Toggle)
+				MsgHandler->SendMessage((CMND_DEVICE | UTIL_LED_RED_ON), 0, 1);
+			else
+				MsgHandler->SendMessage((CMND_DEVICE | UTIL_LED_RED_OFF), 0, 1);
+
 			break;
 
 			//		case 0x08:	// next case
