@@ -10,6 +10,16 @@ TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 TIM_HandleTypeDef htim16;  // Timer16 object - button handling - 25ms
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
 
+// TODO - these shouldn't really be here...
+static TIM_ClockConfigTypeDef sClockSourceConfig =
+	{0};
+
+static TIM_MasterConfigTypeDef sMasterConfig =
+	{0};
+
+static TIM_OC_InitTypeDef sConfigOC =
+	{0};
+
 typedef struct	// mj808_t actual
 {
 	mj808_t public;  // public struct
@@ -36,6 +46,24 @@ void _event_execution_function_mj808(const uint8_t val)
 
 		case 0x02:	// button hold
 			Device->led->Shine(Device->button->button[PushButton]->Hold);  // turn the device on/off
+
+			if(Device->button->button[PushButton]->Hold)
+				{
+					//send the messages out, UDP-style. no need to check if the device is actually online
+					MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);	// convey button press via CAN and the logic unit will do its own thing
+					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 20, 2);  // turn on rear light
+//					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT), 20, 2);  // turn on brake light
+					MsgHandler->SendMessage(DASHBOARD_LED_GREEN_ON, 0x00, 1);  // turn on yellow LED
+				}
+			else
+				{
+					// send the messages out, UDP-style. no need to check if the device is actually online
+					MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);  // convey button press via CAN and the logic unit will tell me what to do
+					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0, 2);  // turn off rear light
+//					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT), 0, 2);  // turn on brake light
+					MsgHandler->SendMessage(DASHBOARD_LED_GREEN_OFF, 0x00, 1);  // turn off yellow LED
+				}
+
 			break;
 
 		case 0x04:	// button toggle
@@ -80,22 +108,18 @@ void _PopulatedBusOperationMJ808(message_handler_t *const in_msg)
 			return;
 		}
 
+	if(msg->COMMAND== (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH))  // front positional light - high beam
+		{
+			__Device.public.led->led[Front].Shine(msg->ARGUMENT);  // high beam
+			return;
+		}
+
 	if(msg->COMMAND== (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT))  // front positional light - low beam
 		{
-			// CHECKME - does it work?
 			__Device.public.led->led[Front].Shine(msg->ARGUMENT);
 			return;
 		}
 
-	if(msg->COMMAND== (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH))  // front positional light - high beam
-		{
-			// TODO - implement timer based safeguard when OCR > OCR_MAX
-			if(msg->ARGUMENT > OCR_MAX_FRONT_LIGHT)// safeguard against too high a value (heating of MOSFet)
-			OCR_FRONT_LIGHT = OCR_MAX_FRONT_LIGHT;
-			else
-			OCR_FRONT_LIGHT = msg->ARGUMENT;
-			return;
-		}
 }
 
 // GPIO init - device specific
@@ -143,13 +167,6 @@ static inline void _GPIOInit(void)
 // Timer init - device specific
 static inline void _TimerInit(void)
 {
-	TIM_ClockConfigTypeDef sClockSourceConfig =
-		{0};
-	TIM_MasterConfigTypeDef sMasterConfig =
-		{0};
-	TIM_OC_InitTypeDef sConfigOC =
-		{0};
-
 	// Timer2 init - front light PWM
 	htim2.Instance = TIM2;
 	htim2.Init.Prescaler = 0;  // scale by 1
@@ -157,7 +174,6 @@ static inline void _TimerInit(void)
 	htim2.Init.Period = 99;  // count to 100
 	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;	// no division
 	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;	// no pre-load
-//	__HAL_RCC_TIM2_CLK_ENABLE();	// start the clock
 
 	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;	// we shall run from our internal oscillator
 	HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);  // commit it
@@ -249,24 +265,10 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 {
 	if(timer->Instance == TIM2)  // front LED PWM
 		{
-			TIM_OC_InitTypeDef sConfigOC =
-				{0};
-
 			// Timer2 init - front light PWM
-			timer->Instance = TIM2;
-			timer->Init.Prescaler = 0;  // scale by 1
-			timer->Init.CounterMode = TIM_COUNTERMODE_UP;  // up counting
-			timer->Init.Period = 99;  // count to 100
-			timer->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;  // no division
-			timer->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;  // no pre-load
 			__HAL_RCC_TIM2_CLK_ENABLE();  // start the clock
-			HAL_TIM_PWM_Init(timer);  // commit it
-
-			sConfigOC.OCMode = TIM_OCMODE_PWM1;
-			sConfigOC.Pulse = LED_OFF;  // 0 to 100% duty cycle in decimal numbers
-			sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-			sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_2);  // commit it
+			HAL_TIM_PWM_Init(timer);  //
+			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_2);  //
 			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_2);  // start the timer
 			return;
 		}

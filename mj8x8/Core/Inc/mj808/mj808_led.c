@@ -35,10 +35,47 @@ static void _FadeHandler(void)
 		}
 }
 
+// does high beam on/off without fading
+static void _HighBeam(const uint8_t value)
+{
+	static uint8_t OldOCR;	// holds previous OCR value
+
+	if(value == 200)	// high beam off command
+		{
+			OCR_FRONT_LIGHT = OldOCR;	// restore original OCR
+
+			if(OldOCR == 0)
+				Device->StopTimer(&htim2);  // stop the timer - front light PWM
+		}
+
+	if(value > 200)	// high beam on command
+		{
+			OldOCR = OCR_FRONT_LIGHT;	// store original OCR value
+
+			if(OCR_FRONT_LIGHT == 0)	// light was previously off
+				Device->StartTimer(&htim2);  // start the timer - front light PWM
+
+			OCR_FRONT_LIGHT = 100;	// high beam on
+		}
+}
+
 // set OCR value to fade to
 static inline void _primitiveFrontLED(const uint8_t value)
 {
+	if(value >= 200)	// special case for high beam
+		{
+			_HighBeam(value);
+			return;
+		}
+
+	Device->StartTimer(&htim14);  // start the timer - LED handling
+	__HAL_TIM_DISABLE_IT(&htim14, TIM_IT_UPDATE);	// disable interrupts until ocr is set (timer14's ISR will otherwise kill it very soon)
+
+	if(value)
+		Device->StartTimer(&htim2);  // start the timer - front light PWM
+
 	Device->led->led[Front].ocr = value;	// set OCR value, the handler will do the rest
+	__HAL_TIM_ENABLE_IT(&htim14, TIM_IT_UPDATE);	// start timer
 }
 
 // concrete utility LED handling function
@@ -75,31 +112,18 @@ static void _primitiveUtilityLED(uint8_t in_val)
 		}
 }
 
+// turns whole device ON (via pushbutton)
 static void __componentLED_On(void)
 {
-	Device->StartTimer(&htim14);  // start the timer
-	Device->StartTimer(&htim2);  // start the timer
-
 	Device->led->led[Utility].Shine(UTIL_LED_GREEN_ON);  // green LED on
 	Device->led->led[Front].Shine(20);  // front light on - low key; gets overwritten by LU command, since it comes in a bit later
-
-	//send the messages out, UDP-style. no need to check if the device is actually online
-	MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);	// convey button press via CAN and the logic unit will do its own thing
-	MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0xFF, 2);  // turn on rear light
-	MsgHandler->SendMessage(DASHBOARD_LED_YELLOW_ON, 0x00, 1);	// turn on yellow LED
 }
 
+// turns whole device OFF (via pushbutton)
 static void __componentLED_Off(void)
 {
-	Device->StartTimer(&htim14);  // start the timer
-
 	Device->led->led[Utility].Shine(UTIL_LED_GREEN_OFF);	// green LED off
 	Device->led->led[Front].Shine(0);  // front light off
-
-	// send the messages out, UDP-style. no need to check if the device is actually online
-	MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);  // convey button press via CAN and the logic unit will tell me what to do
-	MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0x00, 2);  // turn off rear light
-	MsgHandler->SendMessage(DASHBOARD_LED_YELLOW_OFF, 0x00, 1);  // turn off yellow LED
 }
 
 // delegates operations from LED component downwards to LED leaves

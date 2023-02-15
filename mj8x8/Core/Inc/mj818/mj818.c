@@ -10,6 +10,16 @@ TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms - FIXME - should not be here
 
+// TODO - these shouldn't really be here...
+static TIM_ClockConfigTypeDef sClockSourceConfig =
+	{0};
+
+static TIM_MasterConfigTypeDef sMasterConfig =
+	{0};
+
+static TIM_OC_InitTypeDef sConfigOC =
+	{0};
+
 typedef struct	// mj818_t actual
 {
 	mj818_t public;  // public struct
@@ -38,10 +48,8 @@ void _PopulatedBusOperationMJ818(message_handler_t *const in_msg)
 
 	if(msg->COMMAND== (CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT))	// brake light
 		{
-			if(msg->ARGUMENT > OCR_MAX_BRAKE_LIGHT)
-			OCR_BRAKE_LIGHT = OCR_MAX_BRAKE_LIGHT;
-			else
-			OCR_BRAKE_LIGHT = msg->ARGUMENT;
+			__Device.public.led->led[Brake].Shine(msg->ARGUMENT);  // be on/off, according to argument
+			return;
 		}
 }
 
@@ -83,13 +91,6 @@ static inline void _GPIOInit(void)
 // Timer init - device specific
 static inline void _TimerInit(void)
 {
-	TIM_ClockConfigTypeDef sClockSourceConfig =
-		{0};
-	TIM_MasterConfigTypeDef sMasterConfig =
-		{0};
-	TIM_OC_InitTypeDef sConfigOC =
-		{0};
-
 	// Timer2 init - rear light PWM
 	htim2.Instance = TIM2;
 	htim2.Init.Prescaler = 0;  // scale by 1
@@ -180,47 +181,19 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 {
 	if(timer->Instance == TIM2)  // front LED PWM
 		{
-			TIM_OC_InitTypeDef sConfigOC =
-				{0};
-
 			// Timer2 init - rear light PWM
-			timer->Instance = TIM2;
-			timer->Init.Prescaler = 0;  // scale by 1
-			timer->Init.CounterMode = TIM_COUNTERMODE_UP;  // up counting
-			timer->Init.Period = 99;  // count to 100
-			timer->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;  // no division
-			timer->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;  // no pre-load
 			__HAL_RCC_TIM2_CLK_ENABLE();	// start the clock
-			HAL_TIM_PWM_Init(timer);  // commit it
-
-			sConfigOC.OCMode = TIM_OCMODE_PWM1;
-			sConfigOC.Pulse = LED_OFF;  // 0 to 100% duty cycle in decimal numbers
-			sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-			sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_1);  // commit it
+			HAL_TIM_PWM_Init(timer);  // FIXME - timer14 reset happens somewhere in here
+			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_1);  //
 			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_1);  // start the timer
 			return;
 		}
 
 	if(timer->Instance == TIM3)  // brake LED PWM
 		{
-			TIM_OC_InitTypeDef sConfigOC =
-				{0};
-
 			// timer3 - brake light PWM
-			timer->Instance = TIM3;
-			timer->Init.Prescaler = 0;
-			timer->Init.CounterMode = TIM_COUNTERMODE_UP;
-			timer->Init.Period = 99;
-			timer->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-			timer->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 			__HAL_RCC_TIM3_CLK_ENABLE();	// start the clock
-			HAL_TIM_PWM_Init(timer);  // commit it
-
-			sConfigOC.OCMode = TIM_OCMODE_PWM1;
-			sConfigOC.Pulse = LED_OFF;
-			sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-			sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+			HAL_TIM_PWM_Init(timer);  //
 			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_4);
 			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_4);  // start the timer
 			return;

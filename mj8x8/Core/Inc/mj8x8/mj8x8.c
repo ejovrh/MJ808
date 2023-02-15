@@ -229,7 +229,7 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 	 *
 	 *	if there are no devices on the bus, a device-specific default operation is executed.
 	 */
-	__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
+// TODO - is needed here?	__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
 	__MJ8x8.public.HeartBeat(MsgHandler);  // execute the heartbeat
 
 	if((!MsgHandler->Devices) && (__MJ8x8.__FlagDoDefaultOperation > 1))	// if we have passed one iteration of non-heartbeat mode and we are alone on the bus
