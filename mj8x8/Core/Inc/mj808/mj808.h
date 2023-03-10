@@ -53,7 +53,7 @@ typedef union  // union for activity indication
 		uint8_t HighBeamOn :1;  // bit 6 - high beam is on
 		uint8_t FrontLightOn :1;  // bit 7 - front light is on
 	};
-	uint8_t uactivity;  // byte-wise representation of the above bitfield
+	uint8_t byte;  // byte-wise representation of the above bitfield
 } mj808_activity_t;
 
 typedef struct	// struct describing devices on MJ808

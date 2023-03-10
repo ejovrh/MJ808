@@ -81,7 +81,7 @@ typedef union  // union for activity indication
 		uint8_t six :1;  // bit 6 -
 		uint8_t LEDsOn :1;  // bit 7 - UI LEDS are on
 	};
-	uint8_t uactivity;  // byte-wise representation of the above bitfield
+	uint8_t byte;  // byte-wise representation of the above bitfield
 } mj828_activity_t;
 
 typedef struct	// struct describing devices on MJ828

@@ -41,7 +41,7 @@ typedef union  // union for activity indication
 		uint8_t BrakeLightOn :1;  // bit 6 - brake light is on
 		uint8_t RearLightOn :1;  // bit 7 - rear light is on
 	};
-	uint8_t uactivity;  // byte-wise representation of the above bitfield
+	uint8_t byte;  // byte-wise representation of the above bitfield
 } mj818_activity_t;
 
 typedef struct	// struct describing devices on MJ818

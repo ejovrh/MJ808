@@ -29,8 +29,8 @@ static void _Heartbeat(message_handler_t *const msg)
 		{
 			if(__MJ8x8.__BeatIterationCount == __MJ8x8.__NumericalCAN_ID)  // see if this counter iteration is our turn
 				{
-//					if(__MJ8x8.public.FlagActive)
-					msg->SendMessage(CMND_ANNOUNCE, 0x00, 1);  // broadcast CAN heartbeat message
+					if(*__MJ8x8.public.FlagActive)	// if device is active
+						msg->SendMessage(CMND_ANNOUNCE, 0x00, 1);  // broadcast CAN heartbeat message
 
 					__MJ8x8.__FlagDoHeartbeat = 0;	// heartbeat mode of for the remaining counter iterations
 				}
@@ -157,23 +157,20 @@ static void _Sleep(void)
 #ifdef USE_POWERSAVE
 	__disable_irq();
 
-//	if(*__MJ8x8.public.FlagActive & 0x0F)  // something in the lower nibble is set
-	__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into active state
-
 	if(*__MJ8x8.public.FlagActive)  // true if device is active
 		{
-//			if(*__MJ8x8.public.FlagActive & 0x0F)  // upper nibble indicates activity
-			__MJ8x8.public.can->BusActive(1);  // put CAN infrastructure into active state
-//			else
-//				__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into standby state
+			if(*__MJ8x8.public.FlagActive & 0x0F)  // upper nibble indicates activity
+				__MJ8x8.public.can->BusActive(1);  // put CAN infrastructure into active state
+			else
+				__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into standby state
 
 			HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
 
 		}
 	else	// if device is not active
 		{
-//			if((*__MJ8x8.public.FlagActive & 0x0F) == 0)  // lower nibble is clear
-			__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into standby state
+			if((*__MJ8x8.public.FlagActive & 0x0F) == 0)  // lower nibble is clear
+				__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into standby state
 
 			HAL_PWR_DisableSleepOnExit();
 

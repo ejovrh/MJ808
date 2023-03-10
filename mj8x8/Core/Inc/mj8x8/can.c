@@ -94,16 +94,13 @@ static inline void _EXTItoRX(void)
 static inline void __can_go_into_standby_mode(void)
 {
 	if(__CAN.__in_sleep)	// if we already are asleep ...
-		{
-			__enable_irq();
-			return;  // ... do nothing
-		}
+		return;  // ... do nothing
 
 	__CAN.__in_sleep = 1;  // mark as sleeping
 
-	HAL_CAN_AbortTxRequest(&_hcan, CAN_TX_MAILBOX0);
-	HAL_CAN_AbortTxRequest(&_hcan, CAN_TX_MAILBOX1);
-	HAL_CAN_AbortTxRequest(&_hcan, CAN_TX_MAILBOX2);
+//	HAL_CAN_AbortTxRequest(&_hcan, CAN_TX_MAILBOX0);
+//	HAL_CAN_AbortTxRequest(&_hcan, CAN_TX_MAILBOX1);
+//	HAL_CAN_AbortTxRequest(&_hcan, CAN_TX_MAILBOX2);
 	HAL_CAN_RequestSleep(&_hcan);  // put internal CAN peripheral to sleep
 	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_STANDBY);  // put transceiver to sleep
 
@@ -114,21 +111,14 @@ static inline void __can_go_into_standby_mode(void)
 static inline void __can_go_into_active_mode(void)
 {
 	if(!__CAN.__in_sleep)  // if we already are awake ...
-		{
-			__enable_irq();
-			return;  // ... do nothing
-		}
+		return;  // ... do nothing
 
 	__CAN.__in_sleep = 0;  // mark as awake
 
 	_EXTItoRX();	// configure GPIO from EXTI to CAN RX
 
 	HAL_CAN_WakeUp(&_hcan);  // wake up internal CAN peripheral
-//	HAL_CAN_AbortTxRequest(&_hcan, 0);
-//	HAL_CAN_AbortTxRequest(&_hcan, 1);
-//	HAL_CAN_AbortTxRequest(&_hcan, 2);
-
-	HAL_CAN_ResetError(&_hcan);
+//	HAL_CAN_ResetError(&_hcan);
 	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_WAKE);	// wake up CAN transceiver
 }
 
@@ -140,14 +130,11 @@ static void _busactive(const uint8_t awake)
 	 * 		2. standby mode with wake
 	 * 		(3. shutdown mode) - not used on mj8x8 devices
 	 */
-	__disable_irq();
 
 	if(awake)
 		__can_go_into_active_mode();
 	else
 		__can_go_into_standby_mode();
-
-	__enable_irq();
 }
 
 __can_t __CAN =  // instantiate can_t actual and set function pointers
