@@ -1,3 +1,4 @@
+#include "main.h"
 #include "mj8x8.h"
 #include "can.h"
 
@@ -28,6 +29,7 @@ static void _Heartbeat(message_handler_t *const msg)
 		{
 			if(__MJ8x8.__BeatIterationCount == __MJ8x8.__NumericalCAN_ID)  // see if this counter iteration is our turn
 				{
+//					if(__MJ8x8.public.FlagActive)
 					msg->SendMessage(CMND_ANNOUNCE, 0x00, 1);  // broadcast CAN heartbeat message
 
 					__MJ8x8.__FlagDoHeartbeat = 0;	// heartbeat mode of for the remaining counter iterations
@@ -150,16 +152,38 @@ static inline void _TimerInit(void)
 
 // puts device to sleep
 static void _Sleep(void)
-{
-	if(__MJ8x8.public.FlagActive)
-		;
-//		HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
-	else
+{  // called periodically by TIM1_BRK_UP_TRG_COM_IRQHandler()
+
+#ifdef USE_POWERSAVE
+	__disable_irq();
+
+//	if(*__MJ8x8.public.FlagActive & 0x0F)  // something in the lower nibble is set
+	__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into active state
+
+	if(*__MJ8x8.public.FlagActive)  // true if device is active
 		{
-			;
-//			HAL_PWR_DisableSleepOnExit();
-//			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // go into stop mode
+//			if(*__MJ8x8.public.FlagActive & 0x0F)  // upper nibble indicates activity
+			__MJ8x8.public.can->BusActive(1);  // put CAN infrastructure into active state
+//			else
+//				__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into standby state
+
+			HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
+
 		}
+	else	// if device is not active
+		{
+//			if((*__MJ8x8.public.FlagActive & 0x0F) == 0)  // lower nibble is clear
+			__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into standby state
+
+			HAL_PWR_DisableSleepOnExit();
+
+			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // go into stop mode
+		}
+
+#else
+	HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
+#endif
+	__enable_irq();
 }
 
 // general device non-specific low-level hardware init & config
@@ -177,8 +201,6 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	__MJ8x8.public.can = can_ctor();	// pass on CAN public part
 
 	__MJ8x8.public.Sleep = &_Sleep;  // puts device to sleep
-
-	__MJ8x8.public.FlagActive = 0;	// mark the device as inactive by default (will go immediately into sleep/stop move after initialisation)
 
 	__MJ8x8.public.can->own_sidh = in_own_sidh;  // high byte
 	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);	// low byte
@@ -203,7 +225,6 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 //	HAL_IWDG_Refresh(&hiwdg);  // refresh the watchdog
 
 	HAL_TIM_IRQHandler(&htim1);  // service the interrupt
-	// TODO - implement sleep cycles for processor and CAN bus hardware
 
 	/* heartbeat of device on bus - aka. active CAN bus device discovery
 	 *

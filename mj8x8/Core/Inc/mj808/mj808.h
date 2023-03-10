@@ -37,9 +37,29 @@ enum mj808_buttons	// enum of buttons on this device
 	  PushButton
 };
 
+typedef union  // union for activity indication
+{
+	struct
+	{
+		// CAN has to be active - 0x0F - lower nibble
+		uint8_t HeartBeatRunning :1;  // bit 0 - HeartBeat is running
+		uint8_t one :1;  // bit 1 -
+		uint8_t two :1;  // bit 2 -
+		uint8_t three :1;  // bit 3 -
+
+		// CAN can be in standby mode - 0xF0 - upper nibble
+		uint8_t four :1;	// bit 4 -
+		uint8_t five :1;	// bit 5 -
+		uint8_t HighBeamOn :1;  // bit 6 - high beam is on
+		uint8_t FrontLightOn :1;  // bit 7 - front light is on
+	};
+	uint8_t uactivity;  // byte-wise representation of the above bitfield
+} mj808_activity_t;
+
 typedef struct	// struct describing devices on MJ808
 {
 	mj8x8_t *mj8x8;  // pointer to the base class
+	mj808_activity_t *activity;  // pointer to struct(union) indicating device activity status
 	composite_led_t *led;  // pointer to LED structure
 	button_t *button;  // array of button_t - one buttons
 

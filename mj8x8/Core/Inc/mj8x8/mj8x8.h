@@ -17,7 +17,7 @@ extern TIM_HandleTypeDef timer;
 
 typedef struct	// "base class" struct for mj8x8 devices
 {
-	uint8_t FlagActive :1;  // flag indicating that the device is active
+	uint8_t *FlagActive;  // flag indicating that the device is active
 
 	can_t *can;  // pointer to the CAN structure
 

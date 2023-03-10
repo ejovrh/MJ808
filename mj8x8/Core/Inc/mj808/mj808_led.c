@@ -42,6 +42,7 @@ static void _HighBeam(const uint8_t value)
 
 	if(value == 200)	// high beam off command
 		{
+			Device->activity->HighBeamOn = 0;	// TODO - shouldn't really be here
 			OCR_FRONT_LIGHT = OldOCR;	// restore original OCR
 
 			if(OldOCR == 0)
@@ -50,6 +51,7 @@ static void _HighBeam(const uint8_t value)
 
 	if(value > 200)	// high beam on command
 		{
+			Device->activity->HighBeamOn = 1;	// TODO - shouldn't really be here
 			OldOCR = OCR_FRONT_LIGHT;	// store original OCR value
 
 			if(OCR_FRONT_LIGHT == 0)	// light was previously off
@@ -62,6 +64,8 @@ static void _HighBeam(const uint8_t value)
 // set OCR value to fade to
 static inline void _primitiveFrontLED(const uint8_t value)
 {
+	Device->activity->FrontLightOn = (value > 0);
+
 	if(value >= 200)	// special case for high beam
 		{
 			_HighBeam(value);

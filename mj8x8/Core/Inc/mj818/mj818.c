@@ -20,6 +20,8 @@ static TIM_MasterConfigTypeDef sMasterConfig =
 static TIM_OC_InitTypeDef sConfigOC =
 	{0};
 
+static mj818_activity_t _activity;  // union indicating device activity
+
 typedef struct	// mj818_t actual
 {
 	mj818_t public;  // public struct
@@ -229,6 +231,9 @@ void mj818_ctor(void)
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B));	// call base class constructor & initialize own SID
 
+	__Device.public.activity = &_activity;  // bind activity struct into device-specific object
+	__Device.public.mj8x8->FlagActive = (uint8_t*) &_activity;	// bind activity struct into device-agnostic object
+
 	_TimerInit();  // initialize Timers
 	_GPIOInit();	// initialize device-specific GPIOs
 
@@ -239,7 +244,6 @@ void mj818_ctor(void)
 
 	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;	// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
-	__Device.public.mj8x8->FlagActive = 1;	// active by default
 
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM14_IRQn, 0, 0);  // charlieplexed LED handler timer (on demand)

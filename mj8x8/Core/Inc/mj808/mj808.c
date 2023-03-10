@@ -20,20 +20,20 @@ static TIM_MasterConfigTypeDef sMasterConfig =
 static TIM_OC_InitTypeDef sConfigOC =
 	{0};
 
+static mj808_activity_t _activity;  // union indicating device activity
+
 typedef struct	// mj808_t actual
 {
 	mj808_t public;  // public struct
 } __mj808_t;
 
-static __mj808_t __Device __attribute__ ((section (".data")));  // preallocate __Device object in .data
+static __mj808_t  __Device  __attribute__ ((section (".data")));  // preallocate __Device object in .data
 
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 // cases in this switch-case statement must be unique for all events on this device
 void _event_execution_function_mj808(const uint8_t val)
 {
 	EventHandler->UnSetEvent(val);	//
-
-	Device->mj8x8->FlagActive = ((Device->button->button[PushButton]->byte > 0) | __HAL_RCC_TIM2_IS_CLK_ENABLED());  // set device to state according to button press, take also timer2 into account
 
 	switch(val)
 		{
@@ -119,7 +119,6 @@ void _PopulatedBusOperationMJ808(message_handler_t *const in_msg)
 			__Device.public.led->led[Front].Shine(msg->ARGUMENT);
 			return;
 		}
-
 }
 
 // GPIO init - device specific
@@ -300,9 +299,12 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 // device-specific constructor
 void mj808_ctor(void)
 {
-// general device non-specific low-level hardware init & config
-// only SIDH is supplied since with the addressing scheme SIDL is always 0
+	// general device non-specific low-level hardware init & config
+	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A));	// call base class constructor & initialize own SID
+
+	__Device.public.activity = &_activity;  // bind activity struct into device-specific object
+	__Device.public.mj8x8->FlagActive = (uint8_t*) &_activity;	// bind activity struct into device-agnostic object
 
 	_GPIOInit();	// initialize device-specific GPIOs
 	_TimerInit();  // initialize Timers
@@ -338,7 +340,7 @@ void EXTI0_1_IRQHandler(void)
 	Device->StartTimer(&htim16);  // start the button handling timer
 
 	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// interrupt source detection
-// Pushbutton: released - pin high, pressed - pin low
+		// Pushbutton: released - pin high, pressed - pin low
 		Device->button->button[PushButton]->Mark(!(HAL_GPIO_ReadPin(Pushbutton_GPIO_Port, Pushbutton_Pin)));  // mark state change
 
 	HAL_GPIO_EXTI_IRQHandler(Pushbutton_Pin);  // service the interrupt

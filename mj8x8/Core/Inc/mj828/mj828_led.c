@@ -11,8 +11,7 @@ extern TIM_HandleTypeDef htim14;  // Timer14 object;
 
 static primitive_led_t __primitive_led[8] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 static __composite_led_t __LED;	// forward declaration of object
-static
-GPIO_InitTypeDef GPIO_InitStruct =  // GPIO initialisation structure
+static GPIO_InitTypeDef GPIO_InitStruct =  // GPIO initialisation structure
 	{0};
 
 // switches a given pin on a port to output
@@ -174,6 +173,7 @@ static void _componentLEDHandler(const uint8_t val)
 
 	// val is a zero-indexed bit-value indicating the LED that shall be lit up
 	__LED.flags ^= _BV(val);	// just toggle
+	Device->activity->LEDsOn = (__LED.flags > 0);	// TODO - shouldn't really be here
 }
 
 static __composite_led_t __LED =

@@ -83,7 +83,7 @@
 #define DEV_0D 3	//	4th logic unit
 #define MJ828 3	// dashboard
 #define DASHBOARD 3
-#define DEV_1A 4	//	dynamo1 - Èos
+#define DEV_1A 4	//	dynamo1 - Čos
 #define COS 4
 #define DEV_1B 5	//	dynamo2
 #define DYN2 5
@@ -101,7 +101,7 @@
 #define DEV_3C 14	//	??
 #define DEV_3D 15	//	??
 
-// general utility LED color definitions; used in LU code
+// general utility LED colour definitions; used in LU code
 #define RED 0x00
 #define GREEN 0x01
 #define YELLOW 0x02
@@ -110,7 +110,7 @@
 #define BATT2 0x05
 #define BATT3 0x06
 #define BATT4 0x07
-#define CMND_UTIL_LED 0x10	// command for utility LED operation (color, on, off, blink)
+#define CMND_UTIL_LED 0x10	// command for utility LED operation (colour, on, off, blink)
 
 #define UTIL_LED_RED_OFF 0x10	// utility LED - off
 #define UTIL_LED_RED_BLINK_1X 0x11	// utility LED - blink
@@ -158,11 +158,11 @@
 #define DEV_SENSOR 0x0C	// sensor device
 #define CMND_FW_FLASH 0x70	// command for flashing firmware
 
-#define CMND_COS_SET_MODE 0xE0	// command to set Èos into some operating mode
+#define CMND_COS_SET_MODE 0xE0	// command to set Čos into some operating mode
 
 #define CMND_REPORT_STATUS 0xFF	// command for a device to report status
 
-#define MSG_TIME_SYNC 0x80	// time synchronization message
+#define MSG_TIME_SYNC 0x80	// time synchronisation message
 
 #define MSG_BUTTON_EVENT 0x90	// message for button events
 #define MSG_BUTTON_EVENT_BUTTON0_OFF	0x90	// button n off
@@ -196,7 +196,7 @@
 #define B1 1
 #define B0 0
 
-// SID defines, must be manually left shifted by 5 (MCP2515 datasheet, p.29 & 30)
+// SID defines, must be manually left shifted by 5 (MCP2515 data sheet, p.29 & 30)
 // b7
 #define PRIORITY_LOW 0x80	// default 0, used by the sender, leave zero on self, except with logic unit 0A (defaults to 1)
 #define PRIORITY_HIGH 0x00

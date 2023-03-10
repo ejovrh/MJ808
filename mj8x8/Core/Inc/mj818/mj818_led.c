@@ -42,6 +42,8 @@ static void _FadeHandler(void)
 // set OCR value to fade to
 static void _primitiveRearLED(uint8_t value)
 {
+	Device->activity->RearLightOn = (value > 0);
+
 	Device->StartTimer(&htim14);  // start the timer - LED handling
 	__HAL_TIM_DISABLE_IT(&htim14, TIM_IT_UPDATE);	// disable interrupts until ocr is set (timer14's ISR will otherwise kill it very soon)
 
@@ -59,6 +61,7 @@ static void _BrakeLight(const uint8_t value)
 
 	if(value == 200)	// brake light off command
 		{
+			Device->activity->BrakeLightOn = 0;	// TODO - shouldn't really be here
 			OCR_BRAKE_LIGHT = OldOCR;	// restore original OCR
 
 			if(OldOCR == 0)
@@ -67,6 +70,7 @@ static void _BrakeLight(const uint8_t value)
 
 	if(value > 200)	// brake light on command
 		{
+			Device->activity->BrakeLightOn = 1;	// TODO - shouldn't really be here
 			OldOCR = OCR_BRAKE_LIGHT;	// store original OCR value
 
 			if(OCR_FRONT_LIGHT == 0)	// light was previously off

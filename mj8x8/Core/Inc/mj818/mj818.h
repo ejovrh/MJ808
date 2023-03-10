@@ -25,9 +25,29 @@ enum mj818_leds  // enum of lights on this device
 	  Brake
 };
 
+typedef union  // union for activity indication
+{
+	struct
+	{
+		// CAN has to be active - 0x0F - lower nibble
+		uint8_t HeartBeatRunning :1;  // bit 0 - HeartBeat is running
+		uint8_t one :1;  // bit 1 -
+		uint8_t two :1;  // bit 2 -
+		uint8_t three :1;  // bit 3 -
+
+		// CAN can be in standby mode - 0xF0 - upper nibble
+		uint8_t four :1;	// bit 4 -
+		uint8_t five :1;	// bit 5 -
+		uint8_t BrakeLightOn :1;  // bit 6 - brake light is on
+		uint8_t RearLightOn :1;  // bit 7 - rear light is on
+	};
+	uint8_t uactivity;  // byte-wise representation of the above bitfield
+} mj818_activity_t;
+
 typedef struct	// struct describing devices on MJ818
 {
 	mj8x8_t *mj8x8;  // pointer to the base class
+	mj818_activity_t *activity;  // pointer to struct(union) indicating device activity status
 	composite_led_t *led;  // pointer to LED structure
 
 	void (*StopTimer)(TIM_HandleTypeDef *timer);	// stops timer identified by argument
