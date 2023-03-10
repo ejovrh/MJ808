@@ -49,7 +49,7 @@ typedef union  // union for activity indication
 
 		// CAN can be in standby mode - 0xF0 - upper nibble
 		uint8_t four :1;	// bit 4 -
-		uint8_t five :1;	// bit 5 -
+		uint8_t UtilityLEDOn :1;	// bit 5 -
 		uint8_t HighBeamOn :1;  // bit 6 - high beam is on
 		uint8_t FrontLightOn :1;  // bit 7 - front light is on
 	};

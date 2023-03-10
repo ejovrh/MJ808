@@ -94,6 +94,7 @@ static void _primitiveUtilityLED(uint8_t in_val)
 	//	RedLED_Pin shifted left by one is the green LED
 
 	in_val &= 7;	// clear everything except B2:0, which is the blink count (1-6)
+	Device->activity->UtilityLEDOn = (in_val > 0);	// mark device on or off
 
 	if(in_val == 0x00)	// B3:B0 is 0 - turn off
 		{

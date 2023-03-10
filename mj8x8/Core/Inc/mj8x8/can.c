@@ -46,7 +46,7 @@ static void _tcan334_can_msg_receive(can_msg_t *const msg)
 static void _tcan334_can_msg_send(can_msg_t *const msg)
 {
 	if(__CAN.__in_sleep)  // if sleeping...
-		__CAN.public.BusActive(0);  // wake up
+		__CAN.public.BusActive(1);  // wake up
 
 	_TXHeader.IDE = CAN_ID_STD;  // set the ID to standard
 	_TXHeader.RTR = CAN_RTR_DATA;  //	set to DATA
