@@ -31,6 +31,7 @@ static void _FadeHandler(void)
 				{
 					Device->StopTimer(&htim14);  // stop the timer
 					Device->StopTimer(&htim2);  // stop the timer
+					Device->activity->FrontLightOn = 0;	// TODO - shouldn't really be here
 				}
 		}
 }
@@ -64,8 +65,6 @@ static void _HighBeam(const uint8_t value)
 // set OCR value to fade to
 static inline void _primitiveFrontLED(const uint8_t value)
 {
-	Device->activity->FrontLightOn = (value > 0);
-
 	if(value >= 200)	// special case for high beam
 		{
 			_HighBeam(value);
@@ -76,7 +75,10 @@ static inline void _primitiveFrontLED(const uint8_t value)
 	__HAL_TIM_DISABLE_IT(&htim14, TIM_IT_UPDATE);	// disable interrupts until ocr is set (timer14's ISR will otherwise kill it very soon)
 
 	if(value)
-		Device->StartTimer(&htim2);  // start the timer - front light PWM
+		{
+			Device->StartTimer(&htim2);  // start the timer - front light PWM
+			Device->activity->FrontLightOn = 1;
+		}
 
 	Device->led->led[Front].ocr = value;	// set OCR value, the handler will do the rest
 	__HAL_TIM_ENABLE_IT(&htim14, TIM_IT_UPDATE);	// start timer

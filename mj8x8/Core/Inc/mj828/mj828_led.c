@@ -148,7 +148,10 @@ static void _CharliePlexingHandler()
 	 */
 
 	if(!__LED.flags)	// if there is any LED to glow at all
-		Device->StopTimer(&htim14);  // stop the time
+		{
+			Device->StopTimer(&htim14);  // stop the time
+			Device->activity->LEDsOn = 0;	// TODO - shouldn't really be here
+		}
 
 	static uint8_t i = 0;  // persistent iterator across function calls loops over all LEDs on device
 

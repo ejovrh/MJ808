@@ -28,11 +28,17 @@ static void _FadeHandler(void)
 	if(Device->led->led[Brake].ocr < OCR_BRAKE_LIGHT)  // fade down
 		--OCR_BRAKE_LIGHT;
 
-	if(OCR_FRONT_LIGHT == 0 && OCR_REAR_LIGHT == 0)
+	if(OCR_BRAKE_LIGHT == 0)
+		Device->activity->BrakeLightOn = 0;	// TODO - shouldn't really be here
+
+	if(OCR_REAR_LIGHT == 0)
+		Device->activity->RearLightOn = 0;	// TODO - shouldn't really be here
+
+	if(OCR_BRAKE_LIGHT == 0 && OCR_REAR_LIGHT == 0)
 		{
 			Device->StopTimer(&htim14);  // stop the timer - LED handling
 			Device->StopTimer(&htim2);  // stop the timer - rear light PWM
-			Device->StopTimer(&htim3);  // stop the timer - brake light PWM
+			Device->StopTimer(&htim3);	// stop the timer - brake light PWM
 		}
 
 	if(OCR_BRAKE_LIGHT == Device->led->led[Brake].ocr && OCR_REAR_LIGHT == Device->led->led[Rear].ocr)
@@ -42,13 +48,15 @@ static void _FadeHandler(void)
 // set OCR value to fade to
 static void _primitiveRearLED(uint8_t value)
 {
-	Device->activity->RearLightOn = (value > 0);
 
 	Device->StartTimer(&htim14);  // start the timer - LED handling
 	__HAL_TIM_DISABLE_IT(&htim14, TIM_IT_UPDATE);	// disable interrupts until ocr is set (timer14's ISR will otherwise kill it very soon)
 
 	if(value)
-		Device->StartTimer(&htim2);  // start the timer - rear light PWM
+		{
+			Device->StartTimer(&htim2);  // start the timer - rear light PWM
+			Device->activity->RearLightOn = 1;
+		}
 
 	Device->led->led[Rear].ocr = value;  // set OCR value, the handler will do the rest
 	__HAL_TIM_ENABLE_IT(&htim14, TIM_IT_UPDATE);	// start timer

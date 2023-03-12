@@ -31,14 +31,14 @@ typedef union  // union for activity indication
 	{
 		// CAN has to be active - 0x0F - lower nibble
 		uint8_t HeartBeatRunning :1;  // bit 0 - HeartBeat is running
-		uint8_t one :1;  // bit 1 -
-		uint8_t two :1;  // bit 2 -
-		uint8_t three :1;  // bit 3 -
+		uint8_t one :1;  //
+		uint8_t two :1;  //
+		uint8_t three :1;  //
 
 		// CAN can be in standby mode - 0xF0 - upper nibble
-		uint8_t four :1;	// bit 4 -
-		uint8_t five :1;	// bit 5 -
-		uint8_t BrakeLightOn :1;  // bit 6 - brake light is on
+		uint8_t CANActive :1;	// CAN is actively being used
+		uint8_t five :1;	//
+		uint8_t BrakeLightOn :1;  // brake light is on
 		uint8_t RearLightOn :1;  // bit 7 - rear light is on
 	};
 	uint8_t byte;  // byte-wise representation of the above bitfield

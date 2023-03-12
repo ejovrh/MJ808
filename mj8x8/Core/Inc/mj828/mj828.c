@@ -12,8 +12,6 @@ TIM_HandleTypeDef htim16;  // Timer16 object - button handling - 25ms
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
 extern ADC_HandleTypeDef hadc;  // ADC object
 
-static mj828_activity_t _activity;  // union indicating device activity
-
 typedef struct	// mj828_t actual
 {
 	mj828_t public;  // public struct
@@ -54,7 +52,7 @@ void _event_execution_function_mj828(uint8_t val)
 {
 	EventHandler->UnSetEvent(val);	//
 
-	Device->mj8x8->FlagActive = (  //	set device to state according to button press
+	Device->activity->ButtonPessed = (  //	set device to state according to button press
 	(  //
 	Device->button->button[PushButton]->byte ||  // ORed byte values indicate _some_ button press is active
 	Device->button->button[LeverFront]->byte ||  //
@@ -345,8 +343,7 @@ void mj828_ctor(void)
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D));  // call base class constructor & initialize own SID
 
-	__Device.public.activity = &_activity;  // bind activity struct into device-specific object
-	__Device.public.mj8x8->FlagActive = (uint8_t*) &_activity;	// bind activity struct into device-agnostic object
+	__Device.public.activity = (mj828_activity_t*) *__Device.public.mj8x8->activity;  // tie in activity from the depths of mj8x8_t and redefine type
 
 	_GPIOInit();	// initialize device-specific GPIOs
 	_TimerInit();  // initialize timers

@@ -17,8 +17,7 @@ extern TIM_HandleTypeDef timer;
 
 typedef struct	// "base class" struct for mj8x8 devices
 {
-	uint8_t *FlagActive;  // flag indicating that the device is active
-
+	uint8_t **activity;  // device activity indicator from one level down (can_t)
 	can_t *can;  // pointer to the CAN structure
 
 	void (*const HeartBeat)(message_handler_t *const msg);	// default periodic heartbeat for all devices

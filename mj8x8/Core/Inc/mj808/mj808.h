@@ -42,15 +42,15 @@ typedef union  // union for activity indication
 	struct
 	{
 		// CAN has to be active - 0x0F - lower nibble
-		uint8_t HeartBeatRunning :1;  // bit 0 - HeartBeat is running
-		uint8_t one :1;  // bit 1 -
-		uint8_t two :1;  // bit 2 -
-		uint8_t three :1;  // bit 3 -
+		uint8_t _0 :1;  // bit 0 -
+		uint8_t _1 :1;  //
+		uint8_t _2 :1;  //
+		uint8_t _3 :1;  //
 
 		// CAN can be in standby mode - 0xF0 - upper nibble
-		uint8_t four :1;	// bit 4 -
-		uint8_t UtilityLEDOn :1;	// bit 5 -
-		uint8_t HighBeamOn :1;  // bit 6 - high beam is on
+		uint8_t CANActive :1;  // CAN is actively being used
+		uint8_t UtilityLEDOn :1;	// utility LED is on
+		uint8_t HighBeamOn :1;  // high beam is on
 		uint8_t FrontLightOn :1;  // bit 7 - front light is on
 	};
 	uint8_t byte;  // byte-wise representation of the above bitfield

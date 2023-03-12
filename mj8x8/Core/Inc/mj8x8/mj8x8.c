@@ -29,7 +29,7 @@ static void _Heartbeat(message_handler_t *const msg)
 		{
 			if(__MJ8x8.__BeatIterationCount == __MJ8x8.__NumericalCAN_ID)  // see if this counter iteration is our turn
 				{
-					if(*__MJ8x8.public.FlagActive)	// if device is active
+					if(**__MJ8x8.public.activity)  // if device is active
 						msg->SendMessage(CMND_ANNOUNCE, 0x00, 1);  // broadcast CAN heartbeat message
 
 					__MJ8x8.__FlagDoHeartbeat = 0;	// heartbeat mode of for the remaining counter iterations
@@ -157,30 +157,28 @@ static void _Sleep(void)
 #ifdef USE_POWERSAVE
 	__disable_irq();
 
-	if(*__MJ8x8.public.FlagActive)  // true if device is active
+	if(**__MJ8x8.public.activity)  // true if device is active in some form (see actual device implementation)
 		{
-			if(*__MJ8x8.public.FlagActive & 0x0F)  // upper nibble indicates activity
+			if(**__MJ8x8.public.activity & 0x0F)  // upper nibble indicates activity
 				__MJ8x8.public.can->BusActive(1);  // put CAN infrastructure into active state
 			else
 				__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into standby state
 
 			HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
-
 		}
 	else	// if device is not active
 		{
-			if((*__MJ8x8.public.FlagActive & 0x0F) == 0)  // lower nibble is clear
+			if((**__MJ8x8.public.activity & 0x0F) == 0)  // lower nibble is clear
 				__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into standby state
 
 			HAL_PWR_DisableSleepOnExit();
-
 			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // go into stop mode
 		}
 
+	__enable_irq();
 #else
 	HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
 #endif
-	__enable_irq();
 }
 
 // general device non-specific low-level hardware init & config
@@ -196,6 +194,7 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	__MJ8x8.__NumericalCAN_ID = (uint8_t) ((in_own_sidh >> 2) & 0x0F);	// set the CAN id.
 
 	__MJ8x8.public.can = can_ctor();	// pass on CAN public part
+	__MJ8x8.public.activity = &__MJ8x8.public.can->activity;	// tie in can_t activity into mj8x8_t activity  (is tied in again one level up)
 
 	__MJ8x8.public.Sleep = &_Sleep;  // puts device to sleep
 

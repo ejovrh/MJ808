@@ -17,14 +17,13 @@ static CAN_FilterTypeDef _FilterCondfig =  // CAN filter configuration object
 static uint32_t _TXMailbox = 0;  // TX mailbox identifier
 uint8_t TxData[8];
 
+static activity_t _activity;	// actual activity object (is used only through references)
+
 typedef struct	// can_t actual
 {
 	can_t public;  // public struct
-	void (*init)(void);  // private - CAN init
 
-	uint8_t __tec;	// Transmit Error Counter
-	uint8_t __rec;	// Receive Error Counter
-	uint8_t __in_sleep :1;	// is MCP2561 CAN transceiver in sleep or not
+	void (*init)(void);  // private - CAN init
 } __can_t;
 
 extern __can_t __CAN;  // declare can_t actual
@@ -45,7 +44,8 @@ static void _tcan334_can_msg_receive(can_msg_t *const msg)
 // Add a message to the first free Tx mailbox and activate the corresponding transmission request
 static void _tcan334_can_msg_send(can_msg_t *const msg)
 {
-	if(__CAN.__in_sleep)  // if sleeping...
+
+	if((__CAN.public.activity->byte & 0x0F) == 0)  // if sleeping...
 		__CAN.public.BusActive(1);  // wake up
 
 	_TXHeader.IDE = CAN_ID_STD;  // set the ID to standard
@@ -80,23 +80,23 @@ static inline void _RXtoEXTI(void)
 // configure GPIO from EXTI to CAN RX
 static inline void _EXTItoRX(void)
 {
+	HAL_NVIC_DisableIRQ(EXTI4_15_IRQn);
+
 	GPIO_InitStruct.Pin = CAN_RX_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	GPIO_InitStruct.Alternate = GPIO_AF4_CAN;
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-	HAL_NVIC_DisableIRQ(EXTI4_15_IRQn);
 }
 
 //	sets CAN infrastructure into standby mode
 static inline void __can_go_into_standby_mode(void)
 {
-	if(__CAN.__in_sleep)	// if we already are asleep ...
+	if(__CAN.public.activity->CANActive == 0)  // if we already are asleep ...
 		return;  // ... do nothing
 
-	__CAN.__in_sleep = 1;  // mark as sleeping
+	__CAN.public.activity->CANActive = 0;  // mark as sleeping
 
 //	HAL_CAN_AbortTxRequest(&_hcan, CAN_TX_MAILBOX0);
 //	HAL_CAN_AbortTxRequest(&_hcan, CAN_TX_MAILBOX1);
@@ -110,10 +110,10 @@ static inline void __can_go_into_standby_mode(void)
 //	sets CAN infrastructure into normal operating mode
 static inline void __can_go_into_active_mode(void)
 {
-	if(!__CAN.__in_sleep)  // if we already are awake ...
+	if(__CAN.public.activity->CANActive == 1)  // if we already are awake ...
 		return;  // ... do nothing
 
-	__CAN.__in_sleep = 0;  // mark as awake
+	__CAN.public.activity->CANActive = 1;  // mark as awake
 
 	_EXTItoRX();	// configure GPIO from EXTI to CAN RX
 
@@ -139,9 +139,11 @@ static void _busactive(const uint8_t awake)
 
 __can_t __CAN =  // instantiate can_t actual and set function pointers
 	{  //
+	.public.activity = &_activity,  // tie in private activity union into can_t object (is tied in again one level up)
+
 	.public.BusActive = &_busactive,  // set up function pointer for public methods
 	.public.RequestToSend = &_tcan334_can_msg_send,  // ditto
-	.public.FetchMessage = &_tcan334_can_msg_receive,  // ditto
+	.public.FetchMessage = &_tcan334_can_msg_receive  // ditto
 	};
 
 static inline void _ConfigFilters(void)
@@ -176,7 +178,8 @@ static inline void _ConfigFilters(void)
 inline static void _CANInit(void)
 {
 	HAL_GPIO_WritePin(TCAN334_Shutdown_GPIO_Port, TCAN334_Shutdown_Pin, GPIO_PIN_RESET);	// bring device out of shutdown
-	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, GPIO_PIN_RESET);	// bring device out of sleep
+	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_WAKE);  // bring device out of standby
+	__CAN.public.activity->CANActive = 1;
 
 	_hcan.Instance = CAN;  // see RM0091, 29.7.7 - pp. 840
 	_hcan.Init.Prescaler = 10;  // TODO - elaborate
@@ -200,6 +203,7 @@ inline static void _CANInit(void)
 
 	HAL_CAN_ActivateNotification(&_hcan, (CAN_IT_ERROR | CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO1_MSG_PENDING | CAN_IT_WAKEUP));  // enable interrupts
 	HAL_CAN_Start(&_hcan);	// start CAN
+
 }
 
 // object constructor
