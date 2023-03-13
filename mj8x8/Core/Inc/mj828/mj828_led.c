@@ -150,7 +150,7 @@ static void _CharliePlexingHandler()
 	if(!__LED.flags)	// if there is any LED to glow at all
 		{
 			Device->StopTimer(&htim14);  // stop the time
-			Device->activity->LEDsOn = 0;	// TODO - shouldn't really be here
+			Device->activity->LEDsOn = 0;	// mark inactivity
 		}
 
 	static uint8_t i = 0;  // persistent iterator across function calls loops over all LEDs on device
@@ -176,7 +176,7 @@ static void _componentLEDHandler(const uint8_t val)
 
 	// val is a zero-indexed bit-value indicating the LED that shall be lit up
 	__LED.flags ^= _BV(val);	// just toggle
-	Device->activity->LEDsOn = (__LED.flags > 0);	// TODO - shouldn't really be here
+	Device->activity->LEDsOn = (__LED.flags > 0);	// mark in/activity
 }
 
 static __composite_led_t __LED =

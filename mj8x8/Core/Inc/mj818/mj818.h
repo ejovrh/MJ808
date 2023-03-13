@@ -29,13 +29,17 @@ typedef union  // union for activity indication
 {
 	struct
 	{
-		// CAN has to be active - 0x0F - lower nibble
-		uint8_t HeartBeatRunning :1;  // bit 0 - HeartBeat is running
+		/* 0x0F - lower nibble
+		 * CAN has to be active
+		 */
+		uint8_t DoHeartbeat :1;  // bit 0 - HeartBeat is running
 		uint8_t one :1;  //
 		uint8_t two :1;  //
 		uint8_t three :1;  //
 
-		// CAN can be in standby mode - 0xF0 - upper nibble
+		/* 0xF0 - upper nibble
+		 * CAN can be in standby mode
+		 */
 		uint8_t CANActive :1;	// CAN is actively being used
 		uint8_t five :1;	//
 		uint8_t BrakeLightOn :1;  // brake light is on

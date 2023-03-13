@@ -183,7 +183,7 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 		{
 			// Timer2 init - rear light PWM
 			__HAL_RCC_TIM2_CLK_ENABLE();	// start the clock
-			HAL_TIM_PWM_Init(timer);  // FIXME - timer14 reset happens somewhere in here
+			HAL_TIM_PWM_Init(timer);  //
 			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_1);  //
 			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_1);  // start the timer
 			return;
@@ -225,7 +225,6 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 
 void mj818_ctor(void)
 {
-// TODO - test stop mode properly once CAN infra is working
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
 	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B));	// call base class constructor & initialize own SID
 

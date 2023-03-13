@@ -4,18 +4,39 @@
 #include <inttypes.h>
 #include "can_msg.h"
 
-typedef union  // union for core activity indication (is exposed to end device via mj8x8_t)
+typedef union  // union for core activity indication and CAN standby control (is exposed to end device via mj8x8_t)
 {
-	// will be type-redefined in the end device (e.g. mj808_activity_t)
+	/* the purpose of activity_t ...
+	 * ... is to facilitate powersaving.
+	 * the uC can be in two states: stop mode and sleep on exit (see datasheet)
+	 *
+	 * if the byte representation of activity_t is zero, the device will enter stop mode.
+	 * wakeup from stop mode can only be done by EXTI - either button press or CAN activity (once the GPIO has been configured accordingly)
+	 * if the byte representation of activity_t is non-zero, the device will enter sleep on exit (if timers permit it).
+	 *
+	 * while entering sleep on exit, CAN can be stopped or kept running by setting/clearing flags. see the bitfield below.
+	 *
+	 * the type activity_t by itself is used only in can_t, however it is exposed to all upper objects.
+	 * for instance, mj8x8_t sees it as part of the can_t member and the final device implementation (e.g. mj808_t) in turn
+	 * can see it as part of the mj8x8_t base object.
+	 *
+	 * this finds its utilization in e.g. mj808_led.c, where the front light/high beam set/unset flags while in operation.
+	 *
+	 * names in the lower nibble have to be copied "up" (into e.g. mj808.h) manually, while the upper nibble's names are reserved for the actual implementations.
+	 */
 	struct
 	{
-		// CAN has to be active - 0x0F - lower nibble
-		uint8_t _0 :1;  // bit 0
+		/* 0x0F - lower nibble
+		 * CAN has to be active
+		 */
+		uint8_t DoHeartbeat :1;  // bit 0
 		uint8_t _1 :1;  // bit 1
 		uint8_t _2 :1;  // bit 2
 		uint8_t _3 :1;  // bit 3
 
-		// CAN can be in standby mode - 0xF0 - upper nibble
+		/* 0xF0 - upper nibble
+		 * CAN can be in standby mode
+		 */
 		uint8_t CANActive :1;  // bit 4
 		uint8_t _5 :1;	// bit 5
 		uint8_t _6 :1;  // bit 6

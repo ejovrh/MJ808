@@ -29,10 +29,10 @@ static void _FadeHandler(void)
 		--OCR_BRAKE_LIGHT;
 
 	if(OCR_BRAKE_LIGHT == 0)
-		Device->activity->BrakeLightOn = 0;	// TODO - shouldn't really be here
+		Device->activity->BrakeLightOn = 0;	// mark inactivity
 
 	if(OCR_REAR_LIGHT == 0)
-		Device->activity->RearLightOn = 0;	// TODO - shouldn't really be here
+		Device->activity->RearLightOn = 0;	// mark inactivity
 
 	if(OCR_BRAKE_LIGHT == 0 && OCR_REAR_LIGHT == 0)
 		{
@@ -69,7 +69,7 @@ static void _BrakeLight(const uint8_t value)
 
 	if(value == 200)	// brake light off command
 		{
-			Device->activity->BrakeLightOn = 0;	// TODO - shouldn't really be here
+			Device->activity->BrakeLightOn = 0;	// mark inactivity
 			OCR_BRAKE_LIGHT = OldOCR;	// restore original OCR
 
 			if(OldOCR == 0)
@@ -78,7 +78,7 @@ static void _BrakeLight(const uint8_t value)
 
 	if(value > 200)	// brake light on command
 		{
-			Device->activity->BrakeLightOn = 1;	// TODO - shouldn't really be here
+			Device->activity->BrakeLightOn = 1;	// mark activity
 			OldOCR = OCR_BRAKE_LIGHT;	// store original OCR value
 
 			if(OCR_FRONT_LIGHT == 0)	// light was previously off

@@ -31,7 +31,7 @@ static void _FadeHandler(void)
 				{
 					Device->StopTimer(&htim14);  // stop the timer
 					Device->StopTimer(&htim2);  // stop the timer
-					Device->activity->FrontLightOn = 0;	// TODO - shouldn't really be here
+					Device->activity->FrontLightOn = 0;	// mark inactivity
 				}
 		}
 }
@@ -43,7 +43,7 @@ static void _HighBeam(const uint8_t value)
 
 	if(value == 200)	// high beam off command
 		{
-			Device->activity->HighBeamOn = 0;	// TODO - shouldn't really be here
+			Device->activity->HighBeamOn = 0;	// mark inactivity
 			OCR_FRONT_LIGHT = OldOCR;	// restore original OCR
 
 			if(OldOCR == 0)
@@ -52,7 +52,7 @@ static void _HighBeam(const uint8_t value)
 
 	if(value > 200)	// high beam on command
 		{
-			Device->activity->HighBeamOn = 1;	// TODO - shouldn't really be here
+			Device->activity->HighBeamOn = 1;	// mark activity
 			OldOCR = OCR_FRONT_LIGHT;	// store original OCR value
 
 			if(OCR_FRONT_LIGHT == 0)	// light was previously off

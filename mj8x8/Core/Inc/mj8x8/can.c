@@ -182,7 +182,7 @@ inline static void _CANInit(void)
 	__CAN.public.activity->CANActive = 1;
 
 	_hcan.Instance = CAN;  // see RM0091, 29.7.7 - pp. 840
-	_hcan.Init.Prescaler = 10;  // TODO - elaborate
+	_hcan.Init.Prescaler = 10;  // TODO - revise CAN bit timing
 	_hcan.Init.Mode = CAN_MODE_NORMAL;  //
 	_hcan.Init.SyncJumpWidth = CAN_SJW_2TQ;  //
 	_hcan.Init.TimeSeg1 = CAN_BS1_13TQ;  //
