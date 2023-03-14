@@ -1,6 +1,8 @@
 #include "mj8x8\mj8x8.h"
 #include "message\message.h"
 
+static device_t _devices;  // devices discovered on the bus
+
 typedef struct	// message_handler_t actual
 {
 	message_handler_t public;  // public struct
@@ -31,21 +33,22 @@ volatile can_msg_t* _ReceiveMessage(void)
 {
 	__MsgHandler.__can->FetchMessage(&__MsgHandler.__msg);	// fetch the message from some RX buffer into RAM
 	// FIXME - 1st LU doesn't always get listed in devices.All -- very likely the root cause in the quick'n'dirty arduino LU
-	__MsgHandler.public.Devices |= (1 << ((__MsgHandler.__msg.sidh >> 2) & 0x0F));	// populate devices in canbus_t struct so that we know who else is on the bus
+	__MsgHandler.public.Devices->byte |= (1 << ((__MsgHandler.__msg.sidh >> 2) & 0x0F));	// populate devices in canbus_t struct so that we know who else is on the bus
 
 	return &__MsgHandler.__msg;  // return pointer to it to someone who will make use of it
 }
 
 __message_handler_t __MsgHandler =  // instantiate message_handler_t actual and set function pointers
 	{  //
-	.public.SendMessage = &_SendMessage,	// set up function pointer
-	.public.ReceiveMessage = &_ReceiveMessage  //	ditto
+	.public.SendMessage = &_SendMessage,  // set up function pointer
+	.public.ReceiveMessage = &_ReceiveMessage,  //	ditto
+	.public.Devices = &_devices  // tie in actual object to reference
 	};
 
 void message_handler_ctor(can_t *const in_can)
 {
 	__MsgHandler.__can = in_can;	// save address of can_t struct in private data member
-	__MsgHandler.public.Devices = 0x0000;  // default state is empty bus
+	__MsgHandler.public.Devices->byte = 0x0000;  // default state is empty bus
 }
 
 message_handler_t *const MsgHandler = &__MsgHandler.public;  // set pointer to MsgHandler public part

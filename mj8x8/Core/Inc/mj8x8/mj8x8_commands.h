@@ -85,11 +85,11 @@
 #define DASHBOARD 3
 #define DEV_1A 4	//	dynamo1 - Čos
 #define COS 4
-#define DEV_1B 5	//	dynamo2
+#define DEV_1B 5	//
 #define DYN2 5
 #define DEV_1C 6	//	battery
 #define BATT 6
-#define DEV_1D 7	//	solar cell
+#define DEV_1D 7	//
 #define DEV_2A 8	//	mj808
 #define MJ808 8
 #define DEV_2B 9	//	mj818
@@ -100,6 +100,30 @@
 #define DEV_3B 13	//	radar
 #define DEV_3C 14	//	??
 #define DEV_3D 15	//	??
+
+typedef union
+{  //
+	struct
+	{  // bit-wise view of devices on the bus,  max. 16 in total
+		uint16_t mj848 :1;  // 0A - logic unit
+		uint16_t _1 :1;  // 0B - ?
+		uint16_t _2 :1;  // 0C - ?
+		uint16_t mj828 :1;  // 0D - dashboard
+		uint16_t mj838 :1;  // 1A - Čos dynamo/generator
+		uint16_t _5 :1;  // 1B - ?
+		uint16_t _6 :1;  // 1C - ?
+		uint16_t _7 :1;  // 1D - ?
+		uint16_t mj808 :1;  // 2A - front light
+		uint16_t mj818 :1;  // 2B - rear light
+		uint16_t _10 :1;	// 2C - ?
+		uint16_t _11 :1;	// 2D - ?
+		uint16_t _12 :1;	// 3A - ?
+		uint16_t _13 :1;	// 3B - ?
+		uint16_t _14 :1;	// 3C - ?
+		uint16_t _15 :1;	// 3D - ?
+	};
+	uint16_t byte;	// byte-wise representation of above bitfield
+} device_t;
 
 // general utility LED colour definitions; used in LU code
 #define RED 0x00

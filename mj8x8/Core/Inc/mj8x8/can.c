@@ -179,7 +179,7 @@ inline static void _CANInit(void)
 {
 	HAL_GPIO_WritePin(TCAN334_Shutdown_GPIO_Port, TCAN334_Shutdown_Pin, GPIO_PIN_RESET);	// bring device out of shutdown
 	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_WAKE);  // bring device out of standby
-	__CAN.public.activity->CANActive = 1;
+	__CAN.public.activity->CANActive = 1;  // mark as active
 
 	_hcan.Instance = CAN;  // see RM0091, 29.7.7 - pp. 840
 	_hcan.Init.Prescaler = 10;  // TODO - revise CAN bit timing
