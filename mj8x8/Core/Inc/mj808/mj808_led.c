@@ -12,20 +12,35 @@ extern TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 
 static primitive_led_t __primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
-// called indirectly by timer1 (_SystemInterrupt()), handles the fading
-static void _FadeHandler(void)
-{
-	if(Device->led->led[Front].ocr > OCR_FRONT_LIGHT)  // fade up
-		{
-			++OCR_FRONT_LIGHT;
+static const uint8_t _fade_fransfer[] =	// fade transfer curve according to MacNamara
+	{  // see https://tigoe.github.io/LightProjects/fading.html
+	0, 0, 0, 0, 0, 0, 0, 1, 1, 1,	// 10 by 10
+	1, 1, 1, 1, 1, 1, 1, 1, 2, 2,	// ...
+	2, 2, 2, 2, 2, 2, 3, 3, 3, 3,	//
+	3, 4, 4, 4, 4, 4, 4, 5, 5, 5,	//
+	6, 6, 6, 7, 7, 7, 8, 8, 9, 9,	//
+	9, 10, 10, 11, 12, 12, 13, 13, 14, 15,  //
+	16, 16, 17, 18, 19, 20, 21, 22, 23, 24,	//
+	25, 27, 28, 29, 31, 32, 34, 35, 37, 39,	//
+	41, 43, 45, 47, 49, 51, 54, 57, 59, 62,	//
+	65, 68, 71, 75, 78, 82, 86, 90, 94, 100	//
+	};
+volatile static uint8_t i = 0;	// front
 
-			if(OCR_FRONT_LIGHT == Device->led->led[Front].ocr)
+// called indirectly by timer1 (_SystemInterrupt()), handles the fading
+static void _MacNamaraFadeHandler(void)
+{
+	if(OCR_FRONT_LIGHT < Device->led->led[Front].ocr)  // fade up
+		{
+			OCR_FRONT_LIGHT = _fade_fransfer[i++];
+
+			if(i == Device->led->led[Front].ocr)
 				Device->StopTimer(&htim14);  // stop the timer
 		}
 
-	if(Device->led->led[Front].ocr < OCR_FRONT_LIGHT)  // fade down
+	if(OCR_FRONT_LIGHT > Device->led->led[Front].ocr)  // fade down
 		{
-			--OCR_FRONT_LIGHT;
+			OCR_FRONT_LIGHT = _fade_fransfer[--i];
 
 			if(OCR_FRONT_LIGHT == 0)
 				{
@@ -123,7 +138,7 @@ static void _primitiveUtilityLED(uint8_t in_val)
 static void __componentLED_On(void)
 {
 	Device->led->led[Utility].Shine(UTIL_LED_GREEN_ON);  // green LED on
-	Device->led->led[Front].Shine(20);  // front light on - low key; gets overwritten by LU command, since it comes in a bit later
+	Device->led->led[Front].Shine(75);  // front light on - low key; gets overwritten by LU command, since it comes in a bit later
 }
 
 // turns whole device OFF (via pushbutton)
@@ -156,7 +171,7 @@ composite_led_t* _virtual_led_ctorMJ808()
 	__LED.public.led[Utility].ocr = 0;	// TODO - not needed yet but it has potential...
 	__LED.public.led[Front].Shine = &_primitiveFrontLED;  // LED-specific implementation
 	__LED.public.led[Front].ocr = 0;	// is already at 0, but nevertheless
-	__LED.public.Handler = &_FadeHandler;  // timer-based periodic LED control function
+	__LED.public.Handler = &_MacNamaraFadeHandler;  // timer-based periodic LED control function
 
 	return &__LED.public;  // return address of public part; calling code accesses it via pointer
 }

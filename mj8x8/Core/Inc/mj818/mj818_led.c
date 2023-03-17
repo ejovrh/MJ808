@@ -13,28 +13,49 @@ extern TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 
 static primitive_led_t __primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
+static const uint8_t _fade_fransfer[] =	// fade transfer curve according to MacNamara
+	{  // see https://tigoe.github.io/LightProjects/fading.html
+	0, 0, 0, 0, 0, 0, 0, 1, 1, 1,	// 10 by 10
+	1, 1, 1, 1, 1, 1, 1, 1, 2, 2,	// ...
+	2, 2, 2, 2, 2, 2, 3, 3, 3, 3,	//
+	3, 4, 4, 4, 4, 4, 4, 5, 5, 5,	//
+	6, 6, 6, 7, 7, 7, 8, 8, 9, 9,	//
+	9, 10, 10, 11, 12, 12, 13, 13, 14, 15,  //
+	16, 16, 17, 18, 19, 20, 21, 22, 23, 24,	//
+	25, 27, 28, 29, 31, 32, 34, 35, 37, 39,	//
+	41, 43, 45, 47, 49, 51, 54, 57, 59, 62,	//
+	65, 68, 71, 75, 78, 82, 86, 90, 94, 100	//
+	};
+
+volatile static uint8_t i = 0;	// rear
+volatile static uint8_t j = 0;	// brake
+
 // called indirectly by timer1 (_SystemInterrupt()), handles the fading
-static void _FadeHandler(void)
+static void _MacNamaraFadeHandler(void)
 {
-	if(Device->led->led[Rear].ocr > OCR_REAR_LIGHT)  // fade up
-		++OCR_REAR_LIGHT;
+	if(OCR_REAR_LIGHT < Device->led->led[Rear].ocr)  // fade up
+		OCR_REAR_LIGHT = _fade_fransfer[i++];
 
-	if(Device->led->led[Brake].ocr > OCR_BRAKE_LIGHT)  // fade up
-		++OCR_BRAKE_LIGHT;
+	if(OCR_BRAKE_LIGHT < Device->led->led[Brake].ocr)  // fade up
+		OCR_BRAKE_LIGHT = _fade_fransfer[j++];
 
-	if(Device->led->led[Rear].ocr < OCR_REAR_LIGHT)  // fade down
-		--OCR_REAR_LIGHT;
+	if(OCR_REAR_LIGHT > Device->led->led[Rear].ocr)  // fade down
+		{
+			OCR_REAR_LIGHT = _fade_fransfer[--i];
 
-	if(Device->led->led[Brake].ocr < OCR_BRAKE_LIGHT)  // fade down
-		--OCR_BRAKE_LIGHT;
+			if(OCR_REAR_LIGHT == 0)
+				Device->activity->RearLightOn = 0;	// mark inactivity
+		}
 
-	if(OCR_BRAKE_LIGHT == 0)
-		Device->activity->BrakeLightOn = 0;	// mark inactivity
+	if(OCR_BRAKE_LIGHT > Device->led->led[Brake].ocr)  // fade down
+		{
+			OCR_BRAKE_LIGHT = _fade_fransfer[--j];
 
-	if(OCR_REAR_LIGHT == 0)
-		Device->activity->RearLightOn = 0;	// mark inactivity
+			if(OCR_BRAKE_LIGHT == 0)
+				Device->activity->BrakeLightOn = 0;	// mark inactivity
+		}
 
-	if(OCR_BRAKE_LIGHT == 0 && OCR_REAR_LIGHT == 0)
+	if(Device->activity->RearLightOn == 0 && Device->activity->BrakeLightOn == 0)
 		{
 			Device->StopTimer(&htim14);  // stop the timer - LED handling
 			Device->StopTimer(&htim2);  // stop the timer - rear light PWM
@@ -138,7 +159,7 @@ composite_led_t* _virtual_led_ctorMJ818()
 {
 	__LED.public.led[Rear].Shine = &_primitiveRearLED;  // LED-specific implementation
 	__LED.public.led[Brake].Shine = &_primitiveBrakeLED;  // LED-specific implementation
-	__LED.public.Handler = &_FadeHandler;  // timer-based periodic LED control function
+	__LED.public.Handler = &_MacNamaraFadeHandler;  // timer-based periodic LED control function
 
 	return &__LED.public;  // return address of public part; calling code accesses it via pointer
 }

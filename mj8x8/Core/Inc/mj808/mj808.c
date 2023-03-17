@@ -49,7 +49,7 @@ void _event_execution_function_mj808(const uint8_t val)
 				{
 					//send the messages out, UDP-style. no need to check if the device is actually online
 					MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);	// convey button press via CAN and the logic unit will do its own thing
-					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 20, 2);  // turn on rear light
+					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 75, 2);  // turn on rear light
 //					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT), 20, 2);  // turn on brake light
 					MsgHandler->SendMessage(DASHBOARD_LED_GREEN_ON, 0x00, 1);  // turn on yellow LED
 				}
@@ -223,9 +223,9 @@ static inline void _TimerInit(void)
 
 	// timer14 - LED handling - 20ms
 	htim14.Instance = TIM14;
-	htim14.Init.Prescaler = 799;  // 8MHz / 799+1 = 10kHz update rate
+	htim14.Init.Prescaler = TIMER14_PRESCALER;
 	htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim14.Init.Period = 199;  // with above pre-scaler and a period of 19, we have an 2ms interrupt frequency
+	htim14.Init.Period = TIMER14_PERIOD;
 	htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim14.Init.RepetitionCounter = 0;
 	htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -273,8 +273,8 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 	if(timer->Instance == TIM14)	// LED fading
 		{
 			__HAL_RCC_TIM14_CLK_ENABLE();  // start the clock
-			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
-			timer->Instance->ARR = 199;
+			timer->Instance->PSC = TIMER14_PRESCALER;  // reconfigure after peripheral was powered down
+			timer->Instance->ARR = TIMER14_PERIOD;
 		}
 
 	if(timer->Instance == TIM16)	// button handling
