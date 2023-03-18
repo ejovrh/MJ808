@@ -38,9 +38,10 @@ static void _Heartbeat(message_handler_t *const msg)
 	 * if after a few iterations no devices are discovered, a bus-off routine is executed.
 	 * e.g. in the case of mj818 (the rear light without switches), it turns itself on automatically and just shines.
 	 */
-
+#ifdef USE_HEARTBEAT
 	if(__MJ8x8.__HeartBeatCounter == __MJ8x8.__NumericalCAN_ID)  // see if this counter iteration is our turn
 		msg->SendMessage(CMND_ANNOUNCE, 0x00, 1);  // if so, broadcast CAN heartbeat message
+#endif
 
 	++__MJ8x8.__HeartBeatCounter;  // increment the iteration counter
 
@@ -203,7 +204,7 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	__MJ8x8.__NumericalCAN_ID = (uint8_t) ((in_own_sidh >> 2) & 0x0F);	// set the CAN id.
 
 	__MJ8x8.public.can = can_ctor();	// pass on CAN public part
-	__MJ8x8.public.activity = &__MJ8x8.public.can->activity;	// tie in can_t activity into mj8x8_t activity  (is tied in again one level up)
+	__MJ8x8.public.activity = (uint8_t**) &__MJ8x8.public.can->activity;  // tie in can_t activity into mj8x8_t activity  (is tied in again one level up)
 	__MJ8x8.public.can->own_sidh = in_own_sidh;  // high byte
 	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);	// low byte
 	__MJ8x8.public.can->activity->DoHeartbeat = 1;	// start up with heartbeat enabled

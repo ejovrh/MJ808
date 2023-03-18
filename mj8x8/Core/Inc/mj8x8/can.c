@@ -177,22 +177,21 @@ static inline void _ConfigFilters(void)
 // CAN init
 inline static void _CANInit(void)
 {
-	HAL_GPIO_WritePin(TCAN334_Shutdown_GPIO_Port, TCAN334_Shutdown_Pin, GPIO_PIN_RESET);	// bring device out of shutdown
 	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_WAKE);  // bring device out of standby
 	__CAN.public.activity->CANActive = 1;  // mark as active
 
 	_hcan.Instance = CAN;  // see RM0091, 29.7.7 - pp. 840
 	_hcan.Init.Prescaler = 10;  // TODO - revise CAN bit timing
 	_hcan.Init.Mode = CAN_MODE_NORMAL;  //
-	_hcan.Init.SyncJumpWidth = CAN_SJW_2TQ;  //
-	_hcan.Init.TimeSeg1 = CAN_BS1_13TQ;  //
-	_hcan.Init.TimeSeg2 = CAN_BS2_2TQ;  //
-	_hcan.Init.TimeTriggeredMode = DISABLE;  //
-	_hcan.Init.AutoBusOff = DISABLE;  //
-	_hcan.Init.AutoWakeUp = ENABLE;  //
-	_hcan.Init.AutoRetransmission = ENABLE;  //
-	_hcan.Init.ReceiveFifoLocked = ENABLE;  //
-	_hcan.Init.TransmitFifoPriority = ENABLE;  //
+	_hcan.Init.SyncJumpWidth = CAN_SJW_2TQ;  // @suppress("Field cannot be resolved")
+	_hcan.Init.TimeSeg1 = CAN_BS1_13TQ;  // @suppress("Field cannot be resolved")
+	_hcan.Init.TimeSeg2 = CAN_BS2_2TQ;  // @suppress("Field cannot be resolved")
+	_hcan.Init.TimeTriggeredMode = DISABLE;  // @suppress("Field cannot be resolved")
+	_hcan.Init.AutoBusOff = DISABLE;  // @suppress("Field cannot be resolved")
+	_hcan.Init.AutoWakeUp = ENABLE;  // @suppress("Field cannot be resolved")
+	_hcan.Init.AutoRetransmission = ENABLE;  // @suppress("Field cannot be resolved")
+	_hcan.Init.ReceiveFifoLocked = ENABLE;  // @suppress("Field cannot be resolved")
+	_hcan.Init.TransmitFifoPriority = ENABLE;  // @suppress("Field cannot be resolved")
 	__HAL_RCC_CAN1_CLK_ENABLE();
 	HAL_CAN_Init(&_hcan);  // Initialize CAN Bus
 

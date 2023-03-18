@@ -12,6 +12,7 @@
 #define MJ808_	// what device to compile for
 
 #define	USE_POWERSAVE	// use processor power save features (stop mode & sleep on exit)
+//#define USE_HEARTBEAT	// use the heartbeat
 
 #if defined(MJ808_)	// front light header include
 #include "mj808/mj808.h"

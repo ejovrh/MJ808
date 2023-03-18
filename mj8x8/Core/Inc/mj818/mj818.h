@@ -12,8 +12,6 @@
 #include "event\event.h"
 
 // definitions of device/PCB layout-dependent hardware pins
-#define TCAN334_Shutdown_Pin GPIO_PIN_4
-#define TCAN334_Shutdown_GPIO_Port GPIOB
 #define TCAN334_Standby_Pin GPIO_PIN_5
 #define TCAN334_Standby_GPIO_Port GPIOA
 #define BrakeLED_Pin GPIO_PIN_1
