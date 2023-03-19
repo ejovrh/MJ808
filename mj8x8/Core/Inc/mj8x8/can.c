@@ -3,6 +3,7 @@
 
 #define TCAN334_STANDBY	GPIO_PIN_SET	// TCAN ds. p. 23
 #define TCAN334_WAKE GPIO_PIN_RESET	// TCAN ds. p. 23
+#define CAN_TIMEOUT_VALUE 200U
 
 static GPIO_InitTypeDef GPIO_InitStruct =
 	{0};
@@ -35,7 +36,6 @@ static void _tcan334_can_msg_receive(can_msg_t *const msg)
 	HAL_CAN_GetRxMessage(&_hcan, CAN_RX_FIFO0, &_RXHeader, msg->data);	// fetch msg from fifo0
 
 	msg->sidh = _RXHeader.StdId;
-
 	msg->dlc = _RXHeader.DLC;
 
 	return;
@@ -44,6 +44,7 @@ static void _tcan334_can_msg_receive(can_msg_t *const msg)
 // Add a message to the first free Tx mailbox and activate the corresponding transmission request
 static void _tcan334_can_msg_send(can_msg_t *const msg)
 {
+	volatile uint8_t i = 0;  // safeguard counter
 
 	if((__CAN.public.activity->byte & 0x0F) == 0)  // if sleeping...
 		__CAN.public.BusActive(1);  // wake up
@@ -59,10 +60,33 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 		{
 			mboxFreeCount = HAL_CAN_GetTxMailboxesFreeLevel(&_hcan);	// get count of free mailboxes
 
-			if(HAL_CAN_AddTxMessage(&_hcan, &_TXHeader, msg->data, &_TXMailbox) == HAL_OK)  // add the message to the mailbox and if all is ok...
-				return;  // get out
+			if(i > CAN_TIMEOUT_VALUE)  // safeguard
+				{
+					asm("NOP");
+					// FIXME - CAN msg send - no free mailbox timeout
+					// TODO - CAN msg send - no free mailbox - implement error handling
+					break;
+				}
+
+			++i;
 		}
 	while(mboxFreeCount == 0);  // loop until the free mailbox level is non-zero
+
+	HAL_CAN_AddTxMessage(&_hcan, &_TXHeader, msg->data, &_TXMailbox);  // add the message to the mailbox
+
+	i = 0;	// reinitialise safeguard counter
+	while(HAL_CAN_IsTxMessagePending(&_hcan, _TXMailbox))
+		{
+			++i;
+
+			if(i > CAN_TIMEOUT_VALUE)
+				{
+					// TODO - CAN msg send - msg tx pending - implement error handling
+					// FIXME - CAN msg send - msg tx pending timeout
+					HAL_CAN_AbortTxRequest(&_hcan, _TXMailbox);
+				}
+		}
+	asm("NOP");
 }
 
 // configure GPIO from CAN RX to EXTI
@@ -93,33 +117,69 @@ static inline void _EXTItoRX(void)
 //	sets CAN infrastructure into standby mode
 static inline void __can_go_into_standby_mode(void)
 {
+	uint8_t i = 0;	// safeguard counter
+
 	if(__CAN.public.activity->CANActive == 0)  // if we already are asleep ...
 		return;  // ... do nothing
 
-	__CAN.public.activity->CANActive = 0;  // mark as sleeping
+	__disable_irq();	// uninterrupted...
 
-//	HAL_CAN_AbortTxRequest(&_hcan, CAN_TX_MAILBOX0);
-//	HAL_CAN_AbortTxRequest(&_hcan, CAN_TX_MAILBOX1);
-//	HAL_CAN_AbortTxRequest(&_hcan, CAN_TX_MAILBOX2);
-	HAL_CAN_RequestSleep(&_hcan);  // put internal CAN peripheral to sleep
+	do
+		{
+			HAL_CAN_RequestSleep(&_hcan);  // try to put CAN peripheral to sleep
+
+			if(i > CAN_TIMEOUT_VALUE)  // safeguard
+				{
+					asm("NOP");
+					// FIXME - CAN sleep fail due to timeout
+					// TODO - CAN sleep fails - implement error handling
+					break;
+				}
+
+			++i;
+		}
+	while(HAL_CAN_IsSleepActive(&_hcan) == 0);  // check if CAN peripheral is still active
+
 	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_STANDBY);  // put transceiver to sleep
 
 	_RXtoEXTI();	// configure GPIO from CAN RX pin to EXTI (so that CAN frame reception can wake up the uC from stop mode)
+
+	__CAN.public.activity->CANActive = 0;  // mark as sleeping
+
+	__enable_irq();
 }
 
 //	sets CAN infrastructure into normal operating mode
 static inline void __can_go_into_active_mode(void)
 {
+	uint8_t i = 0;	// safeguard counter
+
 	if(__CAN.public.activity->CANActive == 1)  // if we already are awake ...
 		return;  // ... do nothing
 
-	__CAN.public.activity->CANActive = 1;  // mark as awake
+	__disable_irq();	// uninterrupted...
 
+	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_WAKE);	// wake up CAN transceiver
 	_EXTItoRX();	// configure GPIO from EXTI to CAN RX
 
-	HAL_CAN_WakeUp(&_hcan);  // wake up internal CAN peripheral
-//	HAL_CAN_ResetError(&_hcan);
-	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_WAKE);	// wake up CAN transceiver
+	do
+		{
+			HAL_CAN_WakeUp(&_hcan);  // try to wake up internal CAN peripheral
+
+			if(i > CAN_TIMEOUT_VALUE)  // safeguard
+				{
+					asm("NOP");
+					// TODO - CAN sleep fails - implement error handling
+					break;
+				}
+
+			++i;
+		}
+	while(HAL_CAN_IsSleepActive(&_hcan));  // check if CAN peripheral is still asleep
+
+	__CAN.public.activity->CANActive = 1;  // mark as awake
+
+	__enable_irq();
 }
 
 // puts the whole CAN infrastructure to sleep; 1 - sleep, 0 - awake
@@ -181,14 +241,22 @@ inline static void _CANInit(void)
 	__CAN.public.activity->CANActive = 1;  // mark as active
 
 	_hcan.Instance = CAN;  // see RM0091, 29.7.7 - pp. 840
-	_hcan.Init.Prescaler = 10;  // TODO - revise CAN bit timing
+
+	/* bit timing
+	 * 	TCAN334 has a wakeup filter time of max. 4us (DS. p. 8).
+	 * 	this means a maximum speed of 250kbit/s can be used so that a WUP pattern can be generated safely by any CAN frame.
+	 *
+	 *
+	 */
+
+	_hcan.Init.Prescaler = 10;  // TODO - revise CAN bit timing, pay particular attention to wakeup timing
 	_hcan.Init.Mode = CAN_MODE_NORMAL;  //
 	_hcan.Init.SyncJumpWidth = CAN_SJW_2TQ;  // @suppress("Field cannot be resolved")
 	_hcan.Init.TimeSeg1 = CAN_BS1_13TQ;  // @suppress("Field cannot be resolved")
 	_hcan.Init.TimeSeg2 = CAN_BS2_2TQ;  // @suppress("Field cannot be resolved")
 	_hcan.Init.TimeTriggeredMode = DISABLE;  // @suppress("Field cannot be resolved")
 	_hcan.Init.AutoBusOff = DISABLE;  // @suppress("Field cannot be resolved")
-	_hcan.Init.AutoWakeUp = ENABLE;  // @suppress("Field cannot be resolved")
+	_hcan.Init.AutoWakeUp = DISABLE;  // @suppress("Field cannot be resolved")
 	_hcan.Init.AutoRetransmission = ENABLE;  // @suppress("Field cannot be resolved")
 	_hcan.Init.ReceiveFifoLocked = ENABLE;  // @suppress("Field cannot be resolved")
 	_hcan.Init.TransmitFifoPriority = ENABLE;  // @suppress("Field cannot be resolved")
@@ -200,7 +268,7 @@ inline static void _CANInit(void)
 	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 3, 0);
 	HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
 
-	HAL_CAN_ActivateNotification(&_hcan, (CAN_IT_ERROR | CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO1_MSG_PENDING | CAN_IT_WAKEUP));  // enable interrupts
+	HAL_CAN_ActivateNotification(&_hcan, (CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO1_MSG_PENDING));  // enable interrupts
 	HAL_CAN_Start(&_hcan);	// start CAN
 
 }
@@ -208,8 +276,8 @@ inline static void _CANInit(void)
 // object constructor
 can_t* can_ctor(void)
 {
-	// at this point STM32's TCAN334 Stby and Shdn pins are initialised and pulled up
-	// TCAN334 is in shutdown/standby mode
+// at this point STM32's TCAN334 Stby and Shdn pins are initialised and pulled up
+// TCAN334 is in shutdown/standby mode
 	_CANInit();  // initialize & configure STM32's CAN peripheral
 
 	return &__CAN.public;  // return address of public part; calling code accesses it via pointer
@@ -258,7 +326,7 @@ void CEC_CAN_IRQHandler(void)
 // CAN RX GPIO EXIT ISR
 void EXTI4_15_IRQHandler(void)
 {  // called on activity on CAN RX GPIO
-	__CAN.public.BusActive(1);  // wake up CAN
+	__CAN.public.BusActive(1);  // ...wake up CAN
 
 	HAL_GPIO_EXTI_IRQHandler(CAN_RX_Pin);  // service the interrupt
 }
