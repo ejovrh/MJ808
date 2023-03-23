@@ -329,6 +329,7 @@ void mj808_ctor(void)
 void EXTI0_1_IRQHandler(void)
 {
 	Device->StartTimer(&htim16);  // start the button handling timer
+	Device->mj8x8->StartCoreTimer();  // start time core timer
 
 	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// interrupt source detection
 		// Pushbutton: released - pin high, pressed - pin low

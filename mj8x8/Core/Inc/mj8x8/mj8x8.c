@@ -3,7 +3,7 @@
 #include "can.h"
 
 static TIM_HandleTypeDef htim1;  // Timer1 object
-static IWDG_HandleTypeDef hiwdg;  // Independent Watchdog object
+//static IWDG_HandleTypeDef hiwdg;  // Independent Watchdog object
 
 typedef struct	// mj8x8_t actual
 {
@@ -52,13 +52,31 @@ static void _Heartbeat(message_handler_t *const msg)
 			if((MsgHandler->Devices == 0) && (__MJ8x8.__HeartBeatIterationCounter > 1))  // if we have passed one iteration of non-heartbeat mode and we are alone on the bus
 				__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
 
-			if(__MJ8x8.__HeartBeatIterationCounter > 2)
-				__MJ8x8.public.can->activity->DoHeartbeat = 0;  // allow sleep
+			if(__MJ8x8.__HeartBeatIterationCounter > 2)  // two complete heartbeat iterations have passed
+				__MJ8x8.public.can->activity->DoHeartbeat = 0;  // mark as complete and allow sleep
 		}
+}
+
+// stops timer1
+static void _StopTimer1(void)
+{
+	HAL_TIM_Base_Stop_IT(&htim1);  // stop the timer
+	__HAL_RCC_TIM1_CLK_DISABLE();  // stop the clock
+}
+
+// starts timer1 - used by can_t
+static void _StartTimer1(void)
+{
+	__HAL_RCC_TIM1_CLK_ENABLE();  // start the clock
+	htim1.Instance->PSC = TIMER1_PRESCALER;  // reconfigure after peripheral was powered down
+	htim1.Instance->ARR = TIMER1_PERIOD;
+	HAL_TIM_Base_Start_IT(&htim1);  // stop the timer
 }
 
 __mj8x8_t __MJ8x8 =  // instantiate mj8x8_t actual and set function pointers
 	{  //
+	.public.StartCoreTimer = &_StartTimer1,  // timer1 stop - see can_t for start
+	.public.StopCoreTimer = &_StopTimer1,  // timer1 stop - see can_t for start
 	.public.HeartBeat = &_Heartbeat,  // implement device-agnostic default behaviour - heartbeat
 	.public.EmptyBusOperation = &_DoNothing  // implement device-agnostic default behaviour - do nothing, usually an override happens
 	};
@@ -85,14 +103,14 @@ static inline void _SystemClockConfig(void)
 }
 
 // IWDG init
-void _IWDGInit(void)
-{
-	hiwdg.Instance = IWDG;
-	hiwdg.Init.Prescaler = IWDG_PRESCALER_4;	// 40kHz / 4 = 10kHz
-	hiwdg.Init.Window = 4095;
-	hiwdg.Init.Reload = 4095;  // 4095/10kHz = 409.5ms
-	HAL_IWDG_Init(&hiwdg);
-}
+//void _IWDGInit(void)
+//{
+//	hiwdg.Instance = IWDG;
+//	hiwdg.Init.Prescaler = IWDG_PRESCALER_4;	// 40kHz / 4 = 10kHz
+//	hiwdg.Init.Window = 4095;
+//	hiwdg.Init.Reload = 4095;  // 4095/10kHz = 409.5ms
+//	HAL_IWDG_Init(&hiwdg);
+//}
 
 // GPIO init - device non-specific
 static inline void _GPIOInit(void)
@@ -142,9 +160,9 @@ static inline void _TimerInit(void)
 		{0};
 
 	htim1.Instance = TIM1;
-	htim1.Init.Prescaler = 799;  // 8MHz / 799+1 = 10kHz update rate
+	htim1.Init.Prescaler = TIMER1_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
 	htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim1.Init.Period = 1249;  // with above pre-scaler and a period of 1249, we have an 125ms interrupt frequency
+	htim1.Init.Period = TIMER1_PERIOD;  // with above pre-scaler and a period of 1249, we have an 125ms interrupt frequency
 	htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim1.Init.RepetitionCounter = 0;
 	htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -180,6 +198,7 @@ static void _Sleep(void)
 	else	// if device is not active
 		{
 			__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into standby state
+			__MJ8x8.public.StopCoreTimer();  // stop timer1
 
 			HAL_PWR_DisableSleepOnExit();
 			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // go into stop mode
@@ -208,6 +227,7 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	__MJ8x8.public.can->own_sidh = in_own_sidh;  // high byte
 	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);	// low byte
 	__MJ8x8.public.can->activity->DoHeartbeat = 1;	// start up with heartbeat enabled
+	__MJ8x8.public.can->Timer1Start = &_StartTimer1;  //
 
 	__MJ8x8.public.Sleep = &_Sleep;  // puts device to sleep
 

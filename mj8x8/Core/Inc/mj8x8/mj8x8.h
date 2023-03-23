@@ -13,6 +13,9 @@
 #define CAN_TX_GPIO_Port GPIOA
 // definitions of device/PCB layout-independent hardware pins
 
+#define TIMER1_PRESCALER 799	// 8MHz / 799+1 = 10kHz update rate
+#define TIMER1_PERIOD 1249	// with above pre-scaler and a period of 1249, we have an 125ms interrupt frequency
+
 extern TIM_HandleTypeDef timer;
 
 typedef struct	// "base class" struct for mj8x8 devices
@@ -20,6 +23,8 @@ typedef struct	// "base class" struct for mj8x8 devices
 	uint8_t **activity;  // device activity indicator from one level down (can_t)
 	can_t *can;  // pointer to the CAN structure
 
+	void (*const StartCoreTimer)(void);  // starts timer1
+	void (*const StopCoreTimer)(void);  // stops timer1
 	void (*const HeartBeat)(message_handler_t *const msg);	// default periodic heartbeat for all devices
 	void (*EmptyBusOperation)(void);	// device's default operation on empty bus, implemented in derived class
 	void (*PopulatedBusOperation)(message_handler_t *const in_msg);  // device operation on populated bus, executed by incoming msg ISR; operates by means of MsgHandler object

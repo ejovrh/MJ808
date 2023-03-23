@@ -51,6 +51,7 @@ typedef struct can_t	// can_t struct describing the CAN device as a whole
 	uint8_t own_sidl;  // SIDL for device
 	activity_t *activity;  // device activity indicator
 
+	void (*Timer1Start)(void);  // starts timer1 (see mj8x8_t for the stop function)
 	void (*const BusActive)(const uint8_t in_val);	// puts the CAN infrastructure to sleep (and wakes it up)
 	void (*const RequestToSend)(can_msg_t *const msg);  // requests message to be sent to the CAN bus
 	void (*const FetchMessage)(can_msg_t *msg);  // fetches received message from some RX buffer

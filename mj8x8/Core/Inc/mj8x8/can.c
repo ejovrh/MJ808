@@ -38,7 +38,7 @@ static void _tcan334_can_msg_receive(can_msg_t *const msg)
 	msg->sidh = _RXHeader.StdId;
 	msg->dlc = _RXHeader.DLC;
 
-	return;
+	__CAN.public.BusActive(0);
 }
 
 // Add a message to the first free Tx mailbox and activate the corresponding transmission request
@@ -77,16 +77,17 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 	i = 0;	// reinitialise safeguard counter
 	while(HAL_CAN_IsTxMessagePending(&_hcan, _TXMailbox))
 		{
-			++i;
-
 			if(i > CAN_TIMEOUT_VALUE)
 				{
 					// TODO - CAN msg send - msg tx pending - implement error handling
 					// FIXME - CAN msg send - msg tx pending timeout
 					HAL_CAN_AbortTxRequest(&_hcan, _TXMailbox);
 				}
+
+			++i;
 		}
-	asm("NOP");
+
+	__CAN.public.BusActive(0);
 }
 
 // configure GPIO from CAN RX to EXTI
@@ -94,7 +95,7 @@ static inline void _RXtoEXTI(void)
 {
 	GPIO_InitStruct.Pin = CAN_RX_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	HAL_GPIO_Init(CAN_RX_GPIO_Port, &GPIO_InitStruct);
 
 	HAL_NVIC_SetPriority(EXTI4_15_IRQn, 0, 0);  // EXTI11 - CAN RX scenario when uC is in stop mode and needs to be woken up
@@ -123,6 +124,7 @@ static inline void __can_go_into_standby_mode(void)
 		return;  // ... do nothing
 
 	__disable_irq();	// uninterrupted...
+	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_STANDBY);  // put transceiver to sleep
 
 	do
 		{
@@ -139,8 +141,6 @@ static inline void __can_go_into_standby_mode(void)
 			++i;
 		}
 	while(HAL_CAN_IsSleepActive(&_hcan) == 0);  // check if CAN peripheral is still active
-
-	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_STANDBY);  // put transceiver to sleep
 
 	_RXtoEXTI();	// configure GPIO from CAN RX pin to EXTI (so that CAN frame reception can wake up the uC from stop mode)
 
@@ -159,7 +159,6 @@ static inline void __can_go_into_active_mode(void)
 
 	__disable_irq();	// uninterrupted...
 
-	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_WAKE);	// wake up CAN transceiver
 	_EXTItoRX();	// configure GPIO from EXTI to CAN RX
 
 	do
@@ -176,6 +175,8 @@ static inline void __can_go_into_active_mode(void)
 			++i;
 		}
 	while(HAL_CAN_IsSleepActive(&_hcan));  // check if CAN peripheral is still asleep
+
+	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_WAKE);	// wake up CAN transceiver
 
 	__CAN.public.activity->CANActive = 1;  // mark as awake
 
@@ -238,7 +239,6 @@ static inline void _ConfigFilters(void)
 inline static void _CANInit(void)
 {
 	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_WAKE);  // bring device out of standby
-	__CAN.public.activity->CANActive = 1;  // mark as active
 
 	_hcan.Instance = CAN;  // see RM0091, 29.7.7 - pp. 840
 
@@ -327,6 +327,6 @@ void CEC_CAN_IRQHandler(void)
 void EXTI4_15_IRQHandler(void)
 {  // called on activity on CAN RX GPIO
 	__CAN.public.BusActive(1);  // ...wake up CAN
-
+	__CAN.public.Timer1Start();  // start timer1
 	HAL_GPIO_EXTI_IRQHandler(CAN_RX_Pin);  // service the interrupt
 }
