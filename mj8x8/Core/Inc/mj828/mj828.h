@@ -12,7 +12,7 @@
 #include "adc\adc.h"
 
 // definitions of device/PCB layout-specific hardware pins
-#define TCAN334_Standby_Pin GPIO_PIN_8
+#define TCAN334_Standby_Pin GPIO_PIN_8	// TODO - move to PA?
 #define TCAN334_Standby_GPIO_Port GPIOB
 #define LeverFront_Pin GPIO_PIN_1
 #define LeverFront_GPIO_Port GPIOA
@@ -22,18 +22,18 @@
 #define LeverBrake_EXTI_IRQn EXTI2_3_IRQn
 #define VBat_Pin GPIO_PIN_3
 #define VBat_GPIO_Port GPIOA
-#define Pushbutton_Pin GPIO_PIN_0
+#define Pushbutton_Pin GPIO_PIN_0	// TODO - move to PA?
 #define Pushbutton_GPIO_Port GPIOB
 #define Pushbutton_EXTI_IRQn EXTI0_1_IRQn
-#define Phototransistor_Pin GPIO_PIN_1
+#define Phototransistor_Pin GPIO_PIN_1	// TODO - move to PA?
 #define Phototransistor_GPIO_Port GPIOB
 #define CP4_Pin GPIO_PIN_15
 #define CP4_GPIO_Port GPIOA
-#define CP2_Pin GPIO_PIN_3
+#define CP2_Pin GPIO_PIN_3	// TODO - move to PA?
 #define CP2_GPIO_Port GPIOB
-#define CP3_Pin GPIO_PIN_4
+#define CP3_Pin GPIO_PIN_4	// TODO - move to PA?
 #define CP3_GPIO_Port GPIOB
-#define CP1_Pin GPIO_PIN_5
+#define CP1_Pin GPIO_PIN_5	// TODO - move to PA?
 #define CP1_GPIO_Port GPIOB
 // definitions of device/PCB layout-specific hardware pins
 
@@ -63,7 +63,7 @@ enum mj828_buttons	// enum of buttons on this device
 	  LeverBrake	// left brake lever in braking action
 };
 
-typedef union  // union for activity indication
+typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 {
 	struct
 	{
@@ -71,17 +71,17 @@ typedef union  // union for activity indication
 		 * CAN has to be active
 		 */
 		uint8_t DoHeartbeat :1;  // bit 0 - HeartBeat is running
-		uint8_t one :1;  //
-		uint8_t two :1;  //
-		uint8_t three :1;  //
+		uint8_t _1 :1;  //
+		uint8_t _2 :1;  //
+		uint8_t _3 :1;  //
 
 		/* 0xF0 - upper nibble
 		 * CAN can be in standby mode
 		 */
-		uint8_t CANActive :1;  // CAN is actively being used
-		uint8_t five :1;	//
+		uint8_t CANActive :1;  // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
+		uint8_t _5 :1;	//
 		uint8_t ButtonPessed :1;  // any button is in use
-		uint8_t LEDsOn :1;  // UI LEDS are on
+		uint8_t LEDsOn :1;  // UI LEDS are on: timer ISR - stop mode will break functionality
 	};
 	uint8_t byte;  // byte-wise representation of the above bitfield
 } mj828_activity_t;

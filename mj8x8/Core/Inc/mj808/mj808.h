@@ -13,16 +13,16 @@
 #include "button\button.h"
 
 // definitions of device/PCB layout-dependent hardware pins
-#define TCAN334_Standby_Pin GPIO_PIN_1	//	defined here but initialised in mj8x8.c
+#define TCAN334_Standby_Pin GPIO_PIN_1	//	defined here but initialised in mj8x8.c // TODO - move to PA?
 #define TCAN334_Standby_GPIO_Port GPIOB	//	defined here but initialised in mj8x8.c
-#define Pushbutton_Pin GPIO_PIN_0
+#define Pushbutton_Pin GPIO_PIN_0	// TODO - move to PA?
 #define Pushbutton_GPIO_Port GPIOB
-#define Switch_EXTI_IRQn EXTI0_1_IRQn
-#define FrontLED_Pin GPIO_PIN_3
+#define Switch_EXTI_IRQn EXTI0_1_IRQn	// TODO - move to PA?
+#define FrontLED_Pin GPIO_PIN_3	// TODO - move to PA?
 #define FrontLED_GPIO_Port GPIOB
-#define RedLED_Pin GPIO_PIN_4
+#define RedLED_Pin GPIO_PIN_4	// TODO - move to PA?
 #define RedLED_GPIO_Port GPIOB
-#define GreenLED_Pin GPIO_PIN_5
+#define GreenLED_Pin GPIO_PIN_5	// TODO - move to PA?
 #define GreenLED_GPIO_Port GPIOB
 // definitions of device/PCB layout-dependent hardware pins
 
@@ -37,7 +37,7 @@ enum mj808_buttons	// enum of buttons on this device
 	  PushButton
 };
 
-typedef union  // union for activity indication
+typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 {
 	struct
 	{
@@ -52,10 +52,10 @@ typedef union  // union for activity indication
 		/* 0xF0 - upper nibble
 		 * CAN can be in standby mode
 		 */
-		uint8_t CANActive :1;  // CAN is actively being used
-		uint8_t UtilityLEDOn :1;	// utility LED is on
-		uint8_t HighBeamOn :1;  // high beam is on
-		uint8_t FrontLightOn :1;  // bit 7 - front light is on
+		uint8_t CANActive :1;  // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
+		uint8_t UtilityLEDOn :1;	// utility LED is on TODO - used only for debug purposes
+		uint8_t HighBeamOn :1;  // high beam is on: PWM - stop mode will break functionality
+		uint8_t FrontLightOn :1;  // bit 7 - front light is on: PWM - stop mode will break functionality
 	};
 	uint8_t byte;  // byte-wise representation of the above bitfield
 } mj808_activity_t;

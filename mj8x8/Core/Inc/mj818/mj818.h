@@ -14,7 +14,7 @@
 // definitions of device/PCB layout-dependent hardware pins
 #define TCAN334_Standby_Pin GPIO_PIN_5
 #define TCAN334_Standby_GPIO_Port GPIOA
-#define BrakeLED_Pin GPIO_PIN_1
+#define BrakeLED_Pin GPIO_PIN_1	// TODO - move to PA6
 #define BrakeLED_GPIO_Port GPIOB
 #define RearLED_Pin GPIO_PIN_15
 #define RearLED_GPIO_Port GPIOA
@@ -26,7 +26,7 @@ enum mj818_leds  // enum of lights on this device
 	  Brake
 };
 
-typedef union  // union for activity indication
+typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 {
 	struct
 	{
@@ -34,17 +34,17 @@ typedef union  // union for activity indication
 		 * CAN has to be active
 		 */
 		uint8_t DoHeartbeat :1;  // bit 0 - HeartBeat is running
-		uint8_t one :1;  //
-		uint8_t two :1;  //
-		uint8_t three :1;  //
+		uint8_t _1 :1;  //
+		uint8_t _2 :1;  //
+		uint8_t _3 :1;  //
 
 		/* 0xF0 - upper nibble
 		 * CAN can be in standby mode
 		 */
-		uint8_t CANActive :1;	// CAN is actively being used
-		uint8_t five :1;	//
-		uint8_t BrakeLightOn :1;  // brake light is on
-		uint8_t RearLightOn :1;  // bit 7 - rear light is on
+		uint8_t CANActive :1;  // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
+		uint8_t _5 :1;	//
+		uint8_t BrakeLightOn :1;  // brake light is on: PWM - stop mode will break functionality
+		uint8_t RearLightOn :1;  // bit 7 - rear light is on: PWM - stop mode will break functionality
 	};
 	uint8_t byte;  // byte-wise representation of the above bitfield
 } mj818_activity_t;
