@@ -242,14 +242,16 @@ inline static void _CANInit(void)
 
 	_hcan.Instance = CAN;  // see RM0091, 29.7.7 - pp. 840
 
-	/* bit timing TODO - elaborate on bit timing
+	/* bit timing
 	 * 	TCAN334 has a wakeup filter time of max. 4us (DS. p. 8).
 	 * 	this means a maximum speed of 250kbit/s can be used so that a WUP pattern can be generated safely by any CAN frame.
 	 *
-	 *
+	 *	fCPU is 8MHz, with a pre-scaler value of 10 we are getting 800kHz, thus a 0.125 us period.
+	 *	nominal bit-time is 20us, thus 50kbit/s is the baud rate.
+	 *	nominal bit time is 1us, sample point is at 87.5%
 	 */
 
-	_hcan.Init.Prescaler = 10;  // TODO - revise CAN bit timing, pay particular attention to wakeup timing
+	_hcan.Init.Prescaler = 10;  //
 	_hcan.Init.Mode = CAN_MODE_NORMAL;  //
 	_hcan.Init.SyncJumpWidth = CAN_SJW_2TQ;  // @suppress("Field cannot be resolved")
 	_hcan.Init.TimeSeg1 = CAN_BS1_13TQ;  // @suppress("Field cannot be resolved")

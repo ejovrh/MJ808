@@ -20,7 +20,7 @@ typedef struct	// mj828_t actual
 static __mj828_t __Device __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
 // defines device operation on empty bus
-void _EmptyBusOperationMJ828(void)
+void _EmptyBusOperation(void)
 {
 	;  // TODO - define mj828 empty bus operation
 }

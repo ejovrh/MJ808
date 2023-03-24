@@ -27,6 +27,12 @@ typedef struct	// mj808_t actual
 
 static __mj808_t __Device __attribute__ ((section (".data")));  // preallocate __Device object in .data
 
+// defines device operation on empty bus
+void _EmptyBusOperation(void)
+{
+	;  // TODO - define mj828 empty bus operation
+}
+
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 // cases in this switch-case statement must be unique for all events on this device
 void _event_execution_function(const uint8_t val)
@@ -306,7 +312,8 @@ void mj808_ctor(void)
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
-	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperation;	// implements device-specific operation depending on bus activity
+//	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperation;	// override device-agnostic default operation with specifics
+	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperation;  // implements device-specific operation depending on bus activity
 
 	EventHandler->fpointer = &_event_execution_function;	// implements event hander for this device
 
