@@ -22,7 +22,6 @@ extern TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
 extern __event_handler_t __EventHandler;  // declare event_handler_t actual
 
 /* theory of operation
- *
  *	components: subject, event handler, object
  *		the subject uses Notify() to notify the event handler about an event - e.g. a button press
  *		via Notify() the event handler sets a bit in __index
@@ -42,9 +41,9 @@ extern __event_handler_t __EventHandler;  // declare event_handler_t actual
  *		each subject ought to have its own case table
  *		all values in all case table arrays must be unique
  */
-// a function that does nothing
 
-static inline void _DoNothing(void)
+// a function that does nothing
+static inline void _DoNothing(const uint8_t foo)
 {
 	return;
 }

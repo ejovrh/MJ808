@@ -54,7 +54,6 @@ typedef struct can_t	// can_t struct describing the CAN device as a whole
 	void (*Timer1Start)(void);  // starts timer1 (see mj8x8_t for the stop function)
 	void (*const BusActive)(const uint8_t in_val);	// puts the CAN infrastructure to sleep (and wakes it up)
 	void (*const RequestToSend)(can_msg_t *const msg);  // requests message to be sent to the CAN bus
-	void (*const FetchMessage)(can_msg_t *msg);  // fetches received message from some RX buffer
 } can_t __attribute__((aligned(8)));
 
 can_t* can_ctor();	// CAN object constructor - does function pointer & hardware initialisation

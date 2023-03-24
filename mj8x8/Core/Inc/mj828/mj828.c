@@ -144,9 +144,9 @@ void _event_execution_function_mj828(uint8_t val)
 }
 
 // toggles a bit in the LED flags variable; charlieplexer in turn makes it shine
-void _PopulatedBusOperationMJ828(message_handler_t *const in_msg)
+void _PopulatedBusOperationMJ828(message_handler_t *const in_handler)
 {
-	volatile can_msg_t *msg = in_msg->ReceiveMessage();  // CAN message object
+	volatile can_msg_t *msg = in_handler->GetMessage();  // CAN message object
 
 // FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if((msg->COMMAND& MASK_COMMAND) == CMND_DASHBOARD )  // dashboard command

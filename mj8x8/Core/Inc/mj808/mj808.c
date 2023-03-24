@@ -95,9 +95,9 @@ void _event_execution_function_mj808(const uint8_t val)
 }
 
 // received MsgHandler object and passes
-void _PopulatedBusOperationMJ808(message_handler_t *const in_msg)
+void _PopulatedBusOperationMJ808(message_handler_t *const in_handler)
 {
-	volatile can_msg_t *msg = in_msg->ReceiveMessage();  // CAN message object
+	can_msg_t *msg = in_handler->GetMessage();  // CAN message object
 
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if((msg->COMMAND& CMND_UTIL_LED) == CMND_UTIL_LED)  // utility LED command

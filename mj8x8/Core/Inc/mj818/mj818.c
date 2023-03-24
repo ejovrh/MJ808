@@ -35,9 +35,9 @@ void _EmptyBusOperationMJ818(void)
 }
 
 // dispatches CAN messages to appropriate sub-component on device
-void _PopulatedBusOperationMJ818(message_handler_t *const in_msg)
+void _PopulatedBusOperationMJ818(message_handler_t *const in_handler)
 {
-	volatile can_msg_t *msg = in_msg->ReceiveMessage();  // CAN message object
+	volatile can_msg_t *msg = in_handler->GetMessage();  // CAN message object
 
 	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
 	if(msg->COMMAND== (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT))  // rear positional light

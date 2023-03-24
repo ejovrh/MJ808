@@ -11,12 +11,8 @@ static CAN_HandleTypeDef _hcan =  // CAN object
 	{0};
 static CAN_TxHeaderTypeDef _TXHeader =  // CAN header object
 	{0};
-static CAN_RxHeaderTypeDef _RXHeader =  // CAN header object
-	{0};
 static CAN_FilterTypeDef _FilterCondfig =  // CAN filter configuration object
 	{0};
-static uint32_t _TXMailbox = 0;  // TX mailbox identifier
-uint8_t TxData[8];
 
 static activity_t _activity;	// actual activity object (is used only through references)
 
@@ -29,14 +25,18 @@ typedef struct	// can_t actual
 
 extern __can_t __CAN;  // declare can_t actual
 
-// fetches a CAN frame from the RX FIFO and loads it into a can_msg_t object
-static void _tcan334_can_msg_receive(can_msg_t *const msg)
+// fetches a CAN frame from a RX FIFO and loads it into the message handler object
+static void _tcan334_can_msg_receive(message_handler_t *in_handler, const uint8_t in_fifo)
 {
-	// FIXME - implement via FIFO interrupts
-	HAL_CAN_GetRxMessage(&_hcan, CAN_RX_FIFO0, &_RXHeader, msg->data);	// fetch msg from fifo0
+	can_msg_t _msg;  // static or not ?
+	CAN_RxHeaderTypeDef _nRXH;  // static or not ?
 
-	msg->sidh = _RXHeader.StdId;
-	msg->dlc = _RXHeader.DLC;
+	HAL_CAN_GetRxMessage(&_hcan, in_fifo, &_nRXH, _msg.data);  // fetch message from FIFO
+
+	_msg.sidh = _nRXH.StdId;
+	_msg.dlc = _nRXH.DLC;
+
+	in_handler->SetMessage(&_msg);  // upload into the message handler
 
 	__CAN.public.BusActive(0);
 }
@@ -45,6 +45,7 @@ static void _tcan334_can_msg_receive(can_msg_t *const msg)
 static void _tcan334_can_msg_send(can_msg_t *const msg)
 {
 	volatile uint8_t i = 0;  // safeguard counter
+	uint32_t _TXMailbox;  // TX mailbox identifier
 
 	if((__CAN.public.activity->byte & 0x0F) == 0)  // if sleeping...
 		__CAN.public.BusActive(1);  // wake up
@@ -201,15 +202,14 @@ static void _busactive(const uint8_t awake)
 __can_t __CAN =  // instantiate can_t actual and set function pointers
 	{  //
 	.public.activity = &_activity,  // tie in private activity union into can_t object (is tied in again one level up)
-
 	.public.BusActive = &_busactive,  // set up function pointer for public methods
 	.public.RequestToSend = &_tcan334_can_msg_send,  // ditto
-	.public.FetchMessage = &_tcan334_can_msg_receive  // ditto
 	};
 
 static inline void _ConfigFilters(void)
 {
-	_FilterCondfig.FilterBank = 0;	// block all on fifo1
+	// TODO - CAN filters - configure filters
+	_FilterCondfig.FilterBank = 0;	// allow all for FIFOo
 	_FilterCondfig.FilterMode = CAN_FILTERMODE_IDMASK;
 	_FilterCondfig.FilterScale = CAN_FILTERSCALE_32BIT;
 	_FilterCondfig.FilterIdHigh = 0x0000;
@@ -222,15 +222,15 @@ static inline void _ConfigFilters(void)
 	_FilterCondfig.FilterActivation = ENABLE;
 	HAL_CAN_ConfigFilter(&_hcan, &_FilterCondfig);
 
-	_FilterCondfig.FilterBank = 1;	// block all on fifo1
+	_FilterCondfig.FilterBank = 1;	// allow all for FIFO1
 	_FilterCondfig.FilterMode = CAN_FILTERMODE_IDMASK;
 	_FilterCondfig.FilterScale = CAN_FILTERSCALE_32BIT;
 	_FilterCondfig.FilterIdHigh = 0x0000;
 	_FilterCondfig.FilterIdLow = 0x0000;
 
-	_FilterCondfig.FilterMaskIdHigh = 0xFFFF;
-	_FilterCondfig.FilterMaskIdLow = 0xFFFF;
-	_FilterCondfig.FilterFIFOAssignment = CAN_RX_FIFO0;
+//	_FilterCondfig.FilterMaskIdHigh = 0xFFFF;
+//	_FilterCondfig.FilterMaskIdLow = 0xFFFF;
+	_FilterCondfig.FilterFIFOAssignment = CAN_RX_FIFO1;
 	_FilterCondfig.FilterActivation = ENABLE;
 	HAL_CAN_ConfigFilter(&_hcan, &_FilterCondfig);
 }
@@ -242,7 +242,7 @@ inline static void _CANInit(void)
 
 	_hcan.Instance = CAN;  // see RM0091, 29.7.7 - pp. 840
 
-	/* bit timing
+	/* bit timing TODO - elaborate on bit timing
 	 * 	TCAN334 has a wakeup filter time of max. 4us (DS. p. 8).
 	 * 	this means a maximum speed of 250kbit/s can be used so that a WUP pattern can be generated safely by any CAN frame.
 	 *
@@ -268,7 +268,7 @@ inline static void _CANInit(void)
 	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 3, 0);
 	HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
 
-	HAL_CAN_ActivateNotification(&_hcan, (CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO1_MSG_PENDING));  // enable interrupts
+	HAL_CAN_ActivateNotification(&_hcan, (CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO1_MSG_PENDING | CAN_IT_RX_FIFO0_FULL | CAN_IT_RX_FIFO1_FULL));  // enable interrupts
 	HAL_CAN_Start(&_hcan);	// start CAN
 
 }
@@ -287,13 +287,44 @@ can_t* can_ctor(void)
 void CEC_CAN_IRQHandler(void)
 {
 	uint32_t interrupts = READ_REG(_hcan.Instance->IER);
-	uint32_t rf0rflags = READ_REG(_hcan.Instance->RF0R);
 	uint32_t msrflags = READ_REG(_hcan.Instance->MSR);
 
-	if((interrupts & CAN_IT_RX_FIFO0_MSG_PENDING) != 0U)  // Receive FIFO 0 message pending interrupt management
+	// CAN RX message pending in FIFO0
+	if((interrupts & CAN_IT_RX_FIFO0_MSG_PENDING) != 0U)  // Receive FIFO 0 message pending interrupt
 		{
-			if((rf0rflags & CAN_RF0R_FMP0) != 0U)  // Check if message is still pending */
-				Device->mj8x8->PopulatedBusOperation(MsgHandler);  // let the particular device deal with the message
+			if((_hcan.Instance->RF0R & CAN_RF0R_FMP0) != 0U)  // Check if message is still pending
+				{
+					_tcan334_can_msg_receive(MsgHandler, CAN_RX_FIFO0);
+					Device->mj8x8->PopulatedBusOperation(MsgHandler);  // let the particular device deal with the message
+				}
+		}
+
+	// CAN RX message pending in FIFO1
+	if((interrupts & CAN_IT_RX_FIFO1_MSG_PENDING) != 0U)  // Receive FIFO 1 message pending interrupt
+		{
+			if((_hcan.Instance->RF1R & CAN_RF1R_FMP1) != 0U)  // Check if message is still pending
+				{
+					_tcan334_can_msg_receive(MsgHandler, CAN_RX_FIFO1);  // load CAN message from FIFO into message_t object
+					Device->mj8x8->PopulatedBusOperation(MsgHandler);  // let the particular device deal with the message in the message_t object
+				}
+		}
+
+	// CAN RX FIFO0 full
+	if((interrupts & CAN_IT_RX_FIFO0_FULL) != 0U)
+		{
+			if((_hcan.Instance->RF1R & CAN_RF0R_FULL0) != 0U)
+				{
+					__HAL_CAN_CLEAR_FLAG(&_hcan, CAN_FLAG_FF0);  // Clear FIFO 0 full Flag
+				}
+		}
+
+	// CAN RX FIFO1 full
+	if((interrupts & CAN_IT_RX_FIFO1_FULL) != 0U)
+		{
+			if((_hcan.Instance->RF1R & CAN_RF1R_FULL1) != 0U)
+				{
+					__HAL_CAN_CLEAR_FLAG(&_hcan, CAN_FLAG_FF1);  // Clear FIFO 0 full Flag
+				}
 		}
 
 	if((interrupts & CAN_IT_SLEEP_ACK) != 0U)  // sleep acknowledge interrupt
@@ -323,9 +354,10 @@ void CEC_CAN_IRQHandler(void)
 	HAL_CAN_IRQHandler(&_hcan);  // service the interrupt
 }
 
-// CAN RX GPIO EXIT ISR
+// CAN RX GPIO EXTI ISR
 void EXTI4_15_IRQHandler(void)
-{  // called on activity on CAN RX GPIO
+{
+	// called on falling edge on CAN RX GPIO (when configured as an EXTI GPIO instead of CAN RX)
 	__CAN.public.BusActive(1);  // ...wake up CAN
 	__CAN.public.Timer1Start();  // start timer1
 	HAL_GPIO_EXTI_IRQHandler(CAN_RX_Pin);  // service the interrupt
