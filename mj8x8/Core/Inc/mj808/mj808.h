@@ -44,7 +44,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		/* 0x0F - lower nibble
 		 * CAN has to be active
 		 */
-		uint8_t DoHeartbeat :1;  // bit 0 -
+		uint8_t DoHeartbeat :1;  // bit 0 - HeartBeat is running
 		uint8_t _1 :1;  //
 		uint8_t _2 :1;  //
 		uint8_t _3 :1;  //

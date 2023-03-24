@@ -29,7 +29,7 @@ static __mj808_t __Device __attribute__ ((section (".data")));  // preallocate _
 
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 // cases in this switch-case statement must be unique for all events on this device
-void _event_execution_function_mj808(const uint8_t val)
+void _event_execution_function(const uint8_t val)
 {
 	EventHandler->UnSetEvent(val);	//
 
@@ -95,7 +95,7 @@ void _event_execution_function_mj808(const uint8_t val)
 }
 
 // received MsgHandler object and passes
-void _PopulatedBusOperationMJ808(message_handler_t *const in_handler)
+void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
 	can_msg_t *msg = in_handler->GetMessage();  // CAN message object
 
@@ -306,9 +306,9 @@ void mj808_ctor(void)
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
-	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ808;	// implements device-specific operation depending on bus activity
+	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperation;	// implements device-specific operation depending on bus activity
 
-	EventHandler->fpointer = &_event_execution_function_mj808;	// implements event hander for this device
+	EventHandler->fpointer = &_event_execution_function;	// implements event hander for this device
 
 // interrupt init
 	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // EXTI0 - Pushbutton handling

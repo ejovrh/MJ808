@@ -12,6 +12,7 @@ typedef struct	// message_handler_t actual
 } __message_handler_t;
 
 extern __message_handler_t __MsgHandler;  // declare message_handler_t actual
+
 // loads outbound CAN message into local CAN IC and asks it to transmit it onto the bus
 void _SendMessage(const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
 {
@@ -36,9 +37,6 @@ static void _SetMessage(const can_msg_t *const in_msg)
 	__MsgHandler.__rx_msg->sidh = in_msg->sidh;  // deep copy
 	__MsgHandler.__rx_msg->sidl = in_msg->sidl;
 	__MsgHandler.__rx_msg->dlc = in_msg->dlc;
-	__MsgHandler.__rx_msg->eid0 = in_msg->eid0;
-	__MsgHandler.__rx_msg->eid8 = in_msg->eid8;
-	__MsgHandler.__rx_msg->rx_status = in_msg->rx_status;
 
 	for(i = 0; i < CAN_MAX_MSG_LEN; ++i)	// more deep copy
 		__MsgHandler.__rx_msg->data[i] = in_msg->data[i];

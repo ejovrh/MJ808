@@ -28,14 +28,14 @@ typedef struct	// mj818_t actual
 static __mj818_t __Device __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
 // defines device operation on empty bus
-void _EmptyBusOperationMJ818(void)
+void _EmptyBusOperation(void)
 {
 	if(OCR_REAR_LIGHT == 0)  // run once
 		__Device.public.led->Shine(10);  // operate on component part
 }
 
 // dispatches CAN messages to appropriate sub-component on device
-void _PopulatedBusOperationMJ818(message_handler_t *const in_handler)
+void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
 	volatile can_msg_t *msg = in_handler->GetMessage();  // CAN message object
 
@@ -232,8 +232,8 @@ void mj818_ctor(void)
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
-	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ818;	// override device-agnostic default operation with specifics
-	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ818;	// implements device-specific operation depending on bus activity
+	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperation;	// override device-agnostic default operation with specifics
+	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperation;	// implements device-specific operation depending on bus activity
 
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM14_IRQn, 0, 0);  // charlieplexed LED handler timer (on demand)

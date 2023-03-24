@@ -48,7 +48,7 @@ void _DisplayBatteryVoltage(void)
 
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 // cases in this switch-case statement must be unique for all events on this device
-void _event_execution_function_mj828(uint8_t val)
+void _event_execution_function(uint8_t val)
 {
 	EventHandler->UnSetEvent(val);	//
 
@@ -144,7 +144,7 @@ void _event_execution_function_mj828(uint8_t val)
 }
 
 // toggles a bit in the LED flags variable; charlieplexer in turn makes it shine
-void _PopulatedBusOperationMJ828(message_handler_t *const in_handler)
+void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
 	volatile can_msg_t *msg = in_handler->GetMessage();  // CAN message object
 
@@ -348,10 +348,10 @@ void mj828_ctor(void)
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
-//	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperationMJ828;	// override device-agnostic default operation with specifics
-	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperationMJ828;	// implements device-specific operation depending on bus activity
+//	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperation;	// override device-agnostic default operation with specifics
+	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperation;	// implements device-specific operation depending on bus activity
 
-	EventHandler->fpointer = &_event_execution_function_mj828;	// implements event hander for this device
+	EventHandler->fpointer = &_event_execution_function;	// implements event hander for this device
 
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM14_IRQn, 4, 0);  // charlieplexed LED handler timer (on demand)
