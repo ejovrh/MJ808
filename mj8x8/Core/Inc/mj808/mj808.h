@@ -53,7 +53,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		 * CAN can be in standby mode
 		 */
 		uint8_t CANActive :1;  // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
-		uint8_t UtilityLEDOn :1;	// utility LED is on TODO - used only for debug purposes
+		uint8_t ButtonPessed :1;	// utility LED is on TODO - used only for debug purposes
 		uint8_t HighBeamOn :1;  // high beam is on: PWM - stop mode will break functionality
 		uint8_t FrontLightOn :1;  // bit 7 - front light is on: PWM - stop mode will break functionality
 	};

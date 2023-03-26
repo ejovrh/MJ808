@@ -39,6 +39,8 @@ void _event_execution_function(const uint8_t val)
 {
 	EventHandler->UnSetEvent(val);	//
 
+	Device->activity->ButtonPessed = ((Device->button->button[PushButton]->byte) > 0);	// translate button press into true or false
+
 	switch(val)
 		{
 		case 0x00:	// not defined
