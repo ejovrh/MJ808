@@ -184,7 +184,7 @@ static void _Sleep(void)
 {  // called periodically by TIM1_BRK_UP_TRG_COM_IRQHandler()
 
 #ifdef USE_POWERSAVE
-	__disable_irq();
+//	__disable_irq();
 
 	if(**__MJ8x8.public.activity)  // true if device is active in some form (see actual device implementation)
 		{
@@ -204,7 +204,7 @@ static void _Sleep(void)
 			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // go into stop mode
 		}
 
-	__enable_irq();
+//	__enable_irq();
 #else
 	HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
 #endif

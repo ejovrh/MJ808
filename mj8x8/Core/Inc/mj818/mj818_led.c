@@ -90,11 +90,18 @@ static void _BrakeLight(const uint8_t value)
 
 	if(value == 200)	// brake light off command
 		{
-			Device->activity->BrakeLightOn = 0;	// mark inactivity
 			OCR_BRAKE_LIGHT = OldOCR;	// restore original OCR
 
 			if(OldOCR == 0)
-				Device->StopTimer(&htim3);  // stop the timer - brake light PWM
+				{
+					// FIXME - _BrakeLight off - sometimes light stays on (CAN seems ok)
+					Device->StopTimer(&htim3);  // stop the timer - brake light PWM
+					Device->StartTimer(&htim3);  // stop the timer - brake light PWM
+					Device->StopTimer(&htim3);  // stop the timer - brake light PWM
+				}
+
+			Device->activity->BrakeLightOn = 0;	// mark inactivity
+			return;
 		}
 
 	if(value > 200)	// brake light on command
@@ -106,6 +113,7 @@ static void _BrakeLight(const uint8_t value)
 				Device->StartTimer(&htim3);  // start the timer - brake light PWM
 
 			OCR_BRAKE_LIGHT = 100;	// brake light on
+			return;
 		}
 }
 

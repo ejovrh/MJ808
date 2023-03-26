@@ -105,6 +105,7 @@ typedef union
 {  //
 	struct
 	{  // bit-wise view of devices on the bus,  max. 16 in total
+	   // format: n - device indicator - name
 		uint16_t mj848 :1;  // 0A - logic unit
 		uint16_t _1 :1;  // 0B - ?
 		uint16_t _2 :1;  // 0C - ?

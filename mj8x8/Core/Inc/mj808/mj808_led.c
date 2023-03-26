@@ -58,22 +58,33 @@ static void _HighBeam(const uint8_t value)
 
 	if(value == 200)	// high beam off command
 		{
-			Device->activity->HighBeamOn = 0;	// mark inactivity
-			OCR_FRONT_LIGHT = OldOCR;	// restore original OCR
-
-			if(OldOCR == 0)
-				Device->StopTimer(&htim2);  // stop the timer - front light PWM
+			if (Device->activity->FrontLightOn)	// if front light is on
+				{
+					OCR_FRONT_LIGHT = OldOCR;	// restore original OCR
+					return;
+				}
+			else
+				{	// FIXME - _HighBeam off - sometimes light stays on (CAN seems ok)
+					OCR_FRONT_LIGHT = 0;	// turn off light
+					Device->StopTimer(&htim2);  // stop the timer - front light PWM
+					Device->StartTimer(&htim2);
+					Device->StopTimer(&htim2);
+					Device->activity->HighBeamOn = 0;	// mark inactivity
+					return;
+				}
 		}
 
 	if(value > 200)	// high beam on command
 		{
 			Device->activity->HighBeamOn = 1;	// mark activity
-			OldOCR = OCR_FRONT_LIGHT;	// store original OCR value
 
-			if(OCR_FRONT_LIGHT == 0)	// light was previously off
+			if (Device->activity->FrontLightOn)	// if front light is on
+				OldOCR = OCR_FRONT_LIGHT;	// store original OCR value
+			else
 				Device->StartTimer(&htim2);  // start the timer - front light PWM
 
 			OCR_FRONT_LIGHT = 100;	// high beam on
+			return;
 		}
 }
 

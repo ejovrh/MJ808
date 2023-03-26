@@ -3,7 +3,7 @@
 
 #define TCAN334_STANDBY	GPIO_PIN_SET	// TCAN ds. p. 23
 #define TCAN334_WAKE GPIO_PIN_RESET	// TCAN ds. p. 23
-#define CAN_TIMEOUT_VALUE 200U
+#define CAN_TIMEOUT_VALUE 2000U
 
 static GPIO_InitTypeDef GPIO_InitStruct =
 	{0};
@@ -44,7 +44,7 @@ static void _tcan334_can_msg_receive(message_handler_t *in_handler, const uint8_
 // Add a message to the first free Tx mailbox and activate the corresponding transmission request
 static void _tcan334_can_msg_send(can_msg_t *const msg)
 {
-	volatile uint8_t i = 0;  // safeguard counter
+	volatile uint16_t i = 0;  // safeguard counter
 	uint32_t _TXMailbox;  // TX mailbox identifier
 
 	if((__CAN.public.activity->byte & 0x0F) == 0)  // if sleeping...
@@ -124,7 +124,7 @@ static inline void __can_go_into_standby_mode(void)
 	if(__CAN.public.activity->CANActive == 0)  // if we already are asleep ...
 		return;  // ... do nothing
 
-	__disable_irq();	// uninterrupted...
+//	__disable_irq();	// uninterrupted...
 	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_STANDBY);  // put transceiver to sleep
 
 	do
@@ -147,18 +147,18 @@ static inline void __can_go_into_standby_mode(void)
 
 	__CAN.public.activity->CANActive = 0;  // mark as sleeping
 
-	__enable_irq();
+//	__enable_irq();
 }
 
 //	sets CAN infrastructure into normal operating mode
 static inline void __can_go_into_active_mode(void)
 {
-	uint8_t i = 0;	// safeguard counter
+	volatile uint8_t i = 0;  // safeguard counter
 
 	if(__CAN.public.activity->CANActive == 1)  // if we already are awake ...
 		return;  // ... do nothing
 
-	__disable_irq();	// uninterrupted...
+//	__disable_irq();	// uninterrupted...
 
 	_EXTItoRX();	// configure GPIO from EXTI to CAN RX
 
@@ -181,7 +181,7 @@ static inline void __can_go_into_active_mode(void)
 
 	__CAN.public.activity->CANActive = 1;  // mark as awake
 
-	__enable_irq();
+//	__enable_irq();
 }
 
 // puts the whole CAN infrastructure to sleep; 1 - sleep, 0 - awake
