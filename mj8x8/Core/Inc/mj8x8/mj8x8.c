@@ -49,11 +49,13 @@ static void _Heartbeat(message_handler_t *const msg)
 		{
 			++__MJ8x8.__HeartBeatIterationCounter;  // essentially count how many times we are in non-heartbeat count mode
 
-			if((MsgHandler->Devices == 0) && (__MJ8x8.__HeartBeatIterationCounter > 1))  // if we have passed one iteration of non-heartbeat mode and we are alone on the bus
-				__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
-
 			if(__MJ8x8.__HeartBeatIterationCounter > 2)  // two complete heartbeat iterations have passed
-				__MJ8x8.public.can->activity->DoHeartbeat = 0;  // mark as complete and allow sleep
+				{
+					__MJ8x8.public.can->activity->DoHeartbeat = 0;  // mark as complete and allow sleep
+
+					if(MsgHandler->Devices->byte == 0)	// if we are alone on the bus
+						__MJ8x8.public.EmptyBusOperation();  // perform the device-specific default operation (is overridden in specific device constructor)
+				}
 		}
 }
 

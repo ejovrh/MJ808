@@ -33,25 +33,25 @@ volatile static uint8_t j = 0;	// brake
 // called indirectly by timer1 (_SystemInterrupt()), handles the fading
 static void _MacNamaraFadeHandler(void)
 {
-	if(OCR_REAR_LIGHT < Device->led->led[Rear].ocr)  // fade up
-		OCR_REAR_LIGHT = _fade_fransfer[i++];
+	if(REAR_LIGHT_CCR < Device->led->led[Rear].ocr)  // fade up
+		REAR_LIGHT_CCR = _fade_fransfer[i++];
 
-	if(OCR_BRAKE_LIGHT < Device->led->led[Brake].ocr)  // fade up
-		OCR_BRAKE_LIGHT = _fade_fransfer[j++];
+	if(BRAKE_LIGHT_CCR < Device->led->led[Brake].ocr)  // fade up
+		BRAKE_LIGHT_CCR = _fade_fransfer[j++];
 
-	if(OCR_REAR_LIGHT > Device->led->led[Rear].ocr)  // fade down
+	if(REAR_LIGHT_CCR > Device->led->led[Rear].ocr)  // fade down
 		{
-			OCR_REAR_LIGHT = _fade_fransfer[--i];
+			REAR_LIGHT_CCR = _fade_fransfer[--i];
 
-			if(OCR_REAR_LIGHT == 0)
+			if(REAR_LIGHT_CCR == 0)
 				Device->activity->RearLightOn = 0;	// mark inactivity
 		}
 
-	if(OCR_BRAKE_LIGHT > Device->led->led[Brake].ocr)  // fade down
+	if(BRAKE_LIGHT_CCR > Device->led->led[Brake].ocr)  // fade down
 		{
-			OCR_BRAKE_LIGHT = _fade_fransfer[--j];
+			BRAKE_LIGHT_CCR = _fade_fransfer[--j];
 
-			if(OCR_BRAKE_LIGHT == 0)
+			if(BRAKE_LIGHT_CCR == 0)
 				Device->activity->BrakeLightOn = 0;	// mark inactivity
 		}
 
@@ -62,7 +62,7 @@ static void _MacNamaraFadeHandler(void)
 			Device->StopTimer(&htim3);	// stop the timer - brake light PWM
 		}
 
-	if(OCR_BRAKE_LIGHT == Device->led->led[Brake].ocr && OCR_REAR_LIGHT == Device->led->led[Rear].ocr)
+	if(BRAKE_LIGHT_CCR == Device->led->led[Brake].ocr && REAR_LIGHT_CCR == Device->led->led[Rear].ocr)
 		Device->StopTimer(&htim14);  // stop the timer
 }
 
@@ -90,7 +90,7 @@ static void _BrakeLight(const uint8_t value)
 
 	if(value == 200)	// brake light off command
 		{
-			OCR_BRAKE_LIGHT = OldOCR;	// restore original OCR
+			BRAKE_LIGHT_CCR = OldOCR;	// restore original OCR
 
 			if(OldOCR == 0)
 				{
@@ -107,12 +107,12 @@ static void _BrakeLight(const uint8_t value)
 	if(value > 200)	// brake light on command
 		{
 			Device->activity->BrakeLightOn = 1;	// mark activity
-			OldOCR = OCR_BRAKE_LIGHT;	// store original OCR value
+			OldOCR = BRAKE_LIGHT_CCR;	// store original OCR value
 
-			if(OCR_FRONT_LIGHT == 0)	// light was previously off
+			if(BRAKE_LIGHT_CCR == 0)	// light was previously off
 				Device->StartTimer(&htim3);  // start the timer - brake light PWM
 
-			OCR_BRAKE_LIGHT = 100;	// brake light on
+			BRAKE_LIGHT_CCR = 100;	// brake light on
 			return;
 		}
 }
@@ -138,8 +138,9 @@ static void _primitiveBrakeLED(uint8_t value)
 
 static inline void __componentLED_On(const uint8_t val)
 {
-	Device->led->led[Brake].Shine(val);  // brake LED on - low key gets overwritten by LU command, since it comes in a bit later
+	// note - if the order is reversed, it doesnt work:
 	Device->led->led[Rear].Shine(val);  // rear light on
+	Device->led->led[Brake].Shine(val);  // brake LED on
 }
 
 static inline void __componentLED_Off(void)

@@ -26,6 +26,8 @@
 #define GreenLED_GPIO_Port GPIOB
 // definitions of device/PCB layout-dependent hardware pins
 
+#define FRONT_LIGHT_CCR htim2.Instance->CCR2	// Output Compare Register for PWM of front light
+
 enum mj808_leds  // enum of lights on this device
 {
 	  Utility,

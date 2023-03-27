@@ -7,11 +7,6 @@
  * http://www.kreatives-chaos.com/artikel/can-bootloader
  */
 
-// OCR defines
-#define OCR_FRONT_LIGHT TIM2->CCR2	// Output Compare Register for PWM of front light
-#define OCR_REAR_LIGHT TIM2->CCR1	// Output Compare Register for PWM of rear light
-#define OCR_BRAKE_LIGHT TIM3->CCR4	// Output Compare Register for PWM of brake light
-
 /* MJ818 - rear & brake light
  current sense resistor is: 10R/0.5W
  decimal val. - duty cycle - current rear light

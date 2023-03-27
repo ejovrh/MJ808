@@ -30,19 +30,19 @@ volatile static uint8_t i = 0;	// front
 // called indirectly by timer1 (_SystemInterrupt()), handles the fading
 static void _MacNamaraFadeHandler(void)
 {
-	if(OCR_FRONT_LIGHT < Device->led->led[Front].ocr)  // fade up
+	if(FRONT_LIGHT_CCR < Device->led->led[Front].ocr)  // fade up
 		{
-			OCR_FRONT_LIGHT = _fade_fransfer[i++];
+			FRONT_LIGHT_CCR = _fade_fransfer[i++];
 
 			if(i == Device->led->led[Front].ocr)
 				Device->StopTimer(&htim14);  // stop the timer
 		}
 
-	if(OCR_FRONT_LIGHT > Device->led->led[Front].ocr)  // fade down
+	if(FRONT_LIGHT_CCR > Device->led->led[Front].ocr)  // fade down
 		{
-			OCR_FRONT_LIGHT = _fade_fransfer[--i];
+			FRONT_LIGHT_CCR = _fade_fransfer[--i];
 
-			if(OCR_FRONT_LIGHT == 0)
+			if(FRONT_LIGHT_CCR == 0)
 				{
 					Device->StopTimer(&htim14);  // stop the timer
 					Device->StopTimer(&htim2);  // stop the timer
@@ -60,12 +60,12 @@ static void _HighBeam(const uint8_t value)
 		{
 			if (Device->activity->FrontLightOn)	// if front light is on
 				{
-					OCR_FRONT_LIGHT = OldOCR;	// restore original OCR
+					FRONT_LIGHT_CCR = OldOCR;	// restore original OCR
 					return;
 				}
 			else
 				{	// FIXME - _HighBeam off - sometimes light stays on (CAN seems ok)
-					OCR_FRONT_LIGHT = 0;	// turn off light
+					FRONT_LIGHT_CCR = 0;	// turn off light
 					Device->StopTimer(&htim2);  // stop the timer - front light PWM
 					Device->StartTimer(&htim2);
 					Device->StopTimer(&htim2);
@@ -79,11 +79,11 @@ static void _HighBeam(const uint8_t value)
 			Device->activity->HighBeamOn = 1;	// mark activity
 
 			if (Device->activity->FrontLightOn)	// if front light is on
-				OldOCR = OCR_FRONT_LIGHT;	// store original OCR value
+				OldOCR = FRONT_LIGHT_CCR;	// store original OCR value
 			else
 				Device->StartTimer(&htim2);  // start the timer - front light PWM
 
-			OCR_FRONT_LIGHT = 100;	// high beam on
+			FRONT_LIGHT_CCR = 100;	// high beam on
 			return;
 		}
 }
