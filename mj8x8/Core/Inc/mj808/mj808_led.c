@@ -67,9 +67,9 @@ static void _HighBeam(const uint8_t value)
 				{	// FIXME - _HighBeam off - sometimes light stays on (CAN seems ok)
 					FRONT_LIGHT_CCR = 0;	// turn off light
 					Device->StopTimer(&htim2);  // stop the timer - front light PWM
+					Device->activity->HighBeamOn = 0;	// mark inactivity
 					Device->StartTimer(&htim2);
 					Device->StopTimer(&htim2);
-					Device->activity->HighBeamOn = 0;	// mark inactivity
 					return;
 				}
 		}

@@ -54,9 +54,9 @@ void _event_execution_function(uint8_t val)
 
 	Device->activity->ButtonPessed = (  //	set device to state according to button press
 	(  //
-	Device->button->button[PushButton]->byte ||  // ORed byte values indicate _some_ button press is active
-	Device->button->button[LeverFront]->byte ||  //
-	Device->button->button[LeverBrake]->byte) > 0  // translate the above fact into true or false
+	Device->button->button[PushButton]->Momentary ||  // ORed byte values indicate _some_ button press is active
+	Device->button->button[LeverFront]->Momentary ||  //
+	Device->button->button[LeverBrake]->Momentary) > 0  // translate the above fact into true or false
 	//
 	);
 

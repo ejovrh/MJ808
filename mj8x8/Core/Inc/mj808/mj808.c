@@ -39,7 +39,7 @@ void _event_execution_function(const uint8_t val)
 {
 	EventHandler->UnSetEvent(val);	//
 
-	Device->activity->ButtonPessed = ((Device->button->button[PushButton]->byte) > 0);	// translate button press into true or false
+	Device->activity->ButtonPessed = ((Device->button->button[PushButton]->Momentary) > 0);  // translate button press into true or false
 
 	switch(val)
 		{
@@ -56,7 +56,7 @@ void _event_execution_function(const uint8_t val)
 			if(Device->button->button[PushButton]->Hold)
 				{
 					//send the messages out, UDP-style. no need to check if the device is actually online
-					MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);	// convey button press via CAN and the logic unit will do its own thing
+//					MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);	// convey button press via CAN and the logic unit will do its own thing
 					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 75, 2);  // turn on rear light
 //					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT), 20, 2);  // turn on brake light
 					MsgHandler->SendMessage(DASHBOARD_LED_GREEN_ON, 0x00, 1);  // turn on yellow LED
@@ -64,7 +64,7 @@ void _event_execution_function(const uint8_t val)
 			else
 				{
 					// send the messages out, UDP-style. no need to check if the device is actually online
-					MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);  // convey button press via CAN and the logic unit will tell me what to do
+//					MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);  // convey button press via CAN and the logic unit will tell me what to do
 					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0, 2);  // turn off rear light
 //					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT), 0, 2);  // turn on brake light
 					MsgHandler->SendMessage(DASHBOARD_LED_GREEN_OFF, 0x00, 1);  // turn off yellow LED
