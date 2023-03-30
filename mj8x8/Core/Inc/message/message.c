@@ -29,7 +29,7 @@ void _SendMessage(const uint8_t in_command, const uint8_t in_argument, const uin
 	__MsgHandler.__can->RequestToSend(__MsgHandler.__tx_msg);  // load message into TX buffer and request to send
 }
 
-// upload CAN message into self at physical reception from FIFO
+// TX - upload CAN message into self at physical reception from FIFO
 static void _SetMessage(const can_msg_t *const in_msg)
 {
 	uint8_t i;	// iterator for data deep copy
@@ -44,7 +44,7 @@ static void _SetMessage(const can_msg_t *const in_msg)
 	__MsgHandler.public.Devices->byte |= (1 << ((__MsgHandler.__rx_msg->sidh >> 2) & 0x0F));  // populate devices in canbus_t struct so that we know who else is on the bus
 }
 
-// fetches message received from CAN bus by local CAN IC, populates known hosts and returns message handler object
+// RX - fetches message received from CAN bus by local CAN IC, populates known hosts and returns message handler object
 static inline can_msg_t* _GetMessage(void)
 {
 	return __MsgHandler.__rx_msg;  // return pointer to it to someone who will make use of it

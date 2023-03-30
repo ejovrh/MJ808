@@ -57,16 +57,16 @@ void _event_execution_function(const uint8_t val)
 				{
 					//send the messages out, UDP-style. no need to check if the device is actually online
 //					MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);	// convey button press via CAN and the logic unit will do its own thing
-					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 75, 2);  // turn on rear light
-//					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT), 20, 2);  // turn on brake light
+					MsgHandler->SendMessage(CMND_REAR_LIGHT_SHINE, 75, 2);  // turn on rear light
+//					MsgHandler->SendMessage(CMND_BRAKE_LIGHT_SHINE, 20, 2);  // turn on brake light
 					MsgHandler->SendMessage(DASHBOARD_LED_GREEN_ON, 0x00, 1);  // turn on yellow LED
 				}
 			else
 				{
 					// send the messages out, UDP-style. no need to check if the device is actually online
 //					MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);  // convey button press via CAN and the logic unit will tell me what to do
-					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0, 2);  // turn off rear light
-//					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT), 0, 2);  // turn on brake light
+					MsgHandler->SendMessage(CMND_REAR_LIGHT_SHINE, 0, 2);  // turn off rear light
+//					MsgHandler->SendMessage(CMND_BRAKE_LIGHT_SHINE, 0, 2);  // turn on brake light
 					MsgHandler->SendMessage(DASHBOARD_LED_GREEN_OFF, 0x00, 1);  // turn off yellow LED
 				}
 
@@ -74,9 +74,9 @@ void _event_execution_function(const uint8_t val)
 
 		case 0x04:	// button toggle
 			if(Device->button->button[PushButton]->Toggle)  // do something
-				Device->led->led[Utility].Shine(UTIL_LED_RED_ON);
+				Device->led->led[Utility].Shine(CMND_UTIL_RED_LED_ON);
 			else
-				Device->led->led[Utility].Shine(UTIL_LED_RED_OFF);
+				Device->led->led[Utility].Shine(CMND_UTIL_RED_LED_OFF);
 			break;
 
 //		case 0x08:	// next case
@@ -107,20 +107,19 @@ void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
 	can_msg_t *msg = in_handler->GetMessage();  // CAN message object
 
-	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
-	if((msg->COMMAND& CMND_UTIL_LED) == CMND_UTIL_LED)  // utility LED command
+	if((msg->COMMAND& CMND_UTIL_LED) == CMND_UTIL_LED)  // utility LED command (there are many)
 		{
 			__Device.public.led->led[Utility].Shine(msg->COMMAND);	// glowy thingy
 			return;
 		}
 
-	if(msg->COMMAND== (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH))  // front positional light - high beam
+	if(msg->COMMAND== CMND_FRONT_LIGHTHIGH_SHINE)  // front positional light - high beam - only one
 		{
 			__Device.public.led->led[Front].Shine(msg->ARGUMENT);  // high beam
 			return;
 		}
 
-	if(msg->COMMAND== (CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT))  // front positional light - low beam
+	if(msg->COMMAND== CMND_FRONT_LIGHT_SHINE)  // front positional light - low beam
 		{
 			__Device.public.led->led[Front].Shine(msg->ARGUMENT);
 			return;
@@ -301,7 +300,7 @@ void mj808_ctor(void)
 {
 	// general device non-specific low-level hardware init & config
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
-	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A));	// call base class constructor & initialize own SID
+	__Device.public.mj8x8 = mj8x8_ctor(MJ808);	// call base class constructor & initialize own SID
 
 	__Device.public.activity = (mj808_activity_t*) *__Device.public.mj8x8->activity;  // tie in activity from the depths of mj8x8_t and redefine type
 

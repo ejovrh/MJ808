@@ -74,9 +74,9 @@ void _event_execution_function(uint8_t val)
 			Device->led->Shine(Red);
 
 			if(Device->button->button[LeverBrake]->Momentary)
-				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT), 250, 2);  // turn on (250 is a special value)
+				MsgHandler->SendMessage(CMND_BRAKE_LIGHT_SHINE, 250, 2);  // turn on (250 is a special value)
 			else
-				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT), 200, 2);  // turn off (200 is a special value)
+				MsgHandler->SendMessage(CMND_BRAKE_LIGHT_SHINE, 200, 2);  // turn off (200 is a special value)
 
 			break;
 
@@ -84,9 +84,9 @@ void _event_execution_function(uint8_t val)
 			Device->led->Shine(Blue);
 
 			if(Device->button->button[LeverFront]->Momentary)
-				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH), 250, 2);	// turn on (250 is a special value)
+				MsgHandler->SendMessage(CMND_FRONT_LIGHTHIGH_SHINE, 250, 2);  // turn on (250 is a special value)
 			else
-				MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH), 200, 2);	// turn off (200 is a special value)
+				MsgHandler->SendMessage(CMND_FRONT_LIGHTHIGH_SHINE, 200, 2);  // turn off (200 is a special value)
 
 			break;
 
@@ -99,13 +99,13 @@ void _event_execution_function(uint8_t val)
 
 			if(Device->button->button[PushButton]->Hold)
 				{
-					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT), 20, 2);
-					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 20, 2);
+					MsgHandler->SendMessage(CMND_FRONT_LIGHT_SHINE, 20, 2);
+					MsgHandler->SendMessage(CMND_REAR_LIGHT_SHINE, 20, 2);
 				}
 			else
 				{
-					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | FRONT_LIGHT), 0, 2);
-					MsgHandler->SendMessage((CMND_DEVICE | DEV_LIGHT | REAR_LIGHT), 0, 2);
+					MsgHandler->SendMessage(CMND_FRONT_LIGHT_SHINE, 0, 2);
+					MsgHandler->SendMessage(CMND_REAR_LIGHT_SHINE, 0, 2);
 				}
 
 			break;
@@ -114,9 +114,9 @@ void _event_execution_function(uint8_t val)
 			Device->led->Shine(Yellow);
 
 			if(Device->button->button[PushButton]->Toggle)
-				MsgHandler->SendMessage((CMND_DEVICE | UTIL_LED_RED_ON), 0, 1);
+				MsgHandler->SendMessage(CMND_UTIL_RED_LED_ON, 0, 1);
 			else
-				MsgHandler->SendMessage((CMND_DEVICE | UTIL_LED_RED_OFF), 0, 1);
+				MsgHandler->SendMessage(CMND_UTIL_RED_LED_OFF, 0, 1);
 
 			break;
 
@@ -148,8 +148,7 @@ void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
 	volatile can_msg_t *msg = in_handler->GetMessage();  // CAN message object
 
-// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
-	if((msg->COMMAND& MASK_COMMAND) == CMND_DASHBOARD )  // dashboard command
+	if((msg->COMMAND& MASK_COMMAND) == CLASS_DASHBOARD )  // dashboard command
 		{
 			__Device.public.led->Shine(((msg->COMMAND & 0x0E) >> 1));  // flag LED at appropriate index as whatever the command says
 
@@ -334,7 +333,7 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 void mj828_ctor(void)
 {
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
-	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D));  // call base class constructor & initialize own SID
+	__Device.public.mj8x8 = mj8x8_ctor(MJ828);  // call base class constructor & initialize own SID
 
 	__Device.public.activity = (mj828_activity_t*) *__Device.public.mj8x8->activity;  // tie in activity from the depths of mj8x8_t and redefine type
 
@@ -349,7 +348,7 @@ void mj828_ctor(void)
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
 //	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperation;	// override device-agnostic default operation with specifics
-	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperation;	// implements device-specific operation depending on bus activity
+	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperation;  // implements device-specific operation depending on bus activity
 
 	EventHandler->fpointer = &_event_execution_function;	// implements event hander for this device
 

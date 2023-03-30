@@ -39,14 +39,13 @@ void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
 	volatile can_msg_t *msg = in_handler->GetMessage();  // CAN message object
 
-	// FIXME - implement proper command nibble parsing; this here is buggy as hell (parsing for set bits is shitty at best)
-	if(msg->COMMAND== (CMND_DEVICE | DEV_LIGHT | REAR_LIGHT))  // rear positional light
+	if(msg->COMMAND== CMND_REAR_LIGHT_SHINE)  // rear positional light
 		{
 			__Device.public.led->led[Rear].Shine(msg->ARGUMENT);	// fade rear light to CAN msg. argument value
 			return;
 		}
 
-	if(msg->COMMAND== (CMND_DEVICE | DEV_LIGHT | BRAKE_LIGHT))	// brake light
+	if(msg->COMMAND== CMND_BRAKE_LIGHT_SHINE)	// brake light
 		{
 			__Device.public.led->led[Brake].Shine(msg->ARGUMENT);  // be on/off, according to argument
 			return;
@@ -220,7 +219,7 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 void mj818_ctor(void)
 {
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
-	__Device.public.mj8x8 = mj8x8_ctor((PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B));	// call base class constructor & initialize own SID
+	__Device.public.mj8x8 = mj8x8_ctor(MJ818);	// call base class constructor & initialize own SID
 
 	__Device.public.activity = (mj818_activity_t*) *__Device.public.mj8x8->activity;  // tie in activity from the depths of mj8x8_t and redefine type
 
