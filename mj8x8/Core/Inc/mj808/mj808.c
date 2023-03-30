@@ -30,7 +30,7 @@ static __mj808_t __Device __attribute__ ((section (".data")));  // preallocate _
 // defines device operation on empty bus
 void _EmptyBusOperation(void)
 {
-	;  // TODO - define mj828 empty bus operation
+	;  // TODO - define mj808 empty bus operation
 }
 
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
@@ -59,7 +59,7 @@ void _event_execution_function(const uint8_t val)
 //					MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);	// convey button press via CAN and the logic unit will do its own thing
 					MsgHandler->SendMessage(CMND_REAR_LIGHT_SHINE, 75, 2);  // turn on rear light
 //					MsgHandler->SendMessage(CMND_BRAKE_LIGHT_SHINE, 20, 2);  // turn on brake light
-					MsgHandler->SendMessage(DASHBOARD_LED_GREEN_ON, 0x00, 1);  // turn on yellow LED
+					MsgHandler->SendMessage(CMND_DASHBOARD_LED_GREEN_ON, 0x00, 1);  // turn on yellow LED
 				}
 			else
 				{
@@ -67,7 +67,7 @@ void _event_execution_function(const uint8_t val)
 //					MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);  // convey button press via CAN and the logic unit will tell me what to do
 					MsgHandler->SendMessage(CMND_REAR_LIGHT_SHINE, 0, 2);  // turn off rear light
 //					MsgHandler->SendMessage(CMND_BRAKE_LIGHT_SHINE, 0, 2);  // turn on brake light
-					MsgHandler->SendMessage(DASHBOARD_LED_GREEN_OFF, 0x00, 1);  // turn off yellow LED
+					MsgHandler->SendMessage(CMND_DASHBOARD_LED_GREEN_OFF, 0x00, 1);  // turn off yellow LED
 				}
 
 			break;
