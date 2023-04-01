@@ -31,7 +31,7 @@ static inline void _MarkPushButton(const uint8_t state)
 	__Button.__button[PushButton].__state = state;	// mark whatever state the button is in
 }
 
-static __individual_button_t       __button_actual [BUTTON_COUNT] =
+static __individual_button_t __button_actual [BUTTON_COUNT] =
 	{0};  // initialize array of 3 structs, one for each of the 3 device buttons
 
 // implementation of virtual constructor for buttons

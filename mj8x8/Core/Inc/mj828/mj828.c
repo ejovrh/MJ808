@@ -1,6 +1,8 @@
 #include "main.h"
+
 #if defined(MJ828_)	// if this particular device is active
 
+#include "try/try.h"	//
 #include "mj828\mj828.h"
 #include "mj828\mj828_led.c"	// concrete device-specific LED functions
 #include "mj828\mj828_button.c"	// concrete device-specific button functions
@@ -72,21 +74,21 @@ void _event_execution_function(uint8_t val)
 
 		case 0x02:	// lever back - braking action
 			Device->led->Shine(Red);
-
+// TODO - make argument more binady-compatible; e.g. 200 off, 201 on or 232 on, not 250
 			if(Device->button->button[LeverBrake]->Momentary)
-				MsgHandler->SendMessage(CMND_BRAKE_LIGHT_SHINE, 250, 2);  // turn on (250 is a special value)
+				MsgHandler->SendMessage(MSG_BUTTON_EVENT_03, 250, 2);  // turn on (250 is a special value)
 			else
-				MsgHandler->SendMessage(CMND_BRAKE_LIGHT_SHINE, 200, 2);  // turn off (200 is a special value)
+				MsgHandler->SendMessage(MSG_BUTTON_EVENT_03, 200, 2);  // turn off (200 is a special value)
 
 			break;
 
 		case 0x04:	// lever front - high beam
 			Device->led->Shine(Blue);
-
+			// TODO - make argument more binady-compatible; e.g. 200 off, 201 on or 232 on, not 250
 			if(Device->button->button[LeverFront]->Momentary)
-				MsgHandler->SendMessage(CMND_FRONT_LIGHTHIGH_SHINE, 250, 2);  // turn on (250 is a special value)
+				MsgHandler->SendMessage(MSG_BUTTON_EVENT_02, 250, 2);  // turn on (250 is a special value)
 			else
-				MsgHandler->SendMessage(CMND_FRONT_LIGHTHIGH_SHINE, 200, 2);  // turn off (200 is a special value)
+				MsgHandler->SendMessage(MSG_BUTTON_EVENT_02, 200, 2);  // turn off (200 is a special value)
 
 			break;
 
@@ -99,24 +101,18 @@ void _event_execution_function(uint8_t val)
 
 			if(Device->button->button[PushButton]->Hold)
 				{
-					MsgHandler->SendMessage(CMND_FRONT_LIGHT_SHINE, 20, 2);
-					MsgHandler->SendMessage(CMND_REAR_LIGHT_SHINE, 20, 2);
+					MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 20, 2);  // convey button press via CAN and the logic unit will do its own thing
 				}
 			else
 				{
-					MsgHandler->SendMessage(CMND_FRONT_LIGHT_SHINE, 0, 2);
-					MsgHandler->SendMessage(CMND_REAR_LIGHT_SHINE, 0, 2);
+					MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
 				}
 
 			break;
 
-		case 0x20:	// next case
+		case 0x20:	// pushbutton toggle
 			Device->led->Shine(Yellow);
-
-			if(Device->button->button[PushButton]->Toggle)
-				MsgHandler->SendMessage(CMND_UTIL_RED_LED_ON, 0, 1);
-			else
-				MsgHandler->SendMessage(CMND_UTIL_RED_LED_OFF, 0, 1);
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, Device->button->button[PushButton]->Toggle, 2);
 
 			break;
 
@@ -143,17 +139,10 @@ void _event_execution_function(uint8_t val)
 		}
 }
 
-// toggles a bit in the LED flags variable; charlieplexer in turn makes it shine
+// dispatches CAN messages to appropriate sub-component on device
 void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
-	volatile can_msg_t *msg = in_handler->GetMessage();  // CAN message object
-
-	if((msg->COMMAND& MASK_COMMAND) == CLASS_DASHBOARD )  // dashboard command
-		{
-			__Device.public.led->Shine(((msg->COMMAND & 0x0E) >> 1));  // flag LED at appropriate index as whatever the command says
-
-			return;
-		}
+	branchtable_event(in_handler->GetMessage());
 }
 
 // GPIO init - device specific

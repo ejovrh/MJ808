@@ -1,6 +1,8 @@
 #include "main.h"
+
 #if defined(MJ808_)	// if this particular device is active
 
+#include "try/try.h"	//
 #include "mj808\mj808.h"
 #include "mj808\mj808_led.c"	// concrete device-specific LED functions
 #include "mj808\mj808_button.c"	// concrete device-specific button functions
@@ -54,25 +56,15 @@ void _event_execution_function(const uint8_t val)
 			Device->led->Shine(Device->button->button[PushButton]->Hold);  // turn the device on/off
 
 			if(Device->button->button[PushButton]->Hold)
-				{
-					//send the messages out, UDP-style. no need to check if the device is actually online
-//					MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_ON, 0x00, 1);	// convey button press via CAN and the logic unit will do its own thing
-					MsgHandler->SendMessage(CMND_REAR_LIGHT_SHINE, 75, 2);  // turn on rear light
-//					MsgHandler->SendMessage(CMND_BRAKE_LIGHT_SHINE, 20, 2);  // turn on brake light
-					MsgHandler->SendMessage(CMND_DASHBOARD_LED_GREEN_ON, 0x00, 1);  // turn on yellow LED
-				}
+				MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 75, 2);  // convey button press via CAN and the logic unit will do its own thing
 			else
-				{
-					// send the messages out, UDP-style. no need to check if the device is actually online
-//					MsgHandler->SendMessage(MSG_BUTTON_EVENT_BUTTON0_OFF, 0x00, 1);  // convey button press via CAN and the logic unit will tell me what to do
-					MsgHandler->SendMessage(CMND_REAR_LIGHT_SHINE, 0, 2);  // turn off rear light
-//					MsgHandler->SendMessage(CMND_BRAKE_LIGHT_SHINE, 0, 2);  // turn on brake light
-					MsgHandler->SendMessage(CMND_DASHBOARD_LED_GREEN_OFF, 0x00, 1);  // turn off yellow LED
-				}
+				MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 00, 2);  // convey button press via CAN and the logic unit will tell me what to do
 
 			break;
 
 		case 0x04:	// button toggle
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, Device->button->button[PushButton]->Toggle, 2);
+
 			if(Device->button->button[PushButton]->Toggle)  // do something
 				Device->led->led[Utility].Shine(CMND_UTIL_RED_LED_ON);
 			else
@@ -102,28 +94,10 @@ void _event_execution_function(const uint8_t val)
 		}
 }
 
-// received MsgHandler object and passes
+// dispatches CAN messages to appropriate sub-component on device
 void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
-	can_msg_t *msg = in_handler->GetMessage();  // CAN message object
-
-	if((msg->COMMAND& CMND_UTIL_LED) == CMND_UTIL_LED)  // utility LED command (there are many)
-		{
-			__Device.public.led->led[Utility].Shine(msg->COMMAND);	// glowy thingy
-			return;
-		}
-
-	if(msg->COMMAND== CMND_FRONT_LIGHTHIGH_SHINE)  // front positional light - high beam - only one
-		{
-			__Device.public.led->led[Front].Shine(msg->ARGUMENT);  // high beam
-			return;
-		}
-
-	if(msg->COMMAND== CMND_FRONT_LIGHT_SHINE)  // front positional light - low beam
-		{
-			__Device.public.led->led[Front].Shine(msg->ARGUMENT);
-			return;
-		}
+	branchtable_event(in_handler->GetMessage());
 }
 
 // GPIO init - device specific

@@ -1,6 +1,8 @@
 #include "main.h"
+
 #if defined(MJ818_)	// if this particular device is active
 
+#include "try/try.h"	//
 #include "mj818\mj818.h"
 #include "mj818\mj818_led.c"	// concrete device-specific LED functions
 
@@ -37,19 +39,7 @@ void _EmptyBusOperation(void)
 // dispatches CAN messages to appropriate sub-component on device
 void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
-	volatile can_msg_t *msg = in_handler->GetMessage();  // CAN message object
-
-	if(msg->COMMAND== CMND_REAR_LIGHT_SHINE)  // rear positional light
-		{
-			__Device.public.led->led[Rear].Shine(msg->ARGUMENT);	// fade rear light to CAN msg. argument value
-			return;
-		}
-
-	if(msg->COMMAND== CMND_BRAKE_LIGHT_SHINE)	// brake light
-		{
-			__Device.public.led->led[Brake].Shine(msg->ARGUMENT);  // be on/off, according to argument
-			return;
-		}
+	branchtable_event(in_handler->GetMessage());
 }
 
 // GPIO init - device specific
