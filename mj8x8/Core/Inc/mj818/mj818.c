@@ -39,7 +39,7 @@ void _EmptyBusOperation(void)
 // dispatches CAN messages to appropriate sub-component on device
 void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
-	branchtable_event(in_handler->GetMessage());
+	BranchtableMSGButtonEvent(in_handler->GetMessage());
 }
 
 // GPIO init - device specific

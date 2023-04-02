@@ -43,61 +43,13 @@ void _event_execution_function(const uint8_t val)
 
 	Device->activity->ButtonPessed = ((Device->button->button[PushButton]->Momentary) > 0);  // translate button press into true or false
 
-	switch(val)
-		{
-		case 0x00:	// not defined
-			return;
-
-		case 0x01:	// button error: - do the error thing
-			__Device.public.led = _virtual_led_ctorMJ808();  // reset the LED component
-			return;
-
-		case 0x02:	// button hold
-			Device->led->Shine(Device->button->button[PushButton]->Hold);  // turn the device on/off
-
-			if(Device->button->button[PushButton]->Hold)
-				MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 75, 2);  // convey button press via CAN and the logic unit will do its own thing
-			else
-				MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 00, 2);  // convey button press via CAN and the logic unit will tell me what to do
-
-			break;
-
-		case 0x04:	// button toggle
-			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, Device->button->button[PushButton]->Toggle, 2);
-
-			if(Device->button->button[PushButton]->Toggle)  // do something
-				Device->led->led[Utility].Shine(CMND_UTIL_RED_LED_ON);
-			else
-				Device->led->led[Utility].Shine(CMND_UTIL_RED_LED_OFF);
-			break;
-
-//		case 0x08:	// next case
-//			break;
-
-//		case 0x10:	// next case
-//			break;
-
-//		case 0x20:	// next case
-//			break;
-
-//		case 0x20:	// next case
-//			break;
-
-//		case 0x80:	// next case
-//			break;
-
-//		case 0x80:	// next case
-//			break;
-
-		default:	// no value passed
-			break;
-		}
+	BranchtableEventHandler(val);  // TODO - comment
 }
 
 // dispatches CAN messages to appropriate sub-component on device
 void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
-	branchtable_event(in_handler->GetMessage());
+	BranchtableMSGButtonEvent(in_handler->GetMessage());  // TODO - comment
 }
 
 // GPIO init - device specific

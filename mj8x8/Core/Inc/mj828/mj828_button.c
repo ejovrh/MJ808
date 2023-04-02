@@ -16,38 +16,38 @@ static void _ButtonHandler()
 
 static uint8_t PushButtonCaseTable[] =	// array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
 	{  //
-	0x08,  // 0 - button momentary
-	0x20,  // 1 - button toggle
-	0x10,  // 2 - button hold
-	0x01,  // 3 - error event
-	0x00,  // 4 - double press event
-	0x00,  // 5 - future use
-	0x00,  // 6 - future use
-	0x00	// 7 - future use
+		4,  // 0 - button momentary
+		6,  // 1 - button toggle
+		5,  // 2 - button hold
+		1,  // 3 - error event
+		0,  // 4 - double press event
+		0,  // 5 - future use
+		0,  // 6 - future use
+		0	// 7 - future use
 	};
 
 static uint8_t LeverBrakeCaseTable[] =  // array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
 	{  //
-	0x02,  // 0 - button momentary - braking action
-	0x00,  // 1 - button toggle
-	0x00,  // 2 - button hold
-	0x01,  // 3 - error event
-	0x00,  // 4 - double press event
-	0x00,  // 5 - future use
-	0x00,  // 6 - future use
-	0x00	// 7 - future use
+		2,  // 0 - button momentary - braking action
+		0,  // 1 - button toggle
+		0,  // 2 - button hold
+		1,  // 3 - error event
+		0,  // 4 - double press event
+		0,  // 5 - future use
+		0,  // 6 - future use
+		0	// 7 - future use
 	};
 
 static uint8_t LeverFrontCaseTable[] =  // array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
 	{  //
-	0x04,  // 0 - button momentary - high beam
-	0x00,  // 1 - button toggle
-	0x00,  // 2 - button hold
-	0x01,  // 3 - error event
-	0x00,  // 4 - double press event
-	0x00,  // 5 - future use
-	0x00,  // 6 - future use
-	0x00	// 7 - future use
+		3,  // 0 - button momentary - high beam
+		0,  // 1 - button toggle
+		0,  // 2 - button hold
+		1,  // 3 - error event
+		0,  // 4 - double press event
+		0,  // 5 - future use
+		0,  // 6 - future use
+		0	// 7 - future use
 	};
 
 // marker function for button

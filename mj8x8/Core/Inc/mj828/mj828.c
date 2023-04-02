@@ -62,87 +62,13 @@ void _event_execution_function(uint8_t val)
 	//
 	);
 
-	switch(val)
-		// based on array value at position #foo of array e.g. FooButtonCaseTable[]
-		{
-		case 0x00:	// not defined
-			return;
-
-		case 0x01:	// button error: - do the error thing
-			__Device.public.led = _virtual_led_ctorMJ828();  // reset the LED component
-			return;
-
-		case 0x02:	// lever back - braking action
-			Device->led->Shine(Red);
-// TODO - make argument more binady-compatible; e.g. 200 off, 201 on or 232 on, not 250
-			if(Device->button->button[LeverBrake]->Momentary)
-				MsgHandler->SendMessage(MSG_BUTTON_EVENT_03, 250, 2);  // turn on (250 is a special value)
-			else
-				MsgHandler->SendMessage(MSG_BUTTON_EVENT_03, 200, 2);  // turn off (200 is a special value)
-
-			break;
-
-		case 0x04:	// lever front - high beam
-			Device->led->Shine(Blue);
-			// TODO - make argument more binady-compatible; e.g. 200 off, 201 on or 232 on, not 250
-			if(Device->button->button[LeverFront]->Momentary)
-				MsgHandler->SendMessage(MSG_BUTTON_EVENT_02, 250, 2);  // turn on (250 is a special value)
-			else
-				MsgHandler->SendMessage(MSG_BUTTON_EVENT_02, 200, 2);  // turn off (200 is a special value)
-
-			break;
-
-		case 0x08:	// pushbutton press
-			_DisplayBatteryVoltage();  // light up BatteryX LEDs according to voltage read at Vbat
-			break;
-
-		case 0x10:	// pushbutton hold
-			Device->led->Shine(Green);
-
-			if(Device->button->button[PushButton]->Hold)
-				{
-					MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 20, 2);  // convey button press via CAN and the logic unit will do its own thing
-				}
-			else
-				{
-					MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
-				}
-
-			break;
-
-		case 0x20:	// pushbutton toggle
-			Device->led->Shine(Yellow);
-			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, Device->button->button[PushButton]->Toggle, 2);
-
-			break;
-
-			//		case 0x08:	// next case
-			//			break;
-
-			//		case 0x10:	// next case
-			//			break;
-
-			//		case 0x20:	// next case
-			//			break;
-
-			//		case 0x20:	// next case
-			//			break;
-
-			//		case 0x80:	// next case
-			//			break;
-
-			//		case 0x80:	// next case
-			//			break;
-
-		default:	// no value passed
-			break;
-		}
+	BranchtableEventHandler(val);  // TODO - comment
 }
 
 // dispatches CAN messages to appropriate sub-component on device
 void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
-	branchtable_event(in_handler->GetMessage());
+	BranchtableMSGButtonEvent(in_handler->GetMessage());  // TODO - comment
 }
 
 // GPIO init - device specific

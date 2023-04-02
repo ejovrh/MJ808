@@ -15,14 +15,14 @@ static void _ButtonHandler()
 
 static uint8_t PushButtonCaseTable[] =  // array value at position #foo gets passed into __mjxxx_button_execution_function, where it is evaluated in a switch-case statement
 	{  //
-	0x00,  // 0 - button momentary
-	0x04,  // 1 - button toggle
-	0x02,  // 2 - button hold
-	0x01,  // 3 - error event
-	0x00,  // 4 - double press event
-	0x00,  // 5 - future use
-	0x00,  // 6 - future use
-	0x00	// 7 - future use
+		0,  // 0 - button momentary
+		3,  // 1 - button toggle
+		2,  // 2 - button hold
+		1,  // 3 - error event
+		0,  // 4 - double press event
+		0,  // 5 - future use
+		0,  // 6 - future use
+		0	// 7 - future use
 	};
 
 // marker function for button
