@@ -2,7 +2,7 @@
 
 #if defined(MJ808_)	// if this particular device is active
 
-#include "try/try.h"	//
+#include "try\try.h"	// top-level mj8x8 object for consolidated behaviour code
 #include "mj808\mj808.h"
 #include "mj808\mj808_led.c"	// concrete device-specific LED functions
 #include "mj808\mj808_button.c"	// concrete device-specific button functions
@@ -203,7 +203,7 @@ void mj808_ctor(void)
 {
 	// general device non-specific low-level hardware init & config
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
-	__Device.public.mj8x8 = mj8x8_ctor(MJ808);	// call base class constructor & initialize own SID
+	__Device.public.mj8x8 = mj8x8_ctor(CANID_MJ808);	// call base class constructor & initialize own SID
 
 	__Device.public.activity = (mj808_activity_t*) *__Device.public.mj8x8->activity;  // tie in activity from the depths of mj8x8_t and redefine type
 
@@ -216,10 +216,10 @@ void mj808_ctor(void)
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
-	__Device.public.mj8x8->EmptyBusOperation = &EmptyBusOperation;	// override device-agnostic default operation with specifics
-	__Device.public.mj8x8->PopulatedBusOperation = &PopulatedBusOperation;  // implements device-specific operation depending on bus activity
+	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
+	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
 
-	EventHandler->fpointer = &BranchtableEventHandler;	// implements event hander for this device
+	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
 
 // interrupt init
 	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // EXTI0 - Pushbutton handling
