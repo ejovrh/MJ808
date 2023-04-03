@@ -1,10 +1,16 @@
 #include "main.h"
 #include "try/try.h"
 
-// TODO - objectify into try_t
 // TODO - rename adequately
 // TODO - write comments
 // TODO - see that broadcast messages don't end up in branchtable_event()
+
+typedef struct	// try_t actual
+{
+	try_t public;  // public struct
+} __try_t;
+
+static __try_t __Try __attribute__ ((section (".data")));  // preallocate __Try object in .data
 
 static uint32_t (*MsgBtnEventfptr)(can_msg_t *msg);  // dynamically generated function pointer
 static uint32_t (*Eventfptr)(void);  // dynamically generated function pointer
@@ -182,7 +188,7 @@ static uint32_t (*_BranchtableEventHandler[])(void) =  // branch table
 	};
 
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
-void BranchtableEventHandler(const uint8_t val)
+void _EventHandler(const uint8_t val)
 {
 #ifdef MJ808_
 	Device->activity->ButtonPessed = ((Device->button->button[PushButton]->Momentary) > 0);  // translate button press into true or false
@@ -337,7 +343,7 @@ static uint32_t (*_BranchtableMsgBtnEvent[])(can_msg_t *msg) =  // branch table
 	};
 
 // executes function pointer identified by message command
-void PopulatedBusOperation(message_handler_t *const in_handler)
+void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
 	can_msg_t *msg = in_handler->GetMessage();
 
@@ -351,7 +357,7 @@ void PopulatedBusOperation(message_handler_t *const in_handler)
 }
 
 // defines device operation on empty bus
-void EmptyBusOperation(void)
+void _EmptyBusOperation(void)
 {
 #ifdef MJ808_
 	;
@@ -364,3 +370,18 @@ void EmptyBusOperation(void)
 	;
 #endif
 }
+
+static __try_t __Try =  // instantiate can_t actual and set function pointers
+	{  //
+	.public.PopulatedBusOperation = &_PopulatedBusOperation,  // tie in function pointer
+	.public.EmptyBusOperation = &_EmptyBusOperation,  // ditto
+	.public.EventHandler = &_EventHandler  // ditto
+	};
+
+// object constructor
+//try_t* try_ctor(void)
+//{
+//	return &__Try.public;
+//}
+
+try_t *const Try = &__Try.public;  // set pointer to Try public part
