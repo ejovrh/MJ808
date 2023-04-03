@@ -21,12 +21,6 @@ typedef struct	// mj828_t actual
 
 static __mj828_t __Device __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
-// defines device operation on empty bus
-void _EmptyBusOperation(void)
-{
-	;  // TODO - define mj828 empty bus operation
-}
-
 // display battery charge status depending on ADC read
 void _DisplayBatteryVoltage(void)
 {
@@ -46,29 +40,6 @@ void _DisplayBatteryVoltage(void)
 
 	if(temp > 2421)  // 7.8V
 		Device->led->Shine(Battery4);
-}
-
-// executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
-// cases in this switch-case statement must be unique for all events on this device
-void _event_execution_function(uint8_t val)
-{
-	EventHandler->UnSetEvent(val);	//
-
-	Device->activity->ButtonPessed = (  //	set device to state according to button press
-	(  //
-	Device->button->button[PushButton]->Momentary ||  // ORed byte values indicate _some_ button press is active
-	Device->button->button[LeverFront]->Momentary ||  //
-	Device->button->button[LeverBrake]->Momentary) > 0  // translate the above fact into true or false
-	//
-	);
-
-	BranchtableEventHandler(val);  // TODO - comment
-}
-
-// dispatches CAN messages to appropriate sub-component on device
-void _PopulatedBusOperation(message_handler_t *const in_handler)
-{
-	BranchtableMSGButtonEvent(in_handler->GetMessage());  // TODO - comment
 }
 
 // GPIO init - device specific
@@ -262,10 +233,10 @@ void mj828_ctor(void)
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
-//	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperation;	// override device-agnostic default operation with specifics
-	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperation;  // implements device-specific operation depending on bus activity
+	__Device.public.mj8x8->EmptyBusOperation = &EmptyBusOperation;	// override device-agnostic default operation with specifics
+	__Device.public.mj8x8->PopulatedBusOperation = &PopulatedBusOperation;  // implements device-specific operation depending on bus activity
 
-	EventHandler->fpointer = &_event_execution_function;	// implements event hander for this device
+	EventHandler->fpointer = &BranchtableEventHandler;	// implements event hander for this device
 
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM14_IRQn, 4, 0);  // charlieplexed LED handler timer (on demand)

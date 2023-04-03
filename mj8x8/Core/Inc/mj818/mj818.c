@@ -29,19 +29,6 @@ typedef struct	// mj818_t actual
 
 static __mj818_t __Device __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
-// defines device operation on empty bus
-void _EmptyBusOperation(void)
-{
-	if(REAR_LIGHT_CCR == 0)  // run once: check that e.g. rear light is off (which it is on a lonely power on)
-		__Device.public.led->Shine(10);  // operate on component part
-}
-
-// dispatches CAN messages to appropriate sub-component on device
-void _PopulatedBusOperation(message_handler_t *const in_handler)
-{
-	BranchtableMSGButtonEvent(in_handler->GetMessage());
-}
-
 // GPIO init - device specific
 static inline void _GPIOInit(void)
 {
@@ -221,8 +208,8 @@ void mj818_ctor(void)
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
-	__Device.public.mj8x8->EmptyBusOperation = &_EmptyBusOperation;  // override device-agnostic default operation with specifics
-	__Device.public.mj8x8->PopulatedBusOperation = &_PopulatedBusOperation;  // implements device-specific operation depending on bus activity
+	__Device.public.mj8x8->EmptyBusOperation = &EmptyBusOperation;  // override device-agnostic default operation with specifics
+	__Device.public.mj8x8->PopulatedBusOperation = &PopulatedBusOperation;  // implements device-specific operation depending on bus activity
 
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM14_IRQn, 0, 0);  // charlieplexed LED handler timer (on demand)

@@ -71,6 +71,7 @@ typedef struct	// event_handler_t actual
 	event_handler_t public;  // public struct
 	uint16_t __walker;  // private - local variable used to walk over bit positions 1 to 16
 	uint16_t __index;  // private - bit-wise flags for events (see _HandleEvent())
+	uint8_t __bitpos;  // bit position index
 } __event_handler_t;
 
 extern TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
@@ -124,8 +125,12 @@ static void _HandleEvent(void)
 {
 	__EventHandler.__walker = (__EventHandler.__walker << 1) | (__EventHandler.__walker >> 15);  // the __walker shifts a "1" cyclically from right to left
 
-	if(__EventHandler.__index & __EventHandler.__walker)	// if walker and index are the same bit ...
-		(*__EventHandler.public.fpointer)(_GetMSBSetBit(__EventHandler.__walker));  //	... get the position of the set bit (n) and execute function pointer at index n
+	if(__EventHandler.__index & __EventHandler.__walker)	// if walker and index have the same bit set ...
+		{
+			__EventHandler.__bitpos = _GetMSBSetBit(__EventHandler.__walker);  // save the current bit position
+			(*__EventHandler.public.fpointer)(__EventHandler.__bitpos);  //	... get the position of the set bit (n) and execute function pointer at index n
+			_UnSetEvent(__EventHandler.__bitpos);  // mark the event as handled
+		}
 
 	if(__EventHandler.__index == 0)
 		{
@@ -138,7 +143,7 @@ __event_handler_t __EventHandler =  // instantiate event_handler_t actual and se
 	{  //
 	.public.fpointer = &_DoNothing,  // default -- if not initialize: do nothing
 	.public.Notify = &_Notify,	// notifies about an event by setting the index to a predetermined value (uint8_t array-based lookup table)
-	.public.UnSetEvent = &_UnSetEvent,	// un-does what Nofity() does
+//	.public.UnSetEvent = &_UnSetEvent,	// un-does what Nofity() does
 	.public.HandleEvent = &_HandleEvent  // handles event based on index
 	};
 

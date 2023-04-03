@@ -4,26 +4,16 @@
 // TODO - objectify into try_t
 // TODO - rename adequately
 // TODO - write comments
-// TODO - see that broadcast messages dont end up in branchtable_event()
+// TODO - see that broadcast messages don't end up in branchtable_event()
 
-#ifdef MJ808_
-mj808_t *mj808;
-#endif
-#ifdef MJ818_
-mj818_t *mj818;
-#endif
-#ifdef MJ828_
-mj828_t *mj828;
-#endif
+static uint32_t (*MsgBtnEventfptr)(can_msg_t *msg);  // dynamically generated function pointer
+static uint32_t (*Eventfptr)(void);  // dynamically generated function pointer
 
-//
+// a function that does nothing
 static inline void _DoNothing(void *foo)  // a function that does nothing
 {
 	return;
 }
-
-static uint32_t (*MsgBtnEventfptr)(can_msg_t *msg);  // dynamically generated function pointer
-static uint32_t (*Eventfptr)(void);  // dynamically generated function pointer
 
 // error event
 static inline void _EventHandlerEventError(void)
@@ -38,8 +28,7 @@ static inline void _EventHandlerEventError(void)
 #endif
 }
 
-// mj808 center button hold
-// mj828 lever back - braking action
+// mj808 center button hold, mj828 lever back - braking action
 static inline void _EventHandlerEvent02(void)
 {
 #ifdef MJ808_
@@ -60,8 +49,7 @@ static inline void _EventHandlerEvent02(void)
 #endif
 }
 
-// mj808 button toggle
-// mj828 lever front - high beam
+// mj808 button toggle, mj828 lever front - high beam
 static inline void _EventHandlerEvent03(void)
 {
 #ifdef MJ808_
@@ -173,11 +161,11 @@ static inline void _EventHandlerEvent06(void)
 //}
 
 //
-static uint32_t (*_BranchtableEventHandler[])(void) =  // branchtable
+static uint32_t (*_BranchtableEventHandler[])(void) =  // branch table
 	{  // MSG_BUTTON_EVENT_00 to MSG_BUTTON_EVENT_15
 		(void *)&_DoNothing,//
 		(void *)&_EventHandlerEventError,// error event
-		(void *)&_EventHandlerEvent02,//upda
+		(void *)&_EventHandlerEvent02,//
 		(void *)&_EventHandlerEvent03,//
 		(void *)&_EventHandlerEvent04,//
 		(void *)&_EventHandlerEvent05,//
@@ -193,10 +181,23 @@ static uint32_t (*_BranchtableEventHandler[])(void) =  // branchtable
 		(void *)&_DoNothing,//
 	};
 
-//
+// executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 void BranchtableEventHandler(const uint8_t val)
 {
-	Eventfptr = _BranchtableEventHandler[val - 1];  // get appropriate function pointer from branchtable
+#ifdef MJ808_
+	Device->activity->ButtonPessed = ((Device->button->button[PushButton]->Momentary) > 0);  // translate button press into true or false
+#endif
+#ifdef MJ828_
+	Device->activity->ButtonPessed = (  //	set device to state according to button press
+	(  //
+	Device->button->button[PushButton]->Momentary ||  // ORed byte values indicate _some_ button press is active
+	Device->button->button[LeverFront]->Momentary ||  //
+	Device->button->button[LeverBrake]->Momentary) > 0  // translate the above fact into true or false
+	//
+	);
+#endif
+
+	Eventfptr = _BranchtableEventHandler[val - 1];  // get appropriate function pointer from branch table
 	(Eventfptr)();  // execute
 }
 
@@ -216,7 +217,7 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 	return 0;
 }
 
-// center button toggle on mj808 or mj828 - light up red util. led
+// center button toggle on mj808 or mj828 - light up red utility led
 static inline void _MsgBtnEvent01(can_msg_t *msg)
 {
 #ifdef MJ808_
@@ -314,11 +315,11 @@ static inline void _MsgBtnEvent03(can_msg_t *msg)
 //		return;
 //	}
 
-//
-static uint32_t (*_BranchtableMsgBtnEvent[])(can_msg_t *msg) =  // branchtable
+// branch table for CLASS_MSG_BUTTON_EVENT message digest
+static uint32_t (*_BranchtableMsgBtnEvent[])(can_msg_t *msg) =  // branch table
 	{  // MSG_BUTTON_EVENT_00 to MSG_BUTTON_EVENT_15
 		(void *)(can_msg_t *)&_MsgBtnEvent00,// center button hold on mj808 or mj828 - front & rear light on, intensity set by arg
-		(void *)(can_msg_t *)&_MsgBtnEvent01,// center button toggle on mj808 or mj828 - light up red util. led
+		(void *)(can_msg_t *)&_MsgBtnEvent01,// center button toggle on mj808 or mj828 - light up red utility led
 		(void *)(can_msg_t *)&_MsgBtnEvent02,// mj828 high beam button momentary
 		(void *)(can_msg_t *)&_MsgBtnEvent03,// mj828 brake light button momentary
 		(void *)(can_msg_t *)&_DoNothing,//
@@ -336,13 +337,30 @@ static uint32_t (*_BranchtableMsgBtnEvent[])(can_msg_t *msg) =  // branchtable
 	};
 
 // executes function pointer identified by message command
-void BranchtableMSGButtonEvent(can_msg_t *msg)
+void PopulatedBusOperation(message_handler_t *const in_handler)
 {
-	if((msg->COMMAND& CLASS_MSG_BUTTON_EVENT) != CLASS_MSG_BUTTON_EVENT)
+	can_msg_t *msg = in_handler->GetMessage();
+
+	if((msg->COMMAND& CLASS_MSG_BUTTON_EVENT) != CLASS_MSG_BUTTON_EVENT)	// get out if it isn't the proper message
 	return;
 
-	uint16_t n = (msg->COMMAND & 0x0F);  // get lower byte use it as a decimal index - 0 to 15
+	uint16_t n = (msg->COMMAND& 0x0F);  // get lower byte use it as a decimal index - 0 to 15
 
-	MsgBtnEventfptr = _BranchtableMsgBtnEvent[n];// get appropriate function pointer from branchtable
-	(MsgBtnEventfptr)(msg);// execute
+	MsgBtnEventfptr = _BranchtableMsgBtnEvent[n];  // get appropriate function pointer from branch table
+	(MsgBtnEventfptr)(msg);  // execute
+}
+
+// defines device operation on empty bus
+void EmptyBusOperation(void)
+{
+#ifdef MJ808_
+	;
+#endif
+#ifdef MJ818_
+	if(Device->activity->RearLightOn == 0)  // run once: check that e.g. rear light is off (which it is on a lonely power on)
+		Device->led->Shine(10);  // operate on component part
+#endif
+#ifdef MJ828_
+	;
+#endif
 }
