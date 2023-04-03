@@ -3,12 +3,16 @@
 #include "event.h"
 #include "stm32f0xx_hal.h"
 
+#if defined(MJ808_)	// if this particular device is active
+extern mj808_t *const Device;
+#endif
+
 #if defined(MJ828_)	// if this particular device is active
 extern mj828_t *const Device;
 #endif
 
-#if defined(MJ808_)	// if this particular device is active
-extern mj808_t *const Device;
+#if defined(MJ838_)	// if this particular device is active
+extern mj838_t *const Device;
 #endif
 
 // (very) poor man's log base 2, kinda...

@@ -10,8 +10,6 @@ typedef struct 	// struct describing devices on MJ808
 	void (*EmptyBusOperation)(void);  // defines device operation on empty bus
 } try_t;
 
-//try_t* try_ctor(void);
-
 extern try_t *const Try;  // declare pointer to public struct part
 
 #endif /* CORE_INC_TRY_TRY_H_ */

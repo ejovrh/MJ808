@@ -19,7 +19,7 @@ static inline void _DoNothing(void *foo)  // a function that does nothing
 
 // error event
 static inline void _EventHandlerEventError(void)
-{
+{  // TODO - implement _EventHandlerEventError()
 #ifdef MJ808_
 	;
 //	Device->led->Reset();
@@ -28,6 +28,10 @@ static inline void _EventHandlerEventError(void)
 	;
 //	Device->led->Reset();
 #endif
+#ifdef MJ838_
+	;
+#endif
+
 }
 
 // mj808 center button hold, mj828 lever back - braking action
@@ -48,6 +52,9 @@ static inline void _EventHandlerEvent02(void)
 		MsgHandler->SendMessage(MSG_BUTTON_EVENT_03, 250, 2);  // turn on (250 is a special value)
 	else
 		MsgHandler->SendMessage(MSG_BUTTON_EVENT_03, 200, 2);  // turn off (200 is a special value)
+#endif
+#ifdef MJ838_
+	;
 #endif
 }
 
@@ -215,6 +222,9 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 #ifdef MJ828_
 	Device->led->Shine(Green);
 #endif
+#ifdef MJ838_
+	;
+#endif
 
 	return 0;
 }
@@ -230,6 +240,9 @@ static inline void _MsgBtnEvent01(can_msg_t *msg)
 #endif
 #ifdef MJ828_
 	Device->led->Shine(Yellow);
+#endif
+#ifdef MJ838_
+	;
 #endif
 
 	return;
@@ -373,11 +386,5 @@ static __try_t __Try =  // instantiate can_t actual and set function pointers
 	.public.EmptyBusOperation = &_EmptyBusOperation,  // ditto
 	.public.EventHandler = &_EventHandler  // ditto
 	};
-
-// object constructor
-//try_t* try_ctor(void)
-//{
-//	return &__Try.public;
-//}
 
 try_t *const Try = &__Try.public;  // set pointer to Try public part

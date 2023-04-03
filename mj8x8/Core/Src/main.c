@@ -16,7 +16,7 @@ int main(void)
 	mj828_ctor();
 #endif
 #if defined(MJ838_)	// Čos - call derived class constructor and tie in base class
-	cos_ctor();
+	mj838_ctor();
 #endif
 #if defined(MJ848_)	// LU - call derived class constructor and tie in base class
 	lu_ctor();
