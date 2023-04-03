@@ -176,7 +176,7 @@ static __composite_led_t __LED =
 	};
 
 // implementation of virtual constructor for LEDs
-composite_led_t* _virtual_led_ctorMJ808()
+composite_led_t* _virtual_led_ctor()
 {
 	__LED.public.led[Utility].Shine = &_primitiveUtilityLED;  // LED-specific implementation
 	__LED.public.led[Utility].ocr = 0;	// TODO - not needed yet but it has potential...

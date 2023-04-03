@@ -72,7 +72,7 @@ static __individual_button_t __button_actual [BUTTON_COUNT] =
 	{0};  // initialize array of 3 structs, one for each of the 3 device buttons
 
 // implementation of virtual constructor for buttons
-button_t* _virtual_button_ctorMJ828(void)
+button_t* _virtual_button_ctor(void)
 {
 	__button_actual[PushButton].__ButtonCaseptr = PushButtonCaseTable;	// set the casetable
 	__button_actual[LeverFront].__ButtonCaseptr = LeverFrontCaseTable;	// ditto

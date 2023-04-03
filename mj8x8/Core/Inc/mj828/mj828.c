@@ -226,8 +226,8 @@ void mj828_ctor(void)
 	_GPIOInit();	// initialize device-specific GPIOs
 	_TimerInit();  // initialize timers
 
-	__Device.public.led = _virtual_led_ctorMJ828();  // call virtual constructor & tie in object addresses
-	__Device.public.button = _virtual_button_ctorMJ828();  // call virtual constructor & tie in object addresses
+	__Device.public.led = _virtual_led_ctor();  // call virtual constructor & tie in object addresses
+	__Device.public.button = _virtual_button_ctor();  // call virtual constructor & tie in object addresses
 	__Device.public.adc = adc_ctor();  // call ADC constructor
 
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument

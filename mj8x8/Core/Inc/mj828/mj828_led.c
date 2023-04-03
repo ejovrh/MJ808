@@ -188,7 +188,7 @@ static __composite_led_t __LED =
 	};
 
 // implementation of virtual constructor for LEDs
-composite_led_t* _virtual_led_ctorMJ828()
+composite_led_t* _virtual_led_ctor()
 {
 	__LED.flags = 0;	// zero the flags
 
