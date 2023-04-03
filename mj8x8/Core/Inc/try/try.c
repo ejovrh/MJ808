@@ -22,8 +22,11 @@ static inline void _DoNothing(void *foo)  // a function that does nothing
 	return;
 }
 
+static uint32_t (*MsgBtnEventfptr)(can_msg_t *msg);  // dynamically generated function pointer
+static uint32_t (*Eventfptr)(void);  // dynamically generated function pointer
+
 // error event
-static inline void _EventHandlerEvent01(void)
+static inline void _EventHandlerEventError(void)
 {
 #ifdef MJ808_
 	;
@@ -173,7 +176,7 @@ static inline void _EventHandlerEvent06(void)
 static uint32_t (*_BranchtableEventHandler[])(void) =  // branchtable
 	{  // MSG_BUTTON_EVENT_00 to MSG_BUTTON_EVENT_15
 		(void *)&_DoNothing,//
-		(void *)&_EventHandlerEvent01,// error event
+		(void *)&_EventHandlerEventError,// error event
 		(void *)&_EventHandlerEvent02,//upda
 		(void *)&_EventHandlerEvent03,//
 		(void *)&_EventHandlerEvent04,//
@@ -189,6 +192,13 @@ static uint32_t (*_BranchtableEventHandler[])(void) =  // branchtable
 		(void *)&_DoNothing,//
 		(void *)&_DoNothing,//
 	};
+
+//
+void BranchtableEventHandler(const uint8_t val)
+{
+	Eventfptr = _BranchtableEventHandler[val - 1];  // get appropriate function pointer from branchtable
+	(Eventfptr)();  // execute
+}
 
 // center button hold on mj808 or mj828 - front & rear light on, intensity set by arg
 uint16_t _MsgBtnEvent00(can_msg_t *msg)
@@ -325,9 +335,6 @@ static uint32_t (*_BranchtableMsgBtnEvent[])(can_msg_t *msg) =  // branchtable
 		(void *)(can_msg_t *)&_DoNothing,//
 	};
 
-static uint32_t (*MsgBtnEventfptr)(can_msg_t *msg);  // dynamically generated function pointer
-static uint32_t (*Eventfptr)(void);  // dynamically generated function pointer
-
 // executes function pointer identified by message command
 void BranchtableMSGButtonEvent(can_msg_t *msg)
 {
@@ -339,11 +346,3 @@ void BranchtableMSGButtonEvent(can_msg_t *msg)
 	MsgBtnEventfptr = _BranchtableMsgBtnEvent[n];// get appropriate function pointer from branchtable
 	(MsgBtnEventfptr)(msg);// execute
 }
-
-//
-void BranchtableEventHandler(const uint8_t val)
-{
-	Eventfptr = _BranchtableEventHandler[val];  // get appropriate function pointer from branchtable
-	(Eventfptr)();  // execute
-}
-

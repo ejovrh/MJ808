@@ -115,7 +115,7 @@ static void _UnSetEvent(const uint16_t bit_position)
 // sets bit at bit_position ( 1 to 16) in byte __index - _index will have values 0, 1, 2, 4, 8, 16...32768
 static void _Notify(const uint16_t bit_position)
 {
-	__EventHandler.__index |= _BV(bit_position - 1);  // simply sets the bit at position bit_position
+	__EventHandler.__index |= _BV(bit_position);  // simply sets the bit at position bit_position
 	Device->StartTimer(&htim17);  // start the timer
 }
 
