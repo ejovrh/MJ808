@@ -47,11 +47,7 @@ static inline void _EventHandlerEvent02(void)
 #endif
 #ifdef MJ828_
 	Device->led->Shine(Red);
-// TODO - make argument more binady-compatible; e.g. 200 off, 201 on or 232 on, not 250
-	if(Device->button->button[LeverBrake]->Momentary)
-		MsgHandler->SendMessage(MSG_BUTTON_EVENT_03, 250, 2);  // turn on (250 is a special value)
-	else
-		MsgHandler->SendMessage(MSG_BUTTON_EVENT_03, 200, 2);  // turn off (200 is a special value)
+	MsgHandler->SendMessage(MSG_BUTTON_EVENT_03, (REAR_BRAKELIGHT | Device->button->button[LeverBrake]->Momentary), 2);  // turn off (200 is a special value)
 #endif
 #ifdef MJ838_
 	;
@@ -71,11 +67,7 @@ static inline void _EventHandlerEvent03(void)
 #endif
 #ifdef MJ828_
 	Device->led->Shine(Blue);
-	// TODO - make argument more binady-compatible; e.g. 200 off, 201 on or 232 on, not 250
-	if(Device->button->button[LeverFront]->Momentary)
-		MsgHandler->SendMessage(MSG_BUTTON_EVENT_02, 250, 2);  // turn on (250 is a special value)
-	else
-		MsgHandler->SendMessage(MSG_BUTTON_EVENT_02, 200, 2);  // turn off (200 is a special value)
+	MsgHandler->SendMessage(MSG_BUTTON_EVENT_02, (FRONT_HIGHBEAM | Device->button->button[LeverFront]->Momentary), 2);  // turn off (200 is a special value)
 #endif
 }
 

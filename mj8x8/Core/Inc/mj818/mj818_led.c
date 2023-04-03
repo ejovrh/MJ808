@@ -84,11 +84,11 @@ static void _primitiveRearLED(uint8_t value)
 }
 
 // does high beam on/off without fading
-static void _BrakeLight(const uint8_t value)
+static void _BrakeLight(const uint8_t argument)
 {
 	static uint8_t OldOCR;	// holds previous OCR value
 
-	if(value == 200)	// brake light off command
+	if(argument == ARG_BRAKELIGHT_OFF)	// brake light off command
 		{
 			BRAKE_LIGHT_CCR = OldOCR;	// restore original OCR
 
@@ -104,7 +104,7 @@ static void _BrakeLight(const uint8_t value)
 			return;
 		}
 
-	if(value > 200)	// brake light on command
+	if(argument == ARG_BRAKELIGHT_ON)	// brake light on command
 		{
 			Device->activity->BrakeLightOn = 1;	// mark activity
 			OldOCR = BRAKE_LIGHT_CCR;	// store original OCR value
@@ -120,7 +120,7 @@ static void _BrakeLight(const uint8_t value)
 // set OCR value to fade to
 static void _primitiveBrakeLED(uint8_t value)
 {
-	if(value >= 200)	// special case for brake light
+	if(value >= REAR_BRAKELIGHT)	// special case for brake light
 		{
 			_BrakeLight(value);
 			return;
