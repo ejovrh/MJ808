@@ -12,16 +12,6 @@ TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 TIM_HandleTypeDef htim16;  // Timer16 object - button handling - 25ms
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
 
-// TODO - these shouldn't really be here...
-static TIM_ClockConfigTypeDef sClockSourceConfig =
-	{0};
-
-static TIM_MasterConfigTypeDef sMasterConfig =
-	{0};
-
-static TIM_OC_InitTypeDef sConfigOC =
-	{0};
-
 typedef struct	// mj808_t actual
 {
 	mj808_t public;  // public struct
@@ -68,6 +58,15 @@ static inline void _GPIOInit(void)
 // Timer init - device specific
 static inline void _TimerInit(void)
 {
+	TIM_ClockConfigTypeDef sClockSourceConfig =
+		{0};
+
+	TIM_MasterConfigTypeDef sMasterConfig =
+		{0};
+
+	TIM_OC_InitTypeDef sConfigOC =
+		{0};
+
 	// Timer2 init - front light PWM
 	htim2.Instance = TIM2;
 	htim2.Init.Prescaler = 0;  // scale by 1
@@ -166,8 +165,16 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 {
 	if(timer->Instance == TIM2)  // front LED PWM
 		{
+			TIM_OC_InitTypeDef sConfigOC =
+				{0};
+
+			sConfigOC.OCMode = TIM_OCMODE_PWM1;
+			sConfigOC.Pulse = LED_OFF;	// 0 to 100% duty cycle in decimal numbers
+			sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+			sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+
 			// Timer2 init - front light PWM
-			__HAL_RCC_TIM2_CLK_ENABLE();  // start the clock
+			__HAL_RCC_TIM2_CLK_ENABLE();// start the clock
 			HAL_TIM_PWM_Init(timer);  //
 			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_2);  //
 			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_2);  // start the timer

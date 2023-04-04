@@ -12,16 +12,6 @@ TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms - FIXME - should not be here
 
-// TODO - these shouldn't really be here...
-static TIM_ClockConfigTypeDef sClockSourceConfig =
-	{0};
-
-static TIM_MasterConfigTypeDef sMasterConfig =
-	{0};
-
-static TIM_OC_InitTypeDef sConfigOC =
-	{0};
-
 typedef struct	// mj818_t actual
 {
 	mj818_t public;  // public struct
@@ -61,6 +51,15 @@ static inline void _GPIOInit(void)
 // Timer init - device specific
 static inline void _TimerInit(void)
 {
+	static TIM_ClockConfigTypeDef sClockSourceConfig =
+		{0};
+
+	static TIM_MasterConfigTypeDef sMasterConfig =
+		{0};
+
+	static TIM_OC_InitTypeDef sConfigOC =
+		{0};
+
 	// Timer2 init - rear light PWM
 	htim2.Instance = TIM2;
 	htim2.Init.Prescaler = 0;  // scale by 1
@@ -151,8 +150,16 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 {
 	if(timer->Instance == TIM2)  // front LED PWM
 		{
+			static TIM_OC_InitTypeDef sConfigOC =
+				{0};
+
+			sConfigOC.OCMode = TIM_OCMODE_PWM1;
+			sConfigOC.Pulse = LED_OFF;
+			sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+			sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+
 			// Timer2 init - rear light PWM
-			__HAL_RCC_TIM2_CLK_ENABLE();	// start the clock
+			__HAL_RCC_TIM2_CLK_ENABLE();// start the clock
 			HAL_TIM_PWM_Init(timer);  //
 			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_1);  //
 			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_1);  // start the timer
@@ -161,8 +168,16 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 
 	if(timer->Instance == TIM3)  // brake LED PWM
 		{
+			static TIM_OC_InitTypeDef sConfigOC =
+				{0};
+
+			sConfigOC.OCMode = TIM_OCMODE_PWM1;
+			sConfigOC.Pulse = LED_OFF;
+			sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+			sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+
 			// timer3 - brake light PWM
-			__HAL_RCC_TIM3_CLK_ENABLE();	// start the clock
+			__HAL_RCC_TIM3_CLK_ENABLE();// start the clock
 			HAL_TIM_PWM_Init(timer);  //
 			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_4);
 			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_4);  // start the timer
