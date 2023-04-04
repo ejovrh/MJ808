@@ -102,17 +102,17 @@ typedef union
 } device_t;
 
 // mj808 util LED colour
-#define DEV_GREEN_UTIL_LED 0x08
-#define DEV_RED_UTIL_LED 0x00
+//#define DEV_GREEN_UTIL_LED 0x08
+//#define DEV_RED_UTIL_LED 0x00
 
 // mj808 util LED states
-#define BLINK1X 0x01
-#define BLINK2X 0x02
-#define BLINK3X 0x03
-#define BLINK4X 0x04
-#define BLINK5X 0x05
-#define BLINK6X 0x06
-#define UON 0x07	// TODO - convert somehow to 0x01
+//#define BLINK1X 0x01
+//#define BLINK2X 0x02
+//#define BLINK3X 0x03
+//#define BLINK4X 0x04
+//#define BLINK5X 0x05
+//#define BLINK6X 0x06
+//#define UON 0x07	// TODO - convert somehow to 0x01
 
 #define DEV_LU 0x00	// logic unit device
 #define DEV_PWR_SRC 0x04	// power source device
@@ -120,39 +120,39 @@ typedef union
 #define DEV_SENSOR 0x0C	// sensor device
 
 // mj808 front light/high beam
-#define FRONT_LIGHT 0x00	// with fade - front positional light (mj808) - low beam
-#define FRONT_LIGHT_HIGH 0x01	// WITHOUT fade - front positional light (mj808) - high beam
+//#define FRONT_LIGHT 0x00	// with fade - front positional light (mj808) - low beam
+//#define FRONT_LIGHT_HIGH 0x01	// WITHOUT fade - front positional light (mj808) - high beam
 #define FRONT_HIGHBEAM 0xC8	// 200
 
 // mj818 rear light/brake light
-#define REAR_LIGHT 0x02	// rear positional light (mj818)
-#define REAR_LIGHT_BRAKE 0x03	// brake light (mj818)
+//#define REAR_LIGHT 0x02	// rear positional light (mj818)
+//#define REAR_LIGHT_BRAKE 0x03	// brake light (mj818)
 
 #define REAR_BRAKELIGHT 0xC8	// 200
 
 // mj828 LED definitions
-#define DEV_DB_LED 0x00
-#define RED 0x00
-#define GREEN 0x02
-#define YELLOW 0x04
-#define BLUE 0x06
-#define BATT1 0x08
-#define BATT2 0x0A
-#define BATT3 0x0C
-#define BATT4 0x0E
+//#define DEV_DB_LED 0x00
+//#define RED 0x00
+//#define GREEN 0x02
+//#define YELLOW 0x04
+//#define BLUE 0x06
+//#define BATT1 0x08
+//#define BATT2 0x0A
+//#define BATT3 0x0C
+//#define BATT4 0x0E
 
-#define CMND_UTIL_LED 0x10	// command for utility LED operation (colour, on, off, blink)
+//#define CMND_UTIL_LED 0x10	// command for utility LED operation (colour, on, off, blink)
 
 // command classes
-#define CLASS_ANNOUNCE 0x00	//
-#define CLASS_UTIL_LED 0x10	//
-#define CLASS_DASHBOARD	0x20	//
-#define CLASS_DEVICE 0x40	//
-#define CLASS_FW_FLASH 0x70
-#define CLASS_MSG_TIME_SYNC 0x80	//
+//#define CLASS_ANNOUNCE 0x00	//
+//#define CLASS_UTIL_LED 0x10	//
+//#define CLASS_DASHBOARD	0x20	//
+//#define CLASS_DEVICE 0x40	//
+//#define CLASS_FW_FLASH 0x70
+//#define CLASS_MSG_TIME_SYNC 0x80	//
 #define CLASS_MSG_BUTTON_EVENT 0x90	//
-#define CLASS_MSG_MEASURE_DATA 0xD0	//
-#define CLASS_MSG_BUS 0xF0	//
+//#define CLASS_MSG_MEASURE_DATA 0xD0	//
+//#define CLASS_MSG_BUS 0xF0	//
 
 #define EVENT00 0x00
 #define EVENT01 0x01
@@ -171,15 +171,15 @@ typedef union
 #define EVENT14 0x0E
 #define EVENT15 0x0F
 
-#define MSG_MEASUREMENT_DATA 0xD0	// message containing various measurements
-#define MSG_BUS 0xF0	// CAN bus related control messages
+//#define MSG_MEASUREMENT_DATA 0xD0	// message containing various measurements
+//#define MSG_BUS 0xF0	// CAN bus related control messages
 
 //bit fields for command byte
 //	B7:B5 are command nibbles and not broken down further
-#define B3 3
-#define B2 2
-#define B1 1
-#define B0 0
+//#define B3 3
+//#define B2 2
+//#define B1 1
+//#define B0 0
 
 // CAN ID defines - see xls; must be manually left shifted by 5 to match a 13-byte CAN ID
 // upper byte - b7
@@ -228,42 +228,42 @@ typedef union
 #define CANID_MJ838 (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_PWR_SRC | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A)
 
 // actual device commands
-#define CMND_DASHBOARD_LED_RED_OFF			(CLASS_DASHBOARD | DEV_DB_LED | RED | OFF)
-#define CMND_DASHBOARD_LED_RED_ON				(CLASS_DASHBOARD | DEV_DB_LED | RED | ON)
-#define CMND_DASHBOARD_LED_GREEN_OFF		(CLASS_DASHBOARD | DEV_DB_LED | GREEN | OFF)
-#define CMND_DASHBOARD_LED_GREEN_ON			(CLASS_DASHBOARD | DEV_DB_LED | GREEN | ON)
-#define CMND_DASHBOARD_LED_YELLOW_OFF		(CLASS_DASHBOARD | DEV_DB_LED | YELLOW | OFF)
-#define CMND_DASHBOARD_LED_YELLOW_ON		(CLASS_DASHBOARD | DEV_DB_LED | YELLOW | ON)
-#define CMND_DASHBOARD_LED_BLUE_OFF			(CLASS_DASHBOARD | DEV_DB_LED | BLUE | OFF)
-#define CMND_DASHBOARD_LED_BLUE_ON			(CLASS_DASHBOARD | DEV_DB_LED | BLUE | ON)
-#define CMND_DASHBOARD_LED_BATT1_OFF		(CLASS_DASHBOARD | DEV_DB_LED | BATT1 | OFF)
-#define CMND_DASHBOARD_LED_BATT1_ON			(CLASS_DASHBOARD | DEV_DB_LED | BATT1 | ON)
-#define CMND_DASHBOARD_LED_BATT2_OFF		(CLASS_DASHBOARD | DEV_DB_LED | BATT2 | OFF)
-#define CMND_DASHBOARD_LED_BATT2_ON			(CLASS_DASHBOARD | DEV_DB_LED | BATT2 | ON)
-#define CMND_DASHBOARD_LED_BATT3_OFF		(CLASS_DASHBOARD | DEV_DB_LED | BATT3 | OFF)
-#define CMND_DASHBOARD_LED_BATT3_ON			(CLASS_DASHBOARD | DEV_DB_LED | BATT3 | ON)
-#define CMND_DASHBOARD_LED_BATT4_OFF		(CLASS_DASHBOARD | DEV_DB_LED | BATT4 | OFF)
-#define CMND_DASHBOARD_LED_BATT4_ON			(CLASS_DASHBOARD | DEV_DB_LED | BATT4 | ON)
-#define CMND_FRONT_LIGHT_SHINE					(CLASS_DEVICE | DEV_LIGHT | FRONT_LIGHT)
-#define	CMND_FRONT_LIGHTHIGH_SHINE			(CLASS_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH)
-#define CMND_REAR_LIGHT_SHINE						(CLASS_DEVICE | DEV_LIGHT | REAR_LIGHT)
-#define CMND_BRAKE_LIGHT_SHINE					(CLASS_DEVICE | DEV_LIGHT | REAR_LIGHT_BRAKE)
-#define CMND_UTIL_GREEN_LED_OFF 				(CLASS_UTIL_LED | DEV_GREEN_UTIL_LED | OFF)
-#define CMND_UTIL_GREEN_LED_BLINK1X
-#define CMND_UTIL_GREEN_LED_BLINK2X
-#define CMND_UTIL_GREEN_LED_BLINK3X
-#define CMND_UTIL_GREEN_LED_BLINK4X
-#define CMND_UTIL_GREEN_LED_BLINK5X
-#define CMND_UTIL_GREEN_LED_BLINK6X
-#define CMND_UTIL_GREEN_LED_ON 					(CLASS_UTIL_LED | DEV_GREEN_UTIL_LED | UON)
-#define CMND_UTIL_RED_LED_OFF 					(CLASS_UTIL_LED | DEV_RED_UTIL_LED | OFF)
-#define CMND_UTIL_RED_LED_BLINK1X
-#define CMND_UTIL_RED_LED_BLINK2X
-#define CMND_UTIL_RED_LED_BLINK3X
-#define CMND_UTIL_RED_LED_BLINK4X
-#define CMND_UTIL_RED_LED_BLINK5X
-#define CMND_UTIL_RED_LED_BLINK6X
-#define CMND_UTIL_RED_LED_ON 						(CLASS_UTIL_LED | DEV_RED_UTIL_LED | UON)
+//#define CMND_DASHBOARD_LED_RED_OFF			(CLASS_DASHBOARD | DEV_DB_LED | RED | OFF)
+//#define CMND_DASHBOARD_LED_RED_ON				(CLASS_DASHBOARD | DEV_DB_LED | RED | ON)
+//#define CMND_DASHBOARD_LED_GREEN_OFF		(CLASS_DASHBOARD | DEV_DB_LED | GREEN | OFF)
+//#define CMND_DASHBOARD_LED_GREEN_ON			(CLASS_DASHBOARD | DEV_DB_LED | GREEN | ON)
+//#define CMND_DASHBOARD_LED_YELLOW_OFF		(CLASS_DASHBOARD | DEV_DB_LED | YELLOW | OFF)
+//#define CMND_DASHBOARD_LED_YELLOW_ON		(CLASS_DASHBOARD | DEV_DB_LED | YELLOW | ON)
+//#define CMND_DASHBOARD_LED_BLUE_OFF			(CLASS_DASHBOARD | DEV_DB_LED | BLUE | OFF)
+//#define CMND_DASHBOARD_LED_BLUE_ON			(CLASS_DASHBOARD | DEV_DB_LED | BLUE | ON)
+//#define CMND_DASHBOARD_LED_BATT1_OFF		(CLASS_DASHBOARD | DEV_DB_LED | BATT1 | OFF)
+//#define CMND_DASHBOARD_LED_BATT1_ON			(CLASS_DASHBOARD | DEV_DB_LED | BATT1 | ON)
+//#define CMND_DASHBOARD_LED_BATT2_OFF		(CLASS_DASHBOARD | DEV_DB_LED | BATT2 | OFF)
+//#define CMND_DASHBOARD_LED_BATT2_ON			(CLASS_DASHBOARD | DEV_DB_LED | BATT2 | ON)
+//#define CMND_DASHBOARD_LED_BATT3_OFF		(CLASS_DASHBOARD | DEV_DB_LED | BATT3 | OFF)
+//#define CMND_DASHBOARD_LED_BATT3_ON			(CLASS_DASHBOARD | DEV_DB_LED | BATT3 | ON)
+//#define CMND_DASHBOARD_LED_BATT4_OFF		(CLASS_DASHBOARD | DEV_DB_LED | BATT4 | OFF)
+//#define CMND_DASHBOARD_LED_BATT4_ON			(CLASS_DASHBOARD | DEV_DB_LED | BATT4 | ON)
+//#define CMND_FRONT_LIGHT_SHINE					(CLASS_DEVICE | DEV_LIGHT | FRONT_LIGHT)
+//#define	CMND_FRONT_LIGHTHIGH_SHINE			(CLASS_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH)
+//#define CMND_REAR_LIGHT_SHINE						(CLASS_DEVICE | DEV_LIGHT | REAR_LIGHT)
+//#define CMND_BRAKE_LIGHT_SHINE					(CLASS_DEVICE | DEV_LIGHT | REAR_LIGHT_BRAKE)
+//#define CMND_UTIL_GREEN_LED_OFF 				(CLASS_UTIL_LED | DEV_GREEN_UTIL_LED | OFF)
+//#define CMND_UTIL_GREEN_LED_BLINK1X
+//#define CMND_UTIL_GREEN_LED_BLINK2X
+//#define CMND_UTIL_GREEN_LED_BLINK3X
+//#define CMND_UTIL_GREEN_LED_BLINK4X
+//#define CMND_UTIL_GREEN_LED_BLINK5X
+//#define CMND_UTIL_GREEN_LED_BLINK6X
+//#define CMND_UTIL_GREEN_LED_ON 					(CLASS_UTIL_LED | DEV_GREEN_UTIL_LED | UON)
+//#define CMND_UTIL_RED_LED_OFF 					(CLASS_UTIL_LED | DEV_RED_UTIL_LED | OFF)
+//#define CMND_UTIL_RED_LED_BLINK1X
+//#define CMND_UTIL_RED_LED_BLINK2X
+//#define CMND_UTIL_RED_LED_BLINK3X
+//#define CMND_UTIL_RED_LED_BLINK4X
+//#define CMND_UTIL_RED_LED_BLINK5X
+//#define CMND_UTIL_RED_LED_BLINK6X
+//#define CMND_UTIL_RED_LED_ON 						(CLASS_UTIL_LED | DEV_RED_UTIL_LED | UON)
 
 #define MSG_BUTTON_EVENT_00							(CLASS_MSG_BUTTON_EVENT | EVENT00)
 #define MSG_BUTTON_EVENT_01							(CLASS_MSG_BUTTON_EVENT | EVENT01)

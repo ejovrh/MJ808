@@ -25,7 +25,7 @@ typedef struct	// mj838_t actual
 	mj838_t public;  // public struct
 } __mj838_t;
 
-static __mj838_t   __Device   __attribute__ ((section (".data")));  // preallocate __Device object in .data
+static __mj838_t __Device __attribute__ ((section (".data")));  // preallocate __Device object in .data
 
 // GPIO init - device specific
 static inline void _GPIOInit(void)
@@ -77,6 +77,12 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 	HAL_TIM_Base_Start_IT(timer);  // start the timer
 }
 
+// device-specific sleep
+static inline void _DerivedSleep(void)
+{
+	;
+}
+
 // device-specific constructor
 void mj838_ctor(void)
 {
@@ -94,6 +100,7 @@ void mj838_ctor(void)
 
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
+//	__Device.public.mj8x8->DerivedSleep = &_DerivedSleep;  // implements the derived object sleep
 
 	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
 

@@ -9,7 +9,7 @@ typedef struct	// adc_t actual
 {
 	adc_t public;  // public struct
 
-	uint16_t *__channel;  // private - pointer to array of ADC readout destinations
+	uint16_t *__buffer;  // private - pointer to array of ADC readout destinations
 	uint8_t __index;	// private - auto-incrementing index for reading consecutive channels
 } __adc_t;
 

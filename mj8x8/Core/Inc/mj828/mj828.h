@@ -5,6 +5,11 @@
 #if defined(MJ828_)	// if this particular device is active
 
 #define BUTTON_COUNT 3	// how many buttons are there
+#define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
+#define TIMER2_PERIOD 2499	// ADC - 250ms
+#define TIMER14_PERIOD 19	// charlieplexing - 2ms
+#define TIMER16_PERIOD 249	// button handling - 25ms
+#define TIMER17_PERIOD 24	// event handling - 2.5ms
 
 #include "mj8x8\mj8x8.h"
 #include "led\led.h"
@@ -80,7 +85,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		 */
 		uint8_t CANActive :1;  // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
 		uint8_t _5 :1;	//
-		uint8_t ButtonPessed :1;  // any button is in use
+		uint8_t ButtonPressed :1;  // any button is in use
 		uint8_t LEDsOn :1;  // UI LEDS are on: timer ISR - stop mode will break functionality
 	};
 	uint8_t byte;  // byte-wise representation of the above bitfield

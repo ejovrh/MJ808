@@ -8,6 +8,7 @@
 #define ADC_BUF_SIZE 3	// 3 channels to read
 
 static ADC_HandleTypeDef hadc;  // ADC object
+extern TIM_HandleTypeDef htim2;  // Timer2 object - ADC conversion - 500ms
 
 static __adc_t __ADC;  // forward declaration of object
 
@@ -17,7 +18,7 @@ static uint16_t __adc_buffer[ADC_BUF_SIZE] =
 // reads channels as called from ADC ISR
 static void _ReadChannels(void)
 {
-	__adc_buffer[__ADC.__index] = HAL_ADC_GetValue(&hadc);	// store channel value at proper position in buffer
+	__ADC.__buffer[__ADC.__index] = HAL_ADC_GetValue(&hadc);	// store channel value at proper position in buffer
 
 	(__ADC.__index == 2) ? __ADC.__index = 0 : ++__ADC.__index;  // count until 2, then start over
 }
@@ -25,7 +26,7 @@ static void _ReadChannels(void)
 // returns value stored at index i
 static inline uint16_t _GetVal(const uint8_t i)
 {
-	return __ADC.__channel[i];
+	return __ADC.__buffer[i];
 }
 
 // ADC init - device specific
@@ -67,6 +68,20 @@ static void _ADCInit(void)
 	HAL_ADC_Start_IT(&hadc);
 }
 
+// starts the ADC peripheral
+static inline void _Start(void)
+{
+	__HAL_RCC_ADC1_CLK_ENABLE();
+	Device->StartTimer(&htim2);
+}
+
+// stops the ADC peripheral
+static inline void _Stop(void)
+{
+	Device->StopTimer(&htim2);
+	__HAL_RCC_ADC1_CLK_DISABLE();
+}
+
 adc_t* adc_ctor(void)
 {
 	_ADCInit();  // initialize ADC
@@ -74,7 +89,9 @@ adc_t* adc_ctor(void)
 	__ADC.__index = 0;	// initialise
 	__ADC.public.GetVal = &_GetVal;  // set function pointer
 	__ADC.public.ReadChannels = &_ReadChannels;  // ditto
-	__ADC.__channel = __adc_buffer;  // tie in ADC readout destination
+	__ADC.public.Start = &_Start;  // ditto
+	__ADC.public.Stop = &_Stop;  // ditto
+	__ADC.__buffer = __adc_buffer;  // tie in ADC readout destination
 
 	HAL_NVIC_SetPriority(ADC1_IRQn, 0, 0);	// ADC interrupt handling
 	HAL_NVIC_EnableIRQ(ADC1_IRQn);

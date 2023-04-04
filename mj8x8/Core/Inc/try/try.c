@@ -71,7 +71,9 @@ static inline void _EventHandlerEvent03(void)
 static inline void _EventHandlerEvent04(void)
 {
 #ifdef MJ828_
-	_DisplayBatteryVoltage();  // light up BatteryX LEDs according to voltage read at Vbat
+
+	DisplayBatteryVoltage();  // light up BatteryX LEDs according to voltage read at Vbat
+
 #endif
 }
 
@@ -82,7 +84,7 @@ static inline void _EventHandlerEvent05(void)
 	Device->led->Shine(Green);
 
 	if(Device->button->button[PushButton]->Hold)
-		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 20, 2);  // convey button press via CAN and the logic unit will do its own thing
+		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 10, 2);  // convey button press via CAN and the logic unit will do its own thing
 	else
 		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
 #endif
@@ -182,15 +184,15 @@ static uint32_t (*_BranchtableEventHandler[])(void) =  // branch table
 void _EventHandler(const uint8_t val)
 {
 #ifdef MJ808_
-	Device->activity->ButtonPessed = ((Device->button->button[PushButton]->Momentary) > 0);  // translate button press into true or false
+	Device->activity->ButtonPressed = ((Device->button->button[PushButton]->Momentary) > 0);  // translate button press into true or false
 #endif
 #ifdef MJ828_
-	Device->activity->ButtonPessed = (  //	set device to state according to button press
+	Device->activity->ButtonPressed = (  //	set device to state according to button press
 	(  //
 	Device->button->button[PushButton]->Momentary ||  // ORed byte values indicate _some_ button press is active
 	Device->button->button[LeverFront]->Momentary ||  //
 	Device->button->button[LeverBrake]->Momentary) > 0  // translate the above fact into true or false
-	//
+//
 	);
 #endif
 
@@ -209,6 +211,7 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 #endif
 #ifdef MJ828_
 	Device->led->Shine(Green);
+	Device->adc->Start();
 #endif
 #ifdef MJ838_
 	;
@@ -221,13 +224,11 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 static inline void _MsgBtnEvent01(can_msg_t *msg)
 {
 #ifdef MJ808_
-	if(msg->ARGUMENT)  // on or off
-	Device->led->led[Utility].Shine(CMND_UTIL_RED_LED_ON);
-	else
-	Device->led->led[Utility].Shine(CMND_UTIL_RED_LED_OFF);
+	Device->led->led[Utility].Shine(ARG_UTIL_LED_RED | msg->ARGUMENT);	// on or off, depending on argument
 #endif
 #ifdef MJ828_
 	Device->led->Shine(Yellow);
+	Device->adc->Start();
 #endif
 #ifdef MJ838_
 	;

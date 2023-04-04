@@ -92,9 +92,9 @@ static inline void _TimerInit(void)
 
 	// timer 17 - event handling - 2.5ms
 	htim17.Instance = TIM17;
-	htim17.Init.Prescaler = 799;  // 8MHz / 799+1 = 10kHz update rate
+	htim17.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
 	htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim17.Init.Period = 24;  // with above pre-scaler and a period of 24, we have an 2.5ms interrupt frequency
+	htim17.Init.Period = TIMER17_PERIOD;  // with above pre-scaler and a period of 24, we have an 2.5ms interrupt frequency
 	htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim17.Init.RepetitionCounter = 0;
 	htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -109,9 +109,9 @@ static inline void _TimerInit(void)
 
 	// timer 16 - button handling - 25ms
 	htim16.Instance = TIM16;
-	htim16.Init.Prescaler = 799;  // 8MHz / 799+1 = 10kHz update rate
+	htim16.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
 	htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim16.Init.Period = 249;  // with above pre-scaler and a period of 249, we have an 25ms interrupt frequency
+	htim16.Init.Period = TIMER16_PERIOD;  // with above pre-scaler and a period of 249, we have an 25ms interrupt frequency
 	htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim16.Init.RepetitionCounter = 0;
 	htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -126,7 +126,7 @@ static inline void _TimerInit(void)
 
 	// timer14 - LED handling - 20ms
 	htim14.Instance = TIM14;
-	htim14.Init.Prescaler = TIMER14_PRESCALER;
+	htim14.Init.Prescaler = TIMER_PRESCALER;
 	htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
 	htim14.Init.Period = TIMER14_PERIOD;
 	htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -184,25 +184,31 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 	if(timer->Instance == TIM14)	// LED fading
 		{
 			__HAL_RCC_TIM14_CLK_ENABLE();  // start the clock
-			timer->Instance->PSC = TIMER14_PRESCALER;  // reconfigure after peripheral was powered down
+			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
 			timer->Instance->ARR = TIMER14_PERIOD;
 		}
 
 	if(timer->Instance == TIM16)	// button handling
 		{
 			__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
-			htim16.Instance->PSC = 799;  // reconfigure after peripheral was powered down
-			htim16.Instance->ARR = 249;
+			htim16.Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
+			htim16.Instance->ARR = TIMER16_PERIOD;
 		}
 
 	if(timer->Instance == TIM17)	// event handling
 		{
 			__HAL_RCC_TIM17_CLK_ENABLE();  // start the clock
-			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
-			timer->Instance->ARR = 24;
+			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
+			timer->Instance->ARR = TIMER17_PERIOD;
 		}
 
 	HAL_TIM_Base_Start_IT(timer);  // start the timer
+}
+
+// device-specific sleep
+static inline void _DerivedSleep(void)
+{
+	;
 }
 
 // device-specific constructor
@@ -225,6 +231,7 @@ void mj808_ctor(void)
 
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
+//	__Device.public.mj8x8->DerivedSleep = &_DerivedSleep;  // implements the derived object sleep
 
 	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
 

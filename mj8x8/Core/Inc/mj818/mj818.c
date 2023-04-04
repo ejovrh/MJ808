@@ -108,7 +108,7 @@ static inline void _TimerInit(void)
 
 	// timer14 - LED handling - 20ms
 	htim14.Instance = TIM14;
-	htim14.Init.Prescaler = TIMER14_PRESCALER;
+	htim14.Init.Prescaler = TIMER_PRESCALER;
 	htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
 	htim14.Init.Period = TIMER14_PERIOD;
 	htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -187,25 +187,31 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 	if(timer->Instance == TIM14)	// led handling
 		{
 			__HAL_RCC_TIM14_CLK_ENABLE();  // start the clock
-			timer->Instance->PSC = TIMER14_PRESCALER;  // reconfigure after peripheral was powered down
+			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
 			timer->Instance->ARR = TIMER14_PERIOD;
 		}
 
 	if(timer->Instance == TIM16)	// button handling
 		{
 			__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
-			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
-			timer->Instance->ARR = 249;
+			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
+			timer->Instance->ARR = TIMER16_PERIOD;
 		}
 
 	if(timer->Instance == TIM17)	// event handling
 		{
 			__HAL_RCC_TIM17_CLK_ENABLE();  // start the clock
-			timer->Instance->PSC = 799;  // reconfigure after peripheral was powered down
-			timer->Instance->ARR = 24;
+			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
+			timer->Instance->ARR = TIMER17_PERIOD;
 		}
 
 	HAL_TIM_Base_Start_IT(timer);  // start the timer
+}
+
+// device-specific sleep
+static inline void _DerivedSleep(void)
+{
+	;
 }
 
 void mj818_ctor(void)
@@ -225,6 +231,7 @@ void mj818_ctor(void)
 
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
+//	__Device.public.mj8x8->DerivedSleep = &_DerivedSleep;  // implements the derived object sleep
 
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM14_IRQn, 0, 0);  // charlieplexed LED handler timer (on demand)

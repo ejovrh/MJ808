@@ -146,7 +146,7 @@ static void _CharliePlexingHandler()
 	 * the handler is to be called from a timer ISR periodically
 	 * i is a static walker variable, running repeatedly from 0 to 7, thereby indicating which LED in numerical order (as defined in __primitive_led[8]) shall be lit up
 	 */
-
+	// TODO - _CharliePlexingHandler - implement blinking
 	if(!__LED.flags)	// if there is any LED to glow at all
 		{
 			Device->StopTimer(&htim14);  // stop the time

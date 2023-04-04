@@ -5,8 +5,10 @@
 #if defined(MJ808_)	// if this particular device is active
 
 #define BUTTON_COUNT 1	// how many buttons are there
-#define TIMER14_PRESCALER 799	// LED fading - 8MHz / 799+1 = 10kHz update rate
+#define TIMER_PRESCALER 799	// LED fading - 8MHz / 799+1 = 10kHz update rate
 #define TIMER14_PERIOD 49	// with above pre-scaler and a period of 49, we have an 4.9ms interrupt frequency
+#define TIMER16_PERIOD 249	// button handling - 25ms
+#define TIMER17_PERIOD 24	// event handling - 2.5ms
 
 #include "mj8x8\mj8x8.h"
 #include "led\led.h"
@@ -55,7 +57,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		 * CAN can be in standby mode
 		 */
 		uint8_t CANActive :1;  // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
-		uint8_t ButtonPessed :1;	// utility LED is on TODO - used only for debug purposes
+		uint8_t ButtonPressed :1;  // utility LED is on TODO - used only for debug purposes
 		uint8_t HighBeamOn :1;  // high beam is on: PWM - stop mode will break functionality
 		uint8_t FrontLightOn :1;  // bit 7 - front light is on: PWM - stop mode will break functionality
 	};

@@ -141,14 +141,14 @@ static void _primitiveUtilityLED(uint8_t in_arg)
 // turns whole device ON (via pushbutton)
 static void __componentLED_On(void)
 {
-	Device->led->led[Utility].Shine(CMND_UTIL_GREEN_LED_ON);  // green LED on
+	Device->led->led[Utility].Shine(ARG_UTIL_LED_GREEN_ON);  // green LED on
 	Device->led->led[Front].Shine(75);  // front light on - low key; gets overwritten by LU command, since it comes in a bit later
 }
 
 // turns whole device OFF (via pushbutton)
 static void __componentLED_Off(void)
 {
-	Device->led->led[Utility].Shine(CMND_UTIL_GREEN_LED_OFF);	// green LED off
+	Device->led->led[Utility].Shine(ARG_UTIL_LED_GREEN_OFF);	// green LED off
 	Device->led->led[Front].Shine(0);  // front light off
 }
 

@@ -183,11 +183,11 @@ static inline void _TimerInit(void)
 
 // puts device to sleep
 static void _Sleep(void)
-{  // called periodically by TIM1_BRK_UP_TRG_COM_IRQHandler()
+{
+	// called periodically by TIM1_BRK_UP_TRG_COM_IRQHandler()
+	// wakeup events are only EXTIs
 
 #ifdef USE_POWERSAVE
-//	__disable_irq();
-
 	if(**__MJ8x8.public.activity)  // true if device is active in some form (see actual device implementation)
 		{
 			if(**__MJ8x8.public.activity & 0x0F)  // upper nibble indicates activity
@@ -199,14 +199,14 @@ static void _Sleep(void)
 		}
 	else	// if device is not active
 		{
+			__MJ8x8.public.DerivedSleep();	// call the derived object's sleep implementation
+
 			__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into standby state
 			__MJ8x8.public.StopCoreTimer();  // stop timer1
 
 			HAL_PWR_DisableSleepOnExit();
 			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // go into stop mode
 		}
-
-//	__enable_irq();
 #else
 	HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
 #endif
@@ -232,6 +232,7 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	__MJ8x8.public.can->Timer1Start = &_StartTimer1;  //
 
 	__MJ8x8.public.Sleep = &_Sleep;  // puts device to sleep
+	__MJ8x8.public.DerivedSleep = &_DoNothing,  // the derived object implements its own special sleep method
 
 	//HAL_NVIC_SetPriority(SysTick_IRQn, 2, 0);
 	HAL_SuspendTick();
