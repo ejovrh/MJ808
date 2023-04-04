@@ -59,11 +59,7 @@ static inline void _EventHandlerEvent03(void)
 {
 #ifdef MJ808_
 	MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, Device->button->button[PushButton]->Toggle, 2);
-
-	if(Device->button->button[PushButton]->Toggle)  // do something
-		Device->led->led[Utility].Shine(CMND_UTIL_RED_LED_ON);
-	else
-		Device->led->led[Utility].Shine(CMND_UTIL_RED_LED_OFF);
+	Device->led->led[Utility].Shine(ARG_UTIL_LED_RED | Device->button->button[PushButton]->Toggle);
 #endif
 #ifdef MJ828_
 	Device->led->Shine(Blue);

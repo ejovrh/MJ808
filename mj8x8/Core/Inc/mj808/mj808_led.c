@@ -25,6 +25,7 @@ static const uint8_t _fade_fransfer[] =	// fade transfer curve according to MacN
 	41, 43, 45, 47, 49, 51, 54, 57, 59, 62,	//
 	65, 68, 71, 75, 78, 82, 86, 90, 94, 100	//
 	};
+
 volatile static uint8_t i = 0;	// front
 
 // called indirectly by timer1 (_SystemInterrupt()), handles the fading
@@ -112,36 +113,28 @@ static inline void _primitiveFrontLED(const uint8_t value)
 }
 
 // concrete utility LED handling function
-static void _primitiveUtilityLED(uint8_t in_val)
+static void _primitiveUtilityLED(uint8_t in_arg)
 {
 	uint8_t led = 0;	// holds the pin of the LED: D0 - green (default), D1 - red
 
-	if(in_val & _BV(B3))	// if the 4th bit is set, the command is for a red led, otherwise it is green
-		led = 1;	// red
+	in_arg &= 0x07;	// clear everything except B2:0, which indicates colour and blinking
+
+	if(in_arg & UTIL_LED_GREEN)	// if the bit is set, the command is for a green led, otherwise it is red
+		led = 1;	// green
 
 	// the led variable is relevant for bit-shifting, since the red and green LEDs are pin-wise next door neighbours;
 	//	RedLED_Pin shifted left by one is the green LED
 
-	in_val &= 7;	// clear everything except B2:0, which is the blink count (1-6)
-
-	if(in_val == 0x00)	// B3:B0 is 0 - turn off
+// TODO - _primitiveUtilityLED - implement blinking
+	if((in_arg & ON) == OFF)	// state off - on bit is not set
 		{
 			HAL_GPIO_WritePin(GPIOB, (RedLED_Pin << led), GPIO_PIN_SET);  // set high to turn off
 			return;
 		}
-
-	if(in_val == 0x07)	// B3:B0 is 7 - turn on
+	else
 		{
 			HAL_GPIO_WritePin(GPIOB, (RedLED_Pin << led), GPIO_PIN_RESET);  // set low to turn on
 			return;
-		}
-
-	while(in_val--)  // blink loop
-		{
-			HAL_Delay(BLINK_DELAY);  // TODO - get rid of blocking HAL_Delay();
-			HAL_GPIO_TogglePin(GPIOB, (RedLED_Pin << led));  // toggle the led pin
-			HAL_Delay(BLINK_DELAY);  // TODO - get rid of blocking HAL_Delay();
-			HAL_GPIO_TogglePin(GPIOB, (RedLED_Pin << led));  // toggle the led pin
 		}
 }
 

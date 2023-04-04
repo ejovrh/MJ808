@@ -233,8 +233,7 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 
 	__MJ8x8.public.Sleep = &_Sleep;  // puts device to sleep
 
-	HAL_NVIC_DisableIRQ(SysTick_IRQn);	// get rid of SysTick
-	HAL_NVIC_ClearPendingIRQ(SysTick_IRQn);
+	//HAL_NVIC_SetPriority(SysTick_IRQn, 2, 0);
 	HAL_SuspendTick();
 
 	// interrupt init
