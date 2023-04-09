@@ -34,7 +34,8 @@ static inline void _EventHandlerEventError(void)
 
 }
 
-// mj808 center button hold, mj828 lever back - braking action
+// mj808 center button hold
+// mj828 lever back - braking action
 static inline void _EventHandlerEvent02(void)
 {
 #ifdef MJ808_
@@ -54,7 +55,8 @@ static inline void _EventHandlerEvent02(void)
 #endif
 }
 
-// mj808 button toggle, mj828 lever front - high beam
+// mj808 button toggle
+// mj828 lever front - high beam
 static inline void _EventHandlerEvent03(void)
 {
 #ifdef MJ808_
@@ -67,7 +69,7 @@ static inline void _EventHandlerEvent03(void)
 #endif
 }
 
-// mj828 center pushbutton press
+// mj828 center pushbutton momentary
 static inline void _EventHandlerEvent04(void)
 {
 #ifdef MJ828_
@@ -81,9 +83,9 @@ static inline void _EventHandlerEvent04(void)
 static inline void _EventHandlerEvent05(void)
 {
 #ifdef MJ828_
-	Device->led->Shine(Green);
+	Device->led->Shine(Green);	//
 
-	if(Device->button->button[PushButton]->Hold)
+	if(Device->button->button[PushButton]->Hold)	//
 		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 10, 2);  // convey button press via CAN and the logic unit will do its own thing
 	else
 		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
@@ -95,16 +97,23 @@ static inline void _EventHandlerEvent06(void)
 {
 #ifdef MJ828_
 	Device->led->Shine(Yellow);
-	MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, Device->button->button[PushButton]->Toggle, 2);
+	MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, Device->button->button[PushButton]->Toggle, 2);	//
+	Device->autolight->AutoLightEnabled = Device->button->button[PushButton]->Toggle;
 #endif
 }
 
-////
-//static inline void _EventHandlerEvent07(void)
-//{
 //
-//}
-//
+static inline void _EventHandlerEvent07(void)
+{
+#ifdef MJ828_
+	Device->led->Shine(Green);	//
+	if(Device->autolight->AutoLightisOn)  //
+		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 10, 2);  // convey button press via CAN and the logic unit will do its own thing
+	else
+		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
+#endif
+}
+
 ////
 //static inline void _EventHandlerEvent08(void)
 //{
@@ -169,7 +178,7 @@ static uint32_t (*_BranchtableEventHandler[])(void) =  // branch table
 		(void *)&_EventHandlerEvent04,//
 		(void *)&_EventHandlerEvent05,//
 		(void *)&_EventHandlerEvent06,//
-		(void *)&_DoNothing,//
+		(void *)&_EventHandlerEvent07,//
 		(void *)&_DoNothing,//
 		(void *)&_DoNothing,//
 		(void *)&_DoNothing,//

@@ -11,10 +11,24 @@
 #define TIMER16_PERIOD 249	// button handling - 25ms
 #define TIMER17_PERIOD 24	// event handling - 2.5ms
 
+#define AUTOLIGHT_DEBUG true
+
+#ifdef AUTOLIGHT_DEBUG
+#define AUTOLIGHT_THRESHOLD_LIGHT_OFF 3200 // debug values
+#define AUTOLIGHT_THRESHOLD_LIGHT_ON 3500	// debug values
+#else
+// POTI wiper set at approx. 75% - early dusk
+#define AUTOLIGHT_THRESHOLD_LIGHT_OFF 1843	// high light threshold - 4096/2=2048; 2048-10%
+#define AUTOLIGHT_THRESHOLD_LIGHT_ON 2253 // low light threshold - 4096/2=2048; 2048+10%
+#endif
+
 #include "mj8x8\mj8x8.h"
 #include "led\led.h"
 #include "button\button.h"
 #include "adc\adc.h"
+
+#include "mj828/autolight.h"
+#include "mj828/autobatt.h"
 
 // definitions of device/PCB layout-specific hardware pins
 #define TCAN334_Standby_Pin GPIO_PIN_8	// TODO - move to PA?
@@ -57,7 +71,7 @@ enum mj828_leds  // enum of lights on this device
 enum mj828_adcchannels
 {
 	  Vbat,  // battery voltage - PA3
-	  Light,	// Phototransistor - PB1
+	  Darkness,  // Phototransistor - PB1 - low value = little darkness, high value = lots of darkness
 	  Temperature  // internal temperature sensor
 };
 
@@ -98,6 +112,8 @@ typedef struct	// struct describing devices on MJ828
 	composite_led_t *led;  // pointer to LED structure
 	button_t *button;  // array of button_t - two buttons
 	adc_t *adc;  // ADC on device
+	autolight_t *autolight;  // automatic light handling feature
+	autobatt_t *autobatt;  // automatic battery handling feature
 
 	void (*StopTimer)(TIM_HandleTypeDef *timer);	// stops timer identified by argument
 	void (*StartTimer)(TIM_HandleTypeDef *timer);  // starts timer identified by argument

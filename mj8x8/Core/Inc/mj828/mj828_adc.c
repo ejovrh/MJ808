@@ -16,7 +16,7 @@ static uint16_t __adc_buffer[ADC_BUF_SIZE] =
 	{0};	// store for ADC readout
 
 // reads channels as called from ADC ISR
-static void _ReadChannels(void)
+static void _ConversionEnd(void)
 {
 	__ADC.__buffer[__ADC.__index] = HAL_ADC_GetValue(&hadc);	// store channel value at proper position in buffer
 
@@ -24,7 +24,7 @@ static void _ReadChannels(void)
 }
 
 // returns value stored at index i
-static inline uint16_t _GetVal(const uint8_t i)
+static inline uint16_t _GetChannel(const uint8_t i)
 {
 	return __ADC.__buffer[i];
 }
@@ -87,11 +87,12 @@ adc_t* adc_ctor(void)
 	_ADCInit();  // initialize ADC
 
 	__ADC.__index = 0;	// initialise
-	__ADC.public.GetVal = &_GetVal;  // set function pointer
-	__ADC.public.ReadChannels = &_ReadChannels;  // ditto
+	__ADC.__buffer = __adc_buffer;  // tie in ADC readout destination
+
+	__ADC.public.GetChannel = &_GetChannel;  // set function pointer
+	__ADC.public.ConversionEnd = &_ConversionEnd;  // ditto
 	__ADC.public.Start = &_Start;  // ditto
 	__ADC.public.Stop = &_Stop;  // ditto
-	__ADC.__buffer = __adc_buffer;  // tie in ADC readout destination
 
 	HAL_NVIC_SetPriority(ADC1_IRQn, 0, 0);	// ADC interrupt handling
 	HAL_NVIC_EnableIRQ(ADC1_IRQn);

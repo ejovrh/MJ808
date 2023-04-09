@@ -181,7 +181,7 @@ static void _componentLEDHandler(const uint8_t val)
 
 static __composite_led_t __LED =
 	{  //
-	.public.led = __primitive_led,	// addresses one single LED - should not be used directly
+	.public.led = __primitive_led,	// FIXME: implement clear on/off for primitive LEDs -- addresses one single LED - should not be used directly
 	.public.Shine = &_componentLEDHandler,  // addresses all the device's LEDs
 	.public.Handler = &_CharliePlexingHandler,  // timer-based periodic LED control function (e.g. charlieplexing)
 	.flags = 0	// bitwise representation of 8 LEDs

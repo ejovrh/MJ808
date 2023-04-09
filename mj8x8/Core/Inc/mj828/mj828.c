@@ -8,6 +8,9 @@
 #include "mj828\mj828_button.c"	// concrete device-specific button functions
 #include "mj828\mj828_adc.c"	// concrete device-specific ADC functions
 
+#include "mj828\autolight.h"	// automatic light on off
+#include "mj828\autobatt.h"	// automatic battery state handling
+
 TIM_HandleTypeDef htim2;  // Timer2 object - ADC conversion - 500ms
 TIM_HandleTypeDef htim14;  // Timer14 object - charlieplexed LED handling - 2ms
 TIM_HandleTypeDef htim16;  // Timer16 object - button handling - 25ms
@@ -24,7 +27,7 @@ static __mj828_t __Device __attribute__ ((section (".data")));	// preallocate __
 // display battery charge status depending on ADC read
 void DisplayBatteryVoltage(void)
 {
-	volatile uint16_t temp = Device->adc->GetVal(Vbat);
+	volatile uint16_t temp = Device->adc->GetChannel(Vbat);
 
 	if(temp <= 1302 && temp > 1)	// 4.2V
 		Device->led->Shine(Red);
@@ -246,6 +249,8 @@ void mj828_ctor(void)
 	__Device.public.led = _virtual_led_ctor();  // call virtual constructor & tie in object addresses
 	__Device.public.button = _virtual_button_ctor();  // call virtual constructor & tie in object addresses
 	__Device.public.adc = adc_ctor();  // call ADC constructor
+	__Device.public.autolight = autolight_ctor();  // call AutoLight constructor
+	__Device.public.autobatt = autobatt_ctor();  // call AutoBatt constructor
 
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
@@ -352,7 +357,9 @@ void EXTI2_3_IRQHandler(void)
 void ADC1_IRQHandler(void)
 {
 	if((__HAL_ADC_GET_FLAG(&hadc, ADC_FLAG_EOC) && __HAL_ADC_GET_IT_SOURCE(&hadc, ADC_IT_EOC)))
-		Device->adc->ReadChannels();	// on every ISR iteration, read out and store in ADC object
+		Device->adc->ConversionEnd();  // on every ISR iteration, read out and store in ADC object
+
+	Device->autolight->Do();  //	run the AutoLight feature
 
 	HAL_ADC_IRQHandler(&hadc);  // service the interrupt
 }

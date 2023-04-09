@@ -5,8 +5,8 @@ typedef struct adc_t	// struct describing the event handler functionality
 {
 	void (*Start)(void);	// starts the ADC peripheral
 	void (*Stop)(void);  // stops the ADC peripheral
-	void (*ReadChannels)(void);  // reads channels from ADC ISR
-	uint16_t (*GetVal)(const uint8_t);  // returns channel reading at index
+	void (*ConversionEnd)(void);  // reads channels from ADC ISR
+	uint16_t (*GetChannel)(const uint8_t);  // returns channel reading at index
 } adc_t;
 
 #endif /* CORE_INC_ADC_ADC_H_ */
