@@ -46,7 +46,7 @@
 #define Pushbutton_EXTI_IRQn EXTI0_1_IRQn
 #define Phototransistor_Pin GPIO_PIN_1	// TODO - move to PA?
 #define Phototransistor_GPIO_Port GPIOB
-#define CP4_Pin GPIO_PIN_15
+#define CP4_Pin GPIO_PIN_15		// TODO - consolidate charlieplex pins into one port
 #define CP4_GPIO_Port GPIOA
 #define CP2_Pin GPIO_PIN_3	// TODO - move to PA?
 #define CP2_GPIO_Port GPIOB

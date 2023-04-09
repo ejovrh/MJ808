@@ -165,7 +165,7 @@ static __composite_led_t __LED =
 	{  //
 	.public.led = __primitive_led,  // assign pointer to LED array
 	.public.Shine = &_componentLED,  // component part ("interface")
-	.flags = 0	//
+	._flags = 0	//
 	};
 
 // implementation of virtual constructor for LEDs

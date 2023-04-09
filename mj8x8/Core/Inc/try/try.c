@@ -47,8 +47,16 @@ static inline void _EventHandlerEvent02(void)
 		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 00, 2);  // convey button press via CAN and the logic unit will tell me what to do
 #endif
 #ifdef MJ828_
-	Device->led->Shine(Red);
-	MsgHandler->SendMessage(MSG_BUTTON_EVENT_03, (REAR_BRAKELIGHT | Device->button->button[LeverBrake]->Momentary), 2);  // turn off (200 is a special value)
+	if(Device->button->button[LeverBrake]->Momentary)
+		{
+			Device->led->led[Red].Shine(ON);
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_03, (REAR_BRAKELIGHT | ON), 2);  // turn on (0xC8 is a special value)
+		}
+	else
+		{
+			Device->led->led[Red].Shine(OFF);
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_03, (REAR_BRAKELIGHT | OFF), 2);  // turn off (0xc9 is a special value)
+		}
 #endif
 #ifdef MJ838_
 	;
@@ -64,8 +72,16 @@ static inline void _EventHandlerEvent03(void)
 	Device->led->led[Utility].Shine(ARG_UTIL_LED_RED | Device->button->button[PushButton]->Toggle);
 #endif
 #ifdef MJ828_
-	Device->led->Shine(Blue);
-	MsgHandler->SendMessage(MSG_BUTTON_EVENT_02, (FRONT_HIGHBEAM | Device->button->button[LeverFront]->Momentary), 2);  // turn off (200 is a special value)
+	if(Device->button->button[LeverFront]->Momentary)
+		{
+			Device->led->led[Blue].Shine(ON);
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_02, (FRONT_HIGHBEAM | ON), 2);  // turn on (0xC8 is a special value)
+		}
+	else
+		{
+			Device->led->led[Blue].Shine(OFF);
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_02, (FRONT_HIGHBEAM | OFF), 2);  // turn off (0xc9 is a special value)
+		}
 #endif
 }
 
@@ -83,12 +99,16 @@ static inline void _EventHandlerEvent04(void)
 static inline void _EventHandlerEvent05(void)
 {
 #ifdef MJ828_
-	Device->led->Shine(Green);	//
-
 	if(Device->button->button[PushButton]->Hold)	//
-		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 10, 2);  // convey button press via CAN and the logic unit will do its own thing
+		{
+			Device->led->led[Yellow].Shine(ON);
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 10, 2);  // convey button press via CAN and the logic unit will do its own thing
+		}
 	else
-		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
+		{
+			Device->led->led[Yellow].Shine(OFF);
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
+		}
 #endif
 }
 
@@ -96,9 +116,22 @@ static inline void _EventHandlerEvent05(void)
 static inline void _EventHandlerEvent06(void)
 {
 #ifdef MJ828_
-	Device->led->Shine(Yellow);
-	MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, Device->button->button[PushButton]->Toggle, 2);	//
-	Device->autolight->AutoLightEnabled = Device->button->button[PushButton]->Toggle;
+	if(Device->button->button[PushButton]->Toggle)
+		{
+			Device->led->led[Yellow].Shine(ON);
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, ON, 2);	//
+			Device->autolight->AutoLightEnabled = 1;
+
+		}
+	else
+		{
+			Device->led->led[Yellow].Shine(OFF);
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, OFF, 2);  //
+			Device->autolight->AutoLightEnabled = 0;
+		}
+
+//	MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, Device->button->button[PushButton]->Toggle, 2);	//
+//	Device->autolight->AutoLightEnabled = Device->button->button[PushButton]->Toggle;
 #endif
 }
 
@@ -236,7 +269,7 @@ static inline void _MsgBtnEvent01(can_msg_t *msg)
 	Device->led->led[Utility].Shine(ARG_UTIL_LED_RED | msg->ARGUMENT);	// on or off, depending on argument
 #endif
 #ifdef MJ828_
-	Device->led->Shine(Yellow);
+	Device->led->led[Yellow].Shine(msg->ARGUMENT);
 	Device->adc->Start();
 #endif
 #ifdef MJ838_

@@ -182,7 +182,7 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 {
 	HAL_TIM_Base_Stop_IT(timer);  // stop the timer
 
-	if(timer->Instance == TIM2)  // charlieplexing
+	if(timer->Instance == TIM2)  // ADC
 		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
 
 	if(timer->Instance == TIM14)	// charlieplexing
