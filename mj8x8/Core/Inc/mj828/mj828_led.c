@@ -207,19 +207,17 @@ static void _CharliePlexingHandler()
 		++__LED._BlinkCounter;
 }
 
-// toggles a bit in the LED flags variable; _CharliePlexingHandler() is what makes it shine
-static void _componentLEDHandler(const uint8_t led)
-{
-	Device->StartTimer(&htim14);  // start the timer
-
-	// val is a zero-indexed bit-value indicating the LED that shall be lit up
-	__LED._ShineFlags ^= _BV(led);	// just toggle the bit identified by the "led" bit value
-	Device->activity->LEDsOn |= (__LED._ShineFlags > 0);	// mark in/activity
-}
-
 // sets the flag for the red LED to glow; _CharliePlexingHandler() is what makes it shine
 static inline void __primitivegeneralLEDHandler(const uint8_t led, const uint8_t state)
 {
+	/* note: since the charlieplexer operates on flags (bit 1 = red, bit 2 = green, .... -- see the mj828_leds enum),
+	 * something has to set them -- regardless whether the LEDs are operated individually (via Shine() on the primitive LED type)
+	 * or Shine() on the composite LED type
+	 * what sets these flags is __primitivegeneralLEDHandler().
+	 * one can think of it as being the backend, while the primitive (__primitiveRedLEDHandler)
+	 * and composite (_componentLEDHandler) handlers are the frontends.
+	 */
+
 	if (state == ON)	// transition from BLINK to ON state
 		__LED._OldBlinkFlags = __LED._BlinkFlags;	// store previous blink state
 
@@ -243,49 +241,55 @@ static inline void __primitivegeneralLEDHandler(const uint8_t led, const uint8_t
 	Device->StartTimer(&htim14);  // start the timer
 }
 
-// sets the flag for the red LED to glow
+// frontend for the composite LED handler
+static inline void _componentLEDHandler(const uint8_t arg)
+{
+	__primitivegeneralLEDHandler( ( ((arg & 0x3C) >> 2) - 1 ) , (arg & 0x03));
+}
+
+// frontend for the primitive red LED handler
 static inline void __primitiveRedLEDHandler(const uint8_t state)
 {
 	__primitivegeneralLEDHandler(Red, state);	// execute according to state
 }
 
-// sets the flag for the green LED to glow
+// frontend for the primitive green LED handler
 static inline void __primitiveGreenLEDHandler(const uint8_t state)
 {
 	__primitivegeneralLEDHandler(Green, state);	// execute according to state
 }
 
-// sets the flag for the yellow LED to glow
+// frontend for the primitive yellow LED handler
 static inline void __primitiveYellowLEDHandler(const uint8_t state)
 {
 	__primitivegeneralLEDHandler(Yellow, state);	// execute according to state
 }
 
-// sets the flag for the blue LED to glow
+// frontend for the primitive blue LED handler
 static inline void __primitiveBlueLEDHandler(const uint8_t state)
 {
 	__primitivegeneralLEDHandler(Blue, state);	// execute according to state
 }
 
-// sets the flag for the battery1 LED to glow
+// frontend for the primitive battery1 LED handler
 static inline void __primitiveBatt1LEDHandler(const uint8_t state)
 {
 	__primitivegeneralLEDHandler(Battery1, state);	// execute according to state
 }
 
-// sets the flag for the battery2 LED to glow
+// frontend for the primitive battery2 LED handler
 static inline void __primitiveBatt2LEDHandler(const uint8_t state)
 {
 	__primitivegeneralLEDHandler(Battery2, state);	// execute according to state
 }
 
-// sets the flag for the battery3 LED to glow
+// frontend for the primitive battery3 LED handler
 static inline void __primitiveBatt3LEDHandler(const uint8_t state)
 {
 	__primitivegeneralLEDHandler(Battery3, state);	// execute according to state
 }
 
-// sets the flag for the battery4 LED to glow
+// frontend for the primitive battery4 LED handler
 static inline void __primitiveBatt4LEDHandler(const uint8_t state)
 {
 	__primitivegeneralLEDHandler(Battery4, state);	// execute according to state

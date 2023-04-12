@@ -58,14 +58,14 @@
 
 enum mj828_leds  // enum of lights on this device
 {
-	  Red,	// 0
-	  Green,	// 1
-	  Yellow,  // 2
-	  Blue,  // 3
-	  Battery1,  // 4
-	  Battery2,  // 5
-	  Battery3,  // 6
-	  Battery4	// 7
+	  Red,	// bit pos. 0,
+	  Green,	// bit pos. 1
+	  Yellow,  // bit pos. 2
+	  Blue,  // bit pos. 3
+	  Battery1,  // bit pos. 4
+	  Battery2,  // bit pos. 5
+	  Battery3,  // bit pos. 6
+	  Battery4	// bit pos. 7
 };
 
 enum mj828_adcchannels

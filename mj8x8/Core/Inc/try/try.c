@@ -75,12 +75,12 @@ static inline void _EventHandlerEvent03(void)
 #ifdef MJ808_
 	if(Device->button->button[PushButton]->Toggle)
 		{
-			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, BLINK, 2);
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, (RED | BLINK), 2);
 			Device->led->led[Red].Shine(ON);
 		}
 	else
 		{
-			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, OFF, 2);
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, (RED | OFF), 2);
 			Device->led->led[Red].Shine(OFF);
 		}
 #endif
@@ -272,7 +272,7 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 	Device->led->Shine(msg->ARGUMENT);
 #endif
 #ifdef MJ828_
-	Device->led->Shine(Green);
+	Device->led->led[Green].Shine((msg->ARGUMENT>0) );  // TODO - toggling does not work anymore
 	Device->adc->Start();
 #endif
 #ifdef MJ838_
@@ -290,8 +290,8 @@ static inline void _MsgBtnEvent01(can_msg_t *msg)
 	Device->led->led[Red].Shine(msg->ARGUMENT);  // on or off, depending on argument
 #endif
 #ifdef MJ828_
-//	Device->led->led[Blue].Shine(msg->ARGUMENT);	// works
-	Device->led->Shine(BLUE | BLINK);  // TODO - further blink improvement
+	Device->led->led[Blue].Shine(msg->ARGUMENT);	// argument is OFF, ON, BLINK
+	Device->led->Shine(msg->ARGUMENT);// argument is (LED | (OFF, ON, BLINK)) - e.g. (YELLOW | BLINK)
 	Device->adc->Start();
 #endif
 #ifdef MJ838_
