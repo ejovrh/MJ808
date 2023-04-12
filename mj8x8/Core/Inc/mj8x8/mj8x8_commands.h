@@ -131,16 +131,17 @@ typedef union
 #define REAR_BRAKELIGHT 0xC8	// 200
 
 // mj828 LED definitions
-//#define DEV_DB_LED 0x00
-//#define RED 0x00
-//#define GREEN 0x02
-//#define YELLOW 0x04
-//#define BLUE 0x06
-//#define BATT1 0x08
-//#define BATT2 0x0A
-//#define BATT3 0x0C
-//#define BATT4 0x0E
-
+// FIXME - redefine so that Device->led->Shine(BLUE | BLINK) works on mj828
+#define DEV_DB_LED 0x00
+#define RED 0x00
+#define GREEN 0x02
+#define YELLOW 0x04
+#define BLUE 0x06
+#define BATT1 0x08
+#define BATT2 0x0A
+#define BATT3 0x0C
+#define BATT4 0x0E
+#define MJ828_LED_BLUE							0x08
 //#define CMND_UTIL_LED 0x10	// command for utility LED operation (colour, on, off, blink)
 
 // command classes
@@ -291,19 +292,15 @@ typedef union
 #define	UTIL_LED_RED	0x00
 #define	UTIL_LED_GREEN	0x04
 #define	BLINK	0x02
-#define SLOW 0x00
-#define	FAST	0x01
 
 #define ARG_UTIL_LED_RED								(ARG_UTIL_LED | UTIL_LED_RED)
 #define ARG_UTIL_LED_RED_OFF						(ARG_UTIL_LED | UTIL_LED_RED | OFF)
 #define ARG_UTIL_LED_RED_ON							(ARG_UTIL_LED | UTIL_LED_RED | ON)
-#define ARG_UTIL_LED_RED_BLINK_FAST			(ARG_UTIL_LED | UTIL_LED_RED | BLINK | FAST)
-#define ARG_UTIL_LED_RED_BLINK_SLOW			(ARG_UTIL_LED | UTIL_LED_RED | BLINK | SLOW)
+#define ARG_UTIL_LED_RED_BLINK_FAST			(ARG_UTIL_LED | UTIL_LED_RED | BLINK)
 
 #define ARG_UTIL_LED_GREEN							(ARG_UTIL_LED | UTIL_LED_GREEN)
 #define ARG_UTIL_LED_GREEN_OFF					(ARG_UTIL_LED | UTIL_LED_GREEN | OFF)
 #define ARG_UTIL_LED_GREEN_ON						(ARG_UTIL_LED | UTIL_LED_GREEN | ON)
-#define ARG_UTIL_LED_GREEN_BLINK_FAST		(ARG_UTIL_LED | UTIL_LED_GREEN | BLINK | FAST)
-#define ARG_UTIL_LED_GREEN_SLOW					(ARG_UTIL_LED | UTIL_LED_GREEN | BLINK | SLOW)
+#define ARG_UTIL_LED_GREEN_BLINK_FAST		(ARG_UTIL_LED | UTIL_LED_GREEN | BLINK)
 
 #endif /* CORE_INC_MJ8X8_MJ8X8_COMMANDS_H_ */

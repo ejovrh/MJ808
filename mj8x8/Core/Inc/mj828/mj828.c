@@ -27,6 +27,7 @@ static __mj828_t __Device __attribute__ ((section (".data")));	// preallocate __
 // display battery charge status depending on ADC read
 void DisplayBatteryVoltage(void)
 {
+	//FIXME - DisplayBatteryVoltage() - causes mj828 leds to remain lit
 	volatile uint16_t temp = Device->adc->GetChannel(Vbat);
 
 	if(temp <= 1302 && temp > 1)	// 4.2V
