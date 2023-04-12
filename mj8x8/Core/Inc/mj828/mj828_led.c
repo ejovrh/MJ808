@@ -13,7 +13,9 @@ static primitive_led_t __primitive_led[8] __attribute__ ((section (".data")));	/
 static __composite_led_t __LED;	// forward declaration of object
 static GPIO_InitTypeDef GPIO_InitStruct =  // GPIO initialisation structure
 	{0};
+
 static uint32_t (*_primitiveLEDfptr)(const uint8_t state);	// function pointer for above branch table
+static uint8_t _BlinkExclusionMask;	// exclusion mask used for blinking
 
 // switches a given pin on a port to output
 static inline void ___SetPinToOutput(GPIO_InitTypeDef *a, GPIO_TypeDef *inPort, const uint16_t inPin)
@@ -41,7 +43,7 @@ static inline void __SetAllGPIOtoAnalog(GPIO_InitTypeDef *a)
 }
 
 // handler for physical LED
-static void __primitiveRedLED(const uint8_t state)  // red LED on/off
+static void __physicalRedLED(const uint8_t state)  // red LED on/off
 {
 	// state == 1 - on
 	// state == 0 - off
@@ -53,7 +55,7 @@ static void __primitiveRedLED(const uint8_t state)  // red LED on/off
 }
 
 // handler for physical LED
-static void __primitiveGreenLED(const uint8_t state)  // green LED on/off
+static void __physicalGreenLED(const uint8_t state)  // green LED on/off
 {
 	// state == 1 - on
 	// state == 0 - off
@@ -65,7 +67,7 @@ static void __primitiveGreenLED(const uint8_t state)  // green LED on/off
 }
 
 // handler for physical LED
-static void __primitiveBlueLED(const uint8_t state)  // blue1 LED on/off
+static void __physicalBlueLED(const uint8_t state)  // blue1 LED on/off
 {
 	// state == 1 - on
 	// state == 0 - off
@@ -77,7 +79,7 @@ static void __primitiveBlueLED(const uint8_t state)  // blue1 LED on/off
 }
 
 // handler for physical LED
-static void __primitiveYellowLED(const uint8_t state)  // yellow LED on/off
+static void __physicalYellowLED(const uint8_t state)  // yellow LED on/off
 {
 	// state == 1 - on
 	// state == 0 - off
@@ -89,7 +91,7 @@ static void __primitiveYellowLED(const uint8_t state)  // yellow LED on/off
 }
 
 // handler for physical LED
-static void __primitiveBatt1LED(const uint8_t state)  // blue2 LED on/off
+static void __physicalBatt1LED(const uint8_t state)  // blue2 LED on/off
 {
 	// state == 1 - on
 	// state == 0 - off
@@ -101,7 +103,7 @@ static void __primitiveBatt1LED(const uint8_t state)  // blue2 LED on/off
 }
 
 // handler for physical LED
-static void __primitiveBatt2LED(const uint8_t state)  // blue3 LED on/off
+static void __physicalBatt2LED(const uint8_t state)  // blue3 LED on/off
 {
 	// state == 1 - on
 	// state == 0 - off
@@ -113,7 +115,7 @@ static void __primitiveBatt2LED(const uint8_t state)  // blue3 LED on/off
 }
 
 // handler for physical LED
-static void __primitiveBatt3LED(const uint8_t state)  // blue4 LED on/off
+static void __physicalBatt3LED(const uint8_t state)  // blue4 LED on/off
 {
 	// state == 1 - on
 	// state == 0 - off
@@ -125,7 +127,7 @@ static void __primitiveBatt3LED(const uint8_t state)  // blue4 LED on/off
 }
 
 // handler for physical LED
-static void __primitiveBatt4LED(const uint8_t state)  // blue5 LED on/off
+static void __physicalBatt4LED(const uint8_t state)  // blue5 LED on/off
 {
 	// state == 1 - on
 	// state == 0 - off
@@ -139,19 +141,21 @@ static void __primitiveBatt4LED(const uint8_t state)  // blue5 LED on/off
 // branch table for direct primitive LED execution
 static uint32_t (*__primitiveLEDBranchTable[])(const uint8_t state) =
 		{//
-				(void *)&__primitiveRedLED,
-				(void *)&__primitiveGreenLED,
-				(void *)&__primitiveYellowLED,
-				(void *)&__primitiveBlueLED,
-				(void *)&__primitiveBatt1LED,
-				(void *)&__primitiveBatt2LED,
-				(void *)&__primitiveBatt3LED,
-				(void *)&__primitiveBatt4LED,
+				(void *)&__physicalRedLED,	// physical red LED on/off
+				(void *)&__physicalGreenLED,	// physical green LED on/off
+				(void *)&__physicalYellowLED,	// ditto
+				(void *)&__physicalBlueLED,	// ditto
+				(void *)&__physicalBatt1LED,
+				(void *)&__physicalBatt2LED,
+				(void *)&__physicalBatt3LED,
+				(void *)&__physicalBatt4LED,
 		};
 
 // handles the time-based charlieplexing stuff, is being called by timer14 - every 2ms
 static void _CharliePlexingHandler()
 {
+	static uint8_t i = 0;  // persistent iterator across function calls loops over all LEDs on device
+
 	/* charlieplexing handler rationale
 	 * with charlieplexing, the rationale is that only a single LED can be lit at any time so that GPIO current limits are not exhausted
 	 * if e.g. two or more LEDs have to be lit, they must be lit one after the other in rapid succession;
@@ -160,117 +164,161 @@ static void _CharliePlexingHandler()
 	 * the handler is to be called from a timer ISR periodically
 	 * i is a static walker variable, running repeatedly from 0 to 7, thereby indicating which LED in numerical order (as defined in __primitive_led[8]) shall be lit up
 	 */
-	// TODO - _CharliePlexingHandler - implement blinking
-	if(!__LED._flags)	// if there is any LED to glow at all
+
+	if((__LED._ShineFlags | __LED._BlinkFlags) == 0)	// if there is any LED to glow at all
 		{
-			Device->StopTimer(&htim14);  // stop the time
+			__SetAllGPIOtoAnalog(&GPIO_InitStruct);	// set LED pins to initial state
+
+			Device->StopTimer(&htim14);  // stop the timer
 			Device->activity->LEDsOn = 0;	// mark inactivity
+			return;
 		}
 
-	static uint8_t i = 0;  // persistent iterator across function calls loops over all LEDs on device
+	// 126 = slow, 64 - medium, 32 = fast
+	if ((__LED._BlinkCounter & 32) == 0)	// blink frequency by means of ANDing whole base-2 numbers
+		_BlinkExclusionMask &= (uint8_t) (~__LED._BlinkFlags);	// clear particular bits - populate exclusion (i.e. primitive LED off for blinking)
+	else
+		_BlinkExclusionMask = 0xFF;	// all on (normal glow)
 
-	// set LED pins to initial state
-	__SetAllGPIOtoAnalog(&GPIO_InitStruct);
+	__SetAllGPIOtoAnalog(&GPIO_InitStruct);	// set LED pins to initial state
 
-	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(CP1_GPIO_Port, CP1_Pin, GPIO_PIN_RESET);	// begin charlieplexing GPIO sequence
 	HAL_GPIO_WritePin(CP2_GPIO_Port, CP2_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_RESET);
 
 	_primitiveLEDfptr = __primitiveLEDBranchTable[i];	// set function pointer to indicated address of primitive LED function
-	(_primitiveLEDfptr)(__LED._flags & _BV(i));	// pass arguments and execute
+	(_primitiveLEDfptr)(  ( (__LED._ShineFlags | (__LED._BlinkFlags & _BlinkExclusionMask) ) & _BV(i) ) > 0  );	// it is ridiculous, i know...
 
-	// !!!!	iterator
-	(i >= 7) ? i = 0 : ++i;  // count up to 7 and then restart from zero (we have 8 LEDs)
+	/* blinking rationale
+	 * for blinking, we start with a particular LED turned on, i.e. its bit is set, so (__LED._ShineFlags | __LED._BlinkFlags) is true
+	 * _BlinkExclusionMask is an inverted __LED._BlinkFlags - a bitmask that:
+	 * 	- periodically is 0xFF (a particular blinkable LED has its bit set) and
+	 * 	- periodically has the blinkable LED bit unset
+	 * the above _BlinkExclusionMask ANDed with the above two shine and blink masks sets bits for constantly lit LEDs and periodically sets/unsets
+	 * bits for blinkable LEDs
+	 *
+	 * _BV(i) via the iterator does the charlieplexing; the final AND operator gives the blink frequency.
+	 */
+
+	(i >= 7) ? i = 0 : ++i;  // circular bit-wise iterator over a byte range, count up to 7 and then restart from zero (we have 8 LEDs)
+
+	if (__LED._BlinkFlags)	// increment the counter only if there is stuff to blink
+		++__LED._BlinkCounter;
 }
 
-// toggles a bit in the LED flags variable; charlieplexer in turn makes it shine
-static void _componentLEDHandler(const uint8_t led)
+// backend to all frontends - sets the shine/blink flags for _CharliePlexingHandler() to work on
+static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
 {
+	/* note: since the charlieplexer operates on flags (bit 1 = red, bit 2 = green, .... -- see the mj828_leds enum),
+	 * something has to set them -- regardless whether the LEDs are operated individually (via Shine() on the primitive LED type)
+	 * or Shine() on the composite LED type
+	 * what sets these flags is __primitivegeneralLEDHandler().
+	 * one can think of it as being the backend, while the primitive (__primitiveRedLEDHandler)
+	 * and composite (_componentLEDHandler) handlers are the frontends.
+	 */
+
+	if (state == ON)	// transition from BLINK to ON state
+		__LED._OldBlinkFlags = __LED._BlinkFlags;	// store previous blink state
+
+	if(state == OFF) // transition from SHINE to BLINK state
+		{
+			if (__LED._OldBlinkFlags != 0)	// ...really from SHINE to BLINK
+				{
+					__LED._BlinkFlags = __LED._OldBlinkFlags;
+					__LED._OldBlinkFlags &= ~__LED._OldBlinkFlags;
+				}
+			else	// observe for dirty write condition (blink issued from other devices)
+			__LED._BlinkFlags ^= ((-((state>>1) & 0x01) ^ __LED._BlinkFlags) & (1 << led));
+		}
+		else	// transition to BLINK (or true OFF) state
+			__LED._BlinkFlags ^= ((-((state>>1) & 0x01) ^ __LED._BlinkFlags) & (1 << led));	// sets "led" bit to "state" value
+
+	__LED._ShineFlags ^= ((-(state & 0x01) ^ __LED._ShineFlags) & (1 << led));	// sets "led" bit to "state" value
+
+	Device->activity->LEDsOn |= ((__LED._ShineFlags | __LED._BlinkFlags) > 0);	// mark in/activity
+
 	Device->StartTimer(&htim14);  // start the timer
-
-	// val is a zero-indexed bit-value indicating the LED that shall be lit up
-	__LED._flags ^= _BV(led);	// just toggle
-	Device->activity->LEDsOn = (__LED._flags > 0);	// mark in/activity
 }
 
-// sets the flag for the red LED to glow
-static inline void __primitivegeneralLEDHandler(const uint8_t led, const uint8_t state)
+// frontend for the composite LED handler
+static inline void _componentLEDFrontEnd(const uint8_t arg)
 {
-	Device->activity->LEDsOn |= (state > 0);
-	__LED._flags ^= ((-state ^ __LED._flags) & (1 << led));	// sets "led" bit to "state" value
-		Device->StartTimer(&htim14);  // start the timer
+	__LEDBackEnd( ( ((arg & 0x3C) >> 2) - 1 ) , (arg & 0x03));
 }
 
-// sets the flag for the red LED to glow
-static inline void __primitiveRedLEDHandler(const uint8_t state)
+// frontend for the primitive red LED handler
+static inline void __primitiveRedLEDFrontEnd(const uint8_t state)
 {
-	__primitivegeneralLEDHandler(Red, state);	// execute according to state
+	__LEDBackEnd(Red, state);	// execute according to state
 }
 
-// sets the flag for the green LED to glow
-static inline void __primitiveGreenLEDHandler(const uint8_t state)
+// frontend for the primitive green LED handler
+static inline void __primitiveGreenLEDFrontEnd(const uint8_t state)
 {
-	__primitivegeneralLEDHandler(Green, state);	// execute according to state
+	__LEDBackEnd(Green, state);	// execute according to state
 }
 
-// sets the flag for the yellow LED to glow
-static inline void __primitiveYellowLEDHandler(const uint8_t state)
+// frontend for the primitive yellow LED handler
+static inline void __primitiveYellowLEDFrontEnd(const uint8_t state)
 {
-	__primitivegeneralLEDHandler(Yellow, state);	// execute according to state
+	__LEDBackEnd(Yellow, state);	// execute according to state
 }
 
-// sets the flag for the blue LED to glow
-static inline void __primitiveBlueLEDHandler(const uint8_t state)
+// frontend for the primitive blue LED handler
+static inline void __primitiveBlueLEDFrontEnd(const uint8_t state)
 {
-	__primitivegeneralLEDHandler(Blue, state);	// execute according to state
+	__LEDBackEnd(Blue, state);	// execute according to state
 }
 
-// sets the flag for the battery1 LED to glow
-static inline void __primitiveBatt1LEDHandler(const uint8_t state)
+// frontend for the primitive battery1 LED handler
+static inline void __primitiveBatt1LEDFrontEnd(const uint8_t state)
 {
-	__primitivegeneralLEDHandler(Battery1, state);	// execute according to state
+	__LEDBackEnd(Battery1, state);	// execute according to state
 }
 
-// sets the flag for the battery2 LED to glow
-static inline void __primitiveBatt2LEDHandler(const uint8_t state)
+// frontend for the primitive battery2 LED handler
+static inline void __primitiveBatt2LEDFrontEnd(const uint8_t state)
 {
-	__primitivegeneralLEDHandler(Battery2, state);	// execute according to state
+	__LEDBackEnd(Battery2, state);	// execute according to state
 }
 
-// sets the flag for the battery3 LED to glow
-static inline void __primitiveBatt3LEDHandler(const uint8_t state)
+// frontend for the primitive battery3 LED handler
+static inline void __primitiveBatt3LEDFrontEnd(const uint8_t state)
 {
-	__primitivegeneralLEDHandler(Battery3, state);	// execute according to state
+	__LEDBackEnd(Battery3, state);	// execute according to state
 }
 
-// sets the flag for the battery4 LED to glow
-static inline void __primitiveBatt4LEDHandler(const uint8_t state)
+// frontend for the primitive battery4 LED handler
+static inline void __primitiveBatt4LEDFrontEnd(const uint8_t state)
 {
-	__primitivegeneralLEDHandler(Battery4, state);	// execute according to state
+	__LEDBackEnd(Battery4, state);	// execute according to state
 }
 
 static __composite_led_t __LED =
 	{  //
 	.public.led = __primitive_led,	// addresses one single LED
-	.public.Shine = &_componentLEDHandler,  // addresses all the device's LEDs
+	.public.Shine = &_componentLEDFrontEnd,  // addresses all the device's LEDs
 	.public.Handler = &_CharliePlexingHandler,  // timer-based periodic LED control function (e.g. charlieplexing)
-	._flags = 0	// bitwise representation of 8 LEDs
+	._ShineFlags = 0	// bitwise representation of 8 LEDs
 	};
 
 // implementation of virtual constructor for LEDs
 composite_led_t* _virtual_led_ctor()
 {
-	__LED._flags = 0;	// zero the flags
 
-	__LED.public.led[Red].Shine = &__primitiveRedLEDHandler;  // control function for one single LED
-	__LED.public.led[Green].Shine = &__primitiveGreenLEDHandler;
-	__LED.public.led[Yellow].Shine = &__primitiveYellowLEDHandler;
-	__LED.public.led[Blue].Shine = &__primitiveBlueLEDHandler;
-	__LED.public.led[Battery1].Shine = &__primitiveBatt1LEDHandler;
-	__LED.public.led[Battery2].Shine = &__primitiveBatt2LEDHandler;
-	__LED.public.led[Battery3].Shine = &__primitiveBatt3LEDHandler;
-	__LED.public.led[Battery4].Shine = &__primitiveBatt4LEDHandler;
+	__LED._ShineFlags = 0;	// zero the flags
+	__LED._BlinkFlags = 0;	// ditto
+	__LED._BlinkCounter = 0;	//
+
+	__LED.public.led[Red].Shine = &__primitiveRedLEDFrontEnd;  // control function for one single LED
+	__LED.public.led[Green].Shine = &__primitiveGreenLEDFrontEnd;
+	__LED.public.led[Yellow].Shine = &__primitiveYellowLEDFrontEnd;
+	__LED.public.led[Blue].Shine = &__primitiveBlueLEDFrontEnd;
+	__LED.public.led[Battery1].Shine = &__primitiveBatt1LEDFrontEnd;
+	__LED.public.led[Battery2].Shine = &__primitiveBatt2LEDFrontEnd;
+	__LED.public.led[Battery3].Shine = &__primitiveBatt3LEDFrontEnd;
+	__LED.public.led[Battery4].Shine = &__primitiveBatt4LEDFrontEnd;
 
 	return &__LED.public;  // return address of public part; calling code accesses it via pointer
 }

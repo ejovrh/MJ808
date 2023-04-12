@@ -64,6 +64,7 @@
 
 #define OFF 0x00
 #define ON 0x01
+#define	BLINK	0x02
 
 #define LED_OFF 0	// decimal - off value for any OCR
 #define BLINK_DELAY 125	// delay used in the util_led() function
@@ -131,15 +132,16 @@ typedef union
 #define REAR_BRAKELIGHT 0xC8	// 200
 
 // mj828 LED definitions
-//#define DEV_DB_LED 0x00
-//#define RED 0x00
-//#define GREEN 0x02
-//#define YELLOW 0x04
-//#define BLUE 0x06
-//#define BATT1 0x08
-//#define BATT2 0x0A
-//#define BATT3 0x0C
-//#define BATT4 0x0E
+// FIXME - redefine so that Device->led->Shine(BLUE | BLINK) works on mj828
+#define DEV_DB_LED 0x00
+#define RED 0x04
+#define GREEN 0x08
+#define YELLOW 0x0C
+#define BLUE 0x10
+#define BATT1 0x14
+#define BATT2 0x18
+#define BATT3 0x1C
+#define BATT4 0x20
 
 //#define CMND_UTIL_LED 0x10	// command for utility LED operation (colour, on, off, blink)
 
@@ -154,22 +156,22 @@ typedef union
 //#define CLASS_MSG_MEASURE_DATA 0xD0	//
 //#define CLASS_MSG_BUS 0xF0	//
 
-#define EVENT00 0x00
-#define EVENT01 0x01
-#define EVENT02 0x02
-#define EVENT03 0x03
-#define EVENT04 0x04
-#define EVENT05 0x05
-#define EVENT06 0x06
-#define EVENT07 0x07
-#define EVENT08 0x08
-#define EVENT09 0x09
-#define EVENT10 0x0A
-#define EVENT11 0x0B
-#define EVENT12 0x0C
-#define EVENT13 0x0D
-#define EVENT14 0x0E
-#define EVENT15 0x0F
+#define EVENT00 00
+#define EVENT01 01
+#define EVENT02 02
+#define EVENT03 03
+#define EVENT04 04
+#define EVENT05 05
+#define EVENT06 06
+#define EVENT07 07
+#define EVENT08 08
+#define EVENT09 09
+#define EVENT10 10
+#define EVENT11 11
+#define EVENT12 12
+#define EVENT13 13
+#define EVENT14 14
+#define EVENT15 15
 
 //#define MSG_MEASUREMENT_DATA 0xD0	// message containing various measurements
 //#define MSG_BUS 0xF0	// CAN bus related control messages
@@ -290,20 +292,15 @@ typedef union
 #define ARG_UTIL_LED	0x30
 #define	UTIL_LED_RED	0x00
 #define	UTIL_LED_GREEN	0x04
-#define	BLINK	0x02
-#define SLOW 0x00
-#define	FAST	0x01
 
 #define ARG_UTIL_LED_RED								(ARG_UTIL_LED | UTIL_LED_RED)
 #define ARG_UTIL_LED_RED_OFF						(ARG_UTIL_LED | UTIL_LED_RED | OFF)
 #define ARG_UTIL_LED_RED_ON							(ARG_UTIL_LED | UTIL_LED_RED | ON)
-#define ARG_UTIL_LED_RED_BLINK_FAST			(ARG_UTIL_LED | UTIL_LED_RED | BLINK | FAST)
-#define ARG_UTIL_LED_RED_BLINK_SLOW			(ARG_UTIL_LED | UTIL_LED_RED | BLINK | SLOW)
+#define ARG_UTIL_LED_RED_BLINK_FAST			(ARG_UTIL_LED | UTIL_LED_RED | BLINK)
 
 #define ARG_UTIL_LED_GREEN							(ARG_UTIL_LED | UTIL_LED_GREEN)
 #define ARG_UTIL_LED_GREEN_OFF					(ARG_UTIL_LED | UTIL_LED_GREEN | OFF)
 #define ARG_UTIL_LED_GREEN_ON						(ARG_UTIL_LED | UTIL_LED_GREEN | ON)
-#define ARG_UTIL_LED_GREEN_BLINK_FAST		(ARG_UTIL_LED | UTIL_LED_GREEN | BLINK | FAST)
-#define ARG_UTIL_LED_GREEN_SLOW					(ARG_UTIL_LED | UTIL_LED_GREEN | BLINK | SLOW)
+#define ARG_UTIL_LED_GREEN_BLINK_FAST		(ARG_UTIL_LED | UTIL_LED_GREEN | BLINK)
 
 #endif /* CORE_INC_MJ8X8_MJ8X8_COMMANDS_H_ */

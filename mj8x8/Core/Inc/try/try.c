@@ -1,3 +1,4 @@
+#include "stm32f0xx_it.h"
 #include "main.h"
 #include "try/try.h"
 
@@ -31,7 +32,6 @@ static inline void _EventHandlerEventError(void)
 #ifdef MJ838_
 	;
 #endif
-
 }
 
 // mj808 center button hold
@@ -39,12 +39,17 @@ static inline void _EventHandlerEventError(void)
 static inline void _EventHandlerEvent02(void)
 {
 #ifdef MJ808_
-	Device->led->Shine(Device->button->button[PushButton]->Hold);  // turn the device on/off
 
 	if(Device->button->button[PushButton]->Hold)
-		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 75, 2);  // convey button press via CAN and the logic unit will do its own thing
+		{
+			Device->led->Shine(50);  // turn the device on/off
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 50, 2);  // convey button press via CAN and the logic unit will do its own thing
+		}
 	else
-		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 00, 2);  // convey button press via CAN and the logic unit will tell me what to do
+		{
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will tell me what to do
+			Device->led->Shine(0);  // turn the device on/off
+		}
 #endif
 #ifdef MJ828_
 	if(Device->button->button[LeverBrake]->Momentary)
@@ -68,8 +73,16 @@ static inline void _EventHandlerEvent02(void)
 static inline void _EventHandlerEvent03(void)
 {
 #ifdef MJ808_
-	MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, Device->button->button[PushButton]->Toggle, 2);
-	Device->led->led[Utility].Shine(ARG_UTIL_LED_RED | Device->button->button[PushButton]->Toggle);
+	if(Device->button->button[PushButton]->Toggle)
+		{
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, (RED | BLINK), 2);
+			Device->led->led[Red].Shine(ON);
+		}
+	else
+		{
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, (RED | OFF), 2);
+			Device->led->led[Red].Shine(OFF);
+		}
 #endif
 #ifdef MJ828_
 	if(Device->button->button[LeverFront]->Momentary)
@@ -89,9 +102,7 @@ static inline void _EventHandlerEvent03(void)
 static inline void _EventHandlerEvent04(void)
 {
 #ifdef MJ828_
-
-	DisplayBatteryVoltage();  // light up BatteryX LEDs according to voltage read at Vbat
-
+//	DisplayBatteryVoltage();  // light up BatteryX LEDs according to voltage read at Vbat
 #endif
 }
 
@@ -119,6 +130,9 @@ static inline void _EventHandlerEvent06(void)
 	if(Device->button->button[PushButton]->Toggle)
 		{
 			Device->led->led[Yellow].Shine(ON);
+
+//			Device->led->led[Battery2].Shine(BLINK);
+
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, ON, 2);	//
 			Device->autolight->AutoLightEnabled = 1;
 
@@ -126,12 +140,12 @@ static inline void _EventHandlerEvent06(void)
 	else
 		{
 			Device->led->led[Yellow].Shine(OFF);
+
+//			Device->led->led[Battery2].Shine(OFF);
+
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, OFF, 2);  //
 			Device->autolight->AutoLightEnabled = 0;
 		}
-
-//	MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, Device->button->button[PushButton]->Toggle, 2);	//
-//	Device->autolight->AutoLightEnabled = Device->button->button[PushButton]->Toggle;
 #endif
 }
 
@@ -139,11 +153,16 @@ static inline void _EventHandlerEvent06(void)
 static inline void _EventHandlerEvent07(void)
 {
 #ifdef MJ828_
-	Device->led->Shine(Green);	//
 	if(Device->autolight->AutoLightisOn)  //
-		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 10, 2);  // convey button press via CAN and the logic unit will do its own thing
+		{
+			Device->led->led[Green].Shine(ON);
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 10, 2);  // convey button press via CAN and the logic unit will do its own thing
+		}
 	else
-		MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
+		{
+			Device->led->led[Green].Shine(OFF);
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
+		}
 #endif
 }
 
@@ -242,7 +261,8 @@ void _EventHandler(const uint8_t val)
 	(__Try._Eventfptr)();  // execute
 }
 
-// center button hold on mj808 or mj828 - front & rear light on, intensity set by arg
+// mj808 center button hold
+// mj828 center button hold
 uint16_t _MsgBtnEvent00(can_msg_t *msg)
 {
 #ifdef MJ808_
@@ -252,7 +272,7 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 	Device->led->Shine(msg->ARGUMENT);
 #endif
 #ifdef MJ828_
-	Device->led->Shine(Green);
+	Device->led->led[Green].Shine((msg->ARGUMENT>0) );  // TODO - toggling does not work anymore
 	Device->adc->Start();
 #endif
 #ifdef MJ838_
@@ -262,14 +282,16 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 	return 0;
 }
 
-// center button toggle on mj808 or mj828 - light up red utility led
+// mj808 center button toggle
+// mj828 center button toggle
 static inline void _MsgBtnEvent01(can_msg_t *msg)
 {
 #ifdef MJ808_
-	Device->led->led[Utility].Shine(ARG_UTIL_LED_RED | msg->ARGUMENT);	// on or off, depending on argument
+	Device->led->led[Red].Shine(msg->ARGUMENT);  // on or off, depending on argument
 #endif
 #ifdef MJ828_
-	Device->led->led[Yellow].Shine(msg->ARGUMENT);
+	Device->led->led[Blue].Shine(msg->ARGUMENT);	// argument is OFF, ON, BLINK
+	Device->led->Shine(msg->ARGUMENT);// argument is (LED | (OFF, ON, BLINK)) - e.g. (YELLOW | BLINK)
 	Device->adc->Start();
 #endif
 #ifdef MJ838_
