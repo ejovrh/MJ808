@@ -4,8 +4,8 @@
 #include "main.h"
 #if defined(MJ818_)	// if this particular device is active
 
-#define TIMER_PRESCALER 799	// LED fading - 8MHz / 799+1 = 10kHz update rate
-#define TIMER14_PERIOD 49	// with above pre-scaler and a period of 49, we have an 4.9ms interrupt frequency
+#define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
+#define TIMER14_PERIOD 49	// LED handling - 20ms
 #define TIMER16_PERIOD 249	// button handling - 25ms
 #define TIMER17_PERIOD 24	// event handling - 2.5ms
 

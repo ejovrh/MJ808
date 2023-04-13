@@ -7,7 +7,7 @@
 #define BUTTON_COUNT 3	// how many buttons are there
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER2_PERIOD 2499	// ADC - 250ms
-#define TIMER14_PERIOD 19	// charlieplexing - 2ms
+#define TIMER14_PERIOD 19	// charlieplexed LED handling - 2ms
 #define TIMER16_PERIOD 249	// button handling - 25ms
 #define TIMER17_PERIOD 24	// event handling - 2.5ms
 

@@ -5,10 +5,7 @@
 #include "try\try.h"	// top-level mj8x8 object for consolidated behaviour code
 #include "mj838\mj838.h"
 
-TIM_HandleTypeDef htim2;	// front light PWM on channel 2
-TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
-TIM_HandleTypeDef htim16;  // Timer16 object - button handling - 25ms
-TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
+TIM_HandleTypeDef htim17;  // event handling - 2.5ms
 
 // TODO - these shouldn't really be here...
 static TIM_ClockConfigTypeDef sClockSourceConfig =
