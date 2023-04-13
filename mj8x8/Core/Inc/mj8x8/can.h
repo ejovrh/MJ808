@@ -4,6 +4,9 @@
 #include <inttypes.h>
 #include "can_msg.h"
 
+#define POWERSAVE_CANBUS_ACTIVE_MASK 0x03
+#define	POWERSAVE_DEVICE_SLEEPONEXIT_ACTIVE_MASK 0x3F
+
 typedef union  // union for core activity indication and CAN standby control (is exposed to end device via mj8x8_t)
 {
 	/* the purpose of activity_t ...
@@ -26,19 +29,19 @@ typedef union  // union for core activity indication and CAN standby control (is
 	 */
 	struct
 	{
-		/* 0x0F - lower nibble
-		 * CAN has to be active
+		/*  0x3F - if any of bits 0 though 5 are set - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus on
+		 * additionally: if CANBUS_ACTIVE_MASK has bits not set, CANbus will be off
 		 */
 		uint8_t DoHeartbeat :1;  // bit 0
-		uint8_t _1 :1;  // bit 1
+		uint8_t CANActive :1;  // bit 1
+
+		// 0x3C - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus off
 		uint8_t _2 :1;  // bit 2
 		uint8_t _3 :1;  // bit 3
-
-		/* 0xF0 - upper nibble
-		 * CAN can be in standby mode
-		 */
-		uint8_t CANActive :1;  // bit 4
+		uint8_t _4 :1;  // bit 4
 		uint8_t _5 :1;	// bit 5
+
+		// 0xC0 - don't care - the device will execute HAL_PWR_EnterSTOPMode()
 		uint8_t _6 :1;  // bit 6
 		uint8_t _7 :1;  // bit 7
 	};

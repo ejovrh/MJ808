@@ -47,7 +47,7 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 	volatile uint16_t i = 0;  // safeguard counter
 	uint32_t _TXMailbox;  // TX mailbox identifier
 
-	if((__CAN.public.activity->byte & 0x0F) == 0)  // if sleeping...
+	if((__CAN.public.activity->byte & POWERSAVE_CANBUS_ACTIVE_MASK) == 0)  // if sleeping...
 		__CAN.public.BusActive(1);  // wake up
 
 	_TXHeader.IDE = CAN_ID_STD;  // set the ID to standard

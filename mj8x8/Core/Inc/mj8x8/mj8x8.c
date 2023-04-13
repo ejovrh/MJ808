@@ -188,16 +188,16 @@ static void _Sleep(void)
 	// wakeup events are only EXTIs
 
 #ifdef USE_POWERSAVE
-	if(**__MJ8x8.public.activity)  // true if device is active in some form (see actual device implementation)
+	if(**__MJ8x8.public.activity & POWERSAVE_DEVICE_SLEEPONEXIT_ACTIVE_MASK)  // true if device is active in some form (see actual device implementation)
 		{
-			if(**__MJ8x8.public.activity & 0x0F)  // upper nibble indicates activity
+			if(**__MJ8x8.public.activity & POWERSAVE_CANBUS_ACTIVE_MASK)  // upper nibble indicates activity
 				__MJ8x8.public.can->BusActive(1);  // put CAN infrastructure into active state
 			else
 				__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into standby state
 
 			HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
 		}
-	else	// if device is not active
+	else	// if device is not active - i.e the (activity_byte & 0x3F == 0)
 		{
 			__MJ8x8.public.DerivedSleep();	// call the derived object's sleep implementation
 
