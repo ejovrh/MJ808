@@ -10,7 +10,7 @@ typedef struct	// try_t actual
 	uint32_t (*_Eventfptr)(void);  // dynamically generated function pointer
 } __try_t;
 
-static __try_t __Try __attribute__ ((section (".data")));  // preallocate __Try object in .data
+static __try_t  __Try  __attribute__ ((section (".data")));  // preallocate __Try object in .data
 
 // a function that does nothing
 static inline void _DoNothing(void *foo)  // a function that does nothing
@@ -287,7 +287,7 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 static inline void _MsgBtnEvent01(can_msg_t *msg)
 {
 #ifdef MJ808_
-	Device->led->led[Red].Shine(msg->ARGUMENT);  // on or off, depending on argument
+	Device->led->led[Green].Shine(msg->ARGUMENT);  // on or off, depending on argument
 #endif
 #ifdef MJ828_
 	Device->led->led[Blue].Shine(msg->ARGUMENT);	// argument is OFF, ON, BLINK
@@ -433,7 +433,7 @@ void _EmptyBusOperation(void)
 #endif
 }
 
-static __try_t __Try =  // instantiate can_t actual and set function pointers
+static __try_t  __Try =  // instantiate can_t actual and set function pointers
 	{  //
 	.public.PopulatedBusOperation = &_PopulatedBusOperation,  // tie in function pointer
 	.public.EmptyBusOperation = &_EmptyBusOperation,  // ditto
