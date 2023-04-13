@@ -34,8 +34,7 @@ enum mj808_leds  // enum of lights on this device
 {
 	  Red,
 	  Green,
-	  Front,
-	  HighBeam
+	  Front
 };
 
 enum mj808_buttons	// enum of buttons on this device

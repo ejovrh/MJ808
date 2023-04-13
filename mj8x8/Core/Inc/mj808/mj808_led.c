@@ -64,7 +64,7 @@ static void _HighBeam(const uint8_t value)
 	if(value == ARG_HIGHBEAM_OFF)	// high beam off command
 		{
 			Device->activity->HighBeamOn = 0;	// mark inactivity
-			__LED._ShineFlags &= ~_BV(HighBeam);	// unset high beam flag
+//			__LED._ShineFlags &= ~_BV(HighBeam);	// unset high beam flag
 
 			if (Device->activity->FrontLightOn)	// if front light is on
 				{
@@ -84,7 +84,7 @@ static void _HighBeam(const uint8_t value)
 	if(value == ARG_HIGHBEAM_ON)	// high beam on command
 		{
 			Device->activity->HighBeamOn = 1;	// mark activity
-			__LED._ShineFlags |= _BV(HighBeam);	// set the high beam flag
+//			__LED._ShineFlags |= _BV(HighBeam);	// set the high beam flag
 
 			if (Device->activity->FrontLightOn)	// if front light is on
 				OldOCR = FRONT_LIGHT_CCR;	// store original OCR value
@@ -260,7 +260,7 @@ composite_led_t* _virtual_led_ctor()
 {
 	__LED.public.led[Red].Shine = &__primitiveRedLEDFrontEnd;  // control function for one single LED
 	__LED.public.led[Green].Shine = &__primitiveGreenLEDFrontEnd;	// ditto
-	__LED.public.led[Front].Shine = &__primitiveFrontLightHandler;  // ditto
+	__LED.public.led[Front].Shine = &_physicalFrontLED;  // ditto
 	__LED.public.Handler = &_LEDHandler;  // timer-based periodic LED control function
 
 	return &__LED.public;  // return address of public part; calling code accesses it via pointer
