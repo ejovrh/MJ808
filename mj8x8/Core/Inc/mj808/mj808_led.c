@@ -96,8 +96,23 @@ static void _HighBeam(const uint8_t value)
 		}
 }
 
+// delegates operations from LED component downwards to LED leaves
+static void _componentLED(const uint8_t val)
+{
+	if(val)  // true - on, false - off
+		{	// delegate indirectly to the leaves
+			Device->led->led[Green].Shine(ON);  // green LED on
+			Device->led->led[Front].Shine(val);  // front light on - low key; gets overwritten by LU command, since it comes in a bit later
+		}
+	else
+		{	// delegate indirectly to the leaves
+			Device->led->led[Green].Shine(OFF);	// green LED off
+			Device->led->led[Front].Shine(0);  // front light off
+		}
+}
+
 // set OCR value to fade to
-static inline void _primitiveFrontLED(const uint8_t value)
+static inline void _physicalFrontLED(const uint8_t value)
 {
 	if(value >= FRONT_HIGHBEAM)	// special case for high beam
 		{
@@ -117,21 +132,6 @@ static inline void _primitiveFrontLED(const uint8_t value)
 
 	Device->led->led[Front].ocr = value;	// set OCR value, the handler will do the rest
 	__HAL_TIM_ENABLE_IT(&htim14, TIM_IT_UPDATE);	// start timer
-}
-
-// delegates operations from LED component downwards to LED leaves
-static void _componentLED(const uint8_t val)
-{
-	if(val)  // true - on, false - off
-		{	// delegate indirectly to the leaves
-			Device->led->led[Green].Shine(ON);  // green LED on
-			Device->led->led[Front].Shine(val);  // front light on - low key; gets overwritten by LU command, since it comes in a bit later
-		}
-	else
-		{	// delegate indirectly to the leaves
-			Device->led->led[Green].Shine(OFF);	// green LED off
-			Device->led->led[Front].Shine(0);  // front light off
-		}
 }
 
 // handler for physical LED
@@ -157,6 +157,7 @@ static uint32_t (*__physicalLEDBranchTable[])(const uint8_t state) =
 		{//
 				(void *)&__physicalRedLED,	// physical red LED on/off
 				(void *)&__physicalGreenLED,	// physical green LED on/off
+				(void *)&_physicalFrontLED,	// physical front light CCR value set
 		};
 
 // concrete utility LED handling function
@@ -180,11 +181,10 @@ static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
 
 	__LED._ShineFlags ^= ((-(state & 0x01) ^ __LED._ShineFlags) & (1 << led));	// sets "led" bit to "state" value
 
-	Device->activity->UtilLEDOn = (__LED._BlinkFlags > 0);	// mark in/activity, but only for blinking (timer is needed); shining doesnt need the timer and wont set this bit
+	Device->activity->UtilLEDOn = ( (__LED._BlinkFlags & 0x03)  > 0);	// mark in/activity, but only for blinking (timer is needed); shining doesnt need the timer and wont set this bit
 
 	if(state == BLINK)	// state blink
 		{
-			__LED._BlinkFlags = _BV(led);	//
 			Device->StartTimer(&htim14);	//
 			return;
 		}
@@ -205,17 +205,11 @@ static inline void __primitiveGreenLEDFrontEnd(const uint8_t state)
 	__LEDBackEnd(Green, state);	// execute according to state
 }
 
-//// frontend for the primitive front light handler
-//static inline void __primitiveFrontLightHandler(const uint8_t state)
-//{
-//	__LEDBackEnd(Front, state);	// execute according to state
-//}
-//
-//// frontend for the primitive high beam handler
-//static inline void __primitiveHighBeamHandler(const uint8_t state)
-//{
-//	__LEDBackEnd(HighBeam, state);	// execute according to state
-//}
+// frontend for the primitive front light handler
+static inline void __primitiveFrontLightHandler(const uint8_t state)
+{
+	__LEDBackEnd(Front, state);	// execute according to state
+}
 
 // handles blinking
 static void _Blinker(void)
@@ -247,7 +241,7 @@ static void _Blinker(void)
 // called indirectly by timer1 (_SystemInterrupt()), handles the fading (and blinking)
 static void _LEDHandler(void)
 {
-	if (__LED._ShineFlags & _BV(Front))
+	if (Device->activity->FrontLightOn)
 		_MacNamaraFader();	// fades front light pleasingly for the human eye
 
 	if (__LED._BlinkFlags)
@@ -266,7 +260,7 @@ composite_led_t* _virtual_led_ctor()
 {
 	__LED.public.led[Red].Shine = &__primitiveRedLEDFrontEnd;  // control function for one single LED
 	__LED.public.led[Green].Shine = &__primitiveGreenLEDFrontEnd;	// ditto
-	__LED.public.led[Front].Shine = &_primitiveFrontLED;  // ditto
+	__LED.public.led[Front].Shine = &__primitiveFrontLightHandler;  // ditto
 	__LED.public.Handler = &_LEDHandler;  // timer-based periodic LED control function
 
 	return &__LED.public;  // return address of public part; calling code accesses it via pointer
