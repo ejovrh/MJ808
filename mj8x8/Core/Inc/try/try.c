@@ -76,7 +76,7 @@ static inline void _EventHandlerEvent03(void)
 	if(Device->button->button[PushButton]->Toggle)
 		{
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, (RED | BLINK), 2);
-			Device->led->led[Red].Shine(ON);
+			Device->led->led[Red].Shine(BLINK);
 		}
 	else
 		{

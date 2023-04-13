@@ -53,7 +53,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		uint8_t DoHeartbeat :1;  // bit 0 - HeartBeat is running
 		uint8_t _1 :1;  //
 		uint8_t _2 :1;  //
-		uint8_t LEDsOn :1;  //
+		uint8_t UtilLEDOn :1;  //
 
 		/* 0xF0 - upper nibble
 		 * CAN can be in standby mode

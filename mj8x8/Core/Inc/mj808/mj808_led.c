@@ -51,6 +51,7 @@ static void _MacNamaraFader(void)
 					Device->StopTimer(&htim14);  // stop the timer
 					Device->StopTimer(&htim2);  // stop the timer
 					Device->activity->FrontLightOn = 0;	// mark inactivity
+					__LED._ShineFlags &= ~_BV(Front);	// unset front light flag
 				}
 		}
 }
@@ -63,6 +64,7 @@ static void _HighBeam(const uint8_t value)
 	if(value == ARG_HIGHBEAM_OFF)	// high beam off command
 		{
 			Device->activity->HighBeamOn = 0;	// mark inactivity
+			__LED._ShineFlags &= ~_BV(HighBeam);	// unset high beam flag
 
 			if (Device->activity->FrontLightOn)	// if front light is on
 				{
@@ -82,6 +84,7 @@ static void _HighBeam(const uint8_t value)
 	if(value == ARG_HIGHBEAM_ON)	// high beam on command
 		{
 			Device->activity->HighBeamOn = 1;	// mark activity
+			__LED._ShineFlags |= _BV(HighBeam);	// set the high beam flag
 
 			if (Device->activity->FrontLightOn)	// if front light is on
 				OldOCR = FRONT_LIGHT_CCR;	// store original OCR value
@@ -109,6 +112,7 @@ static inline void _primitiveFrontLED(const uint8_t value)
 		{
 			Device->StartTimer(&htim2);  // start the timer - front light PWM
 			Device->activity->FrontLightOn = 1;
+			__LED._ShineFlags |= _BV(Front);	// set the front light flag
 		}
 
 	Device->led->led[Front].ocr = value;	// set OCR value, the handler will do the rest
@@ -176,7 +180,7 @@ static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
 
 	__LED._ShineFlags ^= ((-(state & 0x01) ^ __LED._ShineFlags) & (1 << led));	// sets "led" bit to "state" value
 
-	Device->activity->LEDsOn |= ((__LED._ShineFlags | __LED._BlinkFlags) > 0);	// mark in/activity
+	Device->activity->UtilLEDOn = (__LED._BlinkFlags > 0);	// mark in/activity, but only for blinking (timer is needed); shining doesnt need the timer and wont set this bit
 
 	if(state == BLINK)	// state blink
 		{
@@ -221,7 +225,7 @@ static void _Blinker(void)
 	if((__LED._ShineFlags | __LED._BlinkFlags) == 0)	// if there is any LED to glow at all
 		{
 			Device->StopTimer(&htim14);  // stop the timer
-			Device->activity->LEDsOn = 0;	// mark inactivity
+			Device->activity->UtilLEDOn = 0;	// mark inactivity
 			return;
 		}
 
@@ -234,7 +238,6 @@ static void _Blinker(void)
 	_fptr = __physicalLEDBranchTable[i];	// set function pointer to indicated address of primitive LED function
 	(_fptr)(  ( (__LED._ShineFlags | (__LED._BlinkFlags & _BlinkExclusionMask) ) & _BV(i) ) > 0  );	// it is ridiculous, i know...
 
-
 	(i >= 1) ? i = 0 : ++i;  // circular bit-wise iterator over a byte range, count up to 7 and then restart from zero (we have 8 LEDs)
 
 	if (__LED._BlinkFlags)	// increment the counter only if there is stuff to blink
@@ -244,9 +247,11 @@ static void _Blinker(void)
 // called indirectly by timer1 (_SystemInterrupt()), handles the fading (and blinking)
 static void _LEDHandler(void)
 {
-	_MacNamaraFader();	// fades front light pleasingly for the human eye
+	if (__LED._ShineFlags & _BV(Front))
+		_MacNamaraFader();	// fades front light pleasingly for the human eye
 
-	_Blinker(); // handles blinking
+	if (__LED._BlinkFlags)
+		_Blinker(); // handles blinking
 }
 
 static __composite_led_t __LED =
