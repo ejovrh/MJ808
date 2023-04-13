@@ -7,14 +7,14 @@
 
 #include "led\composite_led_actual.c"	// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
 
-extern TIM_HandleTypeDef htim14;  // Timer14 object;
+extern TIM_HandleTypeDef htim14;  // charlieplexed LED handling - 2ms
 
 static primitive_led_t __primitive_led[8] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 static __composite_led_t __LED;	// forward declaration of object
 static GPIO_InitTypeDef GPIO_InitStruct =  // GPIO initialisation structure
 	{0};
 
-static uint32_t (*_primitiveLEDfptr)(const uint8_t state);	// function pointer for above branch table
+static uint32_t (*_fptr)(const uint8_t state);	// function pointer for branch table
 static uint8_t _BlinkExclusionMask;	// exclusion mask used for blinking
 
 // switches a given pin on a port to output
@@ -139,7 +139,7 @@ static void __physicalBatt4LED(const uint8_t state)  // blue5 LED on/off
 }
 
 // branch table for direct primitive LED execution
-static uint32_t (*__primitiveLEDBranchTable[])(const uint8_t state) =
+static uint32_t (*__physicalLEDBranchTable[])(const uint8_t state) =
 		{//
 				(void *)&__physicalRedLED,	// physical red LED on/off
 				(void *)&__physicalGreenLED,	// physical green LED on/off
@@ -187,8 +187,8 @@ static void _CharliePlexingHandler()
 	HAL_GPIO_WritePin(CP3_GPIO_Port, CP3_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(CP4_GPIO_Port, CP4_Pin, GPIO_PIN_RESET);
 
-	_primitiveLEDfptr = __primitiveLEDBranchTable[i];	// set function pointer to indicated address of primitive LED function
-	(_primitiveLEDfptr)(  ( (__LED._ShineFlags | (__LED._BlinkFlags & _BlinkExclusionMask) ) & _BV(i) ) > 0  );	// it is ridiculous, i know...
+	_fptr = __physicalLEDBranchTable[i];	// set function pointer to indicated address of primitive LED function
+	(_fptr)(  ( (__LED._ShineFlags | (__LED._BlinkFlags & _BlinkExclusionMask) ) & _BV(i) ) > 0  );	// it is ridiculous, i know...
 
 	/* blinking rationale
 	 * for blinking, we start with a particular LED turned on, i.e. its bit is set, so (__LED._ShineFlags | __LED._BlinkFlags) is true

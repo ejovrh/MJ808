@@ -4,6 +4,9 @@
 #include "main.h"
 #if defined(MJ838_)	// if this particular device is active
 
+#define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
+#define TIMER17_PERIOD 24	// event handling - 2.5ms
+
 #include "mj8x8\mj8x8.h"
 #include "button\button.h"
 

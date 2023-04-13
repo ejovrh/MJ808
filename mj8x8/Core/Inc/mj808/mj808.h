@@ -5,8 +5,8 @@
 #if defined(MJ808_)	// if this particular device is active
 
 #define BUTTON_COUNT 1	// how many buttons are there
-#define TIMER_PRESCALER 799	// LED fading - 8MHz / 799+1 = 10kHz update rate
-#define TIMER14_PERIOD 49	// with above pre-scaler and a period of 49, we have an 4.9ms interrupt frequency
+#define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
+#define TIMER14_PERIOD 49	// LED handling - 20ms
 #define TIMER16_PERIOD 249	// button handling - 25ms
 #define TIMER17_PERIOD 24	// event handling - 2.5ms
 
@@ -32,8 +32,10 @@
 
 enum mj808_leds  // enum of lights on this device
 {
-	  Utility,
-	  Front
+	  Red,
+	  Green,
+	  Front,
+	  HighBeam
 };
 
 enum mj808_buttons	// enum of buttons on this device
@@ -51,7 +53,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		uint8_t DoHeartbeat :1;  // bit 0 - HeartBeat is running
 		uint8_t _1 :1;  //
 		uint8_t _2 :1;  //
-		uint8_t _3 :1;  //
+		uint8_t UtilLEDOn :1;  //
 
 		/* 0xF0 - upper nibble
 		 * CAN can be in standby mode

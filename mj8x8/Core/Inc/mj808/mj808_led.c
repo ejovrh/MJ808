@@ -8,9 +8,12 @@
 #include "led\composite_led_actual.c"	// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
 
 extern TIM_HandleTypeDef htim2;  // front light PWM on channel 2
-extern TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
+extern TIM_HandleTypeDef htim14;  // LED handling - 20ms
 
-static primitive_led_t __primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
+static primitive_led_t __primitive_led[4] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
+
+static uint32_t (*_fptr)(const uint8_t state);	// function pointer for branch table
+static uint8_t _BlinkExclusionMask;	// exclusion mask used for blinking
 
 static const uint8_t _fade_fransfer[] =	// fade transfer curve according to MacNamara
 	{  // see https://tigoe.github.io/LightProjects/fading.html
@@ -28,14 +31,14 @@ static const uint8_t _fade_fransfer[] =	// fade transfer curve according to MacN
 
 volatile static uint8_t i = 0;	// front
 
-// called indirectly by timer1 (_SystemInterrupt()), handles the fading
-static void _MacNamaraFadeHandler(void)
+// fades front light pleasingly for the human eye
+static void _MacNamaraFader(void)
 {
 	if(FRONT_LIGHT_CCR < Device->led->led[Front].ocr)  // fade up
 		{
 			FRONT_LIGHT_CCR = _fade_fransfer[i++];
 
-			if(i == Device->led->led[Front].ocr)
+			if(i == Device->led->led[Front].ocr && __LED._BlinkFlags == 0)
 				Device->StopTimer(&htim14);  // stop the timer
 		}
 
@@ -43,11 +46,12 @@ static void _MacNamaraFadeHandler(void)
 		{
 			FRONT_LIGHT_CCR = _fade_fransfer[--i];
 
-			if(FRONT_LIGHT_CCR == 0)
+			if(FRONT_LIGHT_CCR == 0 && __LED._BlinkFlags == 0)
 				{
 					Device->StopTimer(&htim14);  // stop the timer
 					Device->StopTimer(&htim2);  // stop the timer
 					Device->activity->FrontLightOn = 0;	// mark inactivity
+					__LED._ShineFlags &= ~_BV(Front);	// unset front light flag
 				}
 		}
 }
@@ -60,6 +64,7 @@ static void _HighBeam(const uint8_t value)
 	if(value == ARG_HIGHBEAM_OFF)	// high beam off command
 		{
 			Device->activity->HighBeamOn = 0;	// mark inactivity
+			__LED._ShineFlags &= ~_BV(HighBeam);	// unset high beam flag
 
 			if (Device->activity->FrontLightOn)	// if front light is on
 				{
@@ -79,6 +84,7 @@ static void _HighBeam(const uint8_t value)
 	if(value == ARG_HIGHBEAM_ON)	// high beam on command
 		{
 			Device->activity->HighBeamOn = 1;	// mark activity
+			__LED._ShineFlags |= _BV(HighBeam);	// set the high beam flag
 
 			if (Device->activity->FrontLightOn)	// if front light is on
 				OldOCR = FRONT_LIGHT_CCR;	// store original OCR value
@@ -90,8 +96,23 @@ static void _HighBeam(const uint8_t value)
 		}
 }
 
+// delegates operations from LED component downwards to LED leaves
+static void _componentLED(const uint8_t val)
+{
+	if(val)  // true - on, false - off
+		{	// delegate indirectly to the leaves
+			Device->led->led[Green].Shine(ON);  // green LED on
+			Device->led->led[Front].Shine(val);  // front light on - low key; gets overwritten by LU command, since it comes in a bit later
+		}
+	else
+		{	// delegate indirectly to the leaves
+			Device->led->led[Green].Shine(OFF);	// green LED off
+			Device->led->led[Front].Shine(0);  // front light off
+		}
+}
+
 // set OCR value to fade to
-static inline void _primitiveFrontLED(const uint8_t value)
+static inline void _physicalFrontLED(const uint8_t value)
 {
 	if(value >= FRONT_HIGHBEAM)	// special case for high beam
 		{
@@ -106,76 +127,141 @@ static inline void _primitiveFrontLED(const uint8_t value)
 		{
 			Device->StartTimer(&htim2);  // start the timer - front light PWM
 			Device->activity->FrontLightOn = 1;
+			__LED._ShineFlags |= _BV(Front);	// set the front light flag
 		}
 
 	Device->led->led[Front].ocr = value;	// set OCR value, the handler will do the rest
 	__HAL_TIM_ENABLE_IT(&htim14, TIM_IT_UPDATE);	// start timer
 }
 
+// handler for physical LED
+static inline void __physicalRedLED(const uint8_t state)  // red LED on/off
+{
+	// state == 1 - off
+	// state == 0 - on
+	HAL_GPIO_WritePin(GPIOB, RedLED_Pin, (! state));
+	return;
+}
+
+// handler for physical LED
+static inline void __physicalGreenLED(const uint8_t state)  // green LED on/off
+{
+	// state == 1 - off
+	// state == 0 - on
+	HAL_GPIO_WritePin(GPIOB, GreenLED_Pin, (! state));
+	return;
+}
+
+// branch table for direct primitive LED execution
+static uint32_t (*__physicalLEDBranchTable[])(const uint8_t state) =
+		{//
+				(void *)&__physicalRedLED,	// physical red LED on/off
+				(void *)&__physicalGreenLED,	// physical green LED on/off
+				(void *)&_physicalFrontLED,	// physical front light CCR value set
+		};
+
 // concrete utility LED handling function
-static void _primitiveUtilityLED(uint8_t in_arg)
+static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
 {
-	uint8_t led = 0;	// holds the pin of the LED: D0 - green (default), D1 - red
+	if (state == ON)	// transition from BLINK to ON state
+		__LED._OldBlinkFlags = __LED._BlinkFlags;	// store previous blink state
 
-	in_arg &= 0x07;	// clear everything except B2:0, which indicates colour and blinking
-
-	if(in_arg & UTIL_LED_GREEN)	// if the bit is set, the command is for a green led, otherwise it is red
-		led = 1;	// green
-
-	// the led variable is relevant for bit-shifting, since the red and green LEDs are pin-wise next door neighbours;
-	//	RedLED_Pin shifted left by one is the green LED
-
-// TODO - _primitiveUtilityLED - implement blinking
-	if((in_arg & ON) == OFF)	// state off - on bit is not set
+	if(state == OFF) // transition from SHINE to BLINK state
 		{
-			HAL_GPIO_WritePin(GPIOB, (RedLED_Pin << led), GPIO_PIN_SET);  // set high to turn off
+			if (__LED._OldBlinkFlags != 0)	// ...really from SHINE to BLINK
+				{
+					__LED._BlinkFlags = __LED._OldBlinkFlags;
+					__LED._OldBlinkFlags &= ~__LED._OldBlinkFlags;
+				}
+			else	// observe for dirty write condition (blink issued from other devices)
+			__LED._BlinkFlags ^= ((-((state>>1) & 0x01) ^ __LED._BlinkFlags) & (1 << led));
+		}
+		else	// transition to BLINK (or true OFF) state
+			__LED._BlinkFlags ^= ((-((state>>1) & 0x01) ^ __LED._BlinkFlags) & (1 << led));	// sets "led" bit to "state" value
+
+	__LED._ShineFlags ^= ((-(state & 0x01) ^ __LED._ShineFlags) & (1 << led));	// sets "led" bit to "state" value
+
+	Device->activity->UtilLEDOn = ( (__LED._BlinkFlags & 0x03)  > 0);	// mark in/activity, but only for blinking (timer is needed); shining doesnt need the timer and wont set this bit
+
+	if(state == BLINK)	// state blink
+		{
+			Device->StartTimer(&htim14);	//
 			return;
 		}
-	else
+
+	_fptr = __physicalLEDBranchTable[led];	// set function pointer to indicated address of primitive LED function
+	(_fptr)(state);	// execute according to arg
+}
+
+// frontend for the primitive red LED handler
+static inline void __primitiveRedLEDFrontEnd(const uint8_t state)
+{
+	__LEDBackEnd(Red, state);	// execute according to state
+}
+
+// frontend for the primitive green LED handler
+static inline void __primitiveGreenLEDFrontEnd(const uint8_t state)
+{
+	__LEDBackEnd(Green, state);	// execute according to state
+}
+
+// frontend for the primitive front light handler
+static inline void __primitiveFrontLightHandler(const uint8_t state)
+{
+	__LEDBackEnd(Front, state);	// execute according to state
+}
+
+// handles blinking
+static void _Blinker(void)
+{
+	static uint8_t i = 0;  // persistent iterator across function calls loops over all LEDs on device
+
+	if((__LED._ShineFlags | __LED._BlinkFlags) == 0)	// if there is any LED to glow at all
 		{
-			HAL_GPIO_WritePin(GPIOB, (RedLED_Pin << led), GPIO_PIN_RESET);  // set low to turn on
+			Device->StopTimer(&htim14);  // stop the timer
+			Device->activity->UtilLEDOn = 0;	// mark inactivity
 			return;
 		}
-}
 
-// turns whole device ON (via pushbutton)
-static void __componentLED_On(void)
-{
-	Device->led->led[Utility].Shine(ARG_UTIL_LED_GREEN_ON);  // green LED on
-	Device->led->led[Front].Shine(75);  // front light on - low key; gets overwritten by LU command, since it comes in a bit later
-}
-
-// turns whole device OFF (via pushbutton)
-static void __componentLED_Off(void)
-{
-	Device->led->led[Utility].Shine(ARG_UTIL_LED_GREEN_OFF);	// green LED off
-	Device->led->led[Front].Shine(0);  // front light off
-}
-
-// delegates operations from LED component downwards to LED leaves
-static void _componentLED(const uint8_t val)
-{
-	if(val)  // true - on, false - off
-		__componentLED_On();	// delegate indirectly to the leaves
+	// 126 = slow, 64 - medium, 32 = fast
+	if ((__LED._BlinkCounter & 16) == 0)	// blink frequency by means of ANDing whole base-2 numbers
+		_BlinkExclusionMask &= (uint8_t) (~__LED._BlinkFlags);	// clear particular bits - populate exclusion (i.e. primitive LED off for blinking)
 	else
-		__componentLED_Off();
+		_BlinkExclusionMask = 0xFF;	// all on (normal glow)
+
+	_fptr = __physicalLEDBranchTable[i];	// set function pointer to indicated address of primitive LED function
+	(_fptr)(  ( (__LED._ShineFlags | (__LED._BlinkFlags & _BlinkExclusionMask) ) & _BV(i) ) > 0  );	// it is ridiculous, i know...
+
+	(i >= 1) ? i = 0 : ++i;  // circular bit-wise iterator over a byte range, count up to 7 and then restart from zero (we have 8 LEDs)
+
+	if (__LED._BlinkFlags)	// increment the counter only if there is stuff to blink
+		++__LED._BlinkCounter;
+}
+
+// called indirectly by timer1 (_SystemInterrupt()), handles the fading (and blinking)
+static void _LEDHandler(void)
+{
+	if (Device->activity->FrontLightOn)
+		_MacNamaraFader();	// fades front light pleasingly for the human eye
+
+	if (__LED._BlinkFlags)
+		_Blinker(); // handles blinking
 }
 
 static __composite_led_t __LED =
 	{  //
 	.public.led = __primitive_led,  // assign pointer to LED array
 	.public.Shine = &_componentLED,  // component part ("interface")
-	._flags = 0	//
+	._ShineFlags = 0	//
 	};
 
 // implementation of virtual constructor for LEDs
 composite_led_t* _virtual_led_ctor()
 {
-	__LED.public.led[Utility].Shine = &_primitiveUtilityLED;  // LED-specific implementation
-	__LED.public.led[Utility].ocr = 0;	// TODO - not needed yet but it has potential...
-	__LED.public.led[Front].Shine = &_primitiveFrontLED;  // LED-specific implementation
-	__LED.public.led[Front].ocr = 0;	// is already at 0, but nevertheless
-	__LED.public.Handler = &_MacNamaraFadeHandler;  // timer-based periodic LED control function
+	__LED.public.led[Red].Shine = &__primitiveRedLEDFrontEnd;  // control function for one single LED
+	__LED.public.led[Green].Shine = &__primitiveGreenLEDFrontEnd;	// ditto
+	__LED.public.led[Front].Shine = &__primitiveFrontLightHandler;  // ditto
+	__LED.public.Handler = &_LEDHandler;  // timer-based periodic LED control function
 
 	return &__LED.public;  // return address of public part; calling code accesses it via pointer
 }
