@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="12.5" unitdist="mil" unit="mil" style="dots" multiple="1" display="yes" altdistance="0.125" altunitdist="mm" altunit="mm"/>
+<grid distance="12.5" unitdist="mil" unit="mm" style="dots" multiple="1" display="yes" altdistance="0.125" altunitdist="mm" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
@@ -2174,7 +2174,7 @@ design rules under a new name.</description>
 <vertex x="35" y="0"/>
 <vertex x="0" y="0"/>
 </polygon>
-<via x="3.86" y="16.19" extent="1-16" drill="0.35"/>
+<via x="3.86" y="16.19" extent="1-16" drill="0.45"/>
 <via x="17.5" y="24.98" extent="1-16" drill="0.35"/>
 <via x="14" y="5.5" extent="1-16" drill="0.35"/>
 <via x="29" y="15.595" extent="1-16" drill="0.35"/>
@@ -2376,7 +2376,7 @@ design rules under a new name.</description>
 <contactref element="C405" pad="1"/>
 <contactref element="IC401" pad="P$3"/>
 <contactref element="IC602" pad="4_VCC"/>
-<via x="3.86" y="18.7325" extent="1-16" drill="0.35"/>
+<via x="3.86" y="18.7325" extent="1-16" drill="0.45"/>
 <via x="18.75" y="24.98" extent="1-16" drill="0.35"/>
 <wire x1="3.865" y1="18.73" x2="3.8625" y2="18.73" width="0.25" layer="1"/>
 <wire x1="3.8625" y1="18.73" x2="3.86" y2="18.7325" width="0.25" layer="1"/>
@@ -2426,7 +2426,7 @@ design rules under a new name.</description>
 <signal name="SYS_SWDIO" class="3">
 <contactref element="SWD101" pad="2_T_SWDIO"/>
 <contactref element="IC302" pad="21_PA13"/>
-<via x="5.14" y="18.73" extent="1-16" drill="0.35"/>
+<via x="5.14" y="18.73" extent="1-16" drill="0.45"/>
 <wire x1="5.135" y1="18.73" x2="5.14" y2="18.73" width="0.25" layer="1"/>
 <wire x1="5.135" y1="18.73" x2="5.84" y2="18.025" width="0.25" layer="1"/>
 <wire x1="15.395" y1="18.025" x2="5.84" y2="18.025" width="0.25" layer="1"/>
@@ -2436,21 +2436,21 @@ design rules under a new name.</description>
 <contactref element="SWD101" pad="3_T_NRST"/>
 <contactref element="IC302" pad="4_NRST"/>
 <contactref element="C307" pad="2"/>
-<via x="3.86" y="17.46" extent="1-16" drill="0.35"/>
+<via x="3.86" y="17.46" extent="1-16" drill="0.45"/>
 <wire x1="3.865" y1="17.46" x2="3.86" y2="17.46" width="0.25" layer="1"/>
 <wire x1="3.875" y1="17.525" x2="3.875" y2="17.475" width="0.25" layer="16"/>
 <wire x1="3.875" y1="17.475" x2="3.86" y2="17.46" width="0.25" layer="16"/>
 <via x="17" y="19.5" extent="1-16" drill="0.35"/>
 <wire x1="19.48" y1="19.5" x2="17" y2="19.5" width="0.25" layer="1"/>
 <wire x1="3.90575625" y1="17.525" x2="3.875" y2="17.525" width="0.25" layer="16"/>
-<wire x1="4.68075625" y1="16.75" x2="3.90575625" y2="17.525" width="0.25" layer="16"/>
-<wire x1="14.25" y1="16.75" x2="4.68075625" y2="16.75" width="0.25" layer="16"/>
-<wire x1="17" y1="19.5" x2="14.25" y2="16.75" width="0.25" layer="16"/>
+<wire x1="4.92075625" y1="16.51" x2="3.90575625" y2="17.525" width="0.25" layer="16"/>
+<wire x1="14.01" y1="16.51" x2="4.92075625" y2="16.51" width="0.25" layer="16"/>
+<wire x1="17" y1="19.5" x2="14.01" y2="16.51" width="0.25" layer="16"/>
 </signal>
 <signal name="SYS_SWCLK" class="3">
 <contactref element="SWD101" pad="4_T_SWCLK"/>
 <contactref element="IC302" pad="22_PA14"/>
-<via x="5.14" y="17.46" extent="1-16" drill="0.35"/>
+<via x="5.14" y="17.46" extent="1-16" drill="0.45"/>
 <wire x1="5.135" y1="17.46" x2="5.14" y2="17.46" width="0.25" layer="1"/>
 <wire x1="5.135" y1="17.46" x2="15.96" y2="17.46" width="0.25" layer="1"/>
 <wire x1="15.96" y1="17.46" x2="16" y2="17.42" width="0.25" layer="1"/>
@@ -2557,14 +2557,7 @@ design rules under a new name.</description>
 <approved hash="4,1,a58ce94bcf5884d9"/>
 <approved hash="4,16,378bf296418cb51e"/>
 <approved hash="19,1,ec25ec086470645d"/>
-<approved hash="19,1,60246074400c405c"/>
-<approved hash="19,1,e424e10e4176445c"/>
-<approved hash="19,1,60ec605c00240094"/>
-<approved hash="19,1,e42ce44844304454"/>
-<approved hash="19,1,6424610e4176445c"/>
 <approved hash="19,1,e0fde2006a786885"/>
-<approved hash="19,16,b296f3f467ff7361"/>
-<approved hash="19,16,64672cbfe68b3651"/>
 <approved hash="19,16,28f91fcb463090ff"/>
 <approved hash="5,1,44a50f6706a65c19"/>
 <approved hash="19,16,98e022535d1451db"/>
@@ -2607,6 +2600,15 @@ design rules under a new name.</description>
 <approved hash="5,16,e863f8c8407a810c"/>
 <approved hash="5,16,0cd4b47d6681c1d6"/>
 <approved hash="23,16,09c9bfbbbfe30991"/>
+<approved hash="4,1,e5449ea77e58ceea"/>
+<approved hash="4,16,e5449ea77e58ceea"/>
+<approved hash="19,1,a611a76539173863"/>
+<approved hash="19,1,bbc0bef8208a25b2"/>
+<approved hash="19,1,3b003b8925fb2572"/>
+<approved hash="19,1,3bc93ef4208625bb"/>
+<approved hash="19,1,fb66fb74a506a514"/>
+<approved hash="19,16,97c396f62cbb2582"/>
+<approved hash="19,16,d19245d54d5864eb"/>
 </errors>
 </board>
 </drawing>
