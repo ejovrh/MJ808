@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="20" unitdist="mil" unit="mil" style="dots" multiple="1" display="yes" altdistance="0.125" altunitdist="mm" altunit="mm"/>
+<grid distance="12.5" unitdist="mil" unit="mil" style="dots" multiple="1" display="yes" altdistance="0.125" altunitdist="mm" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
@@ -1695,6 +1695,31 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 </package>
 </packages>
 </library>
+<library name="testpad" urn="urn:adsk.eagle:library:385">
+<description>&lt;b&gt;Test Pins/Pads&lt;/b&gt;&lt;p&gt;
+Cream on SMD OFF.&lt;br&gt;
+new: Attribute TP_SIGNAL_NAME&lt;br&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="P1-13" urn="urn:adsk.eagle:footprint:27902/1" library_version="3">
+<description>&lt;b&gt;TEST PAD&lt;/b&gt;</description>
+<circle x="0" y="0" radius="0.762" width="0.1524" layer="51"/>
+<pad name="TP" x="0" y="0" drill="1.3208" diameter="2.159" shape="octagon"/>
+<text x="-1.016" y="1.27" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="0" y="0" size="0.0254" layer="27">&gt;VALUE</text>
+<text x="-1.27" y="-2.54" size="1" layer="37">&gt;TP_SIGNAL_NAME</text>
+<rectangle x1="-0.3302" y1="-0.3302" x2="0.3302" y2="0.3302" layer="51"/>
+</package>
+</packages>
+<packages3d>
+<package3d name="P1-13" urn="urn:adsk.eagle:package:27946/1" type="box" library_version="3">
+<description>TEST PAD</description>
+<packageinstances>
+<packageinstance name="P1-13"/>
+</packageinstances>
+</package3d>
+</packages3d>
+</library>
 <library name="con-amp" urn="urn:adsk.eagle:library:127">
 <description>&lt;b&gt;AMP Connectors&lt;/b&gt;&lt;p&gt;
 
@@ -2055,11 +2080,11 @@ design rules under a new name.</description>
 <attribute name="SPICEPREFIX" value="R" x="16.5" y="10.5" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="VALUE" x="16.5" y="10.5" size="1.27" layer="28" rot="MR270"/>
 </element>
-<element name="R405" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="60" x="10.16" y="27.432" smashed="yes" rot="MR270">
-<attribute name="NAME" x="10.16" y="25.4" size="0.5" layer="26" rot="MR180" align="center"/>
-<attribute name="POPULARITY" value="86" x="10.16" y="27.432" size="1.778" layer="28" rot="MR270" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="10.16" y="27.432" size="1.778" layer="28" rot="MR270" display="off"/>
-<attribute name="VALUE" x="10.16" y="27.432" size="1.27" layer="28" rot="MR270"/>
+<element name="R405" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="120" x="8.86" y="27.34" locked="yes" smashed="yes" rot="MR0">
+<attribute name="NAME" x="8.86" y="28.59" locked="yes" size="0.5" layer="26" rot="MR0" align="center"/>
+<attribute name="POPULARITY" value="86" x="8.86" y="27.34" locked="yes" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="8.86" y="27.34" locked="yes" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="VALUE" x="8.86" y="27.34" locked="yes" size="1.27" layer="28" rot="MR0"/>
 </element>
 <element name="R504" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R2010" package3d_urn="urn:adsk.eagle:package:23551/2" value="WSLT2010R2200FEB18 / 0.22Ohm 1W" x="26.5" y="11.345" smashed="yes" rot="MR0">
 <attribute name="NAME" x="26.5" y="9.47" size="0.5" layer="26" rot="MR0" align="center"/>
@@ -2067,12 +2092,30 @@ design rules under a new name.</description>
 <attribute name="SPICEPREFIX" value="R" x="26.5" y="11.345" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="VALUE" x="26.5" y="11.345" size="1.27" layer="28" rot="MR0"/>
 </element>
+<element name="SJ401" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="CAN termination" x="7.84" y="27.39" locked="yes" smashed="yes">
+<attribute name="NAME" x="6.57" y="26.235" size="0.5" layer="25" align="center"/>
+<attribute name="POPULARITY" value="0" x="7.84" y="27.39" locked="yes" size="1.778" layer="27" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="7.84" y="27.39" locked="yes" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="7.84" y="27.39" locked="yes" size="1.27" layer="27"/>
+</element>
 <element name="SW701" library="TL3305-844809 SPST-NO Tact Switch" package="SMD" value="TL3305CF160QG" x="17.5" y="7" smashed="yes" rot="R180">
 <attribute name="NAME" x="17.5" y="4.25" size="0.5" layer="25" font="vector" align="center"/>
 </element>
 <element name="SWD101" library="tag-connect" package="TC2030-NL" value="TC2030-NL" x="4.5" y="20" locked="yes" smashed="yes" rot="R270">
 <attribute name="NAME" x="4.5" y="17.5" locked="yes" size="0.4" layer="25" rot="R90" align="center"/>
 <attribute name="VALUE" x="4.5" y="20" locked="yes" size="0.5" layer="27" font="vector" align="center"/>
+</element>
+<element name="TP401" library="testpad" library_urn="urn:adsk.eagle:library:385" package="P1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="PTR1PAD1-13" x="5.75" y="28" locked="yes" smashed="yes">
+<attribute name="NAME" x="5.75" y="35.75" locked="yes" size="1.27" layer="25" ratio="10" rot="R90"/>
+<attribute name="POPULARITY" value="2" x="5.75" y="28" locked="yes" size="1" layer="27" font="vector" display="off"/>
+<attribute name="TP_SIGNAL_NAME" value="" x="5.75" y="28" locked="yes" size="1" layer="27" font="vector" display="off"/>
+<attribute name="VALUE" x="5.75" y="28" locked="yes" size="0.0254" layer="27"/>
+</element>
+<element name="TP402" library="testpad" library_urn="urn:adsk.eagle:library:385" package="P1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="PTR1PAD1-13" x="12" y="28" locked="yes" smashed="yes">
+<attribute name="NAME" x="12" y="35.75" locked="yes" size="1.27" layer="25" ratio="10" rot="R90"/>
+<attribute name="POPULARITY" value="2" x="12" y="28" locked="yes" size="1" layer="27" font="vector" display="off"/>
+<attribute name="TP_SIGNAL_NAME" value="" x="12" y="28" locked="yes" size="1" layer="27" font="vector" display="off"/>
+<attribute name="VALUE" x="12" y="28" locked="yes" size="0.0254" layer="27"/>
 </element>
 <element name="J1" library="con-amp" library_urn="urn:adsk.eagle:library:127" package="10X02MTA" package3d_urn="urn:adsk.eagle:package:8081649/1" value="CAN" x="8.89" y="31.115" locked="yes" smashed="yes" rot="R180">
 <attribute name="NAME" x="8.89" y="35.8775" locked="yes" size="1.27" layer="25"/>
@@ -2088,18 +2131,6 @@ design rules under a new name.</description>
 <attribute name="NAME" x="26.035" y="35.8775" locked="yes" size="1.27" layer="25"/>
 <attribute name="POPULARITY" value="5" x="26.035" y="31.115" locked="yes" size="1" layer="27" font="vector" rot="R180" display="off"/>
 <attribute name="VALUE" x="28.5811" y="28.9641" locked="yes" size="1.27" layer="27" rot="R180"/>
-</element>
-<element name="R401" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="60" x="7.62" y="27.432" smashed="yes" rot="MR90">
-<attribute name="NAME" x="7.62" y="25.4" size="0.5" layer="26" font="vector" rot="MR0" align="center"/>
-<attribute name="POPULARITY" value="86" x="7.62" y="27.432" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="7.62" y="27.432" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="VALUE" x="5.08" y="26.797" size="1.27" layer="28" rot="MR90"/>
-</element>
-<element name="C401" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="47nF" x="5.08" y="26.416" smashed="yes" rot="MR0">
-<attribute name="NAME" x="5.08" y="25.4" size="0.5" layer="26" font="vector" rot="MR0" align="center"/>
-<attribute name="POPULARITY" value="18" x="5.08" y="26.416" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="SPICEPREFIX" value="C" x="5.08" y="26.416" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="VALUE" x="5.715" y="24.511" size="1.27" layer="28" rot="MR0"/>
 </element>
 </elements>
 <signals>
@@ -2143,7 +2174,7 @@ design rules under a new name.</description>
 <vertex x="35" y="0"/>
 <vertex x="0" y="0"/>
 </polygon>
-<via x="3.86" y="16.19" extent="1-16" drill="0.45"/>
+<via x="3.86" y="16.19" extent="1-16" drill="0.35"/>
 <via x="17.5" y="24.98" extent="1-16" drill="0.35"/>
 <via x="14" y="5.5" extent="1-16" drill="0.35"/>
 <via x="29" y="15.595" extent="1-16" drill="0.35"/>
@@ -2208,7 +2239,6 @@ design rules under a new name.</description>
 <via x="7.125" y="20.375" extent="1-16" drill="0.35"/>
 <via x="21.25" y="5.5" extent="1-16" drill="0.35"/>
 <contactref element="J2" pad="1"/>
-<contactref element="C401" pad="2"/>
 </signal>
 <signal name="DIM_FRONT" class="3">
 <contactref element="R101" pad="2"/>
@@ -2305,19 +2335,31 @@ design rules under a new name.</description>
 </signal>
 <signal name="CAN_H" class="3">
 <contactref element="IC401" pad="P$7"/>
+<contactref element="SJ401" pad="2"/>
+<wire x1="8.535" y1="26.115" x2="8.535" y2="27.195" width="0.25" layer="1"/>
+<wire x1="8.535" y1="27.195" x2="8.34" y2="27.39" width="0.25" layer="1"/>
+<contactref element="TP401" pad="TP"/>
 <contactref element="J1" pad="1"/>
-<contactref element="R401" pad="2"/>
-<wire x1="8.535" y1="26.115" x2="8.535" y2="30.2" width="0.25" layer="1"/>
-<wire x1="8.535" y1="30.2" x2="7.62" y2="31.115" width="0.25" layer="1"/>
-<wire x1="7.62" y1="28.382" x2="7.62" y2="31.115" width="0.25" layer="16"/>
+<wire x1="7.62" y1="31.115" x2="8.34" y2="30.395" width="0.25" layer="1"/>
+<wire x1="8.34" y1="30.395" x2="8.34" y2="28.25" width="0.25" layer="1"/>
+<wire x1="8.34" y1="28.25" x2="8.34" y2="27.39" width="0.25" layer="1"/>
+<wire x1="5.75" y1="28" x2="6" y2="28.25" width="0.25" layer="1"/>
+<wire x1="6" y1="28.25" x2="8.34" y2="28.25" width="0.25" layer="1"/>
 </signal>
 <signal name="CAN_L" class="3">
 <contactref element="IC401" pad="P$6"/>
 <contactref element="R405" pad="1"/>
+<via x="10.36" y="27.34" extent="1-16" drill="0.35"/>
+<wire x1="9.185" y1="26.115" x2="9.185" y2="27.165" width="0.25" layer="1"/>
+<wire x1="9.185" y1="27.165" x2="9.36" y2="27.34" width="0.25" layer="1"/>
+<wire x1="9.36" y1="27.34" x2="10.36" y2="27.34" width="0.25" layer="1"/>
+<wire x1="10.36" y1="27.34" x2="9.81" y2="27.34" width="0.25" layer="16"/>
+<contactref element="TP402" pad="TP"/>
 <contactref element="J1" pad="2"/>
-<wire x1="9.185" y1="26.115" x2="9.185" y2="30.14" width="0.25" layer="1"/>
-<wire x1="9.185" y1="30.14" x2="10.16" y2="31.115" width="0.25" layer="1"/>
-<wire x1="10.16" y1="28.382" x2="10.16" y2="31.115" width="0.25" layer="16"/>
+<wire x1="10.16" y1="31.115" x2="10.36" y2="30.915" width="0.25" layer="1"/>
+<wire x1="10.36" y1="30.915" x2="10.36" y2="27.34" width="0.25" layer="1"/>
+<wire x1="9.81" y1="27.34" x2="11.34" y2="27.34" width="0.25" layer="16"/>
+<wire x1="11.34" y1="27.34" x2="12" y2="28" width="0.25" layer="16"/>
 </signal>
 <signal name="3V3" class="4">
 <contactref element="SWD101" pad="1_TVCC"/>
@@ -2334,7 +2376,7 @@ design rules under a new name.</description>
 <contactref element="C405" pad="1"/>
 <contactref element="IC401" pad="P$3"/>
 <contactref element="IC602" pad="4_VCC"/>
-<via x="3.86" y="18.7325" extent="1-16" drill="0.45"/>
+<via x="3.86" y="18.7325" extent="1-16" drill="0.35"/>
 <via x="18.75" y="24.98" extent="1-16" drill="0.35"/>
 <wire x1="3.865" y1="18.73" x2="3.8625" y2="18.73" width="0.25" layer="1"/>
 <wire x1="3.8625" y1="18.73" x2="3.86" y2="18.7325" width="0.25" layer="1"/>
@@ -2384,7 +2426,7 @@ design rules under a new name.</description>
 <signal name="SYS_SWDIO" class="3">
 <contactref element="SWD101" pad="2_T_SWDIO"/>
 <contactref element="IC302" pad="21_PA13"/>
-<via x="5.14" y="18.73" extent="1-16" drill="0.45"/>
+<via x="5.14" y="18.73" extent="1-16" drill="0.35"/>
 <wire x1="5.135" y1="18.73" x2="5.14" y2="18.73" width="0.25" layer="1"/>
 <wire x1="5.135" y1="18.73" x2="5.84" y2="18.025" width="0.25" layer="1"/>
 <wire x1="15.395" y1="18.025" x2="5.84" y2="18.025" width="0.25" layer="1"/>
@@ -2394,21 +2436,21 @@ design rules under a new name.</description>
 <contactref element="SWD101" pad="3_T_NRST"/>
 <contactref element="IC302" pad="4_NRST"/>
 <contactref element="C307" pad="2"/>
-<via x="3.86" y="17.46" extent="1-16" drill="0.45"/>
+<via x="3.86" y="17.46" extent="1-16" drill="0.35"/>
 <wire x1="3.865" y1="17.46" x2="3.86" y2="17.46" width="0.25" layer="1"/>
 <wire x1="3.875" y1="17.525" x2="3.875" y2="17.475" width="0.25" layer="16"/>
 <wire x1="3.875" y1="17.475" x2="3.86" y2="17.46" width="0.25" layer="16"/>
 <via x="17" y="19.5" extent="1-16" drill="0.35"/>
 <wire x1="19.48" y1="19.5" x2="17" y2="19.5" width="0.25" layer="1"/>
 <wire x1="3.90575625" y1="17.525" x2="3.875" y2="17.525" width="0.25" layer="16"/>
-<wire x1="4.92075625" y1="16.51" x2="3.90575625" y2="17.525" width="0.25" layer="16"/>
-<wire x1="14.01" y1="16.51" x2="4.92075625" y2="16.51" width="0.25" layer="16"/>
-<wire x1="17" y1="19.5" x2="14.01" y2="16.51" width="0.25" layer="16"/>
+<wire x1="4.68075625" y1="16.75" x2="3.90575625" y2="17.525" width="0.25" layer="16"/>
+<wire x1="14.25" y1="16.75" x2="4.68075625" y2="16.75" width="0.25" layer="16"/>
+<wire x1="17" y1="19.5" x2="14.25" y2="16.75" width="0.25" layer="16"/>
 </signal>
 <signal name="SYS_SWCLK" class="3">
 <contactref element="SWD101" pad="4_T_SWCLK"/>
 <contactref element="IC302" pad="22_PA14"/>
-<via x="5.14" y="17.46" extent="1-16" drill="0.45"/>
+<via x="5.14" y="17.46" extent="1-16" drill="0.35"/>
 <wire x1="5.135" y1="17.46" x2="5.14" y2="17.46" width="0.25" layer="1"/>
 <wire x1="5.135" y1="17.46" x2="15.96" y2="17.46" width="0.25" layer="1"/>
 <wire x1="15.96" y1="17.46" x2="16" y2="17.42" width="0.25" layer="1"/>
@@ -2461,13 +2503,13 @@ design rules under a new name.</description>
 <wire x1="15.55" y1="15.3" x2="18.25" y2="18" width="0.25" layer="16"/>
 <wire x1="15.55" y1="9.1" x2="15.55" y2="15.3" width="0.25" layer="16"/>
 </signal>
-<signal name="CAN_INFRA:SPLIT" class="3">
+<signal name="CAN_INFRA:CAN_JMPR" class="3">
 <contactref element="R405" pad="2"/>
-<contactref element="R401" pad="1"/>
-<contactref element="C401" pad="1"/>
-<wire x1="5.73" y1="26.416" x2="5.796" y2="26.482" width="0.25" layer="16"/>
-<wire x1="5.796" y1="26.482" x2="7.62" y2="26.482" width="0.25" layer="16"/>
-<wire x1="7.62" y1="26.482" x2="10.16" y2="26.482" width="0.25" layer="16"/>
+<contactref element="SJ401" pad="1"/>
+<via x="7.36" y="27.34" extent="1-16" drill="0.35"/>
+<wire x1="7.34" y1="27.39" x2="7.36" y2="27.37" width="0.25" layer="1"/>
+<wire x1="7.36" y1="27.37" x2="7.36" y2="27.34" width="0.25" layer="1"/>
+<wire x1="7.36" y1="27.34" x2="7.91" y2="27.34" width="0.25" layer="16"/>
 </signal>
 <signal name="FRONT_LED_DRIVER:DIM_FRONT_DRAIN" class="3">
 <contactref element="D501" pad="A"/>
@@ -2515,11 +2557,20 @@ design rules under a new name.</description>
 <approved hash="4,1,a58ce94bcf5884d9"/>
 <approved hash="4,16,378bf296418cb51e"/>
 <approved hash="19,1,ec25ec086470645d"/>
+<approved hash="19,1,60246074400c405c"/>
+<approved hash="19,1,e424e10e4176445c"/>
+<approved hash="19,1,60ec605c00240094"/>
+<approved hash="19,1,e42ce44844304454"/>
+<approved hash="19,1,6424610e4176445c"/>
 <approved hash="19,1,e0fde2006a786885"/>
+<approved hash="19,16,b296f3f467ff7361"/>
+<approved hash="19,16,64672cbfe68b3651"/>
 <approved hash="19,16,28f91fcb463090ff"/>
 <approved hash="5,1,44a50f6706a65c19"/>
 <approved hash="19,16,98e022535d1451db"/>
 <approved hash="19,16,a9d9f4d1866e6a1a"/>
+<approved hash="19,16,c8ca848df7694ff3"/>
+<approved hash="19,16,5b19ab446a026e82"/>
 <approved hash="5,1,51d3121911e251f8"/>
 <approved hash="19,16,7312e7de469722a4"/>
 <approved hash="19,16,781ef0d2ef716cea"/>
@@ -2528,6 +2579,7 @@ design rules under a new name.</description>
 <approved hash="19,16,41e5ea5262fe3026"/>
 <approved hash="19,16,e8f73f55a7c29063"/>
 <approved hash="19,16,3fc852709fc631de"/>
+<approved hash="19,1,bfa6e0a80d0ce0ed"/>
 <approved hash="19,1,c76c966f733753d1"/>
 <approved hash="19,16,427f6cba12d12dce"/>
 <approved hash="19,16,703a531f5a4ee6ad"/>
@@ -2555,15 +2607,6 @@ design rules under a new name.</description>
 <approved hash="5,16,e863f8c8407a810c"/>
 <approved hash="5,16,0cd4b47d6681c1d6"/>
 <approved hash="23,16,09c9bfbbbfe30991"/>
-<approved hash="4,1,e5449ea77e58ceea"/>
-<approved hash="4,16,e5449ea77e58ceea"/>
-<approved hash="19,1,a611a76539173863"/>
-<approved hash="19,1,bbc0bef8208a25b2"/>
-<approved hash="19,1,3b003b8925fb2572"/>
-<approved hash="19,1,3bc93ef4208625bb"/>
-<approved hash="19,1,fb66fb74a506a514"/>
-<approved hash="19,16,97c396f62cbb2582"/>
-<approved hash="19,16,d19245d54d5864eb"/>
 </errors>
 </board>
 </drawing>
