@@ -13185,7 +13185,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <port name="!STBY!" side="bottom" coord="-12.7" direction="out"/>
 <port name="DIM_REAR" side="top" coord="17.78" direction="out"/>
 <port name="DIM_BRAKE" side="top" coord="12.7" direction="out"/>
-<port name="!SHDN!" side="bottom" coord="-15.24" direction="out"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -13225,7 +13224,7 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <text x="137.16" y="86.36" size="1.778" layer="98">timer3 channel 2</text>
 <text x="167.64" y="119.38" size="1.778" layer="98" align="center-left">timer3 channel4</text>
 <text x="160.02" y="134.62" size="1.778" layer="98">GPIO</text>
-<text x="160.02" y="88.9" size="1.778" layer="98">GPIO</text>
+<text x="137.16" y="88.9" size="1.778" layer="98">GPIO</text>
 </plain>
 <instances>
 <instance part="IC2" gate="G$1" x="12.7" y="165.1" smashed="yes">
@@ -13412,13 +13411,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <pinref part="IC2" gate="G$1" pin="ADC_IN9,TSC_G3_IO3,TIM1_CH3N,TIM3_CH4,TIM14_CH1-PB1_15"/>
 </segment>
 </net>
-<net name="!SHDN!" class="0">
-<segment>
-<wire x1="129.54" y1="88.9" x2="149.86" y2="88.9" width="0.1524" layer="91"/>
-<label x="149.86" y="88.9" size="1.778" layer="95" xref="yes"/>
-<pinref part="IC2" gate="G$1" pin="EVENTOUT,TSC_G5_IO2,TIM3_CH1,TIM17_BKIN,SPI1_MISO,I2S1_MCK-PB4_25"/>
-</segment>
-</net>
 </nets>
 </sheet>
 </sheets>
@@ -13432,7 +13424,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <port name="TXCAN" side="left" coord="5.08" direction="in"/>
 <port name="RXCAN" side="left" coord="2.54" direction="out"/>
 <port name="!STBY!" side="left" coord="0" direction="in"/>
-<port name="!SHDN!" side="left" coord="-2.54" direction="in"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -13451,7 +13442,7 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <sheets>
 <sheet>
 <plain>
-<text x="40.64" y="71.12" size="1.778" layer="97" rot="R180">internal pulldown</text>
+<text x="66.04" y="71.12" size="1.778" layer="97" rot="R180" align="top-left">internal pulldown</text>
 <text x="40.64" y="68.58" size="1.778" layer="97" rot="R180">internal pulldown</text>
 </plain>
 <instances>
@@ -13594,13 +13585,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <pinref part="SJ1" gate="G$1" pin="1"/>
 <wire x1="142.24" y1="104.14" x2="142.24" y2="101.6" width="0.1524" layer="91"/>
 <label x="142.24" y="101.6" size="0.8128" layer="95"/>
-</segment>
-</net>
-<net name="!SHDN!" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="5_SHDN"/>
-<wire x1="68.58" y1="71.12" x2="50.8" y2="71.12" width="0.1524" layer="91"/>
-<label x="50.8" y="71.12" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 </nets>
@@ -14338,14 +14322,6 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="167.64" y1="106.68" x2="167.64" y2="86.36" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="!SHDN!" class="0">
-<segment>
-<portref moduleinst="CAN_INFRA" port="!SHDN!"/>
-<wire x1="172.72" y1="83.82" x2="165.1" y2="83.82" width="0.1524" layer="91"/>
-<wire x1="165.1" y1="83.82" x2="165.1" y2="106.68" width="0.1524" layer="91"/>
-<portref moduleinst="STM32F04" port="!SHDN!"/>
-</segment>
-</net>
 </nets>
 </sheet>
 </sheets>
@@ -14359,6 +14335,7 @@ Cree XPERED-L1-R250-00401</text>
 <approved hash="104,1@STM32,129.54,111.76,IC2,VCCD_18,3V3,,,"/>
 <approved hash="104,1@CAN_INFRA,68.58,60.96,IC1,2_GND,GND,,,"/>
 <approved hash="104,1@CAN_INFRA,68.58,63.5,IC1,3_VCC,3V3,,,"/>
+<approved hash="202,1@CAN_INFRA,68.58,71.12,IC1,5_SHDN,,,,"/>
 <approved hash="104,1@LED_DRIVER_BRAKE-LIGHT,93.98,96.52,IC6,IN,BAT+,,,"/>
 <approved hash="204,1@LED_DRIVER_BRAKE-LIGHT,93.98,104.14,IC6,VCC,,,,"/>
 <approved hash="104,1@LED_DRIVER_BRAKE-LIGHT,119.38,93.98,IC6,CS,LED_AN,,,"/>

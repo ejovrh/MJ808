@@ -15789,7 +15789,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <port name="BREAK_IN" side="bottom" coord="20.32" direction="in"/>
 <port name="HIGH_IN" side="bottom" coord="22.86" direction="in"/>
 <port name="VBAT+" side="top" coord="12.7" direction="in"/>
-<port name="!SHDN!" side="bottom" coord="-15.24" direction="out"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -16059,13 +16058,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <pinref part="IC2" gate="G$1" pin="ADC_IN3,TSC_G1_IO4,TIM2_CH4,USART2_RX-PA3_9"/>
 </segment>
 </net>
-<net name="!SHDN!" class="0">
-<segment>
-<label x="149.86" y="160.02" size="1.778" layer="95" xref="yes"/>
-<pinref part="IC2" gate="G$1" pin="I2C1_SCL,OSC_OUT-PF1_3"/>
-<wire x1="129.54" y1="160.02" x2="149.86" y2="160.02" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="CP3" class="3">
 <segment>
 <pinref part="IC2" gate="G$1" pin="EVENTOUT,TSC_G5_IO2,TIM3_CH1,TIM17_BKIN,SPI1_MISO,I2S1_MCK-PB4_25"/>
@@ -16086,7 +16078,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <port name="TXCAN" side="left" coord="5.08" direction="in"/>
 <port name="RXCAN" side="left" coord="2.54" direction="out"/>
 <port name="!STBY!" side="left" coord="0" direction="in"/>
-<port name="!SHDN!" side="left" coord="-2.54" direction="in"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -16107,7 +16098,7 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <plain>
 <text x="40.64" y="68.58" size="1.778" layer="97" rot="R180">internal pulldown</text>
 <text x="88.9" y="20.32" size="1.778" layer="90">CAN infrastructure</text>
-<text x="40.64" y="71.12" size="1.778" layer="97" rot="R180">internal pulldown</text>
+<text x="66.04" y="71.12" size="1.778" layer="97" rot="R180" align="top-left">internal pulldown</text>
 </plain>
 <instances>
 <instance part="SUPPLY1" gate="G$1" x="76.2" y="10.16" smashed="yes">
@@ -16249,13 +16240,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <pinref part="SJ1" gate="G$1" pin="1"/>
 <wire x1="142.24" y1="104.14" x2="142.24" y2="101.6" width="0.1524" layer="91"/>
 <label x="142.24" y="101.6" size="0.8128" layer="95"/>
-</segment>
-</net>
-<net name="!SHDN!" class="0">
-<segment>
-<wire x1="50.8" y1="71.12" x2="68.58" y2="71.12" width="0.1524" layer="91"/>
-<label x="50.8" y="71.12" size="1.778" layer="95" rot="R180" xref="yes"/>
-<pinref part="IC1" gate="G$1" pin="5_SHDN"/>
 </segment>
 </net>
 </nets>
@@ -17149,14 +17133,6 @@ BAT+ -- Vbat+
 <wire x1="213.36" y1="223.52" x2="170.18" y2="223.52" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="!SHDN!" class="0">
-<segment>
-<portref moduleinst="STM32F04" port="!SHDN!"/>
-<portref moduleinst="CAN_INFRA" port="!SHDN!"/>
-<wire x1="142.24" y1="101.6" x2="142.24" y2="78.74" width="0.1524" layer="91"/>
-<wire x1="142.24" y1="78.74" x2="149.86" y2="78.74" width="0.1524" layer="91"/>
-</segment>
-</net>
 </nets>
 </sheet>
 </sheets>
@@ -17170,6 +17146,7 @@ BAT+ -- Vbat+
 <approved hash="104,1@STM32,129.54,111.76,IC2,VCCD_18,3V3,,,"/>
 <approved hash="104,1@CAN_INFRA,68.58,60.96,IC1,2_GND,GND,,,"/>
 <approved hash="104,1@CAN_INFRA,68.58,63.5,IC1,3_VCC,3V3,,,"/>
+<approved hash="202,1@CAN_INFRA,68.58,71.12,IC1,5_SHDN,,,,"/>
 <approved hash="104,1@PUSHBUTTON,104.14,68.58,IC2,1_GND,GND,,,"/>
 <approved hash="104,1@PUSHBUTTON,73.66,68.58,IC2,VCC_4,3V3,,,"/>
 <approved hash="213,1,177.8,101.6,BREAK_IN,in,,,,"/>
