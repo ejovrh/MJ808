@@ -13278,6 +13278,11 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="10.16" y1="43.18" x2="248.92" y2="43.18" width="0.1524" layer="98" style="dashdot"/>
 <text x="15.24" y="205.74" size="6.4516" layer="98" rot="R180" align="bottom-right">MJ8x8 - generic</text>
 <text x="180.34" y="165.1" size="6.4516" layer="94">???</text>
+<text x="271.78" y="63.5" size="1.778" layer="91">TODO:
+- move PB3 (tim2 ch2) to PAx
+- move PB1 (gpio) to PAx
+- move PB0 (exti0) to PA0
+- move PB4/5 (gpio) tp PAx</text>
 </plain>
 <moduleinsts>
 <moduleinst name="POWER_3V3" module="POWER_3V3" x="93.98" y="116.84" offset="200">
