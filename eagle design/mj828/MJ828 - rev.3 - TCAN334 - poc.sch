@@ -15066,13 +15066,15 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 </variantdefs>
 <parts>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="120"/>
+<part name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="60"/>
 <part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="CAN_INFRA" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="DINA5_L" device="" value="CAN_INFRA"/>
-<part name="SJ1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="CAN termination"/>
 <part name="IC1" library="TCAN33x - 3.3V CAN Transciever" deviceset="CAN33X" device="" value="TCAN334"/>
+<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="47nF"/>
+<part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="60"/>
 </parts>
 <sheets>
 <sheet>
@@ -15104,13 +15106,20 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <attribute name="LAST_DATE_TIME" x="140.97" y="10.16" size="2.286" layer="94"/>
 <attribute name="SHEET" x="154.305" y="5.08" size="2.54" layer="94"/>
 </instance>
-<instance part="SJ1" gate="G$1" x="142.24" y="109.22" smashed="yes" rot="R90">
-<attribute name="NAME" x="139.7" y="109.22" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="144.78" y="109.22" size="1.778" layer="96"/>
-</instance>
 <instance part="IC1" gate="G$1" x="83.82" y="73.66" smashed="yes">
 <attribute name="NAME" x="76.2" y="83.82" size="1.27" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="76.2" y="55.88" size="1.27" layer="95" font="vector" align="center"/>
+</instance>
+<instance part="C1" gate="G$1" x="154.94" y="99.06" smashed="yes">
+<attribute name="NAME" x="157.48" y="99.06" size="1.778" layer="95"/>
+<attribute name="VALUE" x="157.48" y="96.52" size="1.778" layer="96"/>
+</instance>
+<instance part="SUPPLY4" gate="G$1" x="154.94" y="88.9" smashed="yes">
+<attribute name="VALUE" x="154.94" y="86.995" size="1.778" layer="96" align="center"/>
+</instance>
+<instance part="R1" gate="G$1" x="142.24" y="109.22" smashed="yes" rot="R90">
+<attribute name="NAME" x="144.78" y="111.76" size="1.778" layer="95"/>
+<attribute name="VALUE" x="144.78" y="109.22" size="1.778" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -15148,6 +15157,11 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <wire x1="68.58" y1="58.42" x2="68.58" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="G$1" pin="2_GND"/>
 </segment>
+<segment>
+<pinref part="C1" gate="G$1" pin="2"/>
+<pinref part="SUPPLY4" gate="G$1" pin="GND"/>
+<wire x1="154.94" y1="91.44" x2="154.94" y2="93.98" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="CAN_H" class="0">
 <segment>
@@ -15162,8 +15176,8 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 </segment>
 <segment>
 <wire x1="142.24" y1="114.3" x2="142.24" y2="118.11" width="0.1524" layer="91"/>
-<pinref part="SJ1" gate="G$1" pin="2"/>
 <label x="142.24" y="118.11" size="1.778" layer="95"/>
+<pinref part="R1" gate="G$1" pin="2"/>
 </segment>
 </net>
 <net name="CAN_L" class="0">
@@ -15203,12 +15217,15 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <pinref part="IC1" gate="G$1" pin="8_STB"/>
 </segment>
 </net>
-<net name="CAN_JMPR" class="3">
+<net name="SPLIT" class="3">
 <segment>
 <pinref part="R5" gate="G$1" pin="2"/>
-<pinref part="SJ1" gate="G$1" pin="1"/>
 <wire x1="142.24" y1="104.14" x2="142.24" y2="101.6" width="0.1524" layer="91"/>
 <label x="142.24" y="101.6" size="0.8128" layer="95"/>
+<pinref part="R1" gate="G$1" pin="1"/>
+<pinref part="C1" gate="G$1" pin="1"/>
+<wire x1="142.24" y1="101.6" x2="154.94" y2="101.6" width="0.1524" layer="91"/>
+<junction x="142.24" y="101.6"/>
 </segment>
 </net>
 </nets>

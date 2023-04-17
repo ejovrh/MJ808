@@ -6,9 +6,9 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="12.5" unitdist="mil" unit="mm" style="dots" multiple="1" display="yes" altdistance="0.125" altunitdist="mm" altunit="mm"/>
+<grid distance="20" unitdist="mil" unit="mil" style="dots" multiple="1" display="yes" altdistance="0.125" altunitdist="mm" altunit="mm"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
 <layer number="3" name="Route3" color="17" fill="1" visible="no" active="no"/>
 <layer number="4" name="Route4" color="18" fill="1" visible="no" active="no"/>
@@ -23,21 +23,21 @@
 <layer number="13" name="Route13" color="21" fill="1" visible="no" active="no"/>
 <layer number="14" name="Route14" color="22" fill="1" visible="no" active="no"/>
 <layer number="15" name="Route15" color="23" fill="1" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
-<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
-<layer number="30" name="bStop" color="7" fill="6" visible="yes" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
 <layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
 <layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
@@ -46,10 +46,10 @@
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
-<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
-<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
@@ -58,8 +58,8 @@
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -2055,23 +2055,17 @@ design rules under a new name.</description>
 <attribute name="SPICEPREFIX" value="R" x="16.5" y="10.5" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="VALUE" x="16.5" y="10.5" size="1.27" layer="28" rot="MR270"/>
 </element>
-<element name="R405" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="120" x="8.86" y="27.34" locked="yes" smashed="yes" rot="MR0">
-<attribute name="NAME" x="8.86" y="28.59" locked="yes" size="0.5" layer="26" rot="MR0" align="center"/>
-<attribute name="POPULARITY" value="86" x="8.86" y="27.34" locked="yes" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="8.86" y="27.34" locked="yes" size="1.778" layer="28" rot="MR0" display="off"/>
-<attribute name="VALUE" x="8.86" y="27.34" locked="yes" size="1.27" layer="28" rot="MR0"/>
+<element name="R405" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="60" x="10.16" y="27.432" smashed="yes" rot="MR270">
+<attribute name="NAME" x="10.16" y="25.4" size="0.5" layer="26" rot="MR180" align="center"/>
+<attribute name="POPULARITY" value="86" x="10.16" y="27.432" size="1.778" layer="28" rot="MR270" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="10.16" y="27.432" size="1.778" layer="28" rot="MR270" display="off"/>
+<attribute name="VALUE" x="10.16" y="27.432" size="1.27" layer="28" rot="MR270"/>
 </element>
 <element name="R504" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R2010" package3d_urn="urn:adsk.eagle:package:23551/2" value="WSLT2010R2200FEB18 / 0.22Ohm 1W" x="26.5" y="11.345" smashed="yes" rot="MR0">
 <attribute name="NAME" x="26.5" y="9.47" size="0.5" layer="26" rot="MR0" align="center"/>
 <attribute name="POPULARITY" value="3" x="26.5" y="11.345" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="SPICEPREFIX" value="R" x="26.5" y="11.345" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="VALUE" x="26.5" y="11.345" size="1.27" layer="28" rot="MR0"/>
-</element>
-<element name="SJ401" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="CAN termination" x="7.84" y="27.39" locked="yes" smashed="yes">
-<attribute name="NAME" x="6.57" y="26.235" size="0.5" layer="25" align="center"/>
-<attribute name="POPULARITY" value="0" x="7.84" y="27.39" locked="yes" size="1.778" layer="27" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="7.84" y="27.39" locked="yes" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="7.84" y="27.39" locked="yes" size="1.27" layer="27"/>
 </element>
 <element name="SW701" library="TL3305-844809 SPST-NO Tact Switch" package="SMD" value="TL3305CF160QG" x="17.5" y="7" smashed="yes" rot="R180">
 <attribute name="NAME" x="17.5" y="4.25" size="0.5" layer="25" font="vector" align="center"/>
@@ -2094,6 +2088,18 @@ design rules under a new name.</description>
 <attribute name="NAME" x="26.035" y="35.8775" locked="yes" size="1.27" layer="25"/>
 <attribute name="POPULARITY" value="5" x="26.035" y="31.115" locked="yes" size="1" layer="27" font="vector" rot="R180" display="off"/>
 <attribute name="VALUE" x="28.5811" y="28.9641" locked="yes" size="1.27" layer="27" rot="R180"/>
+</element>
+<element name="R401" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="60" x="7.62" y="27.432" smashed="yes" rot="MR90">
+<attribute name="NAME" x="7.62" y="25.4" size="0.5" layer="26" font="vector" rot="MR0" align="center"/>
+<attribute name="POPULARITY" value="86" x="7.62" y="27.432" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="7.62" y="27.432" size="1.778" layer="28" rot="MR90" display="off"/>
+<attribute name="VALUE" x="5.08" y="26.797" size="1.27" layer="28" rot="MR90"/>
+</element>
+<element name="C401" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="47nF" x="5.08" y="26.416" smashed="yes" rot="MR0">
+<attribute name="NAME" x="5.08" y="25.4" size="0.5" layer="26" font="vector" rot="MR0" align="center"/>
+<attribute name="POPULARITY" value="18" x="5.08" y="26.416" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="SPICEPREFIX" value="C" x="5.08" y="26.416" size="1.778" layer="28" rot="MR0" display="off"/>
+<attribute name="VALUE" x="5.715" y="24.511" size="1.27" layer="28" rot="MR0"/>
 </element>
 </elements>
 <signals>
@@ -2202,6 +2208,7 @@ design rules under a new name.</description>
 <via x="7.125" y="20.375" extent="1-16" drill="0.35"/>
 <via x="21.25" y="5.5" extent="1-16" drill="0.35"/>
 <contactref element="J2" pad="1"/>
+<contactref element="C401" pad="2"/>
 </signal>
 <signal name="DIM_FRONT" class="3">
 <contactref element="R101" pad="2"/>
@@ -2298,25 +2305,19 @@ design rules under a new name.</description>
 </signal>
 <signal name="CAN_H" class="3">
 <contactref element="IC401" pad="P$7"/>
-<contactref element="SJ401" pad="2"/>
-<wire x1="8.535" y1="26.115" x2="8.535" y2="27.195" width="0.25" layer="1"/>
-<wire x1="8.535" y1="27.195" x2="8.34" y2="27.39" width="0.25" layer="1"/>
 <contactref element="J1" pad="1"/>
-<wire x1="7.62" y1="31.115" x2="8.34" y2="30.395" width="0.25" layer="1"/>
-<wire x1="8.34" y1="30.395" x2="8.34" y2="28.25" width="0.25" layer="1"/>
-<wire x1="8.34" y1="28.25" x2="8.34" y2="27.39" width="0.25" layer="1"/>
+<contactref element="R401" pad="2"/>
+<wire x1="8.535" y1="26.115" x2="8.535" y2="30.2" width="0.25" layer="1"/>
+<wire x1="8.535" y1="30.2" x2="7.62" y2="31.115" width="0.25" layer="1"/>
+<wire x1="7.62" y1="28.382" x2="7.62" y2="31.115" width="0.25" layer="16"/>
 </signal>
 <signal name="CAN_L" class="3">
 <contactref element="IC401" pad="P$6"/>
 <contactref element="R405" pad="1"/>
-<via x="10.36" y="27.34" extent="1-16" drill="0.35"/>
-<wire x1="9.185" y1="26.115" x2="9.185" y2="27.165" width="0.25" layer="1"/>
-<wire x1="9.185" y1="27.165" x2="9.36" y2="27.34" width="0.25" layer="1"/>
-<wire x1="9.36" y1="27.34" x2="10.36" y2="27.34" width="0.25" layer="1"/>
-<wire x1="10.36" y1="27.34" x2="9.81" y2="27.34" width="0.25" layer="16"/>
 <contactref element="J1" pad="2"/>
-<wire x1="10.16" y1="31.115" x2="10.36" y2="30.915" width="0.25" layer="1"/>
-<wire x1="10.36" y1="30.915" x2="10.36" y2="27.34" width="0.25" layer="1"/>
+<wire x1="9.185" y1="26.115" x2="9.185" y2="30.14" width="0.25" layer="1"/>
+<wire x1="9.185" y1="30.14" x2="10.16" y2="31.115" width="0.25" layer="1"/>
+<wire x1="10.16" y1="28.382" x2="10.16" y2="31.115" width="0.25" layer="16"/>
 </signal>
 <signal name="3V3" class="4">
 <contactref element="SWD101" pad="1_TVCC"/>
@@ -2460,13 +2461,13 @@ design rules under a new name.</description>
 <wire x1="15.55" y1="15.3" x2="18.25" y2="18" width="0.25" layer="16"/>
 <wire x1="15.55" y1="9.1" x2="15.55" y2="15.3" width="0.25" layer="16"/>
 </signal>
-<signal name="CAN_INFRA:CAN_JMPR" class="3">
+<signal name="CAN_INFRA:SPLIT" class="3">
 <contactref element="R405" pad="2"/>
-<contactref element="SJ401" pad="1"/>
-<via x="7.36" y="27.34" extent="1-16" drill="0.35"/>
-<wire x1="7.34" y1="27.39" x2="7.36" y2="27.37" width="0.25" layer="1"/>
-<wire x1="7.36" y1="27.37" x2="7.36" y2="27.34" width="0.25" layer="1"/>
-<wire x1="7.36" y1="27.34" x2="7.91" y2="27.34" width="0.25" layer="16"/>
+<contactref element="R401" pad="1"/>
+<contactref element="C401" pad="1"/>
+<wire x1="5.73" y1="26.416" x2="5.796" y2="26.482" width="0.25" layer="16"/>
+<wire x1="5.796" y1="26.482" x2="7.62" y2="26.482" width="0.25" layer="16"/>
+<wire x1="7.62" y1="26.482" x2="10.16" y2="26.482" width="0.25" layer="16"/>
 </signal>
 <signal name="FRONT_LED_DRIVER:DIM_FRONT_DRAIN" class="3">
 <contactref element="D501" pad="A"/>
@@ -2519,8 +2520,6 @@ design rules under a new name.</description>
 <approved hash="5,1,44a50f6706a65c19"/>
 <approved hash="19,16,98e022535d1451db"/>
 <approved hash="19,16,a9d9f4d1866e6a1a"/>
-<approved hash="19,16,c8ca848df7694ff3"/>
-<approved hash="19,16,5b19ab446a026e82"/>
 <approved hash="5,1,51d3121911e251f8"/>
 <approved hash="19,16,7312e7de469722a4"/>
 <approved hash="19,16,781ef0d2ef716cea"/>
@@ -2529,7 +2528,6 @@ design rules under a new name.</description>
 <approved hash="19,16,41e5ea5262fe3026"/>
 <approved hash="19,16,e8f73f55a7c29063"/>
 <approved hash="19,16,3fc852709fc631de"/>
-<approved hash="19,1,bfa6e0a80d0ce0ed"/>
 <approved hash="19,1,c76c966f733753d1"/>
 <approved hash="19,16,427f6cba12d12dce"/>
 <approved hash="19,16,703a531f5a4ee6ad"/>
