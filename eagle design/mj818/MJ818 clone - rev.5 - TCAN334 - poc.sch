@@ -12959,6 +12959,8 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="255.27" y1="189.23" x2="255.27" y2="187.96" width="0.1524" layer="98"/>
 <wire x1="255.27" y1="191.77" x2="255.27" y2="193.04" width="0.1524" layer="98"/>
 <wire x1="253.365" y1="189.23" x2="257.175" y2="189.23" width="0.1524" layer="98"/>
+<text x="284.48" y="76.2" size="1.778" layer="91">TODO:
+- move PB1 to PAx</text>
 </plain>
 <moduleinsts>
 <moduleinst name="POWER_3V3" module="POWER_3V3" x="116.84" y="121.92" offset="200">
