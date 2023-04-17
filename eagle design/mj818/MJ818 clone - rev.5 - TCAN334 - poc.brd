@@ -1671,31 +1671,6 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 </package>
 </packages>
 </library>
-<library name="testpad" urn="urn:adsk.eagle:library:385">
-<description>&lt;b&gt;Test Pins/Pads&lt;/b&gt;&lt;p&gt;
-Cream on SMD OFF.&lt;br&gt;
-new: Attribute TP_SIGNAL_NAME&lt;br&gt;
-&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
-<packages>
-<package name="P1-13" urn="urn:adsk.eagle:footprint:27902/1" library_version="3">
-<description>&lt;b&gt;TEST PAD&lt;/b&gt;</description>
-<circle x="0" y="0" radius="0.762" width="0.1524" layer="51"/>
-<pad name="TP" x="0" y="0" drill="1.3208" diameter="2.159" shape="octagon"/>
-<text x="-1.016" y="1.27" size="1.27" layer="25" ratio="10">&gt;NAME</text>
-<text x="0" y="0" size="0.0254" layer="27">&gt;VALUE</text>
-<text x="-1.27" y="-2.54" size="1" layer="37">&gt;TP_SIGNAL_NAME</text>
-<rectangle x1="-0.3302" y1="-0.3302" x2="0.3302" y2="0.3302" layer="51"/>
-</package>
-</packages>
-<packages3d>
-<package3d name="P1-13" urn="urn:adsk.eagle:package:27946/1" type="box" library_version="3">
-<description>TEST PAD</description>
-<packageinstances>
-<packageinstance name="P1-13"/>
-</packageinstances>
-</package3d>
-</packages3d>
-</library>
 <library name="con-amp" urn="urn:adsk.eagle:library:127">
 <description>&lt;b&gt;AMP Connectors&lt;/b&gt;&lt;p&gt;
 
@@ -2116,18 +2091,6 @@ design rules under a new name.</description>
 <attribute name="NAME" x="4.5" y="17.5" locked="yes" size="0.4" layer="25" font="fixed" rot="R90" align="center"/>
 <attribute name="VALUE" x="4.5" y="20" locked="yes" size="0.5" layer="27" font="vector" align="center"/>
 </element>
-<element name="TP401" library="testpad" library_urn="urn:adsk.eagle:library:385" package="P1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="PTR1PAD1-13" x="5.75" y="27.75" locked="yes" smashed="yes">
-<attribute name="NAME" x="5.75" y="35.75" locked="yes" size="1.27" layer="25" ratio="10" rot="R90"/>
-<attribute name="POPULARITY" value="2" x="6.25" y="27.75" locked="yes" size="1.778" layer="27" display="off"/>
-<attribute name="TP_SIGNAL_NAME" value="" x="4.48" y="25.21" locked="yes" size="1" layer="37"/>
-<attribute name="VALUE" x="5.75" y="27.75" locked="yes" size="0.0254" layer="27"/>
-</element>
-<element name="TP402" library="testpad" library_urn="urn:adsk.eagle:library:385" package="P1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="PTR1PAD1-13" x="12" y="27.75" locked="yes" smashed="yes">
-<attribute name="NAME" x="12" y="35.75" locked="yes" size="1.27" layer="25" ratio="10" rot="R90"/>
-<attribute name="POPULARITY" value="2" x="12.5" y="27.75" locked="yes" size="1.778" layer="27" display="off"/>
-<attribute name="TP_SIGNAL_NAME" value="" x="10.73" y="25.21" locked="yes" size="1" layer="37"/>
-<attribute name="VALUE" x="12" y="27.75" locked="yes" size="0.0254" layer="27"/>
-</element>
 <element name="J101" library="con-amp" library_urn="urn:adsk.eagle:library:127" package="10X02MTA" package3d_urn="urn:adsk.eagle:package:8081649/1" value="Power Supply" x="17.5" y="31" locked="yes" smashed="yes" rot="R180">
 <attribute name="NAME" x="17.5" y="35.75" locked="yes" size="1.27" layer="25"/>
 <attribute name="POPULARITY" value="5" x="25.25" y="25" locked="yes" size="1.778" layer="27" rot="R180" display="off"/>
@@ -2385,13 +2348,10 @@ design rules under a new name.</description>
 <wire x1="8.555" y1="25.96" x2="8.555" y2="26.54461875" width="0.25" layer="1"/>
 <wire x1="8.335" y1="26.76461875" x2="8.335" y2="27.1" width="0.25" layer="1"/>
 <wire x1="8.555" y1="26.54461875" x2="8.335" y2="26.76461875" width="0.25" layer="1"/>
-<contactref element="TP401" pad="TP"/>
 <contactref element="J103" pad="1"/>
 <wire x1="7.73" y1="31" x2="8.335" y2="30.395" width="0.25" layer="1"/>
 <wire x1="8.335" y1="30.395" x2="8.335" y2="28" width="0.25" layer="1"/>
 <wire x1="8.335" y1="28" x2="8.335" y2="27.1" width="0.25" layer="1"/>
-<wire x1="5.75" y1="27.75" x2="6" y2="28" width="0.25" layer="1"/>
-<wire x1="6" y1="28" x2="8.335" y2="28" width="0.25" layer="1"/>
 </signal>
 <signal name="CAN_L" class="3">
 <contactref element="IC401" pad="P$6"/>
@@ -2402,12 +2362,9 @@ design rules under a new name.</description>
 <wire x1="9.4" y1="27.085" x2="10.4" y2="27.085" width="0.25" layer="1"/>
 <wire x1="9.835" y1="27.075" x2="9.835" y2="27.085" width="0.25" layer="16"/>
 <wire x1="9.835" y1="27.085" x2="10.4" y2="27.085" width="0.25" layer="16"/>
-<contactref element="TP402" pad="TP"/>
 <contactref element="J103" pad="2"/>
 <wire x1="10.27" y1="31" x2="10.4" y2="30.87" width="0.25" layer="1"/>
 <wire x1="10.4" y1="30.87" x2="10.4" y2="27.085" width="0.25" layer="1"/>
-<wire x1="10.4" y1="27.085" x2="11.335" y2="27.085" width="0.25" layer="16"/>
-<wire x1="11.335" y1="27.085" x2="12" y2="27.75" width="0.25" layer="16"/>
 </signal>
 <signal name="3V3" class="4">
 <contactref element="SWD101" pad="1_TVCC"/>
