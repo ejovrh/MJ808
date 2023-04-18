@@ -102,7 +102,7 @@ static inline void _EventHandlerEvent03(void)
 static inline void _EventHandlerEvent04(void)
 {
 #ifdef MJ828_
-//	DisplayBatteryVoltage();  // light up BatteryX LEDs according to voltage read at Vbat
+	DisplayBatteryVoltage();  // light up BatteryX LEDs according to voltage read at Vbat
 #endif
 }
 

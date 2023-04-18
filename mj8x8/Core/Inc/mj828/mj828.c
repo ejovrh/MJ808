@@ -27,23 +27,49 @@ static __mj828_t __Device __attribute__ ((section (".data")));	// preallocate __
 // display battery charge status depending on ADC read
 void DisplayBatteryVoltage(void)
 {
-	//FIXME - DisplayBatteryVoltage() - causes mj828 leds to remain lit
+	static uint8_t state;
+
+	if(state == 0)
+		{
+			state |= ON;
+			state = 1;
+		}
+	else
+		{
+			state &= ~ON;
+			state = 0;
+		}
+
 	volatile uint16_t temp = Device->adc->GetChannel(Vbat);
 
-	if(temp <= 1302 && temp > 1)	// 4.2V
-		Device->led->Shine(Red);
+	if(temp <= 1714 && temp > 1)	// below 4.2V (as displayed on DP832)
+		{
+			Device->led->led[Red].Shine(state);
+		}
 
-	if(temp > 1302)  // 4.2V
-		Device->led->Shine(Battery1);
+	// 1302 on 3V3, 1714 on 2V5
+	if(temp > 1714)  // 4.2V to 5.4V
+		{
+			Device->led->led[Battery1].Shine(state);
+		}
 
-	if(temp > 1675)  // 5.4V
-		Device->led->Shine(Battery2);
+	// 1675 on 3V3, 2204 on 2V5
+	if(temp > 2204)  // 5.4V to 6.6V
+		{
+			Device->led->led[Battery2].Shine(state);
+		}
 
-	if(temp > 2048)  // 6.6V
-		Device->led->Shine(Battery3);
+	// 2048 on 3V3, 2695 on 2V5
+	if(temp > 2695)  // 6.6V to 7.8V
+		{
+			Device->led->led[Battery3].Shine(state);
+		}
 
-	if(temp > 2421)  // 7.8V
-		Device->led->Shine(Battery4);
+	// 2321 on 3V3, 3186 on 2V5
+	if(temp > 3186)  // above 7.8V
+		{
+			Device->led->led[Battery4].Shine(state);
+		}
 }
 
 // GPIO init - device specific

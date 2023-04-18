@@ -218,18 +218,18 @@ static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
 	 * and composite (_componentLEDHandler) handlers are the frontends.
 	 */
 
-	if (state == ON)	// transition from BLINK to ON state
+	if (state == ON)	// transition from BLINK to ON state (or OFF to ON, in which case BlinkFlags are empty anyway)
 		__LED._OldBlinkFlags = __LED._BlinkFlags;	// store previous blink state
 
-	if(state == OFF) // transition from SHINE to BLINK state
+	if(state == OFF) // transition from SHINE to BLINK state (or ON to OFF, in which case BlinkFlags are empty anyway)
 		{
 			if (__LED._OldBlinkFlags != 0)	// ...really from SHINE to BLINK
 				{
-					__LED._BlinkFlags = __LED._OldBlinkFlags;
-					__LED._OldBlinkFlags &= ~__LED._OldBlinkFlags;
+					__LED._BlinkFlags = __LED._OldBlinkFlags;	// restore previous blink state
+					__LED._OldBlinkFlags &= ~__LED._OldBlinkFlags;	// clear the bits
 				}
 			else	// observe for dirty write condition (blink issued from other devices)
-			__LED._BlinkFlags ^= ((-((state>>1) & 0x01) ^ __LED._BlinkFlags) & (1 << led));
+			__LED._BlinkFlags ^= ((-((state>>1) & 0x01) ^ __LED._BlinkFlags) & (1 << led));	// sets "led" bit to "state" value
 		}
 		else	// transition to BLINK (or true OFF) state
 			__LED._BlinkFlags ^= ((-((state>>1) & 0x01) ^ __LED._BlinkFlags) & (1 << led));	// sets "led" bit to "state" value
@@ -241,9 +241,12 @@ static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
 	Device->StartTimer(&htim14);  // start the timer
 }
 
+static uint8_t state;
 // frontend for the composite LED handler
 static inline void _componentLEDFrontEnd(const uint8_t arg)
 {
+//	argument needs to be e.g. (RED | ON)
+
 	__LEDBackEnd( ( ((arg & 0x3C) >> 2) - 1 ) , (arg & 0x03));
 }
 
