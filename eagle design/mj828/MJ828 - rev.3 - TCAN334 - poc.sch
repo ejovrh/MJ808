@@ -14555,53 +14555,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="MAX6002 - 2V5 Voltage Reference">
-<packages>
-<package name="SOT23-3">
-<text x="-2" y="0" size="0.5" layer="25" font="vector" rot="R90" align="center">&gt;NAME</text>
-<text x="2" y="0" size="0.5" layer="27" font="vector" rot="R90" align="center">&gt;VALUE</text>
-<smd name="1_IN" x="0.65" y="-0.95" dx="0.5" dy="0.6" layer="1" rot="R180"/>
-<smd name="2_OUT" x="-0.65" y="-0.95" dx="0.5" dy="0.6" layer="1"/>
-<smd name="3_GND" x="0" y="0.95" dx="0.5" dy="0.6" layer="1"/>
-<wire x1="-1.5" y1="0.5" x2="1.5" y2="0.5" width="0.127" layer="21"/>
-<wire x1="-1.5" y1="-0.5" x2="1.5" y2="-0.5" width="0.127" layer="21"/>
-<wire x1="1.5" y1="0.5" x2="1.5" y2="-0.5" width="0.127" layer="21"/>
-<wire x1="-1.5" y1="0.5" x2="-1.5" y2="-0.5" width="0.127" layer="21"/>
-</package>
-</packages>
-<symbols>
-<symbol name="MAX6002">
-<pin name="2_OUT" x="10.16" y="0" length="middle" direction="out" rot="R180"/>
-<pin name="1_IN" x="-10.16" y="2.54" length="middle" direction="pwr"/>
-<pin name="3_GND" x="-10.16" y="-2.54" length="middle" direction="pwr"/>
-<wire x1="-5.08" y1="5.08" x2="5.08" y2="5.08" width="0.254" layer="94"/>
-<wire x1="5.08" y1="5.08" x2="5.08" y2="-5.08" width="0.254" layer="94"/>
-<wire x1="5.08" y1="-5.08" x2="-5.08" y2="-5.08" width="0.254" layer="94"/>
-<wire x1="-5.08" y1="-5.08" x2="-5.08" y2="5.08" width="0.254" layer="94"/>
-<text x="-5.08" y="7.62" size="1.27" layer="95">&gt;NAME</text>
-<text x="-5.08" y="-7.62" size="1.27" layer="96">&gt;VALUE</text>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="MAX6002" prefix="IC" uservalue="yes">
-<gates>
-<gate name="G$1" symbol="MAX6002" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="SOT23-3">
-<connects>
-<connect gate="G$1" pin="1_IN" pad="1_IN"/>
-<connect gate="G$1" pin="2_OUT" pad="2_OUT"/>
-<connect gate="G$1" pin="3_GND" pad="3_GND"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 </libraries>
 <attributes>
 </attributes>
@@ -14761,8 +14714,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1u"/>
 <part name="SUPPLY9" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="STM32_MICROCONTROLLER" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device="" value="STM32_MICROCONTROLLER"/>
-<part name="IC1" library="MAX6002 - 2V5 Voltage Reference" deviceset="MAX6002" device="" value="MAX6002EUR+T"/>
-<part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 </parts>
 <sheets>
 <sheet>
@@ -14831,13 +14782,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <attribute name="LAST_DATE_TIME" x="217.17" y="10.16" size="2.286" layer="94"/>
 <attribute name="SHEET" x="230.505" y="5.08" size="2.54" layer="94"/>
 </instance>
-<instance part="IC1" gate="G$1" x="40.64" y="58.42" smashed="yes">
-<attribute name="NAME" x="35.56" y="66.04" size="1.27" layer="95"/>
-<attribute name="VALUE" x="35.56" y="50.8" size="1.27" layer="96"/>
-</instance>
-<instance part="SUPPLY3" gate="G$1" x="20.32" y="53.34" smashed="yes">
-<attribute name="VALUE" x="20.32" y="51.435" size="1.778" layer="96" align="center"/>
-</instance>
 </instances>
 <busses>
 <bus name="SWD:SYS_NRST,SYS_SWCLK,SYS_SWDIO">
@@ -14870,9 +14814,14 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <label x="66.04" y="22.86" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC1" gate="G$1" pin="1_IN"/>
-<wire x1="30.48" y1="60.96" x2="20.32" y2="60.96" width="0.1524" layer="91"/>
-<label x="20.32" y="60.96" size="1.778" layer="95" rot="R180"/>
+<pinref part="C4" gate="G$1" pin="2"/>
+<wire x1="25.4" y1="20.32" x2="25.4" y2="22.86" width="0.1524" layer="91"/>
+<label x="25.4" y="22.86" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="IC2" gate="G$1" pin="VCCA_5"/>
+<wire x1="129.54" y1="154.94" x2="149.86" y2="154.94" width="0.1524" layer="91"/>
+<label x="149.86" y="154.94" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -14905,11 +14854,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <pinref part="C7" gate="G$1" pin="1"/>
 <pinref part="SUPPLY9" gate="G$1" pin="GND"/>
 <wire x1="86.36" y1="10.16" x2="86.36" y2="12.7" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="IC1" gate="G$1" pin="3_GND"/>
-<wire x1="30.48" y1="55.88" x2="20.32" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="SUPPLY3" gate="G$1" pin="GND"/>
 </segment>
 </net>
 <net name="SYS_SWCLK" class="0">
@@ -15029,23 +14973,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <pinref part="IC2" gate="G$1" pin="EVENTOUT,TSC_G5_IO2,TIM3_CH1,TIM17_BKIN,SPI1_MISO,I2S1_MCK-PB4_25"/>
 <wire x1="129.54" y1="88.9" x2="149.86" y2="88.9" width="0.1524" layer="91"/>
 <label x="149.86" y="88.9" size="1.778" layer="95" xref="yes"/>
-</segment>
-</net>
-<net name="2V5_REF" class="3">
-<segment>
-<pinref part="IC1" gate="G$1" pin="2_OUT"/>
-<wire x1="50.8" y1="58.42" x2="60.96" y2="58.42" width="0.1524" layer="91"/>
-<label x="60.96" y="58.42" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="IC2" gate="G$1" pin="VCCA_5"/>
-<wire x1="129.54" y1="154.94" x2="149.86" y2="154.94" width="0.1524" layer="91"/>
-<label x="149.86" y="154.94" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="C4" gate="G$1" pin="2"/>
-<wire x1="25.4" y1="20.32" x2="25.4" y2="22.86" width="0.1524" layer="91"/>
-<label x="25.4" y="22.86" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
@@ -16126,12 +16053,10 @@ BAT+ -- Vbat+
 <approved hash="104,1,114.3,170.18,SWD101,1_T_VCC,3V3,,,"/>
 <approved hash="104,1,114.3,160.02,SWD101,5_GND,GND,,,"/>
 <approved hash="202,1,114.3,157.48,SWD101,6_T-SWO,,,,"/>
-<approved hash="104,1@STM32,129.54,154.94,IC2,VCCA_5,2V5_REF,,,"/>
+<approved hash="104,1@STM32,129.54,154.94,IC2,VCCA_5,3V3,,,"/>
 <approved hash="104,1@STM32,129.54,116.84,IC2,GND_16,GND,,,"/>
 <approved hash="104,1@STM32,129.54,114.3,IC2,VCC_17,3V3,,,"/>
 <approved hash="104,1@STM32,129.54,111.76,IC2,VCCD_18,3V3,,,"/>
-<approved hash="104,1@STM32,30.48,60.96,IC1,1_IN,3V3,,,"/>
-<approved hash="104,1@STM32,30.48,55.88,IC1,3_GND,GND,,,"/>
 <approved hash="104,1@CAN_INFRA,68.58,60.96,IC1,2_GND,GND,,,"/>
 <approved hash="104,1@CAN_INFRA,68.58,63.5,IC1,3_VCC,3V3,,,"/>
 <approved hash="202,1@CAN_INFRA,68.58,71.12,IC1,5_SHDN,,,,"/>
