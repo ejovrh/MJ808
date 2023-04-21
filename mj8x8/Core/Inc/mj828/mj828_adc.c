@@ -5,14 +5,12 @@
 
 #include "adc\adc_actual.c"
 
-#define ADC_BUF_SIZE 3	// 3 channels to read
-
 static ADC_HandleTypeDef hadc;  // ADC object
 extern TIM_HandleTypeDef htim2;  // Timer2 object - ADC conversion - 500ms
 
 static __adc_t __ADC;  // forward declaration of object
 
-static uint16_t __adc_buffer[ADC_BUF_SIZE] =
+static uint16_t __adc_buffer[ADC_CHANNELS] =
 	{0};	// store for ADC readout
 
 // reads channels as called from ADC ISR
@@ -20,7 +18,7 @@ static void _ConversionEnd(void)
 {
 	__ADC.__buffer[__ADC.__index] = HAL_ADC_GetValue(&hadc);	// store channel value at proper position in buffer
 
-	(__ADC.__index == 2) ? __ADC.__index = 0 : ++__ADC.__index;  // count until 2, then start over
+	(__ADC.__index == ADC_CHANNELS-1) ? __ADC.__index = 0 : ++__ADC.__index;  // count until ADC_CHANNELS - 1, then start over
 }
 
 // returns value stored at index i
@@ -61,6 +59,9 @@ static void _ADCInit(void)
 	HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
 	sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;  //	built-in temperature sensor
+	HAL_ADC_ConfigChannel(&hadc, &sConfig);
+
+	sConfig.Channel = ADC_CHANNEL_VREFINT;	// Vrefint - see RM0091, 13.8, p. 260
 	HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
 	HAL_ADCEx_Calibration_Start(&hadc);

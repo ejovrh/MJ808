@@ -10,7 +10,7 @@ typedef struct	// try_t actual
 	uint32_t (*_Eventfptr)(void);  // dynamically generated function pointer
 } __try_t;
 
-static __try_t  __Try  __attribute__ ((section (".data")));  // preallocate __Try object in .data
+static __try_t __Try __attribute__ ((section (".data")));  // preallocate __Try object in .data
 
 // a function that does nothing
 static inline void _DoNothing(void *foo)  // a function that does nothing
@@ -102,7 +102,7 @@ static inline void _EventHandlerEvent03(void)
 static inline void _EventHandlerEvent04(void)
 {
 #ifdef MJ828_
-	DisplayBatteryVoltage();  // light up BatteryX LEDs according to voltage read at Vbat
+	Device->autobatt->DisplayBatteryVoltage();  // light up BatteryX LEDs according to voltage read at Vbat
 #endif
 }
 
@@ -149,29 +149,31 @@ static inline void _EventHandlerEvent06(void)
 #endif
 }
 
-//
+// AutoLight detects darkness/light
 static inline void _EventHandlerEvent07(void)
 {
 #ifdef MJ828_
-	if(Device->autolight->AutoLightisOn)  //
+	if(Device->autolight->AutoLightisOn)  //	AutoLight feature is on
 		{
-			Device->led->led[Green].Shine(ON);
-			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 10, 2);  // convey button press via CAN and the logic unit will do its own thing
+			Device->led->led[Green].Shine(ON);	// turn green indicator on
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 20, 2);  // convey button press via CAN and the logic unit will do its own thing
 		}
 	else
 		{
-			Device->led->led[Green].Shine(OFF);
+			Device->led->led[Green].Shine(OFF);  //	turn green indicator off
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
 		}
 #endif
 }
 
-////
-//static inline void _EventHandlerEvent08(void)
-//{
-//
-//}
-//
+//	AutoBattLight detects battery status
+static inline void _EventHandlerEvent08(void)
+{
+#ifdef MJ828_
+	;
+#endif
+}
+
 ////
 //static inline void _EventHandlerEvent09(void)
 //{
@@ -231,7 +233,7 @@ static uint32_t (*_BranchtableEventHandler[])(void) =  // branch table
 		(void *)&_EventHandlerEvent05,//
 		(void *)&_EventHandlerEvent06,//
 		(void *)&_EventHandlerEvent07,//
-		(void *)&_DoNothing,//
+		(void *)&_EventHandlerEvent08,//
 		(void *)&_DoNothing,//
 		(void *)&_DoNothing,//
 		(void *)&_DoNothing,//
@@ -266,7 +268,7 @@ void _EventHandler(const uint8_t val)
 uint16_t _MsgBtnEvent00(can_msg_t *msg)
 {
 #ifdef MJ808_
-	Device->led->Shine(msg->ARGUMENT);
+	Device->led->led[Front].Shine(msg->ARGUMENT);
 #endif
 #ifdef MJ818_
 	Device->led->Shine(msg->ARGUMENT);
@@ -286,9 +288,6 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 // mj828 center button toggle
 static inline void _MsgBtnEvent01(can_msg_t *msg)
 {
-#ifdef MJ808_
-	Device->led->led[Green].Shine(msg->ARGUMENT);  // on or off, depending on argument
-#endif
 #ifdef MJ828_
 	Device->led->led[Blue].Shine(msg->ARGUMENT);	// argument is OFF, ON, BLINK
 	Device->led->Shine(msg->ARGUMENT);// argument is (LED | (OFF, ON, BLINK)) - e.g. (YELLOW | BLINK)
@@ -433,7 +432,7 @@ void _EmptyBusOperation(void)
 #endif
 }
 
-static __try_t  __Try =  // instantiate can_t actual and set function pointers
+static __try_t __Try =  // instantiate can_t actual and set function pointers
 	{  //
 	.public.PopulatedBusOperation = &_PopulatedBusOperation,  // tie in function pointer
 	.public.EmptyBusOperation = &_EmptyBusOperation,  // ditto

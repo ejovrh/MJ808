@@ -24,54 +24,6 @@ typedef struct	// mj828_t actual
 
 static __mj828_t __Device __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
-// display battery charge status depending on ADC read
-void DisplayBatteryVoltage(void)
-{
-	static uint8_t state;
-
-	if(state == 0)
-		{
-			state |= ON;
-			state = 1;
-		}
-	else
-		{
-			state &= ~ON;
-			state = 0;
-		}
-
-	volatile uint16_t temp = Device->adc->GetChannel(Vbat);
-
-	if(temp <= 1714 && temp > 1)	// below 4.2V (as displayed on DP832)
-		{
-			Device->led->led[Red].Shine(state);
-		}
-
-	// 1302 on 3V3, 1714 on 2V5
-	if(temp > 1714)  // 4.2V to 5.4V
-		{
-			Device->led->led[Battery1].Shine(state);
-		}
-
-	// 1675 on 3V3, 2204 on 2V5
-	if(temp > 2204)  // 5.4V to 6.6V
-		{
-			Device->led->led[Battery2].Shine(state);
-		}
-
-	// 2048 on 3V3, 2695 on 2V5
-	if(temp > 2695)  // 6.6V to 7.8V
-		{
-			Device->led->led[Battery3].Shine(state);
-		}
-
-	// 2321 on 3V3, 3186 on 2V5
-	if(temp > 3186)  // above 7.8V
-		{
-			Device->led->led[Battery4].Shine(state);
-		}
-}
-
 // GPIO init - device specific
 static inline void _GPIOInit(void)
 {
@@ -386,7 +338,8 @@ void ADC1_IRQHandler(void)
 	if((__HAL_ADC_GET_FLAG(&hadc, ADC_FLAG_EOC) && __HAL_ADC_GET_IT_SOURCE(&hadc, ADC_IT_EOC)))
 		Device->adc->ConversionEnd();  // on every ISR iteration, read out and store in ADC object
 
-	Device->autolight->Do();  //	run the AutoLight feature
+	Device->autolight->Do();  // run the AutoLight feature
+	Device->autobatt->Do();  // run the AutoBatt feature
 
 	HAL_ADC_IRQHandler(&hadc);  // service the interrupt
 }

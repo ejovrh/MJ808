@@ -4,6 +4,9 @@
 #include "main.h"
 #if defined(MJ828_)	// if this particular device is active
 
+#define VREFINT_CAL ((uint16_t*) ((uint32_t) 0x1FFFF7BA)) // internal reference voltage calibration data: acquired by measuring Vdda = 3V3 (+-10%) at 30 DegC (+-5 DegC), see RM0091l paragraph 13.8, p 260 for conversion formula
+
+#define ADC_CHANNELS 4	// how many ADC channels are we using
 #define BUTTON_COUNT 3	// how many buttons are there
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER2_PERIOD 2499	// ADC - 250ms
@@ -72,7 +75,8 @@ enum mj828_adcchannels
 {
 	  Vbat,  // battery voltage - PA3
 	  Darkness,  // Phototransistor - PB1 - low value = little darkness, high value = lots of darkness
-	  Temperature  // internal temperature sensor
+	  Temperature,  // internal temperature sensor
+	  Vrefint  // internal reference voltage
 };
 
 enum mj828_buttons	// enum of buttons on this device

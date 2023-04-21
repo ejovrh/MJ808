@@ -13,7 +13,7 @@ typedef struct	// autolight_t actual
 
 static __autolight_t __AutoLight __attribute__ ((section (".data")));  // preallocate __AutoLight object in .data
 
-//
+// implements AutoLight feature - turn light on/off automatically based on light sensor input (ADC data)
 static void _Do(void)
 {
 	if(__AutoLight.public.AutoLightEnabled)  // if AutoLight is enabled
@@ -61,8 +61,8 @@ static __autolight_t __AutoLight =  // instantiate autolight_t actual and set fu
 	{  //
 	.public.Do = &_Do,  //	that one method that does its thing
 	.public.AutoLightEnabled = 0,  //	set to off
-	.public.AutoLightisOn = 0,  //
-	._AutoLightTimer = 0,  //
+	.public.AutoLightisOn = 0,  // set to off
+	._AutoLightTimer = 0,  // Initialize timer
 	};
 
 autolight_t* autolight_ctor(void)  //

@@ -11,6 +11,7 @@ typedef struct	// struct describing the AutoBatt functionality
 	uint8_t AutoBattisOn;  // flag if AutoBatt is on
 
 	void (*Do)(void);  // AutoBatt functionality
+	void (*DisplayBatteryVoltage)(void);  // displays battery voltage
 } autobatt_t;
 
 autobatt_t* autobatt_ctor(void);	// the AutoBatt constructor
