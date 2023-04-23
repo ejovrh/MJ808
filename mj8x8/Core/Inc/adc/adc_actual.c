@@ -9,8 +9,7 @@ typedef struct	// adc_t actual
 {
 	adc_t public;  // public struct
 
-	uint16_t *__buffer;  // private - pointer to array of ADC readout destinations
-	uint8_t __index;	// private - auto-incrementing index for reading consecutive channels
+	volatile uint32_t *__buffer;  // private - pointer to array of ADC readout destinations
 } __adc_t;
 
 #endif /* MJ828_ADC_ACTUAL_C_ */

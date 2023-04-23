@@ -11,11 +11,10 @@
 #include "mj828\autolight.h"	// automatic light on off
 #include "mj828\autobatt.h"	// automatic battery state handling
 
-TIM_HandleTypeDef htim2;  // Timer2 object - ADC conversion - 500ms
+TIM_HandleTypeDef htim2;  // Timer2 object - ADC conversion - 250ms
 TIM_HandleTypeDef htim14;  // Timer14 object - charlieplexed LED handling - 2ms
 TIM_HandleTypeDef htim16;  // Timer16 object - button handling - 25ms
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
-extern ADC_HandleTypeDef hadc;  // ADC object
 
 typedef struct	// mj828_t actual
 {
@@ -330,18 +329,6 @@ void EXTI2_3_IRQHandler(void)
 		Device->button->button[LeverBrake]->Mark(!(HAL_GPIO_ReadPin(LeverBrake_GPIO_Port, LeverBrake_Pin)));  // mark state change
 
 	HAL_GPIO_EXTI_IRQHandler(LeverBrake_Pin);  // service the interrupt
-}
-
-// ADC ISR
-void ADC1_IRQHandler(void)
-{
-	if((__HAL_ADC_GET_FLAG(&hadc, ADC_FLAG_EOC) && __HAL_ADC_GET_IT_SOURCE(&hadc, ADC_IT_EOC)))
-		Device->adc->ConversionEnd();  // on every ISR iteration, read out and store in ADC object
-
-	Device->autolight->Do();  // run the AutoLight feature
-	Device->autobatt->Do();  // run the AutoBatt feature
-
-	HAL_ADC_IRQHandler(&hadc);  // service the interrupt
 }
 // device-specific interrupt handlers
 

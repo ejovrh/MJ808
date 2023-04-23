@@ -4,7 +4,9 @@
 #include "main.h"
 #if defined(MJ828_)	// if this particular device is active
 
-#define VREFINT_CAL ((uint16_t*) ((uint32_t) 0x1FFFF7BA)) // internal reference voltage calibration data: acquired by measuring Vdda = 3V3 (+-10%) at 30 DegC (+-5 DegC), see RM0091l paragraph 13.8, p 260 for conversion formula
+#define VREFINT_CAL *((uint16_t*) ((uint32_t) 0x1FFFF7BA)) // value is 1525 - internal reference voltage calibration data: acquired by measuring Vdda = 3V3 (+-10%) at 30 DegC (+-5 DegC), see RM0091l paragraph 13.8, p 260 for conversion formula
+#define TS_CAL1	*((uint16_t*) ((uint32_t) 0x1FFFF7B8)) // cal. at 30 deg C, value is 1777
+#define TS_CAL2	*((uint16_t*) ((uint32_t) 0x1FFFF7C2)) // cal. at 110 deg C, value is 1319
 
 #define ADC_CHANNELS 4	// how many ADC channels are we using
 #define BUTTON_COUNT 3	// how many buttons are there
@@ -72,7 +74,7 @@ enum mj828_leds  // enum of lights on this device
 };
 
 enum mj828_adcchannels
-{
+{  // order is important! - this MCU has no ranking and the order of channels is by channel number
 	  Vbat,  // battery voltage - PA3
 	  Darkness,  // Phototransistor - PB1 - low value = little darkness, high value = lots of darkness
 	  Temperature,  // internal temperature sensor

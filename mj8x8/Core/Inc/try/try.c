@@ -169,6 +169,9 @@ static inline void _EventHandlerEvent07(void)
 //	AutoBattLight detects battery status
 static inline void _EventHandlerEvent08(void)
 {
+#ifdef MJ808_
+	;
+#endif
 #ifdef MJ828_
 	;
 #endif
@@ -320,12 +323,19 @@ static inline void _MsgBtnEvent03(can_msg_t *msg)
 	return;
 }
 
-////
-//static inline void _MsgBtnEvent04(can_msg_t *msg)
-//{
-//	return;
-//}
-//
+// AutoBat status
+static inline void _MsgBtnEvent04(can_msg_t *msg)
+{
+#ifdef MJ808_
+	Device->led->led[Front].Shine(msg->ARGUMENT);
+#endif
+#ifdef MJ818_
+	Device->led->led[Front].Shine(msg->ARGUMENT);
+#endif
+
+	return;
+}
+
 //
 //static inline void _MsgBtnEvent05(can_msg_t *msg)
 //{
@@ -389,7 +399,7 @@ static uint32_t (*_BranchtableMsgBtnEvent[])(can_msg_t *msg) =  // branch table
 		(void *)(can_msg_t *)&_MsgBtnEvent01,// center button toggle on mj808 or mj828 - light up red utility led
 		(void *)(can_msg_t *)&_MsgBtnEvent02,// mj828 high beam button momentary
 		(void *)(can_msg_t *)&_MsgBtnEvent03,// mj828 brake light button momentary
-		(void *)(can_msg_t *)&_DoNothing,//
+		(void *)(can_msg_t *)&_MsgBtnEvent04,// AutoBat status
 		(void *)(can_msg_t *)&_DoNothing,//
 		(void *)(can_msg_t *)&_DoNothing,//
 		(void *)(can_msg_t *)&_DoNothing,//

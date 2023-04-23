@@ -241,7 +241,6 @@ static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
 	Device->StartTimer(&htim14);  // start the timer
 }
 
-static uint8_t state;
 // frontend for the composite LED handler
 static inline void _componentLEDFrontEnd(const uint8_t arg)
 {

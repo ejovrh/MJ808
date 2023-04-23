@@ -156,16 +156,16 @@ typedef union
 //#define CLASS_MSG_MEASURE_DATA 0xD0	//
 //#define CLASS_MSG_BUS 0xF0	//
 
-#define EVENT00 00
-#define EVENT01 01
-#define EVENT02 02
-#define EVENT03 03
-#define EVENT04 04
-#define EVENT05 05
-#define EVENT06 06
-#define EVENT07 07
-#define EVENT08 08
-#define EVENT09 09
+#define EVENT00 0
+#define EVENT01 1
+#define EVENT02 2
+#define EVENT03 3
+#define EVENT04 4
+#define EVENT05 5
+#define EVENT06 6
+#define EVENT07 7
+#define EVENT08 8
+#define EVENT09 9
 #define EVENT10 10
 #define EVENT11 11
 #define EVENT12 12
