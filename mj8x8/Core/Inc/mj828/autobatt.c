@@ -11,7 +11,11 @@ typedef struct	// autobatt_t actual
 
 static __autobatt_t __AutoBatt __attribute__ ((section (".data")));  // preallocate __AutoBatt object in .data
 
-static double _VddaConversionConstant;
+static double _VddaConversionConstant;	// constant values pre-computed in constructor
+static uint8_t i;  // iterator for average calculation
+static uint32_t tempvbat;  // temporary variable for average calculation
+static uint32_t tempvrefint;	// ditto
+static uint32_t temptemp;  // ditto
 
 // display battery charge status depending on ADC read
 void _DisplayBatteryVoltage(void)
@@ -59,31 +63,48 @@ void _DisplayBatteryVoltage(void)
 // AutoBatt functionality based on battery charge
 static void _Do(void)
 {
-	/* ADC channel voltage calculation - see RM 0091, chapter 13.8, p. 260
-	 *
-	 * using the Vrefint reference channel, the formula for calculating the ADC channel voltage is:
-	 * 	Vchannel = (Vdda_charact. * Vrefint_cal * ADC_data) / (Vrefint_data * full scale)
-	 *
-	 * 	of these, only ADC_data and Vrefint_data are variable, the rest are constants which can be computed in advance
-	 * 	thus, the formula becomes:
-	 *
-	 * 	Vchannel = (ADC_data/Vrefint_data) * ( (Vdda_charact. * Vrefint_cal) / full scale ) * 4
-	 * 		the latter term is computed once in the constructor.
-	 * 		in absolute numbers it is 4915.7509157509157
-	 *
-	 * 			since we are working with a 300k & 100k voltage divider, the above term was multiplied by 4
-	 *
-	 * 	Vchannel becomes (ADC_data/Vrefint_data) * VddaConversionConstant, true battery voltage in mV
-	 * 	this is then typecast into uint16_t to have a nice round number
-	 */
-	__AutoBatt.public.Vbat = (uint16_t) ((double) Device->adc->GetChannel(Vbat) / Device->adc->GetChannel(Vrefint) * _VddaConversionConstant);
+	tempvbat += Device->adc->GetChannel(Vbat);	// sum up raw data
+	tempvrefint += Device->adc->GetChannel(Vrefint);	// ditto
+	temptemp += Device->adc->GetChannel(Temperature);  // ...
 
-	/* ADC temperature calculation - see RM0091, chapter 13.8, p. 259
-	 *
-	 *	https://techoverflow.net/2015/01/13/reading-stm32f0-internal-temperature-and-voltage-using-chibios/
-	 */
+	if(++i == ADC_MEASURE_ITERATIONS)
+		{
+			tempvbat /= ADC_MEASURE_ITERATIONS;  // divide over iterations
+			tempvrefint /= ADC_MEASURE_ITERATIONS;	// ditto
+			temptemp /= ADC_MEASURE_ITERATIONS;  // ...
 
-	__AutoBatt.public.Temp = (((((double) (Device->adc->GetChannel(Temperature) * VREFINT_CAL) / Device->adc->GetChannel(Vrefint)) - TS_CAL1) * 800) / (int16_t) (TS_CAL2 - TS_CAL1)) + 300;
+			/* ADC channel voltage calculation - see RM 0091, chapter 13.8, p. 260
+			 *
+			 * using the Vrefint reference channel, the formula for calculating the ADC channel voltage is:
+			 * 	Vchannel = (Vdda_charact. * Vrefint_cal * ADC_data) / (Vrefint_data * full scale)
+			 *
+			 * 	of these, only ADC_data and Vrefint_data are variable, the rest are constants which can be computed in advance
+			 * 	thus, the formula becomes:
+			 *
+			 * 	Vchannel = (ADC_data/Vrefint_data) * ( (Vdda_charact. * Vrefint_cal) / full scale ) * 4
+			 * 		the latter term is computed once in the constructor.
+			 * 		in absolute numbers it is 4915.7509157509157
+			 *
+			 * 			since we are working with a 300k & 100k voltage divider, the above term was multiplied by 4
+			 *
+			 * 	Vchannel becomes (ADC_data/Vrefint_data) * VddaConversionConstant, true battery voltage in mV
+			 * 	this is then typecast into uint16_t to have a nice round number
+			 */
+
+			__AutoBatt.public.Vbat = (uint16_t) ((double) tempvbat / tempvrefint * _VddaConversionConstant);
+
+			/* ADC temperature calculation - see RM0091, chapter 13.8, p. 259
+			 *
+			 *	https://techoverflow.net/2015/01/13/reading-stm32f0-internal-temperature-and-voltage-using-chibios/
+			 */
+
+			__AutoBatt.public.Temp = (((((double) (temptemp * VREFINT_CAL) / tempvrefint) - TS_CAL1) * 800) / (int16_t) (TS_CAL2 - TS_CAL1)) + 300;
+
+			tempvbat = 0;  // reset
+			tempvrefint = 0;
+			temptemp = 0;
+			i = 0;
+		}
 
 	// TODO - take action based on battery states
 //	if(__AutoBatt._ADCval <= 1714 && __AutoBatt._ADCval > 1)	// below 4.2V (as displayed on DP832)

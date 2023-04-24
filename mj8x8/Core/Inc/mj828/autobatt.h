@@ -6,6 +6,7 @@
 // TODO - specify Li-Ion cell specific values
 #define BATTERY_FULL 8400	// mV, 2SxP pack, LiIon cells
 #define BATTERY_EMPTY	5500	// mV, 2SxP pack, LiIon cells
+#define ADC_MEASURE_ITERATIONS 40	// iterations for measurement data value average
 
 #if defined(MJ828_)	// if this particular device is active
 

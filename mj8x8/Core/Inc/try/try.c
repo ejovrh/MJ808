@@ -112,12 +112,12 @@ static inline void _EventHandlerEvent05(void)
 #ifdef MJ828_
 	if(Device->button->button[PushButton]->Hold)	//
 		{
-			Device->led->led[Yellow].Shine(ON);
+			Device->led->led[Green].Shine(ON);
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 10, 2);  // convey button press via CAN and the logic unit will do its own thing
 		}
 	else
 		{
-			Device->led->led[Yellow].Shine(OFF);
+			Device->led->led[Green].Shine(OFF);
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
 		}
 #endif
@@ -156,7 +156,7 @@ static inline void _EventHandlerEvent07(void)
 	if(Device->autolight->AutoLightisOn)  //	AutoLight feature is on
 		{
 			Device->led->led[Green].Shine(ON);	// turn green indicator on
-			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 20, 2);  // convey button press via CAN and the logic unit will do its own thing
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 75, 2);  // convey button press via CAN and the logic unit will do its own thing
 		}
 	else
 		{
