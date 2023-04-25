@@ -10,7 +10,7 @@ typedef struct	// try_t actual
 	uint32_t (*_Eventfptr)(void);  // dynamically generated function pointer
 } __try_t;
 
-static __try_t __Try __attribute__ ((section (".data")));  // preallocate __Try object in .data
+static __try_t   __Try   __attribute__ ((section (".data")));  // preallocate __Try object in .data
 
 // a function that does nothing
 static inline void _DoNothing(void *foo)  // a function that does nothing
@@ -134,7 +134,7 @@ static inline void _EventHandlerEvent06(void)
 //			Device->led->led[Battery2].Shine(BLINK);
 
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, ON, 2);	//
-			Device->autolight->AutoLightEnabled = 1;
+			Device->activity->AutoLight = 1;
 
 		}
 	else
@@ -144,7 +144,7 @@ static inline void _EventHandlerEvent06(void)
 //			Device->led->led[Battery2].Shine(OFF);
 
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, OFF, 2);  //
-			Device->autolight->AutoLightEnabled = 0;
+			Device->activity->AutoLight = 0;
 		}
 #endif
 }
@@ -330,7 +330,7 @@ static inline void _MsgBtnEvent04(can_msg_t *msg)
 	Device->led->led[Front].Shine(msg->ARGUMENT);
 #endif
 #ifdef MJ818_
-	Device->led->led[Front].Shine(msg->ARGUMENT);
+	Device->led->led[Rear].Shine(msg->ARGUMENT);
 #endif
 
 	return;
@@ -442,7 +442,7 @@ void _EmptyBusOperation(void)
 #endif
 }
 
-static __try_t __Try =  // instantiate can_t actual and set function pointers
+static __try_t   __Try =  // instantiate can_t actual and set function pointers
 	{  //
 	.public.PopulatedBusOperation = &_PopulatedBusOperation,  // tie in function pointer
 	.public.EmptyBusOperation = &_EmptyBusOperation,  // ditto

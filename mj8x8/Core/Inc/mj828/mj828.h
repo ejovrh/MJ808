@@ -5,8 +5,8 @@
 #if defined(MJ828_)	// if this particular device is active
 
 #define VREFINT_CAL *((uint16_t*) ((uint32_t) 0x1FFFF7BA)) // value is 1525 - internal reference voltage calibration data: acquired by measuring Vdda = 3V3 (+-10%) at 30 DegC (+-5 DegC), see RM0091l paragraph 13.8, p 260 for conversion formula
-#define TS_CAL1	*((uint16_t*) ((uint32_t) 0x1FFFF7B8)) // cal. at 30 deg C, value is 1777
-#define TS_CAL2	*((uint16_t*) ((uint32_t) 0x1FFFF7C2)) // cal. at 110 deg C, value is 1319
+#define TS_CAL1	*((uint16_t*) ((uint32_t) 0x1FFFF7B8)) // calibration value at 30 degrees C, value is 1777
+#define TS_CAL2	*((uint16_t*) ((uint32_t) 0x1FFFF7C2)) // calibration at 110 degrees C, value is 1319
 
 #define ADC_CHANNELS 4	// how many ADC channels are we using
 #define BUTTON_COUNT 3	// how many buttons are there
@@ -19,8 +19,8 @@
 #define AUTOLIGHT_DEBUG true
 
 #ifdef AUTOLIGHT_DEBUG
-#define AUTOLIGHT_THRESHOLD_LIGHT_OFF 3200 // debug values
-#define AUTOLIGHT_THRESHOLD_LIGHT_ON 3500	// debug values
+#define AUTOLIGHT_THRESHOLD_LIGHT_OFF 3200 // debug values so that ambient light sensor turns lights on/off in a room (as opposed to the outdoors)
+#define AUTOLIGHT_THRESHOLD_LIGHT_ON 3500	// ditto
 #else
 // POTI wiper set at approx. 75% - early dusk
 #define AUTOLIGHT_THRESHOLD_LIGHT_OFF 1843	// high light threshold - 4096/2=2048; 2048-10%
@@ -51,7 +51,7 @@
 #define Pushbutton_EXTI_IRQn EXTI0_1_IRQn
 #define Phototransistor_Pin GPIO_PIN_1	// TODO - move to PA?
 #define Phototransistor_GPIO_Port GPIOB
-#define CP4_Pin GPIO_PIN_15		// TODO - consolidate charlieplex pins into one port
+#define CP4_Pin GPIO_PIN_15		// TODO - consolidate charlieplexed pins into one port
 #define CP4_GPIO_Port GPIOA
 #define CP2_Pin GPIO_PIN_3	// TODO - move to PA?
 #define CP2_GPIO_Port GPIOB
@@ -105,8 +105,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		uint8_t LEDsOn :1;  // UI LEDS are on: timer ISR - stop mode will break functionality
 
 		// 0xC0 - don't care - the device will execute HAL_PWR_EnterSTOPMode()
-		uint8_t _6 :1;	//
-		uint8_t _7 :1;  // bit 7
+		uint8_t AutoBatt :1;	// automatic light behaviour based on battery charge state
+		uint8_t AutoLight :1;  // bit 7 - automatic light behaviour based on ambient light
 	};
 	uint8_t byte;  // byte-wise representation of the above bitfield
 } mj828_activity_t;

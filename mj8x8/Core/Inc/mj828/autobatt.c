@@ -34,7 +34,7 @@ void _DisplayBatteryVoltage(void)
 		}
 
 	// TODO - specify values for specific Li-Ion cells (once battery pack is empty)
-	if(__AutoBatt.public.Vbat <= 4200 && __AutoBatt.public.Vbat > 1)  // below 4.2V (as displayed on DP832)
+	if(__AutoBatt.public.Vbat <= 4200 && __AutoBatt.public.Vbat > 1)  // below 4.2V (as measured by internal ADC)
 		{
 			Device->led->led[Red].Shine(state);
 		}
@@ -106,16 +106,16 @@ static void _Do(void)
 			i = 0;
 		}
 
-	// TODO - take action based on battery states
-//	if(__AutoBatt._ADCval <= 1714 && __AutoBatt._ADCval > 1)	// below 4.2V (as displayed on DP832)
-//		{
-//			MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 25, 2);	// send out event of battery < 25%
-//		}
-//
-//	if(__AutoBatt._ADCval > 1302)  // 4.2V to 5.4V
-//		{
-//			MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 50, 2);	// send out event of battery < 50%
-//		}
+	// TODO - take action based on battery states, Vbat values are example values only
+	if(__AutoBatt.public.Vbat <= 4500 && __AutoBatt.public.Vbat > 1)	// TODO - replace example value with meaningful one (as measured by internal ADC)
+		{
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 10, 2);	//
+		}
+
+	if(__AutoBatt.public.Vbat > 4900)  // TODO - replace example value with meaningful one
+		{
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 50, 2);	//
+		}
 }
 
 static __autobatt_t __AutoBatt =  // instantiate autobatt_t actual and set function pointers
