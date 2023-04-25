@@ -7,7 +7,6 @@
 
 typedef struct	// struct describing the AutoLight functionality
 {
-	uint8_t AutoLightEnabled;	// flag indicating AutoLight is active
 	uint8_t AutoLightisOn;  // flag if AutoLight is on
 
 	void (*Do)(void);  // AutoLight functionality

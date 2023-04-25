@@ -16,7 +16,7 @@ static __autolight_t __AutoLight __attribute__ ((section (".data")));  // preall
 // implements AutoLight feature - turn light on/off automatically based on light sensor input (ADC data)
 static void _Do(void)
 {
-	if(__AutoLight.public.AutoLightEnabled)  // if AutoLight is enabled
+	if(Device->activity->AutoLight)  // if AutoLight is enabled
 		{
 			if(Device->adc->GetChannel(Darkness) > AUTOLIGHT_THRESHOLD_LIGHT_ON)  // if it is dark
 				{
@@ -60,7 +60,6 @@ static void _Do(void)
 static __autolight_t __AutoLight =  // instantiate autolight_t actual and set function pointers
 	{  //
 	.public.Do = &_Do,  //	that one method that does its thing
-	.public.AutoLightEnabled = 0,  //	set to off
 	.public.AutoLightisOn = 0,  // set to off
 	._AutoLightTimer = 0,  // Initialize timer
 	};

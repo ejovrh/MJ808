@@ -7,9 +7,9 @@ typedef struct message_handler_t	// sends and receives (stores) CAN messages, ke
 {  //
 	device_t *Devices;  // pointer to indicator of devices discovered, see device_t definition
 
-	void (*const SendMessage)(const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len);  // sends message out to CAN bus
-	can_msg_t* (*const GetMessage)(void);  // downloads received message by local CAN IC
-	void (*const SetMessage)(const can_msg_t *const msg);  // downloads received message by local CAN IC
+	void (*const SendMessage)(const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len);  // loads outbound CAN message into local CAN IC and asks it to transmit it onto the bus
+	can_msg_t* (*const GetMessage)(void);  // RX - returns reference to received message stored in message handler object
+	void (*const SetMessage)(const can_msg_t *const msg);  // RX - upload CAN message into self at physical reception from FIFO
 } message_handler_t;
 
 void message_handler_ctor(can_t *const in_can);  // the message handler constructor
