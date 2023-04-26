@@ -3,8 +3,8 @@
 
 #include "main.h"
 
-// TODO - specify Li-Ion cell specific values
 #define BATTERY_FULL 8400	// mV, 2SxP pack, LiIon cells
+#define BBATTERY_TURN_ON_THRESHOLD 5800	// do not turn on below that voltage (approx. 10% charge)
 #define BATTERY_EMPTY	5500	// mV, 2SxP pack, LiIon cells
 #define ADC_MEASURE_ITERATIONS 40	// iterations for measurement data value average
 

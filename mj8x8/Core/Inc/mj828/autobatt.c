@@ -33,28 +33,27 @@ void _DisplayBatteryVoltage(void)
 			state = 0;
 		}
 
-	// TODO - specify values for specific Li-Ion cells (once battery pack is empty)
-	if(__AutoBatt.public.Vbat <= 4200 && __AutoBatt.public.Vbat > 1)  // below 4.2V (as measured by internal ADC)
+	if(__AutoBatt.public.Vbat <= 6075 && __AutoBatt.public.Vbat > 1)  // below 6.1V (as measured by internal ADC) - below 20% charge
 		{
 			Device->led->led[Red].Shine(state);
 		}
 
-	if(__AutoBatt.public.Vbat > 4200)  // 1302 - 4.2V to 5.4V
+	if(__AutoBatt.public.Vbat > 6075)  // 1890 - 6.1V to 6.6V - above approx. 20% charge
 		{
 			Device->led->led[Battery1].Shine(state);
 		}
 
-	if(__AutoBatt.public.Vbat > 5400)  // 1675 - 5.4V to 6.6V
+	if(__AutoBatt.public.Vbat > 6650)  // 2070 - 6.6V to 7.8V	- above approx. 40% charge
 		{
 			Device->led->led[Battery2].Shine(state);
 		}
 
-	if(__AutoBatt.public.Vbat > 6600)  // 2048 - 6.6V to 7.8V
+	if(__AutoBatt.public.Vbat > 7200)  // 2245 - 7.2V to 7.8V - above approx. 60% charge
 		{
 			Device->led->led[Battery3].Shine(state);
 		}
 
-	if(__AutoBatt.public.Vbat > 7800)  // 2421 - above 7.8V
+	if(__AutoBatt.public.Vbat > 7800)  // 2430 - above 7.8V	- above approx. 80% charge
 		{
 			Device->led->led[Battery4].Shine(state);
 		}
@@ -107,9 +106,10 @@ static void _Do(void)
 		}
 
 	// TODO - take action based on battery states, Vbat values are example values only
-	if(__AutoBatt.public.Vbat <= 4500 && __AutoBatt.public.Vbat > 1)	// TODO - replace example value with meaningful one (as measured by internal ADC)
+	if(__AutoBatt.public.Vbat <= 5800 && __AutoBatt.public.Vbat > 1)	// if battery state below 10%)
 		{
-			MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 10, 2);	//
+			Device->led->led[Red].Shine(BLINK);  // indicate
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 10, 2);	// send out event with 10% as argument
 		}
 
 	if(__AutoBatt.public.Vbat > 4900)  // TODO - replace example value with meaningful one
