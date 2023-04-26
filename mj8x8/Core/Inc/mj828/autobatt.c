@@ -18,7 +18,7 @@ static uint32_t tempvrefint;	// ditto
 static uint32_t temptemp;  // ditto
 
 // display battery charge status depending on ADC read
-void _DisplayBatteryVoltage(void)
+static void _DisplayBatteryVoltage(void)
 {
 	static uint8_t state;
 
