@@ -1,0 +1,3 @@
+[submodule "mj8x8/STM32CubeF0"]
+	path = mj8x8/STM32CubeF0
+	url = https://github.com/STMicroelectronics/STM32CubeF0.git
