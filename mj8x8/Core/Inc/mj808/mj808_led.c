@@ -38,7 +38,7 @@ static void _MacNamaraFader(void)
 		{
 			FRONT_LIGHT_CCR = _fade_fransfer[i++];
 
-			if(i == Device->led->led[Front].ocr && __LED._BlinkFlags == 0)
+			if(FRONT_LIGHT_CCR >= Device->led->led[Front].ocr && __LED._BlinkFlags == 0)
 				Device->StopTimer(&htim14);  // stop the timer
 		}
 

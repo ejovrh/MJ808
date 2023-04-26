@@ -106,16 +106,16 @@ static void _Do(void)
 		}
 
 	// TODO - take action based on battery states, Vbat values are example values only
-	if(__AutoBatt.public.Vbat <= 5800 && __AutoBatt.public.Vbat > 1)	// if battery state below 10%)
-		{
-			Device->led->led[Red].Shine(BLINK);  // indicate
-			MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 10, 2);	// send out event with 10% as argument
-		}
+//	if(__AutoBatt.public.Vbat <= 5800 && __AutoBatt.public.Vbat > 1)	// if battery state below 10%)
+//		{
+//			Device->led->led[Red].Shine(BLINK);  // indicate
+//			MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 10, 2);	// send out event with 10% as argument
+//		}
 
-	if(__AutoBatt.public.Vbat > 4900)  // TODO - replace example value with meaningful one
-		{
-			MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 50, 2);	//
-		}
+//	if(__AutoBatt.public.Vbat > 4900)  // TODO - replace example value with meaningful one
+//		{
+//			MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 50, 2);	//
+//		}
 }
 
 static __autobatt_t __AutoBatt =  // instantiate autobatt_t actual and set function pointers

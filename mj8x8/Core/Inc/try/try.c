@@ -10,7 +10,7 @@ typedef struct	// try_t actual
 	uint32_t (*_Eventfptr)(void);  // dynamically generated function pointer
 } __try_t;
 
-static __try_t   __Try   __attribute__ ((section (".data")));  // preallocate __Try object in .data
+static __try_t __Try __attribute__ ((section (".data")));  // preallocate __Try object in .data
 
 // a function that does nothing
 static inline void _DoNothing(void *foo)  // a function that does nothing
@@ -156,7 +156,7 @@ static inline void _EventHandlerEvent07(void)
 	if(Device->autolight->AutoLightisOn)  //	AutoLight feature is on
 		{
 			Device->led->led[Green].Shine(ON);	// turn green indicator on
-			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 75, 2);  // convey button press via CAN and the logic unit will do its own thing
+			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 30, 2);  // convey button press via CAN and the logic unit will do its own thing
 		}
 	else
 		{
@@ -442,7 +442,7 @@ void _EmptyBusOperation(void)
 #endif
 }
 
-static __try_t   __Try =  // instantiate can_t actual and set function pointers
+static __try_t __Try =  // instantiate can_t actual and set function pointers
 	{  //
 	.public.PopulatedBusOperation = &_PopulatedBusOperation,  // tie in function pointer
 	.public.EmptyBusOperation = &_EmptyBusOperation,  // ditto
