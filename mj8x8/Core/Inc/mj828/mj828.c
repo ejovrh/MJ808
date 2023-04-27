@@ -303,7 +303,7 @@ void EXTI0_1_IRQHandler(void)
 
 	Device->StartTimer(&htim16);  // start the button handling timer
 	Device->adc->Start();  // start the ADC peripheral
-	Device->mj8x8->StartCoreTimer();  // start time core timer
+	Device->mj8x8->StartCoreTimer();  // start core timer
 
 	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// interrupt source detection
 // Pushbutton: released - pin high, pressed - pin low
@@ -322,7 +322,7 @@ void EXTI2_3_IRQHandler(void)
 {
 	Device->StartTimer(&htim16);  // start the button handling timer
 	Device->adc->Start();  // start the ADC peripheral
-	Device->mj8x8->StartCoreTimer();  // start time core timer
+	Device->mj8x8->StartCoreTimer();  // start core timer
 
 	if(__HAL_GPIO_EXTI_GET_IT(LeverBrake_Pin))	// interrupt source detection
 // lever brake: released (no magnet) - pin high, pressed (magnet) - pin low

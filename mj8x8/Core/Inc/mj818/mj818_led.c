@@ -44,7 +44,7 @@ static void _MacNamaraFadeHandler(void)
 			REAR_LIGHT_CCR = _fade_fransfer[--i];
 
 			if(REAR_LIGHT_CCR == 0)
-				Device->activity->RearLightOn = 0;	// mark inactivity
+				Device->mj8x8->UpdateActivity(REARLIGHT, OFF);	// mark inactivity
 		}
 
 	if(BRAKE_LIGHT_CCR > Device->led->led[Brake].ocr)  // fade down
@@ -52,10 +52,10 @@ static void _MacNamaraFadeHandler(void)
 			BRAKE_LIGHT_CCR = _fade_fransfer[--j];
 
 			if(BRAKE_LIGHT_CCR == 0)
-				Device->activity->BrakeLightOn = 0;	// mark inactivity
+				Device->mj8x8->UpdateActivity(BRAKELIGHT, OFF);	// mark inactivity
 		}
 
-	if(Device->activity->RearLightOn == 0 && Device->activity->BrakeLightOn == 0)
+	if(Device->mj8x8->GetActivity(REARLIGHT) && Device->mj8x8->GetActivity(BRAKELIGHT))
 		{
 			Device->StopTimer(&htim14);  // stop the timer - LED handling
 			Device->StopTimer(&htim2);  // stop the timer - rear light PWM
@@ -76,7 +76,7 @@ static void _primitiveRearLED(uint8_t value)
 	if(value)
 		{
 			Device->StartTimer(&htim2);  // start the timer - rear light PWM
-			Device->activity->RearLightOn = 1;
+			Device->mj8x8->UpdateActivity(REARLIGHT, ON);	// mark activity
 		}
 
 	Device->led->led[Rear].ocr = value;  // set OCR value, the handler will do the rest
@@ -94,19 +94,18 @@ static void _BrakeLight(const uint8_t argument)
 
 			if(OldOCR == 0)
 				{
-					// FIXME - _BrakeLight off - sometimes light stays on (CAN seems ok)
 					Device->StopTimer(&htim3);  // stop the timer - brake light PWM
 					Device->StartTimer(&htim3);  // stop the timer - brake light PWM
 					Device->StopTimer(&htim3);  // stop the timer - brake light PWM
 				}
 
-			Device->activity->BrakeLightOn = 0;	// mark inactivity
+			Device->mj8x8->UpdateActivity(BRAKELIGHT, OFF);	// mark inactivity
 			return;
 		}
 
 	if(argument == ARG_BRAKELIGHT_ON)	// brake light on command
 		{
-			Device->activity->BrakeLightOn = 1;	// mark activity
+			Device->mj8x8->UpdateActivity(BRAKELIGHT, ON);	// mark activity
 			OldOCR = BRAKE_LIGHT_CCR;	// store original OCR value
 
 			if(BRAKE_LIGHT_CCR == 0)	// light was previously off

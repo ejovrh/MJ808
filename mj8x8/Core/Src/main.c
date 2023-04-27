@@ -1,4 +1,5 @@
 #include "main.h"	// device core config
+#include "try\try.h"	// top-level object for bus-wide device handling
 
 int main(void)
 {
@@ -19,10 +20,12 @@ int main(void)
 	mj838_ctor();
 #endif
 #if defined(MJ848_)	// LU - call derived class constructor and tie in base class
-	lu_ctor();
+	mj848_ctor();
 #endif
 
 	message_handler_ctor(Device->mj8x8->can);  // call message handler constructor
+
+	try_ctor();  // call top-level object constructor
 
 	__enable_irq();  // enable interrupts
 

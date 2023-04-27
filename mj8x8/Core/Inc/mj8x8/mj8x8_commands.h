@@ -113,7 +113,6 @@ typedef union
 //#define BLINK4X 0x04
 //#define BLINK5X 0x05
 //#define BLINK6X 0x06
-//#define UON 0x07	// TODO - convert somehow to 0x01
 
 #define DEV_LU 0x00	// logic unit device
 #define DEV_PWR_SRC 0x04	// power source device
@@ -132,7 +131,6 @@ typedef union
 #define REAR_BRAKELIGHT 0xC8	// 200
 
 // mj828 LED definitions
-// FIXME - redefine so that Device->led->Shine(BLUE | BLINK) works on mj828
 #define DEV_DB_LED 0x00
 #define RED 0x04
 #define GREEN 0x08

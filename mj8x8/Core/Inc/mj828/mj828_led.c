@@ -170,7 +170,7 @@ static void _CharliePlexingHandler()
 			__SetAllGPIOtoAnalog(&GPIO_InitStruct);	// set LED pins to initial state
 
 			Device->StopTimer(&htim14);  // stop the timer
-			Device->activity->LEDsOn = 0;	// mark inactivity
+			Device->mj8x8->UpdateActivity(LEDS, OFF);	// mark inactivity
 			return;
 		}
 
@@ -236,7 +236,7 @@ static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
 
 	__LED._ShineFlags ^= ((-(state & 0x01) ^ __LED._ShineFlags) & (1 << led));	// sets "led" bit to "state" value
 
-	Device->activity->LEDsOn |= ((__LED._ShineFlags | __LED._BlinkFlags) > 0);	// mark in/activity
+	Device->mj8x8->UpdateActivity(LEDS, (__LED._ShineFlags | __LED._BlinkFlags) > 0);	// mark in/activity
 
 	Device->StartTimer(&htim14);  // start the timer
 }

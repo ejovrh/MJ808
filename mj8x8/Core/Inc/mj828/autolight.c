@@ -16,7 +16,7 @@ static __autolight_t __AutoLight __attribute__ ((section (".data")));  // preall
 // implements AutoLight feature - turn light on/off automatically based on light sensor input (ADC data)
 static void _Do(void)
 {
-	if(Device->activity->AutoLight)  // if AutoLight is enabled
+	if(Device->mj8x8->GetActivity(AUTOLIGHT))  // if AutoLight is enabled
 		{
 			if(Device->adc->GetChannel(Darkness) > AUTOLIGHT_THRESHOLD_LIGHT_ON)  // if it is dark
 				{
