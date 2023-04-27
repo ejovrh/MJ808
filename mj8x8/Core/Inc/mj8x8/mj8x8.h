@@ -6,6 +6,9 @@
 #include "message\message.h"
 #include "stm32f0xx_hal.h"	// include HAL layer
 
+#define HEARTBEAT 0
+#define CANACTIVE 1
+
 // definitions of device/PCB layout-independent hardware pins
 #define CAN_RX_Pin GPIO_PIN_11
 #define CAN_RX_GPIO_Port GPIOA
@@ -26,6 +29,8 @@ typedef struct	// "base class" struct for mj8x8 devices
 	void (*const StartCoreTimer)(void);  // starts timer1
 	void (*const StopCoreTimer)(void);  // stops timer1
 	void (*const HeartBeat)(message_handler_t *const msg);	// default periodic heartbeat for all devices
+	void (*const UpdateActivity)(const uint8_t act, const uint8_t val);  // updates a particular activity and notifies the bus
+	uint8_t (*const GetActivity)(const uint8_t act);	// returns whether some activity is ON (1) or OFF(0)
 	void (*EmptyBusOperation)(void);	// device's default operation on empty bus, implemented in derived class
 	void (*PopulatedBusOperation)(message_handler_t *const in_msg);  // device operation on populated bus, executed by incoming msg ISR; operates by means of MsgHandler object
 	void (*DerivedSleep)(void);  // puts derived object to sleep

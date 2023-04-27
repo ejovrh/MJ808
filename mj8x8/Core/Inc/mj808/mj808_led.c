@@ -50,7 +50,7 @@ static void _MacNamaraFader(void)
 				{
 					Device->StopTimer(&htim14);  // stop the timer
 					Device->StopTimer(&htim2);  // stop the timer
-					Device->activity->FrontLightOn = 0;	// mark inactivity
+					Device->mj8x8->UpdateActivity(FRONTLIGHT, OFF);	// mark inactivity
 					__LED._ShineFlags &= ~_BV(Front);	// unset front light flag
 				}
 		}
@@ -63,16 +63,16 @@ static void _HighBeam(const uint8_t value)
 
 	if(value == ARG_HIGHBEAM_OFF)	// high beam off command
 		{
-			Device->activity->HighBeamOn = 0;	// mark inactivity
-//			__LED._ShineFlags &= ~_BV(HighBeam);	// unset high beam flag
+			Device->mj8x8->UpdateActivity(HIGHBEAM, OFF);	// mark inactivity
+			//			__LED._ShineFlags &= ~_BV(HighBeam);	// unset high beam flag
 
-			if (Device->activity->FrontLightOn)	// if front light is on
+			if(Device->mj8x8->GetActivity(FRONTLIGHT))	// if front light is on
 				{
 					FRONT_LIGHT_CCR = OldOCR;	// restore original OCR
 					return;
 				}
 			else
-				{	// FIXME - _HighBeam off - sometimes light stays on (CAN seems ok)
+				{
 					FRONT_LIGHT_CCR = 0;	// turn off light
 					Device->StopTimer(&htim2);  // stop the timer - front light PWM
 					Device->StartTimer(&htim2);
@@ -83,10 +83,10 @@ static void _HighBeam(const uint8_t value)
 
 	if(value == ARG_HIGHBEAM_ON)	// high beam on command
 		{
-			Device->activity->HighBeamOn = 1;	// mark activity
+			Device->mj8x8->UpdateActivity(HIGHBEAM, ON);	// mark activity
 //			__LED._ShineFlags |= _BV(HighBeam);	// set the high beam flag
 
-			if (Device->activity->FrontLightOn)	// if front light is on
+			if(Device->mj8x8->GetActivity(FRONTLIGHT))	// if front light is on
 				OldOCR = FRONT_LIGHT_CCR;	// store original OCR value
 			else
 				Device->StartTimer(&htim2);  // start the timer - front light PWM
@@ -126,7 +126,7 @@ static inline void _physicalFrontLED(const uint8_t value)
 	if(value)
 		{
 			Device->StartTimer(&htim2);  // start the timer - front light PWM
-			Device->activity->FrontLightOn = 1;
+			Device->mj8x8->UpdateActivity(FRONTLIGHT, ON);	// mark activity
 			__LED._ShineFlags |= _BV(Front);	// set the front light flag
 		}
 
@@ -181,7 +181,7 @@ static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
 
 	__LED._ShineFlags ^= ((-(state & 0x01) ^ __LED._ShineFlags) & (1 << led));	// sets "led" bit to "state" value
 
-	Device->activity->UtilLEDOn = ( (__LED._BlinkFlags & 0x03)  > 0);	// mark in/activity, but only for blinking (timer is needed); shining doesnt need the timer and wont set this bit
+	Device->mj8x8->UpdateActivity(UTILLED, (__LED._BlinkFlags & 0x03) > 0);	// mark in/activity, but only for blinking (timer is needed); shining doesnt need the timer and wont set this bit
 
 	if(state == BLINK)	// state blink
 		{
@@ -219,7 +219,7 @@ static void _Blinker(void)
 	if((__LED._ShineFlags | __LED._BlinkFlags) == 0)	// if there is any LED to glow at all
 		{
 			Device->StopTimer(&htim14);  // stop the timer
-			Device->activity->UtilLEDOn = 0;	// mark inactivity
+			Device->mj8x8->UpdateActivity(UTILLED, OFF);	// mark inactivity
 			return;
 		}
 
@@ -241,7 +241,7 @@ static void _Blinker(void)
 // called indirectly by timer1 (_SystemInterrupt()), handles the fading (and blinking)
 static void _LEDHandler(void)
 {
-	if (Device->activity->FrontLightOn)
+	if (Device->mj8x8->GetActivity(FRONTLIGHT))
 		_MacNamaraFader();	// fades front light pleasingly for the human eye
 
 	if (__LED._BlinkFlags)

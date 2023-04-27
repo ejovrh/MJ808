@@ -1,6 +1,8 @@
 #include "mj8x8\mj8x8.h"
 #include "message\message.h"
+#include "try/try.h"
 
+extern activity_t *_BusActivityArray[16];
 static device_t _devices;  // devices discovered on the bus
 
 typedef struct	// message_handler_t actual
@@ -29,19 +31,36 @@ void _SendMessage(const uint8_t in_command, const uint8_t in_argument, const uin
 	__MsgHandler.__can->RequestToSend(__MsgHandler.__tx_msg);  // load message into TX buffer and request to send
 }
 
+// convert the CAN SIDH to a zero-indexed device number
+static inline uint8_t SidtoNum(const uint8_t sid)
+{
+	return ((__MsgHandler.__rx_msg->sidh & 0x3C) >> 2);  // mask relevant bits and rsh and return the result
+}
+
 // RX - upload CAN message into self at physical reception from FIFO
 static void _SetMessage(const can_msg_t *const in_msg)
 {
 	uint8_t i;	// iterator for data deep copy
+	uint8_t num;	// numerical value derived from CAN SID of sender
 
 	__MsgHandler.__rx_msg->sidh = in_msg->sidh;  // deep copy
 	__MsgHandler.__rx_msg->sidl = in_msg->sidl;
 	__MsgHandler.__rx_msg->dlc = in_msg->dlc;
 
-	for(i = 0; i < CAN_MAX_MSG_LEN; ++i)	// more deep copy
+	num = SidtoNum(__MsgHandler.__rx_msg->sidh);	// convert CAN SID to zero-indexed device number
+
+	for(i = 0; i < __MsgHandler.__rx_msg->dlc; ++i)  // more deep copy
 		__MsgHandler.__rx_msg->data[i] = in_msg->data[i];
 
-	__MsgHandler.public.Devices->byte |= (1 << ((__MsgHandler.__rx_msg->sidh >> 2) & 0x0F));  // populate devices in canbus_t struct so that we know who else is on the bus
+	__MsgHandler.public.Devices->byte |= _BV(num);  // populate devices in canbus_t struct so that we know who else is on the bus
+
+	if(__MsgHandler.__rx_msg->COMMAND == CMND_ANNOUNCE)  // if it is a heartbeat message
+		{
+			if(num != CANID_SELF)
+				_BusActivityArray[num]->byte = __MsgHandler.__rx_msg->ARGUMENT;  // store the transmitted remote device status
+			else
+				return;
+		}
 }
 
 // RX - returns reference to received message stored in message handler object

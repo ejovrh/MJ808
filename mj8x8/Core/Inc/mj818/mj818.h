@@ -1,8 +1,35 @@
 #ifndef CORE_INC_MJ818_MJ818_H_
 #define CORE_INC_MJ818_MJ818_H_
 
+typedef union  // union for activity indication, see mj8x8_t's _Sleep()
+{
+	struct
+	{
+		/*  0x3F - if any of bits 0 though 5 are set - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus on
+		 * additionally: if CANBUS_ACTIVE_MASK has bits not set, CANbus will be off
+		 */
+		uint8_t DoHeartbeat :1;  // bit 0 - HeartBeat is running
+		uint8_t CANActive :1;  // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
+
+		// 0x3C - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus off
+		uint8_t _2 :1;  //
+		uint8_t _3 :1;  //
+		uint8_t RearLightOn :1;  // rear light is on: PWM - stop mode will break functionality
+		uint8_t BrakeLightOn :1;  // brake light is on: PWM - stop mode will break functionality
+
+		// 0xC0 - don't care - the device will execute HAL_PWR_EnterSTOPMode()
+		uint8_t _6 :1;  //
+		uint8_t _7 :1;	// bit 7
+	};
+	uint8_t byte;  // byte-wise representation of the above bitfield
+} mj818_activity_t;
+
 #include "main.h"
 #if defined(MJ818_)	// if this particular device is active
+#define CANID_SELF CANID_MJ818
+
+#define REARLIGHT 4
+#define BRAKELIGHT 5
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER14_PERIOD 49	// LED handling - 20ms
@@ -30,29 +57,6 @@ enum mj818_leds  // enum of lights on this device
 	  Rear,
 	  Brake
 };
-
-typedef union  // union for activity indication, see mj8x8_t's _Sleep()
-{
-	struct
-	{
-		/*  0x3F - if any of bits 0 though 5 are set - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus on
-		 * additionally: if CANBUS_ACTIVE_MASK has bits not set, CANbus will be off
-		 */
-		uint8_t DoHeartbeat :1;  // bit 0 - HeartBeat is running
-		uint8_t CANActive :1;  // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
-
-		// 0x3C - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus off
-		uint8_t _2 :1;  //
-		uint8_t _3 :1;  //
-		uint8_t RearLightOn :1;  // rear light is on: PWM - stop mode will break functionality
-		uint8_t BrakeLightOn :1;  // brake light is on: PWM - stop mode will break functionality
-
-		// 0xC0 - don't care - the device will execute HAL_PWR_EnterSTOPMode()
-		uint8_t _6 :1;  //
-		uint8_t _7 :1;	// bit 7
-	};
-	uint8_t byte;  // byte-wise representation of the above bitfield
-} mj818_activity_t;
 
 typedef struct	// struct describing devices on MJ818
 {

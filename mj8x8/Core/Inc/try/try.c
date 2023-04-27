@@ -1,6 +1,10 @@
-#include "stm32f0xx_it.h"
 #include "main.h"
 #include "try/try.h"
+
+static activity_t _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15;  // device activity containers for all 16 devices
+
+activity_t *_BusActivityArray[16] =  // array for addresses of activity containers
+	{&_0, &_1, &_2, &_3, &_4, &_5, &_6, &_7, &_8, &_9, &_10, &_11, &_12, &_13, &_14, &_15};
 
 typedef struct	// try_t actual
 {
@@ -32,6 +36,7 @@ static inline void _EventHandlerEventError(void)
 #ifdef MJ838_
 	;
 #endif
+	;
 }
 
 // mj808 center button hold
@@ -39,6 +44,9 @@ static inline void _EventHandlerEventError(void)
 static inline void _EventHandlerEvent02(void)
 {
 #ifdef MJ808_
+
+	if(Try->BusActivity->mj828->AutoLight)
+		return;
 
 	if(Device->button->button[PushButton]->Hold)
 		{
@@ -52,6 +60,7 @@ static inline void _EventHandlerEvent02(void)
 		}
 #endif
 #ifdef MJ828_
+
 	if(Device->button->button[LeverBrake]->Momentary)
 		{
 			Device->led->led[Red].Shine(ON);
@@ -66,6 +75,7 @@ static inline void _EventHandlerEvent02(void)
 #ifdef MJ838_
 	;
 #endif
+	;
 }
 
 // mj808 button toggle
@@ -96,6 +106,7 @@ static inline void _EventHandlerEvent03(void)
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_02, (FRONT_HIGHBEAM | OFF), 2);  // turn off (0xc9 is a special value)
 		}
 #endif
+	;
 }
 
 // mj828 center pushbutton momentary
@@ -104,6 +115,7 @@ static inline void _EventHandlerEvent04(void)
 #ifdef MJ828_
 	Device->autobatt->DisplayBatteryVoltage();  // light up BatteryX LEDs according to voltage read at Vbat
 #endif
+	;
 }
 
 // mj828 pushbutton hold
@@ -121,32 +133,30 @@ static inline void _EventHandlerEvent05(void)
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
 		}
 #endif
+	;
 }
 
 // mj828 pushbutton toggle
 static inline void _EventHandlerEvent06(void)
 {
 #ifdef MJ828_
+
 	if(Device->button->button[PushButton]->Toggle)
 		{
 			Device->led->led[Yellow].Shine(ON);
 
-//			Device->led->led[Battery2].Shine(BLINK);
-
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, ON, 2);	//
-			Device->activity->AutoLight = 1;
-
+			Device->mj8x8->UpdateActivity(AUTOLIGHT, ON);  // mark activity
 		}
 	else
 		{
 			Device->led->led[Yellow].Shine(OFF);
 
-//			Device->led->led[Battery2].Shine(OFF);
-
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_01, OFF, 2);  //
-			Device->activity->AutoLight = 0;
+			Device->mj8x8->UpdateActivity(AUTOLIGHT, OFF);	// mark inactivity
 		}
 #endif
+	;
 }
 
 // AutoLight detects darkness/light
@@ -164,6 +174,7 @@ static inline void _EventHandlerEvent07(void)
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
 		}
 #endif
+	;
 }
 
 //	AutoBattLight detects battery status
@@ -180,49 +191,49 @@ static inline void _EventHandlerEvent08(void)
 ////
 //static inline void _EventHandlerEvent09(void)
 //{
-//
+//	;
 //}
 //
 ////
 //static inline void _EventHandlerEvent10(void)
 //{
-//
+//	;
 //}
 //
 ////
 //static inline void _EventHandlerEvent10(void)
 //{
-//
+//	;
 //}
 //
 ////
 //static inline void _EventHandlerEvent12(void)
 //{
-//
+//	;
 //}
 //
 ////
 //static inline void _EventHandlerEvent13(void)
 //{
-//
+//	;
 //}
 //
 ////
 //static inline void _EventHandlerEvent14(void)
 //{
-//
+//	;
 //}
 //
 ////
 //static inline void _EventHandlerEvent15(void)
 //{
-//
+//	;
 //}
 //
 ////
 //static inline void _EventHandlerEvent16(void)
 //{
-//
+//	;
 //}
 
 //
@@ -250,15 +261,14 @@ static uint32_t (*_BranchtableEventHandler[])(void) =  // branch table
 void _EventHandler(const uint8_t val)
 {
 #ifdef MJ808_
-	Device->activity->ButtonPressed = ((Device->button->button[PushButton]->Momentary) > 0);  // translate button press into true or false
+	Device->mj8x8->UpdateActivity(BUTTONPRESSED, (Device->button->button[PushButton]->Momentary) > 0);  // translate button press into true or false
 #endif
 #ifdef MJ828_
-	Device->activity->ButtonPressed = (  //	set device to state according to button press
+	Device->mj8x8->UpdateActivity(BUTTONPRESSED,  //	set device to state according to button press
 	(  //
 	Device->button->button[PushButton]->Momentary ||  // ORed byte values indicate _some_ button press is active
 	Device->button->button[LeverFront]->Momentary ||  //
 	Device->button->button[LeverBrake]->Momentary) > 0  // translate the above fact into true or false
-//
 	);
 #endif
 
@@ -418,6 +428,19 @@ void _PopulatedBusOperation(message_handler_t *const in_handler)
 {
 	can_msg_t *msg = in_handler->GetMessage();
 
+//	if((msg->COMMAND& GET_DEVICE_STATUS) == GET_DEVICE_STATUS)	// if asked for device status of self
+//		{
+//			MsgHandler->SendMessage(SET_DEVICE_STATUS, Device->activity->byte, 2);	// reply broadcast with own device status
+//			return;
+//		}
+//
+//	if((msg->COMMAND& SET_DEVICE_STATUS) == SET_DEVICE_STATUS)	// set device status identified by SID
+//		{
+//			uint8_t *statusptr = (uint8_t *) __Try._status;
+//			*(statusptr + ( (msg->sidh >> 2) & 0x0F) * sizeof(uint8_t) ) = msg->ARGUMENT;  // set the status of the particular device identified by its SID
+//			return;
+//		}
+
 	if((msg->COMMAND& CLASS_MSG_BUTTON_EVENT) != CLASS_MSG_BUTTON_EVENT)	// get out if it isn't the proper message
 	return;
 
@@ -434,7 +457,7 @@ void _EmptyBusOperation(void)
 	;
 #endif
 #ifdef MJ818_
-	if(Device->activity->RearLightOn == 0)  // run once: check that e.g. rear light is off (which it is on a lonely power on)
+	if(Device->mj8x8->GetActivity(REARLIGHT) == 0)  // run once: check that e.g. rear light is off (which it is on a lonely power on)
 		Device->led->Shine(10);  // operate on component part
 #endif
 #ifdef MJ828_
@@ -444,9 +467,94 @@ void _EmptyBusOperation(void)
 
 static __try_t __Try =  // instantiate can_t actual and set function pointers
 	{  //
+	.public.BusActivity = (status_t*) &_BusActivityArray,  // bus-wide device status of all devices
 	.public.PopulatedBusOperation = &_PopulatedBusOperation,  // tie in function pointer
 	.public.EmptyBusOperation = &_EmptyBusOperation,  // ditto
 	.public.EventHandler = &_EventHandler  // ditto
 	};
+
+void try_ctor(void)
+{
+#if defined futureMJ_0
+	_BusActivityArray[0] = (activity_t*) Device->activity;
+#endif
+
+#if defined futureMJ_1
+	_BusActivityArray[1] = (activity_t*) Device->activity;
+#endif
+
+#if defined futureMJ_2
+	_BusActivityArray[2] = (activity_t*) Device->activity;
+#endif
+
+#if defined MJ828_
+	_BusActivityArray[3] = (activity_t*) Device->activity;
+#endif
+
+#if defined MJ838_
+	_BusActivityArray[4] = (activity_t*) Device->activity;
+#endif
+
+#if defined futureMJ_5
+	_BusActivityArray[5] = (activity_t*) Device->activity;
+#endif
+
+#if defined futureMJ_6
+	_BusActivityArray[6] = (activity_t*) Device->activity;
+#endif
+
+#if defined futureMJ_7
+	_BusActivityArray[8] = (activity_t*) Device->activity;
+#endif
+
+#if defined MJ808_
+	_BusActivityArray[8] = (activity_t*) Device->activity;
+#endif
+
+#if defined MJ818_
+	_BusActivityArray[9] = (activity_t*) Device->activity;
+#endif
+
+#if defined futureMJ_10
+	_BusActivityArray[10] = (activity_t*) Device->activity;
+#endif
+
+#if defined futureMJ_11
+	_BusActivityArray[11] = (activity_t*) Device->activity;
+#endif
+
+#if defined futureMJ_12
+	_BusActivityArray[12] = (activity_t*) Device->activity;
+#endif
+
+#if defined futureMJ_13
+	_BusActivityArray[13] = (activity_t*) Device->activity;
+#endif
+
+#if defined futureMJ_14
+	_BusActivityArray[14] = (activity_t*) Device->activity;
+#endif
+
+#if defined futureMJ_15
+	_BusActivityArray[15] = (activity_t*) Device->activity;
+#endif
+
+	Try->BusActivity->_0 = _BusActivityArray[0];
+	Try->BusActivity->_1 = _BusActivityArray[1];
+	Try->BusActivity->_2 = _BusActivityArray[2];
+	Try->BusActivity->mj828 = (mj828_activity_t*) _BusActivityArray[3];
+	Try->BusActivity->mj838 = (mj838_activity_t*) _BusActivityArray[4];
+	Try->BusActivity->_5 = _BusActivityArray[5];
+	Try->BusActivity->_6 = _BusActivityArray[6];
+	Try->BusActivity->_7 = _BusActivityArray[7];
+	Try->BusActivity->mj808 = (mj808_activity_t*) _BusActivityArray[8];
+	Try->BusActivity->mj818 = (mj818_activity_t*) _BusActivityArray[9];
+	Try->BusActivity->_10 = _BusActivityArray[10];
+	Try->BusActivity->_11 = _BusActivityArray[11];
+	Try->BusActivity->_12 = _BusActivityArray[12];
+	Try->BusActivity->_13 = _BusActivityArray[13];
+	Try->BusActivity->_14 = _BusActivityArray[14];
+	Try->BusActivity->_15 = _BusActivityArray[15];
+}
 
 try_t *const Try = &__Try.public;  // set pointer to Try public part

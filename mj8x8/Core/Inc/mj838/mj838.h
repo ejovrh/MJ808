@@ -1,20 +1,6 @@
 #ifndef CORE_INC_MJ838_MJ838_H_
 #define CORE_INC_MJ838_MJ838_H_
 
-#include "main.h"
-#if defined(MJ838_)	// if this particular device is active
-
-#define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
-#define TIMER17_PERIOD 24	// event handling - 2.5ms
-
-#include "mj8x8\mj8x8.h"
-#include "button\button.h"
-
-// definitions of device/PCB layout-dependent hardware pins
-#define TCAN334_Standby_Pin GPIO_PIN_1	//	defined here but initialised in mj8x8.c // TODO - move to PA?
-#define TCAN334_Standby_GPIO_Port GPIOB	//	defined here but initialised in mj8x8.c
-// definitions of device/PCB layout-dependent hardware pins
-
 typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 {
 	struct
@@ -37,6 +23,21 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 	};
 	uint8_t byte;  // byte-wise representation of the above bitfield
 } mj838_activity_t;
+
+#include "main.h"
+#if defined(MJ838_)	// if this particular device is active
+#define CANID_SELF CANID_MJ838
+
+#define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
+#define TIMER17_PERIOD 24	// event handling - 2.5ms
+
+#include "mj8x8\mj8x8.h"
+#include "button\button.h"
+
+// definitions of device/PCB layout-dependent hardware pins
+#define TCAN334_Standby_Pin GPIO_PIN_1	//	defined here but initialised in mj8x8.c // TODO - move to PA?
+#define TCAN334_Standby_GPIO_Port GPIOB	//	defined here but initialised in mj8x8.c
+// definitions of device/PCB layout-dependent hardware pins
 
 typedef struct	// struct describing devices on MJ838
 {

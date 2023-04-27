@@ -40,7 +40,7 @@ static void _Heartbeat(message_handler_t *const msg)
 	 */
 #ifdef USE_HEARTBEAT
 	if(__MJ8x8.__HeartBeatCounter == __MJ8x8.__NumericalCAN_ID)  // see if this counter iteration is our turn
-		msg->SendMessage(CMND_ANNOUNCE, 0x00, 1);  // if so, broadcast CAN heartbeat message
+		msg->SendMessage(CMND_ANNOUNCE, Device->activity->byte, 2);  // if so, broadcast CAN heartbeat message and disguise device status in it
 #endif
 
 	++__MJ8x8.__HeartBeatCounter;  // increment the iteration counter
@@ -75,12 +75,32 @@ static void _StartTimer1(void)
 	HAL_TIM_Base_Start_IT(&htim1);  // stop the timer
 }
 
+// updates a particular activity and notifies the bus
+static void _UpdateActivity(const uint8_t act, const uint8_t val)
+{
+	if(val == OFF)
+		Device->activity->byte &= ~_BV(act);  // clear the bit
+
+	if(val == ON)
+		Device->activity->byte |= _BV(act);  // set it
+
+	MsgHandler->SendMessage(CMND_ANNOUNCE, Device->activity->byte, 2);	// notify the bus of the change
+}
+
+// returns whether some activity is ON (1) or OFF(0)
+static inline uint8_t _GetActivity(const uint8_t act)
+{
+	return (Device->activity->byte & _BV(act));
+}
+
 __mj8x8_t __MJ8x8 =  // instantiate mj8x8_t actual and set function pointers
 	{  //
 	.public.StartCoreTimer = &_StartTimer1,  // timer1 stop - see can_t for start
 	.public.StopCoreTimer = &_StopTimer1,  // timer1 stop - see can_t for start
 	.public.HeartBeat = &_Heartbeat,  // implement device-agnostic default behaviour - heartbeat
-	.public.EmptyBusOperation = &_DoNothing  // implement device-agnostic default behaviour - do nothing, usually an override happens
+	.public.EmptyBusOperation = &_DoNothing,  // implement device-agnostic default behaviour - do nothing, usually an override happens
+	.public.UpdateActivity = &_UpdateActivity,  // updates a particular activity and notifies the bus
+	.public.GetActivity = &_GetActivity  // returns whether some activity is ON (1) or OFF(0)
 	};
 
 // system clock config
@@ -232,7 +252,7 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	__MJ8x8.public.can->Timer1Start = &_StartTimer1;  //
 
 	__MJ8x8.public.Sleep = &_Sleep;  // puts device to sleep
-	__MJ8x8.public.DerivedSleep = &_DoNothing,  // the derived object implements its own special sleep method
+	__MJ8x8.public.DerivedSleep = &_DoNothing;  // the derived object implements its own special sleep method
 
 	//HAL_NVIC_SetPriority(SysTick_IRQn, 2, 0);
 	HAL_SuspendTick();
