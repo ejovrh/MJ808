@@ -5,6 +5,8 @@
 #include "try\try.h"	// top-level mj8x8 object for consolidated behaviour code
 #include "mj838\mj838.h"
 
+#include "mj838\autodrive.h"	// auto-drive detection functionality
+
 TIM_HandleTypeDef htim17;  // event handling - 2.5ms
 
 // TODO - these shouldn't really be here...
