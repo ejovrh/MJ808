@@ -50,10 +50,22 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #include "mj838\autodrive.h"
 
 // definitions of device/PCB layout-dependent hardware pins
-#define ZeroCross_Pin GPIO_PIN_0
-#define ZeroCross_GPIO_Port GPIOA
 #define TCAN334_Standby_Pin GPIO_PIN_15	//	defined here but initialised in mj8x8.c
 #define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
+#define ZeroCross_Pin GPIO_PIN_0
+#define ZeroCross_GPIO_Port GPIOA
+#define SW1_CTRL_Pin	GPIO_PIN_2	// solid-state relay NC
+#define SW1_CTRL_GPIO_Port GPIOA
+#define SW2_CTRL_Pin	GPIO_PIN_3	// solid-state relay NC
+#define SW2_CTRL_GPIO_Port GPIOA
+#define SW_CA_CTRL_Pin	GPIO_PIN_4	// solid-state relay NO
+#define SW_CA_CTRL_GPIO_Port GPIOA
+#define SW_CB_CTRL_Pin	GPIO_PIN_5	// solid-state relay NO
+#define SW_CB_CTRL_GPIO_Port GPIOA
+#define SW_CC_CTRL_Pin	GPIO_PIN_6	// solid-state relay NO
+#define SW_CC_CTRL_GPIO_Port GPIOA
+#define SW9_CTRL_Pin	GPIO_PIN_7	// solid-state relay NO
+#define SW9_CTRL_GPIO_Port GPIOA
 
 // definitions of device/PCB layout-dependent hardware pins
 
