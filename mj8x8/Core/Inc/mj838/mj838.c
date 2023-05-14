@@ -51,6 +51,7 @@ static inline void _GPIOInit(void)
 // Timer init - device specific
 static inline void _TimerInit(void)
 {
+	// input capture of zero-cross signal on rising edge
 	htim2.Instance = TIM2;
 	htim2.Init.Prescaler = TIMER_PRESCALER;
 	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
