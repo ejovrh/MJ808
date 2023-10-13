@@ -188,7 +188,7 @@
 <wire x1="32" y1="3" x2="32" y2="32" width="0.1524" layer="49"/>
 <wire x1="32" y1="32" x2="3" y2="32" width="0.1524" layer="49"/>
 <text x="4" y="9.25" locked="yes" size="1" layer="29" font="vector" ratio="12" rot="R90" align="center">MJfoo POC
-ejovrh rev.1</text>
+ejovrh rev.1a</text>
 <wire x1="34" y1="32" x2="34" y2="3" width="2" layer="29" locked="yes"/>
 <wire x1="34" y1="3" x2="32" y2="1" width="2" layer="29" curve="-90" locked="yes"/>
 <wire x1="32" y1="1" x2="3" y2="1" width="2" layer="29" locked="yes"/>
@@ -1439,7 +1439,6 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <smd name="5_GND" x="3.81" y="-0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
 <smd name="3_T_NRST" x="2.54" y="-0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
 <smd name="1_TVCC" x="1.27" y="-0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
-<text x="2.54" y="0" size="0.5" layer="25" rot="R180" align="center">&gt;NAME</text>
 <hole x="0" y="0" drill="0.9906"/>
 <hole x="5.08" y="-1.016" drill="0.9906"/>
 <hole x="5.08" y="1.016" drill="0.9906"/>
@@ -1465,13 +1464,7 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <vertex x="1.6637" y="0.2413"/>
 <vertex x="1.27" y="0.2413"/>
 </polygon>
-<text x="6" y="0" size="0.5" layer="27" font="vector" rot="R90" align="center">&gt;VALUE</text>
-<text x="1.27" y="-1.27" size="0.5" layer="25" font="vector" rot="R180" align="bottom-center">1</text>
-<text x="1.27" y="1.27" size="0.5" layer="25" font="vector" rot="R180" align="top-center">2</text>
-<text x="2.54" y="-1.27" size="0.5" layer="25" font="vector" rot="R180" align="bottom-center">3</text>
-<text x="2.54" y="1.27" size="0.5" layer="25" font="vector" rot="R180" align="top-center">4</text>
-<text x="3.81" y="-1.27" size="0.5" layer="25" font="vector" rot="R180" align="bottom-center">5</text>
-<text x="3.81" y="1.27" size="0.5" layer="25" font="vector" rot="R180" align="top-center">6</text>
+<text x="5.1" y="0" size="0.5" layer="21" font="vector" align="center">SWD</text>
 </package>
 </packages>
 </library>
@@ -1961,6 +1954,11 @@ design rules under a new name.</description>
 <attribute name="POPULARITY" value="98" x="25" y="29.75" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="27.54" y="32.925" size="1.27" layer="27" rot="R180"/>
 </element>
+<element name="3V3" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X02" package3d_urn="urn:adsk.eagle:package:22435/2" value="3V3" x="13" y="27" smashed="yes" rot="R270">
+<attribute name="NAME" x="13" y="23.75" size="1" layer="25" align="center"/>
+<attribute name="POPULARITY" value="98" x="13" y="27" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="VALUE" x="9.825" y="29.54" size="1.27" layer="27" rot="R270"/>
+</element>
 </elements>
 <signals>
 <signal name="GND">
@@ -2037,6 +2035,7 @@ design rules under a new name.</description>
 <contactref element="J2" pad="1"/>
 <contactref element="C401" pad="2"/>
 <via x="8.875" y="24.875" extent="1-16" drill="0.35"/>
+<contactref element="3V3" pad="1"/>
 </signal>
 <signal name="BAT+" class="1">
 <contactref element="IC202" pad="EN"/>
@@ -2111,14 +2110,17 @@ design rules under a new name.</description>
 <wire x1="2.9875" y1="22.88" x2="9.125" y2="22.88" width="0.25" layer="16"/>
 <wire x1="9.125" y1="22.88" x2="12.975" y2="22.88" width="0.25" layer="16"/>
 <wire x1="9.125" y1="22.025" x2="9.125" y2="22.88" width="0.25" layer="16"/>
-<wire x1="12.975" y1="20.875" x2="12.975" y2="22.75" width="0.25" layer="16"/>
-<wire x1="12.975" y1="22.75" x2="12.975" y2="22.88" width="0.25" layer="16"/>
+<wire x1="12.975" y1="20.875" x2="12.975" y2="22.88" width="0.25" layer="16"/>
 <wire x1="18.65" y1="24.98" x2="18.75" y2="24.88" width="0.25" layer="16"/>
 <wire x1="18.75" y1="24.88" x2="18.75" y2="22.88" width="0.25" layer="16"/>
 <wire x1="18.45" y1="25.08" x2="18.65" y2="25.08" width="0.25" layer="1"/>
 <wire x1="18.65" y1="25.08" x2="18.75" y2="24.98" width="0.25" layer="1"/>
 <wire x1="18.65" y1="24.98" x2="18.75" y2="24.98" width="0.25" layer="16"/>
-<wire x1="12.975" y1="22.75" x2="12.975" y2="22.75" width="0.25" layer="16"/>
+<contactref element="3V3" pad="2"/>
+<wire x1="13" y1="25.73" x2="13.275" y2="26.005" width="0.25" layer="1"/>
+<wire x1="18.45" y1="25.33" x2="17.775" y2="26.005" width="0.25" layer="1"/>
+<wire x1="18.45" y1="25.33" x2="18.45" y2="25.08" width="0.25" layer="1"/>
+<wire x1="13.275" y1="26.005" x2="17.775" y2="26.005" width="0.25" layer="1"/>
 </signal>
 <signal name="SYS_SWDIO" class="3">
 <contactref element="SWD101" pad="2_T_SWDIO"/>
