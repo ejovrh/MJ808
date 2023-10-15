@@ -2225,12 +2225,9 @@ design rules under a new name.</description>
 <contactref element="C401" pad="2"/>
 </signal>
 <signal name="DIM_BRAKE" class="3">
-<contactref element="IC302" pad="15_PB1"/>
 <contactref element="IC506" pad="DIM"/>
 <via x="29.25" y="16" extent="1-16" drill="0.35"/>
 <via x="15.5" y="22.5" extent="1-16" drill="0.35"/>
-<wire x1="15.5" y1="22.5" x2="15.5" y2="21.08" width="0.25" layer="1"/>
-<wire x1="15.42" y1="21" x2="15.5" y2="21.08" width="0.25" layer="1"/>
 <wire x1="28.19" y1="15.52" x2="28.77" y2="15.52" width="0.25" layer="1"/>
 <wire x1="28.77" y1="15.52" x2="29.25" y2="16" width="0.25" layer="1"/>
 <wire x1="26.75" y1="16" x2="29.25" y2="16" width="0.25" layer="16"/>
@@ -2240,6 +2237,11 @@ design rules under a new name.</description>
 <wire x1="17.25" y1="22.5" x2="19.5" y2="20.25" width="0.25" layer="16"/>
 <wire x1="21" y1="18" x2="19.5" y2="19.5" width="0.25" layer="16"/>
 <wire x1="24.75" y1="18" x2="21" y2="18" width="0.25" layer="16"/>
+<contactref element="IC302" pad="12_PA6"/>
+<wire x1="15.5" y1="22.5" x2="16.82821875" y2="22.5" width="0.25" layer="1"/>
+<wire x1="16.82821875" y1="22.5" x2="17.025" y2="22.30321875" width="0.25" layer="1"/>
+<wire x1="17.025" y1="22.30321875" x2="17.025" y2="21.505" width="0.25" layer="1"/>
+<wire x1="17.025" y1="21.505" x2="17" y2="21.48" width="0.25" layer="1"/>
 </signal>
 <signal name="DIM_REAR" class="3">
 <contactref element="IC302" pad="23_PA15"/>

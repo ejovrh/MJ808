@@ -7,7 +7,7 @@
 #include "mj808\mj808_led.c"	// concrete device-specific LED functions
 #include "mj808\mj808_button.c"	// concrete device-specific button functions
 
-TIM_HandleTypeDef htim2;	// front light PWM on channel 2
+TIM_HandleTypeDef htim3;	// front light PWM on channel 3
 TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 TIM_HandleTypeDef htim16;  // Timer16 object - button handling - 25ms
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
@@ -25,10 +25,8 @@ static inline void _GPIOInit(void)
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
 
-	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
-
-	HAL_GPIO_WritePin(GPIOB, RedLED_Pin, GPIO_PIN_SET);  //	high - LED off
-	HAL_GPIO_WritePin(GPIOB, GreenLED_Pin, GPIO_PIN_SET);  // high - LED off
+	HAL_GPIO_WritePin(GPIOA, RedLED_Pin, GPIO_PIN_SET);  //	high - LED off
+	HAL_GPIO_WritePin(GPIOA, GreenLED_Pin, GPIO_PIN_SET);  // high - LED off
 
 	GPIO_InitStruct.Pin = TCAN334_Standby_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -51,7 +49,7 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;  // activate pulldown resistor
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	GPIO_InitStruct.Alternate = GPIO_AF2_TIM2;	// alternate function2: timer2 channel 2 PWM output
+	GPIO_InitStruct.Alternate = GPIO_AF1_TIM3;	// alternate function1: timer3 channel 1 PWM output
 	HAL_GPIO_Init(FrontLED_GPIO_Port, &GPIO_InitStruct);
 }
 
@@ -67,28 +65,28 @@ static inline void _TimerInit(void)
 	TIM_OC_InitTypeDef sConfigOC =
 		{0};
 
-	// Timer2 init - front light PWM
-	htim2.Instance = TIM2;
-	htim2.Init.Prescaler = 0;  // scale by 1
-	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;	// up counting
-	htim2.Init.Period = 99;  // count to 100
-	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;	// no division
-	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;	// no pre-load
+	// Timer3 init - front light PWM
+	htim3.Instance = TIM3;
+	htim3.Init.Prescaler = 0;  // scale by 1
+	htim3.Init.CounterMode = TIM_COUNTERMODE_UP;	// up counting
+	htim3.Init.Period = 99;  // count to 100
+	htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;	// no division
+	htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;	// no pre-load
 
 	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;	// we shall run from our internal oscillator
-	HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);  // commit it
-	HAL_TIM_PWM_Init(&htim2);  // commit it
+	HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig);  // commit it
+	HAL_TIM_PWM_Init(&htim3);  // commit it
 
 	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);	// commit it
+	HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig);	// commit it
 
 	sConfigOC.OCMode = TIM_OCMODE_PWM1;
 	sConfigOC.Pulse = LED_OFF;	// 0 to 100% duty cycle in decimal numbers
 	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-	HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2);  // commit it
-	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);  // start the timer
+	HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1);  // commit it
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);  // start the timer
 
 	// timer 17 - event handling - 2.5ms
 	htim17.Instance = TIM17;
@@ -147,8 +145,8 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 {
 	HAL_TIM_Base_Stop_IT(timer);  // stop the timer
 
-	if(timer->Instance == TIM2)  // front led PWM
-		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
+	if(timer->Instance == TIM3)  // front led PWM
+		__HAL_RCC_TIM3_CLK_DISABLE();  // stop the clock
 
 	if(timer->Instance == TIM14)  // led handling
 		__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
@@ -163,7 +161,7 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 // starts timer identified by argument
 static void _StartTimer(TIM_HandleTypeDef *timer)
 {
-	if(timer->Instance == TIM2)  // front LED PWM
+	if(timer->Instance == TIM3)  // front LED PWM
 		{
 			TIM_OC_InitTypeDef sConfigOC =
 				{0};
@@ -173,11 +171,11 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 			sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 			sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 
-			// Timer2 init - front light PWM
-			__HAL_RCC_TIM2_CLK_ENABLE();// start the clock
+			// Timer3 init - front light PWM
+			__HAL_RCC_TIM3_CLK_ENABLE();// start the clock
 			HAL_TIM_PWM_Init(timer);  //
-			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_2);  //
-			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_2);  // start the timer
+			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_1);  //
+			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_1);  // start the timer
 			return;
 		}
 

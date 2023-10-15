@@ -43,8 +43,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 // definitions of device/PCB layout-dependent hardware pins
 #define TCAN334_Standby_Pin GPIO_PIN_5
 #define TCAN334_Standby_GPIO_Port GPIOA
-#define BrakeLED_Pin GPIO_PIN_1	// TODO - move to PA6
-#define BrakeLED_GPIO_Port GPIOB
+#define BrakeLED_Pin GPIO_PIN_6
+#define BrakeLED_GPIO_Port GPIOA
 #define RearLED_Pin GPIO_PIN_15
 #define RearLED_GPIO_Port GPIOA
 // definitions of device/PCB layout-dependent hardware pins

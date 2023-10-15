@@ -17,15 +17,13 @@ typedef struct	// mj818_t actual
 	mj818_t public;  // public struct
 } __mj818_t;
 
-static __mj818_t __Device __attribute__ ((section (".data")));	// preallocate __Device object in .data
+static __mj818_t  __Device  __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
 // GPIO init - device specific
 static inline void _GPIOInit(void)
 {
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
-
-	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
 
 	GPIO_InitStruct.Pin = TCAN334_Standby_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -37,7 +35,7 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;  // activate pulldown resistor
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	GPIO_InitStruct.Alternate = GPIO_AF1_TIM3;	// alternate function2: timer3 channel 4 PWM output
+	GPIO_InitStruct.Alternate = GPIO_AF1_TIM3;	// alternate function2: timer3 channel 1 PWM output
 	HAL_GPIO_Init(BrakeLED_GPIO_Port, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = RearLED_Pin;
@@ -148,7 +146,7 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 // starts timer identified by argument
 static void _StartTimer(TIM_HandleTypeDef *timer)
 {
-	if(timer->Instance == TIM2)  // front LED PWM
+	if(timer->Instance == TIM2)  // rear light PWM
 		{
 			static TIM_OC_InitTypeDef sConfigOC =
 				{0};
@@ -166,7 +164,7 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 			return;
 		}
 
-	if(timer->Instance == TIM3)  // brake LED PWM
+	if(timer->Instance == TIM3)  // brake light PWM
 		{
 			static TIM_OC_InitTypeDef sConfigOC =
 				{0};
@@ -179,8 +177,8 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 			// timer3 - brake light PWM
 			__HAL_RCC_TIM3_CLK_ENABLE();// start the clock
 			HAL_TIM_PWM_Init(timer);  //
-			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_4);
-			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_4);  // start the timer
+			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_1);
+			HAL_TIM_PWM_Start(timer, TIM_CHANNEL_1);  // start the timer
 			return;
 		}
 

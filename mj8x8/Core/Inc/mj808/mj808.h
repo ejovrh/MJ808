@@ -44,20 +44,20 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #include "button\button.h"
 
 // definitions of device/PCB layout-dependent hardware pins
-#define TCAN334_Standby_Pin GPIO_PIN_1	//	defined here but initialised in mj8x8.c // TODO - move to PA?
-#define TCAN334_Standby_GPIO_Port GPIOB	//	defined here but initialised in mj8x8.c
-#define Pushbutton_Pin GPIO_PIN_0	// TODO - move to PA?
-#define Pushbutton_GPIO_Port GPIOB
-#define Switch_EXTI_IRQn EXTI0_1_IRQn	// TODO - move to PA?
-#define FrontLED_Pin GPIO_PIN_3	// TODO - move to PA?
-#define FrontLED_GPIO_Port GPIOB
-#define RedLED_Pin GPIO_PIN_4	// TODO - move to PA?
-#define RedLED_GPIO_Port GPIOB
-#define GreenLED_Pin GPIO_PIN_5	// TODO - move to PA?
-#define GreenLED_GPIO_Port GPIOB
+#define TCAN334_Standby_Pin GPIO_PIN_5	//	defined here but initialised in mj8x8.c
+#define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
+#define Pushbutton_Pin GPIO_PIN_0
+#define Pushbutton_GPIO_Port GPIOA
+#define Switch_EXTI_IRQn EXTI0_1_IRQn
+#define FrontLED_Pin GPIO_PIN_6
+#define FrontLED_GPIO_Port GPIOA
+#define RedLED_Pin GPIO_PIN_2
+#define RedLED_GPIO_Port GPIOA
+#define GreenLED_Pin GPIO_PIN_4
+#define GreenLED_GPIO_Port GPIOA
 // definitions of device/PCB layout-dependent hardware pins
 
-#define FRONT_LIGHT_CCR htim2.Instance->CCR2	// Output Compare Register for PWM of front light
+#define FRONT_LIGHT_CCR htim3.Instance->CCR2	// Output Compare Register for PWM of front light
 
 enum mj808_leds  // enum of lights on this device
 {

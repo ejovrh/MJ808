@@ -12581,7 +12581,7 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <text x="167.64" y="93.98" size="1.778" layer="98" align="center-left">timer2 channel1</text>
 <text x="167.64" y="91.44" size="1.778" layer="98" align="center-left">timer2 channel2</text>
 <text x="167.64" y="88.9" size="1.778" layer="98" align="center-left">timer3 channel1</text>
-<text x="162.56" y="127" size="1.778" layer="98" align="center-left">external interrupt 0</text>
+<text x="162.56" y="152.4" size="1.778" layer="98" align="center-left">external interrupt 0</text>
 <text x="167.64" y="86.36" size="1.778" layer="98" align="center-left">timer3 channel2</text>
 <text x="137.16" y="83.82" size="1.778" layer="98">USART1 tx</text>
 <text x="137.16" y="81.28" size="1.778" layer="98">USART1 rx</text>
@@ -12589,7 +12589,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <text x="137.16" y="162.56" size="1.778" layer="98">I2C1 SDA</text>
 <text x="137.16" y="149.86" size="1.778" layer="98">external interrupt 1</text>
 <text x="137.16" y="134.62" size="1.778" layer="98">SPI1 SCK</text>
-<text x="137.16" y="132.08" size="1.778" layer="98">SPI1 MISO</text>
 <text x="137.16" y="129.54" size="1.778" layer="98">SPI1 MOSI</text>
 <text x="137.16" y="142.24" size="1.778" layer="98">GPIO</text>
 <text x="137.16" y="139.7" size="1.778" layer="98">GPIO</text>
@@ -12762,37 +12761,37 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 </net>
 <net name="!STBY!" class="0">
 <segment>
-<pinref part="IC2" gate="G$1" pin="ADC_IN9,TSC_G3_IO3,TIM1_CH3N,TIM3_CH4,TIM14_CH1-PB1_15"/>
-<wire x1="129.54" y1="119.38" x2="149.86" y2="119.38" width="0.1524" layer="91"/>
-<label x="149.86" y="119.38" size="1.778" layer="95" xref="yes"/>
+<wire x1="129.54" y1="134.62" x2="149.86" y2="134.62" width="0.1524" layer="91"/>
+<pinref part="IC2" gate="G$1" pin="ADC_IN5,TSC_G2_IO2,TIM2_CH1_ETR,CEC,SPI1_SCK,I2S1_CK-PA5_11"/>
+<label x="149.86" y="134.62" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="SWITCH" class="0">
 <segment>
-<label x="149.86" y="127" size="1.778" layer="95" xref="yes"/>
-<wire x1="129.54" y1="127" x2="149.86" y2="127" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="G$1" pin="ADC_IN8,EVENTOUT,TSC_G3_IO2,TIM1_CH2N,TIM3_CH3-PB0_14"/>
+<wire x1="129.54" y1="152.4" x2="149.86" y2="152.4" width="0.1524" layer="91"/>
+<pinref part="IC2" gate="G$1" pin="ADC_IN0,WKUP1,RTC_TAMP2,TSC_G1_IO1,TIM2_CH1_ETR,USART2_CTS-PA0_6"/>
+<label x="149.86" y="152.4" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="RED_LED" class="0">
 <segment>
-<wire x1="129.54" y1="88.9" x2="149.86" y2="88.9" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="G$1" pin="EVENTOUT,TSC_G5_IO2,TIM3_CH1,TIM17_BKIN,SPI1_MISO,I2S1_MCK-PB4_25"/>
-<label x="149.86" y="88.9" size="1.778" layer="95" xref="yes"/>
+<wire x1="129.54" y1="142.24" x2="149.86" y2="142.24" width="0.1524" layer="91"/>
+<pinref part="IC2" gate="G$1" pin="WKUP4,ADC_IN2,TSC_G1_IO3,TIM2_CH3,USART2_TX-PA2_8"/>
+<label x="149.86" y="142.24" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="GREEN_LED" class="0">
 <segment>
-<wire x1="129.54" y1="86.36" x2="149.86" y2="86.36" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="G$1" pin="WKUP6,TIM3_CH2,TIM16_BKIN,I2C1_SMBA,SPI1_MOSI,I2S1_SD-PB5_26"/>
-<label x="149.86" y="86.36" size="1.778" layer="95" xref="yes"/>
+<wire x1="129.54" y1="137.16" x2="149.86" y2="137.16" width="0.1524" layer="91"/>
+<pinref part="IC2" gate="G$1" pin="ADC_IN4,USB_NOE,USART2_CK,TSC_G2_IO1,TIM14_CH1,SPI1_NSS,I2S1_WS-PA4_10"/>
+<label x="149.86" y="137.16" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="DIM_FRONT" class="0">
 <segment>
-<label x="149.86" y="91.44" size="1.778" layer="95" xref="yes"/>
-<wire x1="129.54" y1="91.44" x2="149.86" y2="91.44" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="G$1" pin="EVENTOUT,TSC_G5_IO1,TIM2_CH2,SPI1_SCK,I2S1_CK-PB3_24"/>
+<pinref part="IC2" gate="G$1" pin="ADC_IN6,EVENTOUT,TSC_G2_IO3,TIM16_CH1,TIM3_CH1,TIM1_BKIN,SPI1_MISO,I2S1_MCK-PA6_12"/>
+<wire x1="129.54" y1="132.08" x2="149.86" y2="132.08" width="0.1524" layer="91"/>
+<label x="149.86" y="132.08" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 </nets>
@@ -13276,8 +13275,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="10.16" y1="43.18" x2="248.92" y2="43.18" width="0.1524" layer="98" style="dashdot"/>
 <text x="15.24" y="205.74" size="6.4516" layer="98" rot="R180" align="bottom-right">MJ8x8 - generic</text>
 <text x="271.78" y="63.5" size="1.778" layer="91">TODO:
-- move PB3 (tim2 ch2) to PAx
-- move PB1 (gpio) to PAx
 - move PB0 (exti0) to PA0
 - move PB4/5 (gpio) tp PAx</text>
 </plain>

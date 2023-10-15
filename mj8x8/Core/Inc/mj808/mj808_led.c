@@ -7,7 +7,7 @@
 
 #include "led\composite_led_actual.c"	// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
 
-extern TIM_HandleTypeDef htim2;  // front light PWM on channel 2
+extern TIM_HandleTypeDef htim3;  // front light PWM on channel 2
 extern TIM_HandleTypeDef htim14;  // LED handling - 20ms
 
 static primitive_led_t __primitive_led[4] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
@@ -49,7 +49,7 @@ static void _MacNamaraFader(void)
 			if(FRONT_LIGHT_CCR == 0 && __LED._BlinkFlags == 0)
 				{
 					Device->StopTimer(&htim14);  // stop the timer
-					Device->StopTimer(&htim2);  // stop the timer
+					Device->StopTimer(&htim3);  // stop the timer
 					Device->mj8x8->UpdateActivity(FRONTLIGHT, OFF);	// mark inactivity
 					__LED._ShineFlags &= ~_BV(Front);	// unset front light flag
 				}
@@ -74,9 +74,9 @@ static void _HighBeam(const uint8_t value)
 			else
 				{
 					FRONT_LIGHT_CCR = 0;	// turn off light
-					Device->StopTimer(&htim2);  // stop the timer - front light PWM
-					Device->StartTimer(&htim2);
-					Device->StopTimer(&htim2);
+					Device->StopTimer(&htim3);  // stop the timer - front light PWM
+					Device->StartTimer(&htim3);
+					Device->StopTimer(&htim3);
 					return;
 				}
 		}
@@ -89,7 +89,7 @@ static void _HighBeam(const uint8_t value)
 			if(Device->mj8x8->GetActivity(FRONTLIGHT))	// if front light is on
 				OldOCR = FRONT_LIGHT_CCR;	// store original OCR value
 			else
-				Device->StartTimer(&htim2);  // start the timer - front light PWM
+				Device->StartTimer(&htim3);  // start the timer - front light PWM
 
 			FRONT_LIGHT_CCR = 100;	// high beam on
 			return;
@@ -125,7 +125,7 @@ static inline void _physicalFrontLED(const uint8_t value)
 
 	if(value)
 		{
-			Device->StartTimer(&htim2);  // start the timer - front light PWM
+			Device->StartTimer(&htim3);  // start the timer - front light PWM
 			Device->mj8x8->UpdateActivity(FRONTLIGHT, ON);	// mark activity
 			__LED._ShineFlags |= _BV(Front);	// set the front light flag
 		}

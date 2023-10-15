@@ -12124,7 +12124,7 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <text x="137.16" y="165.1" size="1.778" layer="98">I2C1 SCL</text>
 <text x="137.16" y="162.56" size="1.778" layer="98">I2C1 SDA</text>
 <text x="137.16" y="152.4" size="1.778" layer="98">external interrupt 0</text>
-<text x="137.16" y="132.08" size="1.778" layer="98">SPI1 MISO</text>
+<text x="167.64" y="132.08" size="1.778" layer="98">SPI1 MISO</text>
 <text x="137.16" y="129.54" size="1.778" layer="98">SPI1 MOSI</text>
 <text x="137.16" y="142.24" size="1.778" layer="98">GPIO</text>
 <text x="137.16" y="139.7" size="1.778" layer="98">GPIO</text>
@@ -12132,7 +12132,7 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <text x="137.16" y="83.82" size="1.778" layer="98">USART1 tx</text>
 <text x="137.16" y="81.28" size="1.778" layer="98">USART1 rx</text>
 <text x="137.16" y="86.36" size="1.778" layer="98">timer3 channel 2</text>
-<text x="167.64" y="119.38" size="1.778" layer="98" align="center-left">timer3 channel4</text>
+<text x="137.16" y="119.38" size="1.778" layer="98" align="center-left">timer3 channel4</text>
 <text x="160.02" y="134.62" size="1.778" layer="98">GPIO</text>
 <text x="137.16" y="88.9" size="1.778" layer="98">GPIO</text>
 </plain>
@@ -12316,9 +12316,9 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 </net>
 <net name="DIM_BRAKE" class="0">
 <segment>
-<label x="149.86" y="119.38" size="1.778" layer="95" xref="yes"/>
-<wire x1="129.54" y1="119.38" x2="149.86" y2="119.38" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="G$1" pin="ADC_IN9,TSC_G3_IO3,TIM1_CH3N,TIM3_CH4,TIM14_CH1-PB1_15"/>
+<wire x1="129.54" y1="132.08" x2="149.86" y2="132.08" width="0.1524" layer="91"/>
+<pinref part="IC2" gate="G$1" pin="ADC_IN6,EVENTOUT,TSC_G2_IO3,TIM16_CH1,TIM3_CH1,TIM1_BKIN,SPI1_MISO,I2S1_MCK-PA6_12"/>
+<label x="149.86" y="132.08" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 </nets>
@@ -12959,8 +12959,6 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="255.27" y1="189.23" x2="255.27" y2="187.96" width="0.1524" layer="98"/>
 <wire x1="255.27" y1="191.77" x2="255.27" y2="193.04" width="0.1524" layer="98"/>
 <wire x1="253.365" y1="189.23" x2="257.175" y2="189.23" width="0.1524" layer="98"/>
-<text x="284.48" y="76.2" size="1.778" layer="91">TODO:
-- move PB1 to PAx</text>
 </plain>
 <moduleinsts>
 <moduleinst name="POWER_3V3" module="POWER_3V3" x="116.84" y="121.92" offset="200">
