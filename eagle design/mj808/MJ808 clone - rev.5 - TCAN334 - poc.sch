@@ -13243,8 +13243,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <part name="LED101" library="APHBM2012LSURKZGKC" deviceset="APHBM2012LSURKZGKC" device="" value="APHBM2012SURKZGKC"/>
 <part name="R102" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="68R"/>
 <part name="SUPPLY7" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="R101" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
-<part name="SUPPLY8" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="FRAME101" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A3L-LOC" device="" value="MJ808"/>
 <part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="J1" library="con-amp" library_urn="urn:adsk.eagle:library:127" deviceset="MTA02-100" device="" package3d_urn="urn:adsk.eagle:package:8081649/1" value="CAN"/>
@@ -13277,7 +13275,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="10.16" y1="210.82" x2="10.16" y2="43.18" width="0.1524" layer="98" style="dashdot"/>
 <wire x1="10.16" y1="43.18" x2="248.92" y2="43.18" width="0.1524" layer="98" style="dashdot"/>
 <text x="15.24" y="205.74" size="6.4516" layer="98" rot="R180" align="bottom-right">MJ8x8 - generic</text>
-<text x="180.34" y="165.1" size="6.4516" layer="94">???</text>
 <text x="271.78" y="63.5" size="1.778" layer="91">TODO:
 - move PB3 (tim2 ch2) to PAx
 - move PB1 (gpio) to PAx
@@ -13331,13 +13328,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 </instance>
 <instance part="SUPPLY7" gate="G$1" x="127" y="160.02" smashed="yes" rot="R90">
 <attribute name="VALUE" x="128.905" y="160.02" size="1.778" layer="96" rot="R90" align="center"/>
-</instance>
-<instance part="R101" gate="G$1" x="175.26" y="177.8" smashed="yes" rot="R90">
-<attribute name="NAME" x="177.8" y="177.8" size="1.778" layer="95"/>
-<attribute name="VALUE" x="177.8" y="175.26" size="1.778" layer="96"/>
-</instance>
-<instance part="SUPPLY8" gate="G$1" x="175.26" y="167.64" smashed="yes">
-<attribute name="VALUE" x="175.26" y="165.735" size="1.778" layer="96" align="center"/>
 </instance>
 <instance part="FRAME101" gate="G$1" x="0" y="0" smashed="yes">
 <attribute name="DRAWING_NAME" x="344.17" y="15.24" size="2.54" layer="94"/>
@@ -13408,11 +13398,6 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="124.46" y1="160.02" x2="114.3" y2="160.02" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="R101" gate="G$1" pin="1"/>
-<pinref part="SUPPLY8" gate="G$1" pin="GND"/>
-<wire x1="175.26" y1="170.18" x2="175.26" y2="172.72" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <portref moduleinst="PUSHBUTTON" port="GND"/>
 <pinref part="SUPPLY3" gate="G$1" pin="GND"/>
 <wire x1="251.46" y1="101.6" x2="251.46" y2="104.14" width="0.1524" layer="91"/>
@@ -13423,11 +13408,8 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <portref moduleinst="STM32F04" port="DIM_FRONT"/>
 <portref moduleinst="FRONT_LED_DRIVER" port="DIM_FRONT"/>
 <wire x1="170.18" y1="132.08" x2="170.18" y2="182.88" width="0.1524" layer="91"/>
-<wire x1="170.18" y1="182.88" x2="175.26" y2="182.88" width="0.1524" layer="91"/>
 <label x="170.18" y="152.4" size="1.778" layer="95" rot="R90"/>
-<pinref part="R101" gate="G$1" pin="2"/>
-<wire x1="175.26" y1="182.88" x2="180.34" y2="182.88" width="0.1524" layer="91"/>
-<junction x="175.26" y="182.88"/>
+<wire x1="170.18" y1="182.88" x2="180.34" y2="182.88" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="RED_LED" class="3">

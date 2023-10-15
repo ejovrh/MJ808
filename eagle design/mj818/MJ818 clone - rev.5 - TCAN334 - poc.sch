@@ -12928,8 +12928,6 @@ Vf = 2.0V
 <part name="SUPPLY5" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY6" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY7" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="R101" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="10k"/>
-<part name="SUPPLY8" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="FRAME101" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A3L-LOC" device="" value="MJ818"/>
 <part name="SUPPLY9" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="J101" library="con-amp" library_urn="urn:adsk.eagle:library:127" deviceset="MTA02-100" device="" package3d_urn="urn:adsk.eagle:package:8081649/1" value="Power Supply"/>
@@ -12954,7 +12952,6 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="33.02" y1="215.9" x2="33.02" y2="48.26" width="0.1524" layer="98" style="dashdot"/>
 <wire x1="33.02" y1="48.26" x2="271.78" y2="48.26" width="0.1524" layer="98" style="dashdot"/>
 <text x="38.1" y="210.82" size="6.4516" layer="98" rot="R180" align="bottom-right">MJ8x8 - generic</text>
-<text x="203.2" y="170.18" size="6.4516" layer="94">???</text>
 <wire x1="255.27" y1="189.23" x2="257.175" y2="191.77" width="0.1524" layer="98"/>
 <wire x1="257.175" y1="191.77" x2="255.27" y2="191.77" width="0.1524" layer="98"/>
 <wire x1="255.27" y1="191.77" x2="253.365" y2="191.77" width="0.1524" layer="98"/>
@@ -13004,13 +13001,6 @@ Cree XPERED-L1-R250-00401</text>
 </instance>
 <instance part="SUPPLY7" gate="G$1" x="149.86" y="165.1" smashed="yes" rot="R90">
 <attribute name="VALUE" x="151.765" y="165.1" size="1.778" layer="96" rot="R90" align="center"/>
-</instance>
-<instance part="R101" gate="G$1" x="198.12" y="182.88" smashed="yes" rot="R90">
-<attribute name="NAME" x="200.66" y="182.88" size="1.778" layer="95"/>
-<attribute name="VALUE" x="200.66" y="180.34" size="1.778" layer="96"/>
-</instance>
-<instance part="SUPPLY8" gate="G$1" x="198.12" y="172.72" smashed="yes">
-<attribute name="VALUE" x="198.12" y="170.815" size="1.778" layer="96" align="center"/>
 </instance>
 <instance part="FRAME101" gate="G$1" x="0" y="0" smashed="yes">
 <attribute name="DRAWING_NAME" x="344.17" y="15.24" size="2.54" layer="94"/>
@@ -13081,11 +13071,6 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="147.32" y1="165.1" x2="137.16" y2="165.1" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="R101" gate="G$1" pin="1"/>
-<pinref part="SUPPLY8" gate="G$1" pin="GND"/>
-<wire x1="198.12" y1="175.26" x2="198.12" y2="177.8" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <portref moduleinst="REAR_LED_DRIVER" port="GND"/>
 <pinref part="SUPPLY9" gate="G$1" pin="GND"/>
 <wire x1="223.52" y1="134.62" x2="223.52" y2="137.16" width="0.1524" layer="91"/>
@@ -13096,11 +13081,8 @@ Cree XPERED-L1-R250-00401</text>
 <portref moduleinst="STM32F04" port="DIM_BRAKE"/>
 <portref moduleinst="BRAKE_LED_DRIVER" port="DIM_BRAKE"/>
 <wire x1="193.04" y1="137.16" x2="193.04" y2="187.96" width="0.1524" layer="91"/>
-<wire x1="193.04" y1="187.96" x2="198.12" y2="187.96" width="0.1524" layer="91"/>
 <label x="193.04" y="157.48" size="1.778" layer="95" rot="R90"/>
-<pinref part="R101" gate="G$1" pin="2"/>
-<wire x1="198.12" y1="187.96" x2="203.2" y2="187.96" width="0.1524" layer="91"/>
-<junction x="198.12" y="187.96"/>
+<wire x1="193.04" y1="187.96" x2="203.2" y2="187.96" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="DIM_REAR" class="3">
