@@ -1947,22 +1947,22 @@ design rules under a new name.</description>
 <attribute name="SPICEPREFIX" value="R" x="42.25" y="20.5" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="VALUE" x="44.155" y="21.135" size="1.27" layer="28" rot="MR270"/>
 </element>
-<element name="TP6" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="49.5" y="29.5" smashed="yes" rot="MR270">
+<element name="TP6" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="TP2l" x="49.5" y="29.5" smashed="yes" rot="MR270">
 <attribute name="POPULARITY" value="0" x="49.5" y="29.5" size="1" layer="28" font="vector" rot="MR270" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="49.5" y="29.5" size="1" layer="28" font="vector" rot="MR270" display="off"/>
 <attribute name="VALUE" x="50.135" y="30.008" size="0.0254" layer="28" rot="MR270"/>
 </element>
-<element name="TP7" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="49.5" y="28" smashed="yes" rot="MR270">
+<element name="TP7" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="TP2r" x="49.5" y="28" smashed="yes" rot="MR270">
 <attribute name="POPULARITY" value="0" x="49.5" y="28" size="1" layer="28" font="vector" rot="MR270" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="49.5" y="28" size="1" layer="28" font="vector" rot="MR270" display="off"/>
 <attribute name="VALUE" x="50.135" y="28.508" size="0.0254" layer="28" rot="MR270"/>
 </element>
-<element name="TP5" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="34.5" y="32" smashed="yes" rot="MR0">
+<element name="TP5" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="TP1r" x="34.5" y="32" smashed="yes" rot="MR0">
 <attribute name="POPULARITY" value="0" x="34.5" y="32" size="1" layer="28" font="vector" rot="MR0" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="34.5" y="32" size="1" layer="28" font="vector" rot="MR0" display="off"/>
 <attribute name="VALUE" x="35.008" y="31.365" size="0.0254" layer="28" rot="MR0"/>
 </element>
-<element name="TP4" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="PTR1TP10SQ" x="33" y="32" smashed="yes" rot="MR0">
+<element name="TP4" library="testpad" library_urn="urn:adsk.eagle:library:385" package="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="TP1l" x="33" y="32" smashed="yes" rot="MR0">
 <attribute name="POPULARITY" value="0" x="33" y="32" size="1" layer="28" font="vector" rot="MR0" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="33" y="32" size="1" layer="28" font="vector" rot="MR0" display="off"/>
 <attribute name="VALUE" x="33.508" y="31.365" size="0.0254" layer="28" rot="MR0"/>
@@ -2005,7 +2005,7 @@ design rules under a new name.</description>
 <attribute name="SPICEPREFIX" value="R" x="-6" y="33.75" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="VALUE" x="12.175" y="36.29" size="1.27" layer="28" rot="MR270"/>
 </element>
-<element name="C708" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C1812" package3d_urn="urn:adsk.eagle:package:23622/2" value="10n/100v" x="13" y="33" smashed="yes" rot="MR270">
+<element name="C708" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C1812" package3d_urn="urn:adsk.eagle:package:23622/2" value="10nF / 100v" x="13" y="33" smashed="yes" rot="MR270">
 <attribute name="NAME" x="5" y="31" size="0.75" layer="26" rot="MR90" align="center"/>
 <attribute name="POPULARITY" value="3" x="11.75" y="47.5" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="SPICEPREFIX" value="C" x="11.75" y="47.5" size="1.778" layer="28" rot="MR270" display="off"/>
@@ -2019,7 +2019,7 @@ design rules under a new name.</description>
 <attribute name="NAME" x="8.75" y="24" size="0.75" layer="25" font="vector" align="center"/>
 <attribute name="VALUE" x="6.5" y="26.5" size="0.75" layer="27" font="vector" rot="R270" align="center"/>
 </element>
-<element name="C703" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="0.1u" x="11.5" y="26.5" smashed="yes" rot="MR270">
+<element name="C703" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="0.1uF / 10V" x="11.5" y="26.5" smashed="yes" rot="MR270">
 <attribute name="NAME" x="11.5" y="23.25" size="0.75" layer="26" rot="MR90" align="center"/>
 <attribute name="POPULARITY" value="88" x="-6.25" y="34.75" size="1.778" layer="28" rot="MR270" display="off"/>
 <attribute name="SPICEPREFIX" value="C" x="-6.25" y="34.75" size="1.778" layer="28" rot="MR270" display="off"/>
@@ -2047,13 +2047,13 @@ design rules under a new name.</description>
 <attribute name="NAME" x="45.75" y="24.5" size="0.75" layer="21" font="vector" align="center"/>
 <attribute name="VALUE" x="43.25" y="26.75" size="1" layer="27" font="vector" rot="R270" align="center"/>
 </element>
-<element name="C902" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="1μF / 10V" x="45.75" y="28.25" smashed="yes" rot="MR0">
+<element name="C902" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="1uF / 10V" x="45.75" y="28.25" smashed="yes" rot="MR0">
 <attribute name="NAME" x="45.75" y="29.75" size="0.75" layer="26" rot="MR0" align="center"/>
 <attribute name="POPULARITY" value="88" x="53.75" y="35.25" size="0.75" layer="28" rot="MR0" display="off"/>
 <attribute name="SPICEPREFIX" value="C" x="53.75" y="35.25" size="0.75" layer="28" rot="MR0" display="off"/>
 <attribute name="VALUE" x="46.385" y="26.345" size="1.27" layer="28" rot="MR0"/>
 </element>
-<element name="C907" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="1μF" x="45.75" y="25.25" smashed="yes" rot="MR0">
+<element name="C907" library="rcl" library_urn="urn:adsk.eagle:library:334" package="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="1uF / 10V" x="45.75" y="25.25" smashed="yes" rot="MR0">
 <attribute name="NAME" x="45.75" y="23.75" size="0.75" layer="26" rot="MR0" align="center"/>
 <attribute name="POPULARITY" value="88" x="53.75" y="32.25" size="0.75" layer="28" rot="MR0" display="off"/>
 <attribute name="SPICEPREFIX" value="C" x="53.75" y="32.25" size="0.75" layer="28" rot="MR0" display="off"/>
@@ -2200,12 +2200,12 @@ design rules under a new name.</description>
 <attribute name="NAME" x="35.75" y="36" size="0.75" layer="26" rot="MR90" align="center"/>
 <attribute name="VALUE" x="28.86" y="38.706" size="1.27" layer="28" ratio="10" rot="MR180"/>
 </element>
-<element name="TP2" library="testpad" library_urn="urn:adsk.eagle:library:385" package="P1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +" x="49" y="36.5" smashed="yes">
+<element name="TP2" library="testpad" library_urn="urn:adsk.eagle:library:385" package="P1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="dynamo 1" x="49" y="36.5" smashed="yes">
 <attribute name="POPULARITY" value="0" x="49" y="36.5" size="1.778" layer="27" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="49" y="36.5" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="49" y="36.5" size="0.0254" layer="27"/>
 </element>
-<element name="TP3" library="testpad" library_urn="urn:adsk.eagle:library:385" package="P1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +" x="5.5" y="36.5" smashed="yes">
+<element name="TP3" library="testpad" library_urn="urn:adsk.eagle:library:385" package="P1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="dynamo 2" x="5.5" y="36.5" smashed="yes">
 <attribute name="POPULARITY" value="0" x="5.5" y="36.5" size="1.778" layer="27" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="5.5" y="36.5" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="5.5" y="36.5" size="0.0254" layer="27"/>

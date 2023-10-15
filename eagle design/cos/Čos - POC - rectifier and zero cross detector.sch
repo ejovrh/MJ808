@@ -11907,10 +11907,10 @@ DIN A4, landscape with location and doc. field</description>
 <parts>
 <part name="ZERO-CROSS" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A5L-LOC" device="" value="zero-cross detector"/>
 <part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R2512" package3d_urn="urn:adsk.eagle:package:23545/2" value="10k/3W"/>
-<part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1812" package3d_urn="urn:adsk.eagle:package:23622/2" value="10n/100v"/>
+<part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1812" package3d_urn="urn:adsk.eagle:package:23622/2" value="10nF / 100v"/>
 <part name="D10" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="ZENER-DIODE" device="DO214AA" package3d_urn="urn:adsk.eagle:package:43433/2" value="6V/3W"/>
 <part name="IC1" library="LT1638 - Rail to Rail OpAmp" deviceset="LT1638" device="" value="LT1638IDD#PBF"/>
-<part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="0.1u"/>
+<part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="0.1uF / 10V"/>
 <part name="+3V1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
 <part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
@@ -12109,8 +12109,8 @@ other valid combos for same freq.:
 <part name="+3V1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="IC2" library="LDK320 5V LDO" deviceset="LDK320" device="SOT-23-5L" value="LDK320AM33R"/>
-<part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="1μF / 10V"/>
-<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="1μF"/>
+<part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="1uF / 10V"/>
+<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="1uF / 10V"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
@@ -12740,10 +12740,10 @@ R=(3.3V-1.20V)/5mA=2.1V/0.005A=420R</text>
 </modules>
 <parts>
 <part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="47k"/>
-<part name="TP6" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP7" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP5" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
-<part name="TP4" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1"/>
+<part name="TP6" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="TP2l"/>
+<part name="TP7" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="TP2r"/>
+<part name="TP5" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="TP1r"/>
+<part name="TP4" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP10SQ" package3d_urn="urn:adsk.eagle:package:27962/1" value="TP1l"/>
 <part name="D1" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device="" value="CUHS20S30,H3F"/>
 <part name="D2" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device="" value="CUHS20S30,H3F"/>
 <part name="D3" library="CUHS20S30 - Schottky Barrier Diode" deviceset="CUHS20S30" device="" value="CUHS20S30,H3F"/>
@@ -12773,8 +12773,8 @@ R=(3.3V-1.20V)/5mA=2.1V/0.005A=420R</text>
 <part name="JP1" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X10" device="" package3d_urn="urn:adsk.eagle:package:22406/2" value="2.54-pinhead"/>
 <part name="SUPPLY1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="" value="GND"/>
 <part name="+3V2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
-<part name="TP2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
-<part name="TP3" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="Li-Ion Cell +"/>
+<part name="TP2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="dynamo 1"/>
+<part name="TP3" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="dynamo 2"/>
 </parts>
 <sheets>
 <sheet>
