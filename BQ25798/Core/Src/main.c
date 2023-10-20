@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "bq25798.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,7 +49,7 @@ TIM_HandleTypeDef htim1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-uint8_t I2CTXBuffer[] = "A";
+bq25798_t *BQ25798;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -101,8 +101,10 @@ int main(void)
 	MX_TIM1_Init();
 	MX_I2C1_Init();
 	/* USER CODE BEGIN 2 */
-	HAL_PWR_EnableSleepOnExit();  // go to sleep once any ISR finishes
+//	HAL_PWR_EnableSleepOnExit();  // go to sleep once any ISR finishes
 	HAL_UART_Transmit_IT(&huart2, (uint8_t*) "bq25798 start\r\n", 15);
+	BQ25798 = bq25798_ctor(&hi2c1);
+
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
