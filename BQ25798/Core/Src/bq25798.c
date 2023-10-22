@@ -1,4 +1,6 @@
+#include "main.h"
 #include "bq25798.h"
+#include <stdio.h>
 
 typedef struct	// bq25798_t actual
 {
@@ -80,11 +82,28 @@ uint16_t _Read(const uint8_t RegAddr)
 	return _buf[RegAddr];
 }
 
+#if UART_DUMP
+// printout of all register values to uart
+void _Print(void)
+{
+	printf("%d %d %d ", __BQ25798.public.pg, __BQ25798.public.irq, __BQ25798.public.stat);	// first print charger status
+
+	for(uint8_t i = 0; i < REG_CNT; ++i)
+		printf("%x ", __BQ25798.__buffer[i]);  // then print all the registers
+
+	printf("\r\n");
+}
+#endif
+
 // reads out the whole device register
 void _Dump(void)
 {
 	for(uint8_t i = 0; i < REG_CNT; ++i)	// loop over all registers
 		_buf[i] = _Read(i);  // and store in register buffer
+
+#if UART_DUMP
+	_Print();
+#endif
 }
 
 // I2C write function

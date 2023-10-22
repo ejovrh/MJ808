@@ -58,8 +58,9 @@ void Error_Handler(void);
 
 /* Private defines -----------------------------------------------------------*/
 #define TIMER1_PERIOD 1249
-#define UART2_BAUD 38400
+#define UART2_BAUD 115200
 #define TIMER_PRESCALER 799
+#define UART_DUMP 1
 #define MCO_Pin GPIO_PIN_0
 #define MCO_GPIO_Port GPIOF
 #define BQ25798_INT_Pin GPIO_PIN_0

@@ -21,6 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
 #include "bq25798.h"
 /* USER CODE END Includes */
 
@@ -101,11 +102,12 @@ int main(void)
 	MX_TIM1_Init();
 	MX_I2C1_Init();
 	/* USER CODE BEGIN 2 */
+
 	// order is important!
 	BQ25798 = bq25798_ctor(&hi2c1);  // initialize device
 	HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);  // enable timer1 interrupts
 
-	HAL_UART_Transmit_IT(&huart2, (uint8_t*) "bq25798 start\r\n", 15);	// transmit start message
+	printf("\r\n---\r\n");	// start marker
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -397,7 +399,21 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+/**
+ * @brief  Retargets the C library printf function to the USART.
+ * @param  None
+ * @retval None
+ */
+#if UART_DUMP
+int __io_putchar(int ch)
+{
+	/* Place your implementation of fputc here */
+	/* e.g. write a character to the USART1 and Loop until the end of transmission */
+//	HAL_UART_Transmit_IT(&huart2, (uint8_t*) &ch, 1);
+	HAL_UART_Transmit(&huart2, (uint8_t*) &ch, 1, HAL_MAX_DELAY);
+	return ch;
+}
+#endif
 /* USER CODE END 4 */
 
 /**
@@ -426,8 +442,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+		/* User can add his own implementation to report the file name and line number,
+		 ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
