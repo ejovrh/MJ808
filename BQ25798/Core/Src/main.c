@@ -407,10 +407,9 @@ static void MX_GPIO_Init(void)
 #if UART_DUMP
 int __io_putchar(int ch)
 {
-	/* Place your implementation of fputc here */
-	/* e.g. write a character to the USART1 and Loop until the end of transmission */
-//	HAL_UART_Transmit_IT(&huart2, (uint8_t*) &ch, 1);
-	HAL_UART_Transmit(&huart2, (uint8_t*) &ch, 1, HAL_MAX_DELAY);
+	while(HAL_UART_Transmit(&huart2, (uint8_t*) &ch, 1, 10) != HAL_OK)
+		;
+
 	return ch;
 }
 #endif
