@@ -207,10 +207,10 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim_base)
 			/* Peripheral clock enable */
 			__HAL_RCC_TIM1_CLK_ENABLE();
 			/* TIM1 interrupt Init */
-			HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 0, 0);
+			HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 2, 0);
 			HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
 			/* USER CODE BEGIN TIM1_MspInit 1 */
-
+			HAL_NVIC_DisableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);	// disable interrupt so that devices can init uninterrupted
 			/* USER CODE END TIM1_MspInit 1 */
 		}
 
@@ -272,7 +272,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 			HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 			/* USART2 interrupt Init */
-			HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
+			HAL_NVIC_SetPriority(USART2_IRQn, 3, 0);
 			HAL_NVIC_EnableIRQ(USART2_IRQn);
 			/* USER CODE BEGIN USART2_MspInit 1 */
 

@@ -101,10 +101,11 @@ int main(void)
 	MX_TIM1_Init();
 	MX_I2C1_Init();
 	/* USER CODE BEGIN 2 */
-//	HAL_PWR_EnableSleepOnExit();  // go to sleep once any ISR finishes
-	HAL_UART_Transmit_IT(&huart2, (uint8_t*) "bq25798 start\r\n", 15);
-	BQ25798 = bq25798_ctor(&hi2c1);
+	// order is important!
+	BQ25798 = bq25798_ctor(&hi2c1);  // initialize device
+	HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);  // enable timer1 interrupts
 
+	HAL_UART_Transmit_IT(&huart2, (uint8_t*) "bq25798 start\r\n", 15);	// transmit start message
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -178,7 +179,7 @@ static void MX_I2C1_Init(void)
 
 	/* USER CODE END I2C1_Init 1 */
 	hi2c1.Instance = I2C1;
-	hi2c1.Init.Timing = 0x2000090E;
+	hi2c1.Init.Timing = 0x0000020B;
 	hi2c1.Init.OwnAddress1 = 0;
 	hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
 	hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -385,10 +386,10 @@ static void MX_GPIO_Init(void)
 	HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 
 	/* EXTI interrupt init*/
-	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 1, 0);
 	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 
-	HAL_NVIC_SetPriority(EXTI4_15_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(EXTI4_15_IRQn, 1, 0);
 	HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
 
 	/* USER CODE BEGIN MX_GPIO_Init_2 */

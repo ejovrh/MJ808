@@ -114,8 +114,9 @@ bq25798_t* bq25798_ctor(I2C_HandleTypeDef *const in_hi2c)
 	__Device.__buffer = _buf;  // point array pointer to internal array
 	__Device.__hi2c = in_hi2c;	// HAL's I2C handler
 
-	__Device.public.Read = &_Read;  // read method
-	__Device.public.Write = &_Write;  // write method
+	__Device.public.Read = &_Read;  // I2C read method
+	__Device.public.Write = &_Write;  // I2C write method
+	__Device.public.Dump = &_Dump;  // sequential read of all device registers
 
 //	__Device.public.Write(REG10_Charger_Control_1, 0x01);  // reset watchdog, set WD timer to 0.5s
 //	__Device.public.Write(REG14_Charger_Control_5, 0x80);  // set ship FET to enabled

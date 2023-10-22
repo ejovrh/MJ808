@@ -74,8 +74,9 @@ typedef enum	// register to array index translation
 
 typedef struct	// struct describing devices on BQ25798
 {
-	void (*Write)(const uint8_t addr, const uint16_t val);	// function pointer for Write method
-	uint16_t (*Read)(const uint8_t addr);  // function pointer for Read method
+	void (*Write)(const uint8_t addr, const uint16_t val);	// I2C read method
+	uint16_t (*Read)(const uint8_t addr);  // I2C write method
+	void (*Dump)(void);  // sequential read of all device registers
 } bq25798_t;
 
 bq25798_t* bq25798_ctor(I2C_HandleTypeDef *const in_hi2c);

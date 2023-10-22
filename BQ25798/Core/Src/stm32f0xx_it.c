@@ -22,6 +22,7 @@
 #include "stm32f0xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "bq25798.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -61,7 +62,7 @@ extern I2C_HandleTypeDef hi2c1;
 extern TIM_HandleTypeDef htim1;
 extern UART_HandleTypeDef huart2;
 /* USER CODE BEGIN EV */
-
+extern bq25798_t *BQ25798;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -212,6 +213,7 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 	HAL_TIM_IRQHandler(&htim1);
 	/* USER CODE BEGIN TIM1_BRK_UP_TRG_COM_IRQn 1 */
 	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+	BQ25798->Dump();	// dump device registers into internal array
 	/* USER CODE END TIM1_BRK_UP_TRG_COM_IRQn 1 */
 }
 
