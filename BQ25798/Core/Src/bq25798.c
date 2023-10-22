@@ -8,7 +8,7 @@ typedef struct	// bq25798_t actual
 	I2C_HandleTypeDef *__hi2c;	// I2C HAL handler
 } __bq25798_t;
 
-static __bq25798_t __Device __attribute__ ((section (".data")));	// preallocate __Device object in .data
+static __bq25798_t __BQ25798 __attribute__ ((section (".data")));  // preallocate __Device object in .data
 
 extern void Error_Handler(void);
 
@@ -39,19 +39,19 @@ static void __ReadWrapper(uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pDa
 {
 	do  // read from device
 		{
-			if(HAL_I2C_Mem_Read_DMA(__Device.__hi2c, BQ25798_I2C_ADDR, MemAddress, MemAddSize, pData, MemAddSize) != HAL_OK)	// transmit onto the I2C bus
+			if(HAL_I2C_Mem_Read_DMA(__BQ25798.__hi2c, BQ25798_I2C_ADDR, MemAddress, MemAddSize, pData, MemAddSize) != HAL_OK)  // transmit onto the I2C bus
 				Error_Handler();
 
 			// see if the target device is ready
-			while(HAL_I2C_IsDeviceReady(__Device.__hi2c, BQ25798_I2C_ADDR, 5, 50) == HAL_TIMEOUT)
+			while(HAL_I2C_IsDeviceReady(__BQ25798.__hi2c, BQ25798_I2C_ADDR, 5, 50) == HAL_TIMEOUT)
 				;
 
 			// see if the bus is ready
-			while(HAL_I2C_GetState(__Device.__hi2c) != HAL_I2C_STATE_READY)
+			while(HAL_I2C_GetState(__BQ25798.__hi2c) != HAL_I2C_STATE_READY)
 				;  // wait for end of transfer
 
 		}
-	while(HAL_I2C_GetError(__Device.__hi2c) == HAL_I2C_ERROR_AF);  // retry on acknowledge failure
+	while(HAL_I2C_GetError(__BQ25798.__hi2c) == HAL_I2C_ERROR_AF);  // retry on acknowledge failure
 }
 
 // I2C read function
@@ -92,31 +92,31 @@ void _Write(const uint8_t RegAddr, const uint16_t val)
 {
 	do  // write to device
 		{
-			if(HAL_I2C_Mem_Write_DMA(__Device.__hi2c, BQ25798_I2C_ADDR, _RegOffset[RegAddr], (uint16_t) _RegSize[RegAddr], (uint8_t*) &val, (uint16_t) _RegSize[RegAddr]) != HAL_OK)  // transmit onto the I2C bus
+			if(HAL_I2C_Mem_Write_DMA(__BQ25798.__hi2c, BQ25798_I2C_ADDR, _RegOffset[RegAddr], (uint16_t) _RegSize[RegAddr], (uint8_t*) &val, (uint16_t) _RegSize[RegAddr]) != HAL_OK)  // transmit onto the I2C bus
 				Error_Handler();
 
 			// see if the target device is ready
-			while(HAL_I2C_IsDeviceReady(__Device.__hi2c, BQ25798_I2C_ADDR, 5, 50) == HAL_TIMEOUT)
+			while(HAL_I2C_IsDeviceReady(__BQ25798.__hi2c, BQ25798_I2C_ADDR, 5, 50) == HAL_TIMEOUT)
 				;
 
 			// see if the bus is ready
-			while(HAL_I2C_GetState(__Device.__hi2c) != HAL_I2C_STATE_READY)
+			while(HAL_I2C_GetState(__BQ25798.__hi2c) != HAL_I2C_STATE_READY)
 				;		// wait for end of transfer
 
 		}
-	while(HAL_I2C_GetError(__Device.__hi2c) == HAL_I2C_ERROR_AF);  // retry on acknowledge failure
+	while(HAL_I2C_GetError(__BQ25798.__hi2c) == HAL_I2C_ERROR_AF);  // retry on acknowledge failure
 }
 
 bq25798_t* bq25798_ctor(I2C_HandleTypeDef *const in_hi2c)
 {
 //	uint8_t _buf[49];  // internal array for register address & payload
 
-	__Device.__buffer = _buf;  // point array pointer to internal array
-	__Device.__hi2c = in_hi2c;	// HAL's I2C handler
+	__BQ25798.__buffer = _buf;  // point array pointer to internal array
+	__BQ25798.__hi2c = in_hi2c;  // HAL's I2C handler
 
-	__Device.public.Read = &_Read;  // I2C read method
-	__Device.public.Write = &_Write;  // I2C write method
-	__Device.public.Dump = &_Dump;  // sequential read of all device registers
+	__BQ25798.public.Read = &_Read;  // I2C read method
+	__BQ25798.public.Write = &_Write;  // I2C write method
+	__BQ25798.public.Dump = &_Dump;  // sequential read of all device registers
 
 //	__Device.public.Write(REG10_Charger_Control_1, 0x01);  // reset watchdog, set WD timer to 0.5s
 //	__Device.public.Write(REG14_Charger_Control_5, 0x80);  // set ship FET to enabled
@@ -154,7 +154,6 @@ bq25798_t* bq25798_ctor(I2C_HandleTypeDef *const in_hi2c)
 ////	__Device.public.Write(REG30_ADC_Function_Disable_1, 0x00);	//
 ////	__Device.public.Write(REG47_DPDM_Driver, 0x00);	//
 
-	return (&__Device.public);
+	return (&__BQ25798.public);
 }
 
-bq25798_t *const Device = &__Device.public;  // set pointer to MsgHandler public part

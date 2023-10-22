@@ -153,7 +153,7 @@ void EXTI0_1_IRQHandler(void)
 	/* USER CODE BEGIN EXTI0_1_IRQn 0 */
 	if(__HAL_GPIO_EXTI_GET_IT(BQ25798_INT_Pin))  // TODO - verify interrupt source detection
 		{
-			;  // TODO - implement BQ25798 int ISR
+			BQ25798->irq = HAL_GPIO_ReadPin(BQ25798_INT_GPIO_Port, BQ25798_INT_Pin);	// save pin state
 		}
 
 	/* USER CODE END EXTI0_1_IRQn 0 */
@@ -171,12 +171,12 @@ void EXTI4_15_IRQHandler(void)
 	/* USER CODE BEGIN EXTI4_15_IRQn 0 */
 	if(__HAL_GPIO_EXTI_GET_IT(BQ25798_STAT_Pin))	// TODO - verify interrupt source detection
 		{
-			;  // TODO - implement BQ25798 stat ISR
+			BQ25798->stat = HAL_GPIO_ReadPin(BQ25798_STAT_GPIO_Port, BQ25798_STAT_Pin);  // save pin state
 		}
 
 	if(__HAL_GPIO_EXTI_GET_IT(LMR34206_PG_Pin))  // TODO - verify interrupt source detection
 		{
-			;  // TODO - implement LMR34206 pg ISR
+			BQ25798->pg = HAL_GPIO_ReadPin(LMR34206_PG_GPIO_Port, LMR34206_PG_Pin);  // save pin state
 		}
 
 	/* USER CODE END EXTI4_15_IRQn 0 */

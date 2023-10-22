@@ -74,6 +74,10 @@ typedef enum	// register to array index translation
 
 typedef struct	// struct describing devices on BQ25798
 {
+	uint8_t pg;  // LMR34206 power good, high - good, low - not good
+	uint8_t stat;  // charge status, high - charge completed or disabled, low - charge in progress, blink at 1Hz - fault
+	uint8_t irq;  // interrupt (reverse logic), high - asserted, low - not asserted
+
 	void (*Write)(const uint8_t addr, const uint16_t val);	// I2C read method
 	uint16_t (*Read)(const uint8_t addr);  // I2C write method
 	void (*Dump)(void);  // sequential read of all device registers

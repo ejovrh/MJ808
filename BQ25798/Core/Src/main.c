@@ -49,7 +49,7 @@ TIM_HandleTypeDef htim1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-bq25798_t *BQ25798;
+bq25798_t const *BQ25798;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
