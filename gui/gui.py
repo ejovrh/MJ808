@@ -9,7 +9,7 @@ import queue
 custom_font_size = 10   # Create a custom font size
 num_fields_per_row = 10 # how many register fields per row
 num_rows = 6    # how many rows
-default_value = "0x00"  # default value
+default_value = "n/a"  # default value
 entry_field_width = 6   #
 entry_field_height = 1  #
 custom_font = ("Arial", custom_font_size)  # font to be used
@@ -78,7 +78,8 @@ def update_entry_fields(data):
         for i, value in enumerate(values):
             if i < len(entry_fields):
                 entry_fields[i].delete(1.0, tk.END)
-                entry_fields[i].insert(1.0, fptr[i](value, register_offset[i], register_step_size[i]))
+                result = str(fptr[i](value, register_offset[i], register_step_size[i])) + register_unit[i]
+                entry_fields[i].insert(1.0, result)
 
 # Function to read and display data from COM port
 def read_com_data(ser, queue):
@@ -230,7 +231,15 @@ register_description = [
                         "BQ2798 status" # 
 ]
 
-fptr = [RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, retval, RegToVal, retval, # REG00 to REG0D
+register_unit = [
+                "V", "V", "A", "V", "A", "", "", "", "V", "",   # REG00 to REG0D
+                "", "", "", "", "", "", "", "", "", "",         # REG0E to REG17
+                "", "", "A", "", "", "", "", "", "", "",        # REG18 to REG22
+                "", "", "", "", "", "", "", "", "", "",         # REG23 to REG2C
+                "", "", "", "", "A", "A", "V", "V", "V", "V",   # REG2D to REG3B
+                "V", "%", "°C", "V", "V", "", "", "", "", "",   # REG3D to REG48, along with PG, IRQ, STAT
+]
+fptr = [RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, retval, RegToVal, retval, RegToVal, retval, # REG00 to REG0D
         retval, retval, retval, retval, retval, retval, retval, retval, retval, retval,   # REG0E to REG17
         retval, RegToVal, retval, retval, retval, retval, retval, retval, retval, retval,   # REG18 to REG22
         retval, retval, retval, retval, retval, retval, retval, retval, retval, retval,   # REG23 to REG2C
