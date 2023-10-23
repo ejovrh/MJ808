@@ -1,19 +1,18 @@
+# Import necessary modules
 import tkinter as tk
 from tkinter import Text, Label, messagebox
 import serial
 import threading
 import queue
 
-# Create a custom font size
-custom_font_size = 10
 
-# Create text entry fields with the default value "0x00" and a custom font size
-num_fields_per_row = 10
-num_rows = 6
-default_value = "0x00"
-entry_field_width = 6
-entry_field_height = 1
-custom_font = ("Arial", custom_font_size)
+custom_font_size = 10   # Create a custom font size
+num_fields_per_row = 10 # how many register fields per row
+num_rows = 6    # how many rows
+default_value = "0x00"  # default value
+entry_field_width = 6   #
+entry_field_height = 1  #
+custom_font = ("Arial", custom_font_size)  # font to be used
 
 # Create a global variable to keep track of the serial connection and reading flag
 ser = None
@@ -24,7 +23,7 @@ reading_thread = None
 root = tk.Tk()
 root.title("BQ25798 registers")
 
-# Create frames for organizing the GUI elements with a height of 100
+# Create frames for organizing the GUI elements
 top_frame = tk.Frame(root, bg='gray', width=1024, height=50, pady=3)
 bq25798_frame = tk.Frame(root, bg='gray', width=1024, pady=3)
 status_frame = tk.Frame(root, bg='gray', width=1024, pady=3)
@@ -100,24 +99,15 @@ def show_error(message):
     messagebox.showerror("Error", message)
     print(f"Error: {message}")
 
-# Function definition for RegToVal
+# Function for calculating values based on register data, offset and bit stpe size
 def RegToVal(in_val=0, in_offset=0, in_stepsize=1):
-    if not isinstance(in_val, str):
-        raise ValueError("in_val must be a hexadecimal string.")
-    if not in_val.isalnum():
-        raise ValueError("in_val must be an alphanumeric string.")
-
-    try:
-        in_val = int(in_val, 16)
-    except ValueError:
-        raise ValueError("in_val must be a valid hexadecimal string.")
-
-    if not (0 <= in_offset <= 65535) or not (0 <= in_stepsize <= 65535):
-        raise ValueError("in_offset and in_stepsize must be within the range [0, 65535].")
-
     retval = (in_val * in_stepsize) + in_offset
     retval /= 1000
     return retval
+
+# Function that returns the input
+def retval(input):
+    return input
 
 register_name = ['REG00', 'REG01', 'REG03', 'REG05', 'REG06', 'REG08', 'REG09', 'REG0A', 'REG0B', 'REG0D',
                  'REG0E', 'REG0F', 'REG10', 'REG11', 'REG12', 'REG13', 'REG14', 'REG15', 'REG16', 'REG17',
@@ -126,58 +116,78 @@ register_name = ['REG00', 'REG01', 'REG03', 'REG05', 'REG06', 'REG08', 'REG09', 
                  'REG2D', 'REG2E', 'REG2F', 'REG30', 'REG31', 'REG33', 'REG35', 'REG37', 'REG39', 'REG3B', 
                  'REG3D', 'REG3F', 'REG41', 'REG43', 'REG45', 'REG47', 'REG48', 'PG', 'IRQ', 'STAT']
 
-register_offset = [2500, 0, 0, 0, 0, 0, 0, 0, 2800, 0,
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+register_offset = [2500, 0, 0, 0, 0, 0, 0, 0, 2800, 0,  # REG00 to REG0D
+                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,        # REG0E to REG17
+                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,        # REG18 to REG22
+                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,        # REG23 to REG2C
+                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,        # REG2D to REG3B
+                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0         # REG3D to REG48, along with PG, IRQ, STAT
+                   ]
 
-register_step_size = [250, 10, 10, 100, 10, 40, 40, -1, 10, -1,
-                      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-                      -1, 10, -1, -1, -1, -1, -1, -1, -1, -1,
-                      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
-                      -1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 
-                      1, 0.0976563, 0.5, 1, 1, -1, -1, -1, -1, -1]
+register_step_size = [250, 10, 10, 100, 10, 40, 40, -1, 10, -1, # REG00 to REG0D
+                      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   # REG0E to REG17
+                      -1, 10, -1, -1, -1, -1, -1, -1, -1, -1,   # REG18 to REG22
+                      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   # REG23 to REG2C
+                      -1, -1, -1, -1, 1, 1, 1, 1, 1, 1,         # REG2D to REG3B
+                      1, 0.0976563, 0.5, 1, 1, -1, -1, -1, -1, -1   # REG3D to REG48, along with PG, IRQ, STAT
+                      ]
 
-field_num =0
+fptr = [RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, retval, RegToVal, retval, # REG00 to REG0D
+        retval, retval, retval, retval, retval, retval, retval, retval, retval, retval,   # REG0E to REG17
+        retval, RegToVal, retval, retval, retval, retval, retval, retval, retval, retval,   # REG18 to REG22
+        retval, retval, retval, retval, retval, retval, retval, retval, retval, retval,   # REG23 to REG2C
+        retval, retval, retval, retval, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal,         # REG2D to REG3B
+        RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, retval, retval, retval, retval, retval   # REG3D to REG48, along with PG, IRQ, STAT
+        ]
+
+# create bq25798 register labels and fields
+field_num = 0
 for i in range(6):  # 6 rows
     for j in range(10): # 10 register values per row
-        # 
         if field_num >= 57:
             break
+
+        # Create labels for register names
         label = Label(bq25798_frame, text=register_name[field_num])
         label.grid(row=i, column=2*j, padx=2, pady=5, sticky="e")
 
+        # Create text entry fields for register values
         entry_field = Text(bq25798_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
         entry_field.insert(1.0, default_value)
         entry_field.grid(row=i, column=2*j + 1, padx=2, pady=5)
         entry_fields.append(entry_field)
         field_num +=1 
         
-
+# create charger status labels and fields
 for i in range(3):
+    # Create labels for status registers
     label = Label(status_frame, text=register_name[field_num])  
     label.grid(row=0, column=2 * i, padx=2, pady=5, sticky="e")
 
+    # Create text entry fields for status registers
     entry_field = Text(status_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
     entry_field.insert(1.0, default_value)
     entry_field.grid(row=0, column=2 * i + 1, padx=2, pady=5)
     entry_fields.append(entry_field)
     field_num +=1 
 
+# Create buttons for controlling the application
 start_button = tk.Button(button_frame, text="Start Reading", command=start_reading)
 stop_button = tk.Button(button_frame, text="Stop Reading", command=stop_reading)
 exit_button = tk.Button(button_frame, text="Exit", command=exit_app)
 
+# Configure button frame layout
 button_frame.columnconfigure(0, weight=1)
 button_frame.columnconfigure(1, weight=1)
 button_frame.columnconfigure(2, weight=1)
 
+# Place buttons in the button frame
 start_button.grid(row=0, column=1, padx=5, pady=5, sticky='W')
 stop_button.grid(row=0, column=1, padx=5, pady=5)
 exit_button.grid(row=0, column=1, padx=5, pady=5, sticky='E')
 
+# Initialize a queue for data processing
 data_queue = queue.Queue()
 
+# Start the Tkinter main loop
 root.mainloop()
