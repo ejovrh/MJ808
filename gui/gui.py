@@ -21,6 +21,31 @@ ser = None
 reading_flag = False
 reading_thread = None
 
+class ToolTip:
+    def __init__(self, widget, text):
+        self.widget = widget
+        self.text = text
+        self.tooltip = None
+
+        widget.bind("<Enter>", self.display_tooltip)
+        widget.bind("<Leave>", self.hide_tooltip)
+
+    def display_tooltip(self, event):
+        x, y, _, _ = self.widget.bbox("insert")
+        x += self.widget.winfo_rootx() + 25
+        y += self.widget.winfo_rooty() + 25
+
+        self.tooltip = tk.Toplevel(self.widget)
+        self.tooltip.wm_overrideredirect(True)
+        self.tooltip.wm_geometry(f"+{x}+{y}")
+        label = Label(self.tooltip, text=self.text, background="lightyellow", relief="solid", borderwidth=1)
+        label.pack()
+
+    def hide_tooltip(self, event):
+        if self.tooltip:
+            self.tooltip.destroy()
+            self.tooltip = None
+
 # Create a Tkinter window
 root = tk.Tk()
 root.title("BQ25798 registers")
@@ -142,6 +167,69 @@ register_step_size = [250, 10, 10, 100, 10, 40, 40, -1, 10, -1, # REG00 to REG0D
                       1, 0.0976563, 0.5, 1, 1, -1, -1, -1, -1, -1   # REG3D to REG48, along with PG, IRQ, STAT
                       ]
 
+register_description = [
+                        "Minimal System Voltage",   # 0h
+                        "Charge Voltage Limit", # 1h
+                        "Charge Current Limit", # 3h
+                        "Input Voltage Limit",  # 5h
+                        "Input Current Limit", # 6h
+                        "Precharge Control", # 8h
+                        "Termination Control", # 9h
+                        "Re-charge Contro", # Ah
+                        "VOTG regulation", # Bh
+                        "IOTG regulation", # Dh
+                        "Timer Control", # Eh
+                        "Charger Control 0", # Fh
+                        "Charger Control 1", # 10h
+                        "Charger Control 2", # 11h
+                        "Charger Control 3", # 12h
+                        "Charger Control 4", # 13h
+                        "Charger Control 5", # 14h
+                        "MPPT Control", # 15h
+                        "Temperature Control", # 16h
+                        "NTC Control 0", # 17h
+                        "NTC Control 1", # 18h
+                        "ICO Current Limit", # 19h
+                        "Charger Status 0", # 1Bh
+                        "Charger Status 1", # 1Ch
+                        "Charger Status 2", # 1Dh
+                        "Charger Status 3", # 1Eh
+                        "Charger Status 4", # 1Fh
+                        "FAULT Status 0", # 20h
+                        "FAULT Status 1", # 21h
+                        "Charger Flag 0", # 22h
+                        "Charger Flag 1", # 23h
+                        "Charger Flag 2", # 24h
+                        "Charger Flag 3", # 25h
+                        "FAULT Flag 0", # 26h
+                        "FAULT Flag 1", # 27h
+                        "Charger Mask 0", # 28h
+                        "Charger Mask 1", # 29h
+                        "Charger Mask 2", # 2Ah
+                        "Charger Mask 3", # 2Bh
+                        "FAULT Mask 0", # 2Ch
+                        "FAULT Mask 1", # 2Dh
+                        "ADC Control", # 2Eh
+                        "ADC Function Disable 0", # 2Fh
+                        "ADC Function Disable 1", # 30h
+                        "IBUS ADC", # 31h
+                        "IBAT ADC", # 33h
+                        "VBUS ADC", # 35h
+                        "VAC1 ADC" , # 37h
+                        "VAC2 ADC", # 39h
+                        "VBAT ADC", # 3Bh
+                        "VSYS ADC", # 3Dh
+                        "TS ADC", # 3Fh
+                        "TDIE_ADC", # 41h
+                        "D+ ADC", # 43h
+                        "D- ADC", # 45h
+                        "DPDM Driver", # 47h
+                        "Part Information", # 48h
+                        "LMR34206 Power Good", # 
+                        "BQ2798 Interrupt", # 
+                        "BQ2798 status" # 
+]
+
 fptr = [RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, retval, RegToVal, retval, # REG00 to REG0D
         retval, retval, retval, retval, retval, retval, retval, retval, retval, retval,   # REG0E to REG17
         retval, RegToVal, retval, retval, retval, retval, retval, retval, retval, retval,   # REG18 to REG22
@@ -161,6 +249,10 @@ for i in range(6):  # 6 rows
         label = Label(bq25798_frame, text=register_name[field_num])
         label.grid(row=i, column=2*j, padx=2, pady=5, sticky="e")
 
+        # Add tooltips to the labels
+        tooltip_text = register_description[field_num]
+        tooltip = ToolTip(label, tooltip_text)
+
         # Create text entry fields for register values
         entry_field = Text(bq25798_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
         entry_field.insert(1.0, default_value)
@@ -174,6 +266,10 @@ for i in range(3):
     label = Label(status_frame, text=register_name[field_num])  
     label.grid(row=0, column=2 * i, padx=2, pady=5, sticky="e")
 
+    # Add tooltips to the labels
+    tooltip_text = register_description[field_num]
+    tooltip = ToolTip(label, tooltip_text)
+    
     # Create text entry fields for status registers
     entry_field = Text(status_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
     entry_field.insert(1.0, default_value)
