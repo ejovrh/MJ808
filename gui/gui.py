@@ -13,6 +13,8 @@ default_value = "0x00"  # default value
 entry_field_width = 6   #
 entry_field_height = 1  #
 custom_font = ("Arial", custom_font_size)  # font to be used
+entry_fields = []   # container for register values as read from device and computed
+data_buffer = ""    # data buffer for serial read
 
 # Create a global variable to keep track of the serial connection and reading flag
 ser = None
@@ -35,22 +37,29 @@ bq25798_frame.grid(row=1, column=0, sticky='nsew')
 status_frame.grid(row=2, column=0, sticky='nsew')
 button_frame.grid(row=3, column=0, sticky='nsew')
 
-# Create a list to store references to text entry fields
-entry_fields = []
-
 # Function to update text entry fields with received data
 def update_entry_fields(data):
-    values = data.strip().split()
-    for i, value in enumerate(values):
-        if i < len(entry_fields):
-            entry_fields[i].delete(1.0, tk.END)
-            entry_fields[i].insert(1.0, value)
+    # Append the received data to the buffer
+    global data_buffer
+    data_buffer += data
+
+    # Keep processing as long as there are newline characters in the buffer
+    while '\n' in data_buffer:
+        # Split the buffer by newline characters
+        data_lines, data_buffer = data_buffer.split('\n', 1)
+        values = data_lines.strip().split()
+        
+        # Process the values and update the entry fields
+        for i, value in enumerate(values):
+            if i < len(entry_fields):
+                entry_fields[i].delete(1.0, tk.END)
+                entry_fields[i].insert(1.0, fptr[i](value, register_offset[i], register_step_size[i]))
 
 # Function to read and display data from COM port
 def read_com_data(ser, queue):
     try:
         while reading_flag:
-            data = ser.readline().decode('utf-8')
+            data = ser.readline().decode('ascii')
             queue.put(data)
     except serial.SerialException as e:
         queue.put(f"Serial Error: {e}")
@@ -101,12 +110,13 @@ def show_error(message):
 
 # Function for calculating values based on register data, offset and bit stpe size
 def RegToVal(in_val=0, in_offset=0, in_stepsize=1):
+    in_val = int(in_val, 16)
     retval = (in_val * in_stepsize) + in_offset
     retval /= 1000
     return retval
 
 # Function that returns the input
-def retval(input):
+def retval(input, two, three):
     return input
 
 register_name = ['REG00', 'REG01', 'REG03', 'REG05', 'REG06', 'REG08', 'REG09', 'REG0A', 'REG0B', 'REG0D',
