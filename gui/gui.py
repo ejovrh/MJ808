@@ -141,6 +141,18 @@ def RegToVal(in_val=0, in_offset=0, in_stepsize=1):
     retval /= 1000
     return retval
 
+# Function for calculating values based on register data, offset and bit stpe size
+def RegToTemp(in_val=0, in_offset=0, in_stepsize=1):
+    in_val = int(in_val, 16)
+
+    if in_val & (1 << 15):
+        # Compute the two's complement
+        in_val -= 1 << 16
+
+    retval = (in_val * in_stepsize) + in_offset
+    retval /= 1000
+    return retval
+
 # Function that returns the input
 def retval(input, two, three):
     return input
@@ -244,7 +256,7 @@ fptr = [RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, retval, RegToVal, retv
         retval, RegToVal, retval, retval, retval, retval, retval, retval, retval, retval,   # REG18 to REG22
         retval, retval, retval, retval, retval, retval, retval, retval, retval, retval,   # REG23 to REG2C
         retval, retval, retval, retval, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal,         # REG2D to REG3B
-        RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, retval, retval, retval, retval, retval   # REG3D to REG48, along with PG, IRQ, STAT
+        RegToVal, RegToVal, RegToTemp, RegToVal, RegToVal, retval, retval, retval, retval, retval   # REG3D to REG48, along with PG, IRQ, STAT
         ]
 
 # create bq25798 register labels and fields
