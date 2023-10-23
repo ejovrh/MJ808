@@ -1,18 +1,18 @@
 import tkinter as tk
-from tkinter import Text, messagebox
+from tkinter import Text, Label, messagebox
 import serial
 import threading
 import queue
 
 # Create a custom font size
-custom_font_size = 12
+custom_font_size = 10
 
 # Create text entry fields with the default value "0x00" and a custom font size
 num_fields_per_row = 10
 num_rows = 6
 default_value = "0x00"
-entry_field_width = 6  # Width of 6 characters
-entry_field_height = 1  # Height of 1 character (slightly taller than the default font size)
+entry_field_width = 6  # Width 
+entry_field_height = 1  # Height 
 custom_font = ("Arial", custom_font_size)
 
 # Create a global variable to keep track of the serial connection and reading flag
@@ -23,19 +23,18 @@ reading_thread = None  # Store the reading thread
 # Create a Tkinter window
 root = tk.Tk()
 root.title("BQ25798 registers")  # Set the window title
-root.geometry("1024x768")  # Set the window size to 1024x768
-root.resizable(False, False)  # Make the window non-resizable
+root.geometry('{}x{}'.format(1024, 768))  # Resized window to fit the vertical arrangement
 
 # Create frames for organizing the GUI elements with a height of 100
-top_frame = tk.Frame(root, width=1000, height=10, highlightbackground="black", highlightthickness=1)
-status_frame = tk.Frame(root, width=1000, height=100, highlightbackground="black", highlightthickness=1)
-bq25798_frame = tk.Frame(root, width=1000, height=100, highlightbackground="black", highlightthickness=1)
-button_frame = tk.Frame(root, width=1000, height=100, highlightbackground="black", highlightthickness=1)
+top_frame = tk.Frame(root, bg='gray', width=1024, height=50, pady=3)
+bq25798_frame = tk.Frame(root, bg='gray', width=1024, pady=3)
+status_frame = tk.Frame(root, bg='gray', width=1024, pady=3)
+button_frame = tk.Frame(root, bg='gray', width=1024, pady=3)
 
 # Draw grid
 top_frame.grid(row=1, column=0, sticky='nsew')
-status_frame.grid(row=2, column=0, sticky='nsew')
-bq25798_frame.grid(row=3, column=0, sticky='nsew')
+bq25798_frame.grid(row=2, column=0, sticky='nsew')
+status_frame.grid(row=3, column=0, sticky='nsew')
 button_frame.grid(row=4, column=0, sticky='nsew')
 
 # Create a list to store references to text entry fields
@@ -102,23 +101,72 @@ def show_error(message):
     messagebox.showerror("Error", message)
     print(f"Error: {message}")  # Print the error to the command prompt
 
+# Function definition for RegToVal
+def RegToVal(in_val=0, in_offset=0, in_stepsize=1):
+    if not isinstance(in_val, str):
+        raise ValueError("in_val must be a hexadecimal string.")
+    if not in_val.isalnum():
+        raise ValueError("in_val must be an alphanumeric string.")
+
+    try:
+        in_val = int(in_val, 16)
+    except ValueError:
+        raise ValueError("in_val must be a valid hexadecimal string.")
+
+    if not (0 <= in_offset <= 65535) or not (0 <= in_stepsize <= 65535):
+        raise ValueError("in_offset and in_stepsize must be within the range [0, 65535].")
+
+    retval = (in_val * in_stepsize) + in_offset
+    retval /= 1000  # Divide retval by 1000
+    return retval
+
+# list of 60 register names
+register_name = ['REG00', 'REG01', 'REG03', 'REG05', 'REG06', 'REG08', 'REG09', 'REG0A', 'REG0B', 'REG0D',
+                 'REG0E', 'REG0F', 'REG10', 'REG11', 'REG12', 'REG13', 'REG14', 'REG15', 'REG16', 'REG17',
+                 'REG18', 'REG19', 'REG1B', 'REG1C', 'REG1D', 'REG1E', 'REG1F', 'REG20', 'REG21', 'REG22',
+                 'REG23', 'REG24', 'REG25', 'REG26', 'REG34', 'REG27', 'REG28', 'REG29', 'REG2A', 'REG2B',
+                 'REG2C', 'REG2D', 'REG2E', 'REG2F', 'REG30', 'REG31', 'REG33', 'REG35', 'REG37', 'REG39',
+                 'REG3B', 'REG3D', 'REG3F', 'REG41', 'REG43', 'REG45', 'REG47', 'REG48', 'PG', 'IRQ',
+                 'STAT']
+
+# list of 60 offset values
+register_offset = [2500, 0, 0, 0, 0, 0, 0, 0, 2800, 0,
+                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                   0]
+
+# list of 60 offset values
+register_step_size = [250, 10, 10, 100, 10, 40, 40, -1, 10, -1,
+                      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+                      -1, 10, -1, -1, -1, -1, -1, -1, -1, -1,
+                      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+                      -1, -1, -1, -1, -1, 1, 1, 1, 1, 1,
+                      1, 1, 0.0976563, 0.5, 1, 1, -1, -1, -1, -1,
+                      -1]
+
+# Create bq25798 register fields in the bq25798_frame
+for i in range(num_rows):
+    for j in range(num_fields_per_row):
+        
+        field_num = i * num_fields_per_row + j
+        if field_num >= 57:
+            break
+
+        entry_field = Text(bq25798_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
+        entry_field.insert(1.0, default_value)  # Set the default value
+        entry_field.grid(row=i, column=j, padx=5, pady=5)
+        entry_fields.append(entry_field)
+
 # Create controller status entry fields in the status_frame
 for i in range(3):
     entry_field = Text(status_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
     entry_field.insert(1.0, default_value)  # Set the default value
     entry_field.grid(row=0, column=i, padx=5, pady=5, sticky='nsew')
     entry_fields.insert(i, entry_field)
-    
-# Create bq25798 register fields in the bq25798_frame
-for i in range(num_rows):
-    for j in range(num_fields_per_row):
-        field_num = i * num_fields_per_row + j
-        if field_num >= 57:
-            break
-        entry_field = Text(bq25798_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
-        entry_field.insert(1.0, default_value)  # Set the default value
-        entry_field.grid(row=i, column=j, padx=5, pady=5, sticky='nsew')
-        entry_fields.append(entry_field)
+
 
 # Create buttons in the button_frame
 start_button = tk.Button(button_frame, text="Start Reading", command=start_reading)
