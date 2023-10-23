@@ -4,16 +4,39 @@ import serial
 import threading
 import queue
 
+# Create a custom font size
+custom_font_size = 12
+
+# Create text entry fields with the default value "0x00" and a custom font size
+num_fields_per_row = 10
+num_rows = 6
+default_value = "0x00"
+entry_field_width = 6  # Width of 6 characters
+entry_field_height = 1  # Height of 1 character (slightly taller than the default font size)
+custom_font = ("Arial", custom_font_size)
+
 # Create a global variable to keep track of the serial connection and reading flag
 ser = None
 reading_flag = False
 reading_thread = None  # Store the reading thread
 
 # Create a Tkinter window
-app = tk.Tk()
-app.title("BQ25798 registers")  # Set the window title
-app.geometry("1024x768")  # Set the window size to 1024x768
-app.resizable(False, False)  # Make the window non-resizable
+root = tk.Tk()
+root.title("BQ25798 registers")  # Set the window title
+root.geometry("1024x768")  # Set the window size to 1024x768
+root.resizable(False, False)  # Make the window non-resizable
+
+# Create frames for organizing the GUI elements with a height of 100
+top_frame = tk.Frame(root, width=1000, height=10, highlightbackground="black", highlightthickness=1)
+status_frame = tk.Frame(root, width=1000, height=100, highlightbackground="black", highlightthickness=1)
+bq25798_frame = tk.Frame(root, width=1000, height=100, highlightbackground="black", highlightthickness=1)
+button_frame = tk.Frame(root, width=1000, height=100, highlightbackground="black", highlightthickness=1)
+
+# Draw grid
+top_frame.grid(row=1, column=0, sticky='nsew')
+status_frame.grid(row=2, column=0, sticky='nsew')
+bq25798_frame.grid(row=3, column=0, sticky='nsew')
+button_frame.grid(row=4, column=0, sticky='nsew')
 
 # Create a list to store references to text entry fields
 entry_fields = []
@@ -47,7 +70,7 @@ def start_reading():
     reading_flag = True
     reading_thread = threading.Thread(target=read_com_data, args=(ser, data_queue))
     reading_thread.start()
-    app.after(100, process_queue)  # Start processing the data queue
+    root.after(100, process_queue)  # Start processing the data queue
 
 # Function to process the data queue
 def process_queue():
@@ -57,9 +80,9 @@ def process_queue():
             show_error(data)
         else:
             update_entry_fields(data)
-        app.after(100, process_queue)  # Continue processing the data queue
+        root.after(100, process_queue)  # Continue processing the data queue
     except queue.Empty:
-        app.after(100, process_queue)  # Queue is empty, continue processing
+        root.after(100, process_queue)  # Queue is empty, continue processing
 
 # Function to stop reading data and close the serial connection
 def stop_reading():
@@ -72,69 +95,42 @@ def stop_reading():
 # Function to exit the application
 def exit_app():
     stop_reading()  # Stop reading data (close the serial connection)
-    app.quit()  # Quit the main application loop
+    root.quit()  # Quit the main application loop
 
 # Function to display an error popup
 def show_error(message):
     messagebox.showerror("Error", message)
     print(f"Error: {message}")  # Print the error to the command prompt
 
-# Create a custom font size
-custom_font_size = 12
-
-# Create text entry fields with the default value "0x00" and a custom font size
-num_fields_per_row = 10
-num_rows = 6
-default_value = "0x00"
-entry_field_width = 6  # Width of 6 characters
-entry_field_height = 1  # Height of 1 character (slightly taller than the default font size)
-custom_font = ("Arial", custom_font_size)
-
-# Create a frame for the text entry fields
-entry_frame = tk.Frame(app)
-entry_frame.grid(row=0, column=0, sticky='nsew')
-
-# Create controller status entry fields in the first row
+# Create controller status entry fields in the status_frame
 for i in range(3):
-    entry_field = Text(entry_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
+    entry_field = Text(status_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
     entry_field.insert(1.0, default_value)  # Set the default value
     entry_field.grid(row=0, column=i, padx=5, pady=5, sticky='nsew')
     entry_fields.insert(i, entry_field)
-
-# Create bq25798 register fields in the second row
+    
+# Create bq25798 register fields in the bq25798_frame
 for i in range(num_rows):
     for j in range(num_fields_per_row):
         field_num = i * num_fields_per_row + j
         if field_num >= 57:
             break
-        entry_field = Text(entry_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
+        entry_field = Text(bq25798_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
         entry_field.insert(1.0, default_value)  # Set the default value
-        entry_field.grid(row=i + 1, column=j, padx=5, pady=5, sticky='nsew')
+        entry_field.grid(row=i, column=j, padx=5, pady=5, sticky='nsew')
         entry_fields.append(entry_field)
 
-# Create a frame for the buttons and place it at the bottom of the window
-button_frame = tk.Frame(app)
-button_frame.grid(row=1, column=0, sticky='nsew')
-
-# Create a button to start reading data
+# Create buttons in the button_frame
 start_button = tk.Button(button_frame, text="Start Reading", command=start_reading)
-start_button.grid(row=0, column=0, padx=5, pady=5)
-
-# Create a button to stop reading data
 stop_button = tk.Button(button_frame, text="Stop Reading", command=stop_reading)
-stop_button.grid(row=0, column=1, padx=5, pady=5)
-
-# Create an exit button to close the application
 exit_button = tk.Button(button_frame, text="Exit", command=exit_app)
-exit_button.grid(row=0, column=2, padx=5, pady=5)
 
-# Configure grid weights to allow resizing
-entry_frame.grid_rowconfigure(0, weight=1)
-entry_frame.grid_columnconfigure(0, weight=1)
-button_frame.grid_rowconfigure(0, weight=1)
-button_frame.grid_columnconfigure(0, weight=1)
+# Pack the buttons in the middle of the button_frame
+start_button.pack(side="left", padx=5, pady=5)
+stop_button.pack(side="left", padx=5, pady=5)
+exit_button.pack(side="left", padx=5, pady=5)
 
 # Create a queue for communication between threads
 data_queue = queue.Queue()
 
-app.mainloop()
+root.mainloop()
