@@ -4,7 +4,7 @@ from tkinter import Text, Label, messagebox
 import serial
 import threading
 import queue
-
+import time
 
 custom_font_size = 10   # Create a custom font size
 num_fields_per_row = 10 # how many register fields per row
@@ -13,9 +13,12 @@ default_value = "n/a"  # default value
 entry_field_width = 6   #
 entry_field_height = 1  #
 custom_font = ("Arial", custom_font_size)  # font to be used
-entry_fields = []   # container for register values as read from device and computed
+entry_fields = []    # container for register values as read from device and computed
 data_buffer = ""    # data buffer for serial read
+last_values = [default_value] * 60
+last_update_times = [time.time()] * 60
 
+                     
 # Create a global variable to keep track of the serial connection and reading flag
 ser = None
 reading_flag = False
@@ -75,11 +78,25 @@ def update_entry_fields(data):
         values = data_lines.strip().split()
         
         # Process the values and update the entry fields
+        current_time = time.time()
         for i, value in enumerate(values):
             if i < len(entry_fields):
                 entry_fields[i].delete(1.0, tk.END)
                 result = str(fptr[i](value, register_offset[i], register_step_size[i])) + register_unit[i]
+                
+                if result != last_values[i]:
+                    entry_fields[i].config(bg='yellow')
+                    
+                    # Set a timer to reset the background color to white after 5 seconds
+                    root.after(5000, reset_bg_color, i)
+                    
                 entry_fields[i].insert(1.0, result)
+                last_values[i] = result
+                last_update_times[i] = current_time
+
+# Function to reset the background color to white
+def reset_bg_color(i):
+    entry_fields[i].config(bg='white')
 
 # Function to read and display data from COM port
 def read_com_data(ser, queue):
@@ -246,11 +263,12 @@ register_description = [
 register_unit = [
                 "V", "V", "A", "V", "A", "", "", "", "V", "",   # REG00 to REG0D
                 "", "", "", "", "", "", "", "", "", "",         # REG0E to REG17
-                "", "", "A", "", "", "", "", "", "", "",        # REG18 to REG22
+                "", "A", "", "", "", "", "", "", "", "",        # REG18 to REG22
                 "", "", "", "", "", "", "", "", "", "",         # REG23 to REG2C
                 "", "", "", "", "A", "A", "V", "V", "V", "V",   # REG2D to REG3B
                 "V", "%", "°C", "V", "V", "", "", "", "", "",   # REG3D to REG48, along with PG, IRQ, STAT
 ]
+
 fptr = [RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, retval, RegToVal, retval, RegToVal, retval, # REG00 to REG0D
         retval, retval, retval, retval, retval, retval, retval, retval, retval, retval,   # REG0E to REG17
         retval, RegToVal, retval, retval, retval, retval, retval, retval, retval, retval,   # REG18 to REG22
@@ -276,7 +294,7 @@ for i in range(6):  # 6 rows
 
         # Create text entry fields for register values
         entry_field = Text(bq25798_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
-        entry_field.insert(1.0, default_value)
+        entry_field.insert(1.0, str(default_value))
         entry_field.grid(row=i, column=2*j + 1, padx=2, pady=5)
         entry_fields.append(entry_field)
         field_num +=1 
@@ -305,7 +323,7 @@ exit_button = tk.Button(button_frame, text="Exit", command=exit_app)
 
 # Configure button frame layout
 button_frame.columnconfigure(0, weight=1)
-button_frame.columnconfigure(1, weight=1)
+button_frame.columnconfigure(1, weight=3)
 button_frame.columnconfigure(2, weight=1)
 
 # Place buttons in the button frame
