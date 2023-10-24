@@ -17,7 +17,7 @@ entry_fields = []    # container for register values as read from device and com
 data_buffer = ""    # data buffer for serial read
 last_values = [default_value] * 60
 last_update_times = [time.time()] * 60
-
+last_change_times = [0] * 60
                      
 # Create a global variable to keep track of the serial connection and reading flag
 ser = None
@@ -76,23 +76,23 @@ def update_entry_fields(data):
         # Split the buffer by newline characters
         data_lines, data_buffer = data_buffer.split('\n', 1)
         values = data_lines.strip().split()
-        
+
         # Process the values and update the entry fields
         current_time = time.time()
         for i, value in enumerate(values):
             if i < len(entry_fields):
                 entry_fields[i].delete(1.0, tk.END)
                 result = str(fptr[i](value, register_offset[i], register_step_size[i])) + register_unit[i]
-                
+
                 if result != last_values[i]:
-                    entry_fields[i].config(bg='yellow')
-                    
-                    # Set a timer to reset the background color to white after 5 seconds
-                    root.after(5000, reset_bg_color, i)
-                    
+                    if entry_fields[i].cget("bg") != "yellow":
+                        entry_fields[i].config(bg='yellow')
+                        last_change_times[i] = current_time
+                elif current_time - last_change_times[i] >= 5:
+                    entry_fields[i].config(bg='white')
+
                 entry_fields[i].insert(1.0, result)
                 last_values[i] = result
-                last_update_times[i] = current_time
 
 # Function to reset the background color to white
 def reset_bg_color(i):
