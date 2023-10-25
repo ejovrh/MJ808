@@ -3,11 +3,9 @@ import queue
 import tkinter as tk
 from tkinter import Text, Label, messagebox
 import serial
-
 import time
 
-# Create a queue for communication between threads
-data_queue = queue.Queue()
+data_queue = queue.Queue()  # Initialize a queue for data processing
 
 custom_font_size = 10   # Create a custom font size
 num_fields_per_row = 10 # how many register fields per row
@@ -18,10 +16,11 @@ entry_field_height = 1  #
 custom_font = ("Arial", custom_font_size)  # font to be used
 entry_fields = []    # container for register values as read from device and computed
 data_buffer = ""    # data buffer for serial read
-last_values = [default_value] * 60
+current_values:int = [default_value] * 60
+last_values:int = [default_value] * 60
 last_update_times = [time.time()] * 60
 last_change_times = [0] * 60
-# clicked_field = 21
+clicked_field = 21
                      
 # Create a global variable to keep track of the serial connection and reading flag
 ser = None
@@ -74,18 +73,18 @@ button_frame.grid(row=3, column=0, sticky='nsew')
 byte_frame.grid(row=4, column=0, sticky='nsew')
 
 # Callback function to execute the appropriate function based on field_num
-def on_entry_field_click(event, field_num):
-    clicked_field = field_num   # save the last click
+def on_entry_field_click(event, field_num:int):
+    # clicked_field = field_num   # save the last click
 
     if field_num < len(fptr):
         # Get the value of the clicked entry field
-        clicked_entry_value = entry_fields[field_num].get("1.0", "end-1c")
+        # clicked_entry_value = entry_fields[field_num].get("1.0", "end-1c")
         try:
-            int(clicked_entry_value, 16)
+            # clicked_entry_value = int(clicked_entry_value, 16)
             # Call the function from fptr based on field_num with the clicked value
-            fptr_hover[field_num](clicked_entry_value, register_offset[field_num], register_step_size[field_num])
+            fptr_hover[field_num](current_values[field_num], register_offset[field_num], register_step_size[field_num])
             # Do something with the result (e.g., display it)
-            print(f"Result for {register_name[field_num]}: {clicked_entry_value}")
+            print(f"Result for {register_name[field_num]}: {current_values[field_num]}")
         except ValueError as e:
             return None
             # Handle the ValueError gracefully (e.g., display an error message)
@@ -102,40 +101,34 @@ def update_entry_fields(data):
         # Split the buffer by newline characters
         data_lines, data_buffer = data_buffer.split('\n', 1)
         values = data_lines.strip().split()
-
-        # Process the values and update the entry fields
         current_time = time.time()
-        for i, value in enumerate(values):
+
+        for i, value in enumerate(values):  # loop over values with i and value
             if i < len(entry_fields):
+                hexvalue:str = value    # save the original value as hex
+                value = int(value, 16)  # convert value to integer
+
+                if fptr[i] != retval:   # only if the function pointer is not retval
+                    current_values[i] = fptr[i](value, register_offset[i], register_step_size[i])  # execute whatever the fuction pointer points to
+                else:   # if it is retval
+                    current_values[i] = hexvalue   # display the hex value (registers with bitfie)
+
+                # FIXME
+                # if current_values[i] != last_values[clicked_field]:
+                #     if fptr_hover[i] != retval:
+                #         fptr_hover[i](str(value), register_offset[i], register_step_size[i])
+
                 entry_fields[i].delete(1.0, tk.END)
-                result = str(fptr[i](value, register_offset[i], register_step_size[i])) + register_unit[i]
 
-                # if result != last_values[clicked_field]:
-                #     fptr_hover[i](value, register_offset[i], register_step_size[i])
-
-
-                if result != last_values[i]:
+                if current_values[i] != last_values[i]:
                     if entry_fields[i].cget("bg") != "yellow":
                         entry_fields[i].config(bg='yellow')
                         last_change_times[i] = current_time
                 elif current_time - last_change_times[i] >= 5:
                     entry_fields[i].config(bg='white')
 
-                entry_fields[i].insert(1.0, result)
-                last_values[i] = result
-
-# Function to reset the background color to white
-def reset_bg_color(i):
-    entry_fields[i].config(bg='white')
-
-# Function to read and display data from COM port
-def read_com_data(ser, queue):
-    try:
-        while reading_flag:
-            data = ser.readline().decode('ascii')
-            queue.put(data)
-    except serial.SerialException as e:
-        queue.put(f"Serial Error: {e}")
+                entry_fields[i].insert(1.0, str(current_values[i]) + register_unit[i] )
+                last_values[i] = current_values[i]
 
 # Function to read and process data from the serial port
 def read_serial_data(ser, data_queue):
@@ -200,23 +193,16 @@ def show_error(message):
     print(f"Error: {message}")
 
 # Function for calculating values based on register data, offset and bit stpe size
-def RegToVal(in_val=0, in_offset=0, in_stepsize=1):
-    in_val = int(in_val, 16)
-    retval = (in_val * in_stepsize) + in_offset
-    retval /= 1000
-    return retval
+def RegToVal(in_val:int, in_offset:int, in_stepsize:int) -> int:
+    return ( ((in_val * in_stepsize) + in_offset ) / 1000 )
 
 # Function for calculating values based on register data, offset and bit stpe size
-def RegToTemp(in_val=0, in_offset=0, in_stepsize=1):
-    in_val = int(in_val, 16)
-
+def RegToTemp(in_val:int, in_offset:int, in_stepsize:float):
     if in_val & (1 << 15):
         # Compute the two's complement
         in_val -= 1 << 16
 
-    retval = (in_val * in_stepsize) + in_offset
-    retval /= 1000
-    return retval
+    return ( ((in_val * in_stepsize) + in_offset ) / 1000 )
 
 def REG08(in_val, _ignore1, _ignore2):
     return in_val
@@ -233,7 +219,7 @@ def REG0D(in_val, _ignore1, _ignore2):
 def REG0E(in_val, _ignore1, _ignore2):
     return in_val
 
-def REG0F(in_val, _ignore1, _ignore2):
+def REG0F(in_val:int, _ignore1:int, _ignore2:int):
     decimal = int(in_val, 16)  # Convert in_val to an integer
     binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
 
@@ -575,16 +561,16 @@ def REG47(in_val, _ignore1, _ignore2):
 
 # Function that returns the input
 def retval(input, _ignore1, _ignore2):
-    return input
+    return None
 
-register_name = ['REG00', 'REG01', 'REG03', 'REG05', 'REG06', 'REG08', 'REG09', 'REG0A', 'REG0B', 'REG0D',
+register_name:str = ['REG00', 'REG01', 'REG03', 'REG05', 'REG06', 'REG08', 'REG09', 'REG0A', 'REG0B', 'REG0D',
                  'REG0E', 'REG0F', 'REG10', 'REG11', 'REG12', 'REG13', 'REG14', 'REG15', 'REG16', 'REG17',
                  'REG18', 'REG19', 'REG1B', 'REG1C', 'REG1D', 'REG1E', 'REG1F', 'REG20', 'REG21', 'REG22',
                  'REG23', 'REG24', 'REG25', 'REG26', 'REG27', 'REG28', 'REG29', 'REG2A', 'REG2B', 'REG2C', 
                  'REG2D', 'REG2E', 'REG2F', 'REG30', 'REG31', 'REG33', 'REG35', 'REG37', 'REG39', 'REG3B', 
                  'REG3D', 'REG3F', 'REG41', 'REG43', 'REG45', 'REG47', 'REG48', 'PG', 'IRQ', 'STAT']
 
-register_offset = [2500, 0, 0, 0, 0, 0, 0, 0, 2800, 0,  # REG00 to REG0D
+register_offset:int = [2500, 0, 0, 0, 0, 0, 0, 0, 2800, 0,  # REG00 to REG0D
                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,        # REG0E to REG17
                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,        # REG18 to REG22
                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,        # REG23 to REG2C
@@ -592,7 +578,7 @@ register_offset = [2500, 0, 0, 0, 0, 0, 0, 0, 2800, 0,  # REG00 to REG0D
                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0         # REG3D to REG48, along with PG, IRQ, STAT
                    ]
 
-register_step_size = [250, 10, 10, 100, 10, 40, 40, -1, 10, -1, # REG00 to REG0D
+register_step_size: int = [250, 10, 10, 100, 10, 40, 40, -1, 10, -1, # REG00 to REG0D
                       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   # REG0E to REG17
                       -1, 10, -1, -1, -1, -1, -1, -1, -1, -1,   # REG18 to REG22
                       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   # REG23 to REG2C
@@ -600,7 +586,7 @@ register_step_size = [250, 10, 10, 100, 10, 40, 40, -1, 10, -1, # REG00 to REG0D
                       1, 0.0976563, 0.5, 1, 1, -1, -1, -1, -1, -1   # REG3D to REG48, along with PG, IRQ, STAT
                       ]
 
-register_description = [
+register_description:str = [
                         "Minimal System Voltage",   # 0h
                         "Charge Voltage Limit", # 1h
                         "Charge Current Limit", # 3h
@@ -663,7 +649,7 @@ register_description = [
                         "BQ2798 status" # 
 ]
 
-register_unit = [
+register_unit:str = [
                 "V", "V", "A", "V", "A", "", "", "", "V", "",   # REG00 to REG0D
                 "", "", "", "", "", "", "", "", "", "",         # REG0E to REG17
                 "", "A", "", "", "", "", "", "", "", "",        # REG18 to REG22
@@ -746,9 +732,6 @@ button_frame.columnconfigure(2, weight=1)
 start_button.grid(row=0, column=1, padx=5, pady=5, sticky='W')
 stop_button.grid(row=0, column=1, padx=5, pady=5)
 exit_button.grid(row=0, column=1, padx=5, pady=5, sticky='E')
-
-# Initialize a queue for data processing
-data_queue = queue.Queue()
 
 # Start the Tkinter main loop
 root.mainloop()
