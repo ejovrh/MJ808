@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import Text, Label, messagebox
 import serial
 import time
+import inspect
 
 data_queue = queue.Queue()  # Initialize a queue for data processing
 
@@ -15,6 +16,8 @@ entry_field_width = 6   #
 entry_field_height = 1  #
 custom_font = ("Arial", custom_font_size)  # font to be used
 entry_fields = []    # container for register values as read from device and computed
+bit_fields = {}  # dictionary
+bit_description_fields = {}  # dictionary
 data_buffer = ""    # data buffer for serial read
 current_values:int = [default_value] * 60
 last_values:int = [default_value] * 60
@@ -64,6 +67,7 @@ bq25798_frame = tk.Frame(root, bg='gray', width=1024, pady=3)
 status_frame = tk.Frame(root, bg='gray', width=1024, pady=3)
 button_frame = tk.Frame(root, bg='gray', width=1024, pady=3)
 byte_frame = tk.Frame(root, bg='gray', width=1024, height=200)
+bottom_frame = tk.Frame(root, bg='gray', width=1024, height=50, pady=3)
 
 # Draw grid
 top_frame.grid(row=0, column=0, sticky='nsew')
@@ -71,24 +75,17 @@ bq25798_frame.grid(row=1, column=0, sticky='nsew')
 status_frame.grid(row=2, column=0, sticky='nsew')
 button_frame.grid(row=3, column=0, sticky='nsew')
 byte_frame.grid(row=4, column=0, sticky='nsew')
+top_frame.grid(row=5, column=0, sticky='nsew')
 
 # Callback function to execute the appropriate function based on field_num
 def on_entry_field_click(event, field_num:int):
-    # clicked_field = field_num   # save the last click
-
     if field_num < len(fptr):
-        # Get the value of the clicked entry field
-        # clicked_entry_value = entry_fields[field_num].get("1.0", "end-1c")
         try:
-            # clicked_entry_value = int(clicked_entry_value, 16)
-            # Call the function from fptr based on field_num with the clicked value
-            fptr_hover[field_num](current_values[field_num], register_offset[field_num], register_step_size[field_num])
-            # Do something with the result (e.g., display it)
+            fptr_hover[field_num](current_values[field_num], register_offset[field_num], register_step_size[field_num]) # Call the function from fptr based on field_num with the clicked value
             print(f"Result for {register_name[field_num]}: {current_values[field_num]}")
         except ValueError as e:
             return None
-            # Handle the ValueError gracefully (e.g., display an error message)
-            show_error(f"Error for {register_name[field_num]}: {e}")
+            show_error(f"Error for {register_name[field_num]}: {e}")    # Handle the ValueError gracefully (e.g., display an error message)
 
 # Function to update text entry fields with received data
 def update_entry_fields(data):
@@ -108,7 +105,7 @@ def update_entry_fields(data):
                 hexvalue:str = value    # save the original value as hex
                 value = int(value, 16)  # convert value to integer
 
-                if fptr[i] != retval:   # only if the function pointer is not retval
+                if fptr[i] != retnone:   # only if the function pointer is not retval
                     current_values[i] = fptr[i](value, register_offset[i], register_step_size[i])  # execute whatever the fuction pointer points to
                 else:   # if it is retval
                     current_values[i] = hexvalue   # display the hex value (registers with bitfie)
@@ -127,7 +124,7 @@ def update_entry_fields(data):
                 elif current_time - last_change_times[i] >= 5:
                     entry_fields[i].config(bg='white')
 
-                entry_fields[i].insert(1.0, str(current_values[i]) + register_unit[i] )
+                entry_fields[i].insert(1.0, f"{current_values[i]}{register_unit[i]}\n")
                 last_values[i] = current_values[i]
 
 # Function to read and process data from the serial port
@@ -198,8 +195,7 @@ def RegToVal(in_val:int, in_offset:int, in_stepsize:int) -> int:
 
 # Function for calculating values based on register data, offset and bit stpe size
 def RegToTemp(in_val:int, in_offset:int, in_stepsize:float):
-    if in_val & (1 << 15):
-        # Compute the two's complement
+    if in_val & (1 << 15):  # Compute the two's complement
         in_val -= 1 << 16
 
     return ( ((in_val * in_stepsize) + in_offset ) / 1000 )
@@ -219,23 +215,31 @@ def REG0D(in_val, _ignore1, _ignore2):
 def REG0E(in_val, _ignore1, _ignore2):
     return in_val
 
-def REG0F(in_val:int, _ignore1:int, _ignore2:int):
+def populate_8_bitfields(in_val:int):
     decimal = int(in_val, 16)  # Convert in_val to an integer
     binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
+    binary_str = binary_str.zfill(8) # Pad the binary string to 8 characters with leading zeros if needed
 
     # place bit info in byte_frame
     for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
+        key = str("bit_field"+str(i))   # set key
+        bit_fields[key].delete(1.0, tk.END)  # Clear the bit_field
+        bit_fields[key].insert(1.0, binary_str[i])
+
+    return binary_str
+
+def REG0F(in_val:int, _ignore1:int, _ignore2:int):
+    binstr = populate_8_bitfields(in_val)
+    all_stack_frames = inspect.stack()
+    caller_name = all_stack_frames[0].function
+
+    print("My caller method name is", caller_name)
+
+    # for i in range(8):
+    #         key = str("desc  bit_field"+str(i))   # set key
+    #         description_fields[key].delete(1.0, tk.END)  # Clear the bit_field
+    #         description_fields[key].insert(1.0, binstr[i])
+
 
     return in_val
 
@@ -270,23 +274,7 @@ def REG19(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG1B(in_val, _ignore1, _ignore2):
-    decimal = int(in_val, 16)  # Convert in_val to an integer
-    binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
-
-    # place bit info in byte_frame
-    for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
-
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG1C(in_val, _ignore1, _ignore2):
@@ -296,235 +284,59 @@ def REG1D(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG1E(in_val, _ignore1, _ignore2):
-    decimal = int(in_val, 16)  # Convert in_val to an integer
-    binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
-
-    # place bit info in byte_frame
-    for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
-
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG1F(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG20(in_val, _ignore1, _ignore2):
-    decimal = int(in_val, 16)  # Convert in_val to an integer
-    binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
-
-    # place bit info in byte_frame
-    for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
-
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG21(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG22(in_val, _ignore1, _ignore2):
-    decimal = int(in_val, 16)  # Convert in_val to an integer
-    binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
-
-    # place bit info in byte_frame
-    for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
-
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG23(in_val, _ignore1, _ignore2):
-    decimal = int(in_val, 16)  # Convert in_val to an integer
-    binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
-
-    # place bit info in byte_frame
-    for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
-
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG24(in_val, _ignore1, _ignore2):
-    decimal = int(in_val, 16)  # Convert in_val to an integer
-    binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
-
-    # place bit info in byte_frame
-    for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
-
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG25(in_val, _ignore1, _ignore2):
-    decimal = int(in_val, 16)  # Convert in_val to an integer
-    binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
-
-    # place bit info in byte_frame
-    for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
-
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG26(in_val, _ignore1, _ignore2):
-    decimal = int(in_val, 16)  # Convert in_val to an integer
-    binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
-
-    # place bit info in byte_frame
-    for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
-
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG27(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG28(in_val, _ignore1, _ignore2):
-    decimal = int(in_val, 16)  # Convert in_val to an integer
-    binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
-
-    # place bit info in byte_frame
-    for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
-
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG29(in_val, _ignore1, _ignore2):
-    decimal = int(in_val, 16)  # Convert in_val to an integer
-    binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
-
-    # place bit info in byte_frame
-    for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
-
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG2A(in_val, _ignore1, _ignore2):
-    decimal = int(in_val, 16)  # Convert in_val to an integer
-    binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
-
-    # place bit info in byte_frame
-    for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
-
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG2B(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG2C(in_val, _ignore1, _ignore2):
-    decimal = int(in_val, 16)  # Convert in_val to an integer
-    binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
-
-    # place bit info in byte_frame
-    for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
-
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG2D(in_val, _ignore1, _ignore2):
@@ -534,23 +346,7 @@ def REG2E(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG2F(in_val, _ignore1, _ignore2):
-    decimal = int(in_val, 16)  # Convert in_val to an integer
-    binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-
-    # Pad the binary string to 8 characters with leading zeros if needed
-    binary_str = binary_str.zfill(8)
-
-    # place bit info in byte_frame
-    for i in range(8):
-        label_text = "bit" + str(i)
-        label = tk.Label(byte_frame, text=label_text)
-        label.config(bg='gray')
-        label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
-        bit_field = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)
-        bit_field.delete(1.0, tk.END)  # Clear the bit_field
-        bit_field.insert(1.0, binary_str[i])
-        bit_field.grid(row=i+1, column=2, padx=2, sticky='W')
-
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG30(in_val, _ignore1, _ignore2):
@@ -560,7 +356,7 @@ def REG47(in_val, _ignore1, _ignore2):
     return in_val
 
 # Function that returns the input
-def retval(input, _ignore1, _ignore2):
+def retnone(input, _ignore1, _ignore2):
     return None
 
 register_name:str = ['REG00', 'REG01', 'REG03', 'REG05', 'REG06', 'REG08', 'REG09', 'REG0A', 'REG0B', 'REG0D',
@@ -658,20 +454,20 @@ register_unit:str = [
                 "V", "%", "°C", "V", "V", "", "", "", "", "",   # REG3D to REG48, along with PG, IRQ, STAT
 ]
 
-fptr = [RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, retval, retval, retval, RegToVal, retval, # REG00 to REG0D
-        retval, retval, retval, retval, retval, retval, retval, retval, retval, retval,   # REG0E to REG17
-        retval, RegToVal, retval, retval, retval, retval, retval, retval, retval, retval,   # REG18 to REG22
-        retval, retval, retval, retval, retval, retval, retval, retval, retval, retval,   # REG23 to REG2C
-        retval, retval, retval, retval, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, # REG2D to REG3B
-        RegToVal, RegToVal, RegToTemp, RegToVal, RegToVal, retval, retval, retval, retval, retval    # REG3D to REG48, along with PG, IRQ, STAT
+fptr = [RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, retnone, retnone, retnone, RegToVal, retnone, # REG00 to REG0D
+        retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone,   # REG0E to REG17
+        retnone, RegToVal, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone,   # REG18 to REG22
+        retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone,   # REG23 to REG2C
+        retnone, retnone, retnone, retnone, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, # REG2D to REG3B
+        RegToVal, RegToVal, RegToTemp, RegToVal, RegToVal, retnone, retnone, retnone, retnone, retnone    # REG3D to REG48, along with PG, IRQ, STAT
         ]
 
-fptr_hover = [retval, retval, retval, retval, retval, REG08, REG09, REG0A, retval, REG0D, # REG00 to REG0D
+fptr_hover = [retnone, retnone, retnone, retnone, retnone, REG08, REG09, REG0A, retnone, REG0D, # REG00 to REG0D
                 REG0E, REG0F, REG10, REG11, REG12, REG13, REG14, REG15, REG16, REG17,   # REG0E to REG17
-                REG18, retval, REG1B, REG1C, REG1D, REG1E, REG1F, REG20, REG21, REG22,   # REG18 to REG22
+                REG18, retnone, REG1B, REG1C, REG1D, REG1E, REG1F, REG20, REG21, REG22,   # REG18 to REG22
                 REG23, REG24, REG25, REG26, REG27, REG28, REG29, REG2A, REG2B, REG2C,   # REG23 to REG2C
-                REG2D, REG2E, REG2F, REG30, retval, retval, retval, retval, retval, retval, # REG2D to REG3B
-                retval, retval, retval, retval, retval, REG47, retval, retval, retval, retval    # REG3D to REG48, along with PG, IRQ, STAT
+                REG2D, REG2E, REG2F, REG30, retnone, retnone, retnone, retnone, retnone, retnone, # REG2D to REG3B
+                retnone, retnone, retnone, retnone, retnone, REG47, retnone, retnone, retnone, retnone    # REG3D to REG48, along with PG, IRQ, STAT
             ]
 
 # create bq25798 register labels and fields
@@ -727,6 +523,27 @@ exit_button = tk.Button(button_frame, text="Exit", command=exit_app)
 button_frame.columnconfigure(0, weight=1)
 button_frame.columnconfigure(1, weight=3)
 button_frame.columnconfigure(2, weight=1)
+
+# create labels in byte_frame
+for i in range(8):
+    label_text = "bit" + str(i)
+    label = tk.Label(byte_frame, text=label_text)
+    label.config(bg='gray')
+    label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
+
+
+for i in range(8):  # populate dictionary
+    # global bit_fields
+    key = str("bit_field"+str(i))   # set key
+    bit_fields[key] = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)    # value...
+    bit_fields[key].insert(1.0, "n/a")
+    bit_fields[key].grid(row=i+1, column=2, padx=2, sticky='W')
+
+    key = str("bit_field_description"+str(i))   # set key
+    bit_description_fields[key] = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)    # value...
+    bit_description_fields[key].insert(1.0, "n/a")
+    bit_description_fields[key].grid(row=i+1, column=3, padx=2, sticky='W')
+    
 
 # Place buttons in the button frame
 start_button.grid(row=0, column=1, padx=5, pady=5, sticky='W')
