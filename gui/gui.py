@@ -223,40 +223,24 @@ def dectostr(in_val:int) -> str:
     binary_str = binary_str.zfill(8) # Pad the binary string to 8 characters with leading zeros if needed"
     return binary_str
 
-def populate_8_bitfields(in_val:int):
+def populate_8_bitfields(in_val:int, description, bit_set, bit_unset):
     binary_str = dectostr(in_val)
 
-    # place bit info in byte_frame
-    for i in range(8):
-        key = str("bit_field"+str(i))   # set key
-        bit_fields[key].delete(1.0, tk.END)  # Clear the bit_field
-        bit_fields[key].insert(1.0, binary_str[i])
-
-def REG0F(in_val:int, _ignore1:int, _ignore2:int):
-    all_stack_frames = inspect.stack()
-    caller_name = all_stack_frames[0].function
-
-    print("My caller method name is", caller_name)
-
-    # populate_8_bitfields(in_val)
-
-    binary_str = dectostr(in_val)
-
-    # place bit info in byte_frame
     for i in range(8):
         key = str("bit_field"+str(i))   # set key
         bit_fields[key].delete(1.0, tk.END)  # Clear the bit_field
 
         if binary_str[i] == 1:
-            bit_fields[key].insert(1.0, reg0f_bits_set[i])
+            bit_fields[key].insert(1.0, bit_set[i])
         else:
-            bit_fields[key].insert(1.0, reg0f_bits_unset[i])
+            bit_fields[key].insert(1.0, bit_unset[i])
 
         key = str("bit_field_description"+str(i))   # set key
         bit_description_fields[key].delete(1.0, tk.END)  # Clear the bit_field
-        bit_description_fields[key].insert(1.0, reg0f_description[i])
+        bit_description_fields[key].insert(1.0, description[i])
 
-
+def REG0F(in_val:int, _ignore1:int, _ignore2:int):
+    populate_8_bitfields(in_val, reg0f_description, reg0f_bits_set, reg0f_bits_unset)
     return in_val
 
 def REG10(in_val, _ignore1, _ignore2):
@@ -266,11 +250,11 @@ def REG11(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG12(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg12_description, reg12_bits_set, reg12_bits_unset)
     return in_val
 
 def REG13(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg13_description, reg13_bits_set, reg13_bits_unset)
     return in_val
 
 def REG14(in_val, _ignore1, _ignore2):
@@ -292,7 +276,7 @@ def REG19(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG1B(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg1b_description, reg1b_bits_set, reg1b_bits_unset)
     return in_val
 
 def REG1C(in_val, _ignore1, _ignore2):
@@ -302,77 +286,77 @@ def REG1D(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG1E(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg1e_description, reg1e_bits_set, reg1e_bits_unset)
     return in_val
 
 def REG1F(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg1f_description, reg1f_bits_set, reg1f_bits_unset)
     return in_val
 
 def REG20(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg20_description, reg20_bits_set, reg20_bits_unset)
     return in_val
 
 def REG21(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG22(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg22_description, reg22_bits_set, reg22_bits_unset)
     return in_val
 
 def REG23(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg23_description, reg23_bits_set, reg23_bits_unset)
     return in_val
 
 def REG24(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg24_description, reg24_bits_set, reg24_bits_unset)
     return in_val
 
 def REG25(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg25_description, reg25_bits_set, reg25_bits_unset)
     return in_val
 
 def REG26(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg26_description, reg26_bits_set, reg26_bits_unset)
     return in_val
 
 def REG27(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg27_description, reg27_bits_set, reg27_bits_unset)
     return in_val
 
 def REG28(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg28_description, reg28_bits_set, reg28_bits_unset)
     return in_val
 
 def REG29(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg29_description, reg29_bits_set, reg29_bits_unset)
     return in_val
 
 def REG2A(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg2a_description, reg2a_bits_set, reg2a_bits_unset)
     return in_val
 
 def REG2B(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg2b_description, reg2b_bits_set, reg2b_bits_unset)
     return in_val
 
 def REG2C(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg2c_description, reg2c_bits_set, reg2c_bits_unset)
     return in_val
 
 def REG2D(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg2d_description, reg2d_bits_set, reg2d_bits_unset)
     return in_val
 
 def REG2E(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG2F(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg2f_description, reg2f_bits_set, reg2f_bits_unset)
     return in_val
 
 def REG30(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val)
+    populate_8_bitfields(in_val, reg30_description, reg30_bits_set, reg30_bits_unset)
     return in_val
 
 def REG47(in_val, _ignore1, _ignore2):
@@ -470,7 +454,7 @@ for i in range(8):  # populate dictionary
     key = str("bit_field_description"+str(i))   # set key
     bit_description_fields[key] = Text(byte_frame, width=110, height=entry_field_height, font=custom_font)    # value...
     bit_description_fields[key].insert(1.0, "n/a")
-    bit_description_fields[key].grid(row=i+1, column=3, padx=2, sticky='W')
+    bit_description_fields[key].grid(row=i+1, column=1, padx=2, sticky='W')
     
 
 # Place buttons in the button frame

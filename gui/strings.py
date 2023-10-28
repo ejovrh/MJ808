@@ -395,10 +395,10 @@ reg23_description = [
                   "BC1.2 status Flag",   # bit1
                   "IC thermal regulation flag",   # bit2
                   "RESERVED",   # bit3
-                  "",   # bit4
+                  "VBUS status flag",   # bit4
                   "RESERVED",   # bit5
-                  "",   # bit6
-                  ""   # bit7
+                  "ICO status flag",   # bit6
+                  "Charge status flag"   # bit7
                 ]
 
 reg23_bits_set = [
