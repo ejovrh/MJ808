@@ -217,10 +217,14 @@ def REG0D(in_val, _ignore1, _ignore2):
 def REG0E(in_val, _ignore1, _ignore2):
     return in_val
 
-def populate_8_bitfields(in_val:int):
+def dectostr(in_val:int) -> str:
     decimal = int(in_val, 16)  # Convert in_val to an integer
     binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
-    binary_str = binary_str.zfill(8) # Pad the binary string to 8 characters with leading zeros if needed
+    binary_str = binary_str.zfill(8) # Pad the binary string to 8 characters with leading zeros if needed"
+    return binary_str
+
+def populate_8_bitfields(in_val:int):
+    binary_str = dectostr(in_val)
 
     # place bit info in byte_frame
     for i in range(8):
@@ -228,19 +232,29 @@ def populate_8_bitfields(in_val:int):
         bit_fields[key].delete(1.0, tk.END)  # Clear the bit_field
         bit_fields[key].insert(1.0, binary_str[i])
 
-    return binary_str
-
 def REG0F(in_val:int, _ignore1:int, _ignore2:int):
-    binstr = populate_8_bitfields(in_val)
     all_stack_frames = inspect.stack()
     caller_name = all_stack_frames[0].function
 
     print("My caller method name is", caller_name)
 
-    # for i in range(8):
-    #         key = str("desc  bit_field"+str(i))   # set key
-    #         description_fields[key].delete(1.0, tk.END)  # Clear the bit_field
-    #         description_fields[key].insert(1.0, binstr[i])
+    # populate_8_bitfields(in_val)
+
+    binary_str = dectostr(in_val)
+
+    # place bit info in byte_frame
+    for i in range(8):
+        key = str("bit_field"+str(i))   # set key
+        bit_fields[key].delete(1.0, tk.END)  # Clear the bit_field
+
+        if binary_str[i] == 1:
+            bit_fields[key].insert(1.0, reg0f_bits_set[i])
+        else:
+            bit_fields[key].insert(1.0, reg0f_bits_unset[i])
+
+        key = str("bit_field_description"+str(i))   # set key
+        bit_description_fields[key].delete(1.0, tk.END)  # Clear the bit_field
+        bit_description_fields[key].insert(1.0, reg0f_description[i])
 
 
     return in_val
@@ -449,12 +463,12 @@ for i in range(8):
 for i in range(8):  # populate dictionary
     # global bit_fields
     key = str("bit_field"+str(i))   # set key
-    bit_fields[key] = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)    # value...
+    bit_fields[key] = Text(byte_frame, width=25, height=entry_field_height, font=custom_font)    # value...
     bit_fields[key].insert(1.0, "n/a")
     bit_fields[key].grid(row=i+1, column=2, padx=2, sticky='W')
 
     key = str("bit_field_description"+str(i))   # set key
-    bit_description_fields[key] = Text(byte_frame, width=50, height=entry_field_height, font=custom_font)    # value...
+    bit_description_fields[key] = Text(byte_frame, width=110, height=entry_field_height, font=custom_font)    # value...
     bit_description_fields[key].insert(1.0, "n/a")
     bit_description_fields[key].grid(row=i+1, column=3, padx=2, sticky='W')
     
