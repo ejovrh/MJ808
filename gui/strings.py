@@ -93,6 +93,237 @@ register_step_size: int = [250, 10, 10, 100, 10, 40, 40, -1, 10, -1, # REG00 to 
                       1, 0.0976563, 0.5, 1, 1, -1, -1, -1, -1, -1   # REG3D to REG48, along with PG, IRQ, STAT
                       ]
 
+reg08_bits = [
+                  "IPRECHG:0",   # bit0
+                  "IPRECHG:1",   # bit1
+                  "IPRECHG:2",   # bit2
+                  "IPRECHG:3",   # bit3
+                  "IPRECHG:4",   # bit4
+                  "IPRECHG:5",   # bit5
+                  "VBAT_LOWV:0",   # bit6
+                  "VBAT_LOWV:1"   # bit7
+                ]
+
+reg08_description = [
+                  "Precharge current limit",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "Battery voltage thresholds for the transition from precharge to fast charge, which is defined as a ratio of battery regulation limit (VREG)",   # bit6
+                  ""   # bit7
+                ]
+
+reg08_bits_set = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg08_bits_unset = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg09_bits = [
+                  "ITERM:0",   # bit0
+                  "ITERM:1",   # bit1
+                  "ITERM:2",   # bit2
+                  "ITERM:3",   # bit3
+                  "ITERM:4",   # bit4
+                  "STOP_WD_CHG",   # bit5
+                  "REG_RST",   # bit6
+                  "RESERVED"   # bit7
+                ]
+
+reg09_description = [
+                  "Termination current",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "Defines whether a watchdog timer expiration will disable charging",   # bit5
+                  "Reset registers to default values and reset timer",   # bit6
+                  "RESERVED"   # bit7
+                ]
+
+reg09_bits_set = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "WD timer expiration sets EN_CHG=0",   # bit5
+                  "Reset",   # bit6
+                  "n/a"   # bit7
+                ]
+
+reg09_bits_unset = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "WD timer expiration keeps existing EN_CHG setting",   # bit5
+                  " Not reset",   # bit6
+                  "n/a"   # bit7
+                ]
+
+reg0a_bits = [
+                  "VRECHG:0",   # bit0
+                  "VRECHG:1",   # bit1
+                  "VRECHG:2",   # bit2
+                  "VRECHG:3",   # bit3
+                  "TRECHG:0",   # bit4
+                  "TRECHG:1",   # bit5
+                  "CELL:0",   # bit6
+                  "CELL:1"   # bit7
+                ]
+
+reg0a_description = [
+                  "Battery Recharge Threshold Offset (Below VREG)",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "Battery recharge deglich time",   # bit4
+                  "",   # bit5
+                  "At POR, the charger reads the PROG pin resistance to determine the battery cell count and update this CELL bits accordingly",   # bit6
+                  ""   # bit7
+                ]
+
+reg0a_bits_set = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg0a_bits_unset = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg0d_bits = [
+                  "IOTG:0",   # bit0
+                  "IOTG:1",   # bit1
+                  "IOTG:2",   # bit2
+                  "IOTG:3",   # bit3
+                  "IOTG:4",   # bit4
+                  "IOTG:5",   # bit5
+                  "IOTG:6",   # bit6
+                  "PRECHG_TMR"   # bit7
+                ]
+
+reg0d_description = [
+                  "OTG current limit",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  "Pre-charge safety timer setting"   # bit7
+                ]
+
+reg0d_bits_set = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  "0.5 hrs"   # bit7
+                ]
+
+reg0d_bits_unset = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  "2 hrs (default)"   # bit7
+                ]
+
+reg0e_bits = [
+                  "TMR2X_EN",   # bit0
+                  "CHG_TMR:0",   # bit1
+                  "CHG_TMR:1",   # bit2
+                  "EN_CHG_TMR",   # bit3
+                  "EN_PRECHG_TMR",   # bit4
+                  "EN_TRICHG_TMR",   # bit5
+                  "TOPOFF_TMR:0",   # bit6
+                  "TOPOFF_TMR:1"   # bit7
+                ]
+
+reg0e_description = [
+                  "TMR2X_EN",   # bit0
+                  "Fast charge timer setting",   # bit1
+                  "",   # bit2
+                  "Enable fast charge timer",   # bit3
+                  "Enable pre-charge timer",   # bit4
+                  "Enable trickle charge timer (fixed as 1hr)",   # bit5
+                  "Top-off timer control",   # bit6
+                  ""   # bit7
+                ]
+
+reg0e_bits_set = [
+                  "Trickle charge, pre-charge and fast charge timer slowed by 2X during input DPM or thermal regulation (default)",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "Enabled (default)",   # bit3
+                  "Enabled (default)",   # bit4
+                  "Enabled (default)",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg0e_bits_unset = [
+                  "Trickle charge, pre-charge and fast charge timer NOT slowed by 2X during input DPM or thermal regulation.",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "Disabled",   # bit3
+                  "Disabled",   # bit4
+                  "Disabled",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg0f_bits = [
+                  "EN_BACKUP",   # bit0
+                  "EN_TERM",   # bit1
+                  "EN_HIZ",   # bit2
+                  "FORCE_ICO",   # bit3
+                  "EN_ICO",   # bit4
+                  "EN_CHG",   # bit5
+                  "FORCE_IBATDIS",   # bit6
+                  "EN_AUTO_IBATDIS"   # bit7
+                ]
+
 reg0f_description = [
                     "Enables backup mode where OTG automatically engages when VBUS droops below voltage set in REG10",   # bit0
                     "Termination",   # bit1
@@ -126,6 +357,105 @@ reg0f_bits_unset = [
                   "The charger will NOT apply a discharging current on BAT during battery OVP"   # bit7
                 ]
 
+reg10_bits = [
+                  "WATCHDOG:0",   # bit0
+                  "WATCHDOG:1",   # bit1
+                  "WATCHDOG:2",   # bit2
+                  "WD_RST",   # bit3
+                  "VAC_OVP:0",   # bit4
+                  "VAC_OVP:1",   # bit5
+                  "VBUS_BACKUP:0",   # bit6
+                  "VBUS_BACKUP:1"   # bit7
+                ]
+
+reg10_description = [
+                  "Watchdog timer settings",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "I2C watch dog timer reset",   # bit3
+                  "VAC_OVP thresholds",   # bit4
+                  "",   # bit5
+                  "The thresholds to trigger the backup mode, defined as a ratio of VINDPM",   # bit6
+                  ""   # bit7
+                ]
+
+reg10_bits_set = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "Reset (this bit goes back to 0 after timer resets)",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg10_bits_unset = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "Normal (default)",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg11_bits = [
+                  "SDRV_DLY",   # bit0
+                  "SDRV_CTRL:0",   # bit1
+                  "SDRV_CTRL:1",   # bit2
+                  "HVDCP_EN",   # bit3
+                  "EN_9V",   # bit4
+                  "EN_12V",   # bit5
+                  "AUTO_INDET_EN",   # bit6
+                  "FORCE_INDET"   # bit7
+                ]
+
+reg11_description = [
+                  "Delay time added to the taking action in bit [2:1] of the SFET control",   # bit0
+                  "SFET control",   # bit1
+                  "",   # bit2
+                  "High voltage DCP enable",   # bit3
+                  "EN_9V HVDC",   # bit4
+                  "EN_12V HVDC",   # bit5
+                  "Automatic D+/D- Detection Enable",   # bit6
+                  "Force D+/D- detection"   # bit7
+                ]
+
+reg11_bits_set = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "Enable HVDCP handshake",   # bit3
+                  "Enable 9V mode in HVDCP",   # bit4
+                  "Enable 12V mode in HVDCP",   # bit5
+                  "Enable D+/D- detection when VBUS is plugged-in (default)",   # bit6
+                  "Force D+/D- algorithm, when D+/D- detection is done, this bit will be reset to 0"   # bit7
+                ]
+
+reg11_bits_unset = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "Disable HVDCP handshake (default)",   # bit3
+                  "Disable 9V mode in HVDCP (default)",   # bit4
+                  "Enable 12V mode in HVDCP",   # bit5
+                  "Enable D+/D- detection when VBUS is plugged-in (default)",   # bit6
+                  "Force D+/D- algorithm, when D+/D- detection is done, this bit will be reset to 0"   # bit7
+                ]
+
+reg12_bits = [
+                  "DIS_FWD_OOA",   # bit0
+                  "DIS_OTG_OOA",   # bit1
+                  "DIS_LDO",   # bit2
+                  "WKUP_DLY",   # bit3
+                  "PFM_FWD_DIS",   # bit4
+                  "PFM_OTG_DIS",   # bit5
+                  "EN_OTG",   # bit6
+                  "DIS_ACDRV"   # bit7
+                ]
+
 reg12_description = [
                   "Disable OOA in forward mode",   # bit0
                   "Disable OOA in OTG mode",   # bit1
@@ -148,7 +478,7 @@ reg12_bits_set = [
                   "force"   # bit7
                 ]
 
-reg12_bits_unset = [
+reg13_bits_unset = [
                   "Enable (Default)",   # bit0
                   "Enable (Default)",   # bit1
                   "Enable (Default)",   # bit2
@@ -157,6 +487,17 @@ reg12_bits_unset = [
                   "Enable (Default)",   # bit5
                   "OTG Disable (default)",   # bit6
                   "NOT force"   # bit7
+                ]
+
+reg13_bits = [
+                  "EN_IBUS_OCP",   # bit0
+                  "FORCE_VINDPM_DET",   # bit1
+                  "DIS_VOTG_UVP",   # bit2
+                  "DIS_VSYS_SHORT",   # bit3
+                  "DIS_STAT",   # bit4
+                  "PWM_FREQ",   # bit5
+                  "EN_ACDRV1",   # bit6
+                  "EN_ACDRV2"   # bit7
                 ]
 
 reg13_description = [
@@ -192,6 +533,237 @@ reg13_bits_unset = [
                   "turn off (default)"   # bit7
                 ]
 
+reg14_bits = [
+                  "EN_BATOC",   # bit0
+                  "EN_EXTILIM",   # bit1
+                  "EN_IINDPM",   # bit2
+                  "IBAT_REG:0",   # bit3
+                  "IBAT_REG:1",   # bit4
+                  "EN_IBAT",   # bit5
+                  "RESERVED",   # bit6
+                  "SFET_PRESENT"   # bit7
+                ]
+
+reg14_description = [
+                  "Enable the battery discharging current OCP",   # bit0
+                  "Enable the external ILIM_HIZ pin input current regulation",   # bit1
+                  "Enable the internal IINDPM register input current regulation",   # bit2
+                  "Battery discharging current regulation in OTG mode",   # bit3
+                  "",   # bit4
+                  "IBAT discharge current sensing enable",   # bit5
+                  "RESERVED",   # bit6
+                  "FET is populated"   # bit7
+                ]
+
+reg14_bits_set = [
+                  "Enable",   # bit0
+                  "Enable (default)",   # bit1
+                  "Enable (default)",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "Enable the IBAT discharge sensing at battery only or OTG condition",   # bit5
+                  "n/a",   # bit6
+                  "Ship FET populated"   # bit7
+                ]
+
+reg14_bits_unset = [
+                  "Disable (default)",   # bit0
+                  "Disable",   # bit1
+                  "Disable",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "Disable the IBAT discharge sensing at battery only or OTG condition (default)",   # bit5
+                  "n/a",   # bit6
+                  "No ship FET populated"   # bit7
+                ]
+
+reg15_bits = [
+                  "EN_MPPT",   # bit0
+                  "VOC_RATE:0",   # bit1
+                  "VOC_RATE:1",   # bit2
+                  "VOC_DLY:0",   # bit3
+                  "VOC_DLY:1",   # bit4
+                  "VOC_PCT:0",   # bit5
+                  "VOC_PCT:1",   # bit6
+                  "VOC_PCT:2"   # bit7
+                ]
+
+reg15_description = [
+                  "Enable the MPPT to measure the VBUS open circuit voltage",   # bit0
+                  "The time interval two VBUS open circuit voltage measurements",   # bit1
+                  "",   # bit2
+                  "After the converter stops switching, the time delay before the VOC is measured",   # bit3
+                  "",   # bit4
+                  "To set the VINDPM as a percentage of the VBUS open circuit voltage when the VOC measurement is done",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg15_bits_set = [
+                  "Enable",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg15_bits_unset = [
+                  "Disable (default)",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg16_bits = [
+                  "BKUP_ACFET1_ON",   # bit0
+                  "VAC2_PD_EN",   # bit1
+                  "VAC1_PD_EN",   # bit2
+                  "VBUS_PD_EN",   # bit3
+                  "TSHUT",   # bit4
+                  "TSHUT",   # bit5
+                  "TREG",   # bit6
+                  "TREG"   # bit7
+                ]
+
+reg16_description = [
+                  "When the charger is operated in backup mode, ACFET1 is off. Setting this bit to 1, the charger clears the EN_BACKUP bit to 0, sets DIS_ACDRV=0 and EN_ACDRV1=1 to turn on the ACFET1.",   # bit0
+                  "Enable VAC2 pull down resistor",   # bit1
+                  "Enable VAC1 pull down resistor",   # bit2
+                  "Enable VBUS pull down resistor (6k Ohm)",   # bit3
+                  "Thermal shutdown thresholds",   # bit4
+                  "",   # bit5
+                  "Thermal regulation thresholds",   # bit6
+                  ""   # bit7
+                ]
+
+reg16_bits_set = [
+                  "To turn on ACFET1 in backup mode",   # bit0
+                  "Enable",   # bit1
+                  "Enable",   # bit2
+                  "Enable",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg16_bits_unset = [
+                  "IDLE (default)",   # bit0
+                  "Disable (default)",   # bit1
+                  "Disable (default)",   # bit2
+                  "Disable (default)",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg17_bits = [
+                  "RESERVED",   # bit0
+                  "JEITA_ISETC",   # bit1
+                  "JEITA_ISETC",   # bit2
+                  "JEITA_ISETH",   # bit3
+                  "JEITA_ISETH",   # bit4
+                  "JEITA_VSET",   # bit5
+                  "JEITA_VSET",   # bit6
+                  "JEITA_VSET"   # bit7
+                ]
+
+reg17_description = [
+                  "RESERVED",   # bit0
+                  "JEITA low temperature range (TCOLD – TCOOL) charge current setting",   # bit1
+                  "",   # bit2
+                  "JEITA high temperature range (TWARN – THOT) charge current setting",   # bit3
+                  "",   # bit4
+                  "JEITA high temperature range (TWARN – THOT) charge voltage setting",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg17_bits_set = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg17_bits_unset = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg18_bits = [
+                  "TS_IGNORE",   # bit0
+                  "BCOLD",   # bit1
+                  "BHOT",   # bit2
+                  "BHOT",   # bit3
+                  "TS_WARM",   # bit4
+                  "TS_WARM",   # bit5
+                  "TS_COOL",   # bit6
+                  "TS_COOL"   # bit7
+                ]
+
+reg18_description = [
+                  "Ignore the TS feedback, the charger considers the TS is always good to allow the charging and OTG modes, all the four TS status bits always stay at 0000 to report the normal condition.",   # bit0
+                  "OTG mode TS COLD temperature threshold",   # bit1
+                  "OTG mode TS HOT temperature threshold",   # bit2
+                  "",   # bit3
+                  "JEITA VT3 comparator voltage falling thresholds as a percentage of REGN. The corresponding temperature in the brackets is achieved when a 103AT NTC thermistor is used, RT1=5.24kΩ and RT2=30.31kΩ.",   # bit4
+                  "",   # bit5
+                  "JEITA VT2 comparator voltage rising thresholds as a percentage of REGN. The corresponding temperature in the brackets is achieved when a 103AT NTC thermistor is used, RT1=5.24kΩ and RT2=30.31kΩ.",   # bit6
+                  ""   # bit7
+                ]
+
+reg18_bits_set = [
+                  "Ignore",   # bit0
+                  "-20°C",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg18_bits_unset = [
+                  "NOT ignore (Default)",   # bit0
+                  "-10°C (default)",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg1b_bits = [
+                  "VBUS_PRESENT_STAT",   # bit0
+                  "AC1_PRESENT_STAT",   # bit1
+                  "AC2_PRESENT_STAT",   # bit2
+                  "PG_STAT",   # bit3
+                  "RESERVED",   # bit4
+                  "WD_STAT",   # bit5
+                  "VINDPM_STAT ",   # bit6
+                  "IINDPM_STAT"   # bit7
+                ]
+
 reg1b_description = [
                   "VBUS present status",   # bit0
                   "VAC1 insert status",   # bit1
@@ -223,6 +795,105 @@ reg1b_bits_unset = [
                   "Normal",   # bit5
                   "Normal",   # bit6
                   "Normal"   # bit7
+                ]
+
+reg1c_bits = [
+                  "BC1.2_DONE_STAT",   # bit0
+                  "VBUS_STAT:0",   # bit1
+                  "VBUS_STAT:1",   # bit2
+                  "VBUS_STAT:2",   # bit3
+                  "VBUS_STAT:3",   # bit4
+                  "CHG_STAT:0",   # bit5
+                  "CHG_STAT:1",   # bit6
+                  "CHG_STAT:2"   # bit7
+                ]
+
+reg1c_description = [
+                  "BC1.2 status bit",   # bit0
+                  "VBUS status bits",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "Charge Status bits",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg1c_bits_set = [
+                  "BC1.2 or non-standard detection complete",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg1c_bits_unset = [
+                  "BC1.2 or non-standard detection NOT complete",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg1d_bits = [
+                  "VBAT_PRESENT_STAT",   # bit0
+                  "DPDM_STAT",   # bit1
+                  "TREG_STAT",   # bit2
+                  "RESERVED",   # bit3
+                  "RESERVED",   # bit4
+                  "RESERVED",   # bit5
+                  "ICO_STAT",   # bit6
+                  "ICO_STAT"   # bit7
+                ]
+
+reg1d_description = [
+                  "Battery present status (VBAT > VBAT_UVLOZ)",   # bit0
+                  "D+/D- detection status bits",   # bit1
+                  "IC thermal regulation status",   # bit2
+                  "RESERVED",   # bit3
+                  "RESERVED",   # bit4
+                  "RESERVED",   # bit5
+                  "Input Current Optimizer (ICO) status",   # bit6
+                  ""   # bit7
+                ]
+
+reg1d_bits_set = [
+                  "VBAT present",   # bit0
+                  "The D+/D- detection is ongoing",   # bit1
+                  "Device in thermal regulation",   # bit2
+                  "n/a",   # bit3
+                  "n/a",   # bit4
+                  "n/a",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg1d_bits_unset = [
+                  "VBAT NOT present",   # bit0
+                  "The D+/D- detection is NOT started yet, or the detection is done",   # bit1
+                  "Normal",   # bit2
+                  "n/a",   # bit3
+                  "n/a",   # bit4
+                  "n/a",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg1e_bits = [
+                  "RESERVED",   # bit0
+                  "PRECHG_TMR_STAT",   # bit1
+                  "TRICHG_TMR_STAT",   # bit2
+                  "CHG_TMR_STAT",   # bit3
+                  "VSYS_STAT",   # bit4
+                  "ADC_DONE_STAT",   # bit5
+                  "ACRB1_STAT",   # bit6
+                  "ACRB2_STAT"   # bit7
                 ]
 
 reg1e_description = [
@@ -258,6 +929,17 @@ reg1e_bits_unset = [
                   "ACFET2-RBFET2 is NOT placed"   # bit7
                 ]
 
+reg1f_bits = [
+                  "TS_HOT_STAT",   # bit0
+                  "TS_WARM_STAT",   # bit1
+                  "TS_COOL_STAT",   # bit2
+                  "TS_COLD_STAT",   # bit3
+                  "VBATOTG_LOW_STAT",   # bit4
+                  "RESERVED",   # bit5
+                  "RESERVED",   # bit6
+                  "RESERVED"   # bit7
+                ]
+
 reg1f_description = [
                   "The TS temperature is in the hot range, higher than T5",   # bit0
                   "The TS temperature is in the warm range, between T3 and T5",   # bit1
@@ -289,6 +971,17 @@ reg1f_bits_unset = [
                   "n/a",   # bit5
                   "n/a",   # bit6
                   "n/a"   # bit7
+                ]
+
+reg20_bits = [
+                  "VAC1_OVP_STAT",   # bit0
+                  "VAC2_OVP_STAT",   # bit1
+                  "CONV_OCP_STAT",   # bit2
+                  "IBAT_OCP_STAT",   # bit3
+                  "IBUS_OCP_STAT",   # bit4
+                  "VBAT_OVP_STAT",   # bit5
+                  "IBAT_REG_STAT",   # bit6
+                  "IBAT_REG_STAT"   # bit7
                 ]
 
 reg20_description = [
@@ -324,6 +1017,17 @@ reg20_bits_unset = [
                   "Normal"   # bit7
                 ]
 
+reg21_bits = [
+                  "RESERVED",   # bit0
+                  "RESERVED",   # bit1
+                  "TSHUT_STAT",   # bit2
+                  "RESERVED",   # bit3
+                  "OTG_UVP_STAT",   # bit4
+                  "OTG_OVP_STAT",   # bit5
+                  "VSYS_OVP_STAT",   # bit6
+                  "VSYS_SHORT_STAT"   # bit7
+                ]
+
 reg21_description = [
                   "RESERVED",   # bit0
                   "RESERVED",   # bit1
@@ -355,6 +1059,17 @@ reg21_bits_unset = [
                   "Normal",   # bit5
                   "Normal",   # bit6
                   "Normal"   # bit7
+                ]
+
+reg22_bits = [
+                  "VBUS_PRESENT_FLAG",   # bit0
+                  "AC1_PRESENT_FLAG",   # bit1
+                  "AC2_PRESENT_FLAG",   # bit2
+                  "PG_FLAG",   # bit3
+                  "POORSRC_FLAG",   # bit4
+                  "WD_FLAG",   # bit5
+                  "VINDPM_FLAG",   # bit6
+                  "IINDPM_FLAG"   # bit7
                 ]
 
 reg22_description = [
@@ -390,6 +1105,17 @@ reg22_bits_unset = [
                   "Normal"   # bit7
                 ]
 
+reg23_bits = [
+                  "BC1.2_DONE_FLAG",   # bit0
+                  "VBAT_PRESENT_FLAG",   # bit1
+                  "TREG_FLAG",   # bit2
+                  "RESERVED",   # bit3
+                  "VBUS_FLAG",   # bit4
+                  "RESERVED",   # bit5
+                  "ICO_FLAG",   # bit6
+                  "CHG_FLAG"   # bit7
+                ]
+
 reg23_description = [
                   "BC1.2 status Flag",   # bit0
                   "BC1.2 status Flag",   # bit1
@@ -421,6 +1147,17 @@ reg23_bits_unset = [
                   "n/a",   # bit5
                   "Normal",   # bit6
                   "Normal"   # bit7
+                ]
+
+reg24_bits = [
+                  "TOPOFF_TMR_FLAG",   # bit0
+                  "PRECHG_TMR_FLAG",   # bit1
+                  "TRICHG_TMR_FLAG",   # bit2
+                  "CHG_TMR_FLAG",   # bit3
+                  "VSYS_FLAG",   # bit4
+                  "ADC_DONE_FLAG",   # bit5
+                  "DPDM_DONE_FLAG",   # bit6
+                  "RESERVED"   # bit7
                 ]
 
 reg24_description = [
@@ -456,6 +1193,17 @@ reg24_bits_unset = [
                   "n/a"   # bit7
                 ]
 
+reg25_bits = [
+                  "TS_HOT_FLAG",   # bit0
+                  "TS_WARM_FLAG",   # bit1
+                  "TS_COOL_FLAG",   # bit2
+                  "TS_COLD_FLAG",   # bit3
+                  "VBATOTG_LOW_FLAG",   # bit4
+                  "RESERVED",   # bit5
+                  "RESERVED",   # bit6
+                  "RESERVED"   # bit7
+                ]
+
 reg25_description = [
                   "TS hot temperature flag",   # bit0
                   "TS warm temperature flag",   # bit1
@@ -487,6 +1235,17 @@ reg25_bits_unset = [
                   "n/a",   # bit5
                   "n/a",   # bit6
                   "n/a"   # bit7
+                ]
+
+reg26_bits = [
+                  "VAC1_OVP_FLAG",   # bit0
+                  "VAC2_OVP_FLAG",   # bit1
+                  "CONV_OCP_FLAG",   # bit2
+                  "IBAT_OCP_FLAG",   # bit3
+                  "IBUS_OCP_FLAG",   # bit4
+                  "VBAT_OVP_FLAG",   # bit5
+                  "VBUS_OVP_FLAG",   # bit6
+                  "IBAT_REG_FLAG"   # bit7
                 ]
 
 reg26_description = [
@@ -522,6 +1281,17 @@ reg26_bits_unset = [
                   "Normal"   # bit7
                 ]
 
+reg27_bits = [
+                  "RESERVED",   # bit0
+                  "RESERVED",   # bit1
+                  "TSHUT_FLAG",   # bit2
+                  "RESERVED",   # bit3
+                  "OTG_UVP_FLAG",   # bit4
+                  "OTG_OVP_FLAG",   # bit5
+                  "VSYS_OVP_FLAG",   # bit6
+                  "VSYS_SHORT_FLAG"   # bit7
+                ]
+
 reg27_description = [
                   "RESERVED",   # bit0
                   "RESERVED",   # bit1
@@ -553,6 +1323,17 @@ reg27_bits_unset = [
                   "Normal",   # bit5
                   "Normal",   # bit6
                   "Normal"   # bit7
+                ]
+
+reg28_bits = [
+                  "VBUS_PRESENT_MASK",   # bit0
+                  "AC1_PRESENT_MASK",   # bit1
+                  "AC2_PRESENT_MASK",   # bit2
+                  "PG_MASK",   # bit3
+                  "POORSRC_MASK",   # bit4
+                  "WD_MASK",   # bit5
+                  "VINDPM_MASK",   # bit6
+                  "IINDPM_MASK"   # bit7
                 ]
 
 reg28_description = [
@@ -588,6 +1369,17 @@ reg28_bits_unset = [
                   "Enter IINDPM / IOTG does produce INT pulse"   # bit7
                 ]
 
+reg29_bits = [
+                  "BC1.2_DONE_MASK",   # bit0
+                  "VBAT_PRESENT_MASK",   # bit1
+                  "TREG_MASK",   # bit2
+                  "RESERVED",   # bit3
+                  "VBUS_MASK",   # bit4
+                  "RESERVED",   # bit5
+                  "ICO_MASK",   # bit6
+                  "CHG_MASK"   # bit7
+                ]
+
 reg29_description = [
                   "BC1.2 status mask flag",   # bit0
                   "VBAT present mask flag",   # bit1
@@ -619,6 +1411,17 @@ reg29_bits_unset = [
                   "n/a",   # bit5
                   "ICO status change does produce INT",   # bit6
                   "ICO status change does produce INT"   # bit7
+                ]
+
+reg2a_bits = [
+                  "TOPOFF_TMR_MASK",   # bit0
+                  "PRECHG_TMR_MASK",   # bit1
+                  "TRICHG_TMR_MASK",   # bit2
+                  "CHG_TMR_MASK",   # bit3
+                  "VSYS_MASK",   # bit4
+                  "ADC_DONE_MASK",   # bit5
+                  "DPDM_DONE_MASK",   # bit6
+                  "RESERVED"   # bit7
                 ]
 
 reg2a_description = [
@@ -654,6 +1457,17 @@ reg2a_bits_unset = [
                   "n/a"   # bit7
                 ]
 
+reg2b_bits = [
+                  "TS_HOT_MASK",   # bit0
+                  "TS_WARM_MASK",   # bit1
+                  "TS_COOL_MASK",   # bit2
+                  "TS_COLD_MASK",   # bit3
+                  "VBATOTG_LOW_MASK",   # bit4
+                  "RESERVED",   # bit5
+                  "RESERVED",   # bit6
+                  "RESERVED"   # bit7
+                ]
+
 reg2b_description = [
                   "TS hot temperature interrupt mask",   # bit0
                   "TS warm temperature interrupt mask",   # bit1
@@ -685,6 +1499,17 @@ reg2b_bits_unset = [
                   "n/a",   # bit5
                   "n/a",   # bit6
                   "n/a"   # bit7
+                ]
+
+reg2c_bits = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
                 ]
 
 reg2c_description = [
@@ -720,6 +1545,17 @@ reg2c_bits_unset = [
                   "enter or exit IBAT regulation does produce INT"   # bit7
                 ]
 
+reg2d_bits = [
+                  "VAC1_OVP_MASK",   # bit0
+                  "VAC2_OVP_MASK",   # bit1
+                  "CONV_OCP_MASK",   # bit2
+                  "IBAT_OCP_MASK",   # bit3
+                  "IBUS_OCP_MASK",   # bit4
+                  "VBUS_OVP_MASK",   # bit5
+                  "VBUS_OVP_MASK",   # bit6
+                  "IBAT_REG_MASK"   # bit7
+                ]
+
 reg2d_description = [
                   "RESERVED",   # bit0
                   "RESERVED",   # bit1
@@ -751,6 +1587,61 @@ reg2d_bits_unset = [
                   "OTG VBUS over-voltage fault does produce INT",   # bit5
                   "System over-voltage fault does produce INT",   # bit6
                   "System short fault does produce INT"   # bit7
+                ]
+
+reg2e_bits = [
+                  "RESERVED",   # bit0
+                  "RESERVED",   # bit1
+                  "ADC_AVG_INIT",   # bit2
+                  "ADC_AVG",   # bit3
+                  "ADC_SAMPLE:0",   # bit4
+                  "ADC_SAMPLE:1",   # bit5
+                  "ADC_RATE",   # bit6
+                  "ADC_EN"   # bit7
+                ]
+
+reg2e_description = [
+                  "RESERVED",   # bit0
+                  "RESERVED",   # bit1
+                  "ADC average initial value control",   # bit2
+                  "ADC average control",   # bit3
+                  "ADC sample speed",   # bit4
+                  "ADC sample speed",   # bit5
+                  "ADC conversion rate control",   # bit6
+                  "ADC Control"   # bit7
+                ]
+
+reg2e_bits_set = [
+                  "",   # bit0
+                  "",   # bit1
+                  "Start average using a new ADC conversion",   # bit2
+                  " Running average (not available for IBAT discharge)",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "One shot conversion",   # bit6
+                  "Enable"   # bit7
+                ]
+
+reg2e_bits_unset = [
+                  "",   # bit0
+                  "",   # bit1
+                  "Start average using the existing register value",   # bit2
+                  "Single value",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "Continuous conversion",   # bit6
+                  "Disable"   # bit7
+                ]
+
+reg2f_bits = [
+                  "RESERVED",   # bit0
+                  "RESERVED",   # bit1
+                  "TSHUT_MASK",   # bit2
+                  "RESERVED",   # bit3
+                  "OTG_UVP_MASK",   # bit4
+                  "OTG_OVP_MASK",   # bit5
+                  "VSYS_OVP_MASK",   # bit6
+                  "VSYS_SHORT_MASK"   # bit7
                 ]
 
 reg2f_description = [
@@ -786,6 +1677,17 @@ reg2f_bits_unset = [
                   "Enable (Default)"   # bit7
                 ]
 
+reg30_bits = [
+                  "RESERVED",   # bit0
+                  "RESERVED",   # bit1
+                  "RESERVED",   # bit2
+                  "RESERVED",   # bit3
+                  "VAC1_ADC_DIS",   # bit4
+                  "VAC2_ADC_DIS",   # bit5
+                  "DM_ADC_DIS",   # bit6
+                  "DP_ADC_DIS"   # bit7
+                ]
+
 reg30_description = [
                   "RESERVED",   # bit0
                   "RESERVED",   # bit1
@@ -817,6 +1719,17 @@ reg30_bits_unset = [
                   "Enable (Default)",   # bit5
                   "Enable (Default)",   # bit6
                   "Enable (Default)"   # bit7
+                ]
+
+regXX_bits = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
                 ]
 
 regXX_description = [
