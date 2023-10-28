@@ -6,6 +6,8 @@ import serial
 import time
 import inspect
 
+from strings import *
+
 data_queue = queue.Queue()  # Initialize a queue for data processing
 
 custom_font_size = 10   # Create a custom font size
@@ -250,9 +252,11 @@ def REG11(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG12(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG13(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG14(in_val, _ignore1, _ignore2):
@@ -288,6 +292,7 @@ def REG1E(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG1F(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG20(in_val, _ignore1, _ignore2):
@@ -318,6 +323,7 @@ def REG26(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG27(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG28(in_val, _ignore1, _ignore2):
@@ -333,6 +339,7 @@ def REG2A(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG2B(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG2C(in_val, _ignore1, _ignore2):
@@ -340,6 +347,7 @@ def REG2C(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG2D(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG2E(in_val, _ignore1, _ignore2):
@@ -350,6 +358,7 @@ def REG2F(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG30(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(in_val)
     return in_val
 
 def REG47(in_val, _ignore1, _ignore2):
@@ -358,101 +367,6 @@ def REG47(in_val, _ignore1, _ignore2):
 # Function that returns the input
 def retnone(input, _ignore1, _ignore2):
     return None
-
-register_name:str = ['REG00', 'REG01', 'REG03', 'REG05', 'REG06', 'REG08', 'REG09', 'REG0A', 'REG0B', 'REG0D',
-                 'REG0E', 'REG0F', 'REG10', 'REG11', 'REG12', 'REG13', 'REG14', 'REG15', 'REG16', 'REG17',
-                 'REG18', 'REG19', 'REG1B', 'REG1C', 'REG1D', 'REG1E', 'REG1F', 'REG20', 'REG21', 'REG22',
-                 'REG23', 'REG24', 'REG25', 'REG26', 'REG27', 'REG28', 'REG29', 'REG2A', 'REG2B', 'REG2C', 
-                 'REG2D', 'REG2E', 'REG2F', 'REG30', 'REG31', 'REG33', 'REG35', 'REG37', 'REG39', 'REG3B', 
-                 'REG3D', 'REG3F', 'REG41', 'REG43', 'REG45', 'REG47', 'REG48', 'PG', 'IRQ', 'STAT']
-
-register_offset:int = [2500, 0, 0, 0, 0, 0, 0, 0, 2800, 0,  # REG00 to REG0D
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,        # REG0E to REG17
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,        # REG18 to REG22
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,        # REG23 to REG2C
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,        # REG2D to REG3B
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0         # REG3D to REG48, along with PG, IRQ, STAT
-                   ]
-
-register_step_size: int = [250, 10, 10, 100, 10, 40, 40, -1, 10, -1, # REG00 to REG0D
-                      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   # REG0E to REG17
-                      -1, 10, -1, -1, -1, -1, -1, -1, -1, -1,   # REG18 to REG22
-                      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,   # REG23 to REG2C
-                      -1, -1, -1, -1, 1, 1, 1, 1, 1, 1,         # REG2D to REG3B
-                      1, 0.0976563, 0.5, 1, 1, -1, -1, -1, -1, -1   # REG3D to REG48, along with PG, IRQ, STAT
-                      ]
-
-register_description:str = [
-                        "Minimal System Voltage",   # 0h
-                        "Charge Voltage Limit", # 1h
-                        "Charge Current Limit", # 3h
-                        "Input Voltage Limit",  # 5h
-                        "Input Current Limit", # 6h
-                        "Precharge Control", # 8h
-                        "Termination Control", # 9h
-                        "Re-charge Contro", # Ah
-                        "VOTG regulation", # Bh
-                        "IOTG regulation", # Dh
-                        "Timer Control", # Eh
-                        "Charger Control 0", # Fh
-                        "Charger Control 1", # 10h
-                        "Charger Control 2", # 11h
-                        "Charger Control 3", # 12h
-                        "Charger Control 4", # 13h
-                        "Charger Control 5", # 14h
-                        "MPPT Control", # 15h
-                        "Temperature Control", # 16h
-                        "NTC Control 0", # 17h
-                        "NTC Control 1", # 18h
-                        "ICO Current Limit", # 19h
-                        "Charger Status 0", # 1Bh
-                        "Charger Status 1", # 1Ch
-                        "Charger Status 2", # 1Dh
-                        "Charger Status 3", # 1Eh
-                        "Charger Status 4", # 1Fh
-                        "FAULT Status 0", # 20h
-                        "FAULT Status 1", # 21h
-                        "Charger Flag 0", # 22h
-                        "Charger Flag 1", # 23h
-                        "Charger Flag 2", # 24h
-                        "Charger Flag 3", # 25h
-                        "FAULT Flag 0", # 26h
-                        "FAULT Flag 1", # 27h
-                        "Charger Mask 0", # 28h
-                        "Charger Mask 1", # 29h
-                        "Charger Mask 2", # 2Ah
-                        "Charger Mask 3", # 2Bh
-                        "FAULT Mask 0", # 2Ch
-                        "FAULT Mask 1", # 2Dh
-                        "ADC Control", # 2Eh
-                        "ADC Function Disable 0", # 2Fh
-                        "ADC Function Disable 1", # 30h
-                        "IBUS ADC", # 31h
-                        "IBAT ADC", # 33h
-                        "VBUS ADC", # 35h
-                        "VAC1 ADC" , # 37h
-                        "VAC2 ADC", # 39h
-                        "VBAT ADC", # 3Bh
-                        "VSYS ADC", # 3Dh
-                        "TS ADC", # 3Fh
-                        "TDIE_ADC", # 41h
-                        "D+ ADC", # 43h
-                        "D- ADC", # 45h
-                        "DPDM Driver", # 47h
-                        "Part Information", # 48h
-                        "LMR34206 Power Good", # 
-                        "BQ2798 Interrupt", # 
-                        "BQ2798 status" # 
-]
-
-register_unit:str = [
-                "V", "V", "A", "V", "A", "", "", "", "V", "",   # REG00 to REG0D
-                "", "", "", "", "", "", "", "", "", "",         # REG0E to REG17
-                "", "A", "", "", "", "", "", "", "", "",        # REG18 to REG22
-                "", "", "", "", "", "", "", "", "", "",         # REG23 to REG2C
-                "", "", "", "", "A", "A", "V", "V", "V", "V",   # REG2D to REG3B
-                "V", "%", "°C", "V", "V", "", "", "", "", "",   # REG3D to REG48, along with PG, IRQ, STAT
-]
 
 fptr = [RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, retnone, retnone, retnone, RegToVal, retnone, # REG00 to REG0D
         retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone,   # REG0E to REG17
