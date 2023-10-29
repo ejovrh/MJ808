@@ -93,7 +93,7 @@ register_step_size: int = [250, 10, 10, 100, 10, 40, 40, -1, 10, -1, # REG00 to 
                       1, 0.0976563, 0.5, 1, 1, -1, -1, -1, -1, -1   # REG3D to REG48, along with PG, IRQ, STAT
                       ]
 
-reg08_bits = [
+reg08_bit_names = [
                   "IPRECHG:0",   # bit0
                   "IPRECHG:1",   # bit1
                   "IPRECHG:2",   # bit2
@@ -144,7 +144,7 @@ reg08_bits_VBAT_LOWV = [
                   "71.4%*VREG",   # 3
                     ]
 
-reg09_bits = [
+reg09_bit_names = [
                   "ITERM:0",   # bit0
                   "ITERM:1",   # bit1
                   "ITERM:2",   # bit2
@@ -188,7 +188,7 @@ reg09_bits_unset = [
                   "n/a"   # bit7
                 ]
 
-reg0a_bits = [
+reg0a_bit_names = [
                   "VRECHG:0",   # bit0
                   "VRECHG:1",   # bit1
                   "VRECHG:2",   # bit2
@@ -287,7 +287,7 @@ reg0d_bits_unset = [
                   "2 hrs (default)"   # bit7
                 ]
 
-reg0e_bits = [
+reg0e_bit_names = [
                   "TMR2X_EN",   # bit0
                   "CHG_TMR:0",   # bit1
                   "CHG_TMR:1",   # bit2
@@ -345,7 +345,7 @@ reg0e_bits_CHG_TMR = [
                   "24 hrs",   # 3
                     ]
 
-reg0f_bits = [
+reg0f_bit_names = [
                   "EN_BACKUP",   # bit0
                   "EN_TERM",   # bit1
                   "EN_HIZ",   # bit2
@@ -389,7 +389,7 @@ reg0f_bits_unset = [
                   "The charger will NOT apply a discharging current on BAT during battery OVP"   # bit7
                 ]
 
-reg10_bits = [
+reg10_bit_names = [
                   "WATCHDOG:0",   # bit0
                   "WATCHDOG:1",   # bit1
                   "WATCHDOG:2",   # bit2
@@ -458,7 +458,7 @@ reg10_bits_WATCHDOG = [
                   "160s"   # 7
                     ]
 
-reg11_bits = [
+reg11_bit_names = [
                   "SDRV_DLY",   # bit0
                   "SDRV_CTRL:0",   # bit1
                   "SDRV_CTRL:1",   # bit2
@@ -509,7 +509,7 @@ reg11_bits_SDRV_CTRL = [
                   "System Power Reset",   # 3
                     ]
 
-reg12_bits = [
+reg12_bit_names = [
                   "DIS_FWD_OOA",   # bit0
                   "DIS_OTG_OOA",   # bit1
                   "DIS_LDO",   # bit2
@@ -553,7 +553,7 @@ reg12_bits_unset = [
                   "NOT force"   # bit7
                 ]
 
-reg13_bits = [
+reg13_bit_names = [
                   "EN_IBUS_OCP",   # bit0
                   "FORCE_VINDPM_DET",   # bit1
                   "DIS_VOTG_UVP",   # bit2
@@ -597,7 +597,7 @@ reg13_bits_unset = [
                   "turn off (default)"   # bit7
                 ]
 
-reg14_bits = [
+reg14_bit_names = [
                   "EN_BATOC",   # bit0
                   "EN_EXTILIM",   # bit1
                   "EN_IINDPM",   # bit2
@@ -648,7 +648,7 @@ reg14_bits_IBAT_REG = [
                   "Disable (default)",   # 3
                     ]
 
-reg15_bits = [
+reg15_bit_names = [
                   "EN_MPPT",   # bit0
                   "VOC_RATE:0",   # bit1
                   "VOC_RATE:1",   # bit2
@@ -717,7 +717,7 @@ reg15_bits_VOC_RATE = [
                   "30mins",   # 3
                     ]
 
-reg16_bits = [
+reg16_bit_names = [
                   "BKUP_ACFET1_ON",   # bit0
                   "VAC2_PD_EN",   # bit1
                   "VAC1_PD_EN",   # bit2
@@ -775,7 +775,7 @@ reg16_bits_TSHUT = [
                   "85°C",   # 3
                     ]
 
-reg17_bits = [
+reg17_bit_names = [
                   "RESERVED",   # bit0
                   "JEITA_ISETC",   # bit1
                   "JEITA_ISETC",   # bit2
@@ -844,7 +844,7 @@ reg17_bits_JEITA_ISETC = [
                   "ICHG unchanged",   # 3
                     ]
 
-reg18_bits = [
+reg18_bit_names = [
                   "TS_IGNORE",   # bit0
                   "BCOLD",   # bit1
                   "BHOT",   # bit2
@@ -909,7 +909,7 @@ reg18_bits_BHOT = [
                   "Disable",   # 3
                     ]
 
-reg1b_bits = [
+reg1b_bit_names = [
                   "VBUS_PRESENT_STAT",   # bit0
                   "AC1_PRESENT_STAT",   # bit1
                   "AC2_PRESENT_STAT",   # bit2
@@ -953,7 +953,7 @@ reg1b_bits_unset = [
                   "Normal"   # bit7
                 ]
 
-reg1c_bits = [
+reg1c_bit_names = [
                   "BC1.2_DONE_STAT",   # bit0
                   "VBUS_STAT:0",   # bit1
                   "VBUS_STAT:1",   # bit2
@@ -1027,7 +1027,7 @@ reg1c_bits_VBUS_STAT = [
                   "Reserved"   # F
                     ]
 
-reg1d_bits = [
+reg1d_bit_names = [
                   "VBAT_PRESENT_STAT",   # bit0
                   "DPDM_STAT",   # bit1
                   "TREG_STAT",   # bit2
@@ -1078,7 +1078,7 @@ reg1d_bits_ICO_STAT = [
                   "Reserved",   # 3
                     ]
 
-reg1e_bits = [
+reg1e_bit_names = [
                   "RESERVED",   # bit0
                   "PRECHG_TMR_STAT",   # bit1
                   "TRICHG_TMR_STAT",   # bit2
@@ -1122,7 +1122,7 @@ reg1e_bits_unset = [
                   "ACFET2-RBFET2 is NOT placed"   # bit7
                 ]
 
-reg1f_bits = [
+reg1f_bit_names = [
                   "TS_HOT_STAT",   # bit0
                   "TS_WARM_STAT",   # bit1
                   "TS_COOL_STAT",   # bit2
@@ -1166,7 +1166,7 @@ reg1f_bits_unset = [
                   "n/a"   # bit7
                 ]
 
-reg20_bits = [
+reg20_bit_names = [
                   "VAC1_OVP_STAT",   # bit0
                   "VAC2_OVP_STAT",   # bit1
                   "CONV_OCP_STAT",   # bit2
@@ -1210,7 +1210,7 @@ reg20_bits_unset = [
                   "Normal"   # bit7
                 ]
 
-reg21_bits = [
+reg21_bit_names = [
                   "RESERVED",   # bit0
                   "RESERVED",   # bit1
                   "TSHUT_STAT",   # bit2
@@ -1254,7 +1254,7 @@ reg21_bits_unset = [
                   "Normal"   # bit7
                 ]
 
-reg22_bits = [
+reg22_bit_names = [
                   "VBUS_PRESENT_FLAG",   # bit0
                   "AC1_PRESENT_FLAG",   # bit1
                   "AC2_PRESENT_FLAG",   # bit2
@@ -1298,7 +1298,7 @@ reg22_bits_unset = [
                   "Normal"   # bit7
                 ]
 
-reg23_bits = [
+reg23_bit_names = [
                   "BC1.2_DONE_FLAG",   # bit0
                   "VBAT_PRESENT_FLAG",   # bit1
                   "TREG_FLAG",   # bit2
@@ -1342,7 +1342,7 @@ reg23_bits_unset = [
                   "Normal"   # bit7
                 ]
 
-reg24_bits = [
+reg24_bit_names = [
                   "TOPOFF_TMR_FLAG",   # bit0
                   "PRECHG_TMR_FLAG",   # bit1
                   "TRICHG_TMR_FLAG",   # bit2
@@ -1386,7 +1386,7 @@ reg24_bits_unset = [
                   "n/a"   # bit7
                 ]
 
-reg25_bits = [
+reg25_bit_names = [
                   "TS_HOT_FLAG",   # bit0
                   "TS_WARM_FLAG",   # bit1
                   "TS_COOL_FLAG",   # bit2
@@ -1430,7 +1430,7 @@ reg25_bits_unset = [
                   "n/a"   # bit7
                 ]
 
-reg26_bits = [
+reg26_bit_names = [
                   "VAC1_OVP_FLAG",   # bit0
                   "VAC2_OVP_FLAG",   # bit1
                   "CONV_OCP_FLAG",   # bit2
@@ -1474,7 +1474,7 @@ reg26_bits_unset = [
                   "Normal"   # bit7
                 ]
 
-reg27_bits = [
+reg27_bit_names = [
                   "RESERVED",   # bit0
                   "RESERVED",   # bit1
                   "TSHUT_FLAG",   # bit2
@@ -1518,7 +1518,7 @@ reg27_bits_unset = [
                   "Normal"   # bit7
                 ]
 
-reg28_bits = [
+reg28_bit_names = [
                   "VBUS_PRESENT_MASK",   # bit0
                   "AC1_PRESENT_MASK",   # bit1
                   "AC2_PRESENT_MASK",   # bit2
@@ -1562,7 +1562,7 @@ reg28_bits_unset = [
                   "Enter IINDPM / IOTG does produce INT pulse"   # bit7
                 ]
 
-reg29_bits = [
+reg29_bit_names = [
                   "BC1.2_DONE_MASK",   # bit0
                   "VBAT_PRESENT_MASK",   # bit1
                   "TREG_MASK",   # bit2
@@ -1606,7 +1606,7 @@ reg29_bits_unset = [
                   "ICO status change does produce INT"   # bit7
                 ]
 
-reg2a_bits = [
+reg2a_bit_names = [
                   "TOPOFF_TMR_MASK",   # bit0
                   "PRECHG_TMR_MASK",   # bit1
                   "TRICHG_TMR_MASK",   # bit2
@@ -1650,7 +1650,7 @@ reg2a_bits_unset = [
                   "n/a"   # bit7
                 ]
 
-reg2b_bits = [
+reg2b_bit_names = [
                   "TS_HOT_MASK",   # bit0
                   "TS_WARM_MASK",   # bit1
                   "TS_COOL_MASK",   # bit2
@@ -1694,15 +1694,15 @@ reg2b_bits_unset = [
                   "n/a"   # bit7
                 ]
 
-reg2c_bits = [
-                  "",   # bit0
-                  "",   # bit1
-                  "",   # bit2
-                  "",   # bit3
-                  "",   # bit4
-                  "",   # bit5
-                  "",   # bit6
-                  ""   # bit7
+reg2c_bit_names = [
+                  "VAC1_OVP_MASK",   # bit0
+                  "VAC2_OVP_MASK",   # bit1
+                  "CONV_OCP_MASK",   # bit2
+                  "IBAT_OCP_MASK",   # bit3
+                  "IBUS_OCP_MASK",   # bit4
+                  "VBAT_OVP_MASK",   # bit5
+                  "VBUS_OVP_MASK",   # bit6
+                  "IBAT_REG_MASK"   # bit7
                 ]
 
 reg2c_description = [
@@ -1738,7 +1738,7 @@ reg2c_bits_unset = [
                   "enter or exit IBAT regulation does produce INT"   # bit7
                 ]
 
-reg2d_bits = [
+reg2d_bit_names = [
                   "VAC1_OVP_MASK",   # bit0
                   "VAC2_OVP_MASK",   # bit1
                   "CONV_OCP_MASK",   # bit2
@@ -1782,7 +1782,7 @@ reg2d_bits_unset = [
                   "System short fault does produce INT"   # bit7
                 ]
 
-reg2e_bits = [
+reg2e_bit_names = [
                   "RESERVED",   # bit0
                   "RESERVED",   # bit1
                   "ADC_AVG_INIT",   # bit2
@@ -1831,9 +1831,13 @@ reg2e_bits_ADC_SAMPLE = [
                   "14 bit effective resolution",   # 1
                   "13 bit effective resolution",   # 2
                   "12 bit effective resolution (not recommended)",   # 3
+                  "",   # 4
+                  "",   # 5
+                  "",   # 6
+                  ""   # 7
                     ]
 
-reg2f_bits = [
+reg2f_bit_names = [
                   "RESERVED",   # bit0
                   "RESERVED",   # bit1
                   "TSHUT_MASK",   # bit2
@@ -1877,7 +1881,7 @@ reg2f_bits_unset = [
                   "Enable (Default)"   # bit7
                 ]
 
-reg30_bits = [
+reg30_bit_names = [
                   "RESERVED",   # bit0
                   "RESERVED",   # bit1
                   "RESERVED",   # bit2
@@ -1921,7 +1925,7 @@ reg30_bits_unset = [
                   "Enable (Default)"   # bit7
                 ]
 
-reg47_bits = [
+reg47_bit_names = [
                   "RESERVED",   # bit0
                   "RESERVED",   # bit1
                   "DMINUS_DAC",   # bit2
@@ -1987,7 +1991,7 @@ reg47_bits_DMINUS_DAC = [
                   "reserved"   # bit7
                     ]
 
-regXX_bits = [
+regXX_bit_names = [
                   "",   # bit0
                   "",   # bit1
                   "",   # bit2

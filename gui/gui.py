@@ -10,15 +10,14 @@ from strings import *
 
 data_queue = queue.Queue()  # Initialize a queue for data processing
 
-custom_font_size = 10   # Create a custom font size
 num_fields_per_row = 10 # how many register fields per row
 num_rows = 6    # how many rows
 default_value = "n/a"  # default value
 entry_field_width = 6   #
-entry_field_height = 1  #
-custom_font = ("Arial", custom_font_size)  # font to be used
+entry_field_height = 0  #
+custom_font = ("Arial", 10)  # font to be used
 entry_fields = []    # container for register values as read from device and computed
-bit_fields = {}  # dictionary
+fields = {}  # dictionary
 bit_description_fields = {}  # dictionary
 data_buffer = ""    # data buffer for serial read
 current_values:int = [default_value] * 60
@@ -26,7 +25,8 @@ last_values:int = [default_value] * 60
 last_update_times = [time.time()] * 60
 last_change_times = [0] * 60
 clicked_field = 21
-                     
+current_label = None  # Variable to keep track of the currently clicked label
+                    
 # Create a global variable to keep track of the serial connection and reading flag
 ser = None
 reading_flag = False
@@ -217,30 +217,50 @@ def REG0D(in_val, _ignore1, _ignore2):
 def REG0E(in_val, _ignore1, _ignore2):
     return in_val
 
+
+
+
+def label_click(event):
+    global current_label  # Declare current_label as a global variable
+    if current_label:
+        # Unbold the previous label
+        # current_label.config(font=("normal", 10))
+        current_label.config(bg="white")
+        
+    # Set the current_label to the label that was clicked
+    current_label = event.widget
+    # Bold the clicked label
+    # current_label.config(font=("bold", 12))
+    current_label.config(bg="lightblue")
+
 def dectostr(in_val:int) -> str:
     decimal = int(in_val, 16)  # Convert in_val to an integer
     binary_str = bin(decimal)[2:]  # Convert the integer to a binary string and remove the '0b' prefix
     binary_str = binary_str.zfill(8) # Pad the binary string to 8 characters with leading zeros if needed"
     return binary_str
 
-def populate_8_bitfields(in_val:int, description, bit_set, bit_unset):
+def populate_8_bitfields(in_name:str, in_val:int, description:str, bit_set, bit_unset:str):
     binary_str = dectostr(in_val)
 
     for i in range(8):
-        key = str("bit_field"+str(i))   # set key
-        bit_fields[key].delete(1.0, tk.END)  # Clear the bit_field
+        key = str("bit_field_name"+str(i)) # in DS pp.59 - column "Field": tree text byte register description
+        fields[key].delete(1.0, tk.END)  # Clear the bit_field
+        fields[key].insert(1.0, in_name[i])
+
+        key = str("bit_field"+str(i)) # bit value according to column "Description"
+        fields[key].delete(1.0, tk.END)  # Clear the bit_field
 
         if binary_str[i] == 1:
-            bit_fields[key].insert(1.0, bit_set[i])
+            fields[key].insert(1.0, bit_set[i])
         else:
-            bit_fields[key].insert(1.0, bit_unset[i])
+            fields[key].insert(1.0, bit_unset[i])
 
-        key = str("bit_field_description"+str(i))   # set key
-        bit_description_fields[key].delete(1.0, tk.END)  # Clear the bit_field
-        bit_description_fields[key].insert(1.0, description[i])
+        key = str("bit_field_description"+str(i)) # in DS pp.59 - column "Description": tree text byte register description
+        fields[key].delete(1.0, tk.END)  # Clear the bit_field
+        fields[key].insert(1.0, description[i])
 
 def REG0F(in_val:int, _ignore1:int, _ignore2:int):
-    populate_8_bitfields(in_val, reg0f_description, reg0f_bits_set, reg0f_bits_unset)
+    populate_8_bitfields(reg0f_bit_names, in_val, reg0f_description, reg0f_bits_set, reg0f_bits_unset)
     return in_val
 
 def REG10(in_val, _ignore1, _ignore2):
@@ -250,11 +270,11 @@ def REG11(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG12(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg12_description, reg12_bits_set, reg12_bits_unset)
+    populate_8_bitfields(reg12_bit_names, in_val, reg12_description, reg12_bits_set, reg12_bits_unset)
     return in_val
 
 def REG13(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg13_description, reg13_bits_set, reg13_bits_unset)
+    populate_8_bitfields(reg13_bit_names, in_val, reg13_description, reg13_bits_set, reg13_bits_unset)
     return in_val
 
 def REG14(in_val, _ignore1, _ignore2):
@@ -276,7 +296,7 @@ def REG19(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG1B(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg1b_description, reg1b_bits_set, reg1b_bits_unset)
+    populate_8_bitfields(reg1b_bit_names, in_val, reg1b_description, reg1b_bits_set, reg1b_bits_unset)
     return in_val
 
 def REG1C(in_val, _ignore1, _ignore2):
@@ -286,77 +306,77 @@ def REG1D(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG1E(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg1e_description, reg1e_bits_set, reg1e_bits_unset)
+    populate_8_bitfields(reg1e_bit_names, in_val, reg1e_description, reg1e_bits_set, reg1e_bits_unset)
     return in_val
 
 def REG1F(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg1f_description, reg1f_bits_set, reg1f_bits_unset)
+    populate_8_bitfields(reg1f_bit_names, in_val, reg1f_description, reg1f_bits_set, reg1f_bits_unset)
     return in_val
 
 def REG20(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg20_description, reg20_bits_set, reg20_bits_unset)
+    populate_8_bitfields(reg20_bit_names, in_val, reg20_description, reg20_bits_set, reg20_bits_unset)
     return in_val
 
 def REG21(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG22(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg22_description, reg22_bits_set, reg22_bits_unset)
+    populate_8_bitfields(reg22_bit_names, in_val, reg22_description, reg22_bits_set, reg22_bits_unset)
     return in_val
 
 def REG23(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg23_description, reg23_bits_set, reg23_bits_unset)
+    populate_8_bitfields(reg23_bit_names, in_val, reg23_description, reg23_bits_set, reg23_bits_unset)
     return in_val
 
 def REG24(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg24_description, reg24_bits_set, reg24_bits_unset)
+    populate_8_bitfields(reg24_bit_names, in_val, reg24_description, reg24_bits_set, reg24_bits_unset)
     return in_val
 
 def REG25(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg25_description, reg25_bits_set, reg25_bits_unset)
+    populate_8_bitfields(reg25_bit_names, in_val, reg25_description, reg25_bits_set, reg25_bits_unset)
     return in_val
 
 def REG26(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg26_description, reg26_bits_set, reg26_bits_unset)
+    populate_8_bitfields(reg26_bit_names, in_val, reg26_description, reg26_bits_set, reg26_bits_unset)
     return in_val
 
 def REG27(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg27_description, reg27_bits_set, reg27_bits_unset)
+    populate_8_bitfields(reg27_bit_names, in_val, reg27_description, reg27_bits_set, reg27_bits_unset)
     return in_val
 
 def REG28(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg28_description, reg28_bits_set, reg28_bits_unset)
+    populate_8_bitfields(reg28_bit_names, in_val, reg28_description, reg28_bits_set, reg28_bits_unset)
     return in_val
 
 def REG29(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg29_description, reg29_bits_set, reg29_bits_unset)
+    populate_8_bitfields(reg29_bit_names, in_val, reg29_description, reg29_bits_set, reg29_bits_unset)
     return in_val
 
 def REG2A(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg2a_description, reg2a_bits_set, reg2a_bits_unset)
+    populate_8_bitfields(reg2a_bit_names, in_val, reg2a_description, reg2a_bits_set, reg2a_bits_unset)
     return in_val
 
 def REG2B(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg2b_description, reg2b_bits_set, reg2b_bits_unset)
+    populate_8_bitfields(reg2b_bit_names, in_val, reg2b_description, reg2b_bits_set, reg2b_bits_unset)
     return in_val
 
 def REG2C(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg2c_description, reg2c_bits_set, reg2c_bits_unset)
+    populate_8_bitfields(reg2c_bit_names, in_val, reg2c_description, reg2c_bits_set, reg2c_bits_unset)
     return in_val
 
 def REG2D(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg2d_description, reg2d_bits_set, reg2d_bits_unset)
+    populate_8_bitfields(reg2d_bit_names, in_val, reg2d_description, reg2d_bits_set, reg2d_bits_unset)
     return in_val
 
 def REG2E(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG2F(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg2f_description, reg2f_bits_set, reg2f_bits_unset)
+    populate_8_bitfields(reg2f_bit_names, in_val, reg2f_description, reg2f_bits_set, reg2f_bits_unset)
     return in_val
 
 def REG30(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(in_val, reg30_description, reg30_bits_set, reg30_bits_unset)
+    populate_8_bitfields(reg30_bit_names, in_val, reg30_description, reg30_bits_set, reg30_bits_unset)
     return in_val
 
 def REG47(in_val, _ignore1, _ignore2):
@@ -403,9 +423,8 @@ for i in range(6):  # 6 rows
         entry_field.grid(row=i, column=2*j + 1, padx=2, pady=5)
         entry_fields.append(entry_field)
         entry_field.bind("<FocusIn>", lambda event, num=field_num: on_entry_field_click(event, num)) # Bind the click event to the entry field
-
-        # Bind the click event to the entry field
-        entry_field.bind("<FocusIn>", lambda event, num=field_num: on_entry_field_click(event, num))
+        entry_field.bind("<FocusIn>", lambda event, num=field_num: on_entry_field_click(event, num)) # Bind the click event to the entry field
+        entry_field.bind("<Button-1>", label_click)  # Bind the click event to the label
 
         field_num +=1 
         
@@ -436,26 +455,36 @@ button_frame.columnconfigure(0, weight=1)
 button_frame.columnconfigure(1, weight=3)
 button_frame.columnconfigure(2, weight=1)
 
-# create labels in byte_frame
-for i in range(8):
+# byte_frame.columnconfigure(0, weight=1)
+# byte_frame.columnconfigure(1, weight=1
+byte_frame.rowconfigure(0, weight=1)
+byte_frame.rowconfigure(1, weight=1)
+
+
+# create itemps in byte_frame 
+j:int = 0
+for i in range(8):  
+    key = str("bit_number"+str(i))   # in DS pp.59 - column "Bit": bit0 to bit7`
     label_text = "bit" + str(i)
-    label = tk.Label(byte_frame, text=label_text)
-    label.config(bg='gray')
-    label.grid(row=i+1, column=0, padx=5, pady=5, sticky='E')
+    fields[key] = Label(byte_frame, width=4, text=label_text)
+    fields[key].config(bg='gray')
+    fields[key].grid(row=i+j+1, column=0, padx=5, pady=5, sticky='W')   
 
+    key = str("bit_field_name"+str(i)) # in DS pp.59 - column "Field": tree text byte register description
+    fields[key] = Text(byte_frame, width=20, height=entry_field_height, font=custom_font)    # value...
+    fields[key].insert(1.0, "")
+    fields[key].grid(row=i+j+1, column=1, padx=2, sticky='W')
 
-for i in range(8):  # populate dictionary
-    # global bit_fields
-    key = str("bit_field"+str(i))   # set key
-    bit_fields[key] = Text(byte_frame, width=25, height=entry_field_height, font=custom_font)    # value...
-    bit_fields[key].insert(1.0, "n/a")
-    bit_fields[key].grid(row=i+1, column=2, padx=2, sticky='W')
+    key = str("bit_field"+str(i)) # bit value according to column "Description"
+    fields[key] = Text(byte_frame, width=75, height=entry_field_height, font=custom_font)    # value...
+    fields[key].insert(1.0, "")
+    fields[key].grid(row=i+j+1, column=1, padx=2)
 
-    key = str("bit_field_description"+str(i))   # set key
-    bit_description_fields[key] = Text(byte_frame, width=110, height=entry_field_height, font=custom_font)    # value...
-    bit_description_fields[key].insert(1.0, "n/a")
-    bit_description_fields[key].grid(row=i+1, column=1, padx=2, sticky='W')
-    
+    key = str("bit_field_description"+str(i)) # in DS pp.59 - column "Description": tree text byte register description
+    fields[key] = Text(byte_frame, width=125, height=2, font=custom_font)    # value...
+    fields[key].insert(1.0, "")
+    fields[key].grid(row=i+j+2, column=1, padx=2, sticky='W')
+    j += 1
 
 # Place buttons in the button frame
 start_button.grid(row=0, column=1, padx=5, pady=5, sticky='W')
