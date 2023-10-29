@@ -454,13 +454,15 @@ for i in range(6):  # 6 rows
         if field_num >= 57:
             break
 
-        # Create labels for register names
-        label = Label(bq25798_frame, text=register_name[field_num])
-        label.grid(row=i, column=2*j, padx=2, pady=5, sticky="e")
+        # create label with register short name
+        key = str("bit_number"+str(i))   # in DS p.57 - string "REG" appended with column "Offset": e.g. REG00
+        fields[key] = Label(bq25798_frame, text=register_name[field_num])
+        fields[key].config(bg='gray')
+        fields[key].grid(row=i, column=2*j, padx=2, pady=5, sticky="W")
+        tooltip = ToolTip(fields[key], register_description[field_num]) # Add tooltips to the labels
 
-        # Add tooltips to the labels
-        tooltip_text = register_description[field_num]
-        tooltip = ToolTip(label, tooltip_text)
+
+
 
         # Create text entry fields for register values
         entry_field = Text(bq25798_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
