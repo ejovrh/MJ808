@@ -1,31 +1,25 @@
 import threading
 import queue
-import tkinter as tk
-from tkinter import Text, Label, messagebox
+from tkinter import * 
+from tkinter import messagebox
 import serial
 import time
-import inspect
 
 from strings import *
 
 data_queue = queue.Queue()  # Initialize a queue for data processing
 
-num_fields_per_row = 10 # how many register fields per row
-num_rows = 6    # how many rows
 default_value = "n/a"  # default value
 entry_field_width = 6   #
 entry_field_height = 0  #
 custom_font = ("Arial", 10)  # font to be used
 entry_fields = []    # container for register values as read from device and computed
-fields = {}  # dictionary
-bit_description_fields = {}  # dictionary
+fields = {}  # dictionary containing GUI widgets
 data_buffer = ""    # data buffer for serial read
 current_values:int = [default_value] * 60
 last_values:int = [default_value] * 60
 last_update_times = [time.time()] * 60
 last_change_times = [0] * 60
-clicked_field = 21
-current_label = None  # Variable to keep track of the currently clicked label
                     
 # Create a global variable to keep track of the serial connection and reading flag
 ser = None
@@ -46,7 +40,7 @@ class ToolTip:
         x += self.widget.winfo_rootx() + 25
         y += self.widget.winfo_rooty() + 25
 
-        self.tooltip = tk.Toplevel(self.widget)
+        self.tooltip = Toplevel(self.widget)
         self.tooltip.wm_overrideredirect(True)
         self.tooltip.wm_geometry(f"+{x}+{y}")
         label = Label(self.tooltip, text=self.text, background="lightyellow", relief="solid", borderwidth=1)
@@ -59,17 +53,17 @@ class ToolTip:
 
 # Create a Tkinter window
 if __name__ == '__main__':
-    root = tk.Tk()
+    root = Tk()
 
 root.title("BQ25798 registers")
 
 # Create frames for organizing the GUI elements
-top_frame = tk.Frame(root, bg='gray', width=1024, height=50, pady=3)
-bq25798_frame = tk.Frame(root, bg='gray', width=1024, pady=3)
-status_frame = tk.Frame(root, bg='gray', width=1024, pady=3)
-button_frame = tk.Frame(root, bg='gray', width=1024, pady=3)
-byte_frame = tk.Frame(root, bg='gray', width=1024, height=200)
-bottom_frame = tk.Frame(root, bg='gray', width=1024, height=50, pady=3)
+top_frame = Frame(root, bg='gray', width=1024, height=50, pady=3)
+bq25798_frame = Frame(root, bg='gray', width=1024, pady=3)
+status_frame = Frame(root, bg='gray', width=1024, pady=3)
+button_frame = Frame(root, bg='gray', width=1024, pady=3)
+byte_frame = Frame(root, bg='gray', width=1024, height=200)
+bottom_frame = Frame(root, bg='gray', width=1024, height=50, pady=3)
 
 # Draw grid
 top_frame.grid(row=0, column=0, sticky='nsew')
@@ -117,7 +111,7 @@ def update_entry_fields(data):
                 #     if fptr_hover[i] != retval:
                 #         fptr_hover[i](str(value), register_offset[i], register_step_size[i])
 
-                entry_fields[i].delete(1.0, tk.END)
+                entry_fields[i].delete(1.0, END)
 
                 if current_values[i] != last_values[i]:
                     if entry_fields[i].cget("bg") != "yellow":
@@ -202,18 +196,20 @@ def RegToTemp(in_val:int, in_offset:int, in_stepsize:float):
 
     return ( ((in_val * in_stepsize) + in_offset ) / 1000 )
 
-def label_click(event):
-    global current_label  # Declare current_label as a global variable
-    if current_label:
-        # Unbold the previous label
-        # current_label.config(font=("normal", 10))
-        current_label.config(bg="white")
-        
-    # Set the current_label to the label that was clicked
-    current_label = event.widget
-    # Bold the clicked label
-    # current_label.config(font=("bold", 12))
-    current_label.config(bg="lightblue")
+previous = 0    # holds the previous state
+def label_click(event, num):
+    global previous
+    key = str("register_short_name"+str(previous))
+    fields[key].config(bg="gray")
+    
+    key = str("register_short_name"+str(num))
+
+    if fields[key]:
+        fields[key].config(bg="red")
+
+    previous = num # save state
+
+    return None
 
 def dectostr(in_val:int) -> str:
     decimal = int(in_val, 16)  # Convert in_val to an integer
@@ -228,13 +224,13 @@ def populate_8_bitfields(in_name:str, in_val:int, description:str, bit_set, bit_
         # bit name
         key = str("bit_field_name"+str(i)) # in DS pp.59 - column "Field": tree text byte register description
 
-        fields[key].delete(1.0, tk.END)  # Clear the bit_field
+        fields[key].delete(1.0, END)  # Clear the bit_field
         fields[key].insert(1.0, in_name[i])
 
 
         # bit value
         key = str("bit_field"+str(i)) # bit value according to column "Description"
-        fields[key].delete(1.0, tk.END)  # Clear the bit_field
+        fields[key].delete(1.0, END)  # Clear the bit_field
 
         if binary_str[i] == 1:
             bit_val = bit_set
@@ -246,7 +242,7 @@ def populate_8_bitfields(in_name:str, in_val:int, description:str, bit_set, bit_
 
         # bit description
         key = str("bit_field_description"+str(i)) # in DS pp.59 - column "Description": tree text byte register description
-        fields[key].delete(1.0, tk.END)  # Clear the bit_field
+        fields[key].delete(1.0, END)  # Clear the bit_field
         fields[key].insert(1.0, description[i])
 
 
@@ -451,11 +447,11 @@ fptr_hover = [retnone, retnone, retnone, retnone, retnone, REG08, REG09, REG0A, 
 field_num = 0
 for i in range(6):  # 6 rows
     for j in range(10): # 10 register values per row
-        if field_num >= 57:
+        if field_num >= 57: # 56 - number of bq2798 registers
             break
 
         # create label with register short name
-        key = str("bit_number"+str(i))   # in DS p.57 - string "REG" appended with column "Offset": e.g. REG00
+        key = str("register_short_name"+str(field_num))   # in DS p.57 - string "REG" appended with column "Offset": e.g. REG00
         fields[key] = Label(bq25798_frame, text=register_name[field_num])
         fields[key].config(bg='gray')
         fields[key].grid(row=i, column=2*j, padx=2, pady=5, sticky="W")
@@ -471,7 +467,7 @@ for i in range(6):  # 6 rows
         entry_fields.append(entry_field)
         entry_field.bind("<FocusIn>", lambda event, num=field_num: on_entry_field_click(event, num)) # Bind the click event to the entry field
         entry_field.bind("<FocusIn>", lambda event, num=field_num: on_entry_field_click(event, num)) # Bind the click event to the entry field
-        entry_field.bind("<Button-1>", label_click)  # Bind the click event to the label
+        entry_field.bind("<Button-1>",lambda event, num=field_num: label_click(event, num))  # Bind the click event to the label
 
         field_num +=1 
         
@@ -493,9 +489,9 @@ for i in range(3):
     field_num +=1 
 
 # Create buttons for controlling the application
-start_button = tk.Button(button_frame, text="Start Reading", command=start_reading)
-stop_button = tk.Button(button_frame, text="Stop Reading", command=stop_reading)
-exit_button = tk.Button(button_frame, text="Exit", command=exit_app)
+start_button = Button(button_frame, text="Start Reading", command=start_reading)
+stop_button = Button(button_frame, text="Stop Reading", command=stop_reading)
+exit_button = Button(button_frame, text="Exit", command=exit_app)
 
 # Configure button frame layout
 button_frame.columnconfigure(0, weight=1)
