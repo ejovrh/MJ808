@@ -137,6 +137,13 @@ reg08_bits_unset = [
                   ""   # bit7
                 ]
 
+reg08_bits_VBAT_LOWV = [
+                  "15%*VREG",   # 0
+                  "62.2%*VREG",   # 1
+                  "66.7%*VREG",   # 2
+                  "71.4%*VREG",   # 3
+                    ]
+
 reg09_bits = [
                   "ITERM:0",   # bit0
                   "ITERM:1",   # bit1
@@ -225,16 +232,27 @@ reg0a_bits_unset = [
                   ""   # bit7
                 ]
 
-reg0d_bits = [
-                  "IOTG:0",   # bit0
-                  "IOTG:1",   # bit1
-                  "IOTG:2",   # bit2
-                  "IOTG:3",   # bit3
-                  "IOTG:4",   # bit4
-                  "IOTG:5",   # bit5
-                  "IOTG:6",   # bit6
-                  "PRECHG_TMR"   # bit7
-                ]
+reg0a_bits_CELL = [
+                  "1s",   # 0
+                  "2s",   # 1
+                  "3s",   # 2
+                  "4s",   # 3
+                  "",   # 4
+                  "",   # 5
+                  "",   # 6
+                  ""   # 7
+                    ]
+
+reg0a_bits_TRECHG = [
+                  "64ms",   # 0
+                  "256ms",   # 1
+                  "1024ms (default)",   # 2
+                  "2048ms",   # 3
+                  "",   # 4
+                  "",   # 5
+                  "",   # 6
+                  ""   # 7
+                    ]
 
 reg0d_description = [
                   "OTG current limit",   # bit0
@@ -312,6 +330,20 @@ reg0e_bits_unset = [
                   "",   # bit6
                   ""   # bit7
                 ]
+
+reg0e_bits_TOPOFF_TMR = [
+                  "Disabled (default)",   # 0
+                  "15 mins",   # 1
+                  "30 mins",   # 2
+                  "45 mins",   # 3
+                    ]
+
+reg0e_bits_CHG_TMR = [
+                  "5 hrs",   # 0
+                  "8 hrs",   # 1
+                  "12 hrs (default)",   # 2
+                  "24 hrs",   # 3
+                    ]
 
 reg0f_bits = [
                   "EN_BACKUP",   # bit0
@@ -401,6 +433,31 @@ reg10_bits_unset = [
                   ""   # bit7
                 ]
 
+reg10_bits_VBUS_BACKUP = [
+                  "40%*VINDPM",   # 0
+                  "60%*VINDPM",   # 1
+                  "80%*VINDPM (default)",   # 2
+                  "100%*VINDPM",   # 3
+                    ]
+
+reg10_bits_VAC_OVP = [
+                  "26V",   # 0
+                  "22V",   # 1
+                  "12V",   # 2
+                  "7V (default)",   # 3
+                    ]
+
+reg10_bits_WATCHDOG = [
+                  "Disable",   # 0
+                  "0.5s",   # 1
+                  "1s",   # 2
+                  "2s",   # 3
+                  "20s",   # 4
+                  "40s (default)",   # 2
+                  "80s",   # 6
+                  "160s"   # 7
+                    ]
+
 reg11_bits = [
                   "SDRV_DLY",   # bit0
                   "SDRV_CTRL:0",   # bit1
@@ -445,6 +502,13 @@ reg11_bits_unset = [
                   "Force D+/D- algorithm, when D+/D- detection is done, this bit will be reset to 0"   # bit7
                 ]
 
+reg11_bits_SDRV_CTRL = [
+                  "IDLE (default)",   # 0
+                  "Shutdown Mode",   # 1
+                  "Ship Mode",   # 2
+                  "System Power Reset",   # 3
+                    ]
+
 reg12_bits = [
                   "DIS_FWD_OOA",   # bit0
                   "DIS_OTG_OOA",   # bit1
@@ -478,7 +542,7 @@ reg12_bits_set = [
                   "force"   # bit7
                 ]
 
-reg13_bits_unset = [
+reg12_bits_unset = [
                   "Enable (Default)",   # bit0
                   "Enable (Default)",   # bit1
                   "Enable (Default)",   # bit2
@@ -577,6 +641,13 @@ reg14_bits_unset = [
                   "No ship FET populated"   # bit7
                 ]
 
+reg14_bits_IBAT_REG = [
+                  "3A",   # 0
+                  "4A",   # 1
+                  "5A",   # 2
+                  "Disable (default)",   # 3
+                    ]
+
 reg15_bits = [
                   "EN_MPPT",   # bit0
                   "VOC_RATE:0",   # bit1
@@ -620,6 +691,31 @@ reg15_bits_unset = [
                   "",   # bit6
                   ""   # bit7
                 ]
+
+reg15_bits_VOC_PCT = [
+                  "0.5625",   # 0
+                  "0.625",   # 1
+                  "0.6875",   # 2
+                  "0.75",   # 3
+                  "0.8125",   # 4
+                  "0.875 (default)",   # 5
+                  "0.9375",   # 6
+                  "1"   # 7
+                    ]
+
+reg15_bits_VOC_DLY = [
+                  "50ms",   # 0
+                  "300ms (default)",   # 1
+                  "2s",   # 2
+                  "5s",   # 3
+                    ]
+
+reg15_bits_VOC_RATE = [
+                  "30s",   # 0
+                  "2mins (default)",   # 1
+                  "10mins",   # 2
+                  "30mins",   # 3
+                    ]
 
 reg16_bits = [
                   "BKUP_ACFET1_ON",   # bit0
@@ -665,6 +761,20 @@ reg16_bits_unset = [
                   ""   # bit7
                 ]
 
+reg16_bits_TREG = [
+                  "60°C",   # 0
+                  "80°C",   # 1
+                  "100°C",   # 2
+                  "120°C (default)",   # 3
+                    ]
+
+reg16_bits_TSHUT = [
+                  "150°C (default)",   # 0
+                  "130°C",   # 1
+                  "120°C",   # 2
+                  "85°C",   # 3
+                    ]
+
 reg17_bits = [
                   "RESERVED",   # bit0
                   "JEITA_ISETC",   # bit1
@@ -709,6 +819,31 @@ reg17_bits_unset = [
                   ""   # bit7
                 ]
 
+reg17_bits_JEITA_VSET = [
+                  "Charge Suspend",   # 0
+                  "Set VREG to VREG-800mV",   # 1
+                  "Set VREG to VREG-600mV",   # 2
+                  "Set VREG to VREG-400mV (default)",   # 3
+                  "Set VREG to VREG-300mV",   # 4
+                  "Set VREG to VREG-200mV",   # 5
+                  "Set VREG to VREG-100mV",   # 6
+                  "VREG unchanged"   # 7
+                    ]
+
+reg17_bits_JEITA_ISETH = [
+                  "Charge Suspend",   # 0
+                  "Set ICHG to 20%* ICHG",   # 1
+                  "Set ICHG to 40%* ICHG",   # 2
+                  "ICHG unchanged (default)",   # 3
+                    ]
+
+reg17_bits_JEITA_ISETC = [
+                  "Charge Suspend",   # 0
+                  "Set ICHG to 20%* ICHG (default)",   # 1
+                  "Set ICHG to 40%* ICHG",   # 2
+                  "ICHG unchanged",   # 3
+                    ]
+
 reg18_bits = [
                   "TS_IGNORE",   # bit0
                   "BCOLD",   # bit1
@@ -752,6 +887,27 @@ reg18_bits_unset = [
                   "",   # bit6
                   ""   # bit7
                 ]
+
+reg18_bits_TS_COOL = [
+                  "71.1% (5°C)",   # 0
+                  "68.4% (default) (10°C)",   # 1
+                  "65.5% (15°C)",   # 2
+                  "62.4% (20°C)",   # 3
+                    ]
+
+reg18_bits_TS_WARM = [
+                  "48.4% (40°C)",   # 0
+                  "44.8% (default) (45°C)",   # 1
+                  "41.2% (50°C)",   # 2
+                  "37.7% (55°C)",   # 3
+                    ]
+
+reg18_bits_BHOT = [
+                  "37.7% (55°C)",   # 0
+                  "60°C (default)",   # 1
+                  "65°C",   # 2
+                  "Disable",   # 3
+                    ]
 
 reg1b_bits = [
                   "VBUS_PRESENT_STAT",   # bit0
@@ -841,6 +997,36 @@ reg1c_bits_unset = [
                   ""   # bit7
                 ]
 
+reg1c_bits_CHG_STAT_2 = [
+                  "Not Charging",   # 0
+                  "Trickle Charge",   # 1
+                  "Pre-charge",   # 2
+                  "Fast charge (CC mode)",   # 3
+                  "Taper Charge (CV mode)",   # 4
+                  "Reserved",   # 5
+                  "Top-off Timer Active Charging",   # 6
+                  "Charge Termination Done"   # 7
+                    ]
+
+reg1c_bits_VBUS_STAT = [
+                  "No Input or BHOT or BCOLD in OTG mode",   # 0
+                  "USB SDP (500mA)",   # 1
+                  "USB CDP (1.5A)",   # 2
+                  "USB DCP (3.25A)",   # 3
+                  "Adjustable High Voltage DCP (HVDCP) (1.5A)",   # 4
+                  "Unknown adaptor (3A)",   # 5
+                  "Non-Standard Adapter (1A/2A/2.1A/2.4A)",   # 6
+                  "In OTG mode"   # 7
+                  "Not qualified adaptor"   # 8
+                  "Reserved"   # bit9
+                  "Reserved"   # A
+                  "Device directly powered from VBUS"   # B
+                  "Backup Mode"   # C
+                  "Reserved"   # D
+                  "Reserved"   # E
+                  "Reserved"   # F
+                    ]
+
 reg1d_bits = [
                   "VBAT_PRESENT_STAT",   # bit0
                   "DPDM_STAT",   # bit1
@@ -884,6 +1070,13 @@ reg1d_bits_unset = [
                   "",   # bit6
                   ""   # bit7
                 ]
+
+reg1d_bits_ICO_STAT = [
+                  "ICO disabled",   # 0
+                  "ICO optimization in progress",   # 1
+                  "Maximum input current detected",   # 2
+                  "Reserved",   # 3
+                    ]
 
 reg1e_bits = [
                   "RESERVED",   # bit0
@@ -1633,6 +1826,13 @@ reg2e_bits_unset = [
                   "Disable"   # bit7
                 ]
 
+reg2e_bits_ADC_SAMPLE = [
+                  "15 bit effective resolution",   # 0
+                  "14 bit effective resolution",   # 1
+                  "13 bit effective resolution",   # 2
+                  "12 bit effective resolution (not recommended)",   # 3
+                    ]
+
 reg2f_bits = [
                   "RESERVED",   # bit0
                   "RESERVED",   # bit1
@@ -1721,6 +1921,72 @@ reg30_bits_unset = [
                   "Enable (Default)"   # bit7
                 ]
 
+reg47_bits = [
+                  "RESERVED",   # bit0
+                  "RESERVED",   # bit1
+                  "DMINUS_DAC",   # bit2
+                  "DMINUS_DAC",   # bit3
+                  "DMINUS_DAC",   # bit4
+                  "DPLUS_DAC",   # bit5
+                  "DPLUS_DAC",   # bit6
+                  "DPLUS_DAC"   # bit7
+                ]
+
+reg47_description = [
+                  "RESERVED",   # bit0
+                  "RESERVED",   # bit1
+                  "D- Output Driver",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "D+ Output Driver",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg47_bits_set = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg47_bits_unset = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "",   # bit6
+                  ""   # bit7
+                ]
+
+reg47_bits_DPLUS_DAC = [
+                  "HIZ",   # bit0
+                  "0",   # bit1
+                  "0.6V",   # bit2
+                  "1.2V",   # bit3
+                  "2.0V",   # bit4
+                  "2.7V",   # bit5
+                  "3.3V",   # bit6
+                  "D+/D- Short"   # bit7
+                    ]
+
+reg47_bits_DMINUS_DAC = [
+                  "HIZ",   # bit0
+                  "0",   # bit1
+                  "0.6V",   # bit2
+                  "1.2V",   # bit3
+                  "2.0V",   # bit4
+                  "2.7V",   # bit5
+                  "3.3V",   # bit6
+                  "reserved"   # bit7
+                    ]
+
 regXX_bits = [
                   "",   # bit0
                   "",   # bit1
@@ -1765,3 +2031,6 @@ regXX_bits_unset = [
                   ""   # bit7
                 ]
 
+regxx_bits_fields = [
+
+                    ]
