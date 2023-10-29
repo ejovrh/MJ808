@@ -254,6 +254,17 @@ reg0a_bits_TRECHG = [
                   ""   # 7
                     ]
 
+reg0d_bit_names = [
+                  "IOTG:0",   # bit0
+                  "IOTG:1",   # bit1
+                  "IOTG:2",   # bit2
+                  "IOTG:3",   # bit3
+                  "IOTG:4",   # bit4
+                  "IOTG:5",   # bit5
+                  "IOTG:6",   # bit6
+                  "PRECHG_TMR"   # bit7
+                ]
+
 reg0d_description = [
                   "OTG current limit",   # bit0
                   "",   # bit1
@@ -798,7 +809,7 @@ reg17_description = [
                 ]
 
 reg17_bits_set = [
-                  "",   # bit0
+                  "n/a",   # bit0
                   "",   # bit1
                   "",   # bit2
                   "",   # bit3
@@ -809,7 +820,7 @@ reg17_bits_set = [
                 ]
 
 reg17_bits_unset = [
-                  "",   # bit0
+                  "n/a",   # bit0
                   "",   # bit1
                   "",   # bit2
                   "",   # bit3
@@ -1805,8 +1816,8 @@ reg2e_description = [
                 ]
 
 reg2e_bits_set = [
-                  "",   # bit0
-                  "",   # bit1
+                  "n/a",   # bit0
+                  "n/a",   # bit1
                   "Start average using a new ADC conversion",   # bit2
                   " Running average (not available for IBAT discharge)",   # bit3
                   "",   # bit4
@@ -1816,8 +1827,8 @@ reg2e_bits_set = [
                 ]
 
 reg2e_bits_unset = [
-                  "",   # bit0
-                  "",   # bit1
+                  "n/a",   # bit0
+                  "n/a",   # bit1
                   "Start average using the existing register value",   # bit2
                   "Single value",   # bit3
                   "",   # bit4
@@ -1839,13 +1850,13 @@ reg2e_bits_ADC_SAMPLE = [
 
 reg2f_bit_names = [
                   "RESERVED",   # bit0
-                  "RESERVED",   # bit1
-                  "TSHUT_MASK",   # bit2
-                  "RESERVED",   # bit3
-                  "OTG_UVP_MASK",   # bit4
-                  "OTG_OVP_MASK",   # bit5
-                  "VSYS_OVP_MASK",   # bit6
-                  "VSYS_SHORT_MASK"   # bit7
+                  "TDIE_ADC_DIS",   # bit1
+                  "TS_ADC_DIS",   # bit2
+                  "VSYS_ADC_DIS",   # bit3
+                  "VBAT_ADC_DIS",   # bit4
+                  "VBUS_ADC_DIS",   # bit5
+                  "IBAT_ADC_DIS",   # bit6
+                  "IBUS_ADC_DIS"   # bit7
                 ]
 
 reg2f_description = [
@@ -1948,8 +1959,8 @@ reg47_description = [
                 ]
 
 reg47_bits_set = [
-                  "",   # bit0
-                  "",   # bit1
+                  "n/a",   # bit0
+                  "n/a",   # bit1
                   "",   # bit2
                   "",   # bit3
                   "",   # bit4
@@ -1959,8 +1970,8 @@ reg47_bits_set = [
                 ]
 
 reg47_bits_unset = [
-                  "",   # bit0
-                  "",   # bit1
+                  "n/a",   # bit0
+                  "n/a",   # bit1
                   "",   # bit2
                   "",   # bit3
                   "",   # bit4
@@ -1970,25 +1981,80 @@ reg47_bits_unset = [
                 ]
 
 reg47_bits_DPLUS_DAC = [
-                  "HIZ",   # bit0
-                  "0",   # bit1
-                  "0.6V",   # bit2
-                  "1.2V",   # bit3
-                  "2.0V",   # bit4
-                  "2.7V",   # bit5
-                  "3.3V",   # bit6
-                  "D+/D- Short"   # bit7
+                  "HIZ",   # 0
+                  "0",   # 1
+                  "0.6V",   # 2
+                  "1.2V",   # 3
+                  "2.0V",   # 4
+                  "2.7V",   # 5
+                  "3.3V",   # 6
+                  "D+/D- Short"   # 7
                     ]
 
 reg47_bits_DMINUS_DAC = [
-                  "HIZ",   # bit0
-                  "0",   # bit1
-                  "0.6V",   # bit2
-                  "1.2V",   # bit3
-                  "2.0V",   # bit4
-                  "2.7V",   # bit5
-                  "3.3V",   # bit6
-                  "reserved"   # bit7
+                  "HIZ",   # 0
+                  "0",   # 1
+                  "0.6V",   # 2
+                  "1.2V",   # 3
+                  "2.0V",   # 4
+                  "2.7V",   # 5
+                  "3.3V",   # 6
+                  "reserved"   # 7
+                    ]
+
+reg48_bit_names = [
+                  "DEV_REV_2",   # bit0
+                  "DEV_REV_2",   # bit1
+                  "DEV_REV_2",   # bit2
+                  "PN_2",   # bit3
+                  "PN_2",   # bit4
+                  "PN_2",   # bit5
+                  "RESERVED",   # bit6
+                  "RESERVED"   # bit7
+                ]
+
+reg48_description = [
+                  "Device Revision",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "Device Part Number",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "RESERVED",   # bit6
+                  "RESERVED"   # bit7
+                ]
+
+reg48_bits_set = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "n/a",   # bit6
+                  "n/a"   # bit7
+                ]
+
+reg48_bits_unset = [
+                  "",   # bit0
+                  "",   # bit1
+                  "",   # bit2
+                  "",   # bit3
+                  "",   # bit4
+                  "",   # bit5
+                  "n/a",   # bit6
+                  "n/a"   # bit7
+                ]
+
+reg48_bits_PN = [
+                  "",   # 0
+                  "",   # 1
+                  "",   # 2
+                  "BQ25798",   # 3
+                    ]
+
+reg48_bits_DEV_REV = [
+                  "BQ25798",   # 0
                     ]
 
 regXX_bit_names = [
@@ -2036,5 +2102,12 @@ regXX_bits_unset = [
                 ]
 
 regxx_bits_fields = [
-
+                  "",   # 0
+                  "",   # 1
+                  "",   # 2
+                  "",   # 3
+                  "",   # 4
+                  "",   # 5
+                  "",   # 6
+                  ""   # 7
                     ]

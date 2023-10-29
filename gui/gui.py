@@ -202,24 +202,6 @@ def RegToTemp(in_val:int, in_offset:int, in_stepsize:float):
 
     return ( ((in_val * in_stepsize) + in_offset ) / 1000 )
 
-def REG08(in_val, _ignore1, _ignore2):
-    return in_val
-
-def REG09(in_val, _ignore1, _ignore2):
-    return in_val
-
-def REG0A(in_val, _ignore1, _ignore2):
-    return in_val
-
-def REG0D(in_val, _ignore1, _ignore2):
-    return in_val
-
-def REG0E(in_val, _ignore1, _ignore2):
-    return in_val
-
-
-
-
 def label_click(event):
     global current_label  # Declare current_label as a global variable
     if current_label:
@@ -243,30 +225,68 @@ def populate_8_bitfields(in_name:str, in_val:int, description:str, bit_set, bit_
     binary_str = dectostr(in_val)
 
     for i in range(8):
+        # bit name
         key = str("bit_field_name"+str(i)) # in DS pp.59 - column "Field": tree text byte register description
+
         fields[key].delete(1.0, tk.END)  # Clear the bit_field
         fields[key].insert(1.0, in_name[i])
 
+
+        # bit value
         key = str("bit_field"+str(i)) # bit value according to column "Description"
         fields[key].delete(1.0, tk.END)  # Clear the bit_field
 
         if binary_str[i] == 1:
-            fields[key].insert(1.0, bit_set[i])
+            bit_val = bit_set
         else:
-            fields[key].insert(1.0, bit_unset[i])
+            bit_val = bit_unset
 
+        fields[key].insert(1.0, bit_val[i])
+
+
+        # bit description
         key = str("bit_field_description"+str(i)) # in DS pp.59 - column "Description": tree text byte register description
         fields[key].delete(1.0, tk.END)  # Clear the bit_field
         fields[key].insert(1.0, description[i])
 
+
+
+def REG08(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg08_bit_names, in_val, reg08_description, reg08_bits_set, reg08_bits_unset) 
+
+    return in_val
+
+def REG09(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg09_bit_names, in_val, reg09_description, reg09_bits_set, reg09_bits_unset) 
+    
+    return in_val
+
+def REG0A(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg0a_bit_names, in_val, reg0a_description, reg0a_bits_set, reg0a_bits_unset) 
+
+    return in_val
+
+def REG0D(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg0d_bit_names, in_val, reg0d_description, reg0d_bits_set, reg0d_bits_unset) 
+
+    return in_val
+
+def REG0E(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg0e_bit_names, in_val, reg0e_description, reg0e_bits_set, reg0e_bits_unset) 
+
+    return in_val
 def REG0F(in_val:int, _ignore1:int, _ignore2:int):
     populate_8_bitfields(reg0f_bit_names, in_val, reg0f_description, reg0f_bits_set, reg0f_bits_unset)
     return in_val
 
 def REG10(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg10_bit_names, in_val, reg10_description, reg10_bits_set, reg10_bits_unset) 
+
     return in_val
 
 def REG11(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg11_bit_names, in_val, reg11_description, reg11_bits_set, reg11_bits_unset) 
+
     return in_val
 
 def REG12(in_val, _ignore1, _ignore2):
@@ -278,18 +298,28 @@ def REG13(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG14(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg14_bit_names, in_val, reg14_description, reg14_bits_set, reg14_bits_unset) 
+
     return in_val
 
 def REG15(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg15_bit_names, in_val, reg15_description, reg15_bits_set, reg15_bits_unset) 
+
     return in_val
 
 def REG16(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg16_bit_names, in_val, reg16_description, reg16_bits_set, reg16_bits_unset) 
+
     return in_val
 
 def REG17(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg17_bit_names, in_val, reg17_description, reg17_bits_set, reg17_bits_unset) 
+
     return in_val
 
 def REG18(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg18_bit_names, in_val, reg18_description, reg18_bits_set, reg18_bits_unset) 
+
     return in_val
 
 def REG19(in_val, _ignore1, _ignore2):
@@ -300,9 +330,13 @@ def REG1B(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG1C(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg1c_bit_names, in_val, reg1c_description, reg1c_bits_set, reg10_bits_unset) 
+
     return in_val
 
 def REG1D(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg1d_bit_names, in_val, reg1d_description, reg1d_bits_set, reg1d_bits_unset) 
+
     return in_val
 
 def REG1E(in_val, _ignore1, _ignore2):
@@ -318,6 +352,8 @@ def REG20(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG21(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg21_bit_names, in_val, reg21_description, reg21_bits_set, reg21_bits_unset) 
+
     return in_val
 
 def REG22(in_val, _ignore1, _ignore2):
@@ -369,6 +405,8 @@ def REG2D(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG2E(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg2e_bit_names, in_val, reg2e_description, reg2e_bits_set, reg2e_bits_unset) 
+
     return in_val
 
 def REG2F(in_val, _ignore1, _ignore2):
@@ -380,6 +418,13 @@ def REG30(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG47(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg47_bit_names, in_val, reg47_description, reg47_bits_set, reg47_bits_unset) 
+
+    return in_val
+
+def REG48(in_val, _ignore1, _ignore2):
+    populate_8_bitfields(reg48_bit_names, in_val, reg48_description, reg48_bits_set, reg48_bits_unset) 
+
     return in_val
 
 # Function that returns the input
@@ -399,7 +444,7 @@ fptr_hover = [retnone, retnone, retnone, retnone, retnone, REG08, REG09, REG0A, 
                 REG18, retnone, REG1B, REG1C, REG1D, REG1E, REG1F, REG20, REG21, REG22,   # REG18 to REG22
                 REG23, REG24, REG25, REG26, REG27, REG28, REG29, REG2A, REG2B, REG2C,   # REG23 to REG2C
                 REG2D, REG2E, REG2F, REG30, retnone, retnone, retnone, retnone, retnone, retnone, # REG2D to REG3B
-                retnone, retnone, retnone, retnone, retnone, REG47, retnone, retnone, retnone, retnone    # REG3D to REG48, along with PG, IRQ, STAT
+                retnone, retnone, retnone, retnone, retnone, REG47, REG48, retnone, retnone, retnone    # REG3D to REG48, along with PG, IRQ, STAT
             ]
 
 # create bq25798 register labels and fields
