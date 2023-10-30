@@ -151,17 +151,20 @@ def update_gui_from_queue():
 # Function to start reading data
 def start_reading():
     global reading_flag, reading_thread, ser
+
     if not ser:
         try:
-            ser = serial.Serial('COM4', 115200)
+            ser = serial.Serial('COM4', 115200, timeout=60)
         except serial.SerialException as e:
             show_error(f"Serial Error: {e}")
             return
+        
     reading_flag = True
     reading_thread = threading.Thread(target=read_serial_data, args=(ser, data_queue))
     reading_thread.start()
     gui_thread = threading.Thread(target=update_gui_from_queue)
     gui_thread.start()
+    start_button.config(bg='green')  # Change button color to green
 
 # Function to process the data queue
 def process_queue():
@@ -182,6 +185,7 @@ def stop_reading():
     if ser:
         ser.close()
         ser = None
+    start_button.config(bg='light gray')  # Change button color to gray
 
 # Function to exit the application
 def exit_app():
@@ -197,12 +201,14 @@ def show_error(message):
 def RegToVal(in_val:int, in_offset:int, in_stepsize:int) -> int:
     return ( ((in_val * in_stepsize) + in_offset ) / 1000 )
 
-# Function for calculating values based on register data, offset and bit stpe size
-def RegToTemp(in_val:int, in_offset:int, in_stepsize:float):
+def twoscomplementtodec(in_val:int) -> int:
     if in_val & (1 << 15):  # Compute the two's complement
         in_val -= 1 << 16
+    return in_val
 
-    return ( ((in_val * in_stepsize) + in_offset ) / 1000 )
+# Function for calculating values based on register data, offset and bit stpe size
+def RegToTemp(in_val:int, in_offset:int, in_stepsize:float):
+    return ( ((twoscomplementtodec(in_val) * in_stepsize) + in_offset )  )
 
 previous = 0    # holds the previous state
 def label_click(event, num):
@@ -607,6 +613,14 @@ def REG30(in_val, _ignore1, _ignore2):
     populate_8_bitfields(reg30_bit_names, in_val, reg30_description, reg30_bits_set, reg30_bits_unset)
     return in_val
 
+#FIXME
+def REG31(in_val:int, in_offset:int, in_stepsize:int) -> int:
+    return ( ((twoscomplementtodec(int(in_val,16)) * in_stepsize) + in_offset ) )
+
+#FIXME
+def REG33(in_val:int, in_offset:int, in_stepsize:int) -> int:
+    return ( ((twoscomplementtodec(int(in_val,16)) * in_stepsize) + in_offset ) )
+
 def REG47(in_val, _ignore1, _ignore2):
     populate_8_bitfields(reg47_bit_names, in_val, reg47_description, reg47_bits_set, reg47_bits_unset) 
 
@@ -647,7 +661,7 @@ fptr = [RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, retnone, retnone, retn
         retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone,   # REG0E to REG17
         retnone, RegToVal, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone,   # REG18 to REG22
         retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone,   # REG23 to REG2C
-        retnone, retnone, retnone, retnone, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, # REG2D to REG3B
+        retnone, retnone, retnone, retnone, retnone, retnone, RegToVal, RegToVal, RegToVal, RegToVal, # REG2D to REG3B
         RegToVal, RegToVal, RegToTemp, RegToVal, RegToVal, retnone, retnone, retnone, retnone, retnone    # REG3D to REG48, along with PG, IRQ, STAT
         ]
 
@@ -655,7 +669,7 @@ fptr_hover = [retnone, retnone, retnone, retnone, retnone, REG08, REG09, REG0A, 
                 REG0E, REG0F, REG10, REG11, REG12, REG13, REG14, REG15, REG16, REG17,   # REG0E to REG17
                 REG18, retnone, REG1B, REG1C, REG1D, REG1E, REG1F, REG20, REG21, REG22,   # REG18 to REG22
                 REG23, REG24, REG25, REG26, REG27, REG28, REG29, REG2A, REG2B, REG2C,   # REG23 to REG2C
-                REG2D, REG2E, REG2F, REG30, retnone, retnone, retnone, retnone, retnone, retnone, # REG2D to REG3B
+                REG2D, REG2E, REG2F, REG30, REG31, REG33, retnone, retnone, retnone, retnone, # REG2D to REG3B
                 retnone, retnone, retnone, retnone, retnone, REG47, REG48, retnone, retnone, retnone    # REG3D to REG48, along with PG, IRQ, STAT
             ]
 
@@ -748,5 +762,4 @@ start_button.grid(row=0, column=1, padx=5, pady=5, sticky='W')
 stop_button.grid(row=0, column=1, padx=5, pady=5)
 exit_button.grid(row=0, column=1, padx=5, pady=5, sticky='E')
 
-# Start the Tkinter main loop
-root.mainloop()
+root.mainloop() # Start the Tkinter main loop
