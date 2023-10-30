@@ -88,7 +88,7 @@ void Error_Handler(void);
 #define LED_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-
+#define _BV(x) (1 << x)
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

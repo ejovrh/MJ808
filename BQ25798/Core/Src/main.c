@@ -107,7 +107,7 @@ int main(void)
 	BQ25798 = bq25798_ctor(&hi2c1);  // initialize device
 	HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);  // enable timer1 interrupts
 
-	printf("\r\n---\r\n");	// start marker
+//	printf("\r\n---\r\n");	// start marker
 	/* USER CODE END 2 */
 
 	/* Infinite loop */

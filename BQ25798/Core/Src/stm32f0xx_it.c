@@ -69,73 +69,73 @@ extern bq25798_t *BQ25798;
 /*           Cortex-M0 Processor Interruption and Exception Handlers          */
 /******************************************************************************/
 /**
-  * @brief This function handles Non maskable interrupt.
-  */
+ * @brief This function handles Non maskable interrupt.
+ */
 void NMI_Handler(void)
 {
-  /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
+	/* USER CODE BEGIN NonMaskableInt_IRQn 0 */
 
-  /* USER CODE END NonMaskableInt_IRQn 0 */
-  /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
+	/* USER CODE END NonMaskableInt_IRQn 0 */
+	/* USER CODE BEGIN NonMaskableInt_IRQn 1 */
 	while(1)
 		{
 		}
-  /* USER CODE END NonMaskableInt_IRQn 1 */
+	/* USER CODE END NonMaskableInt_IRQn 1 */
 }
 
 /**
-  * @brief This function handles Hard fault interrupt.
-  */
+ * @brief This function handles Hard fault interrupt.
+ */
 void HardFault_Handler(void)
 {
-  /* USER CODE BEGIN HardFault_IRQn 0 */
+	/* USER CODE BEGIN HardFault_IRQn 0 */
 
-  /* USER CODE END HardFault_IRQn 0 */
-  while (1)
-  {
-    /* USER CODE BEGIN W1_HardFault_IRQn 0 */
-    /* USER CODE END W1_HardFault_IRQn 0 */
-  }
+	/* USER CODE END HardFault_IRQn 0 */
+	while(1)
+		{
+			/* USER CODE BEGIN W1_HardFault_IRQn 0 */
+			/* USER CODE END W1_HardFault_IRQn 0 */
+		}
 }
 
 /**
-  * @brief This function handles System service call via SWI instruction.
-  */
+ * @brief This function handles System service call via SWI instruction.
+ */
 void SVC_Handler(void)
 {
-  /* USER CODE BEGIN SVC_IRQn 0 */
+	/* USER CODE BEGIN SVC_IRQn 0 */
 
-  /* USER CODE END SVC_IRQn 0 */
-  /* USER CODE BEGIN SVC_IRQn 1 */
+	/* USER CODE END SVC_IRQn 0 */
+	/* USER CODE BEGIN SVC_IRQn 1 */
 
-  /* USER CODE END SVC_IRQn 1 */
+	/* USER CODE END SVC_IRQn 1 */
 }
 
 /**
-  * @brief This function handles Pendable request for system service.
-  */
+ * @brief This function handles Pendable request for system service.
+ */
 void PendSV_Handler(void)
 {
-  /* USER CODE BEGIN PendSV_IRQn 0 */
+	/* USER CODE BEGIN PendSV_IRQn 0 */
 
-  /* USER CODE END PendSV_IRQn 0 */
-  /* USER CODE BEGIN PendSV_IRQn 1 */
+	/* USER CODE END PendSV_IRQn 0 */
+	/* USER CODE BEGIN PendSV_IRQn 1 */
 
-  /* USER CODE END PendSV_IRQn 1 */
+	/* USER CODE END PendSV_IRQn 1 */
 }
 
 /**
-  * @brief This function handles System tick timer.
-  */
+ * @brief This function handles System tick timer.
+ */
 void SysTick_Handler(void)
 {
-  /* USER CODE BEGIN SysTick_IRQn 0 */
+	/* USER CODE BEGIN SysTick_IRQn 0 */
 
-  /* USER CODE END SysTick_IRQn 0 */
-  HAL_IncTick();
-  /* USER CODE BEGIN SysTick_IRQn 1 */
+	/* USER CODE END SysTick_IRQn 0 */
+	HAL_IncTick();
+	/* USER CODE BEGIN SysTick_IRQn 1 */
 
-  /* USER CODE END SysTick_IRQn 1 */
+	/* USER CODE END SysTick_IRQn 1 */
 }
 
 /******************************************************************************/
@@ -146,29 +146,29 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles EXTI line 0 and 1 interrupts.
-  */
+ * @brief This function handles EXTI line 0 and 1 interrupts.
+ */
 void EXTI0_1_IRQHandler(void)
 {
-  /* USER CODE BEGIN EXTI0_1_IRQn 0 */
+	/* USER CODE BEGIN EXTI0_1_IRQn 0 */
 	if(__HAL_GPIO_EXTI_GET_IT(BQ25798_INT_Pin))  // TODO - verify interrupt source detection
 		{
 			BQ25798->irq = HAL_GPIO_ReadPin(BQ25798_INT_GPIO_Port, BQ25798_INT_Pin);	// save pin state
 		}
 
-  /* USER CODE END EXTI0_1_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(BQ25798_INT_Pin);
-  /* USER CODE BEGIN EXTI0_1_IRQn 1 */
+	/* USER CODE END EXTI0_1_IRQn 0 */
+	HAL_GPIO_EXTI_IRQHandler(BQ25798_INT_Pin);
+	/* USER CODE BEGIN EXTI0_1_IRQn 1 */
 
-  /* USER CODE END EXTI0_1_IRQn 1 */
+	/* USER CODE END EXTI0_1_IRQn 1 */
 }
 
 /**
-  * @brief This function handles EXTI line 4 to 15 interrupts.
-  */
+ * @brief This function handles EXTI line 4 to 15 interrupts.
+ */
 void EXTI4_15_IRQHandler(void)
 {
-  /* USER CODE BEGIN EXTI4_15_IRQn 0 */
+	/* USER CODE BEGIN EXTI4_15_IRQn 0 */
 	if(__HAL_GPIO_EXTI_GET_IT(BQ25798_STAT_Pin))	// TODO - verify interrupt source detection
 		{
 			BQ25798->stat = HAL_GPIO_ReadPin(BQ25798_STAT_GPIO_Port, BQ25798_STAT_Pin);  // save pin state
@@ -179,75 +179,79 @@ void EXTI4_15_IRQHandler(void)
 			BQ25798->pg = HAL_GPIO_ReadPin(LMR34206_PG_GPIO_Port, LMR34206_PG_Pin);  // save pin state
 		}
 
-  /* USER CODE END EXTI4_15_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(BQ25798_STAT_Pin);
-  HAL_GPIO_EXTI_IRQHandler(LMR34206_PG_Pin);
-  /* USER CODE BEGIN EXTI4_15_IRQn 1 */
+	/* USER CODE END EXTI4_15_IRQn 0 */
+	HAL_GPIO_EXTI_IRQHandler(BQ25798_STAT_Pin);
+	HAL_GPIO_EXTI_IRQHandler(LMR34206_PG_Pin);
+	/* USER CODE BEGIN EXTI4_15_IRQn 1 */
 
-  /* USER CODE END EXTI4_15_IRQn 1 */
+	/* USER CODE END EXTI4_15_IRQn 1 */
 }
 
 /**
-  * @brief This function handles DMA1 channel 2 and 3 interrupts.
-  */
+ * @brief This function handles DMA1 channel 2 and 3 interrupts.
+ */
 void DMA1_Channel2_3_IRQHandler(void)
 {
-  /* USER CODE BEGIN DMA1_Channel2_3_IRQn 0 */
+	/* USER CODE BEGIN DMA1_Channel2_3_IRQn 0 */
 
-  /* USER CODE END DMA1_Channel2_3_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_i2c1_tx);
-  HAL_DMA_IRQHandler(&hdma_i2c1_rx);
-  /* USER CODE BEGIN DMA1_Channel2_3_IRQn 1 */
+	/* USER CODE END DMA1_Channel2_3_IRQn 0 */
+	HAL_DMA_IRQHandler(&hdma_i2c1_tx);
+	HAL_DMA_IRQHandler(&hdma_i2c1_rx);
+	/* USER CODE BEGIN DMA1_Channel2_3_IRQn 1 */
 
-  /* USER CODE END DMA1_Channel2_3_IRQn 1 */
+	/* USER CODE END DMA1_Channel2_3_IRQn 1 */
 }
 
 /**
-  * @brief This function handles TIM1 break, update, trigger and commutation interrupts.
-  */
+ * @brief This function handles TIM1 break, update, trigger and commutation interrupts.
+ */
 void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM1_BRK_UP_TRG_COM_IRQn 0 */
-
-  /* USER CODE END TIM1_BRK_UP_TRG_COM_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim1);
-  /* USER CODE BEGIN TIM1_BRK_UP_TRG_COM_IRQn 1 */
-	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+	/* USER CODE BEGIN TIM1_BRK_UP_TRG_COM_IRQn 0 */
 	BQ25798->Dump();	// dump device registers into internal array
+	/* USER CODE END TIM1_BRK_UP_TRG_COM_IRQn 0 */
+	HAL_TIM_IRQHandler(&htim1);
+	/* USER CODE BEGIN TIM1_BRK_UP_TRG_COM_IRQn 1 */
+	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 
-  /* USER CODE END TIM1_BRK_UP_TRG_COM_IRQn 1 */
+	BQ25798->Write(REG10, (BQ25798->Read(REG10) | _BV(WD_RST)));  // read out REG10 and reset the watchdog bit
+
+	/* USER CODE END TIM1_BRK_UP_TRG_COM_IRQn 1 */
 }
 
 /**
-  * @brief This function handles I2C1 event global interrupt / I2C1 wake-up interrupt through EXTI line 23.
-  */
+ * @brief This function handles I2C1 event global interrupt / I2C1 wake-up interrupt through EXTI line 23.
+ */
 void I2C1_IRQHandler(void)
 {
-  /* USER CODE BEGIN I2C1_IRQn 0 */
+	/* USER CODE BEGIN I2C1_IRQn 0 */
 
-  /* USER CODE END I2C1_IRQn 0 */
-  if (hi2c1.Instance->ISR & (I2C_FLAG_BERR | I2C_FLAG_ARLO | I2C_FLAG_OVR)) {
-    HAL_I2C_ER_IRQHandler(&hi2c1);
-  } else {
-    HAL_I2C_EV_IRQHandler(&hi2c1);
-  }
-  /* USER CODE BEGIN I2C1_IRQn 1 */
+	/* USER CODE END I2C1_IRQn 0 */
+	if(hi2c1.Instance->ISR & (I2C_FLAG_BERR | I2C_FLAG_ARLO | I2C_FLAG_OVR))
+		{
+			HAL_I2C_ER_IRQHandler(&hi2c1);
+		}
+	else
+		{
+			HAL_I2C_EV_IRQHandler(&hi2c1);
+		}
+	/* USER CODE BEGIN I2C1_IRQn 1 */
 
-  /* USER CODE END I2C1_IRQn 1 */
+	/* USER CODE END I2C1_IRQn 1 */
 }
 
 /**
-  * @brief This function handles USART2 global interrupt.
-  */
+ * @brief This function handles USART2 global interrupt.
+ */
 void USART2_IRQHandler(void)
 {
-  /* USER CODE BEGIN USART2_IRQn 0 */
+	/* USER CODE BEGIN USART2_IRQn 0 */
 
-  /* USER CODE END USART2_IRQn 0 */
-  HAL_UART_IRQHandler(&huart2);
-  /* USER CODE BEGIN USART2_IRQn 1 */
+	/* USER CODE END USART2_IRQn 0 */
+	HAL_UART_IRQHandler(&huart2);
+	/* USER CODE BEGIN USART2_IRQn 1 */
 
-  /* USER CODE END USART2_IRQn 1 */
+	/* USER CODE END USART2_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
