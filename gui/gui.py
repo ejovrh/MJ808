@@ -5,7 +5,10 @@ from tkinter import messagebox
 import serial
 import time
 
-from strings import *
+from strings import * # local strings.py file containing arrays of strings
+
+NumberofDataTokens = 60
+clicked_field = 11
 
 data_queue = queue.Queue()  # Initialize a queue for data processing
 
@@ -13,14 +16,13 @@ default_value = "n/a"  # default value
 entry_field_width = 6   #
 entry_field_height = 0  #
 custom_font = ("Arial", 10)  # font to be used
-entry_fields = []    # container for register values as read from device and computed
 fields = {}  # dictionary containing GUI widgets
 data_buffer = ""    # data buffer for serial read
-current_values:int = [default_value] * 60
-last_values:int = [default_value] * 60
-last_update_times = [time.time()] * 60
-last_change_times = [0] * 60
-                    
+current_values:int = [default_value] * NumberofDataTokens
+last_values:int = [default_value] * NumberofDataTokens
+last_update_times = [time.time()] * NumberofDataTokens
+last_change_time = [0] * NumberofDataTokens
+          
 # Create a global variable to keep track of the serial connection and reading flag
 ser = None
 reading_flag = False
@@ -85,43 +87,47 @@ def on_entry_field_click(event, field_num:int):
 
 # Function to update text entry fields with received data
 def update_entry_fields(data):
-    # Append the received data to the buffer
     global data_buffer
-    data_buffer += data
+    data_buffer += data # Append the received data to the buffer
 
-    # Keep processing as long as there are newline characters in the buffer
-    while '\n' in data_buffer:
-        # Split the buffer by newline characters
-        data_lines, data_buffer = data_buffer.split('\n', 1)
-        values = data_lines.strip().split()
-        current_time = time.time()
+    field_num = 0 # start at data & field zero
 
-        for i, value in enumerate(values):  # loop over values with i and value
-            if i < len(entry_fields):
-                hexvalue:str = value    # save the original value as hex
-                value = int(value, 16)  # convert value to integer
+    while '\n' in data_buffer: # Keep processing as long as there are newline characters in the buffer
+        data_lines, data_buffer = data_buffer.split('\n', 1) # Split the buffer by newline characters
+        values = data_lines.strip().split() # split line into space-seperated values
 
-                if fptr[i] != retnone:   # only if the function pointer is not retval
-                    current_values[i] = fptr[i](value, register_offset[i], register_step_size[i])  # execute whatever the fuction pointer points to
-                else:   # if it is retval
-                    current_values[i] = hexvalue   # display the hex value (registers with bitfie)
+        if len(values) != NumberofDataTokens: # if values is longer than we have data
+            continue    #...get out
+        
+        for field_num, value in enumerate(values):  # loop over values with field_num and value
+            current_time = time.time() # record current time
+            hexvalue:str = value    # save the original value as hex
+            decimalvalue = int(value, 16)  # convert value to integer
 
-                # FIXME
-                # if current_values[i] != last_values[clicked_field]:
-                #     if fptr_hover[i] != retval:
-                #         fptr_hover[i](str(value), register_offset[i], register_step_size[i])
+            if fptr[field_num] != retnone:   # only if the function pointer is not retval
+                current_values[field_num] = fptr[field_num](decimalvalue, register_offset[field_num], register_step_size[field_num])  # execute whatever the fuction pointer points to
+            else:   # if it is retval
+                current_values[field_num] = hexvalue   # display the hex value (registers with bitfie)
 
-                entry_fields[i].delete(1.0, END)
+            key = str("device_values"+str(field_num))   # in DS p.57 - string "REG" appended with column "Offset": e.g. REG00
+            fields[key].delete(1.0, END)
+            fields[key].insert(1.0, f"{current_values[field_num]}{register_unit[field_num]}\n")
 
-                if current_values[i] != last_values[i]:
-                    if entry_fields[i].cget("bg") != "yellow":
-                        entry_fields[i].config(bg='yellow')
-                        last_change_times[i] = current_time
-                elif current_time - last_change_times[i] >= 5:
-                    entry_fields[i].config(bg='white')
+            # # FIXME
+            # if current_values[i] != last_values[clicked_field]:
+            #     if fptr_hover[i] != retnone:
+            #         fptr_hover[i](str(value), register_offset[i], register_step_size[i])
 
-                entry_fields[i].insert(1.0, f"{current_values[i]}{register_unit[i]}\n")
-                last_values[i] = current_values[i]
+            if current_values[field_num] != last_values[field_num]:
+                # if fields[key].cget("bg") != "yellow":
+                fields[key].config(bg='yellow')
+                last_change_time[field_num] = current_time
+                last_values[field_num] = current_values[field_num]
+            else:
+                if current_time - last_change_time[field_num] >= 5:
+                    fields[key].config(bg='white')
+
+            field_num +=1
 
 # Function to read and process data from the serial port
 def read_serial_data(ser, data_queue):
@@ -199,10 +205,10 @@ def RegToTemp(in_val:int, in_offset:int, in_stepsize:float):
 previous = 0    # holds the previous state
 def label_click(event, num):
     global previous
-    key = str("register_short_name"+str(previous))
+    key = str("bq25798_register_short_name"+str(previous))
     fields[key].config(bg="gray")
     
-    key = str("register_short_name"+str(num))
+    key = str("bq25798_register_short_name"+str(num))
 
     if fields[key]:
         fields[key].config(bg="red")
@@ -654,41 +660,39 @@ for i in range(6):  # 6 rows
             break
 
         # create label with register short name
-        key = str("register_short_name"+str(field_num))   # in DS p.57 - string "REG" appended with column "Offset": e.g. REG00
+        key = str("bq25798_register_short_name"+str(field_num))   # in DS p.57 - string "REG" appended with column "Offset": e.g. REG00
         fields[key] = Label(bq25798_frame, text=register_name[field_num])
         fields[key].config(bg='gray')
         fields[key].grid(row=i, column=2*j, padx=2, pady=5, sticky="W")
         tooltip = ToolTip(fields[key], register_description[field_num]) # Add tooltips to the labels
 
 
-
-
-        # Create text entry fields for register values
-        entry_field = Text(bq25798_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
-        entry_field.insert(1.0, str(default_value))
-        entry_field.grid(row=i, column=2*j + 1, padx=2, pady=5)
-        entry_fields.append(entry_field)
-        entry_field.bind("<FocusIn>", lambda event, num=field_num: on_entry_field_click(event, num)) # Bind the click event to the entry field
-        entry_field.bind("<FocusIn>", lambda event, num=field_num: on_entry_field_click(event, num)) # Bind the click event to the entry field
-        entry_field.bind("<Button-1>",lambda event, num=field_num: label_click(event, num))  # Bind the click event to the label
+        key = str("device_values"+str(field_num))   # in DS p.57 - string "REG" appended with column "Offset": e.g. REG00
+        fields[key] = Text(bq25798_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
+        fields[key].insert(1.0, str(default_value))
+        fields[key].grid(row=i, column=2*j + 1, padx=2, pady=5)
+        fields[key].bind("<FocusIn>", lambda event, num=field_num: on_entry_field_click(event, num)) # Bind the click event to the entry field
+        fields[key].bind("<FocusIn>", lambda event, num=field_num: on_entry_field_click(event, num)) # Bind the click event to the entry field
+        fields[key].bind("<Button-1>",lambda event, num=field_num: label_click(event, num))  # Bind the click event to the label
 
         field_num +=1 
+
         
 # create charger status labels and fields
 for i in range(3):
-    # Create labels for status registers
-    label = Label(status_frame, text=register_name[field_num])  
-    label.grid(row=0, column=2 * i, padx=2, pady=5, sticky="e")
+    # create label with register short name
+    key = str("device_status_short_name"+str(field_num))   # in DS p.57 - string "REG" appended with column "Offset": e.g. REG00
+    fields[key] = Label(status_frame, text=register_name[field_num])
+    fields[key].config(bg='gray')
+    fields[key].grid(row=0, column=2 * i, padx=2, pady=5, sticky="e")
+    tooltip = ToolTip(fields[key], register_description[field_num])
 
-    # Add tooltips to the labels
-    tooltip_text = register_description[field_num]
-    tooltip = ToolTip(label, tooltip_text)
+
+    key = str("device_values"+str(field_num))
+    fields[key] = Text(status_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
+    fields[key].insert(1.0, default_value)
+    fields[key].grid(row=0, column=2 * i + 1, padx=2, pady=5)
     
-    # Create text entry fields for status registers
-    entry_field = Text(status_frame, width=entry_field_width, height=entry_field_height, font=custom_font)
-    entry_field.insert(1.0, default_value)
-    entry_field.grid(row=0, column=2 * i + 1, padx=2, pady=5)
-    entry_fields.append(entry_field)
     field_num +=1 
 
 # Create buttons for controlling the application
