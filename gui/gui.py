@@ -22,7 +22,8 @@ current_values:int = [default_value] * NumberofDataTokens
 last_values:int = [default_value] * NumberofDataTokens
 last_update_times = [time.time()] * NumberofDataTokens
 last_change_time = [0] * NumberofDataTokens
-          
+current_time = 0 # used to keep track of time - set in update_entry_fields()
+
 # Create a global variable to keep track of the serial connection and reading flag
 ser = None
 reading_flag = False
@@ -83,7 +84,7 @@ def on_entry_field_click(event, field_num:int):
         try:
             clicked_field = field_num
             fptr_hover[field_num](current_values[field_num], register_offset[field_num], register_step_size[field_num]) # Call the function from fptr based on field_num with the clicked value
-            print(f"Result for {register_name[field_num]}: {current_values[field_num]}")
+            # print(f"Result for {register_name[field_num]}: {current_values[field_num]}")
         except ValueError as e:
             return None
             show_error(f"Error for {register_name[field_num]}: {e}")    # Handle the ValueError gracefully (e.g., display an error message)
@@ -92,42 +93,41 @@ def on_entry_field_click(event, field_num:int):
 def update_entry_fields(data):
     global data_buffer
     data_buffer += data # Append the received data to the buffer
-
     field_num = 0 # start at data & field zero
+    current_time = time.time() # record current time
 
     while '\n' in data_buffer: # Keep processing as long as there are newline characters in the buffer
         data_lines, data_buffer = data_buffer.split('\n', 1) # Split the buffer by newline characters
         values = data_lines.strip().split() # split line into space-seperated values
 
         if len(values) != NumberofDataTokens: # if values is longer than we have data
-            continue    #...get out
+            break    #...get out
         
         for field_num, value in enumerate(values):  # loop over values with field_num and value
-            current_time = time.time() # record current time
-            hexvalue:str = value    # save the original value as hex
-            decimalvalue = int(value, 16)  # convert value to integer
-
             if fptr[field_num] != retnone:   # only if the function pointer is not retval
-                current_values[field_num] = fptr[field_num](decimalvalue, register_offset[field_num], register_step_size[field_num])  # execute whatever the fuction pointer points to
+                current_values[field_num] = fptr[field_num](int(value, 16), register_offset[field_num], register_step_size[field_num])  # execute whatever the fuction pointer points to
             else:   # if it is retval
-                current_values[field_num] = hexvalue   # display the hex value (registers with bitfie)
+                current_values[field_num] = str(value)   # display the hex value (registers with bitfie)
 
             key = str("device_values"+str(field_num))   # in DS p.57 - string "REG" appended with column "Offset": e.g. REG00
             fields[key].delete(1.0, END)
             fields[key].insert(1.0, f"{current_values[field_num]}{register_unit[field_num]}\n")
 
-            if current_values[field_num] != last_values[field_num]:
-                fields[key].config(bg='yellow')
-                last_change_time[field_num] = current_time
-                last_values[field_num] = current_values[field_num]
+            if current_values[field_num] != last_values[field_num]: # if we have a value change
+                fields[key].config(bg='yellow') # mark the field as yellow
+                last_change_time[field_num] = current_time # note the current time
+                last_values[field_num] = current_values[field_num] # save the current value
 
                 if field_num == clicked_field:
                     if fptr_hover[field_num] != retnone:
                         fptr_hover[field_num](current_values[field_num], register_offset[field_num], register_step_size[field_num]) # Call the function from fptr based on field_num with the clicked value
 
-            else:
-                if current_time - last_change_time[field_num] >= 5:
-                    fields[key].config(bg='white')
+                    print(f"{round(current_time, 1):} {register_name[field_num]}: {current_values[field_num]}")
+
+            else: # if the value remained the same
+                if fields[key].cget("bg") == "yellow": # if the field is yellow
+                    if current_time - last_change_time[field_num] >= 5: # and if enough time has passed
+                        fields[key].config(bg='white')  # change it back to white
 
             field_num +=1
 
