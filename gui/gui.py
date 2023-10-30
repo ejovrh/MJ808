@@ -8,7 +8,7 @@ import time
 from strings import * # local strings.py file containing arrays of strings
 
 NumberofDataTokens = 60
-clicked_field = 11
+clicked_field = 0
 
 data_queue = queue.Queue()  # Initialize a queue for data processing
 
@@ -77,8 +77,11 @@ top_frame.grid(row=5, column=0, sticky='nsew')
 
 # Callback function to execute the appropriate function based on field_num
 def on_entry_field_click(event, field_num:int):
+    global clicked_field
+
     if field_num < len(fptr):
         try:
+            clicked_field = field_num
             fptr_hover[field_num](current_values[field_num], register_offset[field_num], register_step_size[field_num]) # Call the function from fptr based on field_num with the clicked value
             print(f"Result for {register_name[field_num]}: {current_values[field_num]}")
         except ValueError as e:
@@ -113,16 +116,15 @@ def update_entry_fields(data):
             fields[key].delete(1.0, END)
             fields[key].insert(1.0, f"{current_values[field_num]}{register_unit[field_num]}\n")
 
-            # # FIXME
-            # if current_values[i] != last_values[clicked_field]:
-            #     if fptr_hover[i] != retnone:
-            #         fptr_hover[i](str(value), register_offset[i], register_step_size[i])
-
             if current_values[field_num] != last_values[field_num]:
-                # if fields[key].cget("bg") != "yellow":
                 fields[key].config(bg='yellow')
                 last_change_time[field_num] = current_time
                 last_values[field_num] = current_values[field_num]
+
+                if field_num == clicked_field:
+                    if fptr_hover[field_num] != retnone:
+                        fptr_hover[field_num](current_values[field_num], register_offset[field_num], register_step_size[field_num]) # Call the function from fptr based on field_num with the clicked value
+
             else:
                 if current_time - last_change_time[field_num] >= 5:
                     fields[key].config(bg='white')
@@ -226,36 +228,38 @@ def dectostr(in_val:int) -> str:
 def populate_8_bitfields(in_name:str, in_val:int, description:str, bit_set, bit_unset:str):
     binary_str = dectostr(in_val)
 
-    for i in range(8):
+    i = 0
+    for item in reversed(binary_str):
         # bit name
-        key = str("bit_field_name"+str(i)) # in DS pp.59 - column "Field": tree text byte register description
+        key = str("bit_field_name"+str(i)) # in DS pp.59 - column "Field": free text byte register description
         
         if in_name[i] == "RESERVED":
                 fields[key].config(bg='gray')
         else:
                 fields[key].config(bg='white')
 
-
         fields[key].delete(1.0, END)  # Clear the bit_field
         fields[key].insert(1.0, in_name[i])
         ###
+
 
         # bit value
         key = str("bit_field"+str(i)) # bit value according to column "Description"
         fields[key].delete(1.0, END)  # Clear the bit_field
 
-        if binary_str[i] == 1:
-            bit_val = bit_set
+        if item == "1":
+            bit_val = bit_set[i]
         else:
-            bit_val = bit_unset
+            bit_val = bit_unset[i]
 
-        if bit_val[i] == "n/a":
+        if bit_val == "n/a":
                 fields[key].config(bg='gray')
         else:
                 fields[key].config(bg='white')
 
-        fields[key].insert(1.0, bit_val[i])
+        fields[key].insert(1.0, bit_val)
         ###  
+
 
         # bit description
         key = str("bit_field_description"+str(i)) # in DS pp.59 - column "Description": tree text byte register description
@@ -268,6 +272,9 @@ def populate_8_bitfields(in_name:str, in_val:int, description:str, bit_set, bit_
         fields[key].delete(1.0, END)  # Clear the bit_field
         fields[key].insert(1.0, description[i])
         ###
+
+
+        i += 1
 
 def apply_mask(in_byte:int, in_mask:int, rsh:int) -> int:
     retval:int = int(in_byte,16) & int(in_mask, 16)

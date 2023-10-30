@@ -1160,7 +1160,7 @@ reg1f_bits_set:str = [
                   "TS status is in warm range",   # bit1
                   "TS status is in cool range",   # bit2
                   "TS status is in cold range",   # bit3
-                  "The battery volage is too low to enable the OTG operation",   # bit4
+                  "The battery voltage is too low to enable the OTG operation",   # bit4
                   "n/a",   # bit5
                   "n/a",   # bit6
                   "n/a"   # bit7
