@@ -97,6 +97,296 @@ register_step_size: int = [
                           1, 0.0976563, 0.5, 1, 1, -1, -1, -1, -1, -1   # REG3D to REG48, along with PG, IRQ, STAT
                           ]
 
+register_bit_name: str = {
+               "VSYSMIN": 0,  # REG00
+
+               "VREG": 1,  # REG01
+               
+               "ICHG": 2,  # REG03
+               
+               "VINDPM": 3,  # REG05
+               
+               "IINDPM": 4,  # REG06
+               
+               "VBAT_LOWV": 5,  # REG08
+               "IPRECHG": 5,  # REG09
+               
+               "REG_RST": 6,  # REG09
+               "STOP_WD_CHG": 6,  # REG09
+               "ITERM": 6,  # REG09
+               
+               "CELL": 7,  # REG0A
+               "TRECHG": 7,  # REG0A
+               "VRECHG": 7,  # REG0A
+               
+               "VOTG": 8,  # REG0B
+               
+               "PRECHG_TMR": 9,  # REG0D
+               "IOTG": 9,  # REG0D
+               
+               "TOPOFF_TMR": 10,  # REG0E
+               "EN_TRICHG_TMR": 10,  # REG0E
+               "EN_PRECHG_TMR": 10,  # REG0E
+               "EN_CHG_TMR": 10,  # REG0E
+               "CHG_TMR": 10,  # REG0E
+               "TMR2X_EN": 10,  # REG0E
+               
+               "EN_AUTO_IBATDIS": 11,  # REG0F
+               "FORCE_IBATDIS": 11,  # REG0F
+               "EN_CHG": 11,  # REG0F
+               "EN_ICO": 11,  # REG0F
+               "FORCE_ICO": 11,  # REG0F
+               "EN_HIZ": 11,  # REG0F
+               "EN_TERM": 11,  # REG0F
+               "EN_BACKUP": 11,  # REG0F
+               
+               "VBUS_BACKUP": 12,  # REG10
+               "VAC_OVP": 12,  # REG10
+               "WD_RST": 12,  # REG10
+               "WATCHDOG": 12,  # REG10
+
+               "FORCE_INDET": 13,  # REG11
+               "AUTO_INDET_EN": 13,  # REG11
+               "EN_12V": 13,  # REG11
+               "EN_9V": 13,  # REG11
+               "HVDCP_EN": 13,  # REG11
+               "SDRV_CTRL": 13,  # REG11
+               "SDRV_DLY": 13,  # REG11
+
+               "DIS_ACDRV": 14,  # REG12
+               "EN_OTG": 14,  # REG12
+               "PFM_OTG_DIS": 14,  # REG12
+               "PFM_FWD_DIS": 14,  # REG12
+               "WKUP_DLY": 14,  # REG12
+               "DIS_LDO": 14,  # REG12
+               "DIS_OTG_OOA": 14,  # REG12
+               "DIS_FWD_OOA": 14,  # REG12
+               
+               "EN_ACDRV2": 15,  # REG13
+               "EN_ACDRV1": 15,  # REG13
+               "PWM_FREQ": 15,  # REG13
+               "DIS_STAT": 15,  # REG13
+               "DIS_VSYS_SHORT": 15,  # REG13
+               "DIS_VOTG_UVP": 15,  # REG13
+               "FORCE_VINDPM_DET": 15,  # REG13
+               "EN_IBUS_OCP": 15,  # REG13
+
+               "SFET_PRESENT": 16,  # REG14
+               "EN_IBAT": 16,  # REG14
+               "IBAT_REG": 16,  # REG14
+               "EN_IINDPM": 16,  # REG14
+               "EN_EXTILIM": 16,  # REG14
+               "EN_BATOC": 16,  # REG14
+
+               "VOC_PCT": 17,  # REG15
+               "VOC_DLY": 17,  # REG15
+               "VOC_RATE": 17,  # REG15
+               "EN_MPPT": 17,  # REG15
+
+               "TREG": 18,  # REG16
+               "TSHUT": 18,  # REG16
+               "VBUS_PD_EN": 18,  # REG16
+               "VAC1_PD_EN": 18,  # REG16  
+               "VAC2_PD_EN": 18,  # REG16
+               "BKUP_ACFET1_ON": 18,  # REG16
+
+
+               "JEITA_VSET": 19,  # REG17
+               "JEITA_ISETH": 19,  # REG17
+               "JEITA_ISETC": 19,  # REG17
+
+               "TS_COOL": 20,  # REG18
+               "TS_WARM": 20,  # REG18
+               "BHOT": 20,  # REG18
+               "BCOLD": 20,  # REG18
+               "TS_IGNORE": 20,  # REG18
+
+               "ICO_ILIM": 21,  # REG19
+
+               "IINDPM_STAT": 22,  # REG1B
+               "VINDPM_STAT": 22,  # REG1B
+               "WD_STAT": 22,  # REG1B
+               "PG_STAT": 22,  # REG1B
+               "AC2_PRESENT_STAT": 22,  # REG1B
+               "AC1_PRESENT_STAT": 22,  # REG1B
+               "VBUS_PRESENT_STAT": 22,  # REG1B
+               
+               "CHG_STAT": 23,  # REG1C
+               "VBUS_STAT": 23,  # REG1C
+               "BC1.2_DONE_STAT": 23,  # REG1C
+               
+               "ICO_STAT": 24,  # REG1D
+               "TREG_STAT": 24,  # REG1D
+               "DPDM_STAT": 24,  # REG1D
+               "VBAT_PRESENT_STAT": 24,  # REG1D
+
+               "ACRB2_STAT": 25,  # REG1E
+               "ACRB1_STAT": 25,  # REG1E
+               "ADC_DONE_STAT": 25,  # REG1E
+               "VSYS_STAT": 25,  # REG1E
+               "CHG_TMR_STAT": 25,  # REG1E
+               "TRICHG_TMR_STAT": 25,  # REG1E
+               "PRECHG_TMR_STAT": 25,  # REG1E
+
+               "VBATOTG_LOW_STAT": 26,  # REG1F
+               "TS_COLD_STAT": 26,  # REG1F
+               "TS_COOL_STAT": 26,  # REG1F
+               "TS_WARM_STAT": 26,  # REG1F
+               "TS_HOT_STAT": 26,  # REG1F
+
+               "IBAT_REG_STAT": 27,  # REG20
+               "VBUS_OVP_STAT": 27,  # REG20
+               "VBAT_OVP_STAT": 27,  # REG20
+               "IBUS_OCP_STAT": 27,  # REG20
+               "IBAT_OCP_STAT": 27,  # REG20
+               "CONV_OCP_STAT": 27,  # REG20
+               "VAC2_OVP_STAT": 27,  # REG20
+               "VAC1_OVP_STAT": 27,  # REG20
+
+               "VSYS_SHORT_STAT": 28,  # REG21
+               "VSYS_OVP_STAT": 28,  # REG21
+               "OTG_OVP_STAT": 28,  # REG21
+               "OTG_UVP_STAT": 28,  # REG21
+               "TSHUT_STAT": 28,  # REG21
+
+               "IINDPM_FLAG": 29,  # REG22
+               "VINDPM_FLAG": 29,  # REG22
+               "WD_FLAG": 29,  # REG22
+               "POORSRC_FLAG": 29,  # REG22
+               "PG_FLAG": 29,  # REG22
+               "AC2_PRESENT_FLAG": 29,  # REG22
+               "AC1_PRESENT_FLAG": 29,  # REG22
+               "VBUS_PRESENT_FLAG": 29,  # REG22
+
+               "CHG_FLAG": 30,  # REG23
+               "ICO_FLAG": 30,  # REG23
+               "VBUS_FLAG": 30,  # REG23
+               "TREG_FLAG": 30,  # REG23
+               "VBAT_PRESENT_FLAG": 30,  # REG23
+               "BC1.2_DONE_FLAG": 30,  # REG23
+
+               "DPDM_DONE_FLAG": 31,  # REG24
+               "ADC_DONE_FLAG": 31,  # REG24
+               "VSYS_FLAG": 31,  # REG24
+               "CHG_TMR_FLAG": 31,  # REG24
+               "TRICHG_TMR_FLAG": 31,  # REG24
+               "PRECHG_TMR_FLAG": 31,  # REG24
+               "TOPOFF_TMR_FLAG": 31,  # REG24
+
+               "VBATOTG_LOW_FLAG": 32,  # REG25
+               "TS_COLD_FLAG": 32,  # REG25
+               "TS_COOL_FLAG": 32,  # REG25
+               "TS_WARM_FLAG": 32,  # REG25
+               "TS_HOT_FLAG": 32,  # REG25
+
+               "IBAT_REG_FLAG": 33,  # REG26
+               "VBUS_OVP_FLAG": 33,  # REG26
+               "VBAT_OVP_FLAG": 33,  # REG26
+               "IBUS_OCP_FLAG": 33,  # REG26
+               "IBAT_OCP_FLAG": 33,  # REG26
+               "CONV_OCP_FLAG": 33,  # REG26
+               "VAC2_OVP_FLAG": 33,  # REG26
+               "VAC1_OVP_FLAG": 33,  # REG26
+
+               "VSYS_SHORT_FLAG": 34,  # REG27
+               "VSYS_OVP_FLAG": 34,  # REG27
+               "OTG_OVP_FLAG": 34,  # REG27
+               "OTG_UVP_FLAG": 34,  # REG27
+               "TSHUT_FLAG": 34,  # REG27
+
+               "IINDPM_MASK": 35,  # REG28
+               "VINDPM_MASK": 35,  # REG28
+               "WD_MASK": 35,  # REG28
+               "POORSRC_MASK": 35,  # REG28
+               "PG_MASK": 35,  # REG28
+               "AC2_PRESENT_MASK": 35,  # REG28
+               "AC1_PRESENT_MASK": 35,  # REG28
+               "VBUS_PRESENT_MASK": 35,  # REG28
+
+               "CHG_MASK": 36,  # REG29
+               "ICO_MASK": 36,  # REG29
+               "VBUS_MASK": 36,  # REG29
+               "TREG_MASK": 36,  # REG29
+               "VBAT_PRESENT_MASK": 36,  # REG29
+               "BC1.2_DONE_MASK": 36,  # REG29
+
+               "DPDM_DONE_MASK": 37,  # REG2A
+               "ADC_DONE_MASK": 37,  # REG2A
+               "VSYS_MASK": 37,  # REG2A
+               "CHG_TMR_MASK": 37,  # REG2A
+               "TRICHG_TMR_MASK": 37,  # REG2A
+               "PRECHG_TMR_MASK": 37,  # REG2A
+               "TOPOFF_TMR_MASK": 37,  # REG2A
+               
+               "VBATOTG_LOW_MASK": 38,  # REG2B
+               "TS_COLD_MASK": 38,  # REG2B
+               "TS_COOL_MASK": 38,  # REG2B
+               "TS_WARM_MASK": 38,  # REG2B
+               "TS_HOT_MASK": 38,  # REG2B
+               
+               "IBAT_REG_MASK": 39,  # REG2C
+               "VBUS_OVP_MASK": 39,  # REG2C
+               "VBAT_OVP_MASK": 39,  # REG2C
+               "IBUS_OCP_MASK": 39,  # REG2C
+               "IBAT_OCP_MASK": 39,  # REG2C
+               "CONV_OCP_MASK": 39,  # REG2C
+               "VAC2_OVP_MASK": 39,  # REG2C
+               "VAC1_OVP_MASK": 39,  # REG2C
+
+               "VSYS_SHORT_MASK": 40,  # REG2D
+               "VSYS_OVP_MASK": 40,  # REG2D
+               "OTG_OVP_MASK": 40,  # REG2D
+               "OTG_UVP_MASK": 40,  # REG2D
+               "TSHUT_MASK": 40,  # REG2D
+
+               "ADC_EN": 41,  # REG2E
+               "ADC_RATE": 41,  # REG2E
+               "ADC_SAMPLE": 41,  # REG2E
+               "ADC_AVG": 41,  # REG2E
+               "ADC_AVG_INIT": 41,  # REG2E
+
+               "IBUS_ADC_DIS": 42,  # REG2F
+               "IBAT_ADC_DIS": 42,  # REG2F
+               "VBUS_ADC_DIS": 42,  # REG2F
+               "VBAT_ADC_DIS": 42,  # REG2F
+               "VSYS_ADC_DIS": 42,  # REG2F
+               "TS_ADC_DIS": 42,  # REG2F
+               "TDIE_ADC_DIS": 42,  # REG2F
+
+               "DP_ADC_DIS": 43,  # REG30
+               "DM_ADC_DIS": 43,  # REG30
+               "VAC2_ADC_DIS": 43,  # REG30
+               "VAC1_ADC_DIS": 43,  # REG30
+
+               "IBUS_ADC": 44,  # REG31
+
+               "IBAT_ADC": 45,  # REG33
+
+               "VBUS_ADC": 46,  # REG35
+
+               "VAC1_ADC": 47,  # REG37
+
+               "VAC2_ADC": 48,  # REG39
+
+               "VBAT_ADC": 49,  # REG3B
+
+               "VSYS_ADC": 50,  # REG3D
+
+               "TS_ADC": 51,  # REG3F
+
+               "TDIE_ADC": 52,  # REG41
+
+               "D+_ADC": 53,  # REG43
+
+               "D-_ADC": 54,  # REG45
+
+               "DPLUS_DAC": 55,  # REG47
+               "DMINUS_DAC": 55,  # REG47
+               
+               "PN": 56,  # REG48
+               "DEV_REV": 56,  # REG48
+                          }
+
 reg08_bit_names: str = [
                   "IPRECHG:0",   # bit0
                   "IPRECHG:1",   # bit1
