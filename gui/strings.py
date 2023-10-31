@@ -75,7 +75,7 @@ register_unit:str = [
                 "", "", "", "", "", "", "", "", "", "",         # REG0E to REG17
                 "", "A", "", "", "", "", "", "", "", "",        # REG18 to REG22
                 "", "", "", "", "", "", "", "", "", "",         # REG23 to REG2C
-                "", "", "", "", "A", "A", "V", "V", "V", "V",   # REG2D to REG3B
+                "", "", "", "", "mA", "mA", "V", "V", "V", "V",   # REG2D to REG3B
                 "V", "%", "°C", "V", "V", "", "", "", "", "",   # REG3D to REG48, along with PG, IRQ, STAT
 ]
 

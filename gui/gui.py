@@ -13,7 +13,7 @@ clicked_field = 0
 data_queue = queue.Queue()  # Initialize a queue for data processing
 
 default_value = "n/a"  # default value
-entry_field_width = 6   #
+entry_field_width = 7   #
 entry_field_height = 0  #
 custom_font = ("Arial", 10)  # font to be used
 fields = {}  # dictionary containing GUI widgets
@@ -99,11 +99,12 @@ def update_entry_fields(data):
     while '\n' in data_buffer: # Keep processing as long as there are newline characters in the buffer
         data_lines, data_buffer = data_buffer.split('\n', 1) # Split the buffer by newline characters
         values = data_lines.strip().split() # split line into space-seperated values
-
-        if len(values) != NumberofDataTokens: # if values is longer than we have data
-            break    #...get out
         
         for field_num, value in enumerate(values):  # loop over values with field_num and value
+            
+            if field_num >= NumberofDataTokens: # if values is longer than we have data
+                return None    #...get out
+        
             if fptr[field_num] != retnone:   # only if the function pointer is not retval
                 current_values[field_num] = fptr[field_num](int(value, 16), register_offset[field_num], register_step_size[field_num])  # execute whatever the fuction pointer points to
             else:   # if it is retval
@@ -152,6 +153,9 @@ def update_gui_from_queue():
 def start_reading():
     global reading_flag, reading_thread, ser
 
+    if reading_flag == True:
+        return None
+
     if not ser:
         try:
             ser = serial.Serial('COM4', 115200, timeout=60)
@@ -164,7 +168,8 @@ def start_reading():
     reading_thread.start()
     gui_thread = threading.Thread(target=update_gui_from_queue)
     gui_thread.start()
-    start_button.config(bg='green')  # Change button color to green
+    start_button.config(bg='green',text='reading ...')  # Change button color to green
+    stop_button.config(bg='light gray', text='stop reading')  # Change button color to gray
 
 # Function to process the data queue
 def process_queue():
@@ -181,11 +186,17 @@ def process_queue():
 # Function to stop reading data and close the serial connection
 def stop_reading():
     global ser, reading_flag
+
+    if reading_flag == False:
+        return None
+    
     reading_flag = False
     if ser:
         ser.close()
         ser = None
-    start_button.config(bg='light gray')  # Change button color to gray
+
+    stop_button.config(bg='red', text='stopped')  # Change button color to red
+    start_button.config(bg='light gray', text='start reading')  # Change button color to gray
 
 # Function to exit the application
 def exit_app():
@@ -281,6 +292,8 @@ def populate_8_bitfields(in_name:str, in_val:int, description:str, bit_set, bit_
 
 
         i += 1
+        if i == 8:
+            return
 
 def apply_mask(in_byte:int, in_mask:int, rsh:int) -> int:
     retval:int = int(in_byte,16) & int(in_mask, 16)
@@ -613,13 +626,11 @@ def REG30(in_val, _ignore1, _ignore2):
     populate_8_bitfields(reg30_bit_names, in_val, reg30_description, reg30_bits_set, reg30_bits_unset)
     return in_val
 
-#FIXME
 def REG31(in_val:int, in_offset:int, in_stepsize:int) -> int:
-    return ( ((twoscomplementtodec(int(in_val,16)) * in_stepsize) + in_offset ) )
+    return (( (twoscomplementtodec(in_val) * in_stepsize) + in_offset ) )
 
-#FIXME
 def REG33(in_val:int, in_offset:int, in_stepsize:int) -> int:
-    return ( ((twoscomplementtodec(int(in_val,16)) * in_stepsize) + in_offset ) )
+    return (( (twoscomplementtodec(in_val) * in_stepsize) + in_offset ) )
 
 def REG47(in_val, _ignore1, _ignore2):
     populate_8_bitfields(reg47_bit_names, in_val, reg47_description, reg47_bits_set, reg47_bits_unset) 
@@ -661,7 +672,7 @@ fptr = [RegToVal, RegToVal, RegToVal, RegToVal, RegToVal, retnone, retnone, retn
         retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone,   # REG0E to REG17
         retnone, RegToVal, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone,   # REG18 to REG22
         retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone, retnone,   # REG23 to REG2C
-        retnone, retnone, retnone, retnone, retnone, retnone, RegToVal, RegToVal, RegToVal, RegToVal, # REG2D to REG3B
+        retnone, retnone, retnone, retnone, REG31, REG33, RegToVal, RegToVal, RegToVal, RegToVal, # REG2D to REG3B
         RegToVal, RegToVal, RegToTemp, RegToVal, RegToVal, retnone, retnone, retnone, retnone, retnone    # REG3D to REG48, along with PG, IRQ, STAT
         ]
 
@@ -669,7 +680,7 @@ fptr_hover = [retnone, retnone, retnone, retnone, retnone, REG08, REG09, REG0A, 
                 REG0E, REG0F, REG10, REG11, REG12, REG13, REG14, REG15, REG16, REG17,   # REG0E to REG17
                 REG18, retnone, REG1B, REG1C, REG1D, REG1E, REG1F, REG20, REG21, REG22,   # REG18 to REG22
                 REG23, REG24, REG25, REG26, REG27, REG28, REG29, REG2A, REG2B, REG2C,   # REG23 to REG2C
-                REG2D, REG2E, REG2F, REG30, REG31, REG33, retnone, retnone, retnone, retnone, # REG2D to REG3B
+                REG2D, REG2E, REG2F, REG30, retnone, retnone, retnone, retnone, retnone, retnone, # REG2D to REG3B
                 retnone, retnone, retnone, retnone, retnone, REG47, REG48, retnone, retnone, retnone    # REG3D to REG48, along with PG, IRQ, STAT
             ]
 
@@ -717,9 +728,9 @@ for i in range(3):
     field_num +=1 
 
 # Create buttons for controlling the application
-start_button = Button(button_frame, text="Start Reading", command=start_reading)
-stop_button = Button(button_frame, text="Stop Reading", command=stop_reading)
-exit_button = Button(button_frame, text="Exit", command=exit_app)
+start_button = Button(button_frame, text="start reading", command=start_reading)
+stop_button = Button(button_frame, text="stopped", command=stop_reading, bg='red')
+exit_button = Button(button_frame, text="exit", command=exit_app)
 
 # Configure button frame layout
 button_frame.columnconfigure(0, weight=1)
