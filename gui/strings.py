@@ -782,25 +782,25 @@ reg11_description: str = [
                 ]
 
 reg11_bits_set:str = [
-                  "",   # bit0
+                  "Do NOT add 10s delay time",   # bit0
                   "",   # bit1
                   "",   # bit2
                   "enable HVDCP handshake",   # bit3
                   "enable 9V mode in HVDCP",   # bit4
                   "enable 12V mode in HVDCP",   # bit5
                   "enable D+/D- detection when VBUS is plugged-in (default)",   # bit6
-                  "Force D+/D- algorithm, when D+/D- detection is done, this bit will be reset to 0"   # bit7
+                  "DO force D+/D- algorithm, when D+/D- detection is done, this bit will be reset to 0"   # bit7
                 ]
 
 reg11_bits_unset: str = [
-                  "",   # bit0
+                  "Add 10s delay time (default)",   # bit0
                   "",   # bit1
                   "",   # bit2
                   "disable HVDCP handshake (default)",   # bit3
                   "disable 9V mode in HVDCP (default)",   # bit4
-                  "enable 12V mode in HVDCP",   # bit5
-                  "enable D+/D- detection when VBUS is plugged-in (default)",   # bit6
-                  "Force D+/D- algorithm, when D+/D- detection is done, this bit will be reset to 0"   # bit7
+                  "disable 12V mode in HVDCP",   # bit5
+                  "disable D+/D- detection when VBUS is plugged-in (default)",   # bit6
+                  "NOT force D+/D- algorithm, when D+/D- detection is done, this bit will be reset to 0"   # bit7
                 ]
 
 reg11_bits_SDRV_CTRL: str = [
@@ -1287,7 +1287,7 @@ reg1c_bits_set:str = [
                   ""   # bit7
                 ]
 
-reg1c_bits_unset: str = [
+reg1c_bits_unset: str = [ 
                   "BC1.2 or non-standard detection NOT complete",   # bit0
                   "",   # bit1
                   "",   # bit2

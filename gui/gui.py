@@ -356,7 +356,7 @@ def REG0A(in_val, _ignore1, _ignore2):
 
     key = str("bit_field0") # create key
     fields[key].delete(1.0, END)  # Clear the bit_field
-    fields[key].insert(1.0, f"{RegToVal(apply_mask(in_val, '0x3f', 0), 50, 50)} V\n") # insert bitfield value # TODO
+    fields[key].insert(1.0, f"{RegToVal(apply_mask(in_val, '0x0f', 0), 50, 50)} V\n") # insert bitfield value # TODO
 
     return in_val
 
@@ -529,7 +529,7 @@ def REG1B(in_val, _ignore1, _ignore2):
     return in_val
 
 def REG1C(in_val, _ignore1, _ignore2):
-    populate_8_bitfields(reg1c_bit_names, in_val, reg1c_description, reg1c_bits_set, reg10_bits_unset) 
+    populate_8_bitfields(reg1c_bit_names, in_val, reg1c_description, reg1c_bits_set, reg1c_bits_unset) 
 
     chg = apply_mask(in_val, '0xe0', 5)
     bus = apply_mask(in_val, '0x1e', 1)
