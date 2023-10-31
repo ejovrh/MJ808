@@ -2,6 +2,7 @@ import threading
 import queue
 from tkinter import * 
 from tkinter import messagebox
+from tkinter.ttk import Combobox
 import serial
 import time
 
@@ -60,21 +61,32 @@ if __name__ == '__main__':
 
 root.title("BQ25798 registers")
 
+sorted_items = sorted(register_bit_name.items(), key=lambda item: item[0]) # Sort the dictionary items alphabetically by key
+sorted_keys = [item[0] for item in sorted_items] # Extract the keys from the sorted items
+dropdown_var = StringVar() # Create a tkinter variable to store the selected item
+
 # Create frames for organizing the GUI elements
 top_frame = Frame(root, bg='gray', width=1024, height=50, pady=3)
 bq25798_frame = Frame(root, bg='gray', width=1024, pady=3)
 status_frame = Frame(root, bg='gray', width=1024, pady=3)
-button_frame = Frame(root, bg='gray', width=1024, pady=3)
+dropdown_frame = Frame(root, bg='gray', width=1024, pady=3)
 byte_frame = Frame(root, bg='gray', width=1024, height=200)
-bottom_frame = Frame(root, bg='gray', width=1024, height=50, pady=3)
+button_frame = Frame(root, bg='gray', width=1024, height=50, pady=3)
 
 # Draw grid
 top_frame.grid(row=0, column=0, sticky='nsew')
 bq25798_frame.grid(row=1, column=0, sticky='nsew')
 status_frame.grid(row=2, column=0, sticky='nsew')
-button_frame.grid(row=3, column=0, sticky='nsew')
+dropdown_frame.grid(row=3, column=0, sticky='nsew')
 byte_frame.grid(row=4, column=0, sticky='nsew')
-top_frame.grid(row=5, column=0, sticky='nsew')
+button_frame.grid(row=5, column=0, sticky='nsew')
+
+def onDropdownSelection(event):
+    selected_item = dropdown_var.get()
+    if selected_item in register_bit_name:
+        selected_value = register_bit_name[selected_item]
+        fptr_hover[selected_value](current_values[selected_value], register_offset[selected_value], register_step_size[selected_value]) # Call the function from fptr based on field_num with the clicked value
+        label_click(event, selected_value)
 
 # Callback function to execute the appropriate function based on field_num
 def on_entry_field_click(event, field_num:int):
@@ -82,6 +94,7 @@ def on_entry_field_click(event, field_num:int):
 
     if field_num < len(fptr):
         try:
+            dropdown_var.set("Select a bit")
             clicked_field = field_num
             fptr_hover[field_num](current_values[field_num], register_offset[field_num], register_step_size[field_num]) # Call the function from fptr based on field_num with the clicked value
             # print(f"Result for {register_name[field_num]}: {current_values[field_num]}")
@@ -170,6 +183,7 @@ def start_reading():
     gui_thread.start()
     start_button.config(bg='green',text='reading ...')  # Change button color to green
     stop_button.config(bg='light gray', text='stop reading')  # Change button color to gray
+    fields["dropdown_field"]["state"] = "readonly"  # Enable the Combobox state="disabled"
 
 # Function to process the data queue
 def process_queue():
@@ -197,6 +211,7 @@ def stop_reading():
 
     stop_button.config(bg='red', text='stopped')  # Change button color to red
     start_button.config(bg='light gray', text='start reading')  # Change button color to gray
+    fields["dropdown_field"]["state"] = "disabled"  # disable the Combobox
 
 # Function to exit the application
 def exit_app():
@@ -767,6 +782,15 @@ for i in range(7, -1, -1):
     fields[key].insert(1.0, "")
     fields[key].grid(row=2*j+2, column=1, padx=2, sticky='W')
     j += 1
+
+# create dropdown box
+key = str("dropdown_field") # dropdown
+fields[key] = Combobox(dropdown_frame, textvariable=dropdown_var, height=10, values=sorted_items, state="disabled")
+sorted_items = sorted(register_bit_name.keys())
+fields[key]['values'] = sorted_items
+dropdown_var.set("Select a bit")
+fields[key].bind("<<ComboboxSelected>>", onDropdownSelection)
+fields[key].grid(row=0, column=1, padx=10, pady=10)
 
 # Place buttons in the button frame
 start_button.grid(row=0, column=1, padx=5, pady=5, sticky='W')
