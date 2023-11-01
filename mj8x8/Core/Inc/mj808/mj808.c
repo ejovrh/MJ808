@@ -7,7 +7,7 @@
 #include "mj808\mj808_led.c"	// concrete device-specific LED functions
 #include "mj808\mj808_button.c"	// concrete device-specific button functions
 
-TIM_HandleTypeDef htim3;	// front light PWM on channel 3
+TIM_HandleTypeDef htim3;	// front light PWM on channel 1
 TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 TIM_HandleTypeDef htim16;  // Timer16 object - button handling - 25ms
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
@@ -25,8 +25,8 @@ static inline void _GPIOInit(void)
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
 
-	HAL_GPIO_WritePin(GPIOA, RedLED_Pin, GPIO_PIN_SET);  //	high - LED off
-	HAL_GPIO_WritePin(GPIOA, GreenLED_Pin, GPIO_PIN_SET);  // high - LED off
+	HAL_GPIO_WritePin(RedLED_GPIO_Port, RedLED_Pin, GPIO_PIN_SET);  //	high - LED off
+	HAL_GPIO_WritePin(GreenLED_GPIO_Port, GreenLED_Pin, GPIO_PIN_SET);  // high - LED off
 
 	GPIO_InitStruct.Pin = TCAN334_Standby_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -43,7 +43,7 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = FrontLED_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;

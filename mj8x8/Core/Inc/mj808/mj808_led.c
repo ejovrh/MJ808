@@ -7,7 +7,7 @@
 
 #include "led\composite_led_actual.c"	// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
 
-extern TIM_HandleTypeDef htim3;  // front light PWM on channel 2
+extern TIM_HandleTypeDef htim3;  // front light PWM on channel 1
 extern TIM_HandleTypeDef htim14;  // LED handling - 20ms
 
 static primitive_led_t __primitive_led[4] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
@@ -139,7 +139,7 @@ static inline void __physicalRedLED(const uint8_t state)  // red LED on/off
 {
 	// state == 1 - off
 	// state == 0 - on
-	HAL_GPIO_WritePin(GPIOB, RedLED_Pin, (! state));
+	HAL_GPIO_WritePin(RedLED_GPIO_Port, RedLED_Pin, (! state));
 	return;
 }
 
@@ -148,7 +148,7 @@ static inline void __physicalGreenLED(const uint8_t state)  // green LED on/off
 {
 	// state == 1 - off
 	// state == 0 - on
-	HAL_GPIO_WritePin(GPIOB, GreenLED_Pin, (! state));
+	HAL_GPIO_WritePin(GreenLED_GPIO_Port, GreenLED_Pin, (! state));
 	return;
 }
 

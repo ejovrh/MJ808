@@ -57,7 +57,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define GreenLED_GPIO_Port GPIOA
 // definitions of device/PCB layout-dependent hardware pins
 
-#define FRONT_LIGHT_CCR htim3.Instance->CCR2	// Output Compare Register for PWM of front light
+#define FRONT_LIGHT_CCR htim3.Instance->CCR1	// Output Compare Register for PWM of front light
 
 enum mj808_leds  // enum of lights on this device
 {
