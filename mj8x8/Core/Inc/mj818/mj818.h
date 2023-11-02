@@ -50,7 +50,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 // definitions of device/PCB layout-dependent hardware pins
 
 #define REAR_LIGHT_CCR htim2.Instance->CCR1	// Output Compare Register for PWM of rear light
-#define BRAKE_LIGHT_CCR htim3.Instance->CCR4	// Output Compare Register for PWM of brake light
+#define BRAKE_LIGHT_CCR htim3.Instance->CCR1	// Output Compare Register for PWM of brake light
 
 enum mj818_leds  // enum of lights on this device
 {

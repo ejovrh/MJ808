@@ -8,7 +8,7 @@
 #include "led\composite_led_actual.c"	// __composite_led_t struct definition & declaration - for convenience in one place for all LED devices
 
 extern TIM_HandleTypeDef htim2;  // rear light PWM on channel 1
-extern TIM_HandleTypeDef htim3;  // brake light PWM on channel 4
+extern TIM_HandleTypeDef htim3;  // brake light PWM on channel 1
 extern TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 
 static primitive_led_t __primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data

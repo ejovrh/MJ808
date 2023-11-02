@@ -7,7 +7,7 @@
 #include "mj818\mj818_led.c"	// concrete device-specific LED functions
 
 TIM_HandleTypeDef htim2;	// rear light PWM on channel 1
-TIM_HandleTypeDef htim3;	// brake light PWM on channel 4
+TIM_HandleTypeDef htim3;	// brake light PWM on channel 1
 TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms - FIXME - should not be here
@@ -101,8 +101,8 @@ static inline void _TimerInit(void)
 	sConfigOC.Pulse = LED_OFF;
 	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-	HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_4);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);  // start the timer
+	HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);  // start the timer
 
 	// timer14 - LED handling - 20ms
 	htim14.Instance = TIM14;
