@@ -8162,320 +8162,6 @@ DIN A3, landscape with location and doc. field</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="tag-connect">
-<description>&lt;h3&gt;TAG-CONNECT ICSP Connector&lt;/h3&gt;&lt;BR&gt;&lt;I&gt;Manufacturer:&lt;/I&gt; &lt;a href="http://www.tag-connect.com"&gt;Tag-Connect&lt;/a&gt;&lt;BR&gt;
-&lt;BR&gt;Cable for easy In-Circuit Serial Programming. Designed for Microchip ICD2, suitable for many others.&lt;BR&gt;
-Two variants - one "with legs" (for hands-free fit on PCB) and another "without legs" for quick programming.
-
-&lt;p&gt;
-&lt;TABLE cellspacing=0 cellpadding=0 border=0&gt;
-&lt;TR&gt;&lt;TD width=20&gt;&lt;/TD&gt;&lt;TD&gt;
-&lt;TABLE cellspacing=0 cellpadding=1 border=1&gt;
-&lt;TR bgcolor=silver&gt;&lt;TD align=center&gt;PAD&lt;/TD&gt;&lt;TD align=center&gt;Description&lt;/TD&gt;&lt;/TR&gt;
-&lt;TR&gt;&lt;TD align=center&gt;1&lt;/TD&gt;&lt;TD&gt;MCLR/Vpp&lt;/TD&gt;&lt;/TR&gt;
-&lt;TR&gt;&lt;TD align=center&gt;2&lt;/TD&gt;&lt;TD&gt;Vdd&lt;/TD&gt;&lt;/TR&gt;
-&lt;TR&gt;&lt;TD align=center&gt;3&lt;/TD&gt;&lt;TD&gt;GND&lt;/TD&gt;&lt;/TR&gt;
-&lt;TR&gt;&lt;TD align=center&gt;4&lt;/TD&gt;&lt;TD&gt;PGD (ISPDAT)&lt;/TD&gt;&lt;/TR&gt;
-&lt;TR&gt;&lt;TD align=center&gt;5&lt;/TD&gt;&lt;TD&gt;PGC (ISPCLK)&lt;/TD&gt;&lt;/TR&gt;
-&lt;TR&gt;&lt;TD align=center&gt;6&lt;/TD&gt;&lt;TD&gt;nc (used for LVP)&lt;/TD&gt;&lt;/TR&gt;
-&lt;/TABLE&gt;
-&lt;/TD&gt;&lt;/TR&gt;&lt;/TABLE&gt;&lt;BR&gt;&lt;BR&gt;
-
-©2009 ROFA.cz - modified and updated by Robert Darlington &amp;#8249;rdarlington@gmail.com&amp;#8250;</description>
-<packages>
-<package name="TC2030-NL">
-<smd name="2_T_SWDIO" x="1.27" y="0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" rot="R90" cream="no"/>
-<smd name="4_T_SWCLK" x="2.54" y="0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" rot="R90" cream="no"/>
-<smd name="6_T_SWO" x="3.81" y="0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" rot="R90" cream="no"/>
-<smd name="5_GND" x="3.81" y="-0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
-<smd name="3_T_NRST" x="2.54" y="-0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
-<smd name="1_TVCC" x="1.27" y="-0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
-<text x="-1" y="0" size="0.5" layer="25" rot="R90" align="center">&gt;NAME</text>
-<hole x="0" y="0" drill="0.9906"/>
-<hole x="5.08" y="-1.016" drill="0.9906"/>
-<hole x="5.08" y="1.016" drill="0.9906"/>
-<polygon width="0.0254" layer="39">
-<vertex x="1.27" y="-0.2413"/>
-<vertex x="1.6637" y="-0.2413"/>
-<vertex x="1.6637" y="-0.635"/>
-<vertex x="2.1463" y="-0.635"/>
-<vertex x="2.1463" y="-0.2413"/>
-<vertex x="2.9337" y="-0.2413"/>
-<vertex x="2.9337" y="-0.635"/>
-<vertex x="3.4163" y="-0.635"/>
-<vertex x="3.4163" y="-0.2413"/>
-<vertex x="3.81" y="-0.2413"/>
-<vertex x="3.81" y="0.2413"/>
-<vertex x="3.4163" y="0.2413"/>
-<vertex x="3.4163" y="0.635"/>
-<vertex x="2.9337" y="0.635"/>
-<vertex x="2.9337" y="0.2413"/>
-<vertex x="2.1463" y="0.2413"/>
-<vertex x="2.1463" y="0.635"/>
-<vertex x="1.6637" y="0.635"/>
-<vertex x="1.6637" y="0.2413"/>
-<vertex x="1.27" y="0.2413"/>
-</polygon>
-<text x="6" y="0" size="0.5" layer="27" font="vector" rot="R90" align="center">&gt;VALUE</text>
-<text x="1.27" y="-1.27" size="0.5" layer="25" font="vector" rot="R180" align="center">1</text>
-<text x="1.27" y="1.27" size="0.5" layer="25" font="vector" rot="R180" align="center">2</text>
-<text x="2.54" y="-1.27" size="0.5" layer="25" font="vector" rot="R180" align="center">3</text>
-<text x="2.54" y="1.27" size="0.5" layer="25" font="vector" rot="R180" align="center">4</text>
-<text x="3.81" y="-1.27" size="0.5" layer="25" font="vector" rot="R180" align="center">5</text>
-<text x="3.81" y="1.27" size="0.5" layer="25" font="vector" rot="R180" align="center">6</text>
-</package>
-<package name="TC2030">
-<smd name="2" x="1.27" y="0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
-<smd name="4" x="2.54" y="0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
-<smd name="6" x="3.81" y="0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
-<smd name="5" x="3.81" y="-0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
-<smd name="3" x="2.54" y="-0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
-<smd name="1" x="1.27" y="-0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
-<text x="-1.5" y="0" size="0.5" layer="25" rot="R90" align="center">&gt;NAME</text>
-<hole x="0" y="0" drill="0.9906"/>
-<hole x="5.08" y="-1.016" drill="0.9906"/>
-<hole x="5.08" y="1.016" drill="0.9906"/>
-<hole x="0" y="2.54" drill="2.3749"/>
-<hole x="0" y="-2.54" drill="2.3749"/>
-<hole x="3.175" y="-2.54" drill="2.3749"/>
-<hole x="3.175" y="2.54" drill="2.3749"/>
-<polygon width="0.0254" layer="39">
-<vertex x="1.27" y="-0.2413"/>
-<vertex x="1.6637" y="-0.2413"/>
-<vertex x="1.6637" y="-0.635"/>
-<vertex x="2.1463" y="-0.635"/>
-<vertex x="2.1463" y="-0.2413"/>
-<vertex x="2.9337" y="-0.2413"/>
-<vertex x="2.9337" y="-0.635"/>
-<vertex x="3.4163" y="-0.635"/>
-<vertex x="3.4163" y="-0.2413"/>
-<vertex x="3.81" y="-0.2413"/>
-<vertex x="3.81" y="0.2413"/>
-<vertex x="3.4163" y="0.2413"/>
-<vertex x="3.4163" y="0.635"/>
-<vertex x="2.9337" y="0.635"/>
-<vertex x="2.9337" y="0.2413"/>
-<vertex x="2.1463" y="0.2413"/>
-<vertex x="2.1463" y="0.635"/>
-<vertex x="1.6637" y="0.635"/>
-<vertex x="1.6637" y="0.2413"/>
-<vertex x="1.27" y="0.2413"/>
-</polygon>
-<text x="6.5" y="0" size="0.5" layer="27" font="vector" rot="R90" align="center">&gt;VALUE</text>
-</package>
-</packages>
-<symbols>
-<symbol name="TC2030">
-<wire x1="-30.48" y1="2.54" x2="-30.48" y2="-15.24" width="0.254" layer="94"/>
-<wire x1="-30.48" y1="-15.24" x2="2.54" y2="-15.24" width="0.254" layer="94"/>
-<wire x1="2.54" y1="-15.24" x2="2.54" y2="2.54" width="0.254" layer="94"/>
-<wire x1="2.54" y1="2.54" x2="-30.48" y2="2.54" width="0.254" layer="94"/>
-<circle x="0" y="0" radius="0.5679" width="0.254" layer="94"/>
-<circle x="-1.016" y="-6.096" radius="0.5679" width="0.254" layer="94"/>
-<circle x="1.016" y="-6.096" radius="0.5679" width="0.254" layer="94"/>
-<pin name="1_T_VCC" x="-33.02" y="0" length="short" direction="pwr"/>
-<pin name="2_T-SWDIO" x="-33.02" y="-2.54" length="short"/>
-<pin name="5_GND" x="-33.02" y="-10.16" length="short" direction="pwr"/>
-<pin name="4_T-SWCLK" x="-33.02" y="-7.62" length="short"/>
-<polygon width="0.254" layer="94">
-<vertex x="0.254" y="-1.524" curve="-90"/>
-<vertex x="0.762" y="-1.016" curve="-90"/>
-<vertex x="1.27" y="-1.524" curve="-90"/>
-<vertex x="0.762" y="-2.032" curve="-90"/>
-</polygon>
-<polygon width="0.254" layer="94">
-<vertex x="-1.27" y="-1.524" curve="-90"/>
-<vertex x="-0.762" y="-1.016" curve="-90"/>
-<vertex x="-0.254" y="-1.524" curve="-90"/>
-<vertex x="-0.762" y="-2.032" curve="-90"/>
-</polygon>
-<polygon width="0.254" layer="94">
-<vertex x="0.254" y="-3.048" curve="-90"/>
-<vertex x="0.762" y="-2.54" curve="-90"/>
-<vertex x="1.27" y="-3.048" curve="-90"/>
-<vertex x="0.762" y="-3.556" curve="-90"/>
-</polygon>
-<polygon width="0.254" layer="94">
-<vertex x="-1.27" y="-3.048" curve="-90"/>
-<vertex x="-0.762" y="-2.54" curve="-90"/>
-<vertex x="-0.254" y="-3.048" curve="-90"/>
-<vertex x="-0.762" y="-3.556" curve="-90"/>
-</polygon>
-<polygon width="0.254" layer="94">
-<vertex x="-1.27" y="-4.572" curve="-90"/>
-<vertex x="-0.762" y="-4.064" curve="-90"/>
-<vertex x="-0.254" y="-4.572" curve="-90"/>
-<vertex x="-0.762" y="-5.08" curve="-90"/>
-</polygon>
-<polygon width="0.254" layer="94">
-<vertex x="0.254" y="-4.572" curve="-90"/>
-<vertex x="0.762" y="-4.064" curve="-90"/>
-<vertex x="1.27" y="-4.572" curve="-90"/>
-<vertex x="0.762" y="-5.08" curve="-90"/>
-</polygon>
-<pin name="6_T-SWO" x="-33.02" y="-12.7" length="short" direction="in"/>
-<pin name="3_T-NRST" x="-33.02" y="-5.08" length="short"/>
-<text x="-27.94" y="-19.05" size="0.635" layer="97" font="vector" align="center-left">(2) input for STLink v3 Set</text>
-<text x="-27.94" y="-16.51" size="0.635" layer="97" font="vector" align="center-left">(1) direction referenced to target</text>
-<text x="-16.51" y="-5.08" size="0.635" layer="97" font="vector" align="center-left">(1)</text>
-<text x="-17.78" y="-12.7" size="0.635" layer="97" font="vector" align="center-left">(1)</text>
-<text x="-15.24" y="-7.62" size="0.635" layer="97" font="vector" align="center-left">(1)</text>
-<text x="-15.24" y="-2.54" size="0.635" layer="97" font="vector" align="center-left">(1)</text>
-<text x="-17.78" y="0" size="0.635" layer="97" font="vector" align="center-left">(2)</text>
-<text x="-27.94" y="-21.59" size="0.635" layer="97" font="vector" align="center-left">(3) SWO optional, required only for SWV trace</text>
-<text x="-15.875" y="-12.7" size="0.635" layer="97" font="vector" align="center-left">(3)</text>
-<text x="-30.48" y="5.08" size="1.27" layer="97" font="vector" align="center-left">&gt;NAME</text>
-<text x="-10.16" y="5.08" size="1.27" layer="97" font="vector" align="center-left">&gt;VALUE</text>
-<text x="0" y="-8.89" size="1.27" layer="94" font="vector" align="center">SWD</text>
-<text x="-1.778" y="-1.524" size="0.254" layer="94" font="vector" align="center">1</text>
-<text x="1.778" y="-1.524" size="0.254" layer="94" font="vector" align="center">2</text>
-<text x="-1.778" y="-3.048" size="0.254" layer="94" font="vector" align="center">3</text>
-<text x="1.778" y="-3.048" size="0.254" layer="94" font="vector" align="center">4</text>
-<text x="-1.778" y="-4.572" size="0.254" layer="94" font="vector" align="center">5</text>
-<text x="1.778" y="-4.572" size="0.254" layer="94" font="vector" align="center">6</text>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="TC2030" prefix="SWD" uservalue="yes">
-<description>&lt;table border="1" cellpadding="1" cellspacing="1" style="width:500px"&gt;
-	&lt;tbody&gt;
-		&lt;tr&gt;
-			&lt;td bgcolor="silver"&gt;&lt;strong&gt;TC2030 pad no.&lt;/strong&gt;&lt;/td&gt;
-			&lt;td bgcolor="silver"&gt;&lt;strong&gt;Function&lt;/strong&gt;&lt;/td&gt;
-			&lt;td bgcolor="silver"&gt;&lt;strong&gt;STLink v3 CN1 pin no.&lt;/strong&gt;&lt;/td&gt;
-			&lt;td bgcolor="silver"&gt;&lt;strong&gt;Function&lt;/strong&gt;&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;1&lt;/td&gt;
-			&lt;td&gt;Reserved (1)&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;2&lt;/td&gt;
-			&lt;td&gt;Reserved (1)&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;1&lt;/td&gt;
-			&lt;td&gt;T_Vcc&lt;/td&gt;
-			&lt;td&gt;3&lt;/td&gt;
-			&lt;td&gt;T_Vcc (2)&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;2&lt;/td&gt;
-			&lt;td&gt;T_SWDIO&lt;/td&gt;
-			&lt;td&gt;4&lt;/td&gt;
-			&lt;td&gt;T_JTMS/T_SWDIO&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;5&lt;/td&gt;
-			&lt;td&gt;GND&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;4&lt;/td&gt;
-			&lt;td&gt;T_SWCLK&lt;/td&gt;
-			&lt;td&gt;6&lt;/td&gt;
-			&lt;td&gt;T_JCLK / T_SWCLK&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;5&lt;/td&gt;
-			&lt;td&gt;GND&lt;/td&gt;
-			&lt;td&gt;7&lt;/td&gt;
-			&lt;td&gt;GND&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;6&lt;/td&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;8&lt;/td&gt;
-			&lt;td&gt;T_JTDO / T_SWO (3)&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;9&lt;/td&gt;
-			&lt;td&gt;T_JRCLK (4) / NC (5)&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;10&lt;/td&gt;
-			&lt;td&gt;T_JTDI / NC (5)&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;11&lt;/td&gt;
-			&lt;td&gt;GNDDetect (6)&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;3&lt;/td&gt;
-			&lt;td&gt;T_NRST&lt;/td&gt;
-			&lt;td&gt;12&lt;/td&gt;
-			&lt;td&gt;T_NRST&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;13&lt;/td&gt;
-			&lt;td&gt;T_VCP_RX (7)&lt;/td&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-			&lt;td&gt;14&lt;/td&gt;
-			&lt;td&gt;T_VCP_TX (2)&lt;/td&gt;
-		&lt;/tr&gt;
-	&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-
-(1) Do not connect to the target&lt;BR&gt;
-(2) Input for STLINK-V3SET&lt;BR&gt;
-(3) SWO is optional, required only for Serial Wire Viewer (SWV) trace&lt;BR&gt;
-(4) Optional loopback of T_JCLK on the target side, required if loopback is removed on the STLINK-V3SET side&lt;BR&gt;
-(5) NC means not required for the SWD connection&lt;BR&gt;
-(6) Tied to GND by STLINK-V3SET firmware; may be used by the target for detection of the tool&lt;BR&gt;
-(7)  Output for STLINK-V3SET&lt;BR&gt;</description>
-<gates>
-<gate name="G$1" symbol="TC2030" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="TC2030-NL">
-<connects>
-<connect gate="G$1" pin="1_T_VCC" pad="1_TVCC"/>
-<connect gate="G$1" pin="2_T-SWDIO" pad="2_T_SWDIO"/>
-<connect gate="G$1" pin="3_T-NRST" pad="3_T_NRST"/>
-<connect gate="G$1" pin="4_T-SWCLK" pad="4_T_SWCLK"/>
-<connect gate="G$1" pin="5_GND" pad="5_GND"/>
-<connect gate="G$1" pin="6_T-SWO" pad="6_T_SWO"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-<device name="TC2030" package="TC2030">
-<connects>
-<connect gate="G$1" pin="1_T_VCC" pad="1"/>
-<connect gate="G$1" pin="2_T-SWDIO" pad="2"/>
-<connect gate="G$1" pin="3_T-NRST" pad="3"/>
-<connect gate="G$1" pin="4_T-SWCLK" pad="4"/>
-<connect gate="G$1" pin="5_GND" pad="5"/>
-<connect gate="G$1" pin="6_T-SWO" pad="6"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="STM32F042G6">
 <packages>
 <package name="UFQFPN-28">
@@ -11565,18 +11251,18 @@ GDSB: gate, drain, source, bulk&lt;p&gt;
 by R. Vogg  15.March.2002</description>
 <packages>
 <package name="SC-70-6">
-<text x="0" y="2.25" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
-<text x="0" y="-2" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
-<smd name="D" x="0" y="0.4" dx="1.5" dy="0.95" layer="1"/>
-<smd name="6D" x="0.975" y="0.725" dx="0.3" dy="0.45" layer="1" rot="R270"/>
-<smd name="5D" x="0.975" y="0.075" dx="0.3" dy="0.45" layer="1" rot="R270"/>
-<smd name="1D" x="-0.975" y="0.725" dx="0.3" dy="0.45" layer="1" rot="R270"/>
-<smd name="2D" x="-0.975" y="0.075" dx="0.3" dy="0.45" layer="1" rot="R270"/>
-<smd name="4S" x="0.975" y="-0.88" dx="0.3" dy="0.45" layer="1" rot="R270"/>
-<smd name="3G" x="-0.975" y="-0.88" dx="0.3" dy="0.45" layer="1" rot="R270"/>
-<smd name="S" x="0" y="-0.915" dx="0.87" dy="0.23" layer="1"/>
-<wire x1="1" y1="1.25" x2="-1" y2="1.25" width="0.127" layer="21"/>
-<wire x1="1" y1="-1.25" x2="-1" y2="-1.25" width="0.127" layer="21"/>
+<text x="0" y="2.25" size="0.75" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-2" size="0.75" layer="27" font="vector" align="center">&gt;VALUE</text>
+<smd name="D" x="0" y="0.325" dx="1.5" dy="0.95" layer="1"/>
+<smd name="6D" x="1" y="0.65" dx="0.3" dy="0.5" layer="1" rot="R270"/>
+<smd name="5D" x="1" y="0" dx="0.3" dy="0.5" layer="1" rot="R270"/>
+<smd name="1D" x="-1" y="0.65" dx="0.3" dy="0.5" layer="1" rot="R270"/>
+<smd name="2D" x="-1" y="0" dx="0.3" dy="0.5" layer="1" rot="R270"/>
+<smd name="4S" x="1" y="-0.65" dx="0.3" dy="0.5" layer="1" rot="R270"/>
+<smd name="3G" x="-1" y="-0.65" dx="0.3" dy="0.5" layer="1" rot="R270"/>
+<smd name="S" x="0.1" y="-0.65" dx="0.75" dy="0.23" layer="1"/>
+<wire x1="1.05" y1="1.05" x2="-1.05" y2="1.05" width="0.127" layer="21"/>
+<wire x1="1.05" y1="-1.05" x2="-1.05" y2="-1.05" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -11766,7 +11452,7 @@ by R. Vogg  15.March.2002</description>
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="MAX16839" urn="urn:adsk.eagle:component:451114/1" locally_modified="yes" prefix="IC" uservalue="yes">
+<deviceset name="MAX16839" prefix="IC" uservalue="yes">
 <gates>
 <gate name="G$1" symbol="MAX16839" x="0" y="0"/>
 </gates>
@@ -11952,6 +11638,101 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <technologies>
 <technology name="">
 <attribute name="POPULARITY" value="5" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+<library name="STM32 JTAG 1.27mm 14pin header">
+<description>&lt;b&gt;https://componentsearchengine.com&lt;/b&gt;&lt;p&gt;
+&lt;author&gt;Created by SamacSys&lt;/author&gt;</description>
+<packages>
+<package name="FTSH10701LDVKA">
+<description>&lt;b&gt;FTSH-107-01-L-DV-K-A-4&lt;/b&gt;&lt;br&gt;
+</description>
+<smd name="1" x="-3.81" y="-2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<smd name="2" x="-3.81" y="2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<smd name="3" x="-2.54" y="-2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<smd name="4" x="-2.54" y="2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<smd name="5" x="-1.27" y="-2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<smd name="6" x="-1.27" y="2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<smd name="7" x="0" y="-2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<smd name="8" x="0" y="2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<smd name="9" x="1.27" y="-2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<smd name="10" x="1.27" y="2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<smd name="11" x="2.54" y="-2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<smd name="12" x="2.54" y="2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<smd name="13" x="3.81" y="-2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<smd name="14" x="3.81" y="2.035" dx="2.79" dy="0.74" layer="1" rot="R90"/>
+<hole x="-3.175" y="0" drill="1.02"/>
+<hole x="3.175" y="0" drill="1.02"/>
+<text x="0" y="4" size="0.75" layer="25" align="center">&gt;NAME</text>
+<text x="0" y="-4" size="0.75" layer="27" align="center">&gt;VALUE</text>
+<wire x1="-4.445" y1="2.92" x2="-4.445" y2="-2.95" width="0.1" layer="21"/>
+<wire x1="4.445" y1="2.92" x2="4.445" y2="-2.95" width="0.1" layer="21"/>
+<wire x1="-4" y1="-4" x2="-4.2" y2="-4" width="0.3" layer="21" curve="180"/>
+<wire x1="-4.2" y1="-4" x2="-4" y2="-4" width="0.3" layer="21" curve="180"/>
+</package>
+</packages>
+<symbols>
+<symbol name="FTSH-107-01-L-DV-K-A">
+<wire x1="-7.62" y1="2.54" x2="17.78" y2="2.54" width="0.254" layer="94"/>
+<wire x1="17.78" y1="-35.56" x2="17.78" y2="2.54" width="0.254" layer="94"/>
+<wire x1="17.78" y1="-35.56" x2="-7.62" y2="-35.56" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="2.54" x2="-7.62" y2="-35.56" width="0.254" layer="94"/>
+<text x="19.05" y="7.62" size="1.778" layer="95" align="center-left">&gt;NAME</text>
+<text x="19.05" y="5.08" size="1.778" layer="96" align="center-left">&gt;VALUE</text>
+<pin name="T_JTDO/T_SWO_P8" x="22.86" y="-17.78" length="middle" direction="out" rot="R180"/>
+<pin name="T_VCP_TX_P14" x="22.86" y="-33.02" length="middle" direction="in" rot="R180"/>
+<pin name="T_VCP_RX_P13" x="22.86" y="-30.48" length="middle" direction="out" rot="R180"/>
+<pin name="T_NRST_P12" x="22.86" y="-27.94" length="middle" rot="R180"/>
+<pin name="GND-DETECT_P11" x="22.86" y="-25.4" length="middle" direction="pwr" rot="R180"/>
+<pin name="T_JTDI_P10" x="22.86" y="-22.86" length="middle" direction="in" rot="R180"/>
+<pin name="T_JRCLK_P9" x="22.86" y="-20.32" length="middle" rot="R180"/>
+<pin name="RESERVED_P1" x="22.86" y="0" length="middle" direction="nc" rot="R180"/>
+<pin name="RESERVED_P2" x="22.86" y="-2.54" length="middle" direction="nc" rot="R180"/>
+<pin name="T_VCC_P3" x="22.86" y="-5.08" length="middle" direction="pwr" rot="R180"/>
+<pin name="TJTMS/T_SWDIO_P4" x="22.86" y="-7.62" length="middle" rot="R180"/>
+<pin name="GND_P5" x="22.86" y="-10.16" length="middle" direction="pwr" rot="R180"/>
+<pin name="T_JCLK/T_SWCLK_P6" x="22.86" y="-12.7" length="middle" rot="R180"/>
+<pin name="GND_P7" x="22.86" y="-15.24" length="middle" direction="pwr" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="FTSH-107-01-L-DV-K-A" prefix="J">
+<description>&lt;b&gt;Headers &amp; Wire Housings .050" Micro Terminal Strip&lt;/b&gt;&lt;p&gt;
+Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L-DV-K-A.pdf"&gt; Datasheet &lt;/a&gt;</description>
+<gates>
+<gate name="G$1" symbol="FTSH-107-01-L-DV-K-A" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="FTSH10701LDVKA">
+<connects>
+<connect gate="G$1" pin="GND-DETECT_P11" pad="11"/>
+<connect gate="G$1" pin="GND_P5" pad="5"/>
+<connect gate="G$1" pin="GND_P7" pad="7"/>
+<connect gate="G$1" pin="RESERVED_P1" pad="1"/>
+<connect gate="G$1" pin="RESERVED_P2" pad="2"/>
+<connect gate="G$1" pin="TJTMS/T_SWDIO_P4" pad="4"/>
+<connect gate="G$1" pin="T_JCLK/T_SWCLK_P6" pad="6"/>
+<connect gate="G$1" pin="T_JRCLK_P9" pad="9"/>
+<connect gate="G$1" pin="T_JTDI_P10" pad="10"/>
+<connect gate="G$1" pin="T_JTDO/T_SWO_P8" pad="8"/>
+<connect gate="G$1" pin="T_NRST_P12" pad="12"/>
+<connect gate="G$1" pin="T_VCC_P3" pad="3"/>
+<connect gate="G$1" pin="T_VCP_RX_P13" pad="13"/>
+<connect gate="G$1" pin="T_VCP_TX_P14" pad="14"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="DESCRIPTION" value="Headers &amp; Wire Housings .050&quot; Micro Terminal Strip" constant="no"/>
+<attribute name="HEIGHT" value="5.97mm" constant="no"/>
+<attribute name="MANUFACTURER_NAME" value="SAMTEC" constant="no"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="FTSH-107-01-L-DV-K-A" constant="no"/>
+<attribute name="MOUSER_PART_NUMBER" value="200-FTSH10701LDVKA" constant="no"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.com/Search/Refine.aspx?Keyword=200-FTSH10701LDVKA" constant="no"/>
 </technology>
 </technologies>
 </device>
@@ -12924,15 +12705,17 @@ Vf = 2.0V
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="SWD101" library="tag-connect" deviceset="TC2030" device="" value="TC2030-NL"/>
 <part name="SUPPLY5" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY6" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY7" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="FRAME101" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A3L-LOC" device="" value="MJ818"/>
+<part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A3L-LOC" device="" value="MJ818"/>
 <part name="SUPPLY9" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="J101" library="con-amp" library_urn="urn:adsk.eagle:library:127" deviceset="MTA02-100" device="" package3d_urn="urn:adsk.eagle:package:8081649/1" value="Power Supply"/>
-<part name="J103" library="con-amp" library_urn="urn:adsk.eagle:library:127" deviceset="MTA02-100" device="" package3d_urn="urn:adsk.eagle:package:8081649/1" value="CAN"/>
-<part name="J102" library="con-amp" library_urn="urn:adsk.eagle:library:127" deviceset="MTA02-100" device="" package3d_urn="urn:adsk.eagle:package:8081649/1" value="LED"/>
+<part name="J1" library="con-amp" library_urn="urn:adsk.eagle:library:127" deviceset="MTA02-100" device="" package3d_urn="urn:adsk.eagle:package:8081649/1" value="Power Supply"/>
+<part name="J4" library="con-amp" library_urn="urn:adsk.eagle:library:127" deviceset="MTA02-100" device="" package3d_urn="urn:adsk.eagle:package:8081649/1" value="CAN"/>
+<part name="J3" library="con-amp" library_urn="urn:adsk.eagle:library:127" deviceset="MTA02-100" device="" package3d_urn="urn:adsk.eagle:package:8081649/1" value="LED"/>
+<part name="J2" library="STM32 JTAG 1.27mm 14pin header" deviceset="FTSH-107-01-L-DV-K-A" device=""/>
+<part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="SUPPLY8" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 </parts>
 <sheets>
 <sheet>
@@ -12987,10 +12770,6 @@ Cree XPERED-L1-R250-00401</text>
 <instance part="SUPPLY4" gate="G$1" x="195.58" y="66.04" smashed="yes">
 <attribute name="VALUE" x="195.58" y="64.135" size="1.778" layer="96" align="center"/>
 </instance>
-<instance part="SWD101" gate="G$1" x="104.14" y="175.26" smashed="yes" rot="MR0">
-<attribute name="NAME" x="134.62" y="180.34" size="1.27" layer="97" font="vector" rot="MR0" align="center-left"/>
-<attribute name="VALUE" x="114.3" y="180.34" size="1.27" layer="97" font="vector" rot="MR0" align="center-left"/>
-</instance>
 <instance part="SUPPLY5" gate="G$1" x="223.52" y="170.18" smashed="yes">
 <attribute name="VALUE" x="223.52" y="168.275" size="1.778" layer="96" align="center"/>
 </instance>
@@ -13000,7 +12779,7 @@ Cree XPERED-L1-R250-00401</text>
 <instance part="SUPPLY7" gate="G$1" x="149.86" y="165.1" smashed="yes" rot="R90">
 <attribute name="VALUE" x="151.765" y="165.1" size="1.778" layer="96" rot="R90" align="center"/>
 </instance>
-<instance part="FRAME101" gate="G$1" x="0" y="0" smashed="yes">
+<instance part="FRAME1" gate="G$1" x="0" y="0" smashed="yes">
 <attribute name="DRAWING_NAME" x="344.17" y="15.24" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="344.17" y="10.16" size="2.286" layer="94"/>
 <attribute name="SHEET" x="357.505" y="5.08" size="2.54" layer="94"/>
@@ -13008,17 +12787,27 @@ Cree XPERED-L1-R250-00401</text>
 <instance part="SUPPLY9" gate="G$1" x="223.52" y="132.08" smashed="yes">
 <attribute name="VALUE" x="223.52" y="130.175" size="1.778" layer="96" align="center"/>
 </instance>
-<instance part="J101" gate="G$1" x="60.96" y="119.38" smashed="yes" rot="R90">
+<instance part="J1" gate="G$1" x="60.96" y="119.38" smashed="yes" rot="R90">
 <attribute name="NAME" x="60.96" y="124.46" size="1.778" layer="95"/>
 <attribute name="VALUE" x="64.77" y="124.46" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="J103" gate="G$1" x="254" y="91.44" smashed="yes" rot="R270">
+<instance part="J4" gate="G$1" x="254" y="91.44" smashed="yes" rot="R270">
 <attribute name="NAME" x="254" y="96.52" size="1.778" layer="95"/>
 <attribute name="VALUE" x="250.19" y="86.36" size="1.778" layer="96" rot="R270"/>
 </instance>
-<instance part="J102" gate="G$1" x="248.92" y="190.5" smashed="yes" rot="MR90">
+<instance part="J3" gate="G$1" x="248.92" y="190.5" smashed="yes" rot="MR90">
 <attribute name="NAME" x="248.92" y="195.58" size="1.778" layer="95" rot="MR90"/>
 <attribute name="VALUE" x="245.11" y="195.58" size="1.778" layer="96" rot="MR90"/>
+</instance>
+<instance part="J2" gate="G$1" x="111.76" y="175.26" smashed="yes">
+<attribute name="NAME" x="130.81" y="182.88" size="1.778" layer="95" align="center-left"/>
+<attribute name="VALUE" x="130.81" y="180.34" size="1.778" layer="96" align="center-left"/>
+</instance>
+<instance part="SUPPLY3" gate="G$1" x="149.86" y="160.02" smashed="yes" rot="R90">
+<attribute name="VALUE" x="151.765" y="160.02" size="1.778" layer="96" rot="R90" align="center"/>
+</instance>
+<instance part="SUPPLY8" gate="G$1" x="149.86" y="149.86" smashed="yes" rot="R90">
+<attribute name="VALUE" x="151.765" y="149.86" size="1.778" layer="96" rot="R90" align="center"/>
 </instance>
 </instances>
 <busses>
@@ -13030,7 +12819,7 @@ Cree XPERED-L1-R250-00401</text>
 </bus>
 <bus name="SWD:SYS_NRST,SYS_SWCLK,SYS_SWDIO">
 <segment>
-<wire x1="157.48" y1="172.72" x2="157.48" y2="142.24" width="0.762" layer="92"/>
+<wire x1="157.48" y1="167.64" x2="157.48" y2="142.24" width="0.762" layer="92"/>
 <wire x1="157.48" y1="142.24" x2="162.56" y2="142.24" width="0.762" layer="92"/>
 <label x="162.56" y="142.24" size="1.778" layer="95"/>
 </segment>
@@ -13041,7 +12830,7 @@ Cree XPERED-L1-R250-00401</text>
 <segment>
 <pinref part="SUPPLY6" gate="G$1" pin="GND"/>
 <wire x1="66.04" y1="119.38" x2="63.5" y2="119.38" width="0.1524" layer="91"/>
-<pinref part="J101" gate="G$1" pin="1"/>
+<pinref part="J1" gate="G$1" pin="1"/>
 </segment>
 <segment>
 <portref moduleinst="STM32F04" port="GND"/>
@@ -13064,14 +12853,24 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="223.52" y1="172.72" x2="223.52" y2="175.26" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="SWD101" gate="G$1" pin="5_GND"/>
-<pinref part="SUPPLY7" gate="G$1" pin="GND"/>
-<wire x1="147.32" y1="165.1" x2="137.16" y2="165.1" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <portref moduleinst="REAR_LED_DRIVER" port="GND"/>
 <pinref part="SUPPLY9" gate="G$1" pin="GND"/>
 <wire x1="223.52" y1="134.62" x2="223.52" y2="137.16" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="J2" gate="G$1" pin="GND_P5"/>
+<pinref part="SUPPLY7" gate="G$1" pin="GND"/>
+<wire x1="134.62" y1="165.1" x2="147.32" y2="165.1" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="J2" gate="G$1" pin="GND_P7"/>
+<wire x1="134.62" y1="160.02" x2="147.32" y2="160.02" width="0.1524" layer="91"/>
+<pinref part="SUPPLY3" gate="G$1" pin="GND"/>
+</segment>
+<segment>
+<pinref part="J2" gate="G$1" pin="GND-DETECT_P11"/>
+<wire x1="134.62" y1="149.86" x2="147.32" y2="149.86" width="0.1524" layer="91"/>
+<pinref part="SUPPLY8" gate="G$1" pin="GND"/>
 </segment>
 </net>
 <net name="DIM_BRAKE" class="3">
@@ -13097,7 +12896,7 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="246.38" y1="190.5" x2="243.84" y2="190.5" width="0.1524" layer="91"/>
 <label x="243.84" y="187.96" size="1.778" layer="95" rot="R270"/>
 <portref moduleinst="BRAKE_LED_DRIVER" port="LED_CA"/>
-<pinref part="J102" gate="G$1" pin="1"/>
+<pinref part="J3" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="BAT+" class="1">
@@ -13115,7 +12914,7 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="203.2" y1="154.94" x2="175.26" y2="154.94" width="0.1524" layer="91"/>
 <wire x1="175.26" y1="154.94" x2="175.26" y2="193.04" width="0.1524" layer="91"/>
 <junction x="175.26" y="193.04"/>
-<pinref part="J101" gate="G$1" pin="2"/>
+<pinref part="J1" gate="G$1" pin="2"/>
 </segment>
 </net>
 <net name="LED_AN" class="1">
@@ -13123,7 +12922,7 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="246.38" y1="193.04" x2="243.84" y2="193.04" width="0.1524" layer="91"/>
 <portref moduleinst="BRAKE_LED_DRIVER" port="LED_AN"/>
 <label x="243.84" y="193.04" size="1.778" layer="95" rot="R90"/>
-<pinref part="J102" gate="G$1" pin="2"/>
+<pinref part="J3" gate="G$1" pin="2"/>
 </segment>
 </net>
 <net name="CAN_H" class="3">
@@ -13135,7 +12934,7 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="246.38" y1="88.9" x2="246.38" y2="91.44" width="0.1524" layer="91"/>
 <wire x1="246.38" y1="91.44" x2="251.46" y2="91.44" width="0.1524" layer="91"/>
 <label x="246.38" y="91.44" size="1.778" layer="95" rot="R180"/>
-<pinref part="J103" gate="G$1" pin="1"/>
+<pinref part="J4" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="CAN_L" class="3">
@@ -13144,7 +12943,7 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="218.44" y1="88.9" x2="218.44" y2="86.36" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="J103" gate="G$1" pin="2"/>
+<pinref part="J4" gate="G$1" pin="2"/>
 <wire x1="251.46" y1="88.9" x2="246.38" y2="88.9" width="0.1524" layer="91"/>
 <label x="246.38" y="86.36" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -13162,39 +12961,39 @@ Cree XPERED-L1-R250-00401</text>
 <junction x="144.78" y="121.92"/>
 </segment>
 <segment>
-<pinref part="SWD101" gate="G$1" pin="1_T_VCC"/>
-<wire x1="137.16" y1="175.26" x2="147.32" y2="175.26" width="0.1524" layer="91"/>
-<label x="147.32" y="175.26" size="1.778" layer="95"/>
+<pinref part="J2" gate="G$1" pin="T_VCC_P3"/>
+<wire x1="134.62" y1="170.18" x2="147.32" y2="170.18" width="0.1524" layer="91"/>
+<label x="147.32" y="170.18" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SYS_SWDIO" class="3">
 <segment>
-<pinref part="SWD101" gate="G$1" pin="2_T-SWDIO"/>
-<wire x1="137.16" y1="172.72" x2="157.48" y2="172.72" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <portref moduleinst="STM32F04" port="SYS_SWDIO"/>
 <wire x1="162.56" y1="142.24" x2="162.56" y2="137.16" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="J2" gate="G$1" pin="TJTMS/T_SWDIO_P4"/>
+<wire x1="134.62" y1="167.64" x2="157.48" y2="167.64" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SYS_NRST" class="3">
 <segment>
-<pinref part="SWD101" gate="G$1" pin="3_T-NRST"/>
-<wire x1="137.16" y1="170.18" x2="157.48" y2="170.18" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <portref moduleinst="STM32F04" port="SYS_NRST"/>
 <wire x1="157.48" y1="142.24" x2="157.48" y2="137.16" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="J2" gate="G$1" pin="T_NRST_P12"/>
+<wire x1="134.62" y1="147.32" x2="157.48" y2="147.32" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SYS_SWCLK" class="3">
 <segment>
-<pinref part="SWD101" gate="G$1" pin="4_T-SWCLK"/>
-<wire x1="137.16" y1="167.64" x2="157.48" y2="167.64" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <portref moduleinst="STM32F04" port="SYS_SWCLK"/>
 <wire x1="160.02" y1="142.24" x2="160.02" y2="137.16" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="J2" gate="G$1" pin="T_JCLK/T_SWCLK_P6"/>
+<wire x1="134.62" y1="162.56" x2="157.48" y2="162.56" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="CAN_TX" class="3">
@@ -13224,9 +13023,12 @@ Cree XPERED-L1-R250-00401</text>
 </sheet>
 </sheets>
 <errors>
-<approved hash="104,1,137.16,175.26,SWD101,1_T_VCC,3V3,,,"/>
-<approved hash="104,1,137.16,165.1,SWD101,5_GND,GND,,,"/>
-<approved hash="202,1,137.16,162.56,SWD101,6_T-SWO,,,,"/>
+<approved hash="202,1,134.62,142.24,J2,T_VCP_TX_P14,,,,"/>
+<approved hash="104,1,134.62,149.86,J2,GND-DETECT_P11,GND,,,"/>
+<approved hash="202,1,134.62,152.4,J2,T_JTDI_P10,,,,"/>
+<approved hash="104,1,134.62,170.18,J2,T_VCC_P3,3V3,,,"/>
+<approved hash="104,1,134.62,165.1,J2,GND_P5,GND,,,"/>
+<approved hash="104,1,134.62,160.02,J2,GND_P7,GND,,,"/>
 <approved hash="104,1@STM32,129.54,154.94,IC2,VCCA_5,3V3,,,"/>
 <approved hash="104,1@STM32,129.54,116.84,IC2,GND_16,GND,,,"/>
 <approved hash="104,1@STM32,129.54,114.3,IC2,VCC_17,3V3,,,"/>
