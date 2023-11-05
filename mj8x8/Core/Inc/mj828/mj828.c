@@ -305,16 +305,13 @@ void EXTI0_1_IRQHandler(void)
 	Device->adc->Start();  // start the ADC peripheral
 	Device->mj8x8->StartCoreTimer();  // start core timer
 
-	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// interrupt source detection
+	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// interrupt source detection`
+		{
 // Pushbutton: released - pin high, pressed - pin low
-		Device->button->button[PushButton]->Mark(!(HAL_GPIO_ReadPin(Pushbutton_GPIO_Port, Pushbutton_Pin)));  // mark state change
+			Device->button->button[PushButton]->Mark(!(HAL_GPIO_ReadPin(Pushbutton_GPIO_Port, Pushbutton_Pin)));  // mark state change
 
-	if(__HAL_GPIO_EXTI_GET_IT(LeverFront_Pin))	// interrupt source detection
-// front lever: released (no magnet) - pin high, pressed (magnet) - pin low
-		Device->button->button[LeverFront]->Mark(!(HAL_GPIO_ReadPin(LeverFront_GPIO_Port, LeverFront_Pin)));  // mark state change
-
-	HAL_GPIO_EXTI_IRQHandler(Pushbutton_Pin);  // service the interrupt
-	HAL_GPIO_EXTI_IRQHandler(LeverFront_Pin);  // service the interrupt
+			HAL_GPIO_EXTI_IRQHandler(Pushbutton_Pin);  // service the interrupt
+		}
 }
 
 // lever brake ISR
@@ -324,11 +321,21 @@ void EXTI2_3_IRQHandler(void)
 	Device->adc->Start();  // start the ADC peripheral
 	Device->mj8x8->StartCoreTimer();  // start core timer
 
-	if(__HAL_GPIO_EXTI_GET_IT(LeverBrake_Pin))	// interrupt source detection
-// lever brake: released (no magnet) - pin high, pressed (magnet) - pin low
-		Device->button->button[LeverBrake]->Mark(!(HAL_GPIO_ReadPin(LeverBrake_GPIO_Port, LeverBrake_Pin)));  // mark state change
+	if(__HAL_GPIO_EXTI_GET_IT(LeverFront_Pin))	// interrupt source detection
+		{
+// front lever: released (no magnet) - pin high, pressed (magnet) - pin low
+			Device->button->button[LeverFront]->Mark(!(HAL_GPIO_ReadPin(LeverFront_GPIO_Port, LeverFront_Pin)));  // mark state change
 
-	HAL_GPIO_EXTI_IRQHandler(LeverBrake_Pin);  // service the interrupt
+			HAL_GPIO_EXTI_IRQHandler(LeverFront_Pin);  // service the interrupt
+		}
+
+	if(__HAL_GPIO_EXTI_GET_IT(LeverBrake_Pin))	// interrupt source detection
+		{
+// lever brake: released (no magnet) - pin high, pressed (magnet) - pin low
+			Device->button->button[LeverBrake]->Mark(!(HAL_GPIO_ReadPin(LeverBrake_GPIO_Port, LeverBrake_Pin)));  // mark state change
+
+			HAL_GPIO_EXTI_IRQHandler(LeverBrake_Pin);  // service the interrupt
+		}
 }
 // device-specific interrupt handlers
 

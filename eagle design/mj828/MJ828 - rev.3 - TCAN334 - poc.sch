@@ -14507,20 +14507,22 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <text x="162.56" y="106.68" size="1.778" layer="98" align="center-left">fixed</text>
 <text x="137.16" y="83.82" size="1.778" layer="98">USART1 tx</text>
 <text x="137.16" y="81.28" size="1.778" layer="98">USART1 rx</text>
-<text x="162.56" y="132.08" size="1.778" layer="98">external interrupt 6</text>
+<text x="165.1" y="142.24" size="1.778" layer="98">external interrupt 2</text>
 <text x="137.16" y="91.44" size="1.778" layer="98">SPI1 SCK</text>
 <text x="137.16" y="88.9" size="1.778" layer="98">SPI1 MISO</text>
 <text x="137.16" y="86.36" size="1.778" layer="98">SPI1 MOSI</text>
 <text x="160.02" y="93.98" size="1.778" layer="98">GPIO</text>
 <text x="165.1" y="20.32" size="1.778" layer="90">STM32F042G6U6 microcontroller</text>
-<text x="157.48" y="139.7" size="1.778" layer="98" align="center-left">GPIO</text>
-<text x="157.48" y="142.24" size="1.778" layer="98" align="center-left">GPIO</text>
-<text x="157.48" y="137.16" size="1.778" layer="98" align="center-left">GPIO</text>
 <text x="157.48" y="134.62" size="1.778" layer="98" align="center-left">GPIO</text>
+<text x="157.48" y="137.16" size="1.778" layer="98" align="center-left">GPIO</text>
+<text x="157.48" y="132.08" size="1.778" layer="98" align="center-left">GPIO</text>
+<text x="157.48" y="129.54" size="1.778" layer="98" align="center-left">GPIO</text>
 <text x="175.26" y="149.86" size="1.778" layer="98" align="center-left">ADC</text>
-<text x="165.1" y="129.54" size="1.778" layer="98">external interrupt 7</text>
+<text x="165.1" y="139.7" size="1.778" layer="98">external interrupt 3</text>
 <text x="160.02" y="127" size="1.778" layer="98" align="center-left">ADC</text>
 <text x="162.56" y="152.4" size="1.778" layer="98">external interrupt 0</text>
+<text x="190.5" y="142.24" size="1.778" layer="98">fixed</text>
+<text x="190.5" y="139.7" size="1.778" layer="98">fixed</text>
 </plain>
 <instances>
 <instance part="IC2" gate="G$1" x="12.7" y="165.1" smashed="yes">
@@ -14709,37 +14711,37 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 </net>
 <net name="CP1" class="3">
 <segment>
-<wire x1="129.54" y1="134.62" x2="149.86" y2="134.62" width="0.1524" layer="91"/>
-<label x="149.86" y="134.62" size="1.778" layer="95" xref="yes"/>
-<pinref part="IC2" gate="G$1" pin="ADC_IN5,TSC_G2_IO2,TIM2_CH1_ETR,CEC,SPI1_SCK,I2S1_CK-PA5_11"/>
+<wire x1="129.54" y1="129.54" x2="149.86" y2="129.54" width="0.1524" layer="91"/>
+<label x="149.86" y="129.54" size="1.778" layer="95" xref="yes"/>
+<pinref part="IC2" gate="G$1" pin="ADC_IN7,EVENTOUT,TSC_G2_IO4,TIM17_CH1,TIM1_CH1N,TIM3_CH2,TIM14_CH1,SPI1_MOSI,I2S1_SD-PA7_13"/>
 </segment>
 </net>
 <net name="CP2" class="3">
+<segment>
+<wire x1="129.54" y1="132.08" x2="149.86" y2="132.08" width="0.1524" layer="91"/>
+<label x="149.86" y="132.08" size="1.778" layer="95" xref="yes"/>
+<pinref part="IC2" gate="G$1" pin="ADC_IN6,EVENTOUT,TSC_G2_IO3,TIM16_CH1,TIM3_CH1,TIM1_BKIN,SPI1_MISO,I2S1_MCK-PA6_12"/>
+</segment>
+</net>
+<net name="CP4" class="3">
 <segment>
 <wire x1="129.54" y1="137.16" x2="149.86" y2="137.16" width="0.1524" layer="91"/>
 <label x="149.86" y="137.16" size="1.778" layer="95" xref="yes"/>
 <pinref part="IC2" gate="G$1" pin="ADC_IN4,USB_NOE,USART2_CK,TSC_G2_IO1,TIM14_CH1,SPI1_NSS,I2S1_WS-PA4_10"/>
 </segment>
 </net>
-<net name="CP4" class="3">
+<net name="BREAK_IN" class="3">
 <segment>
 <wire x1="129.54" y1="142.24" x2="149.86" y2="142.24" width="0.1524" layer="91"/>
 <label x="149.86" y="142.24" size="1.778" layer="95" xref="yes"/>
 <pinref part="IC2" gate="G$1" pin="WKUP4,ADC_IN2,TSC_G1_IO3,TIM2_CH3,USART2_TX-PA2_8"/>
 </segment>
 </net>
-<net name="BREAK_IN" class="3">
-<segment>
-<wire x1="129.54" y1="129.54" x2="149.86" y2="129.54" width="0.1524" layer="91"/>
-<label x="149.86" y="129.54" size="1.778" layer="95" xref="yes"/>
-<pinref part="IC2" gate="G$1" pin="ADC_IN7,EVENTOUT,TSC_G2_IO4,TIM17_CH1,TIM1_CH1N,TIM3_CH2,TIM14_CH1,SPI1_MOSI,I2S1_SD-PA7_13"/>
-</segment>
-</net>
 <net name="HIGH_IN" class="3">
 <segment>
-<wire x1="129.54" y1="132.08" x2="149.86" y2="132.08" width="0.1524" layer="91"/>
-<label x="149.86" y="132.08" size="1.778" layer="95" xref="yes"/>
-<pinref part="IC2" gate="G$1" pin="ADC_IN6,EVENTOUT,TSC_G2_IO3,TIM16_CH1,TIM3_CH1,TIM1_BKIN,SPI1_MISO,I2S1_MCK-PA6_12"/>
+<wire x1="129.54" y1="139.7" x2="149.86" y2="139.7" width="0.1524" layer="91"/>
+<label x="149.86" y="139.7" size="1.778" layer="95" xref="yes"/>
+<pinref part="IC2" gate="G$1" pin="ADC_IN3,TSC_G1_IO4,TIM2_CH4,USART2_RX-PA3_9"/>
 </segment>
 </net>
 <net name="VBAT+" class="0">
@@ -14751,9 +14753,9 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 </net>
 <net name="CP3" class="3">
 <segment>
-<wire x1="129.54" y1="139.7" x2="149.86" y2="139.7" width="0.1524" layer="91"/>
-<label x="149.86" y="139.7" size="1.778" layer="95" xref="yes"/>
-<pinref part="IC2" gate="G$1" pin="ADC_IN3,TSC_G1_IO4,TIM2_CH4,USART2_RX-PA3_9"/>
+<wire x1="129.54" y1="134.62" x2="149.86" y2="134.62" width="0.1524" layer="91"/>
+<label x="149.86" y="134.62" size="1.778" layer="95" xref="yes"/>
+<pinref part="IC2" gate="G$1" pin="ADC_IN5,TSC_G2_IO2,TIM2_CH1_ETR,CEC,SPI1_SCK,I2S1_CK-PA5_11"/>
 </segment>
 </net>
 </nets>

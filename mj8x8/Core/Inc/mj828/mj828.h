@@ -65,29 +65,30 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #include "mj828/autobatt.h"
 
 // definitions of device/PCB layout-specific hardware pins
-#define TCAN334_Standby_Pin GPIO_PIN_8	// TODO - move to PA?
-#define TCAN334_Standby_GPIO_Port GPIOB
-#define LeverFront_Pin GPIO_PIN_1
+#define TCAN334_Standby_Pin GPIO_PIN_15
+#define TCAN334_Standby_GPIO_Port GPIOA
+#define LeverFront_Pin GPIO_PIN_3
 #define LeverFront_GPIO_Port GPIOA
-#define LeverFront_EXTI_IRQn EXTI0_1_IRQn
+#define LeverFront_EXTI_IRQn EXTI2_3_IRQn
 #define LeverBrake_Pin GPIO_PIN_2
 #define LeverBrake_GPIO_Port GPIOA
 #define LeverBrake_EXTI_IRQn EXTI2_3_IRQn
-#define VBat_Pin GPIO_PIN_3
-#define VBat_GPIO_Port GPIOA
-#define Pushbutton_Pin GPIO_PIN_0	// TODO - move to PA?
-#define Pushbutton_GPIO_Port GPIOB
+#define VBat_Pin GPIO_PIN_0
+#define VBat_GPIO_Port GPIOB
+#define Pushbutton_Pin GPIO_PIN_0
+#define Pushbutton_GPIO_Port GPIOA
 #define Pushbutton_EXTI_IRQn EXTI0_1_IRQn
-#define Phototransistor_Pin GPIO_PIN_1	// TODO - move to PA?
-#define Phototransistor_GPIO_Port GPIOB
-#define CP4_Pin GPIO_PIN_15		// TODO - consolidate charlieplexed pins into one port
+#define Phototransistor_Pin GPIO_PIN_1
+#define Phototransistor_GPIO_Port GPIOA
+#define CP1_Pin GPIO_PIN_7
+#define CP1_GPIO_Port GPIOA
+#define CP2_Pin GPIO_PIN_6
+#define CP2_GPIO_Port GPIOA
+#define CP3_Pin GPIO_PIN_5
+#define CP3_GPIO_Port GPIOA
+#define CP4_Pin GPIO_PIN_4
 #define CP4_GPIO_Port GPIOA
-#define CP2_Pin GPIO_PIN_3	// TODO - move to PA?
-#define CP2_GPIO_Port GPIOB
-#define CP3_Pin GPIO_PIN_4	// TODO - move to PA?
-#define CP3_GPIO_Port GPIOB
-#define CP1_Pin GPIO_PIN_5	// TODO - move to PA?
-#define CP1_GPIO_Port GPIOB
+
 // definitions of device/PCB layout-specific hardware pins
 
 enum mj828_leds  // enum of lights on this device

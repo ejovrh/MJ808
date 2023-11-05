@@ -359,8 +359,12 @@ void CEC_CAN_IRQHandler(void)
 // CAN RX GPIO EXTI ISR
 void EXTI4_15_IRQHandler(void)
 {
-	// called on falling edge on CAN RX GPIO (when configured as an EXTI GPIO instead of CAN RX)
-	__CAN.public.BusActive(1);  // ...wake up CAN
-	__CAN.public.Timer1Start();  // start timer1
-	HAL_GPIO_EXTI_IRQHandler(CAN_RX_Pin);  // service the interrupt
+	// interrupt source detection
+	if(__HAL_GPIO_EXTI_GET_IT(CAN_RX_Pin))
+		{
+			// called on falling edge on CAN RX GPIO (when configured as an EXTI GPIO instead of CAN RX)
+			__CAN.public.BusActive(1);  // ...wake up CAN
+			__CAN.public.Timer1Start();  // start timer1
+			HAL_GPIO_EXTI_IRQHandler(CAN_RX_Pin);  // service the interrupt
+		}
 }
