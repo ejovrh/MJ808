@@ -11900,22 +11900,9 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <text x="63.5" y="27.94" size="1.778" layer="91">VddIO2</text>
 <text x="162.56" y="109.22" size="1.778" layer="98" align="center-left">fixed</text>
 <text x="162.56" y="106.68" size="1.778" layer="98" align="center-left">fixed</text>
-<text x="167.64" y="93.98" size="1.778" layer="98" align="center-left">timer2 channel1</text>
-<text x="137.16" y="149.86" size="1.778" layer="98" align="center-left">external interrupt 1</text>
-<text x="137.16" y="165.1" size="1.778" layer="98">I2C1 SCL</text>
-<text x="137.16" y="162.56" size="1.778" layer="98">I2C1 SDA</text>
-<text x="137.16" y="152.4" size="1.778" layer="98">external interrupt 0</text>
-<text x="167.64" y="132.08" size="1.778" layer="98">SPI1 MISO</text>
-<text x="137.16" y="129.54" size="1.778" layer="98">SPI1 MOSI</text>
-<text x="137.16" y="142.24" size="1.778" layer="98">GPIO</text>
-<text x="137.16" y="139.7" size="1.778" layer="98">GPIO</text>
-<text x="137.16" y="137.16" size="1.778" layer="98">GPIO</text>
-<text x="137.16" y="83.82" size="1.778" layer="98">USART1 tx</text>
-<text x="137.16" y="81.28" size="1.778" layer="98">USART1 rx</text>
-<text x="137.16" y="86.36" size="1.778" layer="98">timer3 channel 2</text>
-<text x="137.16" y="119.38" size="1.778" layer="98" align="center-left">timer3 channel4</text>
+<text x="167.64" y="93.98" size="1.778" layer="98" align="center-left">timer2 channel1 PWM</text>
 <text x="160.02" y="134.62" size="1.778" layer="98">GPIO</text>
-<text x="137.16" y="88.9" size="1.778" layer="98">GPIO</text>
+<text x="167.64" y="132.08" size="1.778" layer="98" align="center-left">timer3 channel1 PWM</text>
 </plain>
 <instances>
 <instance part="IC2" gate="G$1" x="12.7" y="165.1" smashed="yes">
@@ -11962,8 +11949,8 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <busses>
 <bus name="SWD:SYS_NRST,SYS_SWCLK,SYS_SWDIO">
 <segment>
-<wire x1="185.42" y1="96.52" x2="185.42" y2="170.18" width="0.762" layer="92"/>
-<label x="185.42" y="154.94" size="1.778" layer="95"/>
+<wire x1="198.12" y1="96.52" x2="198.12" y2="170.18" width="0.762" layer="92"/>
+<label x="198.12" y="154.94" size="1.778" layer="95"/>
 </segment>
 </bus>
 </busses>
@@ -12035,31 +12022,31 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <net name="SYS_SWCLK" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="USART2_TX,SWCLK-PA14_22"/>
-<wire x1="185.42" y1="96.52" x2="129.54" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="198.12" y1="96.52" x2="129.54" y2="96.52" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="185.42" y1="165.1" x2="195.58" y2="165.1" width="0.1524" layer="91"/>
-<label x="195.58" y="165.1" size="1.778" layer="95" xref="yes"/>
+<wire x1="198.12" y1="165.1" x2="208.28" y2="165.1" width="0.1524" layer="91"/>
+<label x="208.28" y="165.1" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="SYS_SWDIO" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="USB_NOE,IR_OUT,SWDIO-PA13_21"/>
-<wire x1="185.42" y1="104.14" x2="129.54" y2="104.14" width="0.1524" layer="91"/>
+<wire x1="198.12" y1="104.14" x2="129.54" y2="104.14" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="185.42" y1="160.02" x2="195.58" y2="160.02" width="0.1524" layer="91"/>
-<label x="195.58" y="160.02" size="1.778" layer="95" xref="yes"/>
+<wire x1="198.12" y1="160.02" x2="208.28" y2="160.02" width="0.1524" layer="91"/>
+<label x="208.28" y="160.02" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="SYS_NRST" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="NRST_4"/>
-<wire x1="185.42" y1="157.48" x2="129.54" y2="157.48" width="0.1524" layer="91"/>
+<wire x1="198.12" y1="157.48" x2="129.54" y2="157.48" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="185.42" y1="170.18" x2="195.58" y2="170.18" width="0.1524" layer="91"/>
-<label x="195.58" y="170.18" size="1.778" layer="95" xref="yes"/>
+<wire x1="198.12" y1="170.18" x2="208.28" y2="170.18" width="0.1524" layer="91"/>
+<label x="208.28" y="170.18" size="1.778" layer="95" xref="yes"/>
 </segment>
 <segment>
 <pinref part="C7" gate="G$1" pin="2"/>

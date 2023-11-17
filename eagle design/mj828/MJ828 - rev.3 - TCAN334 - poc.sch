@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -14472,15 +14472,15 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <port name="CAN_RX" side="bottom" coord="-10.16" direction="in"/>
 <port name="CAN_TX" side="bottom" coord="-7.62" direction="out"/>
 <port name="!STBY!" side="bottom" coord="-12.7" direction="out"/>
-<port name="SWITCH" side="top" coord="20.32" direction="in"/>
-<port name="PHOTOTRANSISTOR" side="top" coord="17.78" direction="in"/>
+<port name="PHOTOTRANSISTOR" side="top" coord="15.24" direction="in"/>
 <port name="CP4" side="right" coord="5.08" direction="pwr"/>
 <port name="CP3" side="right" coord="2.54" direction="pwr"/>
 <port name="CP2" side="right" coord="0" direction="pwr"/>
 <port name="CP1" side="right" coord="-2.54" direction="pwr"/>
 <port name="BREAK_IN" side="bottom" coord="20.32" direction="in"/>
 <port name="HIGH_IN" side="bottom" coord="22.86" direction="in"/>
-<port name="VBAT+" side="top" coord="12.7" direction="in"/>
+<port name="VBAT+" side="top" coord="10.16" direction="in"/>
+<port name="PUSHBUTTON" side="top" coord="17.78" direction="in"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -14505,12 +14505,7 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <text x="63.5" y="27.94" size="1.778" layer="91">VddIO2</text>
 <text x="162.56" y="109.22" size="1.778" layer="98" align="center-left">fixed</text>
 <text x="162.56" y="106.68" size="1.778" layer="98" align="center-left">fixed</text>
-<text x="137.16" y="83.82" size="1.778" layer="98">USART1 tx</text>
-<text x="137.16" y="81.28" size="1.778" layer="98">USART1 rx</text>
 <text x="165.1" y="142.24" size="1.778" layer="98">external interrupt 2</text>
-<text x="137.16" y="91.44" size="1.778" layer="98">SPI1 SCK</text>
-<text x="137.16" y="88.9" size="1.778" layer="98">SPI1 MISO</text>
-<text x="137.16" y="86.36" size="1.778" layer="98">SPI1 MOSI</text>
 <text x="160.02" y="93.98" size="1.778" layer="98">GPIO</text>
 <text x="165.1" y="20.32" size="1.778" layer="90">STM32F042G6U6 microcontroller</text>
 <text x="157.48" y="134.62" size="1.778" layer="98" align="center-left">GPIO</text>
@@ -14520,9 +14515,7 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <text x="175.26" y="149.86" size="1.778" layer="98" align="center-left">ADC</text>
 <text x="165.1" y="139.7" size="1.778" layer="98">external interrupt 3</text>
 <text x="160.02" y="127" size="1.778" layer="98" align="center-left">ADC</text>
-<text x="162.56" y="152.4" size="1.778" layer="98">external interrupt 0</text>
-<text x="190.5" y="142.24" size="1.778" layer="98">fixed</text>
-<text x="190.5" y="139.7" size="1.778" layer="98">fixed</text>
+<text x="167.64" y="152.4" size="1.778" layer="98">external interrupt 0</text>
 </plain>
 <instances>
 <instance part="IC2" gate="G$1" x="12.7" y="165.1" smashed="yes">
@@ -14569,8 +14562,8 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <busses>
 <bus name="SWD:SYS_NRST,SYS_SWCLK,SYS_SWDIO">
 <segment>
-<wire x1="185.42" y1="96.52" x2="185.42" y2="170.18" width="0.762" layer="92"/>
-<label x="185.42" y="154.94" size="1.778" layer="95"/>
+<wire x1="200.66" y1="96.52" x2="200.66" y2="170.18" width="0.762" layer="92"/>
+<label x="200.66" y="154.94" size="1.778" layer="95"/>
 </segment>
 </bus>
 </busses>
@@ -14642,31 +14635,31 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <net name="SYS_SWCLK" class="3">
 <segment>
 <pinref part="IC2" gate="G$1" pin="USART2_TX,SWCLK-PA14_22"/>
-<wire x1="185.42" y1="96.52" x2="129.54" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="200.66" y1="96.52" x2="129.54" y2="96.52" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="185.42" y1="165.1" x2="195.58" y2="165.1" width="0.1524" layer="91"/>
-<label x="195.58" y="165.1" size="1.778" layer="95" xref="yes"/>
+<wire x1="200.66" y1="165.1" x2="210.82" y2="165.1" width="0.1524" layer="91"/>
+<label x="210.82" y="165.1" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="SYS_SWDIO" class="3">
 <segment>
 <pinref part="IC2" gate="G$1" pin="USB_NOE,IR_OUT,SWDIO-PA13_21"/>
-<wire x1="185.42" y1="104.14" x2="129.54" y2="104.14" width="0.1524" layer="91"/>
+<wire x1="200.66" y1="104.14" x2="129.54" y2="104.14" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="185.42" y1="160.02" x2="195.58" y2="160.02" width="0.1524" layer="91"/>
-<label x="195.58" y="160.02" size="1.778" layer="95" xref="yes"/>
+<wire x1="200.66" y1="160.02" x2="210.82" y2="160.02" width="0.1524" layer="91"/>
+<label x="210.82" y="160.02" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="SYS_NRST" class="3">
 <segment>
 <pinref part="IC2" gate="G$1" pin="NRST_4"/>
-<wire x1="185.42" y1="157.48" x2="129.54" y2="157.48" width="0.1524" layer="91"/>
+<wire x1="200.66" y1="157.48" x2="129.54" y2="157.48" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="185.42" y1="170.18" x2="195.58" y2="170.18" width="0.1524" layer="91"/>
-<label x="195.58" y="170.18" size="1.778" layer="95" xref="yes"/>
+<wire x1="200.66" y1="170.18" x2="210.82" y2="170.18" width="0.1524" layer="91"/>
+<label x="210.82" y="170.18" size="1.778" layer="95" xref="yes"/>
 </segment>
 <segment>
 <pinref part="C7" gate="G$1" pin="2"/>
@@ -14695,7 +14688,7 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <label x="149.86" y="93.98" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="SWITCH" class="3">
+<net name="PUSHBUTTON" class="3">
 <segment>
 <wire x1="129.54" y1="152.4" x2="149.86" y2="152.4" width="0.1524" layer="91"/>
 <label x="149.86" y="152.4" size="1.778" layer="95" xref="yes"/>
@@ -14946,7 +14939,7 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <ports>
 <port name="GND" side="bottom" coord="0" direction="pwr"/>
 <port name="3V3" side="left" coord="2.54" direction="pwr"/>
-<port name="SWITCH" side="left" coord="-2.54" direction="out"/>
+<port name="PUSHBUTTON" side="left" coord="-2.54" direction="out"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -15015,7 +15008,7 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <pinref part="SUPPLY3" gate="G$1" pin="GND"/>
 </segment>
 </net>
-<net name="SWITCH" class="0">
+<net name="PUSHBUTTON" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="OUT_3"/>
 <wire x1="73.66" y1="71.12" x2="60.96" y2="71.12" width="0.1524" layer="91"/>
@@ -15707,11 +15700,11 @@ BAT+ -- Vbat+
 <wire x1="121.92" y1="116.84" x2="121.92" y2="139.7" width="0.1524" layer="91"/>
 <junction x="121.92" y="116.84"/>
 <portref moduleinst="PHOTOTRANSISTOR" port="3V3"/>
-<wire x1="149.86" y1="154.94" x2="172.72" y2="154.94" width="0.1524" layer="91"/>
-<wire x1="172.72" y1="154.94" x2="213.36" y2="154.94" width="0.1524" layer="91"/>
-<wire x1="213.36" y1="190.5" x2="172.72" y2="190.5" width="0.1524" layer="91"/>
-<wire x1="172.72" y1="190.5" x2="172.72" y2="154.94" width="0.1524" layer="91"/>
-<junction x="172.72" y="154.94"/>
+<wire x1="149.86" y1="154.94" x2="170.18" y2="154.94" width="0.1524" layer="91"/>
+<wire x1="170.18" y1="154.94" x2="213.36" y2="154.94" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="190.5" x2="170.18" y2="190.5" width="0.1524" layer="91"/>
+<wire x1="170.18" y1="190.5" x2="170.18" y2="154.94" width="0.1524" layer="91"/>
+<junction x="170.18" y="154.94"/>
 <portref moduleinst="CAN_INFRA" port="3V3"/>
 <wire x1="149.86" y1="76.2" x2="121.92" y2="76.2" width="0.1524" layer="91"/>
 <label x="134.62" y="76.2" size="1.778" layer="95"/>
@@ -15783,20 +15776,20 @@ BAT+ -- Vbat+
 <wire x1="144.78" y1="101.6" x2="144.78" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="SWITCH" class="0">
+<net name="PUSHBUTTON" class="0">
 <segment>
-<portref moduleinst="STM32F04" port="SWITCH"/>
-<portref moduleinst="PUSHBUTTON" port="SWITCH"/>
-<wire x1="213.36" y1="149.86" x2="177.8" y2="149.86" width="0.1524" layer="91"/>
-<wire x1="177.8" y1="149.86" x2="177.8" y2="132.08" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="149.86" x2="175.26" y2="149.86" width="0.1524" layer="91"/>
+<wire x1="175.26" y1="149.86" x2="175.26" y2="132.08" width="0.1524" layer="91"/>
+<portref moduleinst="PUSHBUTTON" port="PUSHBUTTON"/>
+<portref moduleinst="STM32F04" port="PUSHBUTTON"/>
 </segment>
 </net>
 <net name="PHOTOTRANSISTOR" class="0">
 <segment>
 <portref moduleinst="PHOTOTRANSISTOR" port="PHOTOTRANSISTOR"/>
-<wire x1="213.36" y1="185.42" x2="175.26" y2="185.42" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="185.42" x2="172.72" y2="185.42" width="0.1524" layer="91"/>
 <portref moduleinst="STM32F04" port="PHOTOTRANSISTOR"/>
-<wire x1="175.26" y1="132.08" x2="175.26" y2="185.42" width="0.1524" layer="91"/>
+<wire x1="172.72" y1="132.08" x2="172.72" y2="185.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="CP1" class="3">
@@ -15852,9 +15845,9 @@ BAT+ -- Vbat+
 <net name="VBAT+" class="0">
 <segment>
 <portref moduleinst="STM32F04" port="VBAT+"/>
-<wire x1="170.18" y1="132.08" x2="170.18" y2="223.52" width="0.1524" layer="91"/>
+<wire x1="167.64" y1="132.08" x2="167.64" y2="223.52" width="0.1524" layer="91"/>
 <portref moduleinst="VOLTAGE_DIVIDER" port="VBAT+"/>
-<wire x1="213.36" y1="223.52" x2="170.18" y2="223.52" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="223.52" x2="167.64" y2="223.52" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
@@ -15880,7 +15873,6 @@ BAT+ -- Vbat+
 <approved hash="213,1,147.32,101.6,CAN_RX,in,,,,"/>
 <approved hash="213,1,180.34,101.6,HIGH_IN,in,,,,"/>
 <approved hash="213,1,175.26,132.08,PHOTOTRANSISTOR,in,,,,"/>
-<approved hash="213,1,177.8,132.08,SWITCH,in,,,,"/>
 <approved hash="213,1,170.18,132.08,VBAT+,in,,,,"/>
 </errors>
 </schematic>
