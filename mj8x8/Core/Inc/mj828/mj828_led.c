@@ -31,12 +31,7 @@ static inline void ___SetPinToOutput(GPIO_InitTypeDef *a, GPIO_TypeDef *inPort, 
 static inline void __SetAllGPIOtoAnalog(GPIO_InitTypeDef *a)
 {
 	// set LED pins to initial state
-	a->Pin = CP1_Pin | CP2_Pin | CP3_Pin;
-	a->Mode = GPIO_MODE_ANALOG;
-	a->Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(GPIOB, &*a);
-
-	a->Pin = CP4_Pin;
+	a->Pin = CP1_Pin | CP2_Pin | CP3_Pin | CP4_Pin;
 	a->Mode = GPIO_MODE_ANALOG;
 	a->Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOA, &*a);
