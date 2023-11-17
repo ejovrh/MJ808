@@ -38,7 +38,9 @@ static void _tcan334_can_msg_receive(message_handler_t *in_handler, const uint8_
 
 	in_handler->SetMessage(&_msg);  // upload into the message handler
 
-	__CAN.public.BusActive(0);
+#if USE_CAN_BUSOFF
+	__CAN.public.GoBusActive(0);
+#endif
 }
 
 // Add a message to the first free Tx mailbox and activate the corresponding transmission request
@@ -47,8 +49,10 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 	volatile uint16_t i = 0;  // safeguard counter
 	uint32_t _TXMailbox;  // TX mailbox identifier
 
+#if USE_CAN_BUSOFF
 	if((__CAN.public.activity->byte & POWERSAVE_CANBUS_ACTIVE_MASK) == 0)  // if sleeping...
-		__CAN.public.BusActive(1);  // wake up
+		__CAN.public.GoBusActive(1);  // wake up
+#endif
 
 	_TXHeader.IDE = CAN_ID_STD;  // set the ID to standard
 	_TXHeader.RTR = CAN_RTR_DATA;  //	set to DATA
@@ -88,7 +92,9 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 			++i;
 		}
 
-	__CAN.public.BusActive(0);
+#if USE_CAN_BUSOFF
+	__CAN.public.GoBusActive(0);
+#endif
 }
 
 // configure GPIO from CAN RX to EXTI
@@ -185,7 +191,7 @@ static inline void __can_go_into_active_mode(void)
 }
 
 // puts the whole CAN infrastructure to sleep; 1 - sleep, 0 - awake
-static void _busactive(const uint8_t awake)
+static void _GoBusActive(const uint8_t awake)
 {
 	/* TCAN334 operating modes (DS. p.22)
 	 * 		1. normal mode
@@ -202,7 +208,7 @@ static void _busactive(const uint8_t awake)
 __can_t __CAN =  // instantiate can_t actual and set function pointers
 	{  //
 	.public.activity = &_activity,  // tie in private activity union into can_t object (is tied in again one level up)
-	.public.BusActive = &_busactive,  // set up function pointer for public methods
+	.public.GoBusActive = &_GoBusActive,  // set up function pointer for public methods
 	.public.RequestToSend = &_tcan334_can_msg_send,  // ditto
 	};
 
@@ -282,6 +288,7 @@ can_t* can_ctor(void)
 // TCAN334 is in shutdown/standby mode
 	_CANInit();  // initialize & configure STM32's CAN peripheral
 
+	__CAN.public.GoBusActive(1);	// start with CAN active by default
 	return &__CAN.public;  // return address of public part; calling code accesses it via pointer
 }
 
@@ -363,7 +370,7 @@ void EXTI4_15_IRQHandler(void)
 	if(__HAL_GPIO_EXTI_GET_IT(CAN_RX_Pin))
 		{
 			// called on falling edge on CAN RX GPIO (when configured as an EXTI GPIO instead of CAN RX)
-			__CAN.public.BusActive(1);  // ...wake up CAN
+			__CAN.public.GoBusActive(1);  // ...wake up CAN
 			__CAN.public.Timer1Start();  // start timer1
 			HAL_GPIO_EXTI_IRQHandler(CAN_RX_Pin);  // service the interrupt
 		}

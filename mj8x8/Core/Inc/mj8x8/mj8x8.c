@@ -38,7 +38,7 @@ static void _Heartbeat(message_handler_t *const msg)
 	 * if after a few iterations no devices are discovered, a bus-off routine is executed.
 	 * e.g. in the case of mj818 (the rear light without switches), it turns itself on automatically and just shines.
 	 */
-#ifdef USE_HEARTBEAT
+#if USE_HEARTBEAT
 	if(__MJ8x8.__HeartBeatCounter == __MJ8x8.__NumericalCAN_ID)  // see if this counter iteration is our turn
 		msg->SendMessage(CMND_ANNOUNCE, Device->activity->byte, 2);  // if so, broadcast CAN heartbeat message and disguise device status in it
 #endif
@@ -207,13 +207,13 @@ static void _Sleep(void)
 	// called periodically by TIM1_BRK_UP_TRG_COM_IRQHandler()
 	// wakeup events are only EXTIs
 
-#ifdef USE_POWERSAVE
+#if USE_POWERSAVE
 	if(**__MJ8x8.public.activity & POWERSAVE_DEVICE_SLEEPONEXIT_ACTIVE_MASK)  // true if device is active in some form (see actual device implementation)
 		{
 			if(**__MJ8x8.public.activity & POWERSAVE_CANBUS_ACTIVE_MASK)  // upper nibble indicates activity
-				__MJ8x8.public.can->BusActive(1);  // put CAN infrastructure into active state
+				__MJ8x8.public.can->GoBusActive(1);  // put CAN infrastructure into active state
 			else
-				__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into standby state
+				__MJ8x8.public.can->GoBusActive(0);  // put CAN infrastructure into standby state
 
 			HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
 		}
@@ -221,14 +221,16 @@ static void _Sleep(void)
 		{
 			__MJ8x8.public.DerivedSleep();	// call the derived object's sleep implementation
 
-			__MJ8x8.public.can->BusActive(0);  // put CAN infrastructure into standby state
+			__MJ8x8.public.can->GoBusActive(0);  // put CAN infrastructure into standby state
 			__MJ8x8.public.StopCoreTimer();  // stop timer1
 
 			HAL_PWR_DisableSleepOnExit();
 			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // go into stop mode
 		}
 #else
+#if USE_SLEEPONEXIT
 	HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
+#endif
 #endif
 }
 

@@ -9,10 +9,12 @@
 
 // TODO - investigate option bytes - RM0091 - 4.1.2 - in order to automatically determine a connected device
 
-#define MJ808_	// what device to compile for
+#define MJ828_	// what device to compile for
 
-#define	USE_POWERSAVE	// use processor power save features (stop mode & sleep on exit)
-#define USE_HEARTBEAT	// use the heartbeat
+#define USE_HEARTBEAT	1 // use the heartbeat
+#define	USE_POWERSAVE	1 // use processor power save feature stop mode
+#define USE_SLEEPONEXIT 1 // use processor power save feature sleep on ISR exit
+#define USE_CAN_BUSOFF 1 // let CAN go into bus-off state or not
 
 #if defined(MJ808_)	// front light header include
 #include "mj808/mj808.h"

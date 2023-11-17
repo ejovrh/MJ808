@@ -305,7 +305,7 @@ void EXTI0_1_IRQHandler(void)
 	Device->adc->Start();  // start the ADC peripheral
 	Device->mj8x8->StartCoreTimer();  // start core timer
 
-	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// interrupt source detection`
+	if(__HAL_GPIO_EXTI_GET_IT(Pushbutton_Pin))	// interrupt source detection
 		{
 // Pushbutton: released - pin high, pressed - pin low
 			Device->button->button[PushButton]->Mark(!(HAL_GPIO_ReadPin(Pushbutton_GPIO_Port, Pushbutton_Pin)));  // mark state change
