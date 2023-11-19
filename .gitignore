@@ -50,7 +50,7 @@
 *.scr
 *.err
 
-
+*/__pycache__/
 **/Debug/**
 **/Release/**
 
