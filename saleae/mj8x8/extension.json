@@ -1,0 +1,13 @@
+{
+  "name": "mj8x8",
+  "apiVersion": "1.0.0",
+  "author": "ejovrh",
+  "version": "0.0.1",
+  "description": "mj8x8 CAN bus protocol decoder",
+  "extensions": {
+    "mj8x8": {
+      "type": "HighLevelAnalyzer",
+      "entryPoint": "HighLevelAnalyzer.Hla"
+    }
+  }
+}
