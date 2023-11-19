@@ -49,3 +49,5 @@
 *.mk
 *.scr
 *.err
+
+*/__pycache__/
