@@ -7,7 +7,9 @@
 #define _BV(x) (1<<(x))
 #endif
 
-#define MJ828_	// what device to compile for
+// AutoDevice
+#define MJ838_	// what device to compile for
+// AutoDevice
 
 #define USE_HEARTBEAT	1 // use the heartbeat
 #define	USE_POWERSAVE	1 // use processor power save feature stop mode
