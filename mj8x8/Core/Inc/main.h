@@ -7,9 +7,9 @@
 #define _BV(x) (1<<(x))
 #endif
 
-// TODO - investigate option bytes - RM0091 - 4.1.2 - in order to automatically determine a connected device
-
+// AutoDevice
 #define MJ828_	// what device to compile for
+// AutoDevice
 
 #define USE_HEARTBEAT	1 // use the heartbeat
 #define	USE_POWERSAVE	1 // use processor power save feature stop mode
