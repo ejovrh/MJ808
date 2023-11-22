@@ -8,7 +8,7 @@
 #endif
 
 // AutoDevice
-#define MJ808_	// what device to compile for
+#define MJ838_	// what device to compile for
 // AutoDevice
 
 #define USE_HEARTBEAT	1 // use the heartbeat
