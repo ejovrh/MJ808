@@ -1,5 +1,6 @@
 import subprocess
 import re
+import time
 
 MJ8x8_boards = {
     '0': 'MJ???_', # 0 Alpha 
@@ -20,16 +21,37 @@ MJ8x8_boards = {
     'f': 'MJ???_', # 3 Delta
 }
 
-def execute_stm32_programmer_cli():
-    command = r'"C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin\STM32_Programmer_CLI.exe" -c port=SWD -ob displ'
+def check_stlink_connected() -> bool:
+    command = r'"C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin\STM32_Programmer_CLI.exe" -l'
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
+    
+    # Check if the output contains the string "Error: No ST-Link detected!"
+    if "Error: No ST-Link detected!" in result.stdout:
+        return False
+    
+    return True
+
+def execute_stm32_programmer_cli() -> str:
+    command = r'"C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin\STM32_Programmer_CLI.exe" -c port=SWD -ob displ'
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True) # First connection attempt
+
+    # Check if the output contains the string "Error: No STM32 target found!"
+    if "Error: No STM32 target found!" in result.stdout:
+        time.sleep(1) # sleep for 1s
+        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True) # First connection attempt
+
+        # If the second attempt also fails, print an error message and return an empty string
+        if "UPLOADING OPTION BYTES DATA" not in result.stdout:
+            print("Error: No STM32 target found. Aborting main.h editing.")
+            exit() # Abort further execution if ST-Link is not detected
+
     return result.stdout
 
-def extract_data0_value(output):
-    match = re.search(r'Data0\s+:\s+0x([0-9A-Fa-f]+)\s+', output) # Use a regular expression to extract the value from Data0 line
+def extract_data0_value(output) -> str:
+    match = re.search(r'Data0\s+:\s+0x([0-9A-Fa-f]+)\s+', output)
     return match.group(1).lower()
 
-def write_to_main_h(device):
+def write_to_main_h(device) -> None:
     header_path = r'C:\Users\hrvoje\Documents\vsite\MJ808\mj8x8\Core\Inc\main.h'
 
     # Read the existing content of the file
@@ -50,9 +72,15 @@ def write_to_main_h(device):
         header_file.writelines(lines)
 
 if __name__ == "__main__":
-    output = execute_stm32_programmer_cli()
-    data0_value = extract_data0_value(output)
-    mj_board = MJ8x8_boards[data0_value]
-    print("board: ", mj_board)
+    if not check_stlink_connected():
+        print("Error: No ST-Link detected! Aborting main.h editing.")
+        exit() # Abort further execution if ST-Link is not detected
 
-    write_to_main_h(mj_board)
+    output = execute_stm32_programmer_cli() # try to connect to the programmer and read out option bytes
+    data0_value = extract_data0_value(output) # parse readout output
+    mj_board = MJ8x8_boards[data0_value] # determine board
+    print("board: ", mj_board) # print it
+
+    write_to_main_h(mj_board) # modify main.h
+
+    exit()
