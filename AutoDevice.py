@@ -21,18 +21,20 @@ MJ8x8_boards = {
     'f': 'MJ???_', # 3 Delta
 }
 
+# check if a stlink debugger is connected
 def check_stlink_connected() -> bool:
-    command = r'"C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin\STM32_Programmer_CLI.exe" -l'
+    command = r'"C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin\STM32_Programmer_CLI.exe" -c port=SWD freq=8000 sn=001C002F3137510A39383538 reset=HWrst'
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
     
-    # Check if the output contains the string "Error: No ST-Link detected!"
-    if "Error: No ST-Link detected!" in result.stdout:
+    # Check if the output contains an error string
+    if "Error: Serial number not found" in result.stdout:
         return False
     
     return True
 
+# try to read out option byte
 def execute_stm32_programmer_cli() -> str:
-    command = r'"C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin\STM32_Programmer_CLI.exe" -c port=SWD -ob displ'
+    command = r'"C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin\STM32_Programmer_CLI.exe" -c port=SWD freq=8000 sn=001C002F3137510A39383538 reset=HWrst -ob displ'
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True) # First connection attempt
 
     # Check if the output contains the string "Error: No STM32 target found!"
@@ -42,8 +44,8 @@ def execute_stm32_programmer_cli() -> str:
 
         # If the second attempt also fails, print an error message and return an empty string
         if "UPLOADING OPTION BYTES DATA" not in result.stdout:
-            print("Error: No STM32 target found. Aborting main.h editing.")
-            exit() # Abort further execution if ST-Link is not detected
+            print("MJ8x8 device not powered on ??. Aborting main.h editing.")
+            exit() # Abort further execution if ST-Link cant connect
 
     return result.stdout
 
@@ -73,7 +75,7 @@ def write_to_main_h(device) -> None:
 
 if __name__ == "__main__":
     if not check_stlink_connected():
-        print("Error: No ST-Link detected! Aborting main.h editing.")
+        print("STLink-V3 not connected ?? Aborting main.h editing.")
         exit() # Abort further execution if ST-Link is not detected
 
     output = execute_stm32_programmer_cli() # try to connect to the programmer and read out option bytes
