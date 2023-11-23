@@ -50,5 +50,7 @@
 *.scr
 *.err
 
+
 **/Debug/**
 **/Release/**
+
