@@ -2,6 +2,8 @@ import subprocess
 import re
 import time
 
+# NOTE! do a skip-worktree on main.h
+
 MJ8x8_boards = {
     '0': 'MJ???_', # 0 Alpha 
     '1': 'MJ???_', # 0 Bravo
