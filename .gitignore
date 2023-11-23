@@ -23,7 +23,7 @@
 *.scr
 *.err
 
-*/__pycache__/
+**/__pycache__/**
 **/Debug/**
 **/Release/**
 
