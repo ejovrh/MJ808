@@ -8,28 +8,35 @@ BROADCAST = 0x40
 
 SENDER_DEVICE_MASK = 0x3C # CAN frame bits 13:10 - the sender of a message
 
-class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevelAnalyzer class
-    # my_string_setting = StringSetting() # List of settings that a user can set for this High Level Analyzer
-    # my_number_setting = NumberSetting(min_value=0, max_value=100) # List of settings that a user can set for this High Level Analyzer
-    # my_choices_setting = ChoicesSetting(choices=('A', 'B')) # List of settings that a user can set for this High Level Analyzer
+CAST_CHOICES = { # dictionary for dropdown choices
+                'all': 'all',
+                'unicast': 'uni',
+                'broadcast': 'brd',
+}
 
+class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevelAnalyzer class
+    filtered = 0 # flag to filter out frames
+    choice = ''
+    my_string_setting = StringSetting() # List of settings that a user can set for this High Level Analyzer
+    # my_number_setting = NumberSetting(min_value=0, max_value=100) # List of settings that a user can set for this High Level Analyzer
+    my_choices_setting = ChoicesSetting(label='cast', choices=CAST_CHOICES.keys()) # List of settings that a user can set for this High Level Analyzer
     my_mj8x8_devices = {
-                        '0x0': '0A', # 0A
-                        '0x1': '0B', # 0B
-                        '0x2': '0C', # 0C
-                        '0x3': 'MJ828', # 0D 
-                        '0x4': 'MJ838', # 1A
-                        '0x5': '1B', # 1B
-                        '0x6': '1C', # 1C
-                        '0x7': '1D', # 1D
-                        '0x8': 'MJ808', # 2A
-                        '0x9': 'MJ818', # 2B
-                        '0xa': '2A', # 2C
-                        '0xb': '2D', # 2D
-                        '0xc': '3A', # 3A
-                        '0xd': '3B', # 3B
-                        '0xe': '3C', # 3C
-                        '0xf': '3D', # 3D
+                        '0': 'mj???', # 0 Alpha 
+                        '1': 'mj???', # 0 Bravo
+                        '2': 'mj???', # 0 Charlie
+                        '3': 'mj828', # 0 Delta
+                        '4': 'mj838', # 1 Alpha
+                        '5': 'mj???', # 1 Bravo
+                        '6': 'mj???', # 1 Charlie
+                        '7': 'mj???', # 1 Delta
+                        '8': 'mj808', # 2 Alpha
+                        '9': 'mj818', # 2 Bravo
+                        'a': 'mj???', # 2 Charlie
+                        'b': 'mj???', # 2 Delta
+                        'c': 'mj???', # 3 Alpha
+                        'd': 'mj???', # 3 Bravo
+                        'e': 'mj???', # 3 Charlie
+                        'f': 'mj???', # 3 Delta
     }
 
     data_array_index = 0 # used to fill the data_array upon data frame reception
@@ -46,10 +53,10 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
     # An optional list of types this analyzer produces, providing a way to customize the way frames are displayed in Logic 2.
     result_types = {
-                    'MJ808': { 'format': '{{data.description}}' },
-                    'MJ818': { 'format': '{{data.description}}' },
-                    'MJ828': { 'format': '{{data.description}}' },
-                    'MJ838': { 'format': '{{data.description}}' },
+                    'mj808': { 'format': '{{data.description}}' },
+                    'mj818': { 'format': '{{data.description}}' },
+                    'mj828': { 'format': '{{data.description}}' },
+                    'mj838': { 'format': '{{data.description}}' },
                     'DLC': { 'format': '{{data.description}}' },
                     'HeartBeat': { 'format': '{{data.description}}' },
     }
@@ -65,7 +72,6 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
     def decode(self, frame: AnalyzerFrame):
         frame_type = 'frame.type'
-
         data = {'input_type': frame.type}
 
         if frame.type == 'identifier_field':
@@ -84,14 +90,24 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
             else:
                 cast = 'uni'
 
-            sender_hex_id = hex( (self.my_can_message['identifier'] & SENDER_DEVICE_MASK) >> 2 ) # mask out all but bits13:10
-            frame_type = self.my_mj8x8_devices[sender_hex_id] # record sender name as a frame type
-            return AnalyzerFrame(frame_type, frame.start_time, frame.end_time, { 'description': '{} {} {}'.format(priority, cast, frame_type) })
+            self.choice =  CAST_CHOICES.get(self.my_choices_setting)
+
+            if (self.choice != cast) & (self.choice != 'all'):
+                self.filtered = 1
+            else:
+                sender_hex_id = hex( (self.my_can_message['identifier'] & SENDER_DEVICE_MASK) >> 2 )[2:] # mask out all but bits13:10
+                frame_type = self.my_mj8x8_devices[sender_hex_id] # record sender name as a frame type
+
+                return AnalyzerFrame(frame_type, frame.start_time, frame.end_time, { 'description': '{} {} {}'.format(priority, cast, frame_type) })
 
 
         if frame.type == 'control_field':
             self.my_can_message['dlc'] = frame.data['num_data_bytes']
-            return AnalyzerFrame('DLC', frame.start_time, frame.end_time, { 'description': '{} Bytes'.format(self.my_can_message['dlc']) })
+
+            if self.filtered:
+                return None
+            else: 
+                return AnalyzerFrame('DLC', frame.start_time, frame.end_time, { 'description': '{} Bytes'.format(self.my_can_message['dlc']) })
 
 
         if frame.type == 'data_field':
@@ -100,33 +116,61 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
             if self.data_array_index == 1: # 1st data frame
                 if self.my_can_message['data'][0] == '00': # HeartBeat message
-                    return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'HeartBeat: ' })
+    
+                    if self.filtered:
+                        return None
+                    else: 
+                        return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'HeartBeat: ' })
         
             if self.data_array_index == 2: # 2nd data frame
                 if self.my_can_message['data'][0] == '00': # was preceeded by a HeartBeat message
                     if self.my_can_message['data'][1] == '00': # idle device
-                        return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'idle' })
+                        if self.filtered:
+                            return None
+                        else: 
+                            return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'idle' })
                     
                     if self.my_can_message['data'][1] == '01': # idle device
-                        return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': '01' })
+                        if self.filtered:
+                            return None
+                        else: 
+                            return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': '01' })
                     
 
             if self.data_array_index == 3: # 3rd data frame
+                if self.filtered:
+                    return None
+                else: 
                     return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'not implemented' })
 
             if self.data_array_index == 4: # 4th data frame
+                if self.filtered:
+                    return None
+                else: 
                     return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'not implemented' })
 
             if self.data_array_index == 5: # 5th data frame
+                if self.filtered:
+                    return None
+                else: 
                     return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'not implemented' })
 
             if self.data_array_index == 6: # 6th data frame
+                if self.filtered:
+                    return None
+                else: 
                     return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'not implemented' })
 
             if self.data_array_index == 7: # 7th data frame
+                if self.filtered:
+                    return None
+                else: 
                     return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'not implemented' })
 
             if self.data_array_index == 8: # 8th data frame
+                if self.filtered:
+                    return None
+                else: 
                     return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'not implemented' })
 
 
@@ -137,4 +181,8 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
         if frame.type == 'ack_field':
             self.my_can_message['ack'] = frame.data['ack']
-            return AnalyzerFrame(frame_type, frame.start_time, frame.end_time, data)
+
+            if self.filtered:
+                return None
+            else: 
+                return AnalyzerFrame(frame_type, frame.start_time, frame.end_time, data)
