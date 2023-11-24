@@ -14,7 +14,7 @@
 #define USE_HEARTBEAT	1 // use the heartbeat
 #define	USE_POWERSAVE	1 // use processor power save feature stop mode
 #define USE_SLEEPONEXIT 1 // use processor power save feature sleep on ISR exit
-#define USE_CAN_BUSOFF 1 // let CAN go into bus-off state or not
+#define USE_CAN_BUSOFF 0 // let CAN go into bus-off state or not // FIXME - if 1: during debug mode, when viewed via "live Expressions", __Try.public.Busactivity pointer vaules (to _0) seems to to flap; if 0: addresses (value column) seems to be stable, no CAN errors are generated
 
 #if defined(MJ808_)	// front light header include
 #include "mj808/mj808.h"
