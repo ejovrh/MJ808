@@ -15,8 +15,7 @@ CAST_CHOICES = { # dictionary for dropdown choices
 }
 
 class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevelAnalyzer class
-    filtered = 0 # flag to filter out frames
-    choice = ''
+    display = 0 # flag to display a frame or not
     my_string_setting = StringSetting() # List of settings that a user can set for this High Level Analyzer
     # my_number_setting = NumberSetting(min_value=0, max_value=100) # List of settings that a user can set for this High Level Analyzer
     my_choices_setting = ChoicesSetting(label='cast', choices=CAST_CHOICES.keys()) # List of settings that a user can set for this High Level Analyzer
@@ -59,7 +58,9 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                     'mj838': { 'format': '{{data.description}}' },
                     'DLC': { 'format': '{{data.description}}' },
                     'HeartBeat': { 'format': '{{data.description}}' },
-    }
+                    'can_error': { 'format': 'ERR' },
+                    'ack_field': { 'format': 'ACK' },
+   }
 
     def __init__(self):
         pass
@@ -92,23 +93,26 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
             self.choice =  CAST_CHOICES.get(self.my_choices_setting)
 
-            if (self.choice != cast) & (self.choice != 'all'):
-                self.filtered = 1
-            else:
+            if (self.choice == cast) or (self.choice == 'all'):
                 sender_hex_id = hex( (self.my_can_message['identifier'] & SENDER_DEVICE_MASK) >> 2 )[2:] # mask out all but bits13:10
                 frame_type = self.my_mj8x8_devices[sender_hex_id] # record sender name as a frame type
 
-                return AnalyzerFrame(frame_type, frame.start_time, frame.end_time, { 'description': '{} {} {}'.format(priority, cast, frame_type) })
+                self.display = 1
+            else:
+                self.display = 0
 
+            if self.display:
+                return AnalyzerFrame(frame_type, frame.start_time, frame.end_time, { 'description': '{} {} {}'.format(priority, cast, frame_type) })
+            else:
+                return None
 
         if frame.type == 'control_field':
             self.my_can_message['dlc'] = frame.data['num_data_bytes']
 
-            if self.filtered:
-                return None
-            else: 
+            if self.display:
                 return AnalyzerFrame('DLC', frame.start_time, frame.end_time, { 'description': '{} Bytes'.format(self.my_can_message['dlc']) })
-
+            else: 
+                return None
 
         if frame.type == 'data_field':
             self.my_can_message['data'][self.data_array_index] = frame.data['data'].hex()
@@ -117,72 +121,77 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
             if self.data_array_index == 1: # 1st data frame
                 if self.my_can_message['data'][0] == '00': # HeartBeat message
     
-                    if self.filtered:
-                        return None
-                    else: 
+                    if self.display:
                         return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'HeartBeat: ' })
+                    else: 
+                        return None
         
             if self.data_array_index == 2: # 2nd data frame
                 if self.my_can_message['data'][0] == '00': # was preceeded by a HeartBeat message
                     if self.my_can_message['data'][1] == '00': # idle device
-                        if self.filtered:
-                            return None
-                        else: 
+                        if self.display:
                             return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'idle' })
-                    
-                    if self.my_can_message['data'][1] == '01': # idle device
-                        if self.filtered:
-                            return None
                         else: 
+                            return None
+                        
+                    if self.my_can_message['data'][1] == '01': # idle device
+                        if self.display:
                             return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': '01' })
-                    
-
+                        else: 
+                            return None
+                        
             if self.data_array_index == 3: # 3rd data frame
-                if self.filtered:
-                    return None
-                else: 
+                if self.display:
                     return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'not implemented' })
+                else: 
+                    return None
 
             if self.data_array_index == 4: # 4th data frame
-                if self.filtered:
-                    return None
-                else: 
+                if self.display:
                     return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'not implemented' })
+                else: 
+                    return None
 
             if self.data_array_index == 5: # 5th data frame
-                if self.filtered:
-                    return None
-                else: 
+                if self.display:
                     return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'not implemented' })
+                else: 
+                    return None
 
             if self.data_array_index == 6: # 6th data frame
-                if self.filtered:
-                    return None
-                else: 
+                if self.display:
                     return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'not implemented' })
+                else: 
+                    return None
 
             if self.data_array_index == 7: # 7th data frame
-                if self.filtered:
-                    return None
-                else: 
+                if self.display:
                     return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'not implemented' })
+                else: 
+                    return None
 
             if self.data_array_index == 8: # 8th data frame
-                if self.filtered:
-                    return None
-                else: 
+                if self.display:
                     return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'not implemented' })
-
+                else: 
+                    return None
 
         if frame.type == 'crc_field':
             self.my_can_message['crc'] = frame.data['crc']
             return None
 
-
         if frame.type == 'ack_field':
             self.my_can_message['ack'] = frame.data['ack']
 
-            if self.filtered:
-                return None
+            if self.display:
+                return AnalyzerFrame(frame.type, frame.start_time, frame.end_time, None)
             else: 
-                return AnalyzerFrame(frame_type, frame.start_time, frame.end_time, data)
+                return None
+                
+        if frame.type == 'can_error':
+            self.my_can_message['ack'] = 'nack'
+
+            if self.display:
+                return AnalyzerFrame(frame.type, frame.start_time, frame.end_time, None)
+            else: 
+                return None
