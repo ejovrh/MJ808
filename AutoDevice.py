@@ -5,22 +5,22 @@ import time
 # NOTE! do a skip-worktree on main.h
 
 MJ8x8_boards = {
-    '0': 'MJ???_', # 0 Alpha 
-    '1': 'MJ???_', # 0 Bravo
-    '2': 'MJ???_', # 0 Charlie
-    '3': 'MJ828_', # 0 Delta
-    '4': 'MJ838_', # 1 Alpha
-    '5': 'MJ???_', # 1 Bravo
-    '6': 'MJ???_', # 1 Charlie
-    '7': 'MJ???_', # 1 Delta
-    '8': 'MJ808_', # 2 Alpha
-    '9': 'MJ818_', # 2 Bravo
-    'a': 'MJ???_,', # 2 Charlie
-    'b': 'MJ???_', # 2 Delta
-    'c': 'MJ???_', # 3 Alpha
-    'd': 'MJ???_', # 3 Bravo
-    'e': 'MJ???_', # 3 Charlie
-    'f': 'MJ???_', # 3 Delta
+    '0': 'mj???', # 0 Alpha 
+    '1': 'mj???', # 0 Bravo
+    '2': 'mj???', # 0 Charlie
+    '3': 'mj828', # 0 Delta
+    '4': 'mj838', # 1 Alpha
+    '5': 'mj???', # 1 Bravo
+    '6': 'mj???', # 1 Charlie
+    '7': 'mj???', # 1 Delta
+    '8': 'mj808', # 2 Alpha
+    '9': 'mj818', # 2 Bravo
+    'a': 'mj???', # 2 Charlie
+    'b': 'mj???', # 2 Delta
+    'c': 'mj???', # 3 Alpha
+    'd': 'mj???', # 3 Bravo
+    'e': 'mj???', # 3 Charlie
+    'f': 'mj???', # 3 Delta
 }
 
 # check if a stlink debugger is connected
@@ -30,8 +30,13 @@ def check_stlink_connected() -> bool:
     
     # Check if the output contains an error string
     if "Error: Serial number not found" in result.stdout:
-        return False
+        print("STLink-V3 not connected ?? Aborting main.h editing.")
+        exit() # Abort further execution if ST-Link is not detected
     
+    if "ST-LINK error (DEV_CONNECT_ERR)" in result.stdout:
+        print("STLink-V3 busy ??")
+        exit() # Abort further execution if ST-Link is not detected
+
     return True
 
 # try to read out option byte
@@ -69,7 +74,7 @@ def write_to_main_h(device) -> None:
     end_index = lines.index(end_comment, start_index)
 
     # Replace the lines with the new device information
-    lines[start_index:end_index] = ['#define ', f'{device}\t// what device to compile for\n']
+    lines[start_index:end_index] = ['#define ', f'{device.upper()}_\t// what device to compile for\n']
 
     # Write the modified content back to the file
     with open(header_path, 'w') as header_file:
@@ -77,7 +82,6 @@ def write_to_main_h(device) -> None:
 
 if __name__ == "__main__":
     if not check_stlink_connected():
-        print("STLink-V3 not connected ?? Aborting main.h editing.")
         exit() # Abort further execution if ST-Link is not detected
 
     output = execute_stm32_programmer_cli() # try to connect to the programmer and read out option bytes
