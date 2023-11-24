@@ -140,6 +140,10 @@ static inline void __physicalRedLED(const uint8_t state)  // red LED on/off
 	// state == 1 - off
 	// state == 0 - on
 	HAL_GPIO_WritePin(RedLED_GPIO_Port, RedLED_Pin, (! state));
+
+	if (! __LED._BlinkFlags)	// if we aren't blinking...
+		Device->mj8x8->UpdateActivity(UTILLED, state);	// ...mark activity
+
 	return;
 }
 
@@ -149,6 +153,10 @@ static inline void __physicalGreenLED(const uint8_t state)  // green LED on/off
 	// state == 1 - off
 	// state == 0 - on
 	HAL_GPIO_WritePin(GreenLED_GPIO_Port, GreenLED_Pin, (! state));
+
+	if (! __LED._BlinkFlags)	// if we aren't blinking...
+		Device->mj8x8->UpdateActivity(UTILLED, state);	// ...mark activity
+
 	return;
 }
 
@@ -181,7 +189,7 @@ static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
 
 	__LED._ShineFlags ^= ((-(state & 0x01) ^ __LED._ShineFlags) & (1 << led));	// sets "led" bit to "state" value
 
-	Device->mj8x8->UpdateActivity(UTILLED, (__LED._BlinkFlags & 0x03) > 0);	// mark in/activity, but only for blinking (timer is needed); shining doesnt need the timer and wont set this bit
+	Device->mj8x8->UpdateActivity(UTILLED, (__LED._BlinkFlags | 0x03) > 0);	// mark in/activity, but only for blinking (timer is needed); shining doesnt need the timer and wont set this bit
 
 	if(state == BLINK)	// state blink
 		{
