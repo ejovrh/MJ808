@@ -1,11 +1,15 @@
 from saleae.analyzers import HighLevelAnalyzer, AnalyzerFrame, StringSetting, NumberSetting, ChoicesSetting
+import re
+import os
 
 PRIORITY_HIGH = 0x00 # CAN frame bit 15
 PRIORITY_LOW = 0x80
 
+INC_DIRECTORY_PATH = r'C:\\Users\\hrvoje\\Documents\\vsite\\MJ808\\mj8x8\\Core\\Inc'
+
 UNICAST = 0x00 # CAN frame bit 14
 BROADCAST = 0x40
-
+    
 SENDER_DEVICE_MASK = 0x3C # CAN frame bits 13:10 - the sender of a message
 
 CAST_CHOICES = { # dictionary for dropdown choices
@@ -19,6 +23,7 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
     Cast = '' # broadcast or unicast
     my_string_setting = StringSetting() # List of settings that a user can set for this High Level Analyzer
     my_choices_setting = ChoicesSetting(label='cast', choices=CAST_CHOICES.keys()) # List of settings that a user can set for this High Level Analyzer
+    devices = {}
 
     my_mj8x8_devices = {
                         '0': 'mj???', # 0 Alpha 
@@ -73,6 +78,79 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
     def set_settings(self, settings):
         pass
 
+    def create_device(self, key, name, activity_data):
+        device = {'name': name, 'activity': activity_data}
+        self.devices[key] = device
+
+    def parse_device_activity(self, directory):
+        device_folders = []
+        devices_dict = {} # a dictionary of all the discovered devices
+        devices_dict_iterator = 0 # iterator for the above
+
+        # Find folders that match the pattern 'mjXXX'
+        for folder_name in os.listdir(directory):
+            if re.match(r'mj\d{3}', folder_name):
+                device_folders.append(folder_name)
+
+        if not device_folders:
+            print("No matching folders found.")
+            return
+
+        # Iterate through each identified folder
+        for device in device_folders:
+            print("device: ", device)
+            device_activity_dict = {}
+
+            # Build the path to device.h in each folder
+            device_header_path = os.path.join(directory, device, f"{device}.h")
+
+            # Check if the device header file exists
+            if os.path.isfile(device_header_path):
+                devices_dict[devices_dict_iterator] = device
+                devices_dict_iterator += 1
+            else:
+                continue
+
+            # print("devices_dict: ", devices_dict) # device_dict is ok
+
+            # Read and parse the device header file
+            with open(device_header_path, 'r') as device_header:
+                inside_union = False
+                union_lines = []
+
+                # Iterate through lines in the file
+                for line in device_header:
+                    # Start capturing lines inside the union
+                    if 'typedef union' in line:
+                        inside_union = True
+
+                    # Stop capturing lines inside the union
+                    if inside_union and 'include' in line:
+                        inside_union = False
+                        break
+
+                    # Capture lines inside the union
+                    if inside_union and line.strip().startswith('uint8_t'):
+                        union_lines.append(line.strip())
+
+                # Parse lines to extract comments
+                for union_line in union_lines:
+                    # Use regular expression to find comments between '//' in each line
+                    comments = re.findall(r'\/\/\s*(.*?)\s*\/\/', union_line)
+                    print("comments: ", comments)
+
+                    # Store comments in the dictionary with keys starting from 0
+                    # for i, comment in enumerate(comments):
+                        # device_activity_dict[i] = comment.strip()
+                        # device_dict[i] = comment
+
+            # # Print the results for the current device
+            # print(f"Device: {device}")
+            # print("Device Activity Dictionary:")
+            # for key, value in device_activity_dict.items():
+            #     print(f"Key {key}: {value}")
+            # print("\n" + "=" * 40 + "\n")
+    
     def decode(self, frame: AnalyzerFrame):
         frame_type = 'frame.type'
         data = {'input_type': frame.type}
@@ -132,6 +210,7 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                         if self.my_can_message['data'][1] == '00': # idle device
                             return AnalyzerFrame('activity', frame.start_time, frame.end_time, { 'description': 'idle' })
                         else:
+                            self.parse_device_activity(INC_DIRECTORY_PATH)
                             return AnalyzerFrame('activity', frame.start_time, frame.end_time, { 'description': 'act' })
                         
             if self.data_array_index == 3: # 3rd data frame
