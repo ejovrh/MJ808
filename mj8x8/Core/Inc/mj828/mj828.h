@@ -13,8 +13,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		uint8_t CANActive :1;  // CAN // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
 
 		// 0x3C - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus off
-		uint8_t _2 :1;  //
-		uint8_t _3 :1;  //
+		uint8_t _2 :1;  // _2 //
+		uint8_t _3 :1;  // _3 //
 		uint8_t ButtonPressed :1;  // BTN // some button is being pressed
 		uint8_t LEDsOn :1;  // LEDs // UI LEDS are on: timer ISR - stop mode will break functionality
 
