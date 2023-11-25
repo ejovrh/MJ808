@@ -8,18 +8,20 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		/*  0x3F - if any of bits 0 though 5 are set - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus on
 		 * additionally: if CANBUS_ACTIVE_MASK has bits not set, CANbus will be off
 		 */
-		uint8_t DoHeartbeat :1;  // bit 0 - HeartBeat is running
-		uint8_t CANActive :1;  // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
+		// bit 0
+		uint8_t DoHeartbeat :1;  // DoHB // HeartBeat is running
+		uint8_t CANActive :1;  // CAN // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
 
 		// 0x3C - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus off
 		uint8_t _2 :1;  //
 		uint8_t _3 :1;  //
-		uint8_t ButtonPressed :1;  // any button is in use
-		uint8_t LEDsOn :1;  // UI LEDS are on: timer ISR - stop mode will break functionality
+		uint8_t ButtonPressed :1;  // BTN // some button is being pressed
+		uint8_t LEDsOn :1;  // LEDs // UI LEDS are on: timer ISR - stop mode will break functionality
 
 		// 0xC0 - don't care - the device will execute HAL_PWR_EnterSTOPMode()
-		uint8_t AutoBatt :1;	// automatic light behaviour based on battery charge state
-		uint8_t AutoLight :1;  // bit 7 - automatic light behaviour based on ambient light
+		uint8_t AutoBatt :1;	// AB // automatic light behaviour based on battery charge state
+		uint8_t AutoLight :1;  // AL // automatic light behaviour based on ambient light
+	// bit 7
 	};
 	uint8_t byte;  // byte-wise representation of the above bitfield
 } mj828_activity_t;
