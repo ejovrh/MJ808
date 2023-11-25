@@ -85,8 +85,8 @@ if __name__ == "__main__":
         exit() # Abort further execution if ST-Link is not detected
 
     output = execute_stm32_programmer_cli() # try to connect to the programmer and read out option bytes
-    data0_value = extract_data0_value(output) # parse readout output
-    mj_board = MJ8x8_boards[data0_value] # determine board
+    hexID = extract_data0_value(output) # parse readout output: device CAN ID in hex
+    mj_board = MJ8x8_boards[hexID] # determine board
     print("board: ", mj_board) # print it
 
     write_to_main_h(mj_board) # modify main.h
