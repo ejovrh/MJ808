@@ -142,8 +142,8 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
         # print("mj808:", self.DynamicDeviceActivityDicts['mj808'])
 
-    def decode_byte_for_device(self, in_byte, device):
-        decoded_string = ""
+    def DecodeActivityByte(self, in_byte, device): # decodes the HeartBeat act byte according to DynamicDeviceActivityDicts[]
+        return_string = ""
         in_byte_int = int(in_byte, 16)
 
         # Iterate over the bits in the byte
@@ -151,11 +151,10 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
             # Check if the bit is set in the input byte
             if (in_byte_int & (1 << i)) != 0:
                 # Check if the corresponding bit index exists in the device dictionary
-                if i in self.DynamicDeviceActivityDicts[device]:
-                    decoded_string += ''.join(self.DynamicDeviceActivityDicts[device][i])
-                    decoded_string += ' '
+                return_string += ''.join(self.DynamicDeviceActivityDicts[device][i])
+                return_string += ' '
 
-        return decoded_string
+        return return_string
     
     def decode(self, frame: AnalyzerFrame):
         frame_type = 'frame.type'
@@ -177,7 +176,7 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
             else:
                 self.Cast = 'uni'
 
-            choice =  CAST_CHOICES.get(self.my_choices_setting)
+            choice = CAST_CHOICES.get(self.my_choices_setting)
 
             if (choice == self.Cast) or (choice == 'all'):
                 self.my_can_message['hexID'] = hex( (self.my_can_message['identifier'] & SENDER_DEVICE_MASK) >> 2 )[2:] # mask out all but bits13:10
@@ -206,10 +205,10 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
             if self.FlagDisplay == 0:
                 return None
-            if self.Cast == 'brd': # only broadcast frames send out HeartBeats; unicast are all commands
+            if self.Cast == 'brd': # the only broadcast frames are HeartBeats; unicast are all commands
                 if self.data_array_index == 1: # 1st data frame
                     if self.my_can_message['data'][0] == '00': # HeartBeat message
-                        return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'HB' })
+                        return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'HeartBeat' })
             
                 if self.data_array_index == 2: # 2nd data frame
                     if self.my_can_message['data'][0] == '00': # was preceeded by a HeartBeat message
@@ -218,7 +217,7 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                         else:
                             device = self.my_mj8x8_devices[self.my_can_message['hexID']]
                             in_byte = self.my_can_message['data'][1]
-                            text = self.decode_byte_for_device(in_byte, device)
+                            text = self.DecodeActivityByte(in_byte, device)
                             return AnalyzerFrame('activity', frame.start_time, frame.end_time, { 'description': text  })
                         
             if self.data_array_index == 3: # 3rd data frame
