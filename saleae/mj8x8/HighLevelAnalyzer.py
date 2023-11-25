@@ -23,8 +23,6 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
     Cast = '' # broadcast or unicast
     my_string_setting = StringSetting() # List of settings that a user can set for this High Level Analyzer
     my_choices_setting = ChoicesSetting(label='cast', choices=CAST_CHOICES.keys()) # List of settings that a user can set for this High Level Analyzer
-    devicesdict = {}
-    activitydict = {}
 
     my_mj8x8_devices = {
                         '0': 'mj???', # 0 Alpha 
@@ -71,7 +69,8 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
    }
 
     def __init__(self):
-        self.dynamic_dicts = {}
+        self.DynamicDeviceActivityDicts = {} # super-dictionary containing e.g. mj808 as key
+        self.ParseDeviceHeaderForActivity(INC_DIRECTORY_PATH) # parse device header file for mjxxx_activity_t struct and deduce device activity options
         return None
 
     def get_capabilities(self):
@@ -80,18 +79,16 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
     def set_settings(self, settings):
         pass
 
-    def create_and_assign_variable(self, variable_name, key, value):
-        # Check if the variable already exists
-        if variable_name not in self.dynamic_dicts:
-            self.dynamic_dicts[variable_name] = {}
+    def PopulateDynamicDeviceActivityDicts(self, device, actID, act): # populates a data structure with device name (e.g. mj808) as key
+        # Check if the device already exists as an dictionary element
+        if device not in self.DynamicDeviceActivityDicts:
+            self.DynamicDeviceActivityDicts[device] = {}
         
         # Add key-value pair to the dynamically created variable
-        self.dynamic_dicts[variable_name][key] = value
+        self.DynamicDeviceActivityDicts[device][actID] = act
 
-
-    def parse_device_activity(self, directory):
+    def ParseDeviceHeaderForActivity(self, directory): # parses device header file for mjxxx_activity_t structure and deduces activity
         device_folders = []
-        devices_dict_iterator = 0 # iterator for the above
 
         # Find folders that match the pattern 'mjXXX'
         for folder_name in os.listdir(directory):
@@ -108,51 +105,42 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
             device_header_path = os.path.join(directory, device, f"{device}.h")
 
             # Check if the device header file exists
-            if os.path.isfile(device_header_path):
-                self.devicesdict[device] = 'to be filled'
-                devices_dict_iterator += 1
-            else:
+            if not os.path.isfile(device_header_path):
                 continue
 
-            # now we have a list of devices - existing header files (e.g. mj808.h and so on)
+            # at this point we have a list of existing devices, i.e. existing header files (e.g. mj808.h and so on)
 
             # Read and parse the device header file
             with open(device_header_path, 'r') as device_header:
                 inside_union = False
                 union_lines = []
 
-                # Iterate through lines in the file
+                # Iterate through lines in the file - go over heach found device
                 for line in device_header:
                     # Start capturing lines inside the union
-                    if 'struct' in line:
+                    if 'struct' in line: # string struct is found
                         inside_union = True
 
                     # Stop capturing lines inside the union
-                    if inside_union and '};' in line:
+                    if inside_union and '};' in line: # string } marks the end of the C struct definition
                         inside_union = False
                         break
 
                     # Capture lines inside the union
-                    if inside_union and line.strip().startswith('uint8_t'):
+                    if inside_union and line.strip().startswith('uint8_t'): # lines of the C struct definition and beginning with  uint8_t 
                         union_lines.append(line.strip())
 
-                activity_iterator = 0
+                activity_iterator = 0 # start at bit 0
 
                 # Parse lines to extract comments
-                for union_line  in union_lines:
+                for union_line  in union_lines: # now go over each line of the activity_t C struct
                     # Use regular expression to find comments between '//' in each line
-                    comments = re.findall(r'\/\/\s*(.*?)\s*\/\/', union_line)
-                    self.create_and_assign_variable(device, activity_iterator, comments)
-                    activity_iterator += 1
+                    activity = re.findall(r'\/\/\s*(.*?)\s*\/\/', union_line) # e.g. '// LED //' or '// CAN //'
+                    self.PopulateDynamicDeviceActivityDicts(device, activity_iterator, activity) # store them in the dict of dicts.
+                    activity_iterator += 1 # 8 bits in total
 
-            self.devicesdict[device] = self.activitydict
+        # print("mj808:", self.DynamicDeviceActivityDicts['mj808'])
 
-        print("mj808:", self.dynamic_dicts['mj808']) # is ok
-        print("mj818:", self.dynamic_dicts['mj818']) # is o
-        print("mj828:", self.dynamic_dicts['mj828']) # is ok
-        print("mj838:", self.dynamic_dicts['mj838']) # is ok
-
-    
     def decode(self, frame: AnalyzerFrame):
         frame_type = 'frame.type'
         data = {'input_type': frame.type}
@@ -212,7 +200,6 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                         if self.my_can_message['data'][1] == '00': # idle device
                             return AnalyzerFrame('activity', frame.start_time, frame.end_time, { 'description': 'idle' })
                         else:
-                            self.parse_device_activity(INC_DIRECTORY_PATH)
                             return AnalyzerFrame('activity', frame.start_time, frame.end_time, { 'description': 'act' })
                         
             if self.data_array_index == 3: # 3rd data frame
