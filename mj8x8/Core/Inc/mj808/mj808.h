@@ -19,8 +19,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		uint8_t FrontLightOn :1;  // Front // front light is on: PWM - stop mode will break functionality
 
 		// 0xC0 - don't care - the device will execute HAL_PWR_EnterSTOPMode()
-		uint8_t _6 :1;  //
-		uint8_t _7 :1;
+		uint8_t _6 :1;  // _6 //
+		uint8_t _7 :1;	// _7 //
 	// bit 7
 	};
 	uint8_t byte;  // byte-wise representation of the above bitfield
