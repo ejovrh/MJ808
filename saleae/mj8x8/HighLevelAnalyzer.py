@@ -46,13 +46,14 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
     data_array_index = 0 # used to fill the data_array upon data frame reception
     data_array = [0] * 8 # fill with 0's
     my_can_message = {  # Define a CAN message as a dictionary
-                        'identifier': 0, # Identifier, either 11 bit or 29 bit
+                        'identifier': 0, # raw Identifier, either 11 bit or 29 bit
                         'extended': False, # (optional) Indicates that this identifier is a 29 bit extended identifier. This key is not present on regular 11 bit identifiers
                         'remote': False, # (optional) Present and true for remote frames
                         'dlc': 0, # Data length code (number of bytes in the payload)
                         'data': data_array, # CAN Payload, 8 bytes
                         'crc': 0, # 16bit CRC value
-                        'ack': 0 # True when an ACK was present
+                        'ack': 0, # True when an ACK was present
+                        'hexID': 0, # translated CAN Identifier 
     }
 
     # An optional list of types this analyzer produces, providing a way to customize the way frames are displayed in Logic 2.
@@ -141,6 +142,21 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
         # print("mj808:", self.DynamicDeviceActivityDicts['mj808'])
 
+    def decode_byte_for_device(self, in_byte, device):
+        decoded_string = ""
+        in_byte_int = int(in_byte, 16)
+
+        # Iterate over the bits in the byte
+        for i in range(8):
+            # Check if the bit is set in the input byte
+            if (in_byte_int & (1 << i)) != 0:
+                # Check if the corresponding bit index exists in the device dictionary
+                if i in self.DynamicDeviceActivityDicts[device]:
+                    decoded_string += ''.join(self.DynamicDeviceActivityDicts[device][i])
+                    decoded_string += ' '
+
+        return decoded_string
+    
     def decode(self, frame: AnalyzerFrame):
         frame_type = 'frame.type'
         data = {'input_type': frame.type}
@@ -164,8 +180,8 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
             choice =  CAST_CHOICES.get(self.my_choices_setting)
 
             if (choice == self.Cast) or (choice == 'all'):
-                sender_hex_id = hex( (self.my_can_message['identifier'] & SENDER_DEVICE_MASK) >> 2 )[2:] # mask out all but bits13:10
-                frame_type = self.my_mj8x8_devices[sender_hex_id] # record sender name as a frame type
+                self.my_can_message['hexID'] = hex( (self.my_can_message['identifier'] & SENDER_DEVICE_MASK) >> 2 )[2:] # mask out all but bits13:10
+                frame_type = self.my_mj8x8_devices[self.my_can_message['hexID']] # record sender name as a frame type
 
                 self.FlagDisplay = 1
             else:
@@ -200,7 +216,10 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                         if self.my_can_message['data'][1] == '00': # idle device
                             return AnalyzerFrame('activity', frame.start_time, frame.end_time, { 'description': 'idle' })
                         else:
-                            return AnalyzerFrame('activity', frame.start_time, frame.end_time, { 'description': 'act' })
+                            device = self.my_mj8x8_devices[self.my_can_message['hexID']]
+                            in_byte = self.my_can_message['data'][1]
+                            text = self.decode_byte_for_device(in_byte, device)
+                            return AnalyzerFrame('activity', frame.start_time, frame.end_time, { 'description': text  })
                         
             if self.data_array_index == 3: # 3rd data frame
                 return AnalyzerFrame('HeartBeat', frame.start_time, frame.end_time, { 'description': 'not implemented' })
