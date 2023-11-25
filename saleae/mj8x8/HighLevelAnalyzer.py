@@ -23,7 +23,8 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
     Cast = '' # broadcast or unicast
     my_string_setting = StringSetting() # List of settings that a user can set for this High Level Analyzer
     my_choices_setting = ChoicesSetting(label='cast', choices=CAST_CHOICES.keys()) # List of settings that a user can set for this High Level Analyzer
-    devices = {}
+    devicesdict = {}
+    activitydict = {}
 
     my_mj8x8_devices = {
                         '0': 'mj???', # 0 Alpha 
@@ -70,7 +71,8 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
    }
 
     def __init__(self):
-        pass
+        self.dynamic_dicts = {}
+        return None
 
     def get_capabilities(self):
         pass
@@ -78,13 +80,17 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
     def set_settings(self, settings):
         pass
 
-    def create_device(self, key, name, activity_data):
-        device = {'name': name, 'activity': activity_data}
-        self.devices[key] = device
+    def create_and_assign_variable(self, variable_name, key, value):
+        # Check if the variable already exists
+        if variable_name not in self.dynamic_dicts:
+            self.dynamic_dicts[variable_name] = {}
+        
+        # Add key-value pair to the dynamically created variable
+        self.dynamic_dicts[variable_name][key] = value
+
 
     def parse_device_activity(self, directory):
         device_folders = []
-        devices_dict = {} # a dictionary of all the discovered devices
         devices_dict_iterator = 0 # iterator for the above
 
         # Find folders that match the pattern 'mjXXX'
@@ -98,20 +104,17 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
         # Iterate through each identified folder
         for device in device_folders:
-            print("device: ", device)
-            device_activity_dict = {}
-
             # Build the path to device.h in each folder
             device_header_path = os.path.join(directory, device, f"{device}.h")
 
             # Check if the device header file exists
             if os.path.isfile(device_header_path):
-                devices_dict[devices_dict_iterator] = device
+                self.devicesdict[device] = 'to be filled'
                 devices_dict_iterator += 1
             else:
                 continue
 
-            # print("devices_dict: ", devices_dict) # device_dict is ok
+            # now we have a list of devices - existing header files (e.g. mj808.h and so on)
 
             # Read and parse the device header file
             with open(device_header_path, 'r') as device_header:
@@ -121,11 +124,11 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                 # Iterate through lines in the file
                 for line in device_header:
                     # Start capturing lines inside the union
-                    if 'typedef union' in line:
+                    if 'struct' in line:
                         inside_union = True
 
                     # Stop capturing lines inside the union
-                    if inside_union and 'include' in line:
+                    if inside_union and '};' in line:
                         inside_union = False
                         break
 
@@ -133,23 +136,22 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                     if inside_union and line.strip().startswith('uint8_t'):
                         union_lines.append(line.strip())
 
+                activity_iterator = 0
+
                 # Parse lines to extract comments
-                for union_line in union_lines:
+                for union_line  in union_lines:
                     # Use regular expression to find comments between '//' in each line
                     comments = re.findall(r'\/\/\s*(.*?)\s*\/\/', union_line)
-                    print("comments: ", comments)
+                    self.create_and_assign_variable(device, activity_iterator, comments)
+                    activity_iterator += 1
 
-                    # Store comments in the dictionary with keys starting from 0
-                    # for i, comment in enumerate(comments):
-                        # device_activity_dict[i] = comment.strip()
-                        # device_dict[i] = comment
+            self.devicesdict[device] = self.activitydict
 
-            # # Print the results for the current device
-            # print(f"Device: {device}")
-            # print("Device Activity Dictionary:")
-            # for key, value in device_activity_dict.items():
-            #     print(f"Key {key}: {value}")
-            # print("\n" + "=" * 40 + "\n")
+        print("mj808:", self.dynamic_dicts['mj808']) # is ok
+        print("mj818:", self.dynamic_dicts['mj818']) # is o
+        print("mj828:", self.dynamic_dicts['mj828']) # is ok
+        print("mj838:", self.dynamic_dicts['mj838']) # is ok
+
     
     def decode(self, frame: AnalyzerFrame):
         frame_type = 'frame.type'
