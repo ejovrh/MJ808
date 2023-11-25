@@ -10,18 +10,20 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		/*  0x3F - if any of bits 0 though 5 are set - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus on
 		 * additionally: if CANBUS_ACTIVE_MASK has bits not set, CANbus will be off
 		 */
-		uint8_t DoHeartbeat :1;  // bit 0 - HeartBeat is running
-		uint8_t CANActive :1;  // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
+		// bit 0
+		uint8_t DoHeartbeat :1;  // DoHB // HeartBeat is running
+		uint8_t CANActive :1;  // CAN // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
 
 		// 0x3C - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus off
-		uint8_t ZeroCross :1;  // zero-cross detection is active/inactive
-		uint8_t AutoDrive :1;  // AutoDrive functionality is on/off
+		uint8_t ZeroCross :1;  // ZC // zero-cross detection is active/inactive
+		uint8_t AutoDrive :1;  // AD // AutoDrive functionality is on/off
 		uint8_t _4 :1;  //
 		uint8_t _5 :1;	//
 
 		// 0xC0 - don't care - the device will execute HAL_PWR_EnterSTOPMode()
 		uint8_t _6 :1;  //
-		uint8_t _7 :1;  // bit 7
+		uint8_t _7 :1;
+	// bit 7
 	};
 	uint8_t byte;  // byte-wise representation of the above bitfield
 } mj838_activity_t;
