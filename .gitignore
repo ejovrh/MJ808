@@ -49,3 +49,6 @@
 *.mk
 *.scr
 *.err
+
+**/Debug/**
+**/Release/**
