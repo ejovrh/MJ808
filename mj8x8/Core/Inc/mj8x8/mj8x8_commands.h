@@ -81,23 +81,23 @@ typedef union
 {  //
 	struct
 	{  // bit-wise view of devices on the bus,  max. 16 in total
-	   // format: n - device indicator - name
-		uint16_t mj848 :1;  // 0A - logic unit
-		uint16_t _1 :1;  // 0B - ?
-		uint16_t _2 :1;  // 0C - ?
-		uint16_t mj828 :1;  // 0D - dashboard
-		uint16_t mj838 :1;  // 1A - Čos dynamo/generator
-		uint16_t _5 :1;  // 1B - ?
-		uint16_t _6 :1;  // 1C - ?
-		uint16_t _7 :1;  // 1D - ?
-		uint16_t mj808 :1;  // 2A - front light
-		uint16_t mj818 :1;  // 2B - rear light
-		uint16_t _10 :1;	// 2C - ?
-		uint16_t _11 :1;	// 2D - ?
-		uint16_t _12 :1;	// 3A - ?
-		uint16_t _13 :1;	// 3B - ?
-		uint16_t _14 :1;	// 3C - ?
-		uint16_t _15 :1;	// 3D - ?
+	   // format: n (0 to 15) - device indicator - hex id - name 
+		uint16_t mj_0 :1;  	// 0 // 0 Alpha - logic unit
+		uint16_t mj_1 :1;  	// 1 // 0 Bravo - ?
+		uint16_t mj_2 :1;  	// 2 // 0 Charlie - ?
+		uint16_t mj828 :1;  // 3 // 0 Delta - dashboard
+		uint16_t mj838 :1;  // 4 // 1 Alpha - Čos dynamo/generator
+		uint16_t mj_5 :1;  	// 5 // 1 Bravo - ?
+		uint16_t mj_6 :1;  	// 6 // 1 Charlie - ?
+		uint16_t mj_7 :1;  	// 7 // 1 Delta - ?
+		uint16_t mj808 :1;  // 8 // 2 Alpha - front light
+		uint16_t mj818 :1;  // 9 // 2 Bravo - rear light
+		uint16_t mj_10 :1;	// a // 2 Charlie - ?
+		uint16_t mj_11 :1;	// b // 2 Delta - ?
+		uint16_t mj_12 :1;	// c // 3 Alpha - ?
+		uint16_t mj_13 :1;	// d // 3 Bravo - ?
+		uint16_t mj_14 :1;	// e // 3 Charlie - ?
+		uint16_t mj_15 :1;	// f // 3 Delta - ?
 	};
 	uint16_t byte;	// byte-wise representation of above bitfield
 } device_t;
