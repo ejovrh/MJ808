@@ -5,7 +5,8 @@ import os
 PRIORITY_HIGH = 0x00 # CAN frame bit 15
 PRIORITY_LOW = 0x80
 
-INC_DIRECTORY_PATH = r'C:\\Users\\hrvoje\\Documents\\vsite\\MJ808\\mj8x8\\Core\\Inc'
+MJ8X8_HEADER_PATH = r'C:\\Users\\hrvoje\\Documents\\vsite\\MJ808\\mj8x8\\Core\\Inc\\mj8x8'
+DEVICE_HEADER_PATH = r'C:\\Users\\hrvoje\\Documents\\vsite\\MJ808\\mj8x8\\Core\\Inc'
 
 UNICAST = 0x00 # CAN frame bit 14
 BROADCAST = 0x40
@@ -71,7 +72,9 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
     def __init__(self):
         self.DynamicDeviceActivityDicts = {} # super-dictionary containing e.g. mj808 as key
-        self.ParseDeviceHeaderForActivity(INC_DIRECTORY_PATH) # parse device header file for mjxxx_activity_t struct and deduce device activity options
+        self.Parsemj8x8HeaderForDevices(MJ8X8_HEADER_PATH) # parse mj8x8_commands.h for devices
+        self.ParseDeviceHeaderForActivity(DEVICE_HEADER_PATH) # parse device header file for mjxxx_activity_t struct and deduce device activity options
+        print("super dict: ", self.DynamicDeviceActivityDicts)
         return None
 
     def get_capabilities(self):
@@ -80,12 +83,14 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
     def set_settings(self, settings):
         pass
 
-    def PopulateDynamicDeviceActivityDicts(self, device, actID, act): # populates a data structure with device name (e.g. mj808) as key
+    def PopulateDynamicDeviceActivityDicts(self, hexID, device, actID, act): # populates a data structure with device name (e.g. mj808) as key
         # Check if the device already exists as an dictionary element
         if device not in self.DynamicDeviceActivityDicts:
             self.DynamicDeviceActivityDicts[device] = {}
         
         # Add key-value pair to the dynamically created variable
+        self.DynamicDeviceActivityDicts[device]['hexID'] = hexID
+        self.DynamicDeviceActivityDicts[device]['name'] = device
         self.DynamicDeviceActivityDicts[device][actID] = act
 
     def ParseDeviceHeaderForActivity(self, directory): # parses device header file for mjxxx_activity_t structure and deduces activity
@@ -134,13 +139,50 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                 activity_iterator = 0 # start at bit 0
 
                 # Parse lines to extract comments
-                for union_line  in union_lines: # now go over each line of the activity_t C struct
+                for union_line in union_lines: # now go over each line of the activity_t C struct
                     # Use regular expression to find comments between '//' in each line
                     activity = re.findall(r'\/\/\s*(.*?)\s*\/\/', union_line) # e.g. '// LED //' or '// CAN //'
-                    self.PopulateDynamicDeviceActivityDicts(device, activity_iterator, activity) # store them in the dict of dicts.
+                    hexID = self.DynamicDeviceActivityDicts[device]['hexID']
+                    self.PopulateDynamicDeviceActivityDicts(hexID, device, activity_iterator, activity) # store them in the dict of dicts.
                     activity_iterator += 1 # 8 bits in total
 
-        # print("mj808:", self.DynamicDeviceActivityDicts['mj808'])
+    def Parsemj8x8HeaderForDevices(self, directory): # parses device header file for mjxxx_activity_t structure and deduces activity
+        commands_header_path = os.path.join(directory, "mj8x8_commands.h")
+
+        # Check if the commands header file exists
+        if not os.path.isfile(commands_header_path):
+            print("mj8x8_commands.h not found.")
+            return
+
+        # Read and parse the commands header file
+        with open(commands_header_path, 'r') as commands_header:
+            inside_struct_device = False
+
+            # Iterate through lines in the file
+            for line in commands_header:
+                # Start capturing lines inside the struct device_t
+                if 'typedef union' in line:
+                    inside_struct_device = True
+                    continue
+
+                # Stop capturing lines inside the struct device_t
+                if inside_struct_device and '};' in line:
+                    inside_struct_device = False
+                    break
+
+                # Capture lines inside the struct device_t
+                if inside_struct_device and 'uint16_t' in line and ':1' in line:
+                    # Use regular expressions to find the device name and hex ID
+                    device_name_match = re.search(r'uint16_t\s+(\w+)\s*:', line)
+                    hex_id_match = re.search(r'\/\/\s*([0-9A-Fa-f]+)\s*\/\/', line)
+                    
+                    if device_name_match and hex_id_match:
+                        device_name = device_name_match.group(1)
+                        hex_id = hex_id_match.group(1)
+
+                        # Insert the device into the dictionary
+                        for i in range(8):
+                            self.PopulateDynamicDeviceActivityDicts(hex_id, device_name, i, '')
 
     def DecodeActivityByte(self, in_byte, device): # decodes the HeartBeat act byte according to DynamicDeviceActivityDicts[]
         return_string = ""
