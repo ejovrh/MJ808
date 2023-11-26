@@ -24,28 +24,9 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
     Cast = '' # broadcast or unicast
     my_string_setting = StringSetting() # List of settings that a user can set for this High Level Analyzer
     my_choices_setting = ChoicesSetting(label='cast', choices=CAST_CHOICES.keys()) # List of settings that a user can set for this High Level Analyzer
-
-    my_mj8x8_devices = {
-                        '0': 'mj???', # 0 Alpha 
-                        '1': 'mj???', # 0 Bravo
-                        '2': 'mj???', # 0 Charlie
-                        '3': 'mj828', # 0 Delta
-                        '4': 'mj838', # 1 Alpha
-                        '5': 'mj???', # 1 Bravo
-                        '6': 'mj???', # 1 Charlie
-                        '7': 'mj???', # 1 Delta
-                        '8': 'mj808', # 2 Alpha
-                        '9': 'mj818', # 2 Bravo
-                        'a': 'mj???', # 2 Charlie
-                        'b': 'mj???', # 2 Delta
-                        'c': 'mj???', # 3 Alpha
-                        'd': 'mj???', # 3 Bravo
-                        'e': 'mj???', # 3 Charlie
-                        'f': 'mj???', # 3 Delta
-    }
-
     data_array_index = 0 # used to fill the data_array upon data frame reception
     data_array = [0] * 8 # fill with 0's
+
     my_can_message = {  # Define a CAN message as a dictionary
                         'identifier': 0, # raw Identifier, either 11 bit or 29 bit
                         'extended': False, # (optional) Indicates that this identifier is a 29 bit extended identifier. This key is not present on regular 11 bit identifiers
@@ -74,7 +55,6 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
         self.DynamicDeviceActivityDicts = {} # super-dictionary containing e.g. mj808 as key
         self.Parsemj8x8HeaderForDevices(MJ8X8_HEADER_PATH) # parse mj8x8_commands.h for devices
         self.ParseDeviceHeaderForActivity(DEVICE_HEADER_PATH) # parse device header file for mjxxx_activity_t struct and deduce device activity options
-        print("super dict: ", self.DynamicDeviceActivityDicts)
         return None
 
     def get_capabilities(self):
@@ -89,8 +69,11 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
             self.DynamicDeviceActivityDicts[device] = {}
         
         # Add key-value pair to the dynamically created variable
-        self.DynamicDeviceActivityDicts[device]['hexID'] = hexID
-        self.DynamicDeviceActivityDicts[device]['name'] = device
+        self.DynamicDeviceActivityDicts[hexID] = device # hexID to device mapping
+        
+        self.DynamicDeviceActivityDicts[device]['hexID'] = hexID # device to hexID mapping
+        # self.DynamicDeviceActivityDicts[device]['name'] = device # 
+
         self.DynamicDeviceActivityDicts[device][actID] = act
 
     def ParseDeviceHeaderForActivity(self, directory): # parses device header file for mjxxx_activity_t structure and deduces activity
@@ -115,7 +98,8 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                 continue
 
             # at this point we have a list of existing devices, i.e. existing header files (e.g. mj808.h and so on)
-
+            hexID = self.DynamicDeviceActivityDicts[device]['hexID']
+            
             # Read and parse the device header file
             with open(device_header_path, 'r') as device_header:
                 inside_union = False
@@ -142,7 +126,7 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                 for union_line in union_lines: # now go over each line of the activity_t C struct
                     # Use regular expression to find comments between '//' in each line
                     activity = re.findall(r'\/\/\s*(.*?)\s*\/\/', union_line) # e.g. '// LED //' or '// CAN //'
-                    hexID = self.DynamicDeviceActivityDicts[device]['hexID']
+
                     self.PopulateDynamicDeviceActivityDicts(hexID, device, activity_iterator, activity) # store them in the dict of dicts.
                     activity_iterator += 1 # 8 bits in total
 
@@ -199,9 +183,6 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
         return return_string
     
     def decode(self, frame: AnalyzerFrame):
-        frame_type = 'frame.type'
-        data = {'input_type': frame.type}
-
         if frame.type == 'identifier_field':
             self.data_array_index = 0 # mark beginning of data capture
             self.my_can_message['identifier'] = frame.data['identifier']
@@ -222,14 +203,15 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
             if (choice == self.Cast) or (choice == 'all'):
                 self.my_can_message['hexID'] = hex( (self.my_can_message['identifier'] & SENDER_DEVICE_MASK) >> 2 )[2:] # mask out all but bits13:10
-                frame_type = self.my_mj8x8_devices[self.my_can_message['hexID']] # record sender name as a frame type
+                hexID = self.my_can_message['hexID']
+                device = self.DynamicDeviceActivityDicts[hexID]
 
                 self.FlagDisplay = 1
             else:
                 self.FlagDisplay = 0
 
             if self.FlagDisplay:
-                return AnalyzerFrame(frame_type, frame.start_time, frame.end_time, { 'description': '{} {}'.format(priority, frame_type) })
+                return AnalyzerFrame(device, frame.start_time, frame.end_time, { 'description': '{} {}'.format(priority, device) })
             else:
                 return None
 
@@ -257,7 +239,7 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                         if self.my_can_message['data'][1] == '00': # idle device
                             return AnalyzerFrame('activity', frame.start_time, frame.end_time, { 'description': 'idle' })
                         else:
-                            device = self.my_mj8x8_devices[self.my_can_message['hexID']]
+                            device = self.DynamicDeviceActivityDicts[self.my_can_message['hexID']]
                             in_byte = self.my_can_message['data'][1]
                             text = self.DecodeActivityByte(in_byte, device)
                             return AnalyzerFrame('activity', frame.start_time, frame.end_time, { 'description': text  })
