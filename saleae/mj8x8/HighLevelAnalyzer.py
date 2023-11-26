@@ -1,3 +1,25 @@
+'''
+abstract: 
+  this HLA analyzes mj8x8 CAN data streams
+
+core components:
+    HLA - HighLevelAnalyzer.py - this file
+    mj8x8_commands.h - C header for mj8x8 command defines - see MJ8X8_HEADER_PATH
+    device header file(s) - C headers for concrete devices - see DEVICE_HEADER_PATH
+
+
+principle of operation: 
+    interpret two kinds of frames: broadcast or unicast
+    broadcast:
+        1. in __init__: parse mj8x8_commands.h for possible devices as defined in "typedef union {} device_t". 
+            populate a super dictionary with it (device hex ID and name)
+        2. in __init__: find header files in DEVICE_HEADER_PATH and decode e.g "typedef union mj838_activity_t" into activities
+            populate earlier super dict. with this info
+        3. in decode(): loop over each bit of the HeartBeat activity byte and determnine which bits are set -> indicate that activity by building an analyzer frame
+
+    unicast: TODO        
+'''
+
 from saleae.analyzers import HighLevelAnalyzer, AnalyzerFrame, StringSetting, NumberSetting, ChoicesSetting
 import re
 import os
@@ -53,6 +75,7 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
     def __init__(self):
         self.DynamicDeviceActivityDicts = {} # super-dictionary containing e.g. mj808 as key
+
         self.Parsemj8x8HeaderForDevices(MJ8X8_HEADER_PATH) # parse mj8x8_commands.h for devices
         self.ParseDeviceHeaderForActivity(DEVICE_HEADER_PATH) # parse device header file for mjxxx_activity_t struct and deduce device activity options
         return None
@@ -161,8 +184,8 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                     hex_id_match = re.search(r'\/\/\s*([0-9A-Fa-f]+)\s*\/\/', line)
                     
                     if device_name_match and hex_id_match:
-                        device_name = device_name_match.group(1)
-                        hex_id = hex_id_match.group(1)
+                        device_name = device_name_match.group(1)    # e.g. mj828
+                        hex_id = hex_id_match.group(1)  # e.g. hex 3
 
                         # Insert the device into the dictionary
                         for i in range(8):
@@ -194,7 +217,7 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
             else:
                 priority = 'HIGH'
 
-            if self.my_can_message['identifier'] & BROADCAST: # determine recipients
+            if self.my_can_message['identifier'] & BROADCAST: # determine recipients - unicast or broadcast
                 self.Cast = 'brd'
             else:
                 self.Cast = 'uni'
@@ -236,9 +259,9 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
             
                 if self.data_array_index == 2: # 2nd data frame
                     if self.my_can_message['data'][0] == '00': # was preceeded by a HeartBeat message
-                        if self.my_can_message['data'][1] == '00': # idle device
+                        if self.my_can_message['data'][1] == '00': # just display 'idle'
                             return AnalyzerFrame('activity', frame.start_time, frame.end_time, { 'description': 'idle' })
-                        else:
+                        else: # analyze activity and display it
                             device = self.DynamicDeviceActivityDicts[self.my_can_message['hexID']]
                             in_byte = self.my_can_message['data'][1]
                             text = self.DecodeActivityByte(in_byte, device)
