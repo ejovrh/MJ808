@@ -15,8 +15,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		// 0x3C - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus off
 		uint8_t _2 :1;  // _2 //
 		uint8_t _3 :1;  // _3 //
-		uint8_t RearLightOn :1;  // Rear // rear light is on: PWM - stop mode will break functionality
 		uint8_t BrakeLightOn :1;  // BRK // brake light is on: PWM - stop mode will break functionality
+		uint8_t RearLightOn :1;  // Rear // rear light is on: PWM - stop mode will break functionality
 
 		// 0xC0 - don't care - the device will execute HAL_PWR_EnterSTOPMode()
 		uint8_t _6 :1;  // _6 //
