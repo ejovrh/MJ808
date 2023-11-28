@@ -9,9 +9,15 @@ MJ8X8_HEADER_PATH = r'C:\\Users\\hrvoje\\Documents\\vsite\\MJ808\\mj8x8\\Core\\I
 # dictionary for detected boards
 MJ8x8_boards = {}
 
+STM32_PROGRAMMER = r'"C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin\STM32_Programmer_CLI.exe"'
+STM32_PROGRAMMER_COMMON_ARGS = r'-c port=SWD freq=8000 sn=001C002F3137510A39383538 mode=HOTPLUG'
+STM32_PROGRAMMER_OPTION_BYTE_ARG = r'-ob displ'
+HEADER_PATH = r'C:\Users\hrvoje\Documents\vsite\MJ808\mj8x8\Core\Inc\main.h'
+TRACKED_HEADER_PATH = r'C:\Users\hrvoje\Documents\vsite\MJ808\mj8x8\Core\Inc\main.h_tracked'
+
 # check if a stlink debugger is connected
 def check_stlink_connected() -> bool:
-    command = r'"C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin\STM32_Programmer_CLI.exe" -c port=SWD freq=8000 sn=001C002F3137510A39383538 reset=HWrst'
+    command = f'{STM32_PROGRAMMER} {STM32_PROGRAMMER_COMMON_ARGS}'
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
     
     # Check if the output contains an error string
@@ -27,7 +33,7 @@ def check_stlink_connected() -> bool:
 
 # try to read out option byte
 def execute_stm32_programmer_cli() -> str:
-    command = r'"C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin\STM32_Programmer_CLI.exe" -c port=SWD freq=8000 sn=001C002F3137510A39383538 reset=HWrst -ob displ'
+    command = f'{STM32_PROGRAMMER} {STM32_PROGRAMMER_COMMON_ARGS} {STM32_PROGRAMMER_OPTION_BYTE_ARG}'
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True) # First connection attempt
 
     # Check if the output contains the string "Error: No STM32 target found!"
@@ -43,15 +49,15 @@ def execute_stm32_programmer_cli() -> str:
     return result.stdout
 
 def parse_mj8x8_header_for_devices(directory): # parses device header file for mjxxx_activity_t structure and deduces activity
-    commands_header_path = os.path.join(directory, "mj8x8_commands.h")
+    commands_HEADER_PATH = os.path.join(directory, "mj8x8_commands.h")
 
     # Check if the commands header file exists
-    if not os.path.isfile(commands_header_path):
+    if not os.path.isfile(commands_HEADER_PATH):
         print("mj8x8_commands.h not found.")
         return
 
     # Read and parse the commands header file
-    with open(commands_header_path, 'r') as commands_header:
+    with open(commands_HEADER_PATH, 'r') as commands_header:
         inside_struct_device = False
 
         # Iterate through lines in the file
@@ -84,17 +90,12 @@ def extract_data0_value(output) -> str:
     return match.group(1).lower()
 
 def copy_main_h_if_not_exists():
-    header_path = r'C:\Users\hrvoje\Documents\vsite\MJ808\mj8x8\Core\Inc\main.h'
-    tracked_header_path = r'C:\Users\hrvoje\Documents\vsite\MJ808\mj8x8\Core\Inc\main.h_tracked'
-
-    if not os.path.isfile(header_path):
-        shutil.copy(tracked_header_path, header_path)
+    if not os.path.isfile(HEADER_PATH):
+        shutil.copy(TRACKED_HEADER_PATH, HEADER_PATH)
 
 def write_to_main_h(device) -> None:
-    header_path = r'C:\Users\hrvoje\Documents\vsite\MJ808\mj8x8\Core\Inc\main.h'
-
     # Read the existing content of the file
-    with open(header_path, 'r') as header_file:
+    with open(HEADER_PATH, 'r') as header_file:
         lines = header_file.readlines()
 
     # Find the lines between the // AutoDevice comments
@@ -107,7 +108,7 @@ def write_to_main_h(device) -> None:
     lines[start_index:end_index] = ['#define ', f'{device.upper()}_\t// what device to compile for\n']
 
     # Write the modified content back to the file
-    with open(header_path, 'w') as header_file:
+    with open(HEADER_PATH, 'w') as header_file:
         header_file.writelines(lines)
 
 if __name__ == "__main__":
