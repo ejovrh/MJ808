@@ -1,27 +1,13 @@
 import subprocess
 import re
 import time
+import os
+import shutil
 
-# NOTE! do a skip-worktree on main.h
+MJ8X8_HEADER_PATH = r'C:\\Users\\hrvoje\\Documents\\vsite\\MJ808\\mj8x8\\Core\\Inc\\mj8x8'
 
-MJ8x8_boards = {
-    '0': 'mj???', # 0 Alpha 
-    '1': 'mj???', # 0 Bravo
-    '2': 'mj???', # 0 Charlie
-    '3': 'mj828', # 0 Delta
-    '4': 'mj838', # 1 Alpha
-    '5': 'mj???', # 1 Bravo
-    '6': 'mj???', # 1 Charlie
-    '7': 'mj???', # 1 Delta
-    '8': 'mj808', # 2 Alpha
-    '9': 'mj818', # 2 Bravo
-    'a': 'mj???', # 2 Charlie
-    'b': 'mj???', # 2 Delta
-    'c': 'mj???', # 3 Alpha
-    'd': 'mj???', # 3 Bravo
-    'e': 'mj???', # 3 Charlie
-    'f': 'mj???', # 3 Delta
-}
+# dictionary for detected boards
+MJ8x8_boards = {}
 
 # check if a stlink debugger is connected
 def check_stlink_connected() -> bool:
@@ -56,9 +42,53 @@ def execute_stm32_programmer_cli() -> str:
 
     return result.stdout
 
+def parse_mj8x8_header_for_devices(directory): # parses device header file for mjxxx_activity_t structure and deduces activity
+    commands_header_path = os.path.join(directory, "mj8x8_commands.h")
+
+    # Check if the commands header file exists
+    if not os.path.isfile(commands_header_path):
+        print("mj8x8_commands.h not found.")
+        return
+
+    # Read and parse the commands header file
+    with open(commands_header_path, 'r') as commands_header:
+        inside_struct_device = False
+
+        # Iterate through lines in the file
+        for line in commands_header:
+            # Start capturing lines inside the struct device_t
+            if 'typedef union' in line:
+                inside_struct_device = True
+                continue
+
+            # Stop capturing lines inside the struct device_t
+            if inside_struct_device and '};' in line:
+                inside_struct_device = False
+                break
+
+            # Capture lines inside the struct device_t
+            if inside_struct_device and 'uint16_t' in line and ':1' in line:
+                # Use regular expressions to find the device name and hex ID
+                device_name_match = re.search(r'uint16_t\s+(\w+)\s*:', line)
+                hex_id_match = re.search(r'\/\/\s*([0-9A-Fa-f]+)\s*\/\/', line)
+                
+                if device_name_match and hex_id_match:
+                    device_name = device_name_match.group(1)    # e.g. mj828
+                    hex_id = hex_id_match.group(1)  # e.g. hex 3
+
+                    # Insert the device into the dictionary
+                    MJ8x8_boards[hex_id] = device_name
+
 def extract_data0_value(output) -> str:
     match = re.search(r'Data0\s+:\s+0x([0-9A-Fa-f]+)\s+', output)
     return match.group(1).lower()
+
+def copy_main_h_if_not_exists():
+    header_path = r'C:\Users\hrvoje\Documents\vsite\MJ808\mj8x8\Core\Inc\main.h'
+    tracked_header_path = r'C:\Users\hrvoje\Documents\vsite\MJ808\mj8x8\Core\Inc\main.h_tracked'
+
+    if not os.path.isfile(header_path):
+        shutil.copy(tracked_header_path, header_path)
 
 def write_to_main_h(device) -> None:
     header_path = r'C:\Users\hrvoje\Documents\vsite\MJ808\mj8x8\Core\Inc\main.h'
@@ -84,11 +114,13 @@ if __name__ == "__main__":
     if not check_stlink_connected():
         exit() # Abort further execution if ST-Link is not detected
 
+    copy_main_h_if_not_exists()  # Check if main.h exists and copy main.h_tracked if not
     output = execute_stm32_programmer_cli() # try to connect to the programmer and read out option bytes
+    parse_mj8x8_header_for_devices(MJ8X8_HEADER_PATH) # parse mj8x8_commands.h for devices
     hexID = extract_data0_value(output) # parse readout output: device CAN ID in hex
     mj_board = MJ8x8_boards[hexID] # determine board
-    print("board: ", mj_board) # print it
 
+    print("board: ", mj_board) # print it
     write_to_main_h(mj_board) # modify main.h
 
     exit()
