@@ -12,16 +12,6 @@ TIM_HandleTypeDef htim17;  // event handling - 2.5ms
 TIM_HandleTypeDef htim2;  // input capture of zero-cross signal on rising edge
 TIM_HandleTypeDef htim3;  // measurement interval of timer2 data - default 250ms
 
-// TODO - these shouldn't really be here...
-static TIM_ClockConfigTypeDef sClockSourceConfig =
-	{0};
-
-static TIM_MasterConfigTypeDef sMasterConfig =
-	{0};
-
-static TIM_IC_InitTypeDef sConfigIC =
-	{0};
-
 typedef struct	// mj838_t actual
 {
 	mj838_t public;  // public struct
@@ -51,6 +41,15 @@ static inline void _GPIOInit(void)
 // Timer init - device specific
 static inline void _TimerInit(void)
 {
+	TIM_ClockConfigTypeDef sClockSourceConfig =
+		{0};
+
+	TIM_MasterConfigTypeDef sMasterConfig =
+		{0};
+
+	TIM_IC_InitTypeDef sConfigIC =
+		{0};
+
 	// input capture of zero-cross signal on rising edge
 	htim2.Instance = TIM2;
 	htim2.Init.Prescaler = TIMER_PRESCALER;
@@ -129,6 +128,9 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 {
 	if(timer->Instance == TIM2)  // ZeroCross frequency measurement
 		{
+			TIM_IC_InitTypeDef sConfigIC =
+				{0};
+
 			__HAL_RCC_TIM2_CLK_ENABLE();  // start the clock
 			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
 			timer->Instance->ARR = TIMER2_PERIOD;
