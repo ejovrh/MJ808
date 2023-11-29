@@ -80,7 +80,7 @@ typedef union  // union of mj8x8 devices: 16 bits or one word
 {
 	struct  // bit-wise struct for mj8x8 devices
 	{  // bit-wise view of devices on the bus,  max. 16 in total
-	   // format: n (0 to 15) - device indicator - dec. id - name
+	   // format: n (0 to 15) - device indicator - hex id - name
 		uint16_t mj000 :1; 	// 0 // 0 Alpha - Gateway/Logic Unit
 		uint16_t mj_1 :1;  	// 1 // 0 Bravo - ?
 		uint16_t mj_2 :1;  	// 2 // 0 Charlie - ?
@@ -91,12 +91,12 @@ typedef union  // union of mj8x8 devices: 16 bits or one word
 		uint16_t mj_7 :1;  	// 7 // 1 Delta - ?
 		uint16_t mj808 :1;  // 8 // 2 Alpha - front light
 		uint16_t mj818 :1;  // 9 // 2 Bravo - rear light
-		uint16_t mj_10 :1;	// 10 // 2 Charlie - ?
-		uint16_t mj_11 :1;	// 11 // 2 Delta - ?
-		uint16_t mj514 :1;	// 12 // 3 Alpha - Rohloff e14 shifter unit
-		uint16_t mj_13 :1;	// 13 // 3 Bravo - ?
-		uint16_t mj_14 :1;	// 14 // 3 Charlie - ?
-		uint16_t mj_15 :1;	// 15 // 3 Delta - ?
+		uint16_t mj_10 :1;	// a // 2 Charlie - ?
+		uint16_t mj_11 :1;	// b // 2 Delta - ?
+		uint16_t mj_12 :1;	// c // 3 Alpha - ?
+		uint16_t mj_13 :1;	// d // 3 Bravo - ?
+		uint16_t mj_14 :1;	// e // 3 Charlie - ?
+		uint16_t mj_15 :1;	// f // 3 Delta - ?
 	};
 	uint16_t byte;	// word representation of above bitfield
 } device_t;
@@ -153,12 +153,7 @@ typedef union  // union of mj8x8 devices: 16 bits or one word
 #define EVENT14 14
 #define EVENT15 15
 
-#define SPEED 0	// speed in m/s as derived from zerocross signal
-#define	ACCELERATION	1	// acceleration as derived from speed change
-
-#define MSG_MEASUREMENT_SPEED							(CLASS_MSG_MEASURE_DATA | SPEED)
-#define MSG_MEASUREMENT_ACCEL							(CLASS_MSG_MEASURE_DATA | ACCELERATION)
-
+#define MSG_MEASUREMENT_DATA 0xD0	// message containing various measurements
 //#define MSG_BUS 0xF0	// CAN bus related control messages
 
 //bit fields for command byte
@@ -180,7 +175,7 @@ typedef union  // union of mj8x8 devices: 16 bits or one word
 typedef enum  // enum describing devices on a mj8x8 bus
 {
 	  ALL = 0,
-	  mj000 = 0x0,  // sender: 0x00
+	  mj_00 = 0x0,  // sender: 0x00
 	  mj_01 = 0x1,  // sender: 0x10
 	  mj_02 = 0x2,  // sender: 0x20
 	  mj828 = 0x3,	// sender: 0x30
@@ -192,7 +187,7 @@ typedef enum  // enum describing devices on a mj8x8 bus
 	  mj818 = 0x9,	// sender: 0x90
 	  mj_10 = 0xA,	// sender: 0xA0
 	  mj_11 = 0xB,	// sender: 0xB0
-	  mj514 = 0xC,	// sender: 0xC0
+	  mj_12 = 0xC,	// sender: 0xC0
 	  mj_13 = 0xD,	// sender: 0xD0
 	  mj_14 = 0xE,	// sender: 0xE0
 	  mj_15 = 0xF,	// sender: 0xF0

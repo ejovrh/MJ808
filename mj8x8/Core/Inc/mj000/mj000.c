@@ -64,7 +64,7 @@ static inline void _DerivedSleep(void)
 void mj000_ctor(void)
 {
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
-	__Device.public.mj8x8 = mj8x8_ctor(mj000);  // call base class constructor & initialize own SID
+	__Device.public.mj8x8 = mj8x8_ctor(CANID_MJ000);  // call base class constructor & initialize own SID
 
 	__Device.public.activity = (mj000_activity_t*) *__Device.public.mj8x8->activity;  // tie in activity from the depths of mj8x8_t and redefine type
 
@@ -76,7 +76,7 @@ void mj000_ctor(void)
 
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;	// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
-//	__Device.public.mj8x8->DerivedSleep = &_DerivedSleep;  // implements the derived object sleep
+	__Device.public.mj8x8->DerivedSleep = &_DerivedSleep;  // implements the derived object sleep
 
 	// interrupt init
 	// TODO - mj000 - interrupt init
