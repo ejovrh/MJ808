@@ -30,6 +30,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #if defined(MJ838_)	// if this particular device is active
 #define CANID_SELF CANID_MJ838
 
+// activity bit pos
 #define ZEROCROSS 2
 #define AUTODRIVE 3
 
