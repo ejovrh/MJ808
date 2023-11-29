@@ -81,7 +81,7 @@ typedef union  // union of mj8x8 devices: 16 bits or one word
 	struct  // bit-wise struct for mj8x8 devices
 	{  // bit-wise view of devices on the bus,  max. 16 in total
 	   // format: n (0 to 15) - device indicator - hex id - name
-		uint16_t mj_0 :1;  	// 0 // 0 Alpha - logic unit
+		uint16_t mj000 :1; 	// 0 // 0 Alpha - Gateway/Logic Unit
 		uint16_t mj_1 :1;  	// 1 // 0 Bravo - ?
 		uint16_t mj_2 :1;  	// 2 // 0 Charlie - ?
 		uint16_t mj828 :1;  // 3 // 0 Delta - dashboard
