@@ -30,6 +30,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #if defined(MJ828_)	// if this particular device is active
 #define USE_EVENTHANDLER 1	// shall EventHandler code be included
 
+// activity bit pos
 #define BUTTONPRESSED 4
 #define LEDS 5
 #define AUTOBATT 6
