@@ -3,6 +3,7 @@ import re
 import time
 import os
 import shutil
+import sys
 
 MJ8X8_HEADER_PATH = r'C:\\Users\\hrvoje\\Documents\\vsite\\MJ808\\mj8x8\\Core\\Inc\\mj8x8'
 
@@ -112,8 +113,16 @@ def write_to_main_h(device) -> None:
         header_file.writelines(lines)
 
 if __name__ == "__main__":
+    if len(sys.argv) != 2 or sys.argv[1] not in ['0', '1']:
+        print("Usage: python script.py <0 or 1>")
+        print("set it in project properties -> C/C++ Build -> Settings -> Build STeps")
+        exit()
+
+    if sys.argv[1] == '0':
+        exit()
+
     if not check_stlink_connected():
-        exit() # Abort further execution if ST-Link is not detected
+        exit()
 
     copy_main_h_if_not_exists()  # Check if main.h exists and copy main.h_tracked if not
     output = execute_stm32_programmer_cli() # try to connect to the programmer and read out option bytes
