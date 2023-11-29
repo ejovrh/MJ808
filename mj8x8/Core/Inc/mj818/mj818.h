@@ -30,6 +30,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #if defined(MJ818_)	// if this particular device is active
 #define USE_EVENTHANDLER 0	// shall EventHandler code be included
 
+// activity bit pos
 #define BRAKELIGHT 4
 #define REARLIGHT 5
 
