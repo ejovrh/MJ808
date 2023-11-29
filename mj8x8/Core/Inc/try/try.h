@@ -1,14 +1,15 @@
 #ifndef CORE_INC_TRY_TRY_H_
 #define CORE_INC_TRY_TRY_H_
 
-#include "mj808\mj808.h"	// the particular activity_t is public and is used below
-#include "mj818\mj818.h"	// ditto
+#include "mj000\mj000.h"	// the particular activity_t is public and is used below
+#include "mj808\mj808.h"	// ditto
+#include "mj818\mj818.h"
 #include "mj828\mj828.h"
 #include "mj838\mj838.h"
 
 typedef struct	// struct describing bus-wide device activity
 {
-	activity_t *_0;  // 0A - ?
+	activity_t *mj000;  // 0A - Gateway / Logic Unit
 	activity_t *_1;  // 0B - ?
 	activity_t *_2;  // 0C - ?
 	mj828_activity_t *mj828;  // 0D - dashboard
@@ -26,7 +27,7 @@ typedef struct	// struct describing bus-wide device activity
 	activity_t *_15;  // 3D - ?
 } status_t;
 
-typedef struct 	// struct describing devices on MJ808
+typedef struct 	// struct describing devices on MJxxx
 {
 	status_t *BusActivity;  // pointer to bus-wide activity container for all devices
 	void (*PopulatedBusOperation)(message_handler_t *const in_handler);  // executes function pointer identified by message command

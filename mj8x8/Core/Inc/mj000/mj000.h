@@ -37,10 +37,12 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 
 #include "mj8x8\mj8x8.h"
 
+#include "event\event.h"
+
 // definitions of device/PCB layout-specific hardware pins
 #define TCAN334_Standby_Pin GPIO_PIN_15
 #define TCAN334_Standby_GPIO_Port GPIOA
-// TODO - mj000 - gpio defines
+// TODO - mj000 - GPIO defines
 
 // definitions of device/PCB layout-specific hardware pins
 
