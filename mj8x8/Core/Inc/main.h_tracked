@@ -8,20 +8,13 @@
 #endif
 
 // AutoDevice
-#define MJ828_	// what device to compile for
+#define MJ808_	// what device to compile for
 // AutoDevice
 
-#define BROADCAST_HEARTBEAT	1 // broadcast heartbeat message
-#define	EXECUTE_SLEEP 1 // in Timer1 ISR, call __MJ8x8.public.Sleep() or not, voids any selection below
-#define USE_HAL_STOPMODE 1 // if activity bit allows it, enter HAL_PWR_EnterSTOPMode & execute DerivedSleep()
-#define USE_HAL_SLEEPONEXIT 1 // use processor power save feature sleep on ISR exit
-
-// FIXME - activating USE_CAN_BUSOFF causes CAN errors & missed frames, response feels sluggish; processor stop/sleeponexit has no effect on this
-// USE_HAL_CANSLEEP seems to not have any effect on this - its is not better or worse if set/unset
-// EXTI <-> CAN switch seems to mess it all up
-#define USE_CAN_BUSACTIVE 0 // let CAN go into bus-off state or not
-#define USE_HAL_CANSLEEP 1 // execute HAL_CAN_RequestSleep() & HAL_CAN_WakeUp() or not?
-#define CAN_FOREVER_DEBUG_LOOP 1 // forever loop which catches CAN code issues in can.c
+#define USE_HEARTBEAT	1 // use the heartbeat
+#define	USE_POWERSAVE	1 // use processor power save feature stop mode
+#define USE_SLEEPONEXIT 1 // use processor power save feature sleep on ISR exit
+#define USE_CAN_BUSOFF 1 // let CAN go into bus-off state or not
 
 #if defined(MJ000_)	// Gateway / Logic Unit
 #include "mj000/mj000.h"
