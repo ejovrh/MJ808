@@ -175,7 +175,7 @@ typedef union  // union of mj8x8 devices: 16 bits or one word
 typedef enum  // enum describing devices on a mj8x8 bus
 {
 	  ALL = 0,
-	  mj_00 = 0x0,  // sender: 0x00
+	  mj000 = 0x0,  // sender: 0x00
 	  mj_01 = 0x1,  // sender: 0x10
 	  mj_02 = 0x2,  // sender: 0x20
 	  mj828 = 0x3,	// sender: 0x30
