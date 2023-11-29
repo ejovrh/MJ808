@@ -28,6 +28,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #if defined(MJ818_)	// if this particular device is active
 #define CANID_SELF CANID_MJ818
 
+// activity bit pos
 #define REARLIGHT 4
 #define BRAKELIGHT 5
 

@@ -16,6 +16,9 @@
 #define USE_SLEEPONEXIT 1 // use processor power save feature sleep on ISR exit
 #define USE_CAN_BUSOFF 1 // let CAN go into bus-off state or not
 
+#if defined(MJ000_)	// Gateway / Logic Unit
+#include "mj000/mj000.h"
+#endif
 #if defined(MJ808_)	// front light header include
 #include "mj808/mj808.h"
 #endif

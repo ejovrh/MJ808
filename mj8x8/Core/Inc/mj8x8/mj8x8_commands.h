@@ -81,8 +81,8 @@ typedef union
 {  //
 	struct
 	{  // bit-wise view of devices on the bus,  max. 16 in total
-	   // format: n (0 to 15) - device indicator - hex id - name 
-		uint16_t mj_0 :1;  	// 0 // 0 Alpha - logic unit
+	   // format: n (0 to 15) - device indicator - hex id - name
+		uint16_t mj000 :1; 	// 0 // 0 Alpha - Gateway/Logic Unit
 		uint16_t mj_1 :1;  	// 1 // 0 Bravo - ?
 		uint16_t mj_2 :1;  	// 2 // 0 Charlie - ?
 		uint16_t mj828 :1;  // 3 // 0 Delta - dashboard
@@ -222,6 +222,7 @@ typedef union
 #define BLANK 0x00
 
 // CAN ID upper byte construction
+#define CANID_MJ000 (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A)
 #define CANID_MJ808 (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A)
 #define CANID_MJ818 (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B)
 #define CANID_MJ828 (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D)
