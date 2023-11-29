@@ -566,6 +566,10 @@ void _PopulatedBusOperation(message_handler_t *const in_handler)
 // defines device operation on empty bus
 void _EmptyBusOperation(void)
 {
+#ifdef MJ000_
+	// TODO - _EmptyBusOperation()
+	;
+#endif
 #ifdef MJ808_
 	;
 #endif
@@ -591,7 +595,7 @@ static __try_t __Try =  // instantiate can_t actual and set function pointers
 
 void try_ctor(void)
 {
-#if defined futureMJ_0
+#if defined MJ000_
 	_BusActivityArray[0] = (activity_t*) Device->activity;
 #endif
 
@@ -655,7 +659,7 @@ void try_ctor(void)
 	_BusActivityArray[15] = (activity_t*) Device->activity;
 #endif
 
-	Try->BusActivity->_0 = _BusActivityArray[0];
+	Try->BusActivity->mj000 = _BusActivityArray[0];
 	Try->BusActivity->_1 = _BusActivityArray[1];
 	Try->BusActivity->_2 = _BusActivityArray[2];
 	Try->BusActivity->mj828 = (mj828_activity_t*) _BusActivityArray[3];
