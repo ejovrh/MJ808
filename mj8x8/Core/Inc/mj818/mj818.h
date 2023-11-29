@@ -30,8 +30,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #if defined(MJ818_)	// if this particular device is active
 #define CANID_SELF CANID_MJ818
 
-#define REARLIGHT 4
-#define BRAKELIGHT 5
+#define BRAKELIGHT 4
+#define REARLIGHT 5
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER14_PERIOD 49	// LED handling - 20ms

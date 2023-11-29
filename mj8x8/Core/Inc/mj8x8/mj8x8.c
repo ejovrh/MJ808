@@ -38,7 +38,8 @@ static void _Heartbeat(message_handler_t *const msg)
 	 * if after a few iterations no devices are discovered, a bus-off routine is executed.
 	 * e.g. in the case of mj818 (the rear light without switches), it turns itself on automatically and just shines.
 	 */
-#if USE_HEARTBEAT
+
+#if BROADCAST_HEARTBEAT
 	if(__MJ8x8.__HeartBeatCounter == __MJ8x8.__NumericalCAN_ID)  // see if this counter iteration is our turn
 		msg->SendMessage(CMND_ANNOUNCE, Device->activity->byte, 2);  // if so, broadcast CAN heartbeat message and disguise device status in it
 #endif
@@ -207,31 +208,45 @@ static void _Sleep(void)
 	// called periodically by TIM1_BRK_UP_TRG_COM_IRQHandler()
 	// wakeup events are only EXTIs
 
-#if USE_POWERSAVE
+#if USE_HAL_STOPMODE
 	if(**__MJ8x8.public.activity & POWERSAVE_DEVICE_SLEEPONEXIT_ACTIVE_MASK)  // true if device is active in some form (see actual device implementation)
 		{
+#if USE_CAN_BUSOFF
 			if(**__MJ8x8.public.activity & POWERSAVE_CANBUS_ACTIVE_MASK)  // upper nibble indicates activity
 				__MJ8x8.public.can->GoBusActive(1);  // put CAN infrastructure into active state
 			else
 				__MJ8x8.public.can->GoBusActive(0);  // put CAN infrastructure into standby state
+#endif
 
+#if USE_HAL_SLEEPONEXIT
 			HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
+#endif
+
+			;
 		}
 	else	// if device is not active - i.e the (activity_byte & 0x3F == 0)
 		{
 			__MJ8x8.public.DerivedSleep();	// call the derived object's sleep implementation
 
+#if USE_CAN_BUSOFF
 			__MJ8x8.public.can->GoBusActive(0);  // put CAN infrastructure into standby state
+#endif
+
 			__MJ8x8.public.StopCoreTimer();  // stop timer1
 
-			HAL_PWR_DisableSleepOnExit();
+#if USE_HAL_SLEEPONEXIT
+			HAL_PWR_DisableSleepOnExit();  // go to sleep once any ISR finishes
+#endif
+
 			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // go into stop mode
 		}
 #else
-#if USE_SLEEPONEXIT
+#if USE_HAL_SLEEPONEXIT
 	HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
 #endif
 #endif
+
+	;
 }
 
 // general device non-specific low-level hardware init & config
@@ -278,5 +293,7 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 
 	__MJ8x8.public.HeartBeat(MsgHandler);  // execute the heartbeat
 
+#if EXECUTE_SLEEP
 	__MJ8x8.public.Sleep();  // go into an appropriate sleep state as allowed by FlagActive
+#endif
 }

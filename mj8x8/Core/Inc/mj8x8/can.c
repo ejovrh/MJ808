@@ -31,6 +31,11 @@ static void _tcan334_can_msg_receive(message_handler_t *in_handler, const uint8_
 	can_msg_t _msg;  // static or not ?
 	CAN_RxHeaderTypeDef _nRXH;  // static or not ?
 
+#if USE_CAN_BUSACTIVE
+	if((__CAN.public.activity->byte & POWERSAVE_CANBUS_ACTIVE_MASK) == 0)  // if sleeping...
+		__CAN.public.GoBusActive(1);  // wake up
+#endif
+
 	HAL_CAN_GetRxMessage(&_hcan, in_fifo, &_nRXH, _msg.data);  // fetch message from FIFO
 
 	_msg.sidh = _nRXH.StdId;
@@ -38,7 +43,7 @@ static void _tcan334_can_msg_receive(message_handler_t *in_handler, const uint8_
 
 	in_handler->SetMessage(&_msg);  // upload into the message handler
 
-#if USE_CAN_BUSOFF
+#if USE_CAN_BUSACTIVE
 	__CAN.public.GoBusActive(0);
 #endif
 }
@@ -49,7 +54,7 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 	volatile uint16_t i = 0;  // safeguard counter
 	uint32_t _TXMailbox;  // TX mailbox identifier
 
-#if USE_CAN_BUSOFF
+#if USE_CAN_BUSACTIVE
 	if((__CAN.public.activity->byte & POWERSAVE_CANBUS_ACTIVE_MASK) == 0)  // if sleeping...
 		__CAN.public.GoBusActive(1);  // wake up
 #endif
@@ -92,7 +97,7 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 			++i;
 		}
 
-#if USE_CAN_BUSOFF
+#if USE_CAN_BUSACTIVE
 	__CAN.public.GoBusActive(0);
 #endif
 }
@@ -123,9 +128,9 @@ static inline void _EXTItoRX(void)
 }
 
 //	sets CAN infrastructure into standby mode
-static inline void __can_go_into_standby_mode(void)
+static inline void __can_reuqest_sleep(void)
 {
-	uint8_t i = 0;	// safeguard counter
+	volatile uint16_t i = 0;  // safeguard counter
 
 	if(__CAN.public.activity->CANActive == 0)  // if we already are asleep ...
 		return;  // ... do nothing
@@ -133,6 +138,7 @@ static inline void __can_go_into_standby_mode(void)
 //	__disable_irq();	// uninterrupted...
 	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_STANDBY);  // put transceiver to sleep
 
+#if USE_HAL_CANSLEEP
 	do
 		{
 			HAL_CAN_RequestSleep(&_hcan);  // try to put CAN peripheral to sleep
@@ -148,6 +154,7 @@ static inline void __can_go_into_standby_mode(void)
 			++i;
 		}
 	while(HAL_CAN_IsSleepActive(&_hcan) == 0);  // check if CAN peripheral is still active
+#endif
 
 	_RXtoEXTI();	// configure GPIO from CAN RX pin to EXTI (so that CAN frame reception can wake up the uC from stop mode)
 
@@ -157,9 +164,9 @@ static inline void __can_go_into_standby_mode(void)
 }
 
 //	sets CAN infrastructure into normal operating mode
-static inline void __can_go_into_active_mode(void)
+static inline void __can_wakeup(void)
 {
-	volatile uint8_t i = 0;  // safeguard counter
+	volatile uint16_t i = 0;  // safeguard counter
 
 	if(__CAN.public.activity->CANActive == 1)  // if we already are awake ...
 		return;  // ... do nothing
@@ -168,6 +175,7 @@ static inline void __can_go_into_active_mode(void)
 
 	_EXTItoRX();	// configure GPIO from EXTI to CAN RX
 
+#if USE_HAL_CANSLEEP
 	do
 		{
 			HAL_CAN_WakeUp(&_hcan);  // try to wake up internal CAN peripheral
@@ -182,6 +190,7 @@ static inline void __can_go_into_active_mode(void)
 			++i;
 		}
 	while(HAL_CAN_IsSleepActive(&_hcan));  // check if CAN peripheral is still asleep
+#endif
 
 	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_WAKE);	// wake up CAN transceiver
 
@@ -200,9 +209,9 @@ static void _GoBusActive(const uint8_t awake)
 	 */
 
 	if(awake)
-		__can_go_into_active_mode();
+		__can_wakeup();
 	else
-		__can_go_into_standby_mode();
+		__can_reuqest_sleep();
 }
 
 __can_t __CAN =  // instantiate can_t actual and set function pointers
