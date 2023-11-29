@@ -40,8 +40,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TS_CAL2	*((uint16_t*) ((uint32_t) 0x1FFFF7C2)) // calibration at 110 degrees C, value is 1319
 
 #define ADC_CHANNELS 4	// how many ADC channels are we using
-#define ADC_CHANNEL_VBATT ADC_CHANNEL_3	// PA3
 #define ADC_CHANNEL_PHOTOTRANSISTOR ADC_CHANNEL_1 // PA1
+#define ADC_CHANNEL_VBATT ADC_CHANNEL_3	// PA3
 #define BUTTON_COUNT 3	// how many buttons are there
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER2_PERIOD 2499	// ADC - 250ms
@@ -109,8 +109,8 @@ enum mj828_leds  // enum of lights on this device
 
 enum mj828_adcchannels
 {  // order is important! - this MCU has no ranking and the order of channels is by channel number
-	  Vbat,  // battery voltage - PA3
 	  Darkness,  // Phototransistor - PA1 - low value = little darkness, high value = lots of darkness
+	  Vbat,  // battery voltage - PA3
 	  Temperature,  // internal temperature sensor
 	  Vrefint  // internal reference voltage
 };
