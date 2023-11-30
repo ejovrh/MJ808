@@ -211,7 +211,7 @@ static void _Sleep(void)
 #if USE_HAL_STOPMODE
 	if(**__MJ8x8.public.activity & POWERSAVE_DEVICE_SLEEPONEXIT_ACTIVE_MASK)  // true if device is active in some form (see actual device implementation)
 		{
-#if USE_CAN_BUSOFF
+#if USE_CAN_BUSACTIVE
 			if(**__MJ8x8.public.activity & POWERSAVE_CANBUS_ACTIVE_MASK)  // upper nibble indicates activity
 				__MJ8x8.public.can->GoBusActive(1);  // put CAN infrastructure into active state
 			else
@@ -228,7 +228,7 @@ static void _Sleep(void)
 		{
 			__MJ8x8.public.DerivedSleep();	// call the derived object's sleep implementation
 
-#if USE_CAN_BUSOFF
+#if USE_CAN_BUSACTIVE
 			__MJ8x8.public.can->GoBusActive(0);  // put CAN infrastructure into standby state
 #endif
 

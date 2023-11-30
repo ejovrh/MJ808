@@ -136,7 +136,7 @@ static inline void __can_reuqest_sleep(void)
 		return;  // ... do nothing
 
 //	__disable_irq();	// uninterrupted...
-	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_STANDBY);  // put transceiver to sleep
+//	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_STANDBY);  // put transceiver to sleep
 
 #if USE_HAL_CANSLEEP
 	do
@@ -156,7 +156,7 @@ static inline void __can_reuqest_sleep(void)
 	while(HAL_CAN_IsSleepActive(&_hcan) == 0);  // check if CAN peripheral is still active
 #endif
 
-	_RXtoEXTI();	// configure GPIO from CAN RX pin to EXTI (so that CAN frame reception can wake up the uC from stop mode)
+//	_RXtoEXTI();	// configure GPIO from CAN RX pin to EXTI (so that CAN frame reception can wake up the uC from stop mode)
 
 	__CAN.public.activity->CANActive = 0;  // mark as sleeping
 
@@ -173,7 +173,7 @@ static inline void __can_wakeup(void)
 
 //	__disable_irq();	// uninterrupted...
 
-	_EXTItoRX();	// configure GPIO from EXTI to CAN RX
+//	_EXTItoRX();	// configure GPIO from EXTI to CAN RX
 
 #if USE_HAL_CANSLEEP
 	do
@@ -192,7 +192,7 @@ static inline void __can_wakeup(void)
 	while(HAL_CAN_IsSleepActive(&_hcan));  // check if CAN peripheral is still asleep
 #endif
 
-	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_WAKE);	// wake up CAN transceiver
+//	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_WAKE);	// wake up CAN transceiver
 
 	__CAN.public.activity->CANActive = 1;  // mark as awake
 
