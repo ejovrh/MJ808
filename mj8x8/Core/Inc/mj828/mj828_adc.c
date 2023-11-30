@@ -62,18 +62,19 @@ static void _ADCInit(void)
 	HAL_ADC_Init(&hadc);
 
 	// channel order has to match mj828_adcchannels enum
-	sConfig.Channel = ADC_CHANNEL_VBATT;	//	Battery voltage - PA3
 	sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
 	sConfig.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
+
+	sConfig.Channel = ADC_CHANNEL_PHOTOTRANSISTOR;	// channel 1 - Phototransistor - PA1
 	HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-	sConfig.Channel = ADC_CHANNEL_PHOTOTRANSISTOR;	//	Phototransistor / PA1
+	sConfig.Channel = ADC_CHANNEL_VBATT;	// channel 8 -Battery voltage - PB0
 	HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-	sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;  //	built-in temperature sensor
+	sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;  // channel 16 -	built-in temperature sensor
 	HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
-	sConfig.Channel = ADC_CHANNEL_VREFINT;	// Vrefint - see RM0091, 13.8, p. 260
+	sConfig.Channel = ADC_CHANNEL_VREFINT;	// channel 17 - Vrefint - see RM0091, 13.8, p. 260
 	HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
 	HAL_ADCEx_Calibration_Start(&hadc);

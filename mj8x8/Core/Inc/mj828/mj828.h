@@ -41,7 +41,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 
 #define ADC_CHANNELS 4	// how many ADC channels are we using
 #define ADC_CHANNEL_PHOTOTRANSISTOR ADC_CHANNEL_1 // PA1
-#define ADC_CHANNEL_VBATT ADC_CHANNEL_3	// PA3
+#define ADC_CHANNEL_VBATT ADC_CHANNEL_8	// PB0
 #define BUTTON_COUNT 3	// how many buttons are there
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER2_PERIOD 2499	// ADC - 250ms
@@ -49,11 +49,11 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TIMER16_PERIOD 249	// button handling - 25ms
 #define TIMER17_PERIOD 24	// event handling - 2.5ms
 
-#define AUTOLIGHT_DEBUG true
+#define AUTOLIGHT_DEBUG true // indoor values vs. other (outdoor values)
 
 #ifdef AUTOLIGHT_DEBUG
-#define AUTOLIGHT_THRESHOLD_LIGHT_OFF 3200 // debug values so that ambient light sensor turns lights on/off in a room (as opposed to the outdoors)
-#define AUTOLIGHT_THRESHOLD_LIGHT_ON 3500	// ditto
+#define AUTOLIGHT_THRESHOLD_LIGHT_OFF 3900 // 3200 debug values so that ambient light sensor turns lights on/off in a room (as opposed to the outdoors)
+#define AUTOLIGHT_THRESHOLD_LIGHT_ON 4000	// 3500 ditto
 #else
 // POTI wiper set at approx. 75% - early dusk
 #define AUTOLIGHT_THRESHOLD_LIGHT_OFF 1843	// high light threshold - 4096/2=2048; 2048-10%
@@ -92,7 +92,6 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define CP3_GPIO_Port GPIOA
 #define CP4_Pin GPIO_PIN_4
 #define CP4_GPIO_Port GPIOA
-
 // definitions of device/PCB layout-specific hardware pins
 
 enum mj828_leds  // enum of lights on this device
@@ -110,7 +109,7 @@ enum mj828_leds  // enum of lights on this device
 enum mj828_adcchannels
 {  // order is important! - this MCU has no ranking and the order of channels is by channel number
 	  Darkness,  // Phototransistor - PA1 - low value = little darkness, high value = lots of darkness
-	  Vbat,  // battery voltage - PA3
+	  Vbat,  // battery voltage - PB0
 	  Temperature,  // internal temperature sensor
 	  Vrefint  // internal reference voltage
 };
