@@ -137,14 +137,11 @@ static void _primitiveBrakeLED(uint8_t value)
 
 static inline void __componentLED_On(const uint8_t val)
 {
-	// note - if the order is reversed, it doesnt work:
 	Device->led->led[Rear].Shine(val);  // rear light on
-//	Device->led->led[Brake].Shine(val);  // brake LED on
 }
 
 static inline void __componentLED_Off(void)
 {
-	Device->led->led[Brake].Shine(0);  // brake LED off
 	Device->led->led[Rear].Shine(0);  // rear light off
 }
 
