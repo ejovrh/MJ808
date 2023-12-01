@@ -6,6 +6,8 @@
 
 typedef struct	// autobatt_t actual
 {
+	uint8_t LowBattery :1;  // flag indicating low battery status
+
 	autobatt_t public;  // public struct
 } __autobatt_t;
 
@@ -17,7 +19,7 @@ static uint32_t tempvbat;  // temporary variable for average calculation
 static uint32_t tempvrefint;	// ditto
 static uint32_t temptemp;  // ditto
 
-// display battery charge status depending on ADC read
+// display voltage-based battery charge status depending on ADC read
 static void _DisplayBatteryVoltage(void)
 {
 	static uint8_t state;
@@ -33,27 +35,22 @@ static void _DisplayBatteryVoltage(void)
 			state = 0;
 		}
 
-	if(__AutoBatt.public.Vbat <= 6075 && __AutoBatt.public.Vbat > 1)  // below 6.1V (as measured by internal ADC) - below 20% charge
-		{
-			Device->led->led[Red].Shine(state);
-		}
-
-	if(__AutoBatt.public.Vbat > 6075)  // 1890 - 6.1V to 6.6V - above approx. 20% charge
+	if(__AutoBatt.public.Vbat > BATTERY_20_PCT)  // 1890 - 6.1V to 6.6V - above approx. 20% charge
 		{
 			Device->led->led[Battery1].Shine(state);
 		}
 
-	if(__AutoBatt.public.Vbat > 6650)  // 2070 - 6.6V to 7.8V	- above approx. 40% charge
+	if(__AutoBatt.public.Vbat > BATTERY_40_PCT)  // 2070 - 6.6V to 7.8V	- above approx. 40% charge
 		{
 			Device->led->led[Battery2].Shine(state);
 		}
 
-	if(__AutoBatt.public.Vbat > 7200)  // 2245 - 7.2V to 7.8V - above approx. 60% charge
+	if(__AutoBatt.public.Vbat > BATTERY_60_PCT)  // 2245 - 7.2V to 7.8V - above approx. 60% charge
 		{
 			Device->led->led[Battery3].Shine(state);
 		}
 
-	if(__AutoBatt.public.Vbat > 7800)  // 2430 - above 7.8V	- above approx. 80% charge
+	if(__AutoBatt.public.Vbat > BATTERY_80_PCT)  // 2430 - above 7.8V	- above approx. 80% charge
 		{
 			Device->led->led[Battery4].Shine(state);
 		}
@@ -62,6 +59,7 @@ static void _DisplayBatteryVoltage(void)
 // AutoBatt functionality based on battery charge
 static void _Do(void)
 {
+	// TODO - remove ADC code from battery code
 	tempvbat += Device->adc->GetChannel(Vbat);	// sum up raw data
 	tempvrefint += Device->adc->GetChannel(Vrefint);	// ditto
 	temptemp += Device->adc->GetChannel(Temperature);  // ...
@@ -105,17 +103,25 @@ static void _Do(void)
 			i = 0;
 		}
 
-	// TODO - take action based on battery states, Vbat values are example values only
-//	if(__AutoBatt.public.Vbat <= 5800 && __AutoBatt.public.Vbat > 1)	// if battery state below 10%)
-//		{
-//			Device->led->led[Red].Shine(BLINK);  // indicate
-//			MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 10, 2);	// send out event with 10% as argument
-//		}
-
-//	if(__AutoBatt.public.Vbat > 4900)  // TODO - replace example value with meaningful one
-//		{
-//			MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 50, 2);	//
-//		}
+	// low battery indicator
+	if(__AutoBatt.LowBattery)  // if it is active
+		{  // deactivate if possible
+			if(__AutoBatt.public.Vbat > BATTERY_10_PCT)  // if battery state above 10%)
+				{
+					Device->led->led[Red].Shine(OFF);  // indicate
+					MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 10, 2);	// send out event with 10% as argument
+					__AutoBatt.LowBattery = 0;
+				}
+		}
+	else
+		{  // activate if needed
+			if(__AutoBatt.public.Vbat <= BATTERY_10_PCT && __AutoBatt.public.Vbat > 1)	// if battery state below 10%)
+				{
+					Device->led->led[Red].Shine(ON);  // indicate
+					MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 10, 2);	// send out event with 10% as argument
+					__AutoBatt.LowBattery = 1;
+				}
+		}
 }
 
 static __autobatt_t __AutoBatt =  // instantiate autobatt_t actual and set function pointers

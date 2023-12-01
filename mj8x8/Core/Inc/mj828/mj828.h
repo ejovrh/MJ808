@@ -60,6 +60,13 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define AUTOLIGHT_THRESHOLD_LIGHT_ON 2253 // low light threshold - 4096/2=2048; 2048+10%
 #endif
 
+// voltage-based charge status
+#define BATTERY_10_PCT 5800	// 10% charge
+#define BATTERY_20_PCT 6075	// 20% charge
+#define BATTERY_40_PCT 6650	// 40% charge
+#define BATTERY_60_PCT 7200	// 60% charge
+#define BATTERY_80_PCT 7800	// 80% charge
+
 #include "mj8x8\mj8x8.h"
 #include "led\led.h"
 #include "button\button.h"
