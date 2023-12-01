@@ -6,15 +6,11 @@
 #define BATTERY_FULL 8400	// mV, 2SxP pack, LiIon cells
 #define BBATTERY_TURN_ON_THRESHOLD 5800	// do not turn on below that voltage (approx. 10% charge)
 #define BATTERY_EMPTY	5500	// mV, 2SxP pack, LiIon cells
-#define ADC_MEASURE_ITERATIONS 40	// iterations for measurement data value average
 
 #if defined(MJ828_)	// if this particular device is active
 
 typedef struct	// struct describing the AutoBatt functionality
 {
-	uint16_t Vbat;	// battery voltage in mV
-	int16_t Temp;  // temperature
-
 	void (*Do)(void);  // AutoBatt functionality
 	void (*DisplayBatteryVoltage)(void);  // displays battery voltage
 } autobatt_t;

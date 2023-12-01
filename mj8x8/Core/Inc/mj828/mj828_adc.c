@@ -5,19 +5,28 @@
 
 #include "adc\adc_actual.c"
 
+#define ADC_MEASURE_ITERATIONS 4	// iterations for measurement data value average
+
 static ADC_HandleTypeDef hadc;  // ADC object
 extern TIM_HandleTypeDef htim2;  // Timer2 object - ADC conversion - 250ms
 static DMA_HandleTypeDef hdma_adc;	// DMA object
 
 static __adc_t __ADC;  // forward declaration of object
 
-volatile uint32_t __adc_buffer[ADC_CHANNELS] =
-	{0};	// store for ADC readout
+static volatile uint32_t __adc_dma_buffer[ADC_CHANNELS] = {0};	// store for ADC readout
+volatile uint32_t __adc_results[ADC_CHANNELS] = {0}; // store ADC average data
+
+static double _VddaConversionConstant;	// constant values pre-computed in constructor
+static uint8_t i;  // iterator for average calculation
+static uint32_t tempvbat;  // temporary variable for average calculation
+static uint32_t tempvrefint;	// ditto
+static uint32_t temptemp;  // ditto
+static uint32_t tempdarkness;  // ditto
 
 // returns value stored at index i
 static inline uint16_t _GetChannel(const uint8_t i)
 {
-	return __adc_buffer[i];
+	return __adc_results[i];
 }
 
 // DMA init - device specific
@@ -96,13 +105,65 @@ static inline void _Stop(void)
 	__HAL_RCC_DMA1_CLK_DISABLE();
 }
 
+// DMA ISR executed function for ADC computation tasks
+static void _Do(void)
+{
+	tempdarkness += __adc_dma_buffer[Darkness]; // sum up raw data
+	tempvbat += __adc_dma_buffer[Vbat];	// ditto
+	temptemp += __adc_dma_buffer[Temperature];  // ...
+	tempvrefint += __adc_dma_buffer[Vrefint];	// ...
+
+	if(++i == ADC_MEASURE_ITERATIONS)
+		{
+			tempdarkness /= ADC_MEASURE_ITERATIONS; // divide over iterations
+			tempvbat /= ADC_MEASURE_ITERATIONS;  // ditto
+			temptemp /= ADC_MEASURE_ITERATIONS;  // ...
+			tempvrefint /= ADC_MEASURE_ITERATIONS;	// ...
+
+			// raw data is enough to determine darkness levels, no need for Lux conversion
+			__adc_results[Darkness] = tempdarkness; // store computed average in result buffer
+
+			/* ADC channel voltage calculation - see RM 0091, chapter 13.8, p. 260
+			 *
+			 * using the Vrefint reference channel, the formula for calculating the ADC channel voltage is:
+			 * 	Vchannel = (Vdda_charact. * Vrefint_cal * ADC_data) / (Vrefint_data * full scale)
+			 *
+			 * 	of these, only ADC_data and Vrefint_data are variable, the rest are constants which can be computed in advance
+			 * 	thus, the formula becomes:
+			 *
+			 * 	Vchannel = (ADC_data/Vrefint_data) * ( (Vdda_charact. * Vrefint_cal) / full scale ) * 4
+			 * 		the latter term is computed once in the constructor.
+			 * 		in absolute numbers it is 4915.7509157509157
+			 *
+			 * 			since we are working with a 300k & 100k voltage divider, the above term was multiplied by 4
+			 *
+			 * 	Vchannel becomes (ADC_data/Vrefint_data) * VddaConversionConstant, true battery voltage in mV
+			 * 	this is then typecast into uint16_t to have a nice round number
+			 */
+			__adc_results[Vbat] = (uint16_t) ((double) tempvbat / tempvrefint * _VddaConversionConstant); // store computed average in result buffer
+
+			/* ADC temperature calculation - see RM0091, chapter 13.8, p. 259
+			 *
+			 *	https://techoverflow.net/2015/01/13/reading-stm32f0-internal-temperature-and-voltage-using-chibios/
+			 */
+			__adc_results[Temperature] = (((((double) (temptemp * VREFINT_CAL) / tempvrefint) - TS_CAL1) * 800) / (int16_t) (TS_CAL2 - TS_CAL1)) + 300;
+			__adc_results[Vrefint] = tempvrefint; // store computed average in result buffer
+
+			tempdarkness = 0;	// reset
+			tempvbat = 0;
+			temptemp = 0;
+			tempvrefint = 0;
+			i = 0;
+		}
+}
+
 adc_t* adc_ctor(void)
 {
 	_DMAInit();	// initialize DMA
 	_ADCInit();  // initialize ADC
 
-	__ADC.__buffer = __adc_buffer;  // tie in ADC readout destination
-
+	__ADC.__adc_results = __adc_results;  // tie in ADC readout destination
+	__ADC._Do = &_Do;	// DMA ISR executed function for ADC computation tasks
 	__ADC.public.GetChannel = &_GetChannel;  // set function pointer
 	__ADC.public.Start = &_Start;  // ditto
 	__ADC.public.Stop = &_Stop;  // ditto
@@ -110,7 +171,9 @@ adc_t* adc_ctor(void)
 	HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);  // DMA interrupt handling
 	HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 
-	HAL_ADC_Start_DMA(&hadc, (uint32_t *)__ADC.__buffer, ADC_CHANNELS);	// start DMA
+	HAL_ADC_Start_DMA(&hadc, (uint32_t *) __adc_dma_buffer, ADC_CHANNELS);	// start DMA
+
+	_VddaConversionConstant = (double) (3300 * VREFINT_CAL * 4) / 4095;  // 3300 - 3.3V for mV, 4 for resistor divider
 
 	return &__ADC.public;  // return public parts
 }
@@ -120,6 +183,7 @@ void DMA1_Channel1_IRQHandler(void)
 {
   HAL_DMA_IRQHandler(&hdma_adc);	// service the interrupt
 
+  __ADC._Do();	// ADC computation tasks on every conversion
 	Device->autolight->Do();  // run the AutoLight feature
 	Device->autobatt->Do();  // run the AutoBatt feature
 }
