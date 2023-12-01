@@ -10,8 +10,6 @@ TIM_HandleTypeDef htim2;	// rear light PWM on channel 1
 TIM_HandleTypeDef htim3;	// brake light PWM on channel 1
 TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 
-TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms - FIXME - should not be here
-
 typedef struct	// mj818_t actual
 {
 	mj818_t public;  // public struct

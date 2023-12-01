@@ -36,7 +36,12 @@ static void _tcan334_can_msg_receive(message_handler_t *in_handler, const uint8_
 		__CAN.public.GoBusActive(1);  // wake up
 #endif
 
-	HAL_CAN_GetRxMessage(&_hcan, in_fifo, &_nRXH, _msg.data);  // fetch message from FIFO
+	HAL_StatusTypeDef status = HAL_CAN_GetRxMessage(&_hcan, in_fifo, &_nRXH, _msg.data);  // fetch message from FIFO
+
+#if CAN_FOREVER_DEBUG_LOOP
+	while(status)
+		;
+#endif
 
 	_msg.sidh = _nRXH.StdId;
 	_msg.dlc = _nRXH.DLC;
@@ -75,6 +80,12 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 					asm("NOP");
 					// FIXME - CAN msg send - no free mailbox timeout
 					// TODO - CAN msg send - no free mailbox - implement error handling
+
+#if CAN_FOREVER_DEBUG_LOOP
+					while(1)
+						;
+#endif
+
 					break;
 				}
 
@@ -82,7 +93,12 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 		}
 	while(mboxFreeCount == 0);  // loop until the free mailbox level is non-zero
 
-	HAL_CAN_AddTxMessage(&_hcan, &_TXHeader, msg->data, &_TXMailbox);  // add the message to the mailbox
+	HAL_StatusTypeDef status = HAL_CAN_AddTxMessage(&_hcan, &_TXHeader, msg->data, &_TXMailbox);  // add the message to the mailbox
+
+#if CAN_FOREVER_DEBUG_LOOP
+	while(status)
+		;
+#endif
 
 	i = 0;	// reinitialise safeguard counter
 	while(HAL_CAN_IsTxMessagePending(&_hcan, _TXMailbox))
@@ -92,6 +108,11 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 					// TODO - CAN msg send - msg tx pending - implement error handling
 					// FIXME - CAN msg send - msg tx pending timeout
 					HAL_CAN_AbortTxRequest(&_hcan, _TXMailbox);
+
+#if CAN_FOREVER_DEBUG_LOOP
+					while(status)
+						;
+#endif
 				}
 
 			++i;
@@ -148,6 +169,12 @@ static inline void __can_reuqest_sleep(void)
 					asm("NOP");
 					// FIXME - CAN sleep fail due to timeout
 					// TODO - CAN sleep fails - implement error handling
+
+#if CAN_FOREVER_DEBUG_LOOP
+					while(1)
+						;
+#endif
+
 					break;
 				}
 
@@ -184,6 +211,12 @@ static inline void __can_wakeup(void)
 				{
 					asm("NOP");
 					// TODO - CAN sleep fails - implement error handling
+
+#if CAN_FOREVER_DEBUG_LOOP
+					while(1)
+						;
+#endif
+
 					break;
 				}
 

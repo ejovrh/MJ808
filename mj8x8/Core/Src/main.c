@@ -5,7 +5,9 @@ int main(void)
 {
 	__disable_irq();	// disable interrupts until end of all initialisations
 
+#if USE_EVENTHANDLER
 	event_handler_ctor();  // call event handler constructor; the Device constructor further down has the chance to override EventHandler.fpointer and implement its own handler
+#endif
 
 #if defined(MJ808_)	// MJ808 - call derived class constructor and tie in base class
 	mj808_ctor();
