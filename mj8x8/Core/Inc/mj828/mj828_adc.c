@@ -85,13 +85,13 @@ static inline void _Start(void)
 {
 	__HAL_RCC_DMA1_CLK_ENABLE();
 	__HAL_RCC_ADC1_CLK_ENABLE();
-	Device->StartTimer(&htim2);
+	Device->StartTimer(&htim2);	// Timer2 object - ADC conversion - 250ms
 }
 
 // stops the ADC & DMA peripherals
 static inline void _Stop(void)
 {
-	Device->StopTimer(&htim2);
+	Device->StopTimer(&htim2);	// Timer2 object - ADC conversion - 250ms
 	__HAL_RCC_ADC1_CLK_DISABLE();
 	__HAL_RCC_DMA1_CLK_DISABLE();
 }
@@ -115,7 +115,7 @@ adc_t* adc_ctor(void)
 	return &__ADC.public;  // return public parts
 }
 
-// DMA ISR
+// DMA ISR - due to mj828 timer2's MasterOutputTrigger = TIM_TRGO_UPDATE it is almost a timer2 250ms ISR
 void DMA1_Channel1_IRQHandler(void)
 {
   HAL_DMA_IRQHandler(&hdma_adc);	// service the interrupt

@@ -88,22 +88,22 @@ static inline void _TimerInit(void)
 	HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1);  // commit it
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);  // start the timer
 
-	// timer 17 - event handling - 2.5ms
-	htim17.Instance = TIM17;
-	htim17.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
-	htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim17.Init.Period = TIMER17_PERIOD;  // with above pre-scaler and a period of 24, we have an 2.5ms interrupt frequency
-	htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	htim17.Init.RepetitionCounter = 0;
-	htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	// timer14 - LED handling - 20ms
+	htim14.Instance = TIM14;
+	htim14.Init.Prescaler = TIMER_PRESCALER;
+	htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim14.Init.Period = TIMER14_PERIOD;
+	htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim14.Init.RepetitionCounter = 0;
+	htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 
 	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-	HAL_TIM_ConfigClockSource(&htim17, &sClockSourceConfig);
-	HAL_TIM_OC_Init(&htim17);
+	HAL_TIM_ConfigClockSource(&htim14, &sClockSourceConfig);
+	HAL_TIM_OC_Init(&htim14);
 
 	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	HAL_TIMEx_MasterConfigSynchronization(&htim17, &sMasterConfig);
+	HAL_TIMEx_MasterConfigSynchronization(&htim14, &sMasterConfig);
 
 	// timer 16 - button handling - 25ms
 	htim16.Instance = TIM16;
@@ -122,22 +122,22 @@ static inline void _TimerInit(void)
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
 	HAL_TIMEx_MasterConfigSynchronization(&htim16, &sMasterConfig);
 
-	// timer14 - LED handling - 20ms
-	htim14.Instance = TIM14;
-	htim14.Init.Prescaler = TIMER_PRESCALER;
-	htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim14.Init.Period = TIMER14_PERIOD;
-	htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	htim14.Init.RepetitionCounter = 0;
-	htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	// timer 17 - event handling - 2.5ms
+	htim17.Instance = TIM17;
+	htim17.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
+	htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim17.Init.Period = TIMER17_PERIOD;  // with above pre-scaler and a period of 24, we have an 2.5ms interrupt frequency
+	htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim17.Init.RepetitionCounter = 0;
+	htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 
 	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-	HAL_TIM_ConfigClockSource(&htim14, &sClockSourceConfig);
-	HAL_TIM_OC_Init(&htim14);
+	HAL_TIM_ConfigClockSource(&htim17, &sClockSourceConfig);
+	HAL_TIM_OC_Init(&htim17);
 
 	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	HAL_TIMEx_MasterConfigSynchronization(&htim14, &sMasterConfig);
+	HAL_TIMEx_MasterConfigSynchronization(&htim17, &sMasterConfig);
 }
 
 // stops timer identified by argument
@@ -203,8 +203,14 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 	HAL_TIM_Base_Start_IT(timer);  // start the timer
 }
 
-// device-specific sleep
-static inline void _DerivedSleep(void)
+// device-specific pre sleep
+static inline void _PreSleep(void)
+{
+	;
+}
+
+// device-specific pre stop
+static inline void _PreStop(void)
 {
 	;
 }
@@ -229,7 +235,8 @@ void mj808_ctor(void)
 
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
-//	__Device.public.mj8x8->DerivedSleep = &_DerivedSleep;  // implements the derived object sleep
+	__Device.public.mj8x8->PreSleep = &_PreSleep;  // implements the derived object prepare to sleep
+	__Device.public.mj8x8->PreStop = &_PreStop;  // implements the derived object prepare to stop
 
 	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
 

@@ -218,6 +218,8 @@ static void _Sleep(void)
 				__MJ8x8.public.can->GoBusActive(0);  // put CAN infrastructure into standby state
 #endif
 
+			__MJ8x8.public.PreSleep();	// call the derived object's sleep implementation
+
 #if USE_HAL_SLEEPONEXIT
 			HAL_PWR_EnableSleepOnExit();	// go to sleep once any ISR finishes
 #endif
@@ -226,7 +228,7 @@ static void _Sleep(void)
 		}
 	else	// if device is not active - i.e the (activity_byte & 0x3F == 0)
 		{
-			__MJ8x8.public.DerivedSleep();	// call the derived object's sleep implementation
+			__MJ8x8.public.PreStop();  // call the derived object's stop implementation
 
 #if USE_CAN_BUSACTIVE
 			__MJ8x8.public.can->GoBusActive(0);  // put CAN infrastructure into standby state
@@ -269,7 +271,7 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	__MJ8x8.public.can->Timer1Start = &_StartTimer1;  //
 
 	__MJ8x8.public.Sleep = &_Sleep;  // puts device to sleep
-	__MJ8x8.public.DerivedSleep = &_DoNothing;  // the derived object implements its own special sleep method
+	__MJ8x8.public.PreSleep = &_DoNothing;  // the derived object implements its own special sleep method
 
 	//HAL_NVIC_SetPriority(SysTick_IRQn, 2, 0);
 	HAL_SuspendTick();

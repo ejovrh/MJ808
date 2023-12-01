@@ -17,7 +17,7 @@ typedef struct	// mj818_t actual
 	mj818_t public;  // public struct
 } __mj818_t;
 
-static __mj818_t  __Device  __attribute__ ((section (".data")));	// preallocate __Device object in .data
+static __mj818_t __Device __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
 // GPIO init - device specific
 static inline void _GPIOInit(void)
@@ -206,8 +206,14 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 	HAL_TIM_Base_Start_IT(timer);  // start the timer
 }
 
-// device-specific sleep
-static inline void _DerivedSleep(void)
+// device-specific pre sleep
+static inline void _PreSleep(void)
+{
+	;
+}
+
+// device-specific pre stop
+static inline void _PreStop(void)
 {
 	;
 }
@@ -229,7 +235,8 @@ void mj818_ctor(void)
 
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
-//	__Device.public.mj8x8->DerivedSleep = &_DerivedSleep;  // implements the derived object sleep
+	__Device.public.mj8x8->PreSleep = &_PreSleep;  // implements the derived object prepare to sleep
+	__Device.public.mj8x8->PreStop = &_PreStop;  // implements the derived object prepare to stop
 
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM14_IRQn, 0, 0);  // charlieplexed LED handler timer (on demand)

@@ -86,39 +86,22 @@ static inline void _TimerInit(void)
 	TIM_MasterConfigTypeDef sMasterConfig =
 		{0};
 
-	// timer 17 - event handling - 10ms
-	htim17.Instance = TIM17;
-	htim17.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
-	htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim17.Init.Period = TIMER17_PERIOD;  // with above pre-scaler and a period of 24, we have an 2.5ms interrupt frequency
-	htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	htim17.Init.RepetitionCounter = 0;
-	htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	// timer2 - ADC sampling - 250ms
+	htim2.Instance = TIM2;
+	htim2.Init.Prescaler = TIMER_PRESCALER;
+	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim2.Init.Period = TIMER2_PERIOD;
+	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	__HAL_RCC_TIM2_CLK_ENABLE();
+	HAL_TIM_OC_Init(&htim2);
 
 	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-	HAL_TIM_ConfigClockSource(&htim17, &sClockSourceConfig);
-	HAL_TIM_OC_Init(&htim17);
+	HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);
 
-	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	HAL_TIMEx_MasterConfigSynchronization(&htim17, &sMasterConfig);
-
-	// timer 16 - button handling - 25ms
-	htim16.Instance = TIM16;
-	htim16.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
-	htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim16.Init.Period = TIMER16_PERIOD;  // with above pre-scaler and a period of 249, we have an 25ms interrupt frequency
-	htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	htim16.Init.RepetitionCounter = 0;
-	htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-
-	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-	HAL_TIM_ConfigClockSource(&htim16, &sClockSourceConfig);
-	HAL_TIM_OC_Init(&htim16);
-
-	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	HAL_TIMEx_MasterConfigSynchronization(&htim16, &sMasterConfig);
+	HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);
 
 	// timer14 - charlieplexed LED handling - 2ms
 	htim14.Instance = TIM14;
@@ -137,22 +120,39 @@ static inline void _TimerInit(void)
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
 	HAL_TIMEx_MasterConfigSynchronization(&htim14, &sMasterConfig);
 
-	// timer2 - ADC sampling - 250ms
-	htim2.Instance = TIM2;
-	htim2.Init.Prescaler = TIMER_PRESCALER;
-	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim2.Init.Period = TIMER2_PERIOD;
-	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-	__HAL_RCC_TIM2_CLK_ENABLE();
-	HAL_TIM_Base_Init(&htim2);
+	// timer 16 - button handling - 25ms
+	htim16.Instance = TIM16;
+	htim16.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
+	htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim16.Init.Period = TIMER16_PERIOD;  // with above pre-scaler and a period of 249, we have an 25ms interrupt frequency
+	htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim16.Init.RepetitionCounter = 0;
+	htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 
 	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-	HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);
+	HAL_TIM_ConfigClockSource(&htim16, &sClockSourceConfig);
+	HAL_TIM_OC_Init(&htim16);
 
-	sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);
+	HAL_TIMEx_MasterConfigSynchronization(&htim16, &sMasterConfig);
+
+	// timer 17 - event handling - 10ms
+	htim17.Instance = TIM17;
+	htim17.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
+	htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim17.Init.Period = TIMER17_PERIOD;  // with above pre-scaler and a period of 24, we have an 2.5ms interrupt frequency
+	htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim17.Init.RepetitionCounter = 0;
+	htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+	HAL_TIM_ConfigClockSource(&htim17, &sClockSourceConfig);
+	HAL_TIM_OC_Init(&htim17);
+
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	HAL_TIMEx_MasterConfigSynchronization(&htim17, &sMasterConfig);
 }
 
 // stops timer identified by argument
@@ -207,11 +207,16 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 	HAL_TIM_Base_Start_IT(timer);  // start the timer
 }
 
-// device-specific sleep
-static inline void _DerivedSleep(void)
+// device-specific pre sleep
+static inline void _PreSleep(void)
+{
+	;
+}
+
+// device-specific pre stop
+static inline void _PreStop(void)
 {
 	__Device.public.adc->Stop();
-	__Device.public.StopTimer(&htim14);
 }
 
 void mj828_ctor(void)
@@ -235,7 +240,8 @@ void mj828_ctor(void)
 
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;	// override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
-	__Device.public.mj8x8->DerivedSleep = &_DerivedSleep;  // implements the derived object sleep
+	__Device.public.mj8x8->PreSleep = &_PreSleep;  // implements the derived object prepare to sleep
+	__Device.public.mj8x8->PreStop = &_PreStop;  // implements the derived object prepare to stop
 
 	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
 
@@ -254,11 +260,6 @@ void mj828_ctor(void)
 
 	HAL_NVIC_SetPriority(EXTI2_3_IRQn, 0, 0);  // EXTI2 - LeverBrake handling
 	HAL_NVIC_EnableIRQ(EXTI2_3_IRQn);
-
-//	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);  //
-//	HAL_NVIC_EnableIRQ(TIM2_IRQn);
-
-	HAL_TIM_Base_Start(&htim2);  // ADC timer
 }
 
 // device-specific interrupt handlers

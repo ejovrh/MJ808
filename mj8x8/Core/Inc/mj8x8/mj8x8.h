@@ -33,7 +33,8 @@ typedef struct	// "base class" struct for mj8x8 devices
 	uint8_t (*const GetActivity)(const uint8_t act);	// returns whether some activity is ON (1) or OFF(0)
 	void (*EmptyBusOperation)(void);	// device's default operation on empty bus, implemented in derived class
 	void (*PopulatedBusOperation)(message_handler_t *const in_msg);  // device operation on populated bus, executed by incoming msg ISR; operates by means of MsgHandler object
-	void (*DerivedSleep)(void);  // puts derived object to sleep
+	void (*PreSleep)(void);  // prepares derived object for sleep mode
+	void (*PreStop)(void);  // prepares derived object for stop mode
 
 	void (*Sleep)(void);	// sleep commands - quite common to each device
 } mj8x8_t;
