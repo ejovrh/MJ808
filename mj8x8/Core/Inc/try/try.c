@@ -292,7 +292,7 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 	Device->led->Shine(msg->ARGUMENT);
 #endif
 #ifdef MJ828_
-	Device->led->led[Green].Shine((msg->ARGUMENT>0) );  // TODO - toggling does not work anymore
+	Device->led->led[Green].Shine((msg->ARGUMENT>0) );
 	Device->adc->Start();
 #endif
 #ifdef MJ838_

@@ -81,7 +81,7 @@ typedef union
 {  //
 	struct
 	{  // bit-wise view of devices on the bus,  max. 16 in total
-	   // format: n (0 to 15) - device indicator - hex id - name 
+	   // format: n (0 to 15) - device indicator - hex id - name
 		uint16_t mj_0 :1;  	// 0 // 0 Alpha - logic unit
 		uint16_t mj_1 :1;  	// 1 // 0 Bravo - ?
 		uint16_t mj_2 :1;  	// 2 // 0 Charlie - ?
@@ -220,6 +220,11 @@ typedef union
 
 // lower byte - b5
 #define BLANK 0x00
+
+// sender and recipient masks (applies only to high byte)
+#define SENDER_MASK 0x3C	// high byte !!
+#define RECIPIENT_MASK_HIGH 0x03	// high byte !!
+#define RECIPIENT_MASK_LOW 0xC0	// low byte !!
 
 // CAN ID upper byte construction
 #define CANID_MJ808 (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A)
