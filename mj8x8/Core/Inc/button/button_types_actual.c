@@ -19,6 +19,7 @@ typedef struct	// button_t actual
 	__individual_button_t *__button;	//
 } __button_t;
 
-static __button_t __Button __attribute__ ((section (".data")));  // preallocate __Button object in .data
+// preallocate __Button object in .data
+static __button_t __Button __attribute__ ((section (".data")));  // @suppress("Unused variable declaration in file scope")
 
 #endif /* MJ808_BUTTON_TYPES_ACTUAL_C_ */

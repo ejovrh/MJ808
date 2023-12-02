@@ -21,6 +21,7 @@ void _SendMessage(const uint8_t in_command, const uint8_t in_argument, const uin
 	__MsgHandler.__tx_msg->sidh = __MsgHandler.__can->own_sidh;
 	__MsgHandler.__tx_msg->sidl = __MsgHandler.__can->own_sidl;
 
+	// FIXME - check rcpt addr. bits -- if they are zero (no rcpt. specified), then send boradcast; else send unicast
 	if(in_command == CMND_ANNOUNCE)  // if we have the broadcast command
 		__MsgHandler.__tx_msg->sidh |= BROADCAST;  //	then set the broadcast flag
 

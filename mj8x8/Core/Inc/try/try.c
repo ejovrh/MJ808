@@ -163,7 +163,7 @@ static inline void _EventHandlerEvent06(void)
 static inline void _EventHandlerEvent07(void)
 {
 #ifdef MJ828_
-	if(Device->autolight->AutoLightisOn)  //	AutoLight feature is on
+	if(Device->autolight->FlagLightisOn)  //	AutoLight feature is on
 		{
 			Device->led->led[Green].Shine(ON);	// turn green indicator on
 			MsgHandler->SendMessage(MSG_BUTTON_EVENT_00, 30, 2);  // convey button press via CAN and the logic unit will do its own thing
@@ -188,13 +188,18 @@ static inline void _EventHandlerEvent08(void)
 #endif
 }
 
-////
-//static inline void _EventHandlerEvent09(void)
-//{
-//	;
-//}
 //
-////
+static inline void _EventHandlerEvent09(void)
+{
+#ifdef MJ828_
+	if(Device->autobatt->FlagBatteryisCritical)
+		MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 10, 2);	// send out event with 10% as argument
+	else
+		MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 100, 2);  // send out event with 100% as argument
+#endif
+}
+
+//
 //static inline void _EventHandlerEvent10(void)
 //{
 //	;
@@ -248,7 +253,7 @@ static uint32_t (*_BranchtableEventHandler[])(void) =  // branch table
 		(void *)&_EventHandlerEvent06,//
 		(void *)&_EventHandlerEvent07,//
 		(void *)&_EventHandlerEvent08,//
-		(void *)&_DoNothing,//
+		(void *)&_EventHandlerEvent09,//
 		(void *)&_DoNothing,//
 		(void *)&_DoNothing,//
 		(void *)&_DoNothing,//
@@ -337,11 +342,23 @@ static inline void _MsgBtnEvent03(can_msg_t *msg)
 static inline void _MsgBtnEvent04(can_msg_t *msg)
 {
 #ifdef MJ808_
-	Device->led->led[Front].Shine(msg->ARGUMENT);
+	uint8_t arg = msg->ARGUMENT;
+
+	if (arg <= 10)	// 10% warning
+		Device->led->led[Front].Shine(msg->ARGUMENT);
+
+	if (arg > 10)	// 10% warning
+		Device->led->led[Front].Shine(75);
+
 #endif
 #ifdef MJ818_
-	Device->led->led[Rear].Shine(msg->ARGUMENT);
-#endif
+	if (arg <= 10)	// 10% warning
+		Device->led->led[Rear].Shine(msg->ARGUMENT);
+
+	if (arg > 10)	// 10% warning
+		Device->led->led[Rear].Shine(100);
+
+	#endif
 
 	return;
 }

@@ -22,10 +22,10 @@ static void _Do(void)
 				{
 					// turn light on
 
-					if(__AutoLight.public.AutoLightisOn == 0)  // run once
+					if(__AutoLight.public.FlagLightisOn == 0)  // run once
 						{
-							EventHandler->Notify(7);	// notify event
-							__AutoLight.public.AutoLightisOn = 1;  // mark as on
+							EventHandler->Notify(EVENT07);	// notify event
+							__AutoLight.public.FlagLightisOn = 1;  // mark as on
 						}
 				}
 
@@ -33,12 +33,12 @@ static void _Do(void)
 				{
 					// turn light off - but not immediately
 
-					if(__AutoLight.public.AutoLightisOn == 1)  // run once ...
+					if(__AutoLight.public.FlagLightisOn == 1)  // run once ...
 						{
 							if(__AutoLight._AutoLightTimer > 8)  // ... if timer is expired
 								{
-									EventHandler->Notify(7);	//	notify event
-									__AutoLight.public.AutoLightisOn = 0;  // mark as off
+									EventHandler->Notify(EVENT07);	//	notify event
+									__AutoLight.public.FlagLightisOn = 0;  // mark as off
 									__AutoLight._AutoLightTimer = 0;	// reset off-timer
 								}
 
@@ -48,11 +48,11 @@ static void _Do(void)
 		}
 	else	// if AutoLight is disabled
 		{
-			if(__AutoLight.public.AutoLightisOn)
+			if(__AutoLight.public.FlagLightisOn)
 				{
 					// turn everything off
-					EventHandler->Notify(7);	// notify event
-					__AutoLight.public.AutoLightisOn = 0;  // mark as off
+					EventHandler->Notify(EVENT07);	// notify event
+					__AutoLight.public.FlagLightisOn = 0;  // mark as off
 				}
 		}
 }
@@ -60,7 +60,7 @@ static void _Do(void)
 static __autolight_t __AutoLight =  // instantiate autolight_t actual and set function pointers
 	{  //
 	.public.Do = &_Do,  //	that one method that does its thing
-	.public.AutoLightisOn = 0,  // set to off
+	.public.FlagLightisOn = 0,  // set to off
 	._AutoLightTimer = 0,  // Initialize timer
 	};
 

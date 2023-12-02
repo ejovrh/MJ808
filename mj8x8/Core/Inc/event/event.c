@@ -3,6 +3,7 @@
 #include "event.h"
 #include "stm32f0xx_hal.h"
 
+// FIXME - remove concrete devices from here
 #if defined(MJ808_)	// if this particular device is active
 extern mj808_t *const Device;
 #endif

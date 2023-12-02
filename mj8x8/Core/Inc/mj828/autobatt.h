@@ -11,6 +11,8 @@
 
 typedef struct	// struct describing the AutoBatt functionality
 {
+	uint8_t FlagBatteryisCritical :1;  // flag if AutoBatt discovered the battery voltage as critical
+
 	void (*Do)(void);  // AutoBatt functionality
 	void (*DisplayBatteryVoltage)(void);  // displays battery voltage
 } autobatt_t;
