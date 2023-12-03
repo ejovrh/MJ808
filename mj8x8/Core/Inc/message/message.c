@@ -16,16 +16,22 @@ typedef struct	// message_handler_t actual
 extern __message_handler_t __MsgHandler;  // declare message_handler_t actual
 
 // loads outbound CAN message into local CAN IC and asks it to transmit it onto the bus
-void _SendMessage(const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
+void _SendMessage(uint8_t in_rcpt, const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
 {
+	// first, format the sender into the empty TX CAN identifier
 	__MsgHandler.__tx_msg->sidh = __MsgHandler.__can->own_sidh;
 	__MsgHandler.__tx_msg->sidl = __MsgHandler.__can->own_sidl;
 
-	// check if there is any recipient listed at all
-	uint8_t rcpt = (__MsgHandler.__tx_msg->sidh & RECIPIENT_MASK_HIGH) | (__MsgHandler.__tx_msg->sidl & RECIPIENT_MASK_LOW);
-
-	if(rcpt == 0)  // if no recipient ...
+	// second, format-in the recipient, if exists...
+	if(in_rcpt == 0)  // if no recipient ...
 		__MsgHandler.__tx_msg->sidh |= BROADCAST;  //	... then set the broadcast flag (the default is unicast)
+	else  // there is a recipient...
+		{  // // unicast  - the default
+		   // determine the recipient bits
+		   // in_rcpt is assumed to be CANID_MJ808, CANID_MJ818, and so on -- in fact a sender-formatted ID
+			__MsgHandler.__tx_msg->sidh = (in_rcpt >> 4) & RECIPIENT_MASK_HIGH;	// bits [1:0} of the high byte
+			__MsgHandler.__tx_msg->sidl = (in_rcpt << 4) & RECIPIENT_MASK_LOW;  // bits [1:0} of the high byte
+		}
 
 	__MsgHandler.__tx_msg->COMMAND= in_command;  // set command into message
 	__MsgHandler.__tx_msg->ARGUMENT= in_argument;  // set argument into message
@@ -37,7 +43,7 @@ void _SendMessage(const uint8_t in_command, const uint8_t in_argument, const uin
 // convert the CAN SIDH to a zero-indexed device number
 static inline uint8_t SidtoNum(const uint8_t sid)
 {
-	return ((__MsgHandler.__rx_msg->sidh & 0x3C) >> 2);  // mask relevant bits and rsh and return the result
+	return ((__MsgHandler.__rx_msg->sidh & SENDER_MASK) >> 2);  // mask relevant bits and rsh and return the result
 }
 
 // RX - upload CAN message into self at physical reception from FIFO

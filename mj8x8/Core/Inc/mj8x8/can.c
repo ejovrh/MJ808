@@ -43,7 +43,8 @@ static void _tcan334_can_msg_receive(message_handler_t *in_handler, const uint8_
 		;
 #endif
 
-	_msg.sidh = _nRXH.StdId;
+	_msg.sidh = (uint8_t) (_nRXH.StdId & 0xFF00);  // transfer CAN ID high byte
+	_msg.sidl = (uint8_t) (_nRXH.StdId & 0x00C0);  // transfer CAN ID low byte - only the relevant portion of it
 	_msg.dlc = _nRXH.DLC;
 
 	in_handler->SetMessage(&_msg);  // upload into the message handler
@@ -64,9 +65,10 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 		__CAN.public.GoBusActive(1);  // wake up
 #endif
 
+	// TODO - investigate if can_msg_t can maybe be skipped: for instanc, the members below to some extent already are in can_msg_t. perhaps in the caller this function the _TXHeader can already be used?
 	_TXHeader.IDE = CAN_ID_STD;  // set the ID to standard
 	_TXHeader.RTR = CAN_RTR_DATA;  //	set to DATA
-	_TXHeader.StdId = msg->sidh;  // populate the standard Id
+	_TXHeader.StdId = (msg->sidh | msg->sidl);  // populate the complete standard Id
 	_TXHeader.DLC = msg->dlc;  // set the length
 
 	uint8_t mboxFreeCount = 0;  // start with the assumption that there are no free mailboxes

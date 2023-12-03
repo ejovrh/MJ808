@@ -61,7 +61,7 @@ static void _Do(void)
 					Device->led->led[Red].Shine(OFF);  // indicate
 					// TODO - work via some external lookup table so that in SendMessage() below something like "autobatt deactivate low voltage warning" is issued. the lookup of said string should be external to this file. the lookup should at the same time identify an action to be taken.
 //					MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 10, 2);	// send out event with 10% as argument
-					EventHandler->Notify(EVENT09);	// notify event
+					EventHandler->Notify(EVENT08);	// notify event
 					__AutoBatt.LowBattery = 0;
 				}
 		}
@@ -70,8 +70,7 @@ static void _Do(void)
 			if(Device->adc->GetChannel(Vbat) <= BATTERY_10_PCT && Device->adc->GetChannel(Vbat) > 1)  // if battery state below 10%)
 				{
 					Device->led->led[Red].Shine(ON);  // indicate
-//					MsgHandler->SendMessage(MSG_BUTTON_EVENT_04, 10, 2);	// send out event with 10% as argument
-					EventHandler->Notify(EVENT09);	// notify event
+					EventHandler->Notify(EVENT08);	// notify event
 					__AutoBatt.LowBattery = 1;
 				}
 		}

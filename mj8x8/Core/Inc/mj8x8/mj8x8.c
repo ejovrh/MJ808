@@ -41,7 +41,7 @@ static void _Heartbeat(message_handler_t *const msg)
 
 #if BROADCAST_HEARTBEAT
 	if(__MJ8x8.__HeartBeatCounter == __MJ8x8.__NumericalCAN_ID)  // see if this counter iteration is our turn
-		msg->SendMessage(CMND_ANNOUNCE, Device->activity->byte, 2);  // if so, broadcast CAN heartbeat message and disguise device status in it
+		msg->SendMessage(CANID_ANY, CMND_ANNOUNCE, Device->activity->byte, 2);  // if so, broadcast CAN heartbeat message and disguise device status in it
 #endif
 
 	++__MJ8x8.__HeartBeatCounter;  // increment the iteration counter
@@ -85,7 +85,7 @@ static void _UpdateActivity(const uint8_t act, const uint8_t val)
 	if(val == ON)
 		Device->activity->byte |= _BV(act);  // set it
 
-	MsgHandler->SendMessage(CMND_ANNOUNCE, Device->activity->byte, 2);	// notify the bus of the change
+	MsgHandler->SendMessage(CANID_ANY, CMND_ANNOUNCE, Device->activity->byte, 2);  // notify the bus of the change
 }
 
 // returns whether some activity is ON (1) or OFF(0)
