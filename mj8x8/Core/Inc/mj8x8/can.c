@@ -56,7 +56,6 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 		__CAN.public.GoBusActive(1);  // wake up
 #endif
 
-	// TODO - investigate if can_msg_t can maybe be skipped: for instance, the members below to some extent already are in can_msg_t. perhaps in the caller this function the _TXHeader can already be used?
 	_TXHeader.IDE = CAN_ID_STD;  // set the ID to standard
 	_TXHeader.RTR = CAN_RTR_DATA;  //	set to DATA
 	_TXHeader.StdId = msg->sid;  // populate the complete standard Id
