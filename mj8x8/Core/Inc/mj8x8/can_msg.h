@@ -9,8 +9,7 @@
 
 typedef struct	// can_msg_t struct describing a generic CAN message
 {
-	uint8_t sidh;  // Standard Identifier High Byte
-	uint8_t sidl;  // Standard Identifier Low Byte
+	uint16_t sid;  // Standard Identifier word
 	uint8_t dlc;	// Data Length Code
 	uint8_t data[CAN_MAX_MSG_LEN];	// Data, length identified by DLC
 } can_msg_t __attribute__((aligned(8)));

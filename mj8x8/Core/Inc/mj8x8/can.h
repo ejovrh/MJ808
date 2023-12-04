@@ -50,8 +50,7 @@ typedef union  // union for core activity indication and CAN standby control (is
 
 typedef struct can_t	// can_t struct describing the CAN device as a whole
 {
-	uint8_t own_sidh;  // SIDH for device
-	uint8_t own_sidl;  // SIDL for device
+	uint16_t own_sid;  // SIDH for device
 	activity_t *activity;  // device activity indicator
 
 	void (*Timer1Start)(void);  // starts timer1 (see mj8x8_t for the stop function)

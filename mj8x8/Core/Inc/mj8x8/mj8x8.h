@@ -39,6 +39,6 @@ typedef struct	// "base class" struct for mj8x8 devices
 	void (*Sleep)(void);	// sleep commands - quite common to each device
 } mj8x8_t;
 
-mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh);  // declare constructor for abstract class
+mj8x8_t* mj8x8_ctor(const mj8x8_Devices_t in_MJ8x8_ID);  // declare constructor for abstract class
 
 #endif /* CORE_INC_MJ808_MJ8X8_H_ */

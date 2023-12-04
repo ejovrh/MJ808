@@ -18,23 +18,17 @@ can_msg_t _rx_can_message;  // object for storing a RX CAN message
 can_msg_t _tx_can_message;  // object for storing a TX CAN message
 
 // loads outbound CAN message into local CAN IC and asks it to transmit it onto the bus
-void _SendMessage(uint8_t in_rcpt, const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
+void _SendMessage(mj8x8_Devices_t in_rcpt, const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
 {
 	// first, format the sender into the empty TX CAN identifier
-	__MsgHandler.__tx_msg->sidh = __MsgHandler.__can->own_sidh;
-	__MsgHandler.__tx_msg->sidl = __MsgHandler.__can->own_sidl;
+	__MsgHandler.__tx_msg->sid = __MsgHandler.__can->own_sid;
 
 	// second, format-in the recipient, if exists...
 	if(in_rcpt == 0)  // if no recipient ...
-		__MsgHandler.__tx_msg->sidh |= BROADCAST;  //	... then set the broadcast flag (the default is unicast)
-	else  // there is a recipient...
-		{  // // unicast  - the default
-		   // determine the recipient bits
-		   // in_rcpt is assumed to be CANID_MJ808, CANID_MJ818, and so on -- in fact a sender-formatted ID
-			uint8_t foo = in_rcpt;
-			__MsgHandler.__tx_msg->sidh |= ((in_rcpt >> 4) & RECIPIENT_MASK_HIGH);  // bits [1:0} of the high byte
-			__MsgHandler.__tx_msg->sidl |= ((foo << 4) & RECIPIENT_MASK_LOW);  // bits [1:0} of the high byte
-		}
+		__MsgHandler.__tx_msg->sid |= BROADCAST;  //	... then set the broadcast flag (the default is unicast)
+	else
+		// there is a recipient...: unicast  - the default
+		__MsgHandler.__tx_msg->sid |= in_rcpt;  // copy the sender ID bits [3:0] into the SID
 
 	__MsgHandler.__tx_msg->COMMAND= in_command;  // set command into message
 	__MsgHandler.__tx_msg->ARGUMENT= in_argument;  // set argument into message
@@ -43,10 +37,10 @@ void _SendMessage(uint8_t in_rcpt, const uint8_t in_command, const uint8_t in_ar
 	__MsgHandler.__can->RequestToSend(__MsgHandler.__tx_msg);  // load message into TX buffer and request to send
 }
 
-// convert the CAN SIDH to a zero-indexed device number
-static inline uint8_t SidtoNum(const uint8_t sid)
+// convert the sender CAN SID to a zero-indexed device number
+static inline uint8_t SenderIDtoNum(const uint16_t in_sid)
 {
-	return ((__MsgHandler.__rx_msg->sidh & SENDER_MASK) >> 2);  // mask relevant bits and rsh and return the result
+	return ((in_sid & 0xF0) >> 4);  // mask relevant bits and rsh and return the result
 }
 
 // RX - upload CAN message into self at physical reception from FIFO
@@ -55,20 +49,19 @@ static void _SetMessage(const can_msg_t *const in_msg)
 	uint8_t i;	// iterator for data deep copy
 	uint8_t num;	// numerical value derived from CAN SID of sender
 
-	__MsgHandler.__rx_msg->sidh = in_msg->sidh;  // deep copy
-	__MsgHandler.__rx_msg->sidl = in_msg->sidl;
+	__MsgHandler.__rx_msg->sid = in_msg->sid;  // deep copy
 	__MsgHandler.__rx_msg->dlc = in_msg->dlc;
 
-	num = SidtoNum(__MsgHandler.__rx_msg->sidh);	// convert CAN SID to zero-indexed device number
+	num = SenderIDtoNum(__MsgHandler.__rx_msg->sid);  // convert sender CAN SID to zero-indexed device number
 
 	for(i = 0; i < __MsgHandler.__rx_msg->dlc; ++i)  // more deep copy
 		__MsgHandler.__rx_msg->data[i] = in_msg->data[i];
 
 	__MsgHandler.public.Devices->byte |= _BV(num);  // populate devices in canbus_t struct so that we know who else is on the bus
 
-	if(__MsgHandler.__rx_msg->COMMAND == CMND_ANNOUNCE)  // if it is a heartbeat message
+	if(__MsgHandler.__rx_msg->COMMAND== CMND_ANNOUNCE)  // if it is a heartbeat message
 		{
-			if(num != CANID_SELF)
+			if(num != ALL)
 				_BusActivityArray[num]->byte = __MsgHandler.__rx_msg->ARGUMENT;  // store the transmitted remote device status
 			else
 				return;

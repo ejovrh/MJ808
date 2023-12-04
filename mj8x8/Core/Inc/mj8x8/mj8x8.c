@@ -41,7 +41,7 @@ static void _Heartbeat(message_handler_t *const msg)
 
 #if BROADCAST_HEARTBEAT
 	if(__MJ8x8.__HeartBeatCounter == __MJ8x8.__NumericalCAN_ID)  // see if this counter iteration is our turn
-		msg->SendMessage(CANID_ANY, CMND_ANNOUNCE, Device->activity->byte, 2);  // if so, broadcast CAN heartbeat message and disguise device status in it
+		msg->SendMessage(ALL, CMND_ANNOUNCE, Device->activity->byte, 2);  // if so, broadcast CAN heartbeat message and disguise device status in it
 #endif
 
 	++__MJ8x8.__HeartBeatCounter;  // increment the iteration counter
@@ -85,7 +85,7 @@ static void _UpdateActivity(const uint8_t act, const uint8_t val)
 	if(val == ON)
 		Device->activity->byte |= _BV(act);  // set it
 
-	MsgHandler->SendMessage(CANID_ANY, CMND_ANNOUNCE, Device->activity->byte, 2);  // notify the bus of the change
+	MsgHandler->SendMessage(ALL, CMND_ANNOUNCE, Device->activity->byte, 2);  // notify the bus of the change
 }
 
 // returns whether some activity is ON (1) or OFF(0)
@@ -252,7 +252,7 @@ static void _Sleep(void)
 }
 
 // general device non-specific low-level hardware init & config
-mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
+mj8x8_t* mj8x8_ctor(const mj8x8_Devices_t in_MJ8x8_ID)
 {
 	HAL_Init();  // systick is needed for CAN
 
@@ -261,12 +261,11 @@ mj8x8_t* mj8x8_ctor(const uint8_t in_own_sidh)
 	_GPIOInit();	// initialize device non-specific GPIOs
 	_TimerInit();  // initialize Timer - heartbeat
 
-	__MJ8x8.__NumericalCAN_ID = (uint8_t) ((in_own_sidh >> 2) & 0x0F);	// set the CAN id.
+	__MJ8x8.__NumericalCAN_ID = in_MJ8x8_ID;	// set the numerical CAN ID - 0 through 15.
 
 	__MJ8x8.public.can = can_ctor();	// pass on CAN public part
 	__MJ8x8.public.activity = (uint8_t**) &__MJ8x8.public.can->activity;  // tie in can_t activity into mj8x8_t activity  (is tied in again one level up)
-	__MJ8x8.public.can->own_sidh = in_own_sidh;  // high byte
-	__MJ8x8.public.can->own_sidl = (RCPT_DEV_BLANK | BLANK);	// low byte
+	__MJ8x8.public.can->own_sid = (in_MJ8x8_ID << 4);  // translate MJ8x8 device ID to sender format for a mj8x8-CAN standard ID frame
 	__MJ8x8.public.can->activity->DoHeartbeat = 1;	// start up with heartbeat enabled
 	__MJ8x8.public.can->Timer1Start = &_StartTimer1;  //
 
