@@ -5,6 +5,8 @@
 #define TCAN334_WAKE GPIO_PIN_RESET	// TCAN ds. p. 23
 #define CAN_TIMEOUT_VALUE 2000U
 
+// TODO - investigate if these objects below can be moved into functions instead of left here
+// 				this applies globally!
 static GPIO_InitTypeDef GPIO_InitStruct =
 	{0};
 static CAN_HandleTypeDef _hcan =  // CAN object
@@ -28,8 +30,8 @@ extern __can_t __CAN;  // declare can_t actual
 // fetches a CAN frame from a RX FIFO and loads it into the message handler object
 static void _tcan334_can_msg_receive(message_handler_t *in_handler, const uint8_t in_fifo)
 {
-	can_msg_t _msg;  // TODO - static or not ?
-	CAN_RxHeaderTypeDef _nRXH;  // TODO - static or not ?
+	can_msg_t _msg;  // FIXME - static or not?
+	CAN_RxHeaderTypeDef _nRXH;  // FIXME - static or not? this object has a lifetime of _tcan334_can_msg_receive(), yet the returned object of this same function continues to live
 
 #if USE_CAN_BUSACTIVE
 	if((__CAN.public.activity->byte & POWERSAVE_CANBUS_ACTIVE_MASK) == 0)  // if sleeping...
@@ -326,7 +328,6 @@ inline static void _CANInit(void)
 
 	HAL_CAN_ActivateNotification(&_hcan, (CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO1_MSG_PENDING | CAN_IT_RX_FIFO0_FULL | CAN_IT_RX_FIFO1_FULL));  // enable interrupts
 	HAL_CAN_Start(&_hcan);	// start CAN
-
 }
 
 // object constructor
@@ -336,6 +337,7 @@ can_t* can_ctor(void)
 // TCAN334 is in shutdown/standby mode
 	_CANInit();  // initialize & configure STM32's CAN peripheral
 
+	// TODO - check if device can start with BusOff state
 	__CAN.public.GoBusActive(1);	// start with CAN active by default
 	return &__CAN.public;  // return address of public part; calling code accesses it via pointer
 }

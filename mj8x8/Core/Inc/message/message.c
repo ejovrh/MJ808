@@ -14,6 +14,8 @@ typedef struct	// message_handler_t actual
 } __message_handler_t;
 
 extern __message_handler_t __MsgHandler;  // declare message_handler_t actual
+can_msg_t _rx_can_message;  // object for storing a RX CAN message
+can_msg_t _tx_can_message;  // object for storing a TX CAN message
 
 // loads outbound CAN message into local CAN IC and asks it to transmit it onto the bus
 void _SendMessage(uint8_t in_rcpt, const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
@@ -78,9 +80,6 @@ static inline can_msg_t* _GetMessage(void)
 {
 	return __MsgHandler.__rx_msg;  // return pointer to it to someone who will make use of it
 }
-
-can_msg_t _rx_can_message;  // object for storing a RX CAN message
-can_msg_t _tx_can_message;  // object for storing a TX CAN message
 
 __message_handler_t __MsgHandler =  // instantiate message_handler_t actual and set function pointers
 	{  //
