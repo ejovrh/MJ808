@@ -24,14 +24,15 @@ from saleae.analyzers import HighLevelAnalyzer, AnalyzerFrame, StringSetting, Nu
 import re
 import os
 
-PRIORITY_HIGH = 0x00 # CAN frame bit 15
-PRIORITY_LOW = 0x80
+# standard CAN ID frame
+PRIORITY_HIGH = 0x000
+PRIORITY_LOW = 0x200
 
 MJ8X8_HEADER_PATH = r'C:\\Users\\hrvoje\\Documents\\vsite\\MJ808\\mj8x8\\Core\\Inc\\mj8x8'
 DEVICE_HEADER_PATH = r'C:\\Users\\hrvoje\\Documents\\vsite\\MJ808\\mj8x8\\Core\\Inc'
 
-UNICAST = 0x00 # CAN frame bit 14
-BROADCAST = 0x40
+UNICAST = 0x000
+BROADCAST = 0x100
     
 SENDER_DEVICE_MASK = 0x3C # CAN frame bits 13:10 - the sender of a message
 
@@ -75,6 +76,28 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
     def __init__(self):
         self.DynamicDeviceActivityDicts = {} # super-dictionary containing e.g. mj808 as key
+        ''' example content:
+        self.DynamicDeviceActivityDicts:
+        {
+            'mj_0': {'hexID': '0', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, '0': 'mj_0', 
+            'mj_1': {'hexID': '1', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, '1': 'mj_1', 
+            'mj_2': {'hexID': '2', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, '2': 'mj_2', 
+            'mj828': {'hexID': '3', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, '3': 'mj828', 
+            'mj838': {'hexID': '4', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, '4': 'mj838', 
+            'mj_5': {'hexID': '5', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, '5': 'mj_5', 
+            'mj_6': {'hexID': '6', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, '6': 'mj_6', 
+            'mj_7': {'hexID': '7', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, '7': 'mj_7', 
+            'mj808': {'hexID': '8', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, '8': 'mj808', 
+            'mj818': {'hexID': '9', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, '9': 'mj818', 
+            'mj_10': {'hexID': 'a', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, 'a': 'mj_10', 
+            'mj_11': {'hexID': 'b', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, 'b': 'mj_11', 
+            'mj_12': {'hexID': 'c', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, 'c': 'mj_12', 
+            'mj_13': {'hexID': 'd', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, 'd': 'mj_13', 
+            'mj_14': {'hexID': 'e', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, 'e': 'mj_14', 
+            'mj_15': {'hexID': 'f', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, 'f': 'mj_15'
+        }
+
+        '''
 
         self.Parsemj8x8HeaderForDevices(MJ8X8_HEADER_PATH) # parse mj8x8_commands.h for devices
         self.ParseDeviceHeaderForActivity(DEVICE_HEADER_PATH) # parse device header file for mjxxx_activity_t struct and deduce device activity options
@@ -191,6 +214,8 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                         for i in range(8):
                             self.PopulateDynamicDeviceActivityDicts(hex_id, device_name, i, '')
 
+        # print("self.DynamicDeviceActivityDicts:\n", self.DynamicDeviceActivityDicts)
+
     def DecodeActivityByte(self, in_byte, device): # decodes the HeartBeat act byte according to DynamicDeviceActivityDicts[]
         return_string = ""
         in_byte_int = int(in_byte, 16)
@@ -225,16 +250,23 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
             choice = CAST_CHOICES.get(self.my_choices_setting)
 
             if (choice == self.Cast) or (choice == 'all'):
-                self.my_can_message['hexID'] = hex( (self.my_can_message['identifier'] & SENDER_DEVICE_MASK) >> 2 )[2:] # mask out all but bits13:10
-                hexID = self.my_can_message['hexID']
-                device = self.DynamicDeviceActivityDicts[hexID]
+                self.my_can_message['hexID'] = hex( (self.my_can_message['identifier'])) # 
+                hexID = int(self.my_can_message['hexID'], 16)
+                sender = (hexID & 0x00F0 ) >> 4
+                recipient = hexID & 0x0F
 
+                sender = self.DynamicDeviceActivityDicts[str(sender)]
+                recipient = self.DynamicDeviceActivityDicts[str(recipient)]
+
+                if recipient == 'mj_0':
+                    recipient = 'ALL'
+                
                 self.FlagDisplay = 1
             else:
                 self.FlagDisplay = 0
 
             if self.FlagDisplay:
-                return AnalyzerFrame(device, frame.start_time, frame.end_time, { 'description': '{} {}'.format(priority, device) })
+                return AnalyzerFrame(sender, frame.start_time, frame.end_time, { 'description': '{}: {} -> {}'.format(priority, sender, recipient) })
             else:
                 return None
 
@@ -262,7 +294,8 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                         if self.my_can_message['data'][1] == '00': # just display 'idle'
                             return AnalyzerFrame('activity', frame.start_time, frame.end_time, { 'description': 'idle' })
                         else: # analyze activity and display it
-                            device = self.DynamicDeviceActivityDicts[self.my_can_message['hexID']]
+                            sender = str((int(self.my_can_message['hexID'], 16) & 0x00F0 ) >> 4)
+                            device = self.DynamicDeviceActivityDicts[sender]
                             in_byte = self.my_can_message['data'][1]
                             text = self.DecodeActivityByte(in_byte, device)
                             return AnalyzerFrame('activity', frame.start_time, frame.end_time, { 'description': text  })
