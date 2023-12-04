@@ -5,18 +5,11 @@
 #define TCAN334_WAKE GPIO_PIN_RESET	// TCAN ds. p. 23
 #define CAN_TIMEOUT_VALUE 2000U
 
-// TODO - investigate if these objects below can be moved into functions instead of left here
-// 				this applies globally!
-static GPIO_InitTypeDef GPIO_InitStruct =
-	{0};
-static CAN_HandleTypeDef _hcan =  // CAN object
-	{0};
-static CAN_TxHeaderTypeDef _TXHeader =  // CAN header object
-	{0};
-static CAN_FilterTypeDef _FilterCondfig =  // CAN filter configuration object
-	{0};
-
+static GPIO_InitTypeDef GPIO_InitStruct = {0};
+static CAN_HandleTypeDef _hcan = {0}; // CAN object
 static activity_t _activity;	// actual activity object (is used only through references)
+static can_msg_t _msg;  // 
+static CAN_RxHeaderTypeDef _nRXH;  // 
 
 typedef struct	// can_t actual
 {
@@ -26,13 +19,9 @@ typedef struct	// can_t actual
 } __can_t;
 
 extern __can_t __CAN;  // declare can_t actual
-
 // fetches a CAN frame from a RX FIFO and loads it into the message handler object
 static void _tcan334_can_msg_receive(message_handler_t *in_handler, const uint8_t in_fifo)
 {
-	can_msg_t _msg;  // FIXME - static or not?
-	CAN_RxHeaderTypeDef _nRXH;  // FIXME - static or not? this object has a lifetime of _tcan334_can_msg_receive(), yet the returned object of this same function continues to live
-
 #if USE_CAN_BUSACTIVE
 	if((__CAN.public.activity->byte & POWERSAVE_CANBUS_ACTIVE_MASK) == 0)  // if sleeping...
 		__CAN.public.GoBusActive(1);  // wake up
@@ -60,6 +49,7 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 {
 	volatile uint16_t i = 0;  // safeguard counter
 	uint32_t _TXMailbox;  // TX mailbox identifier
+	static CAN_TxHeaderTypeDef _TXHeader = {0}; // CAN header object
 
 #if USE_CAN_BUSACTIVE
 	if((__CAN.public.activity->byte & POWERSAVE_CANBUS_ACTIVE_MASK) == 0)  // if sleeping...
@@ -259,6 +249,8 @@ __can_t __CAN =  // instantiate can_t actual and set function pointers
 
 static inline void _ConfigFilters(void)
 {
+	static CAN_FilterTypeDef _FilterCondfig = {0}; // CAN filter configuration object
+
 	// TODO - CAN filters - configure filters
 	_FilterCondfig.FilterBank = 0;	// allow all for FIFOo
 	_FilterCondfig.FilterMode = CAN_FILTERMODE_IDMASK;
@@ -332,7 +324,6 @@ can_t* can_ctor(void)
 // TCAN334 is in shutdown/standby mode
 	_CANInit();  // initialize & configure STM32's CAN peripheral
 
-	// TODO - check if device can start with BusOff state
 	__CAN.public.GoBusActive(1);	// start with CAN active by default
 	return &__CAN.public;  // return address of public part; calling code accesses it via pointer
 }
