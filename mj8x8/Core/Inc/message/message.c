@@ -22,6 +22,7 @@ void _SendMessage(mj8x8_Devices_t in_rcpt, const uint8_t in_command, const uint8
 {
 	// first, format the sender into the empty TX CAN identifier
 	__MsgHandler.__tx_msg->sid = __MsgHandler.__can->own_sid;
+	__MsgHandler.__tx_msg->sid |= PRIORITY_LOW;  // set to low priority (default)
 
 	// second, format-in the recipient, if exists...
 	if(in_rcpt == 0)  // if no recipient ...

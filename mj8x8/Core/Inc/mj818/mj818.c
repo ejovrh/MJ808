@@ -219,7 +219,7 @@ static inline void _PreStop(void)
 void mj818_ctor(void)
 {
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
-	__Device.public.mj8x8 = mj8x8_ctor(CANID_MJ818);	// call base class constructor & initialize own SID
+	__Device.public.mj8x8 = mj8x8_ctor(mj818);	// call base class constructor & initialize own SID
 
 	__Device.public.activity = (mj818_activity_t*) *__Device.public.mj8x8->activity;  // tie in activity from the depths of mj8x8_t and redefine type
 

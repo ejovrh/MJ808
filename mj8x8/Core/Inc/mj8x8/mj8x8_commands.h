@@ -76,10 +76,9 @@
 // command byte structure
 #define CMND_ANNOUNCE 0x00	// command to register self on other devices (announce-like broadcast)
 
-// device
-typedef union
-{  //
-	struct
+typedef union  // union of mj8x8 devices: 16 bits or one word
+{
+	struct  // bit-wise struct for mj8x8 devices
 	{  // bit-wise view of devices on the bus,  max. 16 in total
 	   // format: n (0 to 15) - device indicator - hex id - name
 		uint16_t mj_0 :1;  	// 0 // 0 Alpha - logic unit
@@ -99,7 +98,7 @@ typedef union
 		uint16_t mj_14 :1;	// e // 3 Charlie - ?
 		uint16_t mj_15 :1;	// f // 3 Delta - ?
 	};
-	uint16_t byte;	// byte-wise representation of above bitfield
+	uint16_t byte;	// word representation of above bitfield
 } device_t;
 
 // mj808 front light/high beam
@@ -166,14 +165,14 @@ typedef union
 
 // CAN ID defines - see xls; must be manually left shifted by 5 to match a 13-byte CAN ID
 // upper byte - b7
-#define PRIORITY_LOW 0x020	// default 0, used by the sender, leave zero on self, except with logic unit 0A (defaults to 1)
+#define PRIORITY_LOW 0x0200	// default 0, used by the sender, leave zero on self, except with logic unit 0A (defaults to 1)
 #define PRIORITY_HIGH 0x0000
 
 // upper byte - b6
 #define BROADCAST 0x0100	// default 0, used by the sender
 #define UNICAST 0x0000
 
-typedef enum
+typedef enum  // enum describing devices on a mj8x8 bus
 {
 	  ALL = 0,
 	  mj_00 = 0x0,  // sender: 0x00

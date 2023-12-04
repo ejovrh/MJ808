@@ -237,12 +237,12 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
             # self.my_can_message['extended'] = frame.data['extended']
             # self.my_can_message['remote_frame'] = frame.data['remote_frame']
 
-            if self.my_can_message['identifier'] & PRIORITY_LOW: # determine priority from CAN frame
+            if (self.my_can_message['identifier'] & PRIORITY_LOW) == PRIORITY_LOW: # determine priority from CAN frame
                 priority = 'low'
             else:
                 priority = 'HIGH'
 
-            if self.my_can_message['identifier'] & BROADCAST: # determine recipients - unicast or broadcast
+            if (self.my_can_message['identifier'] & BROADCAST) == BROADCAST: # determine recipients - unicast or broadcast
                 self.Cast = 'brd'
             else:
                 self.Cast = 'uni'

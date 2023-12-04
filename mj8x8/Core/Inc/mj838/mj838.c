@@ -180,7 +180,7 @@ void mj838_ctor(void)
 {
 	// general device non-specific low-level hardware init & config
 	// only SIDH is supplied since with the addressing scheme SIDL is always 0
-	__Device.public.mj8x8 = mj8x8_ctor(CANID_MJ838);	// call base class constructor & initialize own SID
+	__Device.public.mj8x8 = mj8x8_ctor(mj838);	// call base class constructor & initialize own SID
 
 	__Device.public.activity = (mj838_activity_t*) *__Device.public.mj8x8->activity;  // tie in activity from the depths of mj8x8_t and redefine type
 
