@@ -28,8 +28,8 @@ extern __can_t __CAN;  // declare can_t actual
 // fetches a CAN frame from a RX FIFO and loads it into the message handler object
 static void _tcan334_can_msg_receive(message_handler_t *in_handler, const uint8_t in_fifo)
 {
-	can_msg_t _msg;  // static or not ?
-	CAN_RxHeaderTypeDef _nRXH;  // static or not ?
+	can_msg_t _msg;  // TODO - static or not ?
+	CAN_RxHeaderTypeDef _nRXH;  // TODO - static or not ?
 
 #if USE_CAN_BUSACTIVE
 	if((__CAN.public.activity->byte & POWERSAVE_CANBUS_ACTIVE_MASK) == 0)  // if sleeping...
@@ -43,8 +43,10 @@ static void _tcan334_can_msg_receive(message_handler_t *in_handler, const uint8_
 		;
 #endif
 
-	_msg.sidh = (uint8_t) (_nRXH.StdId & 0xFF00);  // transfer CAN ID high byte
-	_msg.sidl = (uint8_t) (_nRXH.StdId & 0x00C0);  // transfer CAN ID low byte - only the relevant portion of it
+	// FIXME - see _tcan334_can_msg_send() below
+	uint16_t temp = _nRXH.StdId;
+	_msg.sidh = (uint8_t) ((_nRXH.StdId >> 8) & 0x00FF);  // transfer CAN ID high byte
+	_msg.sidl = (uint8_t) (temp & 0x00C0);  // transfer CAN ID low byte - only the relevant portion of it
 	_msg.dlc = _nRXH.DLC;
 
 	in_handler->SetMessage(&_msg);  // upload into the message handler
@@ -65,10 +67,12 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 		__CAN.public.GoBusActive(1);  // wake up
 #endif
 
-	// TODO - investigate if can_msg_t can maybe be skipped: for instanc, the members below to some extent already are in can_msg_t. perhaps in the caller this function the _TXHeader can already be used?
+	// TODO - investigate if can_msg_t can maybe be skipped: for instance, the members below to some extent already are in can_msg_t. perhaps in the caller this function the _TXHeader can already be used?
 	_TXHeader.IDE = CAN_ID_STD;  // set the ID to standard
 	_TXHeader.RTR = CAN_RTR_DATA;  //	set to DATA
-	_TXHeader.StdId = (msg->sidh | msg->sidl);  // populate the complete standard Id
+	// FIXME - rsh by 6 is a workaround for a conceptual problem: the mj8x8 CAN std. ID as per excel is leftshifted.
+	// bxCAN assumes rightshifted CAN IDs; somewhere in HAL_CAN_AddTxMessage() a lsh by 21 takes place which has the consequence that mj8x8 already leftshifted ID wander out of the uint32 byte space and become bogus.
+	_TXHeader.StdId = ((msg->sidh << 8) | msg->sidl) >> 6;  // populate the complete standard Id
 	_TXHeader.DLC = msg->dlc;  // set the length
 
 	uint8_t mboxFreeCount = 0;  // start with the assumption that there are no free mailboxes

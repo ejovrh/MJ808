@@ -29,8 +29,9 @@ void _SendMessage(uint8_t in_rcpt, const uint8_t in_command, const uint8_t in_ar
 		{  // // unicast  - the default
 		   // determine the recipient bits
 		   // in_rcpt is assumed to be CANID_MJ808, CANID_MJ818, and so on -- in fact a sender-formatted ID
-			__MsgHandler.__tx_msg->sidh = (in_rcpt >> 4) & RECIPIENT_MASK_HIGH;	// bits [1:0} of the high byte
-			__MsgHandler.__tx_msg->sidl = (in_rcpt << 4) & RECIPIENT_MASK_LOW;  // bits [1:0} of the high byte
+			uint8_t foo = in_rcpt;
+			__MsgHandler.__tx_msg->sidh |= ((in_rcpt >> 4) & RECIPIENT_MASK_HIGH);  // bits [1:0} of the high byte
+			__MsgHandler.__tx_msg->sidl |= ((foo << 4) & RECIPIENT_MASK_LOW);  // bits [1:0} of the high byte
 		}
 
 	__MsgHandler.__tx_msg->COMMAND= in_command;  // set command into message
