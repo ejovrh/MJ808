@@ -258,8 +258,6 @@ static inline void _ConfigFilters(void)
 	_FilterCondfig.FilterIdLow = 0x0000;
 	_FilterCondfig.FilterMaskIdHigh = 0x0000;
 	_FilterCondfig.FilterMaskIdLow = 0x0000;
-//	_FilterCondfig.FilterMaskIdHigh = 0xFFFF;
-//	_FilterCondfig.FilterMaskIdLow = 0xFFFF;
 	_FilterCondfig.FilterFIFOAssignment = CAN_RX_FIFO0;
 	_FilterCondfig.FilterActivation = ENABLE;
 	HAL_CAN_ConfigFilter(&_hcan, &_FilterCondfig);
@@ -270,8 +268,6 @@ static inline void _ConfigFilters(void)
 	_FilterCondfig.FilterIdHigh = 0x0000;
 	_FilterCondfig.FilterIdLow = 0x0000;
 
-//	_FilterCondfig.FilterMaskIdHigh = 0xFFFF;
-//	_FilterCondfig.FilterMaskIdLow = 0xFFFF;
 	_FilterCondfig.FilterFIFOAssignment = CAN_RX_FIFO1;
 	_FilterCondfig.FilterActivation = ENABLE;
 	HAL_CAN_ConfigFilter(&_hcan, &_FilterCondfig);
@@ -317,8 +313,10 @@ inline static void _CANInit(void)
 }
 
 // object constructor
-can_t* can_ctor(void)
+can_t* can_ctor(const uint16_t in_num_id)
 {
+	__CAN.public.own_sid = (in_num_id << 4);  // convert from mj8x8 self ID to mj8x8 sender ID format, where b[7:4] is the sender, b[3:0] the recipient
+
 // at this point STM32's TCAN334 Stby and Shdn pins are initialised and pulled up
 // TCAN334 is in shutdown/standby mode
 	_CANInit();  // initialize & configure STM32's CAN peripheral

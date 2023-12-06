@@ -173,7 +173,8 @@ typedef union  // union of mj8x8 devices: 16 bits or one word
 #define UNICAST 0x0000
 
 typedef enum  // enum describing devices on a mj8x8 bus
-{
+{  // this is intended to be human-readable
+   // actual CAN frames have a different format
 	  ALL = 0,
 	  mj_00 = 0x0,  // sender: 0x00
 	  mj_01 = 0x1,  // sender: 0x10

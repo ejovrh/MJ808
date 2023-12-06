@@ -23,7 +23,7 @@ typedef union  // union for core activity indication and CAN standby control (is
 	 * for instance, mj8x8_t sees it as part of the can_t member and the final device implementation (e.g. mj808_t) in turn
 	 * can see it as part of the mj8x8_t base object.
 	 *
-	 * this finds its utilization in e.g. mj808_led.c, where the front light/high beam set/unset flags while in operation.
+	 * this finds its utilisation in e.g. mj808_led.c, where the front light/high beam set/unset flags while in operation.
 	 *
 	 * names in the lower nibble have to be copied "up" (into e.g. mj808.h) manually, while the upper nibble's names are reserved for the actual implementations.
 	 */
@@ -50,7 +50,7 @@ typedef union  // union for core activity indication and CAN standby control (is
 
 typedef struct can_t	// can_t struct describing the CAN device as a whole
 {
-	uint16_t own_sid;  // SIDH for device
+	uint16_t own_sid;  // SID of self in mj8x8 sender format b[7:4}: sender, b[3:0]: recipient; b[7:4] have to contain (own ID << 4)
 	activity_t *activity;  // device activity indicator
 
 	void (*Timer1Start)(void);  // starts timer1 (see mj8x8_t for the stop function)
@@ -58,6 +58,6 @@ typedef struct can_t	// can_t struct describing the CAN device as a whole
 	void (*const RequestToSend)(can_msg_t *const msg);  // requests message to be sent to the CAN bus
 } can_t __attribute__((aligned(8)));
 
-can_t* can_ctor();	// CAN object constructor - does function pointer & hardware initialisation
+can_t* can_ctor(const uint16_t in_num_id);  // CAN object constructor - does function pointer & hardware initialisation
 
 #endif /* CORE_INC_MJ8X8_CAN_H_ */

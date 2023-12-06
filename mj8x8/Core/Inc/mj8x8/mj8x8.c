@@ -261,11 +261,10 @@ mj8x8_t* mj8x8_ctor(const mj8x8_Devices_t in_MJ8x8_ID)
 	_GPIOInit();	// initialize device non-specific GPIOs
 	_TimerInit();  // initialize Timer - heartbeat
 
-	__MJ8x8.__NumericalCAN_ID = in_MJ8x8_ID;	// set the numerical CAN ID - 0 through 15.
+	__MJ8x8.__NumericalCAN_ID = in_MJ8x8_ID;	// set own mj8x8 ID (0-15)
+	__MJ8x8.public.can = can_ctor(__MJ8x8.__NumericalCAN_ID);  // call the CAN ctor with this device's numerical ID (0-15)
 
-	__MJ8x8.public.can = can_ctor();	// pass on CAN public part
 	__MJ8x8.public.activity = (uint8_t**) &__MJ8x8.public.can->activity;  // tie in can_t activity into mj8x8_t activity  (is tied in again one level up)
-	__MJ8x8.public.can->own_sid = (in_MJ8x8_ID << 4);  // translate MJ8x8 device ID to sender format for a mj8x8-CAN standard ID frame
 	__MJ8x8.public.can->activity->DoHeartbeat = 1;	// start up with heartbeat enabled
 	__MJ8x8.public.can->Timer1Start = &_StartTimer1;  //
 

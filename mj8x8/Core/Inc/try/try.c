@@ -86,6 +86,7 @@ static inline void _EventHandlerEvent03(void)
 	if(Device->button->button[PushButton]->Toggle)
 		{
 			MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_01, (RED | BLINK), 2);
+			MsgHandler->SendMessage(mj838, MSG_BUTTON_EVENT_02, 99, 2);	// bogus command
 			Device->led->led[Red].Shine(BLINK);
 		}
 	else
@@ -170,11 +171,13 @@ static inline void _EventHandlerEvent07(void)
 			Device->led->led[Green].Shine(ON);	// turn green indicator on
 			Device->adc->Start();
 			MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_00, 30, 2);  // convey button press via CAN and the logic unit will do its own thing
+			MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_01, 0, 2);	// bogus command
 		}
 	else
 		{
 			Device->led->led[Green].Shine(OFF);  //	turn green indicator off
 			MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
+			MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_01, 0, 2);	// bogus command
 		}
 #endif
 	;
@@ -324,6 +327,9 @@ static inline void _MsgBtnEvent02(can_msg_t *msg)
 {
 #ifdef MJ808_
 	Device->led->led[Front].Shine(msg->ARGUMENT);
+#endif
+#ifdef MJ838_
+	asm("NOP");
 #endif
 
 	return;
