@@ -86,7 +86,8 @@ static inline void _EventHandlerEvent03(void)
 	if(Device->button->button[PushButton]->Toggle)
 		{
 			MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_01, (RED | BLINK), 2);
-			MsgHandler->SendMessage(mj838, MSG_BUTTON_EVENT_02, 99, 2);	// bogus command
+			MsgHandler->SendMessage(mj_14, MSG_BUTTON_EVENT_01, 0xBE, 2);  // bogus command
+			MsgHandler->SendMessage(mj838, MSG_BUTTON_EVENT_01, 0xEF, 2);  // bogus command
 			Device->led->led[Red].Shine(BLINK);
 		}
 	else

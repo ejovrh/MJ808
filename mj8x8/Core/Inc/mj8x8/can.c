@@ -19,6 +19,7 @@ typedef struct	// can_t actual
 } __can_t;
 
 extern __can_t __CAN;  // declare can_t actual
+
 // fetches a CAN frame from a RX FIFO and loads it into the message handler object
 static void _tcan334_can_msg_receive(message_handler_t *in_handler, const uint8_t in_fifo)
 {
@@ -143,8 +144,6 @@ static inline void _EXTItoRX(void)
 //	sets CAN infrastructure into standby mode
 static inline void __can_reuqest_sleep(void)
 {
-	volatile uint16_t i = 0;  // safeguard counter
-
 	if(__CAN.public.activity->CANActive == 0)  // if we already are asleep ...
 		return;  // ... do nothing
 
@@ -152,6 +151,8 @@ static inline void __can_reuqest_sleep(void)
 	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_STANDBY);  // put transceiver to sleep
 
 #if USE_HAL_CANSLEEP
+	volatile uint16_t i = 0;  // safeguard counter
+
 	do
 		{
 			HAL_CAN_RequestSleep(&_hcan);  // try to put CAN peripheral to sleep
@@ -246,31 +247,56 @@ __can_t __CAN =  // instantiate can_t actual and set function pointers
 	.public.RequestToSend = &_tcan334_can_msg_send,  // ditto
 	};
 
+#define RAW_CAN_BRDCAST 0x4000 // CAN frame bit
+#define RAW_CAN_SNDR 0x3C00
+#define RAW_CAN_RCPT 0x03C0
+//#define RAW_CAN_IDE
+
 static inline void _ConfigFilters(void)
 {
-	static CAN_FilterTypeDef _FilterCondfig = {0}; // CAN filter configuration object
+	static CAN_FilterTypeDef _FilterConfig =
+		{0};  // CAN filter configuration object
 
-	// TODO - CAN filters - configure filters
-	_FilterCondfig.FilterBank = 0;	// allow all for FIFOo
-	_FilterCondfig.FilterMode = CAN_FILTERMODE_IDMASK;
-	_FilterCondfig.FilterScale = CAN_FILTERSCALE_32BIT;
-	_FilterCondfig.FilterIdHigh = 0x0000;
-	_FilterCondfig.FilterIdLow = 0x0000;
-	_FilterCondfig.FilterMaskIdHigh = 0x0000;
-	_FilterCondfig.FilterMaskIdLow = 0x0000;
-	_FilterCondfig.FilterFIFOAssignment = CAN_RX_FIFO0;
-	_FilterCondfig.FilterActivation = ENABLE;
-	HAL_CAN_ConfigFilter(&_hcan, &_FilterCondfig);
+	_FilterConfig.FilterScale = CAN_FILTERSCALE_16BIT;  // 16 bit width
+	_FilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;  // mask mode
+	_FilterConfig.FilterActivation = ENABLE;  // we want it enabled
 
-	_FilterCondfig.FilterBank = 1;	// allow all for FIFO1
-	_FilterCondfig.FilterMode = CAN_FILTERMODE_IDMASK;
-	_FilterCondfig.FilterScale = CAN_FILTERSCALE_32BIT;
-	_FilterCondfig.FilterIdHigh = 0x0000;
-	_FilterCondfig.FilterIdLow = 0x0000;
+	// bank 0 - heartbeat - doesnt work
+//	_FilterCondfig.FilterBank = 0;
+//	_FilterCondfig.FilterMaskIdHigh = 0x0000;
+//	_FilterCondfig.FilterMaskIdLow = (RAW_CAN_BRDCAST | RAW_CAN_RCPT);  // filter 1
+//	_FilterCondfig.FilterIdHigh = 0x0000;
+//	_FilterCondfig.FilterIdLow = RAW_CAN_BRDCAST;  // filter 1
+//	_FilterCondfig.FilterFIFOAssignment = CAN_RX_FIFO0;
+//	HAL_CAN_ConfigFilter(&_hcan, &_FilterCondfig);
 
-	_FilterCondfig.FilterFIFOAssignment = CAN_RX_FIFO1;
-	_FilterCondfig.FilterActivation = ENABLE;
-	HAL_CAN_ConfigFilter(&_hcan, &_FilterCondfig);
+	// unicast to self
+	_FilterConfig.FilterBank = 1;
+	_FilterConfig.FilterMaskIdLow = RAW_CAN_RCPT;  // filter 2
+	_FilterConfig.FilterIdLow = 0x0380;  // filter 2
+	_FilterConfig.FilterMaskIdHigh = 0x0000;
+	_FilterConfig.FilterIdHigh = 0x0000;
+	_FilterConfig.FilterFIFOAssignment = CAN_RX_FIFO1;
+
+	if(HAL_CAN_ConfigFilter(&_hcan, &_FilterConfig) != HAL_OK)
+		{
+			while(1)
+				;
+		}
+
+//	// bank 0 - heartbeat
+//	_FilterCondfig.FilterBank = 1;
+//	_FilterCondfig.FilterMaskIdLow = 0x43C0;   // Mask for all bits (no filtering)
+//	_FilterCondfig.FilterIdLow = 0x4000;         // 16-bit identifier (Low bits)
+//	_FilterCondfig.FilterMaskIdHigh = 0x0000;  // Mask for bits 6, 7, 8, and 9 (inverted)
+//	_FilterCondfig.FilterIdHigh = 0x0000;        // 16-bit identifier (High bits)
+//	_FilterCondfig.FilterFIFOAssignment = CAN_FILTER_FIFO0;  // FIFO 1
+
+//	if(HAL_CAN_ConfigFilter(&_hcan, &_FilterCondfig) != HAL_OK)
+//		{
+//			while(1)
+//				;
+//		}
 }
 
 // CAN init
@@ -301,6 +327,7 @@ inline static void _CANInit(void)
 	_hcan.Init.ReceiveFifoLocked = ENABLE;  // @suppress("Field cannot be resolved")
 	_hcan.Init.TransmitFifoPriority = ENABLE;  // @suppress("Field cannot be resolved")
 	__HAL_RCC_CAN1_CLK_ENABLE();
+
 	HAL_CAN_Init(&_hcan);  // Initialize CAN Bus
 
 	_ConfigFilters();  // set up filters
@@ -308,7 +335,9 @@ inline static void _CANInit(void)
 	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 3, 0);
 	HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
 
-	HAL_CAN_ActivateNotification(&_hcan, (CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO1_MSG_PENDING | CAN_IT_RX_FIFO0_FULL | CAN_IT_RX_FIFO1_FULL));  // enable interrupts
+//	HAL_CAN_ActivateNotification(&_hcan, (CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO0_FULL | CAN_IT_RX_FIFO0_OVERRUN | CAN_IT_WAKEUP | CAN_IT_SLEEP_ACK));  // enable interrupts
+	HAL_CAN_ActivateNotification(&_hcan, (CAN_IT_RX_FIFO1_MSG_PENDING | CAN_IT_RX_FIFO1_FULL | CAN_IT_RX_FIFO1_OVERRUN | CAN_IT_WAKEUP | CAN_IT_SLEEP_ACK));  // enable interrupts
+
 	HAL_CAN_Start(&_hcan);	// start CAN
 }
 
@@ -354,7 +383,7 @@ void CEC_CAN_IRQHandler(void)
 	// CAN RX FIFO0 full
 	if((interrupts & CAN_IT_RX_FIFO0_FULL) != 0U)
 		{
-			if((_hcan.Instance->RF1R & CAN_RF0R_FULL0) != 0U)
+			if((_hcan.Instance->RF0R & CAN_RF0R_FULL0) != 0U)
 				{
 					__HAL_CAN_CLEAR_FLAG(&_hcan, CAN_FLAG_FF0);  // Clear FIFO 0 full Flag
 				}
@@ -365,7 +394,7 @@ void CEC_CAN_IRQHandler(void)
 		{
 			if((_hcan.Instance->RF1R & CAN_RF1R_FULL1) != 0U)
 				{
-					__HAL_CAN_CLEAR_FLAG(&_hcan, CAN_FLAG_FF1);  // Clear FIFO 0 full Flag
+					__HAL_CAN_CLEAR_FLAG(&_hcan, CAN_FLAG_FF1);  // Clear FIFO 1 full Flag
 				}
 		}
 
