@@ -143,8 +143,6 @@ static inline void _EXTItoRX(void)
 //	sets CAN infrastructure into standby mode
 static inline void __can_reuqest_sleep(void)
 {
-	volatile uint16_t i = 0;  // safeguard counter
-
 	if(__CAN.public.activity->CANActive == 0)  // if we already are asleep ...
 		return;  // ... do nothing
 
@@ -152,6 +150,8 @@ static inline void __can_reuqest_sleep(void)
 	HAL_GPIO_WritePin(TCAN334_Standby_GPIO_Port, TCAN334_Standby_Pin, TCAN334_STANDBY);  // put transceiver to sleep
 
 #if USE_HAL_CANSLEEP
+	uint16_t i = 0;  // safeguard counter
+
 	do
 		{
 			HAL_CAN_RequestSleep(&_hcan);  // try to put CAN peripheral to sleep
@@ -185,7 +185,6 @@ static inline void __can_reuqest_sleep(void)
 //	sets CAN infrastructure into normal operating mode
 static inline void __can_wakeup(void)
 {
-	volatile uint16_t i = 0;  // safeguard counter
 
 	if(__CAN.public.activity->CANActive == 1)  // if we already are awake ...
 		return;  // ... do nothing
@@ -195,6 +194,8 @@ static inline void __can_wakeup(void)
 	_EXTItoRX();	// configure GPIO from EXTI to CAN RX
 
 #if USE_HAL_CANSLEEP
+	volatile uint16_t i = 0;  // safeguard counter
+
 	do
 		{
 			HAL_CAN_WakeUp(&_hcan);  // try to wake up internal CAN peripheral

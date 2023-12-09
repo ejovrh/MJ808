@@ -342,9 +342,9 @@ static inline void _MsgBtnEvent03(can_msg_t *msg)
 // AutoBat status
 static inline void _MsgBtnEvent04(can_msg_t *msg)
 {
+#ifdef MJ808_
 	uint8_t arg = msg->ARGUMENT;
 
-#ifdef MJ808_
 	if (arg <= 10)	// 10% warning
 		Device->led->led[Front].Shine(msg->ARGUMENT);
 
@@ -352,6 +352,8 @@ static inline void _MsgBtnEvent04(can_msg_t *msg)
 		Device->led->led[Front].Shine(75);
 #endif
 #ifdef MJ818_
+	uint8_t arg = msg->ARGUMENT;
+
 	if (arg <= 10)	// 10% warning
 		Device->led->led[Rear].Shine(msg->ARGUMENT);
 
