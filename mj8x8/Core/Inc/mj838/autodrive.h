@@ -9,6 +9,8 @@ typedef struct	// struct describing the AutoDrive functionality
 {
 	uint8_t FlagLightisOn;  // flag if AutoDrive turned Light on
 
+	float (*GetSpeed_mps)(void);	// get speed in meters per second
+	float (*GetSpeed_kph)(void);	// get speed in kilometres per hour
 	void (*Do)(void);  // AutoDrive functionality
 } autodrive_t;
 
