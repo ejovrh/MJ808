@@ -19,7 +19,7 @@ volatile uint8_t _zcValues = 0;	// iterator for average frequency calculation
 volatile uint8_t _sleep = 0;	// timer3-based count for sleep since last zero-cross detection
 
 // returns measured wheel frequency
-static inline uint16_t _GetWheelFrequency(const uint8_t i)
+static inline uint16_t _GetWheelFrequency(void)
 {
 	return __ZeroCross._WheelFrequency;
 }
@@ -50,9 +50,9 @@ static inline void _Start(void)
 
 	__disable_irq();	// disable interrupts until end of initialisation
 	Device->mj8x8->UpdateActivity(ZEROCROSS, ON);	// mark device as on
-	HAL_NVIC_DisableIRQ(EXTI0_1_IRQn);	// disable EXTI0 - we will use a different mode from now on...
+	HAL_NVIC_DisableIRQ(EXTI0_1_IRQn);	// disable EXTI0 - we will use a timer2 IC  mode from now on...
 
-	// configure to timer2 input-capture mode
+	// configure from EXTI0 to timer2 input-capture mode (so that the device can measure ZC frequency)
 	GPIO_InitStruct.Pin = ZeroCross_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
@@ -62,7 +62,7 @@ static inline void _Start(void)
 
 	Device->StartTimer(&htim2);	// start zero-cross input capture timer
 
-	__DMAInit();	// initialise DMA
+	__DMAInit();	// TODO - needed? initialise DMA
 
 	HAL_TIM_IC_Start_DMA(&htim2, TIM_CHANNEL_1, _zerocross_buffer, ZC_BUFFER_LEN);	// start timer2 DMA
 	Device->StartTimer(&htim3);	// start measurement interval timer
@@ -73,6 +73,7 @@ static inline void _Start(void)
 // stops the timer & DMA peripherals
 static inline void _Stop(void)
 {
+	// TODO - validate stop on wheel stop (i.e. freq becoming 0)
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
 
@@ -83,7 +84,7 @@ static inline void _Stop(void)
 	__HAL_RCC_DMA1_CLK_DISABLE();	// turn off peripheral
 	Device->StopTimer(&htim2);	// stop zero-cross input capture timer
 
-	// configure to GPIO EXTI0 mode
+	// configure from timer2 IC to GPIO EXTI0 mode (so that the device can wake up on ZC detection)
 	GPIO_InitStruct.Pin = ZeroCross_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;  // catch zero cross activity (idle to first impulse and rolling)
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;

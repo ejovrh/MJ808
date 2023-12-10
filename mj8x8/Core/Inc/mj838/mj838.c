@@ -8,9 +8,9 @@
 
 #include "mj838\autodrive.h"	// auto-drive detection functionality
 
-TIM_HandleTypeDef htim17;  // event handling - 2.5ms
-TIM_HandleTypeDef htim2;  // input capture of zero-cross signal on rising edge
-TIM_HandleTypeDef htim3;  // measurement interval of timer2 data - default 250ms
+TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 2.5ms
+TIM_HandleTypeDef htim2;  // Timer2 object - input capture of zero-cross signal on rising edge
+TIM_HandleTypeDef htim3;  // FIXME - needed like that? Timer3 object - measurement interval of timer2 data - default 250ms
 
 typedef struct	// mj838_t actual
 {
@@ -31,7 +31,7 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(TCAN334_Standby_GPIO_Port, &GPIO_InitStruct);
 
-	// GPIO EXTI0 mode
+	// GPIO EXTI0 mode - state change from idle to measurement mode
 	GPIO_InitStruct.Pin = ZeroCross_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;  // catch zero cross activity (idle to first impulse and rolling)
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
@@ -77,7 +77,7 @@ static inline void _TimerInit(void)
 	htim3.Instance = TIM3;
 	htim3.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
 	htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim3.Init.Period = TIMER3_PERIOD;  // with above pre-scaler and a period of 24, we have an 2.5ms interrupt frequency
+	htim3.Init.Period = TIMER3_PERIOD;  // with above pre-scaler and a period of 2499, we have an 250ms interrupt frequency
 	htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim3.Init.RepetitionCounter = 0;
 	htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -140,13 +140,13 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 			sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
 			sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 			sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
-			sConfigIC.ICFilter = 0x0F;  // odd filter config
+			sConfigIC.ICFilter = 0x0F;  // FIXME odd filter config
 			HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_1);
 
 			return;  // get out since we don't need HAL_TIM_Base_Start_IT() as other timers do
 		}
 
-	if(timer->Instance == TIM3)  // event handling
+	if(timer->Instance == TIM3)  // FIXME - handling of what?
 		{
 			__HAL_RCC_TIM3_CLK_ENABLE();  // start the clock
 			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
@@ -166,13 +166,13 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 // device-specific pre sleep
 static inline void _PreSleep(void)
 {
-	;
+	;  // TODO - switchover of capacitor control to standstill
 }
 
 // device-specific pre stop
 static inline void _PreStop(void)
 {
-	;
+	;  // TODO - switchover of capacitor control to standstill
 }
 
 // device-specific constructor

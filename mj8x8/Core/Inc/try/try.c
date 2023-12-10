@@ -482,6 +482,9 @@ void _EmptyBusOperation(void)
 #ifdef MJ828_
 	;
 #endif
+#ifdef MJ838_
+	;
+#endif
 }
 
 static __try_t __Try =  // instantiate can_t actual and set function pointers
