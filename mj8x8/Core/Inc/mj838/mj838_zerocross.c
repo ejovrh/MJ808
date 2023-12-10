@@ -14,8 +14,8 @@ static __zerocross_t __ZeroCross;  // forward declaration of object
 uint32_t _zerocross_buffer[ZC_BUFFER_LEN] =
 	{0};	// stores timer2 counter readout
 
-volatile float _freq_buffer = 0;	// container for average frequency calculation
-volatile uint8_t _zcValues = 0;	// iterator for average frequency calculation
+volatile uint32_t _freq_buffer = 0;	// container for average frequency calculation
+volatile uint16_t _zcValues = 0;	// iterator for average frequency calculation
 volatile uint8_t _sleep = 0;	// timer3-based count for sleep since last zero-cross detection
 
 // returns measured wheel frequency
@@ -49,6 +49,7 @@ static inline void _Start(void)
 		{0};
 
 	__disable_irq();	// disable interrupts until end of initialisation
+
 	Device->mj8x8->UpdateActivity(ZEROCROSS, ON);	// mark device as on
 	HAL_NVIC_DisableIRQ(EXTI0_1_IRQn);	// disable EXTI0 - we will use a timer2 IC  mode from now on...
 
@@ -128,21 +129,20 @@ void EXTI0_1_IRQHandler(void)
 	HAL_GPIO_EXTI_IRQHandler(ZeroCross_Pin);  // service the interrupt
 }
 
-// DMA ISR - zero-cross frequency measurement
+// DMA ISR - zero-cross frequency measurement - fires once every rising edge zero-cross
 void DMA1_Channel4_5_IRQHandler(void)
 {
+	// NOTE: input signal pulse needs to be at least 40us wide
+
 	HAL_DMA_IRQHandler(&hdma_tim2_ch1);  // service the interrupt
 
-	/* rollover: the counter goes up to 4294967295.
-	 *  the prescaler is 10000, which means the rollover will be in 119 hours. for the purpose of this device - never.
-	 */
-	if ((_zerocross_buffer[1] > _zerocross_buffer[0]))	// very crude guard against rollover
-		{
-			_freq_buffer += (float) (10000.0 / (_zerocross_buffer[1] - _zerocross_buffer[0]));	// add up values for division later on
-			++_zcValues;	// how many times did we add?
-		}
+	if ((_zerocross_buffer[1] > _zerocross_buffer[0]))	//
+		_freq_buffer += (_zerocross_buffer[1] - _zerocross_buffer[0]);	// add up values for division later on
 
-	Device->AutoDrive->Do();  // run the AutoLight feature
+	if ((_zerocross_buffer[1] < _zerocross_buffer[0]))	//
+		_freq_buffer += (_zerocross_buffer[0] - _zerocross_buffer[1]);	// add up values for division later on
+
+	++_zcValues;	// how many times did we add?
 }
 
 // timer 3 ISR - 250ms interrupt - frequency measurement timer
@@ -151,13 +151,24 @@ void TIM3_IRQHandler(void)
 	HAL_TIM_IRQHandler(&htim3);  // service the interrupt
 
 	// once timer3 ISR fires, calculate:
-	__ZeroCross._DynamoFrequency = _freq_buffer / _zcValues;	// average dynamo AC frequency
-	__ZeroCross._WheelFrequency = __ZeroCross._DynamoFrequency / SON_DYNAMO_CORRECTION;	// derive wheel rotations per second
-	__ZeroCross._ms = __ZeroCross._WheelFrequency * WHEEL_CIRCUMFERENCE;	// derive speed in m/s
-	__ZeroCross._kmh = __ZeroCross._ms * 3.6;	// derive speed in km/h
-
-	if (_freq_buffer < 1)	// no rotation detected (timer3 clears the variable after one iteration)
+	if (_freq_buffer)	// if there is data...
+		{
+			if (_zcValues)	// division by zero danger
+				__ZeroCross._DynamoFrequency = 8000000.0 / (float) (_freq_buffer / _zcValues);	// average dynamo AC frequency
+			else
+				__ZeroCross._DynamoFrequency = 8000000.0 / (float) _freq_buffer;	//
+		}
+	else
+		{
+			__ZeroCross._DynamoFrequency = 0;
+			__ZeroCross._ms = 0;
+			__ZeroCross._kmh = 0;
 			++_sleep;
+		}
+
+	__ZeroCross._WheelFrequency = __ZeroCross._DynamoFrequency * 2 / POLE_COUNT;	// FIXME - validate with real wheel - derive wheel rotations per second
+	__ZeroCross._ms = __ZeroCross._WheelFrequency * WHEEL_CIRCUMFERENCE;	// wheel frequency to m/s
+	__ZeroCross._kmh = __ZeroCross._ms * 3.6;	// m/s to km/h
 
 	if (_sleep > SLEEPTIMEOUT_COUNTER) // sleep timeout expired - stop zero-cross
 		{
@@ -171,6 +182,8 @@ void TIM3_IRQHandler(void)
 
 	_freq_buffer = 0;	// zero & start over
 	_zcValues = 0;
+
+	Device->AutoDrive->Do();  // run the AutoLight feature
 }
 
 #endif // MJ838_
