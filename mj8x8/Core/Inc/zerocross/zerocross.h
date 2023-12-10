@@ -5,7 +5,7 @@ typedef struct zerocross_t	// struct describing the event handler functionality
 {
 	void (*Start)(void);	// starts the zero-cross functionality (timer2 & DMA peripherals)
 	void (*Stop)(void);  // stops the zero-cross functionality (timer2 & DMA peripherals)
-	uint16_t (*GetWheelFrequency)(void);  // returns detected wheel frequency
+	uint16_t (*GetZCFrequency)(void);  // returns computed Zero-Cross signal frequency
 } zerocross_t;
 
 #endif /* CORE_INC_ZEROCROSS_ZEROCROSS_H_ */
