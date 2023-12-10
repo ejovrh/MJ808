@@ -18,8 +18,44 @@ volatile uint32_t _freq_buffer = 0;	// container for average frequency calculati
 volatile uint16_t _zcValues = 0;	// iterator for average frequency calculation
 volatile uint8_t _sleep = 0;	// timer3-based count for sleep since last zero-cross detection
 
-// returns measured wheel frequency
-static inline uint16_t _GetWheelFrequency(void)
+// computes Zero-Cross signal frequency
+static void  _CalculateZCFrequency(void)
+{
+	if (_freq_buffer)	// if there is data...
+		{
+			if (_zcValues)	// division by zero danger
+				__ZeroCross._DynamoFrequency = 8000000.0 / (float) (_freq_buffer / _zcValues);	// average dynamo AC frequency
+			else
+				__ZeroCross._DynamoFrequency = 8000000.0 / (float) _freq_buffer;	//
+		}
+	else
+		{
+			__ZeroCross._DynamoFrequency = 0;
+			__ZeroCross._ms = 0;
+			__ZeroCross._kmh = 0;
+			++_sleep;
+		}
+
+	__ZeroCross._WheelFrequency = __ZeroCross._DynamoFrequency * 2 / POLE_COUNT;	// FIXME - validate with real wheel - derive wheel rotations per second
+	__ZeroCross._ms = __ZeroCross._WheelFrequency * WHEEL_CIRCUMFERENCE;	// wheel frequency to m/s
+	__ZeroCross._kmh = __ZeroCross._ms * 3.6;	// m/s to km/h
+
+	if (_sleep > SLEEPTIMEOUT_COUNTER) // sleep timeout expired - stop zero-cross
+		{
+			__ZeroCross._DynamoFrequency = 0;	// zero out values
+			__ZeroCross._WheelFrequency = 0;
+			__ZeroCross._ms = 0;
+			__ZeroCross._kmh = 0;
+			_sleep = 0;
+			Device->ZeroCross->Stop();	// stop zero-cross detection; timer1 will put the device into stop mode soon
+		}
+
+	_freq_buffer = 0;	// zero & start over
+	_zcValues = 0;
+}
+
+// returns computed Zero-Cross signal frequency
+static inline uint16_t _GetZCFrequency(void)
 {
 	return __ZeroCross._WheelFrequency;
 }
@@ -102,7 +138,7 @@ zerocross_t* zerocross_ctor(void)
 {
 	__ZeroCross.__buffer = _zerocross_buffer;  // tie in timer2 counter readout destination
 
-	__ZeroCross.public.GetWheelFrequency = &_GetWheelFrequency;  // set function pointer
+	__ZeroCross.public.GetZCFrequency = &_GetZCFrequency;  // set function pointer
 	__ZeroCross.public.Start = &_Start;  // ditto
 	__ZeroCross.public.Stop = &_Stop;  // ditto
 
@@ -133,7 +169,6 @@ void EXTI0_1_IRQHandler(void)
 void DMA1_Channel4_5_IRQHandler(void)
 {
 	// NOTE: input signal pulse needs to be at least 40us wide
-
 	HAL_DMA_IRQHandler(&hdma_tim2_ch1);  // service the interrupt
 
 	if ((_zerocross_buffer[1] > _zerocross_buffer[0]))	//
@@ -150,40 +185,7 @@ void TIM3_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&htim3);  // service the interrupt
 
-	// once timer3 ISR fires, calculate:
-	if (_freq_buffer)	// if there is data...
-		{
-			if (_zcValues)	// division by zero danger
-				__ZeroCross._DynamoFrequency = 8000000.0 / (float) (_freq_buffer / _zcValues);	// average dynamo AC frequency
-			else
-				__ZeroCross._DynamoFrequency = 8000000.0 / (float) _freq_buffer;	//
-		}
-	else
-		{
-			__ZeroCross._DynamoFrequency = 0;
-			__ZeroCross._ms = 0;
-			__ZeroCross._kmh = 0;
-			++_sleep;
-		}
-
-	__ZeroCross._WheelFrequency = __ZeroCross._DynamoFrequency * 2 / POLE_COUNT;	// FIXME - validate with real wheel - derive wheel rotations per second
-	__ZeroCross._ms = __ZeroCross._WheelFrequency * WHEEL_CIRCUMFERENCE;	// wheel frequency to m/s
-	__ZeroCross._kmh = __ZeroCross._ms * 3.6;	// m/s to km/h
-
-	if (_sleep > SLEEPTIMEOUT_COUNTER) // sleep timeout expired - stop zero-cross
-		{
-			__ZeroCross._DynamoFrequency = 0;	// zero out values
-			__ZeroCross._WheelFrequency = 0;
-			__ZeroCross._ms = 0;
-			__ZeroCross._kmh = 0;
-			_sleep = 0;
-			Device->ZeroCross->Stop();	// stop zero-cross detection; timer1 will put the device into stop mode soon
-		}
-
-	_freq_buffer = 0;	// zero & start over
-	_zcValues = 0;
-
-	Device->AutoDrive->Do();  // run the AutoLight feature
+	_CalculateZCFrequency();  // calculate ZC signal frequency
 }
 
 #endif // MJ838_

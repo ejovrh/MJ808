@@ -14,7 +14,7 @@ static __autodrive_t __AutoDrive __attribute__ ((section (".data")));  // preall
 // AutoDrive functionality based on detected speed
 static void _Do(void)
 {
-	;
+	Device->ZeroCross->GetZCFrequency();
 }
 
 static __autodrive_t __AutoDrive =  // instantiate autobatt_t actual and set function pointers
