@@ -42,7 +42,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 
 #define ZC_BUFFER_LEN 2
 #define WHEEL_CIRCUMFERENCE 1.945	// red training wheel circumference in meters
-#define POLE_COUNT 26	// number of dynamo N and S poles (not pole pairs)
+#define POLE_COUNT 13	// number of dynamo pole pairs
 #define SLEEPTIMEOUT_COUNTER 4 // N * 0.25s = foo seconds - time to stay idle, then stop zero-cross
 
 #include "mj8x8\mj8x8.h"
