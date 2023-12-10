@@ -7,6 +7,7 @@
 
 typedef struct	// struct describing the AutoDrive functionality
 {
+	uint8_t FlagLightisOn;  // flag if AutoDrive turned Light on
 
 	void (*Do)(void);  // AutoDrive functionality
 } autodrive_t;
