@@ -10,7 +10,7 @@
 
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 2.5ms
 TIM_HandleTypeDef htim2;  // Timer2 object - input capture of zero-cross signal on rising edge
-TIM_HandleTypeDef htim3;  // FIXME - needed like that? Timer3 object - measurement interval of timer2 data - default 250ms
+TIM_HandleTypeDef htim3;  // Timer3 object - measurement/calculation interval of timer2 data - default 250ms
 
 typedef struct	// mj838_t actual
 {
@@ -37,7 +37,7 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	HAL_GPIO_Init(ZeroCross_GPIO_Port, &GPIO_InitStruct);
 
-	// TODO - debug pin - remove once debugging is complete	
+	// TODO - debug pin - remove once debugging is complete
 	GPIO_InitStruct.Pin = SW9_CTRL_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;

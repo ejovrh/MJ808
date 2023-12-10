@@ -11,53 +11,44 @@ static DMA_HandleTypeDef hdma_tim2_ch1;	// zero-cross frequency measurement
 
 static __zerocross_t __ZeroCross;  // forward declaration of object
 
-uint32_t _zerocross_buffer[ZC_BUFFER_LEN] =
+uint32_t _zc_counter_buffer[ZC_BUFFER_LEN] =
 	{0};	// stores timer2 counter readout
 
-volatile uint32_t _freq_buffer = 0;	// container for average frequency calculation
+volatile uint32_t _zc_counter_delta = 0;	// container for average frequency calculation
 volatile uint16_t _zcValues = 0;	// iterator for average frequency calculation
 volatile uint8_t _sleep = 0;	// timer3-based count for sleep since last zero-cross detection
 
 // computes Zero-Cross signal frequency
 static void  _CalculateZCFrequency(void)
 {
-	if (_freq_buffer)	// if there is data...
+	if (_zc_counter_delta)	// if there is data...
 		{
 			if (_zcValues)	// division by zero danger
-				__ZeroCross._DynamoFrequency = 8000000.0 / (float) (_freq_buffer / _zcValues);	// average dynamo AC frequency
+				__ZeroCross._ZeroCrossFrequency = 8000000.0 / (float) (_zc_counter_delta / _zcValues);	// average dynamo AC frequency
 			else
-				__ZeroCross._DynamoFrequency = 8000000.0 / (float) _freq_buffer;	//
+				__ZeroCross._ZeroCrossFrequency = 8000000.0 / (float) _zc_counter_delta;	//
 		}
 	else
 		{
-			__ZeroCross._DynamoFrequency = 0;
-			__ZeroCross._ms = 0;
-			__ZeroCross._kmh = 0;
+			__ZeroCross._ZeroCrossFrequency = 0;
 			++_sleep;
 		}
 
-	__ZeroCross._WheelFrequency = __ZeroCross._DynamoFrequency * 2 / POLE_COUNT;	// FIXME - validate with real wheel - derive wheel rotations per second
-	__ZeroCross._ms = __ZeroCross._WheelFrequency * WHEEL_CIRCUMFERENCE;	// wheel frequency to m/s
-	__ZeroCross._kmh = __ZeroCross._ms * 3.6;	// m/s to km/h
-
 	if (_sleep > SLEEPTIMEOUT_COUNTER) // sleep timeout expired - stop zero-cross
 		{
-			__ZeroCross._DynamoFrequency = 0;	// zero out values
-			__ZeroCross._WheelFrequency = 0;
-			__ZeroCross._ms = 0;
-			__ZeroCross._kmh = 0;
+			__ZeroCross._ZeroCrossFrequency = 0;	// zero out values
 			_sleep = 0;
 			Device->ZeroCross->Stop();	// stop zero-cross detection; timer1 will put the device into stop mode soon
 		}
 
-	_freq_buffer = 0;	// zero & start over
+	_zc_counter_delta = 0;	// zero & start over
 	_zcValues = 0;
 }
 
 // returns computed Zero-Cross signal frequency
-static inline uint16_t _GetZCFrequency(void)
+static inline float _GetZCFrequency(void)
 {
-	return __ZeroCross._WheelFrequency;
+	return __ZeroCross._ZeroCrossFrequency;
 }
 
 // DMA init - device specific
@@ -101,7 +92,7 @@ static inline void _Start(void)
 
 	__DMAInit();	// TODO - needed? initialise DMA
 
-	HAL_TIM_IC_Start_DMA(&htim2, TIM_CHANNEL_1, _zerocross_buffer, ZC_BUFFER_LEN);	// start timer2 DMA
+	HAL_TIM_IC_Start_DMA(&htim2, TIM_CHANNEL_1, _zc_counter_buffer, ZC_BUFFER_LEN);	// start timer2 DMA
 	Device->StartTimer(&htim3);	// start measurement interval timer
 
 	__enable_irq();  // enable interrupts
@@ -136,8 +127,6 @@ static inline void _Stop(void)
 
 zerocross_t* zerocross_ctor(void)
 {
-	__ZeroCross.__buffer = _zerocross_buffer;  // tie in timer2 counter readout destination
-
 	__ZeroCross.public.GetZCFrequency = &_GetZCFrequency;  // set function pointer
 	__ZeroCross.public.Start = &_Start;  // ditto
 	__ZeroCross.public.Stop = &_Stop;  // ditto
@@ -171,11 +160,11 @@ void DMA1_Channel4_5_IRQHandler(void)
 	// NOTE: input signal pulse needs to be at least 40us wide
 	HAL_DMA_IRQHandler(&hdma_tim2_ch1);  // service the interrupt
 
-	if ((_zerocross_buffer[1] > _zerocross_buffer[0]))	//
-		_freq_buffer += (_zerocross_buffer[1] - _zerocross_buffer[0]);	// add up values for division later on
+	if ((_zc_counter_buffer[1] > _zc_counter_buffer[0]))	//
+		_zc_counter_delta += (_zc_counter_buffer[1] - _zc_counter_buffer[0]);	// add up values for division later on
 
-	if ((_zerocross_buffer[1] < _zerocross_buffer[0]))	//
-		_freq_buffer += (_zerocross_buffer[0] - _zerocross_buffer[1]);	// add up values for division later on
+	if ((_zc_counter_buffer[1] < _zc_counter_buffer[0]))	//
+		_zc_counter_delta += (_zc_counter_buffer[0] - _zc_counter_buffer[1]);	// add up values for division later on
 
 	++_zcValues;	// how many times did we add?
 }
@@ -186,6 +175,8 @@ void TIM3_IRQHandler(void)
 	HAL_TIM_IRQHandler(&htim3);  // service the interrupt
 
 	_CalculateZCFrequency();  // calculate ZC signal frequency
+
+	Device->AutoDrive->Do();	// let AutoDrive do its thing
 }
 
 #endif // MJ838_
