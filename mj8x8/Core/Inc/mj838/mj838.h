@@ -36,14 +36,14 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define AUTODRIVE 3
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
-#define TIMER2_PERIOD	4294967295 // ZeroCross frequency measurement (rollover every 119 hours of constant use...)
+#define TIMER2_PERIOD	0xFFFFFFFF // ZeroCross frequency measurement (rollover every 119 hours of constant use...)
 #define TIMER3_PERIOD 2499 // by default 250ms
 #define TIMER17_PERIOD 24	// event handling - 2.5ms
 
 #define ZC_BUFFER_LEN 2
 #define WHEEL_CIRCUMFERENCE 1.945	// red training wheel circumference in meters
-#define SON_DYNAMO_CORRECTION 6	// the dynamo has 26 poles; for some reason its frequency has to be divided by 6 to get the wheel frequency
-#define SLEEPTIMEOUT_COUNTER 8	// 120 * 0.25s = 30s - time to stay idle, then stop zero-cross
+#define POLE_COUNT 26	// number of dynamo N and S poles (not pole pairs)
+#define SLEEPTIMEOUT_COUNTER 4 // N * 0.25s = foo seconds - time to stay idle, then stop zero-cross
 
 #include "mj8x8\mj8x8.h"
 #include "button\button.h"
