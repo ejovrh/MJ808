@@ -36,6 +36,13 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;  // catch zero cross activity (idle to first impulse and rolling)
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	HAL_GPIO_Init(ZeroCross_GPIO_Port, &GPIO_InitStruct);
+
+	// TODO - debug pin - remove once debugging is complete	
+	GPIO_InitStruct.Pin = SW9_CTRL_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(SW9_CTRL_GPIO_Port, &GPIO_InitStruct);
 }
 
 // Timer init - device specific
@@ -52,7 +59,7 @@ static inline void _TimerInit(void)
 
 	// input capture of zero-cross signal on rising edge
 	htim2.Instance = TIM2;
-	htim2.Init.Prescaler = TIMER_PRESCALER;
+	htim2.Init.Prescaler = 0;
 	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
 	htim2.Init.Period = TIMER2_PERIOD;
 	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -70,7 +77,7 @@ static inline void _TimerInit(void)
 	sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
 	sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 	sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
-	sConfigIC.ICFilter = 0x0F;  // odd filter config
+	sConfigIC.ICFilter = 0x0;  // TODO - odd filter config
 	HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_1);
 
 	// timer 3 - measurement interval of timer2 data - default 250ms
