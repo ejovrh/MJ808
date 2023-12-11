@@ -25,7 +25,11 @@ static void  _CalculateZCFrequency(void)
 	if (_zc_counter_delta)	// if there is data...
 		{
 			if (_zcValues)	// division by zero danger
+#if SIGNAL_GENERATOR_INPUT
 				__ZeroCross._ZeroCrossFrequency = ( (uint32_t) ( 800000000 / (float) (_zc_counter_delta / _zcValues) ) ) / 100.0;	// "round" and average dynamo AC frequency
+#else
+			__ZeroCross._ZeroCrossFrequency = 8000000.0 / (float) (_zc_counter_delta / _zcValues);	// average dynamo AC frequency
+#endif
 
 			// adjust timer3 so that the next pulse can come in
 			if (__ZeroCross._ZeroCrossFrequency >= 5)

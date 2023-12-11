@@ -46,13 +46,17 @@ static void _Do(void)
 	__AutoDrive.mps.Float = __AutoDrive._WheelFrequency * WHEEL_CIRCUMFERENCE;	// wheel frequency to m/s
 	__AutoDrive.kph.Float = __AutoDrive.mps.Float * 3.6;  // m/s to km/h
 
-	// TODO - verify correct working
-	if(last_mps != __AutoDrive.mps.Float)  // although the direct comparison of two floats is nonsense, this works...
-		{  // ... because of "rounding" in ZeroCross _CalculateZCFrequency()
+#if SIGNAL_GENERATOR_INPUT
+	if(last_mps != __AutoDrive.mps.Float)  // only if data has changed
+		{  // although the direct comparison of two floats is nonsense, this works...
+		   // ... because of "rounding" in ZeroCross _CalculateZCFrequency()
 		   // FIXME - correct MsgHandler->SendMessage() so that data packets can be sent
-			MsgHandler->SendMessage(mj828, 0xDE, __AutoDrive.mps.Bytes, sizeof(float));	// send speed over the wire
-			last_mps = __AutoDrive.mps.Float;
+			MsgHandler->SendMessage(mj828, 0xDE, __AutoDrive.mps.Bytes, sizeof(float));  // send speed over the wire
+			last_mps = __AutoDrive.mps.Float;  // store current speed for comparison in the next cycle
 		}
+#else
+	MsgHandler->SendMessage(mj828, 0xDE, __AutoDrive.mps.Bytes, sizeof(float));  // send speed over the wire
+#endif
 }
 
 static __autodrive_t __AutoDrive =  // instantiate autobatt_t actual and set function pointers
