@@ -1,8 +1,6 @@
 #ifndef CORE_INC_MJ838_MJ838_H_
 #define CORE_INC_MJ838_MJ838_H_
 
-// TODO - mj838 - determine max. zero-cross frequency for speeds up to 75 km/h
-
 typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 {
 	struct
@@ -39,8 +37,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TIMER2_PERIOD	0xFFFFFFFF // ZeroCross frequency measurement (rollover every 119 hours of constant use...)
 #define TIMER3_PERIOD 2499 // by default 250ms
 #define TIMER17_PERIOD 24	// event handling - 2.5ms
+#define TIMER2_IC_FILTER 0x00	// TODO - define proper IC filter values
 
-#define ZC_BUFFER_LEN 2
 #define WHEEL_CIRCUMFERENCE 1.945	// red training wheel circumference in meters
 #define POLE_COUNT 13	// number of dynamo pole pairs
 #define SLEEPTIMEOUT_COUNTER 4 // N * 0.25s = foo seconds - time to stay idle, then stop zero-cross
@@ -56,6 +54,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
 #define ZeroCross_Pin GPIO_PIN_0
 #define ZeroCross_GPIO_Port GPIOA
+//#define AutoMotion_Pin GPIO_PIN_1	// TODO - implement AutoMotion via accelerometer
+//#define AutoMotion_GPIO_Port GPIOA
 #define SW1_CTRL_Pin	GPIO_PIN_2	// solid-state relay NC
 #define SW1_CTRL_GPIO_Port GPIOA
 #define SW2_CTRL_Pin	GPIO_PIN_3	// solid-state relay NC

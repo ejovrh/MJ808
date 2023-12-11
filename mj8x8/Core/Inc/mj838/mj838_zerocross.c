@@ -6,12 +6,12 @@
 #include "zerocross/zerocross_actual.c"
 
 extern TIM_HandleTypeDef htim2;  // Timer2 object - input capture of zero-cross signal on rising edge
-extern TIM_HandleTypeDef htim3;  // Timer3 object - measurement interval of timer2 data
+extern TIM_HandleTypeDef htim3;  // Timer3 object - measurement/calculation interval of timer2 data - default 250ms
 static DMA_HandleTypeDef hdma_tim2_ch1;	// zero-cross frequency measurement
 
 static __zerocross_t __ZeroCross;  // forward declaration of object
 
-uint32_t _zc_counter_buffer[ZC_BUFFER_LEN] =
+uint32_t _zc_counter_buffer[2] =
 	{0};	// stores timer2 counter readout
 
 volatile uint32_t _zc_counter_delta = 0;	// container for average frequency calculation
@@ -90,9 +90,9 @@ static inline void _Start(void)
 
 	Device->StartTimer(&htim2);	// start zero-cross input capture timer
 
-	__DMAInit();	// TODO - needed? initialise DMA
+	__HAL_RCC_DMA1_CLK_ENABLE();	// start the DMA clock
 
-	HAL_TIM_IC_Start_DMA(&htim2, TIM_CHANNEL_1, _zc_counter_buffer, ZC_BUFFER_LEN);	// start timer2 DMA
+	HAL_TIM_IC_Start_DMA(&htim2, TIM_CHANNEL_1, _zc_counter_buffer, 2);	// start timer2 DMA
 	Device->StartTimer(&htim3);	// start measurement interval timer
 
 	__enable_irq();  // enable interrupts
@@ -131,6 +131,8 @@ zerocross_t* zerocross_ctor(void)
 	__ZeroCross.public.Start = &_Start;  // ditto
 	__ZeroCross.public.Stop = &_Stop;  // ditto
 
+	__DMAInit();	// initialise DMA
+
 	HAL_NVIC_SetPriority(TIM3_IRQn, 3, 0);  // event handler timer (on demand)
 	HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
@@ -151,13 +153,16 @@ void EXTI0_1_IRQHandler(void)
 	if(__HAL_GPIO_EXTI_GET_IT(ZeroCross_Pin))  // interrupt source detection
 		Device->ZeroCross->Start();	// start zero-cross detection
 
+//	if(__HAL_GPIO_EXTI_GET_IT(AutoMotion_Pin))  // interrupt source detection
+//		Device->AutoMotion->Start();	// start motion detection
+
 	HAL_GPIO_EXTI_IRQHandler(ZeroCross_Pin);  // service the interrupt
 }
 
 // DMA ISR - zero-cross frequency measurement - fires once every rising edge zero-cross
 void DMA1_Channel4_5_IRQHandler(void)
 {
-	// NOTE: input signal pulse needs to be at least 40us wide
+	// TODO - validate actual ZC pulse width - NOTE: input signal pulse needs to be at least 40us wide
 	HAL_DMA_IRQHandler(&hdma_tim2_ch1);  // service the interrupt
 
 	if ((_zc_counter_buffer[1] > _zc_counter_buffer[0]))	//
