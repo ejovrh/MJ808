@@ -69,6 +69,12 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define SW9_CTRL_Pin	GPIO_PIN_7	// solid-state relay NO
 #define SW9_CTRL_GPIO_Port GPIOA
 
+// TODO - remove once debugging is complete
+#define DEBUG0_Port GPIOA
+#define DEBUG0_Pin GPIO_PIN_7	// HAL_GPIO_TogglePin(DEBUG0_Port, DEBUG0_Pin);
+#define DEBUG1_Port GPIOA
+#define DEBUG1_Pin GPIO_PIN_6	// HAL_GPIO_TogglePin(DEBUG1_Port, DEBUG1_Pin);
+
 // definitions of device/PCB layout-dependent hardware pins
 
 typedef struct	// struct describing devices on MJ838
