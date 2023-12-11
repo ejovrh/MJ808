@@ -77,7 +77,7 @@ static inline void _TimerInit(void)
 	sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
 	sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 	sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
-	sConfigIC.ICFilter = 0x0;  // TODO - odd filter config
+	sConfigIC.ICFilter = TIMER2_IC_FILTER;
 	HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_1);
 
 	// timer 3 - measurement interval of timer2 data - default 250ms
@@ -139,7 +139,7 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 				{0};
 
 			__HAL_RCC_TIM2_CLK_ENABLE();  // start the clock
-			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
+			timer->Instance->PSC = 0;  // reconfigure after peripheral was powered down
 			timer->Instance->ARR = TIMER2_PERIOD;
 
 			HAL_TIM_IC_Init(&htim2);	// activate input capture
@@ -147,13 +147,13 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 			sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
 			sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 			sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
-			sConfigIC.ICFilter = 0x0F;  // FIXME odd filter config
+			sConfigIC.ICFilter = TIMER2_IC_FILTER;
 			HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_1);
 
 			return;  // get out since we don't need HAL_TIM_Base_Start_IT() as other timers do
 		}
 
-	if(timer->Instance == TIM3)  // FIXME - handling of what?
+	if(timer->Instance == TIM3)  // measurement/calculation interval of timer2 data - default 250ms
 		{
 			__HAL_RCC_TIM3_CLK_ENABLE();  // start the clock
 			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
@@ -173,13 +173,13 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 // device-specific pre sleep
 static inline void _PreSleep(void)
 {
-	;  // TODO - switchover of capacitor control to standstill
+	;  // TODO - _PreSleep switchover of capacitor control to standstill
 }
 
 // device-specific pre stop
 static inline void _PreStop(void)
 {
-	;  // TODO - switchover of capacitor control to standstill
+	;  // TODO - _PreStop switchover of capacitor control to standstill
 }
 
 // device-specific constructor
