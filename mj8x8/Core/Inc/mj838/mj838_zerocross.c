@@ -25,10 +25,10 @@ static void  _CalculateZCFrequency(void)
 	if (_zc_counter_delta)	// if there is data...
 		{
 			if (_zcValues)	// division by zero danger
-				__ZeroCross._ZeroCrossFrequency = 8000000.0 / (float) (_zc_counter_delta / _zcValues);	// average dynamo AC frequency
+				__ZeroCross._ZeroCrossFrequency = ( (uint32_t) ( 800000000 / (float) (_zc_counter_delta / _zcValues) ) ) / 100.0;	// "round" and average dynamo AC frequency
 
 			// adjust timer3 so that the next pulse can come in
-			if (__ZeroCross._ZeroCrossFrequency > 5)
+			if (__ZeroCross._ZeroCrossFrequency >= 5)
 				__HAL_TIM_SET_AUTORELOAD(&htim3, 2499);	// 250ms (default)
 
 			if (__ZeroCross._ZeroCrossFrequency < 5)
