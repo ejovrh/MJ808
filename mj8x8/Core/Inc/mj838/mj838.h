@@ -37,7 +37,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TIMER2_PERIOD	0xFFFFFFFF // ZeroCross frequency measurement (rollover every 119 hours of constant use...)
 #define TIMER3_PERIOD 2499 // by default 250ms
 #define TIMER17_PERIOD 24	// event handling - 2.5ms
-#define TIMER2_IC_FILTER 0x00	// TODO - define proper IC filter values
+#define TIMER2_IC_FILTER 0xF	// with TIM_ICPSC_DIV8 and 0xF the pulse needs to be at least 35us wide
 
 #define WHEEL_CIRCUMFERENCE 1.945	// red training wheel circumference in meters
 #define POLE_COUNT 13	// number of dynamo pole pairs
