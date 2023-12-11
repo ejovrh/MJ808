@@ -76,7 +76,7 @@ static inline void _TimerInit(void)
 
 	sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
 	sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
-	sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+	sConfigIC.ICPrescaler = TIM_ICPSC_DIV8;
 	sConfigIC.ICFilter = TIMER2_IC_FILTER;
 	HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_1);
 
