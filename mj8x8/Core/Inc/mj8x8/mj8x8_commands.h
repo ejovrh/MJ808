@@ -133,7 +133,7 @@ typedef union  // union of mj8x8 devices: 16 bits or one word
 //#define CLASS_FW_FLASH 0x70
 //#define CLASS_MSG_TIME_SYNC 0x80	//
 #define CLASS_MSG_BUTTON_EVENT 0x90	//
-//#define CLASS_MSG_MEASURE_DATA 0xD0	//
+#define CLASS_MSG_MEASURE_DATA 0xD0	//
 //#define CLASS_MSG_BUS 0xF0	//
 
 #define EVENT00 0
@@ -153,7 +153,7 @@ typedef union  // union of mj8x8 devices: 16 bits or one word
 #define EVENT14 14
 #define EVENT15 15
 
-//#define MSG_MEASUREMENT_DATA 0xD0	// message containing various measurements
+#define MSG_MEASUREMENT_DATA 0xD0	// message containing various measurements
 //#define MSG_BUS 0xF0	// CAN bus related control messages
 
 //bit fields for command byte

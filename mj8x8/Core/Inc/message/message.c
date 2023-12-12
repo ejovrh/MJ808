@@ -18,7 +18,7 @@ can_msg_t _rx_can_message;  // object for storing a RX CAN message
 can_msg_t _tx_can_message;  // object for storing a TX CAN message
 
 // loads outbound CAN message into local CAN IC and asks it to transmit it onto the bus
-void _SendMessage(mj8x8_Devices_t in_rcpt, const uint8_t in_command, const uint8_t in_argument, const uint8_t in_len)
+void _SendMessage(const mj8x8_Devices_t in_rcpt, const uint8_t in_command, const uint8_t *in_payload, const uint8_t in_len)
 {
 	// first, format the sender into the empty TX CAN identifier
 	__MsgHandler.__tx_msg->sid = __MsgHandler.__can->own_sid;
@@ -31,9 +31,12 @@ void _SendMessage(mj8x8_Devices_t in_rcpt, const uint8_t in_command, const uint8
 		// there is a recipient...: unicast  - the default
 		__MsgHandler.__tx_msg->sid |= in_rcpt;  // copy the sender ID bits [3:0] into the SID
 
-	__MsgHandler.__tx_msg->COMMAND= in_command;  // set command into message
-	__MsgHandler.__tx_msg->ARGUMENT= in_argument;  // set argument into message
-	__MsgHandler.__tx_msg->dlc = in_len;  // set DLC
+	__MsgHandler.__tx_msg->data[0] = in_command;
+
+	for(uint8_t i = 0; i < in_len - 1; ++i)
+		__MsgHandler.__tx_msg->data[i + 1] = *(in_payload + i);  // deep copy
+
+	__MsgHandler.__tx_msg->dlc = in_len;  // set DLC (data plus command byte)
 
 	__MsgHandler.__can->RequestToSend(__MsgHandler.__tx_msg);  // load message into TX buffer and request to send
 }

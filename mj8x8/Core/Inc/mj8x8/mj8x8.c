@@ -39,9 +39,11 @@ static void _Heartbeat(message_handler_t *const msg)
 	 * e.g. in the case of mj818 (the rear light without switches), it turns itself on automatically and just shines.
 	 */
 
+	uint8_t *_payload = &Device->activity->byte;  // set the HeartBeat (aka. CMND_ANNOUNCE) argument
+
 #if BROADCAST_HEARTBEAT
 	if(__MJ8x8.__HeartBeatCounter == __MJ8x8.__NumericalCAN_ID)  // see if this counter iteration is our turn
-		msg->SendMessage(ALL, CMND_ANNOUNCE, Device->activity->byte, 2);  // if so, broadcast CAN heartbeat message and disguise device status in it
+		msg->SendMessage(ALL, CMND_ANNOUNCE, _payload, 2);  // if so, broadcast CAN heartbeat message and disguise device status in it
 #endif
 
 	++__MJ8x8.__HeartBeatCounter;  // increment the iteration counter
@@ -79,13 +81,15 @@ static void _StartTimer1(void)
 // updates a particular activity and notifies the bus
 static void _UpdateActivity(const uint8_t act, const uint8_t val)
 {
+	uint8_t *_payload = &Device->activity->byte;  // set the HeartBeat (aka. CMND_ANNOUNCE) argument
+
 	if(val == OFF)
 		Device->activity->byte &= ~_BV(act);  // clear the bit
 
 	if(val == ON)
 		Device->activity->byte |= _BV(act);  // set it
 
-	MsgHandler->SendMessage(ALL, CMND_ANNOUNCE, Device->activity->byte, 2);  // notify the bus of the change
+	MsgHandler->SendMessage(ALL, CMND_ANNOUNCE, _payload, 2);  // notify the bus of the change
 }
 
 // returns whether some activity is ON (1) or OFF(0)
