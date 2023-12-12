@@ -51,11 +51,11 @@ static void _Do(void)
 		{  // although the direct comparison of two floats is nonsense, this works...
 		   // ... because of "rounding" in ZeroCross _CalculateZCFrequency()
 		   // FIXME - correct MsgHandler->SendMessage() so that data packets can be sent
-			MsgHandler->SendMessage(mj828, 0xDE, __AutoDrive.mps.Bytes, sizeof(float));  // send speed over the wire
+			MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_DATA, __AutoDrive.mps.Bytes, 1 + sizeof(float));  // send speed over the wire
 			last_mps = __AutoDrive.mps.Float;  // store current speed for comparison in the next cycle
 		}
 #else
-	MsgHandler->SendMessage(mj828, 0xDE, __AutoDrive.mps.Bytes, sizeof(float));  // send speed over the wire
+	MsgHandler->SendMessage(mj828, 0xDE, __AutoDrive.mps.Bytes, 1 + sizeof(float));  // send speed over the wire
 #endif
 }
 

@@ -29,6 +29,10 @@ static inline void _EventHandlerEventError(void)
 	;
 //	Device->led->Reset();
 #endif
+#ifdef MJ818_
+	;
+//	Device->led->Reset();
+#endif
 #ifdef MJ828_
 	;
 //	Device->led->Reset();
@@ -44,33 +48,38 @@ static inline void _EventHandlerEventError(void)
 static inline void _EventHandlerEvent02(void)
 {
 #ifdef MJ808_
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
 	if(Try->BusActivity->mj828->AutoLight)
 		return;
 
 	if(Device->button->button[PushButton]->Hold)
 		{
+			_payload = 50;  // argument is intensity in percent
 			Device->led->Shine(50);  // turn the device on/off
-			MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_00, 50, 2);  // convey button press via CAN and the logic unit will do its own thing
 		}
 	else
 		{
-			MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will tell me what to do
+			_payload = 0;  // argument is intensity in percent
 			Device->led->Shine(0);  // turn the device on/off
 		}
+
+	MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 #endif
 #ifdef MJ828_
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
 	if(Device->button->button[LeverBrake]->Momentary)
 		{
+			_payload = (REAR_BRAKELIGHT | ON);  // turn on (0xC8 is a special value)
 			Device->led->led[Red].Shine(ON);
-			MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_03, (REAR_BRAKELIGHT | ON), 2);  // turn on (0xC8 is a special value)
 		}
 	else
 		{
-			Device->led->led[Red].Shine(OFF);
-			MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_03, (REAR_BRAKELIGHT | OFF), 2);  // turn off (0xc9 is a special value)
+			_payload = (REAR_BRAKELIGHT | OFF);  // turn off (0xc9 is a special value)
 		}
+
+	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_03, &_payload, 2);  // send it
 #endif
 #ifdef MJ838_
 	;
@@ -83,28 +92,35 @@ static inline void _EventHandlerEvent02(void)
 static inline void _EventHandlerEvent03(void)
 {
 #ifdef MJ808_
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
+
 	if(Device->button->button[PushButton]->Toggle)
 		{
-			MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_01, (RED | BLINK), 2);
+			_payload = (RED | BLINK);
 			Device->led->led[Red].Shine(BLINK);
 		}
 	else
 		{
-			MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_01, (RED | OFF), 2);
+			_payload = (RED | OFF);
 			Device->led->led[Red].Shine(OFF);
 		}
+	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_01, &_payload, 2);// send it
 #endif
 #ifdef MJ828_
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
+
 	if(Device->button->button[LeverFront]->Momentary)
 		{
+			_payload = (FRONT_HIGHBEAM | ON);  // turn on (0xC8 is a special value)
 			Device->led->led[Blue].Shine(ON);
-			MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_02, (FRONT_HIGHBEAM | ON), 2);  // turn on (0xC8 is a special value)
 		}
 	else
 		{
+			_payload = (FRONT_HIGHBEAM | OFF);  // turn off (0xc9 is a special value)
 			Device->led->led[Blue].Shine(OFF);
-			MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_02, (FRONT_HIGHBEAM | OFF), 2);  // turn off (0xc9 is a special value)
 		}
+
+	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_02, &_payload, 2);  // send it
 #endif
 	;
 }
@@ -122,17 +138,21 @@ static inline void _EventHandlerEvent04(void)
 static inline void _EventHandlerEvent05(void)
 {
 #ifdef MJ828_
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
+
 	if(Device->button->button[PushButton]->Hold)	//
 		{
+			_payload = 10;	// argument is intensity in percent
 			Device->led->led[Green].Shine(ON);
 			Device->adc->Start();
-			MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_00, 10, 2);  // convey button press via CAN and the logic unit will do its own thing
 		}
 	else
 		{
+			_payload = OFF;  // argument is intensity in percent
 			Device->led->led[Green].Shine(OFF);
-			MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
 		}
+
+	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 #endif
 	;
 }
@@ -141,22 +161,22 @@ static inline void _EventHandlerEvent05(void)
 static inline void _EventHandlerEvent06(void)
 {
 #ifdef MJ828_
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
 	if(Device->button->button[PushButton]->Toggle)
 		{
-			Device->led->led[Yellow].Shine(ON);
-
-			Device->adc->Start();
-			MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_01, ON, 2);  //
+			_payload = ON;  // turn on
 			Device->mj8x8->UpdateActivity(AUTOLIGHT, ON);  // mark activity
+			Device->led->led[Yellow].Shine(ON);
+			Device->adc->Start();
 		}
 	else
 		{
-			Device->led->led[Yellow].Shine(OFF);
-
-			MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_01, OFF, 2);  //
+			_payload = OFF;  // turn off
 			Device->mj8x8->UpdateActivity(AUTOLIGHT, OFF);	// mark inactivity
+			Device->led->led[Yellow].Shine(OFF);
 		}
+	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_01, &_payload, 2);  // send it
 #endif
 	;
 }
@@ -165,17 +185,21 @@ static inline void _EventHandlerEvent06(void)
 static inline void _EventHandlerEvent07(void)
 {
 #ifdef MJ828_
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
+
 	if(Device->autolight->FlagLightisOn)  //	AutoLight feature is on
 		{
+			_payload = 30;  // argument is intensity in percent
 			Device->led->led[Green].Shine(ON);	// turn green indicator on
 			Device->adc->Start();
-			MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_00, 30, 2);  // convey button press via CAN and the logic unit will do its own thing
 		}
 	else
 		{
+			_payload = OFF;  // turn off
 			Device->led->led[Green].Shine(OFF);  //	turn green indicator off
-			MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_00, 0, 2);  // convey button press via CAN and the logic unit will do its own thing
 		}
+
+	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 #endif
 	;
 }
@@ -187,11 +211,16 @@ static inline void _EventHandlerEvent08(void)
 	;
 #endif
 #ifdef MJ828_
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
+
 	if(Device->autobatt->FlagBatteryisCritical)
-		MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_04, 10, 2);  // send out event with 10% as argument
+		_payload = 10;  // argument is remaining charge in percent
 	else
-		MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_04, 100, 2);  // send out event with 100% as argument
+		_payload = 100;  // argument is remaining charge in percent
+
+	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_04, &_payload, 2);  // send it
 #endif
+	;
 }
 
 ////
@@ -460,13 +489,19 @@ void _PopulatedBusOperation(message_handler_t *const in_handler)
 //			return;
 //		}
 
-	if((msg->COMMAND& CLASS_MSG_BUTTON_EVENT) != CLASS_MSG_BUTTON_EVENT)	// get out if it isn't the proper message
+//	if((msg->COMMAND& CLASS_MSG_BUTTON_EVENT) != CLASS_MSG_BUTTON_EVENT)	// get out if it isn't the proper message
+//	return;
+
+	if((msg->COMMAND& CLASS_MSG_MEASURE_DATA) == CLASS_MSG_MEASURE_DATA)	// get out if it isn't the proper message
 	return;
 
-	uint16_t n = (msg->COMMAND& 0x0F);  // get lower byte use it as a decimal index - 0 to 15
+	if((msg->COMMAND& CLASS_MSG_BUTTON_EVENT) == CLASS_MSG_BUTTON_EVENT)	// get out if it isn't the proper message
+		{
+			uint16_t n = (msg->COMMAND& 0x0F);  // get lower byte use it as a decimal index - 0 to 15
 
-	__Try._MsgBtnEventfptr = _BranchtableMsgBtnEvent[n];  // get appropriate function pointer from branch table
-	(__Try._MsgBtnEventfptr)(msg);  // execute
+			__Try._MsgBtnEventfptr = _BranchtableMsgBtnEvent[n];// get appropriate function pointer from branch table
+			(__Try._MsgBtnEventfptr)(msg);// execute
+		}
 }
 
 // defines device operation on empty bus
