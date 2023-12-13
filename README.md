@@ -1,17 +1,18 @@
 # keywords:
 
-Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear light, CAN bus, [MCP2515](https://www.microchip.com/wwwproducts/en/en010406), [MCP2561](https://www.microchip.com/wwwproducts/en/MCP2561)
+Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear light, CAN bus
 
+BRANCH ZC_debugging
 
-# 0. this all is still under development
+# 0. this all is still under heavy development
 front and rear lamps do work together and can be used on a bike.
 logic unit and auxiliary devices are still WIP.
 
 
 # 1. abstract:
-this undertaking is an attempt to redesign the MJ808/MJ818 lights by:
+this undertaking originated as an attempt to redesign the MJ808/MJ818 lights by:
 - designing a custom PCB w. driver/controller ICs,
-- writing firmware the above controller IC,
+- writing firmware for a stm32 microcontroller,
 - encapsulating the above in MJ808's/MJ818's original housing,
 - combining:
  - the rear light (MJ818), 
@@ -24,7 +25,7 @@ this undertaking is an attempt to redesign the MJ808/MJ818 lights by:
 **==** and **||** denote the CAN bus, power lines are omitted.
 
 ## 2.1 - current working setup
-front and rear lights are interconnected via the CAN bus; the front light activates the rear light.
+front and rear lights are interconnected via the CAN bus; the front light activates the rear light via commands transmitted over CAN.
 
 	(front light) - (rear light)
 	------------------------------------------------
@@ -50,44 +51,41 @@ these are decent made-in-china bicycle lights operated off a 2S2P Li-Lion batter
 their functionality, apart from producing light, sucks.
 
 	
-# 4. motivation
-operating mode selection, strobing and high power consumption on the original lights is what i would like to have different.
+# 4. motivation for development
+light operating mode selection and high power consumption on the original lights is what i would like to have different.
 	
 the only reasonable way to achieve this is to start from scratch.
 
 	
-# 5. required software for building
+# 5. required software for DIY building
 - eagle for PCB layout & schematics,
-- atmel studio (or keil) for the code,
-- [atmel ICE](https://www.microchip.com/DevelopmentTools/ProductDetails/ATATMEL-ICE) or something similar,
-- some cheapo arduino for quick and dirty CAN testing (the arduino acts as an improvised control unit) and
-- SMD soldering equipment and skills.
+- STM32CubeIDE for the code,
+- one STLink or similar,
+- some cheapo arduino/stm-based CAN capable dev. board for quick and dirty CAN testing
+- SMD soldering equipment and skills,
+- parts.
 	
 	
 # 6. repo structure
-- /datasheets/: contains what the name suggests,
+- /datasheets/*/: contains what the name suggests,
 - /dwg/: AutoCAD drawings & STLs of various sub-components,
-- /eagle designs/: contains subfolders with eagle designs (.brd, .sch & BOMs) of various sub-components
-	- cos/: a dynamo thing, WIP,
+- /eagle designs/: contains subfolders with eagle designs (.brd, .sch & BOMs) of various sub-components:
 	- mj808/: the front light,
 	- mj818/: the rear light,
-	- mj828/: a small handlebar mounted UI (nothing fancy), WIP and
-	- drawings for the atmel ICE <-> light PCB programming adapter.
-- /eagle libraries/: contains eagle libraries of electical components used.
-- /gerber/: gerber files for PCB production,
-	- [mj808](https://oshpark.com/shared_projects/OMSOAv0N),
-	- [mj818](https://oshpark.com/shared_projects/NvGHYtoJ)
-- /MJ808/: C source code for everything.
-
+	- mj828/: a small handlebar mounted UI (nothing fancy), WIP,
+	- mj838/ (aka. Čos): a dynamo thing, WIP,
+	- mjfoo/: a development board based on the mj8x8 infractructure,
+	- branch-dependant: whatever stuff is in the particular branch.
+- /mj8x8/: C source code for everything, to be used with STM32CubeIDE
+- /saleae/: HLA for the logic analyzer
 	
 # 7. hardware
-look in [/datasheets/](https://github.com/ejovrh/MJ808/tree/master/datasheets) for a complete lists of used hardware.
+look in [/datasheets/](https://github.com/ejovrh/MJ808/tree/master/datasheets) for a BOM.
 
 core components:
 - 4-layer PCB manufactured via [OSH Park](https://oshpark.com/),
-- [Attiny4313](https://www.microchip.com/wwwproducts/en/ATtiny4313) 8bit microcontroller, 
-- [MCP2515](https://www.microchip.com/wwwproducts/en/en010406) CAN controller,
-- [MCP2561](https://www.microchip.com/wwwproducts/en/MCP2561) CAN transciever,
+- [STM32F042G6U6](https://www.st.com/en/microcontrollers-microprocessors/stm32f042g6.html) microcontroller, 
+- [TCAN334](https://www.ti.com/product/TCAN334) 3.3V CAN transciever,
 - [MAX16819](https://www.maximintegrated.com/en/products/power/led-drivers/MAX16819.html) & [MAX16820](https://www.maximintegrated.com/en/products/power/led-drivers/MAX16820.html) LED drivers,
 - [LDK320](https://www.st.com/en/power-management/ldk320.html) 5V LDO,
 - 0402 passives and
@@ -99,6 +97,7 @@ maximizing light output to the extreme was not a design factor.
 # 8. software
 ## 8.1 general overview
 the language of choice is C, written in an object-oriented fashion:
+- it uses HAL. (don't like it?  -> go away.),
 - common core components translate into an [abstract base class](https://github.com/ejovrh/MJ808/tree/master/MJ808/MJ808/mj8x8) (implemented via C-structs), 
 - concrete implementations (e.g. [mj808](https://github.com/ejovrh/MJ808/tree/master/MJ808/MJ808/mj808) ) translate into derived classes (again C-structs),
 - methods are generally implemented via function pointers ([e.g. CAN driver message operations](https://github.com/ejovrh/MJ808/blob/master/MJ808/MJ808/mj8x8/mcp2515.h)),
@@ -108,7 +107,24 @@ the language of choice is C, written in an object-oriented fashion:
 
 due to memory limitations there are only hints of SOLID and design patterns to be found.
 
-code is commented in a reasonable manner.
+code is commented in a somewhat reasonable manner.
 
 ## 8.2 detailed description
 TODO
+
+## 8.2.1 mj808 - front light
+
+
+## 8.2.2 mj818 - rear light
+
+
+## 8.2.3 mj828 - UI
+
+
+## 8.2.4 mjfoo - development board
+
+
+## 8.2.5 mj838 - power controller
+
+
+
