@@ -69,7 +69,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define SW9_CTRL_Pin	GPIO_PIN_7	// solid-state relay NO
 #define SW9_CTRL_GPIO_Port GPIOA
 
-// TODO - debug GPIO - remove once debugging is complete
+// TODO - mj838 debug GPIO - remove once debugging is complete
 #define SIGNAL_GENERATOR_INPUT 1	// ZeroCross signal input is signal generator output
 #define DEBUG0_Port GPIOA
 #define DEBUG0_Pin GPIO_PIN_7	// HAL_GPIO_TogglePin(DEBUG0_Port, DEBUG0_Pin);

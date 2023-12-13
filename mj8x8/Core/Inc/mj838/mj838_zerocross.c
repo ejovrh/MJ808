@@ -175,7 +175,7 @@ void EXTI0_1_IRQHandler(void)
 // DMA ISR - zero-cross frequency measurement - fires once every rising edge zero-cross
 void DMA1_Channel4_5_IRQHandler(void)
 {
-	// TODO - validate actual ZC pulse width
+	// TODO - GnZC - validate actual ZC pulse width over speed
 	HAL_DMA_IRQHandler(&hdma_tim2_ch1);  // service the interrupt
 
   uint32_t zc_counter_delta_abs = (_zc_counter_buffer[1] > _zc_counter_buffer[0]) ?	// expression
