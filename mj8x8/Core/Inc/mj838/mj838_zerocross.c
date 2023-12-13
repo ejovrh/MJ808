@@ -181,11 +181,11 @@ void DMA1_Channel4_5_IRQHandler(void)
 	// TODO - validate actual ZC pulse width
 	HAL_DMA_IRQHandler(&hdma_tim2_ch1);  // service the interrupt
 
-	if ((_zc_counter_buffer[1] > _zc_counter_buffer[0]))	//
-		_zc_counter_delta += (_zc_counter_buffer[1] - _zc_counter_buffer[0]);	// add up values for division later on
+  uint32_t zc_counter_delta_abs = (_zc_counter_buffer[1] > _zc_counter_buffer[0]) ?	// expression
+                                     (_zc_counter_buffer[1] - _zc_counter_buffer[0]) :	// if expression true
+                                     (_zc_counter_buffer[0] - _zc_counter_buffer[1]);	//	if expression false
 
-	if ((_zc_counter_buffer[1] < _zc_counter_buffer[0]))	//
-		_zc_counter_delta += (_zc_counter_buffer[0] - _zc_counter_buffer[1]);	// add up values for division later on
+  _zc_counter_delta += zc_counter_delta_abs;	// accumulate the absolute difference
 
 	++_zcValues;	// how many times did we add?
 }
