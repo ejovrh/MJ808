@@ -21,44 +21,41 @@ volatile uint8_t _sleep = 0;	// timer3-based count for sleep since last zero-cro
 // computes Zero-Cross signal frequency
 static void  _CalculateZCFrequency(void)
 {
-	// TODO - optimise code
-	if (_zc_counter_delta)	// if there is data...
-		{
-			if (_zcValues)	// division by zero danger
+  if (_zc_counter_delta)	// if there is data...
+  {
 #if SIGNAL_GENERATOR_INPUT
-				__ZeroCross._ZeroCrossFrequency = ( (uint32_t) ( 800000000 / (float) (_zc_counter_delta / _zcValues) ) ) / 100.0;	// "round" and average dynamo AC frequency
+  	__ZeroCross._ZeroCrossFrequency = (800000000 / (_zc_counter_delta / _zcValues) ) / 100.0;	// "round" and average dynamo AC frequency
 #else
-			__ZeroCross._ZeroCrossFrequency = 8000000.0 / (float) (_zc_counter_delta / _zcValues);	// average dynamo AC frequency
+  	__ZeroCross._ZeroCrossFrequency = 8000000.0 / (_zc_counter_delta / _zcValues);	// average dynamo AC frequency
 #endif
 
-			// adjust timer3 so that the next pulse can come in
-			if (__ZeroCross._ZeroCrossFrequency >= 5)
-				__HAL_TIM_SET_AUTORELOAD(&htim3, 2499);	// 250ms (default)
+  	if (__ZeroCross._ZeroCrossFrequency >= 5)
+  		__HAL_TIM_SET_AUTORELOAD(&htim3, 2499);	// 250ms
 
-			if (__ZeroCross._ZeroCrossFrequency < 5)
-				__HAL_TIM_SET_AUTORELOAD(&htim3, 4999);	// 500ms
+  	if (__ZeroCross._ZeroCrossFrequency < 5)
+    		__HAL_TIM_SET_AUTORELOAD(&htim3, 4999);	// 500ms
 
-			if (__ZeroCross._ZeroCrossFrequency < 2)
-				__HAL_TIM_SET_AUTORELOAD(&htim3, 9999);	// 1s
+  	if (__ZeroCross._ZeroCrossFrequency < 2)
+  		__HAL_TIM_SET_AUTORELOAD(&htim3, 9999);	// 1s
 
-			if (__ZeroCross._ZeroCrossFrequency < 1)
-				__HAL_TIM_SET_AUTORELOAD(&htim3, 19999);	// 2s
-		}
-	else
-		{
-			__ZeroCross._ZeroCrossFrequency = 0;
-			++_sleep;
-		}
+  	if (__ZeroCross._ZeroCrossFrequency < 1)
+  		__HAL_TIM_SET_AUTORELOAD(&htim3, 19999);	// 2s
+  }
+  else	// no data
+  {
+      __ZeroCross._ZeroCrossFrequency = 0;
+      ++_sleep;
+  }
 
-	if (_sleep > SLEEPTIMEOUT_COUNTER) // sleep timeout expired - stop zero-cross
-		{
-			__ZeroCross._ZeroCrossFrequency = 0;	// zero out values
-			_sleep = 0;
-			Device->ZeroCross->Stop();	// stop zero-cross detection; timer1 will put the device into stop mode soon
-		}
+  if (_sleep > SLEEPTIMEOUT_COUNTER)	// n iterations of sleep
+  {
+      __ZeroCross._ZeroCrossFrequency = 0;	// zero & start over
+      _sleep = 0;
+      Device->ZeroCross->Stop();	// stop zero-cross detection; timer1 will put the device into stop mode
+  }
 
-	_zc_counter_delta = 0;	// zero & start over
-	_zcValues = 0;
+  _zc_counter_delta = 0;	// zero & start over
+  _zcValues = 0;
 }
 
 // returns computed Zero-Cross signal frequency
