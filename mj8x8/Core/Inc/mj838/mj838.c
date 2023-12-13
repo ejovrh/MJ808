@@ -37,7 +37,7 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	HAL_GPIO_Init(ZeroCross_GPIO_Port, &GPIO_InitStruct);
 
-	// TODO - debug pin - remove once debugging is complete
+	// TODO - mj838 debug pin - remove once debugging is complete
 	GPIO_InitStruct.Pin = SW9_CTRL_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
@@ -173,13 +173,13 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 // device-specific pre sleep
 static inline void _PreSleep(void)
 {
-	;  // TODO - _PreSleep switchover of capacitor control to standstill
+	;  // TODO - mj838 _PreSleep switchover of capacitor control to standstill
 }
 
 // device-specific pre stop
 static inline void _PreStop(void)
 {
-	;  // TODO - _PreStop switchover of capacitor control to standstill
+	;  // TODO - mj838 _PreStop switchover of capacitor control to standstill
 }
 
 // device-specific constructor
