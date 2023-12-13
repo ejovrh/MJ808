@@ -54,7 +54,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
 #define ZeroCross_Pin GPIO_PIN_0
 #define ZeroCross_GPIO_Port GPIOA
-//#define AutoMotion_Pin GPIO_PIN_1	// TODO - implement AutoMotion via accelerometer
+//#define AutoMotion_Pin GPIO_PIN_1	// TODO - mj838 - implement AutoMotion via accelerometer
 //#define AutoMotion_GPIO_Port GPIOA
 #define SW1_CTRL_Pin	GPIO_PIN_2	// solid-state relay NC
 #define SW1_CTRL_GPIO_Port GPIOA
@@ -69,7 +69,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define SW9_CTRL_Pin	GPIO_PIN_7	// solid-state relay NO
 #define SW9_CTRL_GPIO_Port GPIOA
 
-// TODO - remove once debugging is complete
+// TODO - debug GPIO - remove once debugging is complete
 #define SIGNAL_GENERATOR_INPUT 1	// ZeroCross signal input is signal generator output
 #define DEBUG0_Port GPIOA
 #define DEBUG0_Pin GPIO_PIN_7	// HAL_GPIO_TogglePin(DEBUG0_Port, DEBUG0_Pin);

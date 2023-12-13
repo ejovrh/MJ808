@@ -114,7 +114,6 @@ static inline void _Start(void)
 // stops the timer & DMA peripherals
 static inline void _Stop(void)
 {
-	// TODO - validate stop on wheel stop (i.e. freq becoming 0)
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
 
@@ -166,6 +165,7 @@ void EXTI0_1_IRQHandler(void)
 	if(__HAL_GPIO_EXTI_GET_IT(ZeroCross_Pin))  // interrupt source detection
 		Device->ZeroCross->Start();	// start zero-cross detection
 
+// TODO - mj838 - implement AutoMotion via accelerometer
 //	if(__HAL_GPIO_EXTI_GET_IT(AutoMotion_Pin))  // interrupt source detection
 //		Device->AutoMotion->Start();	// start motion detection
 
