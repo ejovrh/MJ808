@@ -7,8 +7,6 @@
 #define _BV(x) (1<<(x))
 #endif
 
-// TODO - investigate option bytes - RM0091 - 4.1.2 - in order to automatically determine a connected device
-
 #define MJ828_	// what device to compile for
 
 #define USE_HEARTBEAT	1 // use the heartbeat
