@@ -24,6 +24,9 @@ int main(void)
 #if defined(MJ848_)	// LU - call derived class constructor and tie in base class
 	mj848_ctor();
 #endif
+#if defined(MJ514_)	// electronic shifter - call derived class constructor and tie in base class
+	mj514_ctor();
+#endif
 
 	message_handler_ctor(Device->mj8x8->can);  // call message handler constructor
 
