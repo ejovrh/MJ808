@@ -1,7 +1,8 @@
 #include "main.h"
 #include "try/try.h"
 
-static activity_t _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15;  // device activity containers for all 16 devices
+static activity_t _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13,
+    _14, _15;  // device activity containers for all 16 devices
 
 activity_t *_BusActivityArray[16] =  // array for addresses of activity containers
 	{&_0, &_1, &_2, &_3, &_4, &_5, &_6, &_7, &_8, &_9, &_10, &_11, &_12, &_13, &_14, &_15};
@@ -14,7 +15,7 @@ typedef struct	// try_t actual
 	uint32_t (*_Eventfptr)(void);  // dynamically generated function pointer
 } __try_t;
 
-static __try_t __Try __attribute__ ((section (".data")));  // preallocate __Try object in .data
+static __try_t   __Try   __attribute__ ((section (".data")));  // preallocate __Try object in .data
 
 // a function that does nothing
 static inline void _DoNothing(void *foo)  // a function that does nothing
@@ -460,7 +461,7 @@ void _PopulatedBusOperation(message_handler_t *const in_handler)
 //			return;
 //		}
 
-	if((msg->COMMAND& CLASS_MSG_BUTTON_EVENT) != CLASS_MSG_BUTTON_EVENT)	// get out if it isn't the proper message
+	if((msg->COMMAND& CLASS_MSG_BUTTON_EVENT) != CLASS_MSG_BUTTON_EVENT)  // get out if it isn't the proper message
 	return;
 
 	uint16_t n = (msg->COMMAND& 0x0F);  // get lower byte use it as a decimal index - 0 to 15
@@ -484,7 +485,7 @@ void _EmptyBusOperation(void)
 #endif
 }
 
-static __try_t __Try =  // instantiate can_t actual and set function pointers
+static __try_t   __Try =  // instantiate can_t actual and set function pointers
 	{  //
 	.public.BusActivity = (status_t*) &_BusActivityArray,  // bus-wide device status of all devices
 	.public.PopulatedBusOperation = &_PopulatedBusOperation,  // tie in function pointer
@@ -570,7 +571,7 @@ void try_ctor(void)
 	Try->BusActivity->mj818 = (mj818_activity_t*) _BusActivityArray[9];
 	Try->BusActivity->_10 = _BusActivityArray[10];
 	Try->BusActivity->_11 = _BusActivityArray[11];
-	Try->BusActivity->_12 = _BusActivityArray[12];
+	Try->BusActivity->mj514 = (mj514_activity_t*) _BusActivityArray[12];
 	Try->BusActivity->_13 = _BusActivityArray[13];
 	Try->BusActivity->_14 = _BusActivityArray[14];
 	Try->BusActivity->_15 = _BusActivityArray[15];
