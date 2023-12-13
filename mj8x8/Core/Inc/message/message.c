@@ -20,6 +20,8 @@ can_msg_t _tx_can_message;  // object for storing a TX CAN message
 // loads outbound CAN message into local CAN IC and asks it to transmit it onto the bus
 void _SendMessage(const mj8x8_Devices_t in_rcpt, const uint8_t in_command, const uint8_t *in_payload, const uint8_t in_len)
 {
+	// TODO - SendMessage() - devise a way to send arbitrary message lengths >> 8 Bytes, i.e. 20k for FW updates over CAN
+
 	// first, format the sender into the empty TX CAN identifier
 	__MsgHandler.__tx_msg->sid = __MsgHandler.__can->own_sid;
 	__MsgHandler.__tx_msg->sid |= PRIORITY_LOW;  // set to low priority (default)
