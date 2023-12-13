@@ -2,7 +2,7 @@
 
 Magicshine, bicycle front light, MJ808, MJ-808, MJ818, MJ-818, bicycle rear light, CAN bus
 
-BRANCH ZC_debugging
+BRANCH GW
 
 # 0. this all is still under heavy development
 front and rear lamps do work together and can be used on a bike.
