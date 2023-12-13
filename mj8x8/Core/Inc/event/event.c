@@ -15,6 +15,10 @@ extern mj828_t *const Device;
 extern mj838_t *const Device;
 #endif
 
+#if defined(MJ514_)	// if this particular device is active
+extern mj514_t *const Device;
+#endif
+
 // (very) poor man's log base 2, kinda...
 uint8_t _GetMSBSetBit(uint16_t in_val)  // returns the 1-indexed position of a set most significant bit
 {
@@ -79,8 +83,7 @@ typedef struct	// event_handler_t actual
 } __event_handler_t;
 
 extern TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
-extern __event_handler_t __EventHandler;  // declare event_handler_t actual
-
+extern __event_handler_t  __EventHandler;  // declare event_handler_t actual
 /* theory of operation
  *	components: subject, event handler, object
  *		the subject uses Notify() to notify the event handler about an event - e.g. a button press
@@ -101,9 +104,9 @@ extern __event_handler_t __EventHandler;  // declare event_handler_t actual
  *		each subject ought to have its own case table
  *		all values in all case table arrays must be unique
  */
-
 // a function that does nothing
-static inline void _DoNothing(const uint8_t foo)
+static inline
+void _DoNothing(const uint8_t foo)
 {
 	return;
 }
@@ -143,7 +146,7 @@ static void _HandleEvent(void)
 		}
 }
 
-__event_handler_t __EventHandler =  // instantiate event_handler_t actual and set function pointers
+__event_handler_t  __EventHandler =  // instantiate event_handler_t actual and set function pointers
 	{  //
 	.public.fpointer = &_DoNothing,  // default -- if not initialize: do nothing
 	.public.Notify = &_Notify,	// notifies about an event by setting the index to a predetermined value (uint8_t array-based lookup table)

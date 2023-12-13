@@ -5,6 +5,7 @@
 #include "mj818\mj818.h"	// ditto
 #include "mj828\mj828.h"
 #include "mj838\mj838.h"
+#include "mj514\mj514.h"
 
 typedef struct	// struct describing bus-wide device activity
 {
@@ -20,7 +21,7 @@ typedef struct	// struct describing bus-wide device activity
 	mj818_activity_t *mj818;  // 2B - rear light
 	activity_t *_10;  // 2C - ?
 	activity_t *_11;  // 2D - ?
-	activity_t *_12;  // 3A - ?
+	mj514_activity_t *mj514;  // 3A - electronic shifter
 	activity_t *_13;  // 3B - ?
 	activity_t *_14;  // 3C - ?
 	activity_t *_15;  // 3D - ?
