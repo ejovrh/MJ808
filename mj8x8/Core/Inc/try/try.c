@@ -639,7 +639,7 @@ void try_ctor(void)
 	_BusActivityArray[11] = (activity_t*) Device->activity;
 #endif
 
-#if defined futureMJ_12
+#if defined MJ514_
 	_BusActivityArray[12] = (activity_t*) Device->activity;
 #endif
 
