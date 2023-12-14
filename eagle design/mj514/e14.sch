@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="88" name="SimResults" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="89" name="SimProbes" color="9" fill="1" visible="yes" active="yes"/>
@@ -29,6 +29,8 @@
 </variantdefs>
 <classes>
 <class number="0" name="GND" width="0" drill="0">
+</class>
+<class number="1" name="motor" width="0" drill="0">
 </class>
 <class number="2" name="Vcc" width="0.25" drill="0.25">
 <clearance class="2" value="0.25"/>
