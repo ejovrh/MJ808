@@ -15,7 +15,7 @@ typedef struct	// try_t actual
 	uint32_t (*_Eventfptr)(void);  // dynamically generated function pointer
 } __try_t;
 
-static __try_t   __Try   __attribute__ ((section (".data")));  // preallocate __Try object in .data
+static __try_t __Try __attribute__ ((section (".data")));  // preallocate __Try object in .data
 
 // a function that does nothing
 static inline void _DoNothing(void *foo)  // a function that does nothing
@@ -485,7 +485,7 @@ void _EmptyBusOperation(void)
 #endif
 }
 
-static __try_t   __Try =  // instantiate can_t actual and set function pointers
+static __try_t __Try =  // instantiate can_t actual and set function pointers
 	{  //
 	.public.BusActivity = (status_t*) &_BusActivityArray,  // bus-wide device status of all devices
 	.public.PopulatedBusOperation = &_PopulatedBusOperation,  // tie in function pointer
@@ -543,7 +543,7 @@ void try_ctor(void)
 	_BusActivityArray[11] = (activity_t*) Device->activity;
 #endif
 
-#if defined futureMJ_12
+#if defined MJ514_
 	_BusActivityArray[12] = (activity_t*) Device->activity;
 #endif
 

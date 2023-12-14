@@ -13,7 +13,7 @@ typedef struct	// mj514_t actual
 	mj514_t public;  // public struct
 } __mj514_t;
 
-static __mj514_t    __Device    __attribute__ ((section (".data")));  // preallocate __Device object in .data
+static __mj514_t __Device __attribute__ ((section (".data")));  // preallocate __Device object in .data
 
 // GPIO init - device specific
 static inline void _GPIOInit(void)
