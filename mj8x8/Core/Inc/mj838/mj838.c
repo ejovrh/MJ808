@@ -5,6 +5,7 @@
 #include "try\try.h"	// top-level mj8x8 object for consolidated behaviour code
 #include "mj838\mj838.h"
 #include "mj838\mj838_zerocross.c"	// concrete device-specific zero-cross functions
+#include "mj838\mj838_motion.c"	// concrete device-specific motion detection functions
 
 #include "mj838\autodrive.h"	// auto-drive detection functionality
 
@@ -198,6 +199,7 @@ void mj838_ctor(void)
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 	__Device.public.ZeroCross = zerocross_ctor();  // call zero-crossconstructor
 	__Device.public.AutoDrive = autodrive_ctor();  // call AutoDrive constructor
+	__Device.public.Motion = motion_ctor();  // call Motion constructor
 
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
@@ -212,6 +214,25 @@ void mj838_ctor(void)
 }
 
 // device-specific interrupt handlers
+// EXTI0 ISR - standstill to first impulse: wakeup and activate zero-cross functionality
+void EXTI0_1_IRQHandler(void)
+{
+	Device->mj8x8->StartCoreTimer();  // start core timer
+
+	if(__HAL_GPIO_EXTI_GET_IT(ZeroCross_Pin))  // interrupt source detection
+		{
+			Device->ZeroCross->Start();  // start zero-cross detection
+			HAL_GPIO_EXTI_IRQHandler(ZeroCross_Pin);  // service the interrupt
+		}
+
+// TODO - mj838 - implement Motion via accelerometer
+	if(__HAL_GPIO_EXTI_GET_IT(AutoMotion_Pin))  // interrupt source detection
+		{
+			Device->Motion->Start();	// start motion detection
+			HAL_GPIO_EXTI_IRQHandler(AutoMotion_Pin);  // service the interrupt
+		}
+}
+
 // timer 17 ISR - 10ms interrupt - event handler (activated on demand)
 void TIM17_IRQHandler(void)
 {

@@ -1,5 +1,5 @@
-#ifndef MJ828_ADC_ACTUAL_C_
-#define MJ828_ADC_ACTUAL_C_
+#ifndef CORE_INC_ADC_ADC_ACTUAL_C_
+#define CORE_INC_ADC_ADC_ACTUAL_C_
 
 #include <inttypes.h>
 
@@ -12,4 +12,4 @@ typedef struct	// adc_t actual
 	volatile uint32_t *__adc_results;  // private - pointer to array of ADC readout destinations
 } __adc_t;
 
-#endif /* MJ828_ADC_ACTUAL_C_ */
+#endif /* CORE_INC_ADC_ADC_ACTUAL_C_ */

@@ -1,5 +1,5 @@
-#ifndef ADC_ACTUAL_C_
-#define ADC_ACTUAL_C_
+#ifndef CORE_INC_ZEROCROSS_ZEROCROSS_ACTUAL_C_
+#define CORE_INC_ZEROCROSS_ZEROCROSS_ACTUAL_C_
 
 #include <inttypes.h>
 
@@ -12,4 +12,4 @@ typedef struct	// zerocross_t actual
 	volatile float _ZeroCrossFrequency;  // dynamo AC frequency, as measured by zero-cross detection
 } __zerocross_t;
 
-#endif /* ADC_ACTUAL_C_ */
+#endif /* CORE_INC_ZEROCROSS_ZEROCROSS_ACTUAL_C_ */
