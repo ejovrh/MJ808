@@ -16,7 +16,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		uint8_t ZeroCross :1;  // ZC // zero-cross detection is active/inactive
 		uint8_t AutoDrive :1;  // AD // AutoDrive functionality is on/off
 		uint8_t Motion :1;  // M // Motion detected
-		uint8_t _5 :1;	// _5 //
+		uint8_t AutoCharge :1;	// AC // AutoCharge is operating
 
 		// 0xC0 - don't care - the device will execute HAL_PWR_EnterSTOPMode()
 		uint8_t _6 :1;  // _6 //
@@ -33,6 +33,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define ZEROCROSS 2
 #define AUTODRIVE 3
 #define	MOTION 4
+#define AUTOCHARGE 5
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER2_PERIOD	0xFFFFFFFF // ZeroCross frequency measurement (rollover every 119 hours of constant use...)
@@ -50,6 +51,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #include "zerocross\zerocross.h"
 #include "motion\motion.h"
 #include "mj838\autodrive.h"
+#include "mj838\autocharge.h"
 
 // definitions of device/PCB layout-dependent hardware pins
 #define TCAN334_Standby_Pin GPIO_PIN_15	//	defined here but initialised in mj8x8.c
@@ -87,6 +89,7 @@ typedef struct	// struct describing devices on MJ838
 	zerocross_t *ZeroCross;  // zero-cross object
 	autodrive_t *AutoDrive;  // automatic drive handling feature
 	motion_t *Motion;  // motion detection
+	autocharge_t *AutoCharge;  // automatic charger
 
 	void (*StopTimer)(TIM_HandleTypeDef *timer);	// stops timer identified by argument
 	void (*StartTimer)(TIM_HandleTypeDef *timer);  // starts timer identified by argument

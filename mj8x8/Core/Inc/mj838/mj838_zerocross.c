@@ -180,6 +180,7 @@ void TIM3_IRQHandler(void)
 	_CalculateZCFrequency();  // calculate ZC signal frequency
 
 	Device->AutoDrive->Do();	// let AutoDrive do its thing
+	Device->AutoCharge->Do();	// let AutoCharge do its thing
 }
 
 #endif // MJ838_

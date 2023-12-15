@@ -19,11 +19,9 @@ typedef struct	// autobatt_t actual
 		float Float;
 		uint8_t Bytes[sizeof(float)];
 	} kph;
-
-	volatile float _kmh;	// speed in km/h
 } __autodrive_t;
 
-static __autodrive_t __AutoDrive __attribute__ ((section (".data")));  // preallocate __AutoDrive object in .data
+static __autodrive_t   __AutoDrive   __attribute__ ((section (".data")));  // preallocate __AutoDrive object in .data
 
 static float last_mps = 0;
 
@@ -36,7 +34,7 @@ static inline float _GetSpeed_mps(void)
 // get speed in kilometres per hour
 static inline float _GetSpeed_kph(void)
 {
-	return __AutoDrive._kmh;
+	return __AutoDrive.kph.Float;
 }
 
 // AutoDrive functionality based on detected speed
@@ -58,7 +56,7 @@ static void _Do(void)
 #endif
 }
 
-static __autodrive_t __AutoDrive =  // instantiate autobatt_t actual and set function pointers
+static __autodrive_t   __AutoDrive =  // instantiate autobatt_t actual and set function pointers
 	{  //
 	.public.FlagLightisOn = 0,	// flag if AutoDrive turned Light on
 	.public.GetSpeed_mps = &_GetSpeed_mps,  // get speed in meters per second
