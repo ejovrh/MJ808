@@ -1,5 +1,5 @@
-#ifndef MJ808_BUTTON_TYPES_ACTUAL_C_
-#define MJ808_BUTTON_TYPES_ACTUAL_C_
+#ifndef CORE_INC_BUTTON_BUTTON_TYPES_ACTUAL_C_
+#define CORE_INC_BUTTON_BUTTON_TYPES_ACTUAL_C_
 
 #include "button.h"
 
@@ -22,4 +22,4 @@ typedef struct	// button_t actual
 // preallocate __Button object in .data
 static __button_t __Button __attribute__ ((section (".data")));  // @suppress("Unused variable declaration in file scope")
 
-#endif /* MJ808_BUTTON_TYPES_ACTUAL_C_ */
+#endif /* CORE_INC_BUTTON_BUTTON_TYPES_ACTUAL_C_ */

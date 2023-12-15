@@ -15,7 +15,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		// 0x3C - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus off
 		uint8_t ZeroCross :1;  // ZC // zero-cross detection is active/inactive
 		uint8_t AutoDrive :1;  // AD // AutoDrive functionality is on/off
-		uint8_t _4 :1;  // _4 //
+		uint8_t Motion :1;  // M // Motion detected
 		uint8_t _5 :1;	// _5 //
 
 		// 0xC0 - don't care - the device will execute HAL_PWR_EnterSTOPMode()
@@ -32,6 +32,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 
 #define ZEROCROSS 2
 #define AUTODRIVE 3
+#define	MOTION 4
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER2_PERIOD	0xFFFFFFFF // ZeroCross frequency measurement (rollover every 119 hours of constant use...)
@@ -47,6 +48,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #include "button\button.h"
 
 #include "zerocross\zerocross.h"
+#include "motion\motion.h"
 #include "mj838\autodrive.h"
 
 // definitions of device/PCB layout-dependent hardware pins
@@ -54,8 +56,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
 #define ZeroCross_Pin GPIO_PIN_0
 #define ZeroCross_GPIO_Port GPIOA
-//#define AutoMotion_Pin GPIO_PIN_1	// TODO - mj838 - implement AutoMotion via accelerometer
-//#define AutoMotion_GPIO_Port GPIOA
+#define AutoMotion_Pin GPIO_PIN_0	// TODO - mj838 - implement AutoMotion via accelerometer
+#define AutoMotion_GPIO_Port GPIOF	// TODO - mj838 - give motion detection a proper pin & port
 #define SW1_CTRL_Pin	GPIO_PIN_2	// solid-state relay NC
 #define SW1_CTRL_GPIO_Port GPIOA
 #define SW2_CTRL_Pin	GPIO_PIN_3	// solid-state relay NC
@@ -84,6 +86,7 @@ typedef struct	// struct describing devices on MJ838
 	mj838_activity_t *activity;  // pointer to struct(union) indicating device activity status
 	zerocross_t *ZeroCross;  // zero-cross object
 	autodrive_t *AutoDrive;  // automatic drive handling feature
+	motion_t *Motion;  // motion detection
 
 	void (*StopTimer)(TIM_HandleTypeDef *timer);	// stops timer identified by argument
 	void (*StartTimer)(TIM_HandleTypeDef *timer);  // starts timer identified by argument

@@ -83,7 +83,7 @@ static inline void __DMAInit(void)
 }
 
 // starts the timer & DMA peripherals
-static inline void _Start(void)
+static inline void _StartZeroCross(void)
 {
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
@@ -112,7 +112,7 @@ static inline void _Start(void)
 }
 
 // stops the timer & DMA peripherals
-static inline void _Stop(void)
+static inline void _StopZeroCross(void)
 {
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
@@ -140,8 +140,8 @@ static inline void _Stop(void)
 zerocross_t* zerocross_ctor(void)
 {
 	__ZeroCross.public.GetZCFrequency = &_GetZCFrequency;  // set function pointer
-	__ZeroCross.public.Start = &_Start;  // ditto
-	__ZeroCross.public.Stop = &_Stop;  // ditto
+	__ZeroCross.public.Start = &_StartZeroCross;  // ditto
+	__ZeroCross.public.Stop = &_StopZeroCross;  // ditto
 
 	__DMAInit();	// initialise DMA
 
@@ -155,21 +155,6 @@ zerocross_t* zerocross_ctor(void)
 	HAL_NVIC_EnableIRQ(DMA1_Channel4_5_IRQn);
 
 	return &__ZeroCross.public;  // return public parts
-}
-
-// EXTI0 ISR - standstill to first impulse: wakeup and activate zero-cross functionality
-void EXTI0_1_IRQHandler(void)
-{
-	Device->mj8x8->StartCoreTimer();  // start core timer
-
-	if(__HAL_GPIO_EXTI_GET_IT(ZeroCross_Pin))  // interrupt source detection
-		Device->ZeroCross->Start();	// start zero-cross detection
-
-// TODO - mj838 - implement AutoMotion via accelerometer
-//	if(__HAL_GPIO_EXTI_GET_IT(AutoMotion_Pin))  // interrupt source detection
-//		Device->AutoMotion->Start();	// start motion detection
-
-	HAL_GPIO_EXTI_IRQHandler(ZeroCross_Pin);  // service the interrupt
 }
 
 // DMA ISR - zero-cross frequency measurement - fires once every rising edge zero-cross
