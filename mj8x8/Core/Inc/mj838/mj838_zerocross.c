@@ -40,6 +40,10 @@ static void  _CalculateZCFrequency(void)
 
   	if (__ZeroCross._ZeroCrossFrequency < 1)
   		__HAL_TIM_SET_AUTORELOAD(&htim3, 19999);	// 2s
+// FIXME - _CalculateZCFrequency() - correct transitions to _ZeroCrossFrequency == 0 and from 0 (i.e. motion to standstill and back to motion)
+  	if (__ZeroCross._ZeroCrossFrequency == 0)
+  		__HAL_TIM_SET_AUTORELOAD(&htim3, 2499);	// 250ms
+
   }
   else	// no data
   {
