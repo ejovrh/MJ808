@@ -41,6 +41,7 @@ static void  _CalculateZCFrequency(void)
   	if (__ZeroCross._ZeroCrossFrequency < 1)
   		__HAL_TIM_SET_AUTORELOAD(&htim3, 19999);	// 2s
 // FIXME - _CalculateZCFrequency() - correct transitions to _ZeroCrossFrequency == 0 and from 0 (i.e. motion to standstill and back to motion)
+  	// at above 3.8 kps (a convenient 1 mps) the dynamo waveform under load is too unstable to provide accurate frequency measurements so any substantial load has to be switched off
   	if (__ZeroCross._ZeroCrossFrequency == 0)
   		__HAL_TIM_SET_AUTORELOAD(&htim3, 2499);	// 250ms
 

@@ -38,12 +38,76 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	HAL_GPIO_Init(ZeroCross_GPIO_Port, &GPIO_InitStruct);
 
-	// TODO - mj838 debug pin - remove once debugging is complete
+	GPIO_InitStruct.Pin = SW1_CTRL_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(SW1_CTRL_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = SW2_CTRL_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(SW2_CTRL_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = SW_CA_CTRL_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(SW_CA_CTRL_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = SW_CB_CTRL_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(SW_CB_CTRL_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = SW_CC_CTRL_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(SW_CC_CTRL_GPIO_Port, &GPIO_InitStruct);
+
 	GPIO_InitStruct.Pin = SW9_CTRL_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(SW9_CTRL_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = LoadFet_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(LoadFet_GPIO_Port, &GPIO_InitStruct);
+
+	// explicitly set pin states
+	HAL_GPIO_WritePin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin, GPIO_PIN_RESET);	// TODO - specify state
+	HAL_GPIO_WritePin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin, GPIO_PIN_RESET);	// TODO - specify state
+	HAL_GPIO_WritePin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin, GPIO_PIN_RESET);	// TODO - specify state
+	HAL_GPIO_WritePin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin, GPIO_PIN_RESET);	// TODO - specify state
+	HAL_GPIO_WritePin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin, GPIO_PIN_RESET);	// TODO - specify state
+	HAL_GPIO_WritePin(SW9_CTRL_GPIO_Port, SW9_CTRL_Pin, GPIO_PIN_RESET);	// TODO - specify state
+	HAL_GPIO_WritePin(LoadFet_GPIO_Port, LoadFet_Pin, GPIO_PIN_RESET);	// load disconnected
+
+#if defined GPIO_DEBUG_OUT
+	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
+
+	GPIO_InitStruct.Pin = DEBUG0_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(SW9_CTRL_GPIO_Port, &GPIO_InitStruct);
+	HAL_GPIO_Init(DEBUG0_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = DEBUG0_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(DEBUG0_Port, &GPIO_InitStruct);
+
+	HAL_GPIO_WritePin(DEBUG0_Port, DEBUG0_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(DEBUG1_Port, DEBUG1_Pin, GPIO_PIN_RESET);
+
+#endif
 }
 
 // Timer init - device specific
