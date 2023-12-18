@@ -8,7 +8,7 @@
 </settings>
 <grid distance="1" unitdist="mm" unit="mm" style="dots" multiple="1" display="yes" altdistance="0.5" altunitdist="mm" altunit="mm"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
 <layer number="3" name="Route3" color="17" fill="1" visible="no" active="no"/>
 <layer number="4" name="Route4" color="18" fill="1" visible="no" active="no"/>
@@ -52,7 +52,7 @@
 <layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
-<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
@@ -73,26 +73,28 @@
 </layers>
 <board>
 <plain>
-<wire x1="0" y1="0" x2="36.5" y2="0" width="0.01" layer="20"/>
-<wire x1="49" y1="11.5" x2="49" y2="18" width="0.01" layer="20"/>
-<wire x1="49" y1="18" x2="45" y2="18" width="0.01" layer="20"/>
-<wire x1="37" y1="18" x2="2" y2="18" width="0.01" layer="20"/>
+<wire x1="0" y1="0" x2="36.5" y2="0" width="0.1016" layer="20"/>
+<wire x1="49" y1="11.5" x2="49" y2="18" width="0.1016" layer="20"/>
+<wire x1="49" y1="18" x2="45" y2="18" width="0.1016" layer="20"/>
+<wire x1="37" y1="18" x2="2" y2="18" width="0.1016" layer="20"/>
 <dimension x1="0" y1="-3" x2="49" y2="-3" x3="24.5" y3="-7" textsize="1.778" layer="47"/>
 <dimension x1="-3" y1="0" x2="-3" y2="18" x3="-7" y3="9" textsize="1.778" layer="47"/>
 <dimension x1="0" y1="-3" x2="36.5" y2="-3" x3="18.25" y3="-4" textsize="1.778" layer="47"/>
 <dimension x1="52" y1="18" x2="52" y2="11.5" x3="54" y3="14.75" textsize="1.778" layer="47"/>
-<wire x1="0" y1="13" x2="0" y2="0" width="0.01" layer="20"/>
-<wire x1="49" y1="11.5" x2="36.5" y2="0" width="0.01" layer="20"/>
+<wire x1="0" y1="13" x2="0" y2="0" width="0.1016" layer="20"/>
+<wire x1="49" y1="11.5" x2="36.5" y2="0" width="0.1016" layer="20"/>
 <dimension x1="0" y1="-11" x2="22.5" y2="-11" x3="11.25" y3="-13" textsize="1.778" layer="47"/>
-<wire x1="37" y1="18" x2="45" y2="18" width="0.01" layer="20" curve="180"/>
-<wire x1="2" y1="15" x2="2" y2="18" width="0.01" layer="20"/>
-<wire x1="2" y1="15" x2="0" y2="13" width="0.01" layer="20" curve="-90"/>
+<wire x1="37" y1="18" x2="45" y2="18" width="0.1016" layer="20" curve="180"/>
+<wire x1="2" y1="15" x2="2" y2="18" width="0.1016" layer="20"/>
+<wire x1="2" y1="15" x2="0" y2="13" width="0.1016" layer="20" curve="-90"/>
 <dimension x1="41" y1="18" x2="39.735090625" y2="14.20526875" x3="37.268515625" y3="6.8055375" textsize="1.778" layer="47" dtype="radius"/>
 <dimension x1="0" y1="22" x2="27.5" y2="22" x3="35.3" y3="22" textsize="1.778" layer="22" dtype="radius"/>
 <wire x1="25" y1="11.5" x2="27.5" y2="11.5" width="0.25" layer="22"/>
 <wire x1="27.5" y1="11.5" x2="27.5" y2="9" width="0.25" layer="22"/>
 <wire x1="30" y1="11.5" x2="27.5" y2="11.5" width="0.25" layer="22"/>
 <wire x1="27.5" y1="11.5" x2="27.5" y2="14" width="0.25" layer="22"/>
+<hole x="47" y="16" drill="2"/>
+<hole x="22" y="2.5" drill="2"/>
 </plain>
 <libraries>
 </libraries>
@@ -290,8 +292,8 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 </elements>
 <signals>
 <signal name="GND">
-<via x="22.5" y="2.5" extent="1-16" drill="2"/>
-<via x="46.5" y="15.5" extent="1-16" drill="2"/>
+<via x="22.5" y="-3.5" extent="1-16" drill="2"/>
+<via x="56" y="15" extent="1-16" drill="2"/>
 <polygon width="0.25" layer="1">
 <vertex x="-1" y="-1"/>
 <vertex x="50" y="-1"/>
