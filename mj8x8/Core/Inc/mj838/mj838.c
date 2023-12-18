@@ -204,6 +204,8 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 				{0};
 
 			__HAL_RCC_TIM2_CLK_ENABLE();  // start the clock
+			__HAL_TIM_ENABLE_IT(&htim2, TIM_IT_UPDATE);  // enable interrupt
+
 			timer->Instance->PSC = 0;  // reconfigure after peripheral was powered down
 			timer->Instance->ARR = TIMER2_PERIOD;
 
@@ -214,8 +216,6 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 			sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 			sConfigIC.ICFilter = TIMER2_IC_FILTER;
 			HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_1);
-
-			return;  // get out since we don't need HAL_TIM_Base_Start_IT() as other timers do
 		}
 
 	if(timer->Instance == TIM3)  // measurement/calculation interval of timer2 data - default 250ms
