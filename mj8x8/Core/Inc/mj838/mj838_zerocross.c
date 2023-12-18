@@ -17,6 +17,7 @@ uint32_t _zc_counter_buffer[2] =
 volatile uint32_t _zc_counter_delta = 0;	// container for average frequency calculation
 volatile uint16_t _zcValues = 0;	// iterator for average frequency calculation
 volatile uint8_t _sleep = 0;	// timer3-based count for sleep since last zero-cross detection
+volatile uint32_t _tim2ICcounterOVF = 0;	// timer2 IC counter overflow counter
 
 // computes Zero-Cross signal frequency
 static void  _CalculateZCFrequency(void)
@@ -150,6 +151,9 @@ zerocross_t* zerocross_ctor(void)
 
 	__DMAInit();	// initialise DMA
 
+	HAL_NVIC_SetPriority(TIM2_IRQn, 2, 0);  // Set the timer interrupt priority
+	HAL_NVIC_EnableIRQ(TIM2_IRQn);           // Enable the timer interrupt
+
 	HAL_NVIC_SetPriority(TIM3_IRQn, 3, 0);  // event handler timer (on demand)
 	HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
@@ -165,16 +169,32 @@ zerocross_t* zerocross_ctor(void)
 // DMA ISR - zero-cross frequency measurement - fires once every rising edge zero-cross
 void DMA1_Channel4_5_IRQHandler(void)
 {
-	// TODO - GnZC - validate actual ZC pulse width over speed
 	HAL_DMA_IRQHandler(&hdma_tim2_ch1);  // service the interrupt
 
   uint32_t zc_counter_delta_abs = (_zc_counter_buffer[1] > _zc_counter_buffer[0]) ?	// expression
                                      (_zc_counter_buffer[1] - _zc_counter_buffer[0]) :	// if expression true
                                      (_zc_counter_buffer[0] - _zc_counter_buffer[1]);	//	if expression false
 
-  _zc_counter_delta += zc_counter_delta_abs;	// accumulate the absolute difference
+  zc_counter_delta_abs += _tim2ICcounterOVF * TIMER2_PERIOD; // account for overflow condition
+  _tim2ICcounterOVF = 0;
 
+  _zc_counter_delta += zc_counter_delta_abs;	// accumulate the absolute difference
 	++_zcValues;	// how many times did we add?
+}
+
+// counter overflow
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  if (htim->Instance == TIM2)
+  {
+  		++_tim2ICcounterOVF;	// Timer overflow occurred
+  }
+}
+
+// timer 2 ISR - update general interrupt (interrupt itself not needed, but must be serviced anyway)
+void TIM2_IRQHandler(void)
+{
+	HAL_TIM_IRQHandler(&htim2);  // service the interrupt
 }
 
 // timer 3 ISR - 250ms interrupt - frequency measurement timer
