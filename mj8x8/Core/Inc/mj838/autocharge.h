@@ -9,6 +9,8 @@
 
 typedef struct	// struct describing the AutoDrive functionality
 {
+	uint8_t FlagChargerisActive :1;  // flag indicating if the load is connected, i.e. high-side load switch is on or off
+
 	void (*Do)(void);  // AutoCharge functionality
 } autocharge_t;
 

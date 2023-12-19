@@ -44,7 +44,7 @@ static inline float _GetSpeed_kph(void)
 	return __AutoDrive.kph.Float;
 }
 
-// get speed in kilometres per hour
+// get distance in meters
 static inline float _GetDistance_m(void)
 {
 	return __AutoDrive.m.Float;
