@@ -11,6 +11,7 @@ typedef struct	// struct describing the AutoDrive functionality
 
 	float (*GetSpeed_mps)(void);	// get speed in meters per second
 	float (*GetSpeed_kph)(void);	// get speed in kilometres per hour
+	float (*GetDistance_m)(void);  // get distance in meters
 	void (*Do)(void);  // AutoDrive functionality
 } autodrive_t;
 
