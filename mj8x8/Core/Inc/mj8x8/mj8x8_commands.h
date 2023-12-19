@@ -153,7 +153,12 @@ typedef union  // union of mj8x8 devices: 16 bits or one word
 #define EVENT14 14
 #define EVENT15 15
 
-#define MSG_MEASUREMENT_DATA 0xD0	// message containing various measurements
+#define SPEED 0	// speed in m/s as derived from zerocross signal
+#define	ACCELERATION	1	// acceleration as derived from speed change
+
+#define MSG_MEASUREMENT_SPEED							(CLASS_MSG_MEASURE_DATA | SPEED)
+#define MSG_MEASUREMENT_ACCEL							(CLASS_MSG_MEASURE_DATA | ACCELERATION)
+
 //#define MSG_BUS 0xF0	// CAN bus related control messages
 
 //bit fields for command byte
