@@ -18,44 +18,63 @@ volatile uint32_t _zc_counter_delta = 0;	// container for average frequency calc
 volatile uint16_t _zcValues = 0;	// iterator for average frequency calculation
 volatile uint8_t _sleep = 0;	// timer3-based count for sleep since last zero-cross detection
 volatile uint32_t _tim2ICcounterOVF = 0;	// timer2 IC counter overflow counter
+volatile float _previousFrequency = 0;	//
 
-// computes Zero-Cross signal frequency
-static void  _CalculateZCFrequency(void)
+// timer3-triggered - computes Zero-Cross signal frequency, normally at 250ms intervals
+static void  _Do(void)
 {
   if (_zc_counter_delta)	// if there is data...
   {
+  		// below is the 250ms-speed-average calculation for normal speeds (i.e. ZC period << 250ms)
 #if SIGNAL_GENERATOR_INPUT
   	__ZeroCross._ZeroCrossFrequency = (800000000 / (_zc_counter_delta / _zcValues) ) / 100.0;	// "round" and average dynamo AC frequency
 #else
   	__ZeroCross._ZeroCrossFrequency = 8000000.0 / (_zc_counter_delta / _zcValues);	// average dynamo AC frequency
 #endif
 
-  	if (__ZeroCross._ZeroCrossFrequency >= 5)
-  		__HAL_TIM_SET_AUTORELOAD(&htim3, 2499);	// 250ms
 
-  	if (__ZeroCross._ZeroCrossFrequency < 5)
-    		__HAL_TIM_SET_AUTORELOAD(&htim3, 4999);	// 500ms
 
-  	if (__ZeroCross._ZeroCrossFrequency < 2)
-  		__HAL_TIM_SET_AUTORELOAD(&htim3, 9999);	// 1s
+  	// special handling for lower speeds (below normal walking speed)
+  	if (__ZeroCross._ZeroCrossFrequency >= 5)	// 5Hz - speeds >= 0.75 mps / 2.69 kph
+  	{
+    		__HAL_TIM_SET_AUTORELOAD(&htim3, 2499);	// 250ms
+  	}
+  	else
+ 		{
+  			__HAL_TIM_SET_AUTORELOAD(&htim3, 4999);	// 500ms
 
-  	if (__ZeroCross._ZeroCrossFrequency < 1)
-  		__HAL_TIM_SET_AUTORELOAD(&htim3, 19999);	// 2s
-// FIXME - _CalculateZCFrequency() - correct transitions to _ZeroCrossFrequency == 0 and from 0 (i.e. motion to standstill and back to motion)
-  	// at above 3.8 kps (a convenient 1 mps) the dynamo waveform under load is too unstable to provide accurate frequency measurements so any substantial load has to be switched off
-  	if (__ZeroCross._ZeroCrossFrequency == 0)
-  		__HAL_TIM_SET_AUTORELOAD(&htim3, 2499);	// 250ms
+  	  	if (__ZeroCross._ZeroCrossFrequency < 2)	// 2 Hz - speeds < 0.3 mps / 1.07 kph
+  	  		__HAL_TIM_SET_AUTORELOAD(&htim3, 9999);	// 1s
 
+  	  	if (__ZeroCross._ZeroCrossFrequency < 1) // 1 Hz - speeds < 0.15 mps / 0.53 kph
+  	  		__HAL_TIM_SET_AUTORELOAD(&htim3, 19999);	// 2s
+
+  	  	if (__ZeroCross._ZeroCrossFrequencyRate > 1 ) // 1Hz/s²
+  	  		__HAL_TIM_SET_AUTORELOAD(&htim3, 9999);	// 1s
+
+  	  	if (__ZeroCross._ZeroCrossFrequencyRate > 2 ) // 2Hz/s²
+  	  		__HAL_TIM_SET_AUTORELOAD(&htim3, 4999);	// 500ms
+
+  	  	if (__ZeroCross._ZeroCrossFrequencyRate > 4 )	// 4Hz/s²
+  	  		__HAL_TIM_SET_AUTORELOAD(&htim3, 2499);	// 250ms
+ 		}
   }
-  else	// no data
+  else	// no data - standstill
   {
+  		__HAL_TIM_SET_AUTORELOAD(&htim3, 2499);	// 250ms -- set for normal operation
+
       __ZeroCross._ZeroCrossFrequency = 0;
       ++_sleep;
   }
 
+  __ZeroCross._ZeroCrossFrequencyRate = (__ZeroCross._ZeroCrossFrequency - _previousFrequency) / ((__HAL_TIM_GET_AUTORELOAD(&htim3) / 10000) + 1 );
+
+  _previousFrequency = __ZeroCross._ZeroCrossFrequency;	// save current frequency for next iteration
+
   if (_sleep > SLEEPTIMEOUT_COUNTER)	// n iterations of sleep
   {
       __ZeroCross._ZeroCrossFrequency = 0;	// zero & start over
+      __ZeroCross._ZeroCrossFrequencyRate = 0;	// zero & start over
       _sleep = 0;
       Device->ZeroCross->Stop();	// stop zero-cross detection; timer1 will put the device into stop mode
   }
@@ -146,6 +165,7 @@ static inline void _StopZeroCross(void)
 zerocross_t* zerocross_ctor(void)
 {
 	__ZeroCross.public.GetZCFrequency = &_GetZCFrequency;  // set function pointer
+	__ZeroCross.public.Do = &_Do;  // ditto
 	__ZeroCross.public.Start = &_StartZeroCross;  // ditto
 	__ZeroCross.public.Stop = &_StopZeroCross;  // ditto
 
@@ -202,9 +222,9 @@ void TIM3_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&htim3);  // service the interrupt
 
-	_CalculateZCFrequency();  // calculate ZC signal frequency
-
+	Device->ZeroCross->Do();	// calculate ZC signal frequency
 	Device->AutoDrive->Do();	// let AutoDrive do its thing
+	Device->AutoCharge->Do();	// let AutoCharge do its thing
 }
 
 #endif // MJ838_

@@ -8,6 +8,7 @@
 #include "mj838\mj838_motion.c"	// concrete device-specific motion detection functions
 
 #include "mj838\autodrive.h"	// auto-drive detection functionality
+#include "mj838\autocharge.h"	// automatic charger functionality
 
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 2.5ms
 TIM_HandleTypeDef htim2;  // Timer2 object - input capture of zero-cross signal on rising edge
@@ -263,6 +264,7 @@ void mj838_ctor(void)
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 	__Device.public.ZeroCross = zerocross_ctor();  // call zero-crossconstructor
 	__Device.public.AutoDrive = autodrive_ctor();  // call AutoDrive constructor
+	__Device.public.AutoCharge = autocharge_ctor();  // call AutoDrive constructor
 	__Device.public.Motion = motion_ctor();  // call Motion constructor
 
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
