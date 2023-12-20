@@ -14,9 +14,9 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 
 		// 0x3C - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus off
 		uint8_t ZeroCross :1;  // ZC // zero-cross detection is active/inactive
-		uint8_t AutoDrive :1;  // AD // AutoDrive functionality is on/off
 		uint8_t Motion :1;  // M // Motion detected
 		uint8_t AutoCharge :1;	// AC // AutoCharge is operating
+		uint8_t _5 :1;  // _5 //
 
 		// 0xC0 - don't care - the device will execute HAL_PWR_EnterSTOPMode()
 		uint8_t _6 :1;  // _6 //
@@ -31,9 +31,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define USE_EVENTHANDLER 1	// shall EventHandler code be included
 
 #define ZEROCROSS 2
-#define AUTODRIVE 3
-#define	MOTION 4
-#define AUTOCHARGE 5
+#define	MOTION 3
+#define AUTOCHARGE 4
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER2_PERIOD	0xFFFFFFFF // ZeroCross frequency measurement (rollover every 119 hours of constant use...)
@@ -56,29 +55,32 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 // definitions of device/PCB layout-dependent hardware pins
 #define TCAN334_Standby_Pin GPIO_PIN_15	//	defined here but initialised in mj8x8.c
 #define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
-#define ZeroCross_Pin GPIO_PIN_0
+#define ZeroCross_Pin GPIO_PIN_0	// ZeroCross signal in -- GnZC pin 1
 #define ZeroCross_GPIO_Port GPIOA
 #define AutoMotion_Pin GPIO_PIN_0	// TODO - mj838 - implement AutoMotion via accelerometer
 #define AutoMotion_GPIO_Port GPIOF	// TODO - mj838 - give motion detection a proper pin & port
-#define SW1_CTRL_Pin	GPIO_PIN_2	// solid-state relay NC
+#define SW1_CTRL_Pin	GPIO_PIN_1	// solid-state relay NC -- GnZC pin 2
 #define SW1_CTRL_GPIO_Port GPIOA
-#define SW2_CTRL_Pin	GPIO_PIN_3	// solid-state relay NC
+#define SW2_CTRL_Pin	GPIO_PIN_2	// solid-state relay NC -- GnZC pin 3
 #define SW2_CTRL_GPIO_Port GPIOA
-#define SW_CA_CTRL_Pin	GPIO_PIN_4	// solid-state relay NO
+#define SW_CA_CTRL_Pin	GPIO_PIN_3	// solid-state relay NO -- GnZC pin 4
 #define SW_CA_CTRL_GPIO_Port GPIOA
-#define SW_CB_CTRL_Pin	GPIO_PIN_5	// solid-state relay NO
+#define SW_CB_CTRL_Pin	GPIO_PIN_4	// solid-state relay NO -- GnZC pin 5
 #define SW_CB_CTRL_GPIO_Port GPIOA
-#define SW_CC_CTRL_Pin	GPIO_PIN_6	// solid-state relay NO
+#define SW_CC_CTRL_Pin	GPIO_PIN_5	// solid-state relay NO -- GnZC pin 6
 #define SW_CC_CTRL_GPIO_Port GPIOA
-#define SW9_CTRL_Pin	GPIO_PIN_7	// solid-state relay NO
+#define SW9_CTRL_Pin	GPIO_PIN_6	// solid-state relay NO -- GnZC pin 7
 #define SW9_CTRL_GPIO_Port GPIOA
+#define LoadFet_Pin GPIO_PIN_7	// Load N-Fet Gate -- GnZC pin 8
+#define LoadFet_GPIO_Port GPIOA
 
 // TODO - mj838 debug GPIO - remove once debugging is complete
+#define GPIO_DEBUG_OUT 1
 #define SIGNAL_GENERATOR_INPUT 1	// ZeroCross signal input is signal generator output
-#define DEBUG0_Port GPIOA
-#define DEBUG0_Pin GPIO_PIN_7	// HAL_GPIO_TogglePin(DEBUG0_Port, DEBUG0_Pin);
-#define DEBUG1_Port GPIOA
-#define DEBUG1_Pin GPIO_PIN_6	// HAL_GPIO_TogglePin(DEBUG1_Port, DEBUG1_Pin);
+#define DEBUG0_Pin GPIO_PIN_0	// HAL_GPIO_TogglePin(DEBUG0_Port, DEBUG0_Pin);
+#define DEBUG0_Port GPIOB
+#define DEBUG1_Pin GPIO_PIN_1	// HAL_GPIO_TogglePin(DEBUG1_Port, DEBUG1_Pin);
+#define DEBUG1_Port GPIOB
 
 // definitions of device/PCB layout-dependent hardware pins
 
