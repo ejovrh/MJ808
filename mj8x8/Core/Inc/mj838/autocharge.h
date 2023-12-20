@@ -5,7 +5,8 @@
 
 #if defined(MJ838_)	// if this particular device is active
 
-#define LOAD_CONNECT_THRESHOLD_SPEED 2	// speed threshold in m/s for load connection / disconnection
+#define LOAD_CONNECT_THRESHOLD_SPEED_LOW 2	// speed threshold in m/s for load disconnect
+#define LOAD_CONNECT_THRESHOLD_SPEED_HIGH 3	// speed threshold in m/s for load connect
 
 typedef struct	// struct describing the AutoDrive functionality
 {

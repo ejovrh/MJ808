@@ -49,12 +49,12 @@ static inline void _StopCharger(void)
 // AutoCharge functionality
 static void _Do(void)
 {
-	if(Device->AutoDrive->GetSpeed_mps() < LOAD_CONNECT_THRESHOLD_SPEED)  // low speed - load is disconnected
+	if(Device->AutoDrive->GetSpeed_mps() < LOAD_CONNECT_THRESHOLD_SPEED_LOW)  // low speed - load is disconnected
 		{
 			_StopCharger();  // stop, but with a caveat
 		}
 
-	if(Device->AutoDrive->GetSpeed_mps() > LOAD_CONNECT_THRESHOLD_SPEED)  // high enough speed - load is connected
+	if(Device->AutoDrive->GetSpeed_mps() > LOAD_CONNECT_THRESHOLD_SPEED_HIGH)  // high enough speed - load is connected
 		{
 			_StartCharger();	// start, if not already started
 		}

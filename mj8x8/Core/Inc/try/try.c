@@ -122,6 +122,16 @@ static inline void _EventHandlerEvent03(void)
 
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_02, &_payload, 2);  // send it
 #endif
+#ifdef MJ838_
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
+
+	if(Device->AutoCharge->FlagLoadisConnected)
+		_payload = OFF;  // argument is remaining charge in percent
+	else
+		_payload = ON;  // argument is remaining charge in percent
+
+	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_05, &_payload, 2);  // send it
+#endif
 	;
 }
 
@@ -236,7 +246,7 @@ static inline void _EventHandlerEvent08(void)
 //}
 //
 ////
-//static inline void _EventHandlerEvent10(void)
+//static inline void _EventHandlerEvent11(void)
 //{
 //	;
 //}
@@ -394,11 +404,16 @@ static inline void _MsgBtnEvent04(can_msg_t *msg)
 	return;
 }
 
-//
-//static inline void _MsgBtnEvent05(can_msg_t *msg)
-//{
-//		return;
-//}
+// mj838 autocharger on/off
+static inline void _MsgBtnEvent05(can_msg_t *msg)
+{
+#ifdef MJ828_
+	Device->led->led[Red].Shine(msg->ARGUMENT);	// argument is OFF, ON, BLINK
+	Device->adc->Start();
+#endif
+
+	return;
+}
 //
 //static inline void _MsgBtnEvent06(can_msg_t *msg)
 //{
@@ -457,8 +472,8 @@ static uint32_t (*_BranchtableMsgBtnEvent[])(can_msg_t *msg) =  // branch table
 		(void *)(can_msg_t *)&_MsgBtnEvent01,// center button toggle on mj808 or mj828 - light up red utility led
 		(void *)(can_msg_t *)&_MsgBtnEvent02,// mj828 high beam button momentary
 		(void *)(can_msg_t *)&_MsgBtnEvent03,// mj828 brake light button momentary
-		(void *)(can_msg_t *)&_MsgBtnEvent04,// AutoBat status
-		(void *)(can_msg_t *)&_DoNothing,//
+		(void *)(can_msg_t *)&_MsgBtnEvent04,// mj838 AutoBat status
+		(void *)(can_msg_t *)&_MsgBtnEvent05,// mj838 AutoCharge on/off
 		(void *)(can_msg_t *)&_DoNothing,//
 		(void *)(can_msg_t *)&_DoNothing,//
 		(void *)(can_msg_t *)&_DoNothing,//
