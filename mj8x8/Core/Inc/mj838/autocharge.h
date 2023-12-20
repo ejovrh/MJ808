@@ -5,11 +5,11 @@
 
 #if defined(MJ838_)	// if this particular device is active
 
-#define LOAD_CONNECT_THRESHOLD 2	// speed threshold in m/s for load connection / disconnection
+#define LOAD_CONNECT_THRESHOLD_SPEED 2	// speed threshold in m/s for load connection / disconnection
 
 typedef struct	// struct describing the AutoDrive functionality
 {
-	uint8_t FlagChargerisActive :1;  // flag indicating if the load is connected, i.e. high-side load switch is on or off
+	uint8_t FlagLoadisConnected :1;  // flag indicating if the load is connected, i.e. high-side load switch is on or off
 
 	void (*Do)(void);  // AutoCharge functionality
 } autocharge_t;
