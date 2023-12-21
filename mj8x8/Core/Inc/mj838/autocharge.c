@@ -8,12 +8,15 @@ typedef struct	// autocharge_t actual
 {
 	autocharge_t public;  // public struct
 
+	// 0 - switch open, 1 - switch closed -- regardless of NC or NO
 	uint8_t __SW1 :1;  // SSR SW1 state (NC) - 0 open, 1 closed
-	uint8_t __SW2 :1;  // SSR SW1 state (NC) - 0 open, 1 closed
-	uint8_t __SW_CA :1;  // SSR SW1 state (NO) - 0 open, 1 closed
-	uint8_t __SW_CB :1;  // SSR SW1 state (NO) - 0 open, 1 closed
-	uint8_t __SW_CC :1;  // SSR SW1 state (NO) - 0 open, 1 closed
-	uint8_t __SW9 :1;  // SSR SW1 state (NO) - 0 open, 1 closed
+	uint8_t __SW2 :1;  // SSR SW2 state (NC) - 0 open, 1 closed
+	uint8_t __SW_CA :1;  // SSR SW-CA state (NO) - 0 open, 1 closed
+	uint8_t __SW_CB :1;  // SSR SW-CB state (NO) - 0 open, 1 closed
+	uint8_t __SW_CC :1;  // SSR SW-CC state (NO) - 0 open, 1 closed
+	uint8_t __SW_D :1;  // SSR SW-D state (NO) - 0 open, 1 closed
+//	uint8_t __SW_X :1;  // SSR SW-CD state (NO) - 0 open, 1 closed
+
 	uint8_t __LoadSwitch :1;  // High-Side Load Switch state - 0 open, 1 closed
 } __autocharge_t;
 
@@ -61,71 +64,54 @@ static inline void _StopCharger(void)
 	_FlagStopChargerCalled = 1;  // mark as called
 }
 
-// SW1 NC - 0 - open, 1 - closed
+// SW1 control, NC
 static inline void _SSR_SW1(const uint8_t state)
-{  // TODO - validate _SSR_SW1 operation
-	if(state)
-		HAL_GPIO_WritePin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin, GPIO_PIN_SET);	// switch closed (NC type switch - default)
-	else
-		HAL_GPIO_WritePin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin, GPIO_PIN_RESET);	// switch open
-
+{
+	HAL_GPIO_WritePin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin, !state);  // NC switch: 0 closed, 1 open
 	__AutoCharge.__SW1 = state;
 }
 
-// SW2 NC - 0 - open, 1 - closed
+// SW2 control, NC
 static inline void _SSR_SW2(const uint8_t state)
-{  // TODO - validate _SSR_SW2 operation
-	if(state)
-		HAL_GPIO_WritePin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin, GPIO_PIN_RESET);	// switch closed (NC type switch - default)
-	else
-		HAL_GPIO_WritePin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin, GPIO_PIN_SET);	// switch open
-
+{
+	HAL_GPIO_WritePin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin, !state);	// NC switch: 0 closed, 1 open
 	__AutoCharge.__SW2 = state;
 }
 
-// SW-CA NO - 0 - open, 1 - closed
+// SW-CA control, NO
 static inline void _SSR_SW_CA(const uint8_t state)
-{  // TODO - validate _SSR_SW_CA operation
-	if(state)
-		HAL_GPIO_WritePin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin, GPIO_PIN_SET);	// switch closed
-	else
-		HAL_GPIO_WritePin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin, GPIO_PIN_RESET);	// switch open (NO type switch - default)
-
+{
+	HAL_GPIO_WritePin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
 	__AutoCharge.__SW_CA = state;
 }
 
-// SW-CB NO - 0 - open, 1 - closed
+// SW-CB control, NO
 static inline void _SSR_SW_CB(const uint8_t state)
-{  // TODO - validate _SSR_SW_CB operation
-	if(state)
-		HAL_GPIO_WritePin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin, GPIO_PIN_SET);	// switch closed
-	else
-		HAL_GPIO_WritePin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin, GPIO_PIN_RESET);	// switch open (NO type switch - default)
-
+{
+	HAL_GPIO_WritePin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
 	__AutoCharge.__SW_CB = state;
 }
 
-// SW-CC NO - 0 - open, 1 - closed
+// SW-CC control, NO
 static inline void _SSR_SW_CC(const uint8_t state)
-{  // TODO - validate _SSR_SW_CC operation
-	if(state)
-		HAL_GPIO_WritePin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin, GPIO_PIN_SET);	// switch closed
-	else
-		HAL_GPIO_WritePin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin, GPIO_PIN_RESET);	// switch open (NO type switch - default)
-
+{
+	HAL_GPIO_WritePin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
 	__AutoCharge.__SW_CC = state;
 }
 
-// SW9 NO - 0 - open, 1 - closed
-static inline void _SSR_SW9(const uint8_t state)
-{  // TODO - validate _SSR_SW9 operation
-	if(state)
-		HAL_GPIO_WritePin(SW9_CTRL_GPIO_Port, SW9_CTRL_Pin, GPIO_PIN_SET);	// switch closed
-	else
-		HAL_GPIO_WritePin(SW9_CTRL_GPIO_Port, SW9_CTRL_Pin, GPIO_PIN_RESET);	// switch open (NO type switch - default)
-
-	__AutoCharge.__SW9 = state;
+// SW-D control, NO
+static inline void _SSR_SW_D(const uint8_t state)
+{
+	HAL_GPIO_WritePin(SW_D_CTRL_GPIO_Port, SW_D_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
+	__AutoCharge.__SW_D = state;
 }
+
+//// SW-X control, NO
+//static inline void _SSR_SW_CD(const uint8_t state)
+//{
+//		HAL_GPIO_WritePin(SW_X_CTRL_GPIO_Port, SW_X_CTRL_Pin, state);	// NO switch: 0 - open, 1 - closed
+//	__AutoCharge.__SW_X = state;
+//}
 
 // AutoCharge functionality
 static void _Do(void)
@@ -166,13 +152,13 @@ static void _Do(void)
 		_SSR_SW_CC(OFF);
 
 	if(Device->AutoDrive->GetSpeed_mps() > 12)  // high enough speed - load is connected
-		_SSR_SW9(ON);
+		_SSR_SW_D(ON);
 	else
-		_SSR_SW9(OFF);
+		_SSR_SW_D(OFF);
 
 }
 
-static __autocharge_t __AutoCharge =  // instantiate autobatt_t actual and set function pointers
+static __autocharge_t                         __AutoCharge =  // instantiate autobatt_t actual and set function pointers
 	{  //
 	.public.IsLoadConnected = &_IsLoadConnected,	// set function pointer
 	.public.Do = &_Do  // ditto
@@ -188,7 +174,8 @@ autocharge_t* autocharge_ctor(void)  //
 	__AutoCharge.__SW_CA = HAL_GPIO_ReadPin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin);
 	__AutoCharge.__SW_CB = HAL_GPIO_ReadPin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin);
 	__AutoCharge.__SW_CC = HAL_GPIO_ReadPin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin);
-	__AutoCharge.__SW9 = HAL_GPIO_ReadPin(SW9_CTRL_GPIO_Port, SW9_CTRL_Pin);
+	__AutoCharge.__SW_D = HAL_GPIO_ReadPin(SW_D_CTRL_GPIO_Port, SW_D_CTRL_Pin);
+//	__AutoCharge.__SW_X = HAL_GPIO_ReadPin(SW_X_CTRL_GPIO_Port, SW_X_CTRL_Pin);
 
 	return &__AutoCharge.public;  // set pointer to AutoCharge public part
 }
