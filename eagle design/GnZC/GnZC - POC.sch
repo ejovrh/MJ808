@@ -13194,6 +13194,11 @@ Type A - NO</text>
 <wire x1="187.96" y1="86.36" x2="187.96" y2="83.82" width="0.1524" layer="94"/>
 <text x="307.34" y="-106.68" size="1.778" layer="91" align="center">High-Side
 load switch</text>
+<text x="299.72" y="-355.6" size="1.778" layer="94" align="center">swX - no</text>
+<wire x1="299.72" y1="-104.14" x2="314.96" y2="-104.14" width="0.1524" layer="90"/>
+<wire x1="314.96" y1="-104.14" x2="314.96" y2="-109.22" width="0.1524" layer="90"/>
+<wire x1="314.96" y1="-109.22" x2="299.72" y2="-109.22" width="0.1524" layer="90"/>
+<wire x1="299.72" y1="-109.22" x2="299.72" y2="-104.14" width="0.1524" layer="90"/>
 </plain>
 <moduleinsts>
 <moduleinst name="ZERO-CROSS_DETECTOR" module="ZERO-CROSS_DETECTOR" x="807.72" y="-414.02" offset="700">
@@ -13332,7 +13337,7 @@ load switch</text>
 <instance part="SUPPLY14" gate="1" x="1046.48" y="-563.88" smashed="yes"/>
 </instances>
 <busses>
-<bus name="SSR-CTRL:N$1,SW1_CTRL,SW2_CTRL,SW9_CTRL,SW_CA_CTRL,SW_CB_CTRL,SW_CC_CTRL">
+<bus name="SSR-CTRL:SW1_CTRL,SW2_CTRL,SW_CA_CTRL,SW_CB_CTRL,SW_CC_CTRL,SW_CD_CTRL,SW_X_CTRL">
 <segment>
 <wire x1="104.14" y1="-256.54" x2="104.14" y2="-264.16" width="0.762" layer="92"/>
 <wire x1="104.14" y1="-264.16" x2="127" y2="-264.16" width="0.762" layer="92"/>
@@ -13755,6 +13760,7 @@ load switch</text>
 <wire x1="220.98" y1="162.56" x2="220.98" y2="96.52" width="0.1524" layer="91"/>
 <label x="218.44" y="121.92" size="1.778" layer="95" rot="R180"/>
 <pinref part="JP1" gate="A" pin="1"/>
+<label x="220.98" y="134.62" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="SW_CC_CTRL" class="5">
@@ -13771,6 +13777,7 @@ load switch</text>
 <segment>
 <wire x1="233.68" y1="132.08" x2="233.68" y2="162.56" width="0.1524" layer="91"/>
 <pinref part="JP1" gate="A" pin="6"/>
+<label x="233.68" y="134.62" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="CBB" class="1">
@@ -13841,6 +13848,7 @@ load switch</text>
 <segment>
 <wire x1="226.06" y1="132.08" x2="226.06" y2="162.56" width="0.1524" layer="91"/>
 <pinref part="JP1" gate="A" pin="3"/>
+<label x="226.06" y="134.62" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="CAB" class="0">
@@ -13941,6 +13949,7 @@ load switch</text>
 <segment>
 <wire x1="228.6" y1="132.08" x2="228.6" y2="162.56" width="0.1524" layer="91"/>
 <pinref part="JP1" gate="A" pin="4"/>
+<label x="228.6" y="134.62" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="SW_CB_CTRL" class="5">
@@ -13957,9 +13966,10 @@ load switch</text>
 <segment>
 <wire x1="231.14" y1="132.08" x2="231.14" y2="162.56" width="0.1524" layer="91"/>
 <pinref part="JP1" gate="A" pin="5"/>
+<label x="231.14" y="134.62" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
-<net name="SW9_CTRL" class="5">
+<net name="SW_CD_CTRL" class="5">
 <segment>
 <portref moduleinst="SSR_NO/NO3" port="SW1_CTRL"/>
 <wire x1="287.02" y1="-383.54" x2="287.02" y2="-373.38" width="0.1524" layer="91"/>
@@ -13968,6 +13978,7 @@ load switch</text>
 <segment>
 <wire x1="236.22" y1="132.08" x2="236.22" y2="162.56" width="0.1524" layer="91"/>
 <pinref part="JP1" gate="A" pin="7"/>
+<label x="236.22" y="134.62" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="SSR_ANODE" class="2">
@@ -14012,9 +14023,10 @@ load switch</text>
 <segment>
 <wire x1="223.52" y1="132.08" x2="223.52" y2="162.56" width="0.1524" layer="91"/>
 <pinref part="JP1" gate="A" pin="2"/>
+<label x="223.52" y="134.62" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
-<net name="N$1" class="5">
+<net name="SW_X_CTRL" class="5">
 <segment>
 <portref moduleinst="SSR_NO/NO3" port="SW2_CTRL"/>
 <wire x1="289.56" y1="-373.38" x2="289.56" y2="-383.54" width="0.1524" layer="91"/>
@@ -14022,6 +14034,7 @@ load switch</text>
 <segment>
 <wire x1="238.76" y1="132.08" x2="238.76" y2="162.56" width="0.1524" layer="91"/>
 <pinref part="JP1" gate="A" pin="8"/>
+<label x="238.76" y="134.62" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="LOAD_SWITCH" class="5">
@@ -14040,19 +14053,6 @@ load switch</text>
 <label x="1033.78" y="-551.18" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$2" class="4">
-<segment>
-<wire x1="307.34" y1="-127" x2="307.34" y2="-109.22" width="0.1524" layer="91" style="shortdash"/>
-</segment>
-</net>
-<net name="N$3" class="0">
-<segment>
-<wire x1="299.72" y1="-104.14" x2="314.96" y2="-104.14" width="0.1524" layer="91"/>
-<wire x1="314.96" y1="-104.14" x2="314.96" y2="-109.22" width="0.1524" layer="91"/>
-<wire x1="314.96" y1="-109.22" x2="299.72" y2="-109.22" width="0.1524" layer="91"/>
-<wire x1="299.72" y1="-109.22" x2="299.72" y2="-104.14" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="LOAD_HIGHSIDE" class="0">
 <segment>
 <pinref part="JP2" gate="G$1" pin="1"/>
@@ -14060,11 +14060,17 @@ load switch</text>
 <pinref part="IC1" gate="G$1" pin="OUT"/>
 <label x="1071.88" y="-558.8" size="1.778" layer="95"/>
 </segment>
+<segment>
+<wire x1="307.34" y1="-127" x2="307.34" y2="-109.22" width="0.1524" layer="91" style="shortdash"/>
+<label x="307.34" y="-119.38" size="1.778" layer="95"/>
+</segment>
 </net>
 </nets>
 </sheet>
 </sheets>
 <errors>
+<approved hash="104,1,1071.88,-553.72,IC1,OUT,LOAD_HIGHSIDE,,,"/>
+<approved hash="104,1,1071.88,-551.18,IC1,IN,V_REGULATED_TP2-OUT,,,"/>
 <approved hash="104,1@3V3,104.14,81.28,IC2,VOUT,+3V3,,,"/>
 <approved hash="105,1,130.81,-86.36,ZENER_COMMON,,,,,"/>
 <approved hash="213,1,124.46,-254,SW1_CTRL,in,,,,"/>
