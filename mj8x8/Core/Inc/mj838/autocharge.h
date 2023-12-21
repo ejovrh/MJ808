@@ -10,8 +10,7 @@
 
 typedef struct	// struct describing the AutoDrive functionality
 {
-	uint8_t FlagLoadisConnected :1;  // flag indicating if the load is connected, i.e. high-side load switch is on or off
-
+	uint8_t (*IsLoadConnected)(void);  // returns High-Side load switch state: 0 - disconnected, 1 - connected
 	void (*Do)(void);  // AutoCharge functionality
 } autocharge_t;
 
