@@ -125,10 +125,7 @@ static inline void _EventHandlerEvent03(void)
 #ifdef MJ838_
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
-	if(Device->AutoCharge->FlagLoadisConnected)
-		_payload = OFF;  // argument is remaining charge in percent
-	else
-		_payload = ON;  // argument is remaining charge in percent
+	_payload = !Device->AutoCharge->IsLoadConnected();  // 0 - LED on (load disconnected), 1 - LED off (load connected)
 
 	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_05, &_payload, 2);  // send it
 #endif
