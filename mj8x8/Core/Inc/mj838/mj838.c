@@ -36,7 +36,7 @@ static inline void _GPIOInit(void)
 	// GPIO EXTI0 mode - state change from idle to measurement mode
 	GPIO_InitStruct.Pin = ZeroCross_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;  // catch zero cross activity (idle to first impulse and rolling)
-	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(ZeroCross_GPIO_Port, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = SW1_CTRL_Pin;
@@ -69,11 +69,17 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(SW_CC_CTRL_GPIO_Port, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = SW9_CTRL_Pin;
+	GPIO_InitStruct.Pin = SW_D_CTRL_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(SW9_CTRL_GPIO_Port, &GPIO_InitStruct);
+	HAL_GPIO_Init(SW_D_CTRL_GPIO_Port, &GPIO_InitStruct);
+
+//	GPIO_InitStruct.Pin = SW_X_CTRL_Pin;
+//	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+//	GPIO_InitStruct.Pull = GPIO_NOPULL;
+//	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+//	HAL_GPIO_Init(SW_X_CTRL_GPIO_Port, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = LoadFet_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -82,12 +88,13 @@ static inline void _GPIOInit(void)
 	HAL_GPIO_Init(LoadFet_GPIO_Port, &GPIO_InitStruct);
 
 	// explicitly set pin states
-	HAL_GPIO_WritePin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin, GPIO_PIN_RESET);	// TODO - specify state
-	HAL_GPIO_WritePin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin, GPIO_PIN_RESET);	// TODO - specify state
-	HAL_GPIO_WritePin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin, GPIO_PIN_RESET);	// TODO - specify state
-	HAL_GPIO_WritePin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin, GPIO_PIN_RESET);	// TODO - specify state
-	HAL_GPIO_WritePin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin, GPIO_PIN_RESET);	// TODO - specify state
-	HAL_GPIO_WritePin(SW9_CTRL_GPIO_Port, SW9_CTRL_Pin, GPIO_PIN_RESET);	// TODO - specify state
+	HAL_GPIO_WritePin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin, GPIO_PIN_RESET);	// NC - 1 open, (0 closed)
+	HAL_GPIO_WritePin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin, GPIO_PIN_RESET);	// NC - 1 open, (0 closed)
+	HAL_GPIO_WritePin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin, GPIO_PIN_RESET);	// NO - (0 open), 1 closed
+	HAL_GPIO_WritePin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin, GPIO_PIN_RESET);	// NO - (0 open), 1 closed
+	HAL_GPIO_WritePin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin, GPIO_PIN_RESET);	// NO - (0 open), 1 closed
+	HAL_GPIO_WritePin(SW_D_CTRL_GPIO_Port, SW_D_CTRL_Pin, GPIO_PIN_RESET);	// NO - 0 open, 1 closed
+//	HAL_GPIO_WritePin(SW_X_CTRL_GPIO_Port, SW_X_CTRL_Pin, GPIO_PIN_RESET);	// NO - 0 open, 1 closed
 	HAL_GPIO_WritePin(LoadFet_GPIO_Port, LoadFet_Pin, GPIO_PIN_RESET);	// load disconnected
 
 #if defined GPIO_DEBUG_OUT

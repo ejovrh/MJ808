@@ -69,18 +69,22 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define SW_CB_CTRL_GPIO_Port GPIOA
 #define SW_CC_CTRL_Pin	GPIO_PIN_5	// solid-state relay NO -- GnZC pin 6
 #define SW_CC_CTRL_GPIO_Port GPIOA
-#define SW9_CTRL_Pin	GPIO_PIN_6	// solid-state relay NO -- GnZC pin 7
-#define SW9_CTRL_GPIO_Port GPIOA
-#define LoadFet_Pin GPIO_PIN_7	// Load N-Fet Gate -- GnZC pin 8
+#define SW_D_CTRL_Pin	GPIO_PIN_6	// solid-state relay NO -- GnZC pin 7
+#define SW_D_CTRL_GPIO_Port GPIOA
+//#define SW_X_CTRL_Pin	GPIO_PIN_6	// solid-state relay NO -- GnZC pin 8
+//#define SW_X_CTRL_GPIO_Port GPIOA
+#define LoadFet_Pin GPIO_PIN_7	// Load N-Fet Gate -- GnZC pin 11
 #define LoadFet_GPIO_Port GPIOA
 
 // TODO - mj838 debug GPIO - remove once debugging is complete
-#define GPIO_DEBUG_OUT 1
 #define SIGNAL_GENERATOR_INPUT 1	// ZeroCross signal input is signal generator output
+#define GPIO_DEBUG_OUT 1
+# if GPIO_DEBUG_OUT
 #define DEBUG0_Pin GPIO_PIN_0	// HAL_GPIO_TogglePin(DEBUG0_Port, DEBUG0_Pin);
 #define DEBUG0_Port GPIOB
 #define DEBUG1_Pin GPIO_PIN_1	// HAL_GPIO_TogglePin(DEBUG1_Port, DEBUG1_Pin);
 #define DEBUG1_Port GPIOB
+#endif
 
 // definitions of device/PCB layout-dependent hardware pins
 
