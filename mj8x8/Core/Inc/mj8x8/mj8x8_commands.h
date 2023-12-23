@@ -80,7 +80,7 @@ typedef union  // union of mj8x8 devices: 16 bits or one word
 {
 	struct  // bit-wise struct for mj8x8 devices
 	{  // bit-wise view of devices on the bus,  max. 16 in total
-	   // format: n (0 to 15) - device indicator - hex id - name
+	   // format: n (0 to 15) - device indicator - dec. id - name
 		uint16_t mj_0 :1;  	// 0 // 0 Alpha - logic unit
 		uint16_t mj_1 :1;  	// 1 // 0 Bravo - ?
 		uint16_t mj_2 :1;  	// 2 // 0 Charlie - ?
@@ -91,12 +91,12 @@ typedef union  // union of mj8x8 devices: 16 bits or one word
 		uint16_t mj_7 :1;  	// 7 // 1 Delta - ?
 		uint16_t mj808 :1;  // 8 // 2 Alpha - front light
 		uint16_t mj818 :1;  // 9 // 2 Bravo - rear light
-		uint16_t mj_10 :1;	// a // 2 Charlie - ?
-		uint16_t mj_11 :1;	// b // 2 Delta - ?
-		uint16_t mj_12 :1;	// c // 3 Alpha - ?
-		uint16_t mj_13 :1;	// d // 3 Bravo - ?
-		uint16_t mj_14 :1;	// e // 3 Charlie - ?
-		uint16_t mj_15 :1;	// f // 3 Delta - ?
+		uint16_t mj_10 :1;	// 10 // 2 Charlie - ?
+		uint16_t mj_11 :1;	// 11 // 2 Delta - ?
+		uint16_t mj514 :1;	// 12 // 3 Alpha - Rohloff e14 shifter unit
+		uint16_t mj_13 :1;	// 13 // 3 Bravo - ?
+		uint16_t mj_14 :1;	// 14 // 3 Charlie - ?
+		uint16_t mj_15 :1;	// 15 // 3 Delta - ?
 	};
 	uint16_t byte;	// word representation of above bitfield
 } device_t;
