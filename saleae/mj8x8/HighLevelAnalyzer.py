@@ -67,6 +67,7 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
                     'mj818': { 'format': '{{data.description}}' },
                     'mj828': { 'format': '{{data.description}}' },
                     'mj838': { 'format': '{{data.description}}' },
+                    'mj514': { 'format': '{{data.description}}' },
                     'DLC': { 'format': '{{data.description}}' },
                     'HeartBeat': { 'format': '{{data.description}}' },
                     'activity': { 'format': '{{data.description}}' },
@@ -91,7 +92,7 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
             'mj818': {'hexID': '9', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, '9': 'mj818', 
             'mj_10': {'hexID': 'a', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, 'a': 'mj_10', 
             'mj_11': {'hexID': 'b', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, 'b': 'mj_11', 
-            'mj_12': {'hexID': 'c', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, 'c': 'mj_12', 
+            'mj514': {'hexID': 'c', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, 'c': 'mj514', 
             'mj_13': {'hexID': 'd', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, 'd': 'mj_13', 
             'mj_14': {'hexID': 'e', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, 'e': 'mj_14', 
             'mj_15': {'hexID': 'f', 0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: ''}, 'f': 'mj_15'
@@ -257,7 +258,7 @@ class Hla(HighLevelAnalyzer): # High level analyzers must subclass the HighLevel
 
                 sender = self.DynamicDeviceActivityDicts[str(sender)]
                 recipient = self.DynamicDeviceActivityDicts[str(recipient)]
-
+                
                 if recipient == 'mj_0':
                     recipient = 'ALL'
                 
