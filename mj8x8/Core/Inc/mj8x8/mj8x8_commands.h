@@ -76,12 +76,11 @@
 // command byte structure
 #define CMND_ANNOUNCE 0x00	// command to register self on other devices (announce-like broadcast)
 
-// device
-typedef union
-{  //
-	struct
+typedef union  // union of mj8x8 devices: 16 bits or one word
+{
+	struct  // bit-wise struct for mj8x8 devices
 	{  // bit-wise view of devices on the bus,  max. 16 in total
-	   // format: n (0 to 15) - device indicator - hex id - name
+	   // format: n (0 to 15) - device indicator - dec. id - name
 		uint16_t mj000 :1; 	// 0 // 0 Alpha - Gateway/Logic Unit
 		uint16_t mj_1 :1;  	// 1 // 0 Bravo - ?
 		uint16_t mj_2 :1;  	// 2 // 0 Charlie - ?
@@ -92,32 +91,15 @@ typedef union
 		uint16_t mj_7 :1;  	// 7 // 1 Delta - ?
 		uint16_t mj808 :1;  // 8 // 2 Alpha - front light
 		uint16_t mj818 :1;  // 9 // 2 Bravo - rear light
-		uint16_t mj_10 :1;	// a // 2 Charlie - ?
-		uint16_t mj_11 :1;	// b // 2 Delta - ?
-		uint16_t mj_12 :1;	// c // 3 Alpha - ?
-		uint16_t mj_13 :1;	// d // 3 Bravo - ?
-		uint16_t mj_14 :1;	// e // 3 Charlie - ?
-		uint16_t mj_15 :1;	// f // 3 Delta - ?
+		uint16_t mj_10 :1;	// 10 // 2 Charlie - ?
+		uint16_t mj_11 :1;	// 11 // 2 Delta - ?
+		uint16_t mj514 :1;	// 12 // 3 Alpha - Rohloff e14 shifter unit
+		uint16_t mj_13 :1;	// 13 // 3 Bravo - ?
+		uint16_t mj_14 :1;	// 14 // 3 Charlie - ?
+		uint16_t mj_15 :1;	// 15 // 3 Delta - ?
 	};
-	uint16_t byte;	// byte-wise representation of above bitfield
+	uint16_t byte;	// word representation of above bitfield
 } device_t;
-
-// mj808 util LED colour
-//#define DEV_GREEN_UTIL_LED 0x08
-//#define DEV_RED_UTIL_LED 0x00
-
-// mj808 util LED states
-//#define BLINK1X 0x01
-//#define BLINK2X 0x02
-//#define BLINK3X 0x03
-//#define BLINK4X 0x04
-//#define BLINK5X 0x05
-//#define BLINK6X 0x06
-
-#define DEV_LU 0x00	// logic unit device
-#define DEV_PWR_SRC 0x04	// power source device
-#define DEV_LIGHT 0x08	// positional light device
-#define DEV_SENSOR 0x0C	// sensor device
 
 // mj808 front light/high beam
 //#define FRONT_LIGHT 0x00	// with fade - front positional light (mj808) - low beam
@@ -151,7 +133,7 @@ typedef union
 //#define CLASS_FW_FLASH 0x70
 //#define CLASS_MSG_TIME_SYNC 0x80	//
 #define CLASS_MSG_BUTTON_EVENT 0x90	//
-//#define CLASS_MSG_MEASURE_DATA 0xD0	//
+#define CLASS_MSG_MEASURE_DATA 0xD0	//
 //#define CLASS_MSG_BUS 0xF0	//
 
 #define EVENT00 0
@@ -171,7 +153,12 @@ typedef union
 #define EVENT14 14
 #define EVENT15 15
 
-//#define MSG_MEASUREMENT_DATA 0xD0	// message containing various measurements
+#define SPEED 0	// speed in m/s as derived from zerocross signal
+#define	ACCELERATION	1	// acceleration as derived from speed change
+
+#define MSG_MEASUREMENT_SPEED							(CLASS_MSG_MEASURE_DATA | SPEED)
+#define MSG_MEASUREMENT_ACCEL							(CLASS_MSG_MEASURE_DATA | ACCELERATION)
+
 //#define MSG_BUS 0xF0	// CAN bus related control messages
 
 //bit fields for command byte
@@ -183,88 +170,33 @@ typedef union
 
 // CAN ID defines - see xls; must be manually left shifted by 5 to match a 13-byte CAN ID
 // upper byte - b7
-#define PRIORITY_LOW 0x80	// default 0, used by the sender, leave zero on self, except with logic unit 0A (defaults to 1)
-#define PRIORITY_HIGH 0x00
+#define PRIORITY_LOW 0x0200	// default 0, used by the sender, leave zero on self, except with logic unit 0A (defaults to 1)
+#define PRIORITY_HIGH 0x0000
 
 // upper byte - b6
-#define BROADCAST 0x40	// default 0, used by the sender
-#define UNICAST 0x00
+#define BROADCAST 0x0100	// default 0, used by the sender
+#define UNICAST 0x0000
 
-// upper byte - b5:4
-#define SENDER_DEV_CLASS_BLANK 0x00	// sender device class, always populate on self
-#define SENDER_DEV_CLASS_LU 0x00
-#define SENDER_DEV_CLASS_PWR_SRC 0x10
-#define SENDER_DEV_CLASS_LIGHT 0x20
-#define SENDER_DEV_CLASS_SENSOR 0x30
-
-// upper byte - b3:2
-#define SENDER_DEV_D 0x0C	// sender device ID, always populate on self
-#define SENDER_DEV_C 0x08
-#define SENDER_DEV_B 0x04
-#define SENDER_DEV_A 0x00
-#define SENDER_DEV_BLANK 0x00
-
-// upper byte - b1:0
-#define RCPT_DEV_CLASS_BLANK 0x00	// recipient device class, populate when sending, on self use RCPT_DEV_BLANK
-#define RCPT_DEV_CLASS_LU 0x00
-#define RCPT_DEV_CLASS_PWR_SRC 0x01
-#define RCPT_DEV_CLASS_LIGHT 0x02
-#define RCPT_DEV_CLASS_SENSOR 0x03
-
-// lower byte - b7:6
-#define RCPT_DEV_D 0xC0	// recipient device ID, populate when sending, on self use RCPT_DEV_BLANK
-#define RCPT_DEV_C 0x80
-#define RCPT_DEV_B 0x40
-#define RCPT_DEV_A 0x00
-#define RCPT_DEV_BLANK 0x00
-
-// lower byte - b5
-#define BLANK 0x00
-
-// CAN ID upper byte construction
-#define CANID_MJ000 (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A)
-#define CANID_MJ808 (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A)
-#define CANID_MJ818 (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LIGHT | RCPT_DEV_CLASS_BLANK | SENDER_DEV_B)
-#define CANID_MJ828 (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_LU | RCPT_DEV_CLASS_BLANK | SENDER_DEV_D)
-#define CANID_MJ838 (PRIORITY_LOW | UNICAST | SENDER_DEV_CLASS_PWR_SRC | RCPT_DEV_CLASS_BLANK | SENDER_DEV_A)
-
-// actual device commands
-//#define CMND_DASHBOARD_LED_RED_OFF			(CLASS_DASHBOARD | DEV_DB_LED | RED | OFF)
-//#define CMND_DASHBOARD_LED_RED_ON				(CLASS_DASHBOARD | DEV_DB_LED | RED | ON)
-//#define CMND_DASHBOARD_LED_GREEN_OFF		(CLASS_DASHBOARD | DEV_DB_LED | GREEN | OFF)
-//#define CMND_DASHBOARD_LED_GREEN_ON			(CLASS_DASHBOARD | DEV_DB_LED | GREEN | ON)
-//#define CMND_DASHBOARD_LED_YELLOW_OFF		(CLASS_DASHBOARD | DEV_DB_LED | YELLOW | OFF)
-//#define CMND_DASHBOARD_LED_YELLOW_ON		(CLASS_DASHBOARD | DEV_DB_LED | YELLOW | ON)
-//#define CMND_DASHBOARD_LED_BLUE_OFF			(CLASS_DASHBOARD | DEV_DB_LED | BLUE | OFF)
-//#define CMND_DASHBOARD_LED_BLUE_ON			(CLASS_DASHBOARD | DEV_DB_LED | BLUE | ON)
-//#define CMND_DASHBOARD_LED_BATT1_OFF		(CLASS_DASHBOARD | DEV_DB_LED | BATT1 | OFF)
-//#define CMND_DASHBOARD_LED_BATT1_ON			(CLASS_DASHBOARD | DEV_DB_LED | BATT1 | ON)
-//#define CMND_DASHBOARD_LED_BATT2_OFF		(CLASS_DASHBOARD | DEV_DB_LED | BATT2 | OFF)
-//#define CMND_DASHBOARD_LED_BATT2_ON			(CLASS_DASHBOARD | DEV_DB_LED | BATT2 | ON)
-//#define CMND_DASHBOARD_LED_BATT3_OFF		(CLASS_DASHBOARD | DEV_DB_LED | BATT3 | OFF)
-//#define CMND_DASHBOARD_LED_BATT3_ON			(CLASS_DASHBOARD | DEV_DB_LED | BATT3 | ON)
-//#define CMND_DASHBOARD_LED_BATT4_OFF		(CLASS_DASHBOARD | DEV_DB_LED | BATT4 | OFF)
-//#define CMND_DASHBOARD_LED_BATT4_ON			(CLASS_DASHBOARD | DEV_DB_LED | BATT4 | ON)
-//#define CMND_FRONT_LIGHT_SHINE					(CLASS_DEVICE | DEV_LIGHT | FRONT_LIGHT)
-//#define	CMND_FRONT_LIGHTHIGH_SHINE			(CLASS_DEVICE | DEV_LIGHT | FRONT_LIGHT_HIGH)
-//#define CMND_REAR_LIGHT_SHINE						(CLASS_DEVICE | DEV_LIGHT | REAR_LIGHT)
-//#define CMND_BRAKE_LIGHT_SHINE					(CLASS_DEVICE | DEV_LIGHT | REAR_LIGHT_BRAKE)
-//#define CMND_UTIL_GREEN_LED_OFF 				(CLASS_UTIL_LED | DEV_GREEN_UTIL_LED | OFF)
-//#define CMND_UTIL_GREEN_LED_BLINK1X
-//#define CMND_UTIL_GREEN_LED_BLINK2X
-//#define CMND_UTIL_GREEN_LED_BLINK3X
-//#define CMND_UTIL_GREEN_LED_BLINK4X
-//#define CMND_UTIL_GREEN_LED_BLINK5X
-//#define CMND_UTIL_GREEN_LED_BLINK6X
-//#define CMND_UTIL_GREEN_LED_ON 					(CLASS_UTIL_LED | DEV_GREEN_UTIL_LED | UON)
-//#define CMND_UTIL_RED_LED_OFF 					(CLASS_UTIL_LED | DEV_RED_UTIL_LED | OFF)
-//#define CMND_UTIL_RED_LED_BLINK1X
-//#define CMND_UTIL_RED_LED_BLINK2X
-//#define CMND_UTIL_RED_LED_BLINK3X
-//#define CMND_UTIL_RED_LED_BLINK4X
-//#define CMND_UTIL_RED_LED_BLINK5X
-//#define CMND_UTIL_RED_LED_BLINK6X
-//#define CMND_UTIL_RED_LED_ON 						(CLASS_UTIL_LED | DEV_RED_UTIL_LED | UON)
+typedef enum  // enum describing devices on a mj8x8 bus
+{
+	  ALL = 0,
+	  mj000 = 0x0,  // sender: 0x00
+	  mj_01 = 0x1,  // sender: 0x10
+	  mj_02 = 0x2,  // sender: 0x20
+	  mj828 = 0x3,	// sender: 0x30
+	  mj838 = 0x4,	// sender: 0x40
+	  mj_05 = 0x5,  // sender: 0x50
+	  mj_06 = 0x6,	// sender: 0x60
+	  mj_07 = 0x7,	// sender: 0x70
+	  mj808 = 0x8,	// sender: 0x80
+	  mj818 = 0x9,	// sender: 0x90
+	  mj_10 = 0xA,	// sender: 0xA0
+	  mj_11 = 0xB,	// sender: 0xB0
+	  mj514 = 0xC,	// sender: 0xC0
+	  mj_13 = 0xD,	// sender: 0xD0
+	  mj_14 = 0xE,	// sender: 0xE0
+	  mj_15 = 0xF,	// sender: 0xF0
+} mj8x8_Devices_t;
 
 #define MSG_BUTTON_EVENT_00							(CLASS_MSG_BUTTON_EVENT | EVENT00)
 #define MSG_BUTTON_EVENT_01							(CLASS_MSG_BUTTON_EVENT | EVENT01)
