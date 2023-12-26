@@ -4,7 +4,7 @@
 
 #include "autodrive.h"
 
-typedef struct	// autobatt_t actual
+typedef struct	// autodrive_t actual
 {
 	autodrive_t public;  // public struct
 } __autodrive_t;
@@ -17,14 +17,14 @@ static void _Do(void)
 	;
 }
 
-static __autodrive_t __AutoDrive =  // instantiate autobatt_t actual and set function pointers
+static __autodrive_t __AutoDrive =  // instantiate autodrive_t actual and set function pointers
 	{  //
 	.public.Do = &_Do  // set function pointer
 	};
 
 autodrive_t* autodrive_ctor(void)  //
 {
-	return &__AutoDrive.public;  // set pointer to AutoBatt public part
+	return &__AutoDrive.public;  // set pointer to AutoDrive public part
 }
 
 #endif

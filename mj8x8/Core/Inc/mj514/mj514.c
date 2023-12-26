@@ -27,6 +27,18 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(TCAN334_Standby_GPIO_Port, &GPIO_InitStruct);
 
+	GPIO_InitStruct.Pin = Motor_CW_Direction_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(Motor_CW_Direction_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = Motor_CCW_Direction_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(Motor_CCW_Direction_GPIO_Port, &GPIO_InitStruct);
+
 // FIXME - define device GPIOs
 }
 
@@ -76,6 +88,7 @@ void mj514_ctor(void)
 
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
+	__Device.public.gear = gear_ctor();		// electronic gear shifting unit
 
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity

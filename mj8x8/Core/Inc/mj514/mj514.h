@@ -1,5 +1,5 @@
-#ifndef CORE_INC_mj514_mj514_H_
-#define CORE_INC_mj514_mj514_H_
+#ifndef CORE_INC_MJ514_MJ514_H_
+#define CORE_INC_MJ514_MJ514_H_
 
 typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 {
@@ -31,23 +31,29 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 // FIXME - define if eventhandler is used
 #define USE_EVENTHANDLER 0	// shall EventHandler code be included
 
-// FIXME - define activity bit postions
+// FIXME - define activity bit positions
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 // FIXME - define timer defines
 
 #include "mj8x8\mj8x8.h"
+#include "gear.h" // Rohloff electronic shifting unit
 
 // definitions of device/PCB layout-dependent hardware pins
 #define TCAN334_Standby_Pin GPIO_PIN_5	//	defined here but initialised in mj8x8.c
 #define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
 // FIXME - define GPIOs
+#define Motor_CCW_Direction_Pin GPIO_PIN_0
+#define Motor_CCW_Direction_GPIO_Port GPIOA
+#define Motor_CW_Direction_Pin GPIO_PIN_0
+#define Motor_CW_Direction_GPIO_Port GPIOA
 // definitions of device/PCB layout-dependent hardware pins
 
 typedef struct	// struct describing devices on mj514
 {
 	mj8x8_t *mj8x8;  // pointer to the base class
 	mj514_activity_t *activity;  // pointer to struct(union) indicating device activity status
+	gear_t *gear;  // electronic gear shifting unit
 
 	void (*StopTimer)(TIM_HandleTypeDef *timer);	// stops timer identified by argument
 	void (*StartTimer)(TIM_HandleTypeDef *timer);  // starts timer identified by argument
@@ -60,4 +66,4 @@ extern mj514_t *const Device;  // declare pointer to public struct part
 
 #endif // mj514_
 
-#endif /* CORE_INC_mj514_mj514_H_ */
+#endif /* CORE_INC_MJ514_MJ514_H_ */

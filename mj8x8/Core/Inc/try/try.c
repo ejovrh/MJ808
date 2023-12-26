@@ -371,11 +371,15 @@ static inline void _MsgBtnEvent04(can_msg_t *msg)
 //{
 //		return;
 //}
-//
-//static inline void _MsgBtnEvent06(can_msg_t *msg)
-//{
-//		return;
-//}
+
+static inline void _MsgBtnEvent06(can_msg_t *msg)
+{
+#ifdef MJ514_
+	Device->gear->ShiftGear(3);
+	Device->gear->ShiftGear(-1);
+#endif
+	return;
+}
 //
 //static inline void _MsgBtnEvent07(can_msg_t *msg)
 //{
@@ -431,7 +435,7 @@ static uint32_t (*_BranchtableMsgBtnEvent[])(can_msg_t *msg) =  // branch table
 		(void *)(can_msg_t *)&_MsgBtnEvent03,// mj828 brake light button momentary
 		(void *)(can_msg_t *)&_MsgBtnEvent04,// AutoBat status
 		(void *)(can_msg_t *)&_DoNothing,//
-		(void *)(can_msg_t *)&_DoNothing,//
+		(void *)(can_msg_t *)&_MsgBtnEvent06,// mj514
 		(void *)(can_msg_t *)&_DoNothing,//
 		(void *)(can_msg_t *)&_DoNothing,//
 		(void *)(can_msg_t *)&_DoNothing,//
