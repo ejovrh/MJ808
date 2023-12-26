@@ -43,10 +43,17 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TCAN334_Standby_Pin GPIO_PIN_5	//	defined here but initialised in mj8x8.c
 #define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
 // FIXME - define GPIOs
-#define Motor_CCW_Direction_Pin GPIO_PIN_0
-#define Motor_CCW_Direction_GPIO_Port GPIOA
-#define Motor_CW_Direction_Pin GPIO_PIN_0
-#define Motor_CW_Direction_GPIO_Port GPIOA
+#define Motor_Direction_Down_Pin GPIO_PIN_0
+#define Motor_Direction_Down_GPIO_Port GPIOA
+#define Motor_Direction_Up_Pin GPIO_PIN_0
+#define Motor_Direction_Up_GPIO_Port GPIOA
+#define Rotary_A_Pin GPIO_PIN_0
+#define Rotary_A_GPIO_Port GPIOA
+#define Rotary_B_Pin GPIO_PIN_0
+#define Rotary_B_GPIO_Port GPIOA
+#define FeRAM_WP_Pin GPIO_PIN_0
+#define FeRAM_WP_GPIO_Port GPIOA
+
 // definitions of device/PCB layout-dependent hardware pins
 
 typedef struct	// struct describing devices on mj514
