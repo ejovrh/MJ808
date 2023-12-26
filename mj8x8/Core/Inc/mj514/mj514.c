@@ -27,17 +27,35 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(TCAN334_Standby_GPIO_Port, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = Motor_CW_Direction_Pin;
+	GPIO_InitStruct.Pin = Motor_Direction_Up_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(Motor_CW_Direction_GPIO_Port, &GPIO_InitStruct);
+	HAL_GPIO_Init(Motor_Direction_Up_GPIO_Port, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = Motor_CCW_Direction_Pin;
+	GPIO_InitStruct.Pin = Motor_Direction_Down_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(Motor_CCW_Direction_GPIO_Port, &GPIO_InitStruct);
+	HAL_GPIO_Init(Motor_Direction_Down_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = Rotary_A_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(Rotary_A_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = Rotary_B_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(Rotary_B_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = FeRAM_WP_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(FeRAM_WP_GPIO_Port, &GPIO_InitStruct);
 
 // FIXME - define device GPIOs
 }
