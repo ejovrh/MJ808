@@ -3,8 +3,8 @@
 #if defined(MJ514_)	// if this particular device is active
 
 #include "gear.h"	//
-#include "mb85rc\mb85rc.h"	// 16kB FeRAM
-#include "mj514\motor.h"	// Motor controller
+#include "mb85rc/mb85rc.h"	// 16kB FeRAM
+#include "mj514/motor.h"	// Motor controller
 
 static uint8_t _ShiftinginProgress;
 
@@ -39,7 +39,7 @@ static void _ShiftGear(const int8_t n)
 
 	_ShiftinginProgress = 1;	// critical section start
 
-	__Gear.FeRAM->Write(0, &n);  // write gear into FeRAM
+	__Gear.FeRAM->Write(0, n);	// write gear into FeRAM
 
 	if(n > 0)
 		__Gear.Motor->Rotate(Up, n);  // shift up n gears

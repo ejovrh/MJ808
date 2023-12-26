@@ -7,8 +7,8 @@
 
 typedef struct	// struct describing the FeRAM functionality
 {
-	uint8_t (*Read)(const uint16_t RegAddr);  //
-	void (*Write)(const uint16_t RegAddr, uint16_t const *data);  //
+	uint8_t (*Read)(const uint8_t addr);  //
+	void (*Write)(const uint8_t addr, const uint8_t data);	//
 } mb85rc_t;
 
 mb85rc_t* mb85rc_ctor(void);	// the MB85RC constructor
