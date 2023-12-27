@@ -12655,9 +12655,8 @@ by R. Vogg  15.March.2002</description>
 <port name="3V3" side="left" coord="-7.62" direction="pwr"/>
 <port name="I2C_SCL" side="left" coord="-2.54" direction="in"/>
 <port name="I2C_SDA" side="left" coord="0" direction="io"/>
-<port name="B" side="left" coord="2.54" direction="out"/>
-<port name="A" side="left" coord="5.08" direction="out"/>
-<port name="PUSH" side="left" coord="7.62" direction="out"/>
+<port name="ROTARY_B" side="left" coord="2.54" direction="out"/>
+<port name="ROTARY_A" side="left" coord="5.08" direction="out"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -12717,27 +12716,27 @@ by R. Vogg  15.March.2002</description>
 <busses>
 <bus name="I2C:I2C_SCL,I2C_SDA">
 <segment>
-<wire x1="53.34" y1="78.74" x2="53.34" y2="111.76" width="0.762" layer="92"/>
-<label x="53.34" y="111.76" size="1.778" layer="95"/>
+<wire x1="40.64" y1="78.74" x2="40.64" y2="111.76" width="0.762" layer="92"/>
+<label x="40.64" y="111.76" size="1.778" layer="95"/>
 </segment>
 </bus>
 </busses>
 <nets>
-<net name="PUSH" class="0">
+<net name="ROTARY_PUSH" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PUSH"/>
 <wire x1="78.74" y1="91.44" x2="63.5" y2="91.44" width="0.1524" layer="91"/>
 <label x="63.5" y="91.44" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
-<net name="B" class="0">
+<net name="ROTARY_B" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="A"/>
 <wire x1="78.74" y1="88.9" x2="68.58" y2="88.9" width="0.1524" layer="91"/>
 <label x="68.58" y="88.9" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
-<net name="A" class="0">
+<net name="ROTARY_A" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="B"/>
 <wire x1="78.74" y1="86.36" x2="73.66" y2="86.36" width="0.1524" layer="91"/>
@@ -12747,8 +12746,8 @@ by R. Vogg  15.March.2002</description>
 <net name="I2C_SCL" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="SCL"/>
-<wire x1="53.34" y1="78.74" x2="78.74" y2="78.74" width="0.1524" layer="91"/>
-<label x="55.88" y="78.74" size="1.778" layer="95"/>
+<wire x1="40.64" y1="78.74" x2="78.74" y2="78.74" width="0.1524" layer="91"/>
+<label x="43.18" y="78.74" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -12799,8 +12798,8 @@ by R. Vogg  15.March.2002</description>
 <net name="I2C_SDA" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="SDA"/>
-<wire x1="78.74" y1="81.28" x2="53.34" y2="81.28" width="0.1524" layer="91"/>
-<label x="55.88" y="81.28" size="1.778" layer="95"/>
+<wire x1="78.74" y1="81.28" x2="40.64" y2="81.28" width="0.1524" layer="91"/>
+<label x="43.18" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
@@ -12926,7 +12925,7 @@ by R. Vogg  15.March.2002</description>
 <plain>
 </plain>
 <moduleinsts>
-<moduleinst name="ROTARYENCODER" module="ROTARYENCODER" x="78.74" y="198.12">
+<moduleinst name="ROTARYENCODER" module="ROTARYENCODER" x="78.74" y="198.12" offset="900">
 <attribute name="NAME" value="ROTARYENCODER" x="78.74" y="208.28" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
 <moduleinst name="FE-RAM" module="FE-RAM" x="78.74" y="152.4">
@@ -13120,7 +13119,7 @@ by R. Vogg  15.March.2002</description>
 <label x="63.5" y="307.34" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<portref moduleinst="ROTARYENCODER" port="A"/>
+<portref moduleinst="ROTARYENCODER" port="ROTARY_A"/>
 <wire x1="58.42" y1="203.2" x2="50.8" y2="203.2" width="0.1524" layer="91"/>
 <label x="50.8" y="203.2" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -13131,7 +13130,7 @@ by R. Vogg  15.March.2002</description>
 <label x="66.04" y="307.34" size="1.778" layer="95" rot="R270"/>
 </segment>
 <segment>
-<portref moduleinst="ROTARYENCODER" port="B"/>
+<portref moduleinst="ROTARYENCODER" port="ROTARY_B"/>
 <wire x1="58.42" y1="200.66" x2="50.8" y2="200.66" width="0.1524" layer="91"/>
 <label x="50.8" y="200.66" size="1.778" layer="95" rot="R180"/>
 </segment>
