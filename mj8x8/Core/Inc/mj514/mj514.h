@@ -34,6 +34,9 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 // FIXME - define activity bit positions
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
+#define TIMER3_PERIOD  0xFFFF	//
+#define TIMER3_IC1_FILTER	0x0	//
+#define TIMER3_IC2_FILTER 0x0	//
 // FIXME - define timer defines
 
 #include "mj8x8\mj8x8.h"
