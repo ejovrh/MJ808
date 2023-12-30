@@ -34,10 +34,17 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 // FIXME - define activity bit positions
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
+#define TIMER2_PERIOD 99	// rotary encoder time base - 10ms
 #define TIMER3_PERIOD  0xFFFF	//
 #define TIMER3_IC1_FILTER	0x0	//
 #define TIMER3_IC2_FILTER 0x0	//
 // FIXME - define timer defines
+
+typedef enum
+{
+	  CW = 0,  // __HAL_TIM_IS_TIM_COUNTING_DOWN() == 0
+	  CCW = 1	// __HAL_TIM_IS_TIM_COUNTING_DOWN() == 1
+} rotation_t;
 
 #include "mj8x8\mj8x8.h"
 #include "gear.h" // Rohloff electronic shifting unit
@@ -45,15 +52,15 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 // definitions of device/PCB layout-dependent hardware pins
 #define TCAN334_Standby_Pin GPIO_PIN_5	//	defined here but initialised in mj8x8.c
 #define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
+#define Rotary_A_Pin GPIO_PIN_6
+#define Rotary_A_GPIO_Port GPIOA
+#define Rotary_B_Pin GPIO_PIN_7
+#define Rotary_B_GPIO_Port GPIOA
 // FIXME - define GPIOs
 #define Motor_Direction_Down_Pin GPIO_PIN_0
 #define Motor_Direction_Down_GPIO_Port GPIOA
 #define Motor_Direction_Up_Pin GPIO_PIN_0
 #define Motor_Direction_Up_GPIO_Port GPIOA
-#define Rotary_A_Pin GPIO_PIN_0
-#define Rotary_A_GPIO_Port GPIOA
-#define Rotary_B_Pin GPIO_PIN_0
-#define Rotary_B_GPIO_Port GPIOA
 #define FeRAM_WP_Pin GPIO_PIN_0
 #define FeRAM_WP_GPIO_Port GPIOA
 
