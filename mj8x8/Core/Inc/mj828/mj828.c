@@ -83,6 +83,7 @@ static inline void _TimerInit(void)
 {
 	TIM_ClockConfigTypeDef sClockSourceConfig =
 		{0};
+
 	TIM_MasterConfigTypeDef sMasterConfig =
 		{0};
 

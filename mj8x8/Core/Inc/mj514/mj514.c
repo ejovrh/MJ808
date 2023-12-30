@@ -6,6 +6,7 @@
 #include "mj514\mj514.h"
 
 // FIXME - define timer objects
+TIM_HandleTypeDef htim2;  // rotary encoder time base
 TIM_HandleTypeDef htim3;  // rotary encoder handling
 TIM_HandleTypeDef htim17;  // event handling - 2.5ms
 
@@ -28,6 +29,14 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(TCAN334_Standby_GPIO_Port, &GPIO_InitStruct);
 
+	GPIO_InitStruct.Pin = Rotary_A_Pin | Rotary_B_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	GPIO_InitStruct.Alternate = GPIO_AF1_TIM3;
+	HAL_GPIO_Init(Rotary_A_GPIO_Port, &GPIO_InitStruct);
+
+	// FIXME - define device GPIOs
 	GPIO_InitStruct.Pin = Motor_Direction_Up_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -45,29 +54,13 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(FeRAM_WP_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = Rotary_A_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	GPIO_InitStruct.Alternate = GPIO_AF1_TIM3;
-	HAL_GPIO_Init(Rotary_A_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = Rotary_B_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	GPIO_InitStruct.Alternate = GPIO_AF1_TIM3;
-	HAL_GPIO_Init(Rotary_B_GPIO_Port, &GPIO_InitStruct);
-
-// FIXME - define device GPIOs
 }
 
 // Timer init - device specific
 static inline void _TimerInit(void)
 {
-//	TIM_ClockConfigTypeDef sClockSourceConfig =	// TODO - needed?
-//		{0};
+	TIM_ClockConfigTypeDef sClockSourceConfig =
+		{0};
 
 	TIM_Encoder_InitTypeDef sConfig =
 		{0};
@@ -75,19 +68,32 @@ static inline void _TimerInit(void)
 	TIM_MasterConfigTypeDef sMasterConfig =
 		{0};
 
-// FIXME - define device timers
-	// timer3 init
+	// timer2 - rotary encoder time base
+	htim2.Instance = TIM2;
+	htim2.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
+	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim2.Init.Period = TIMER2_PERIOD;  // with above pre-scaler and a period of 99, we have an 10ms interrupt frequency
+	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim2.Init.RepetitionCounter = 0;
+	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+	HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);
+	HAL_TIM_OC_Init(&htim2);
+
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);
+
+	// timer3 - rotary encoder handling
 	htim3.Instance = TIM3;	// rotary encoder handling
-	htim3.Init.Prescaler = 0;  // TODO 0 or TIMER_PRESCALER ?
+	htim3.Init.Prescaler = 0;
 	htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim3.Init.Period = TIMER3_PERIOD;
+	htim3.Init.Period = 0xFF;  // TODO - use this: TIMER3_PERIOD;
 	htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
 
-//	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;	// TODO - needed?
-//	HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig);
-
-	sConfig.EncoderMode = TIM_ENCODERMODE_TI1;	// TODO: test TIM_ENCODERMODE_TI1, TIM_ENCODERMODE_TI2, TIM_ENCODERMODE_TI12
+	sConfig.EncoderMode = TIM_ENCODERMODE_TI12;  // TODO: test TIM_ENCODERMODE_TI1, TIM_ENCODERMODE_TI2, TIM_ENCODERMODE_TI12
 	sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
 	sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
 	sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
@@ -97,14 +103,18 @@ static inline void _TimerInit(void)
 	sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
 	sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
 	sConfig.IC2Filter = TIMER3_IC2_FILTER;
-	HAL_TIM_Encoder_Init(&htim3, &sConfig);
 
 	__HAL_RCC_TIM3_CLK_ENABLE();
+	HAL_TIM_Encoder_Init(&htim3, &sConfig);
 
 	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-
 	HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig);
+
+	HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
+
+	// FIXME - define device timers
+
 }
 
 // stops timer identified by argument
@@ -112,38 +122,33 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 {
 	HAL_TIM_Base_Stop_IT(timer);  // stop the timer
 
-// FIXME - define timer stop
+	if(timer->Instance == TIM2)  // rotary encoder time base
+		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
+
 	if(timer->Instance == TIM3)  // rotary encoder handling
 		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
+
+	// FIXME - define timer stop
 }
 
 // starts timer identified by argument
 static void _StartTimer(TIM_HandleTypeDef *timer)
 {
-// FIXME - define timer start
-	if(timer->Instance == TIM3)  // rotary encoder handling
+	if(timer->Instance == TIM2)  // rotary encoder time base
 		{
-			// FIXME - validate timer3 encoder mode start after it is stopped
-//			TIM_Encoder_InitTypeDef sConfig =	// TODO - needed?
-//				{0};
-
 			__HAL_RCC_TIM2_CLK_ENABLE();  // start the clock
 			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
-			timer->Instance->ARR = TIMER3_PERIOD;
-			HAL_TIM_Encoder_Init(&htim3, TIM_ENCODERMODE_TI12);
-
-//			sConfig.EncoderMode = TIM_ENCODERMODE_TI1;	// TODO - needed?
-//			sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
-//			sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
-//			sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
-//			sConfig.IC1Filter = 0;
-//			sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
-//			sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
-//			sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
-//			sConfig.IC2Filter = 0;
-
-			HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
+			timer->Instance->ARR = TIMER2_PERIOD;
 		}
+
+	if(timer->Instance == TIM3)  // rotary encoder handling
+		{
+			;
+		}
+
+	// FIXME - define timer start
+
+	HAL_TIM_Base_Start_IT(timer);  // start the timer
 }
 
 // device-specific pre sleep
@@ -182,6 +187,12 @@ void mj514_ctor(void)
 //	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
 
 // interrupt init
+	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
+	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(TIM3_IRQn);
+
 // FIXME - define // interrupt init
 }
 
