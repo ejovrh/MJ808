@@ -62,15 +62,12 @@ static inline void _TimerInit(void)
 	TIM_ClockConfigTypeDef sClockSourceConfig =
 		{0};
 
-	TIM_Encoder_InitTypeDef sConfig =
-		{0};
-
 	TIM_MasterConfigTypeDef sMasterConfig =
 		{0};
 
 	// timer2 - rotary encoder time base
 	htim2.Instance = TIM2;
-	htim2.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
+	htim2.Init.Prescaler = TIMER_PRESCALER;
 	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
 	htim2.Init.Period = TIMER2_PERIOD;  // with above pre-scaler and a period of 99, we have an 10ms interrupt frequency
 	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -93,28 +90,11 @@ static inline void _TimerInit(void)
 	htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
 
-	sConfig.EncoderMode = TIM_ENCODERMODE_TI12;  // TODO: test TIM_ENCODERMODE_TI1, TIM_ENCODERMODE_TI2, TIM_ENCODERMODE_TI12
-	sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
-	sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
-	sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
-	sConfig.IC1Filter = TIMER3_IC1_FILTER;
-
-	sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
-	sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
-	sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
-	sConfig.IC2Filter = TIMER3_IC2_FILTER;
-
-	__HAL_RCC_TIM3_CLK_ENABLE();
-	HAL_TIM_Encoder_Init(&htim3, &sConfig);
-
 	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
 	HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig);
 
-	HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
-
 	// FIXME - define device timers
-
 }
 
 // stops timer identified by argument
@@ -126,7 +106,7 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
 
 	if(timer->Instance == TIM3)  // rotary encoder handling
-		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
+		__HAL_RCC_TIM3_CLK_DISABLE();  // stop the clock
 
 	// FIXME - define timer stop
 }
@@ -143,10 +123,27 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 
 	if(timer->Instance == TIM3)  // rotary encoder handling
 		{
-			;
+			TIM_Encoder_InitTypeDef sConfig =
+				{0};
+
+			sConfig.EncoderMode = TIM_ENCODERMODE_TI12;  // TODO: test TIM_ENCODERMODE_TI1, TIM_ENCODERMODE_TI2, TIM_ENCODERMODE_TI12
+			sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+			sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
+			sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
+			sConfig.IC1Filter = TIMER3_IC1_FILTER;
+
+			sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+			sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
+			sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
+			sConfig.IC2Filter = TIMER3_IC2_FILTER;
+
+			__HAL_RCC_TIM3_CLK_ENABLE();
+			HAL_TIM_Encoder_Init(&htim3, &sConfig);
+			HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
 		}
 
 	// FIXME - define timer start
+	;
 
 	HAL_TIM_Base_Start_IT(timer);  // start the timer
 }
