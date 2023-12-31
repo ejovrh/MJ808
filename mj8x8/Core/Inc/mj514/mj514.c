@@ -6,7 +6,7 @@
 #include "mj514\mj514.h"
 
 // FIXME - define timer objects
-TIM_HandleTypeDef htim2;  // rotary encoder time base
+TIM_HandleTypeDef htim2;  // rotary encoder time base - 10ms
 TIM_HandleTypeDef htim3;  // rotary encoder handling
 TIM_HandleTypeDef htim17;  // event handling - 2.5ms
 
@@ -65,7 +65,7 @@ static inline void _TimerInit(void)
 	TIM_MasterConfigTypeDef sMasterConfig =
 		{0};
 
-	// timer2 - rotary encoder time base
+	// timer2 - rotary encoder time base - 10ms
 	htim2.Instance = TIM2;
 	htim2.Init.Prescaler = TIMER_PRESCALER;
 	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -102,19 +102,21 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 {
 	HAL_TIM_Base_Stop_IT(timer);  // stop the timer
 
-	if(timer->Instance == TIM2)  // rotary encoder time base
+	if(timer->Instance == TIM2)  // rotary encoder time base - 10ms
 		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
 
 	if(timer->Instance == TIM3)  // rotary encoder handling
-		__HAL_RCC_TIM3_CLK_DISABLE();  // stop the clock
-
+		{
+			__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
+			__HAL_RCC_TIM3_CLK_DISABLE();  // stop the clock
+		}
 	// FIXME - define timer stop
 }
 
 // starts timer identified by argument
 static void _StartTimer(TIM_HandleTypeDef *timer)
 {
-	if(timer->Instance == TIM2)  // rotary encoder time base
+	if(timer->Instance == TIM2)  // rotary encoder time base - 10ms
 		{
 			__HAL_RCC_TIM2_CLK_ENABLE();  // start the clock
 			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
@@ -140,6 +142,8 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 			__HAL_RCC_TIM3_CLK_ENABLE();
 			HAL_TIM_Encoder_Init(&htim3, &sConfig);
 			HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
+
+			_StartTimer(&htim2);	// start encoder time base
 		}
 
 	// FIXME - define timer start
@@ -184,10 +188,10 @@ void mj514_ctor(void)
 //	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
 
 // interrupt init
-	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);	// rotary encoder time base - 10ms
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
 
-	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);	// rotary encoder handling
 	HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
 // FIXME - define // interrupt init

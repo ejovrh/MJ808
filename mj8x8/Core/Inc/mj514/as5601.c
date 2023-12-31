@@ -54,9 +54,9 @@ as5601_t* as5601_ctor(void)  //
 	__DMAInit();	//
 
 	// FIXME - start timer as reaction to command once functionality is implemented
-	Device->StartTimer(&htim2);
+	Device->StartTimer(&htim3);  // timer3 encoder handling and timer2 time base
+	Device->StopTimer(&htim3);
 	Device->StartTimer(&htim3);
-
 	return &__AS5601.public;  // set pointer to AS5601 public part
 }
 
