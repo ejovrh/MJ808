@@ -130,7 +130,7 @@ static inline void _TimerInit(void)
 	TIM_IC_InitTypeDef sConfigIC =
 		{0};
 
-	// input capture of zero-cross signal on rising edge
+	// timer2 - input capture of zero-cross signal on rising edge
 	htim2.Instance = TIM2;
 	htim2.Init.Prescaler = 0;
 	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -155,7 +155,7 @@ static inline void _TimerInit(void)
 
 	// timer 3 - measurement interval of timer2 data - default 250ms
 	htim3.Instance = TIM3;
-	htim3.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
+	htim3.Init.Prescaler = TIMER_PRESCALER;
 	htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
 	htim3.Init.Period = TIMER3_PERIOD;  // with above pre-scaler and a period of 2499, we have an 250ms interrupt frequency
 	htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -172,7 +172,7 @@ static inline void _TimerInit(void)
 
 	// timer 17 - event handling - 2.5ms
 	htim17.Instance = TIM17;
-	htim17.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
+	htim17.Init.Prescaler = TIMER_PRESCALER;
 	htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
 	htim17.Init.Period = TIMER17_PERIOD;  // with above pre-scaler and a period of 24, we have an 2.5ms interrupt frequency
 	htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;

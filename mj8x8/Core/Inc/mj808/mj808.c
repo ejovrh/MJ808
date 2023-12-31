@@ -107,7 +107,7 @@ static inline void _TimerInit(void)
 
 	// timer 16 - button handling - 25ms
 	htim16.Instance = TIM16;
-	htim16.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
+	htim16.Init.Prescaler = TIMER_PRESCALER;
 	htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
 	htim16.Init.Period = TIMER16_PERIOD;  // with above pre-scaler and a period of 249, we have an 25ms interrupt frequency
 	htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -124,7 +124,7 @@ static inline void _TimerInit(void)
 
 	// timer 17 - event handling - 2.5ms
 	htim17.Instance = TIM17;
-	htim17.Init.Prescaler = TIMER_PRESCALER;  // 8MHz / 799+1 = 10kHz update rate
+	htim17.Init.Prescaler = TIMER_PRESCALER;
 	htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
 	htim17.Init.Period = TIMER17_PERIOD;  // with above pre-scaler and a period of 24, we have an 2.5ms interrupt frequency
 	htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;

@@ -53,6 +53,7 @@ as5601_t* as5601_ctor(void)  //
 
 	__DMAInit();	//
 
+	// FIXME - start timer as reaction to command once functionality is implemented
 	Device->StartTimer(&htim2);
 	Device->StartTimer(&htim3);
 
