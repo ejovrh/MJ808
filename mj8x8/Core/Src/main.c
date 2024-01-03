@@ -9,6 +9,10 @@ int main(void)
 	event_handler_ctor();  // call event handler constructor; the Device constructor further down has the chance to override EventHandler.fpointer and implement its own handler
 #endif
 
+#if USE_I2C
+	i2c_ctor(I2C_SDA_Pin, I2C_SCL_Pin, I2C_SDA_GPIO_Port);	// call I2C constructor
+#endif
+
 #if defined(MJ808_)	// MJ808 - call derived class constructor and tie in base class
 	mj808_ctor();
 #endif

@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
@@ -12657,6 +12657,7 @@ by R. Vogg  15.March.2002</description>
 <port name="I2C_SDA" side="left" coord="0" direction="io"/>
 <port name="ROTARY_B" side="left" coord="2.54" direction="out"/>
 <port name="ROTARY_A" side="left" coord="5.08" direction="out"/>
+<port name="ROTARY_PUSH" side="left" coord="7.62" direction="out"/>
 </ports>
 <variantdefs>
 </variantdefs>

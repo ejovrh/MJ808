@@ -5,6 +5,11 @@
 
 #if defined(MJ514_)	// if this particular device is active
 
+/*	MB85RC 7-bit I2C address is 0xA0
+ * 		(DS. p. 6)
+ */
+#define MB85RC_I2C_ADDR  0xA0 // DS. p. 6
+
 typedef struct	// struct describing the FeRAM functionality
 {
 	uint8_t (*Read)(const uint8_t addr);  //
