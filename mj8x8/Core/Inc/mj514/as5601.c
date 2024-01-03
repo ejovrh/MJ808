@@ -55,8 +55,7 @@ as5601_t* as5601_ctor(void)  //
 
 	// FIXME - start timer as reaction to command once functionality is implemented
 	Device->StartTimer(&htim3);  // timer3 encoder handling and timer2 time base
-	Device->StopTimer(&htim3);
-	Device->StartTimer(&htim3);
+
 	return &__AS5601.public;  // set pointer to AS5601 public part
 }
 
@@ -76,7 +75,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim == &htim2)
 		{
-			__AS5601.public.Rotation = __HAL_TIM_IS_TIM_COUNTING_DOWN(&htim3);	// 0 - CW, 1 - CCW, see rotation_t
+			__AS5601.public.Rotation = __HAL_TIM_IS_TIM_COUNTING_DOWN(&htim3);	// FIXME - validate - 0 - CW, 1 - CCW, see rotation_t
 			__AS5601.counter = __HAL_TIM_GET_COUNTER(&htim3);
 		}
 

@@ -29,6 +29,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #include "main.h"
 #if defined(MJ514_)	// if this particular device is active
 // FIXME - define if eventhandler is used
+#define USE_I2C 1	// use I2C
 #define USE_EVENTHANDLER 0	// shall EventHandler code be included
 
 // FIXME - define activity bit positions
@@ -43,8 +44,12 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 typedef enum
 {
 	  CW = 0,  // __HAL_TIM_IS_TIM_COUNTING_DOWN() == 0
-	  CCW = 1	// __HAL_TIM_IS_TIM_COUNTING_DOWN() == 1
+	  CCW = 1  // __HAL_TIM_IS_TIM_COUNTING_DOWN() == 1
 } rotation_t;
+
+#if USE_I2C
+#include "i2c\i2c.h"
+#endif
 
 #include "mj8x8\mj8x8.h"
 #include "gear.h" // Rohloff electronic shifting unit
@@ -56,6 +61,11 @@ typedef enum
 #define Rotary_A_GPIO_Port GPIOA
 #define Rotary_B_Pin GPIO_PIN_7
 #define Rotary_B_GPIO_Port GPIOA
+#define I2C_SDA_Pin GPIO_PIN_10	// see i2c_ctor()
+#define I2C_SDA_GPIO_Port GPIOA	// see i2c_ctor()
+#define I2C_SCL_Pin GPIO_PIN_11
+#define I2C_SCL_GPIO_Port GPIOA
+
 // FIXME - define GPIOs
 #define Motor_Direction_Down_Pin GPIO_PIN_0
 #define Motor_Direction_Down_GPIO_Port GPIOA
