@@ -194,6 +194,12 @@ void mj514_ctor(void)
 	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);	// rotary encoder handling
 	HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
+	HAL_NVIC_SetPriority(I2C1_IRQn, 0, 0);	// I2C interrupts
+	HAL_NVIC_EnableIRQ(I2C1_IRQn);
+
+	HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 0, 0);  // DMA interrupts
+	HAL_NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
+
 // FIXME - define // interrupt init
 }
 

@@ -3,8 +3,8 @@
 #if defined(MJ514_)	// if this particular device is active
 
 #include "gear.h"	//
-#include "mb85rc/mb85rc.h"	// 16kB FeRAM
-#include "mj514/motor.h"	// Motor controller
+#include "mb85rc\mb85rc.h"	// 16kB FeRAM
+#include "mj514\motor.h"	// Motor controller
 
 static uint8_t _ShiftinginProgress;
 
