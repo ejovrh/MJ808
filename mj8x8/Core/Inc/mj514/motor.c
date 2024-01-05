@@ -17,13 +17,13 @@ static __motor_t __Motor __attribute__ ((section (".data")));  // preallocate __
 
 static void _RotateUp(void)
 {
-	HAL_GPIO_WritePin(Motor_Direction_Up_GPIO_Port, Motor_Direction_Up_Pin, GPIO_PIN_SET);
-	;
+	while(__Motor.as5601->Read(ANGLE) != 360)  // bogus command
+		HAL_GPIO_WritePin(Motor_Direction_Up_GPIO_Port, Motor_Direction_Up_Pin, GPIO_PIN_SET);
 }
 
 static void _RotateDown(void)
 {
-	HAL_GPIO_WritePin(Motor_Direction_Down_GPIO_Port, Motor_Direction_Down_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(Motor_Direction_Down_GPIO_Port, Motor_Direction_Down_Pin, GPIO_PIN_SET);  // bogus command
 	;
 }
 

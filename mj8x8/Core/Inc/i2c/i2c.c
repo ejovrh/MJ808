@@ -14,21 +14,84 @@ typedef struct	// i2c_t actual
 	uint8_t _CriticalSection :1;
 } __i2c_t;
 
+typedef union  // union for activity indication, see mj8x8_t's _Sleep()
+{
+	struct
+	{
+		uint8_t low_byte;  // low byte
+		uint8_t high_byte;  // high byte
+	};
+	uint16_t two_byte;  // byte-wise representation of the above bitfield
+} retval_t;
+
 __i2c_t __I2C __attribute__ ((section (".data")));
 
-void _Read(void)
+inline void Error_Handler(void)
 {
-	;
+	while(1)
+		;
 }
 
-void _Write(void)
+// wrapper for I2C read procedure
+static void __ReadWrapper(const uint8_t DevAddr, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData)
 {
-	while(__I2C._CriticalSection)
-		;
+	do  // read from device
+		{
+			// see if the target device is ready
+			while(HAL_I2C_IsDeviceReady(&_hi2c, DevAddr, 5, 50) == HAL_TIMEOUT)
+				;
 
-	__I2C._CriticalSection = 1;
+			if(HAL_I2C_Mem_Read_DMA(&_hi2c, DevAddr, MemAddress, MemAddSize, pData, MemAddSize) != HAL_OK)  // transmit onto the I2C bus
+				Error_Handler();
 
-	__I2C._CriticalSection = 0;
+			// see if the bus is ready
+			while(HAL_I2C_GetState(&_hi2c) != HAL_I2C_STATE_READY)
+				;  // wait for end of transfer
+
+		}
+	while(HAL_I2C_GetError(&_hi2c) == HAL_I2C_ERROR_AF);  // retry on acknowledge failure
+}
+
+// I2C read function
+void _Read(const uint16_t DevAddr, uint16_t RegAddr, uint16_t *data, uint16_t size)
+{
+
+	retval_t retval;  // holds a byte value
+	retval.two_byte = 0;
+
+	if(size == 1)  // 1 byte register value - reads uint8_t once
+		{
+			__ReadWrapper(DevAddr, RegAddr, size, &retval.low_byte);  // read one byte from device and put into temp
+		}
+
+	// FIXME - heavily untested !!!
+	if(size == 2)  // 2 byte register value - reads 2 uint8_t in a row and constructs one uint16_t
+		{
+			__ReadWrapper(DevAddr, RegAddr, size, &retval.low_byte);  // read upper byte from device and put into temp
+			__ReadWrapper(DevAddr, RegAddr + 1, size, &retval.low_byte);  // read lower byte from device and put into temp
+		}
+
+	*data = retval.two_byte;
+}
+
+// I2C write function
+void _Write(const uint16_t DevAddr, const uint16_t MemAddr, uint16_t const *data, uint16_t MemAddrSize)
+{
+	do  // write to device
+		{
+			// see if the target device is ready
+			while(HAL_I2C_IsDeviceReady(&_hi2c, DevAddr, 5, 50) == HAL_TIMEOUT)
+				;
+
+			if(HAL_I2C_Mem_Write_DMA(&_hi2c, DevAddr, MemAddr, MemAddrSize, (uint8_t*) &data, MemAddrSize) != HAL_OK)  // transmit onto the I2C bus
+				Error_Handler();
+
+			// see if the bus is ready
+			while(HAL_I2C_GetState(&_hi2c) != HAL_I2C_STATE_READY)
+				;		// wait for end of transfer
+
+		}
+	while(HAL_I2C_GetError(&_hi2c) == HAL_I2C_ERROR_AF);  // retry on acknowledge failure
 }
 
 void _I2C_Stop(void)
