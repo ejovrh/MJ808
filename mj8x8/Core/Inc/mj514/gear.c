@@ -39,7 +39,7 @@ static void _ShiftGear(const int8_t n)
 
 	_ShiftinginProgress = 1;	// critical section start
 
-	__Gear.FeRAM->Write(0, n);	// write gear into FeRAM
+	__Gear.FeRAM->Write(0, &n);  // write gear into FeRAM
 
 	if(n > 0)
 		__Gear.Motor->Rotate(Up, n);  // shift up n gears
