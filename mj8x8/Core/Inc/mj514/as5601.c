@@ -3,6 +3,9 @@
 #if defined(MJ514_)	// if this particular device is active
 
 #include "as5601.h"
+#include "i2c/i2c.h"
+
+#define AS5601_I2C_ADDR  (uint16_t) 0x6C // DS. p. 10 - AS5601 7-bit I2C address is 0x36, left-shifted 0x6C
 
 typedef struct	// as5601c_t actual
 {
@@ -18,15 +21,48 @@ static volatile uint8_t _OVFcnt;
 
 static __as5601_t __AS5601 __attribute__ ((section (".data")));  // preallocate __AS5601 object in .data
 
-// FIXME - write primitive read()/write() using DMA
-static void _Read(void)
+#define REG_CNT 11	// 10 registers
+
+static const uint8_t _RegisterAddress[REG_CNT] =  // offset of each register address
+	{  //
+	0x00,  // ZMCO
+	0x01,  // ZPOS
+	0x07,  // CONF
+	0x09,  // ABN
+	0x0A,  // PUSHTHR
+	0x0C,  // RAW_ANGLE
+	0x0E,  // ANGLE
+	0x0B,  // STATUS
+	0x1A,  // AGC
+	0x1B,  // MAGNITUDE
+	0xFF,  // BURN
+	};
+
+static const uint8_t _RegisterSize[REG_CNT] =  // size of each register address
+	{  // 1 or 2 bytes
+	1,  // ZMCO
+	2,  // ZPOS
+	2,  // CONF
+	1,  // ABN
+	1,  // PUSHTHR
+	2,  // RAW_ANGLE
+	2,  // ANGLE
+	1,  // STATUS
+	1,  // AGC
+	2,  // MAGNITUDE
+	1,  // BURN
+	};
+
+static uint16_t _Read(const as5601_reg_t Register)
 {
-	;
+	uint16_t retval;
+	I2C->Read(AS5601_I2C_ADDR, _RegisterAddress[Register], &retval, _RegisterSize[Register]);
+	return retval;
 }
 
-static void _Write(void)
+static void _Write(const as5601_reg_t Register, const uint16_t *data)
 {
-	;
+	I2C->Write(AS5601_I2C_ADDR, _RegisterAddress[Register], data, _RegisterSize[Register]);
 }
 
 static float _CountRotation(void)
