@@ -6,8 +6,8 @@
 #include "mj514\mj514.h"
 
 // FIXME - define timer objects
-TIM_HandleTypeDef htim2;  // rotary encoder time base - 10ms
 TIM_HandleTypeDef htim3;  // rotary encoder handling
+TIM_HandleTypeDef htim16;  // rotary encoder time base - 10ms
 TIM_HandleTypeDef htim17;  // event handling - 2.5ms
 
 typedef struct	// mj514_t actual
@@ -65,23 +65,6 @@ static inline void _TimerInit(void)
 	TIM_MasterConfigTypeDef sMasterConfig =
 		{0};
 
-	// timer2 - rotary encoder time base - 10ms
-	htim2.Instance = TIM2;
-	htim2.Init.Prescaler = TIMER_PRESCALER;
-	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim2.Init.Period = TIMER2_PERIOD;  // with above pre-scaler and a period of 99, we have an 10ms interrupt frequency
-	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	htim2.Init.RepetitionCounter = 0;
-	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-
-	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-	HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);
-	HAL_TIM_OC_Init(&htim2);
-
-	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);
-
 	// timer3 - rotary encoder handling
 	htim3.Instance = TIM3;	// rotary encoder handling
 	htim3.Init.Prescaler = 0;
@@ -94,6 +77,23 @@ static inline void _TimerInit(void)
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
 	HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig);
 
+	// timer16 - rotary encoder time base - 10ms
+	htim16.Instance = TIM16;
+	htim16.Init.Prescaler = TIMER_PRESCALER;
+	htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim16.Init.Period = TIMER16_PERIOD;  // with above pre-scaler and a period of 99, we have an 10ms interrupt frequency
+	htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim16.Init.RepetitionCounter = 0;
+	htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+	HAL_TIM_ConfigClockSource(&htim16, &sClockSourceConfig);
+	HAL_TIM_OC_Init(&htim16);
+
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	HAL_TIMEx_MasterConfigSynchronization(&htim16, &sMasterConfig);
+
 	// FIXME - define device timers
 }
 
@@ -102,27 +102,21 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 {
 	HAL_TIM_Base_Stop_IT(timer);  // stop the timer
 
-	if(timer->Instance == TIM2)  // rotary encoder time base - 10ms
-		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
-
 	if(timer->Instance == TIM3)  // rotary encoder handling
 		{
 			__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
 			__HAL_RCC_TIM3_CLK_DISABLE();  // stop the clock
 		}
+
+	if(timer->Instance == TIM16)  // rotary encoder time base - 10ms
+		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
+
 	// FIXME - define timer stop
 }
 
 // starts timer identified by argument
 static void _StartTimer(TIM_HandleTypeDef *timer)
 {
-	if(timer->Instance == TIM2)  // rotary encoder time base - 10ms
-		{
-			__HAL_RCC_TIM2_CLK_ENABLE();  // start the clock
-			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
-			timer->Instance->ARR = TIMER2_PERIOD;
-		}
-
 	if(timer->Instance == TIM3)  // rotary encoder handling
 		{
 			TIM_Encoder_InitTypeDef sConfig =
@@ -143,7 +137,14 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 			HAL_TIM_Encoder_Init(&htim3, &sConfig);
 			HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
 
-			_StartTimer(&htim2);	// start encoder time base
+			_StartTimer(&htim16);  // start encoder time base
+		}
+
+	if(timer->Instance == TIM16)  // rotary encoder time base - 10ms
+		{
+			__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
+			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
+			timer->Instance->ARR = TIMER16_PERIOD;
 		}
 
 	// FIXME - define timer start
@@ -188,8 +189,8 @@ void mj514_ctor(void)
 //	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
 
 // interrupt init
-	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);	// rotary encoder time base - 10ms
-	HAL_NVIC_EnableIRQ(TIM2_IRQn);
+	HAL_NVIC_SetPriority(TIM16_IRQn, 0, 0);  // rotary encoder time base - 10ms
+	HAL_NVIC_EnableIRQ(TIM16_IRQn);
 
 	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);	// rotary encoder handling
 	HAL_NVIC_EnableIRQ(TIM3_IRQn);
