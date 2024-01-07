@@ -14,8 +14,8 @@ typedef struct	// as5601c_t actual
 	volatile uint16_t counter;  //
 } __as5601_t;
 
-extern TIM_HandleTypeDef htim2;  // rotary encoder time-base
 extern TIM_HandleTypeDef htim3;  // rotary encoder handling
+extern TIM_HandleTypeDef htim16;  // rotary encoder time-base
 
 static volatile uint8_t _OVFcnt;
 
@@ -96,27 +96,27 @@ as5601_t* as5601_ctor(void)  //
 }
 
 //
-void TIM2_IRQHandler(void)
-{
-	HAL_TIM_IRQHandler(&htim2);  // service the interrupt
-}
-
 void TIM3_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&htim3);  // service the interrupt
 }
 
+void TIM16_IRQHandler(void)
+{
+	HAL_TIM_IRQHandler(&htim16);  // service the interrupt
+}
+
 //
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	if(htim == &htim2)
+	if(htim == &htim3)
+		++_OVFcnt;
+
+	if(htim == &htim16)
 		{
 			__AS5601.public.Rotation = __HAL_TIM_IS_TIM_COUNTING_DOWN(&htim3);	// FIXME - validate - 0 - CW, 1 - CCW, see rotation_t
 			__AS5601.counter = __HAL_TIM_GET_COUNTER(&htim3);
 		}
-
-	if(htim == &htim3)
-		++_OVFcnt;
 }
 
 #endif
