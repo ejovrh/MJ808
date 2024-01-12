@@ -28,6 +28,7 @@ __i2c_t __I2C __attribute__ ((section (".data")));
 
 inline void Error_Handler(void)
 {
+	__disable_irq();
 	while(1)
 		;
 }
@@ -41,6 +42,7 @@ static void __ReadWrapper(const uint8_t DevAddr, uint16_t MemAddress, uint16_t M
 			while(HAL_I2C_IsDeviceReady(&_hi2c, DevAddr, 5, 50) == HAL_TIMEOUT)
 				;
 
+			// FIXME - investigate if DevAddr needs to be ORed with 0x01 for a read command
 			if(HAL_I2C_Mem_Read_DMA(&_hi2c, DevAddr, MemAddress, MemAddSize, pData, MemAddSize) != HAL_OK)  // transmit onto the I2C bus
 				Error_Handler();
 
@@ -67,7 +69,7 @@ void _Read(const uint16_t DevAddr, uint16_t RegAddr, uint16_t *data, uint16_t si
 	// FIXME - heavily untested !!!
 	if(size == 2)  // 2 byte register value - reads 2 uint8_t in a row and constructs one uint16_t
 		{
-			__ReadWrapper(DevAddr, RegAddr, size, &retval.low_byte);  // read upper byte from device and put into temp
+			__ReadWrapper(DevAddr, RegAddr, size, &retval.high_byte);  // read upper byte from device and put into temp
 			__ReadWrapper(DevAddr, RegAddr + 1, size, &retval.low_byte);  // read lower byte from device and put into temp
 		}
 
@@ -77,7 +79,8 @@ void _Read(const uint16_t DevAddr, uint16_t RegAddr, uint16_t *data, uint16_t si
 // I2C write function
 void _Write(const uint16_t DevAddr, const uint16_t MemAddr, uint16_t const *data, uint16_t MemAddrSize)
 {
-	do  // write to device
+	// FIXME - investigate if DevAddr needs to be ORed with 0x01
+	do// write to device
 		{
 			// see if the target device is ready
 			while(HAL_I2C_IsDeviceReady(&_hi2c, DevAddr, 5, 50) == HAL_TIMEOUT)
