@@ -14,6 +14,7 @@ typedef struct	// mb85rc_t actual
 
 static __mb85rc_t __MB85RC __attribute__ ((section (".data")));  // preallocate __MB85RC object in .data
 
+//
 static uint8_t _Read(const uint16_t RegAddr)
 {
 	uint8_t retval;
@@ -21,6 +22,7 @@ static uint8_t _Read(const uint16_t RegAddr)
 	return retval;
 }
 
+//
 static void _Write(const uint16_t RegAddr, uint16_t const *data)
 {
 	I2C->Write(MB85RC_I2C_ADDR, (uint16_t) RegAddr, data, (uint16_t) 1);
@@ -34,6 +36,8 @@ static __mb85rc_t __MB85RC =  // instantiate mb85rc_t actual and set function po
 
 mb85rc_t* mb85rc_ctor(void)  //
 {
+	HAL_GPIO_WritePin(FeRAM_WP_GPIO_Port, FeRAM_WP_Pin, GPIO_PIN_SET);
+
 	return &__MB85RC.public;  // set pointer to MB85RC public part
 }
 

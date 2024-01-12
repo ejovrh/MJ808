@@ -2,13 +2,13 @@
 
 #if defined(MJ514_)	// if this particular device is active
 
-#include "try\try.h"	// top-level mj8x8 object for consolidated behaviour code
-#include "mj514\mj514.h"
+#include "try/try.h"	// top-level mj8x8 object for consolidated behaviour code
+#include "mj514/mj514.h"
 
-// FIXME - define timer objects
+TIM_HandleTypeDef htim2;	// motor control PWM signal generation
 TIM_HandleTypeDef htim3;  // rotary encoder handling
 TIM_HandleTypeDef htim16;  // rotary encoder time base - 10ms
-TIM_HandleTypeDef htim17;  // event handling - 2.5ms
+TIM_HandleTypeDef htim17;  // ADC time base - 10ms
 
 typedef struct	// mj514_t actual
 {
@@ -36,18 +36,28 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Alternate = GPIO_AF1_TIM3;
 	HAL_GPIO_Init(Rotary_A_GPIO_Port, &GPIO_InitStruct);
 
-	// FIXME - define device GPIOs
-	GPIO_InitStruct.Pin = Motor_Direction_Up_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pin = Motor_IN1_Pin | Motor_IN2_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(Motor_Direction_Up_GPIO_Port, &GPIO_InitStruct);
+	GPIO_InitStruct.Alternate = GPIO_AF2_TIM2;
+	HAL_GPIO_Init(Motor_IN1_GPIO_Port, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = Motor_Direction_Down_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pin = Motor_FLT_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(Motor_FLT_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = Motor_SLP_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(Motor_Direction_Down_GPIO_Port, &GPIO_InitStruct);
+	HAL_GPIO_Init(Motor_SLP_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = Motor_IPROP_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(Motor_IPROP_GPIO_Port, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = FeRAM_WP_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -65,11 +75,40 @@ static inline void _TimerInit(void)
 	TIM_MasterConfigTypeDef sMasterConfig =
 		{0};
 
+	TIM_OC_InitTypeDef sConfigOC =
+		{0};
+
+	// timer2 - motor control PWM signal generation
+	// FIXME - timer2 - validate correct operation
+	htim2.Instance = TIM2;
+	htim2.Init.Prescaler = 0;
+	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim2.Init.Period = TIMER2_PERIOD;
+	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	HAL_TIM_Base_Init(&htim2);
+
+	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+	HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);
+
+	HAL_TIM_PWM_Init(&htim2);
+
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);
+
+	sConfigOC.OCMode = TIM_OCMODE_PWM1;
+	sConfigOC.Pulse = MOTOR_OFF;
+	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+	HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1);
+	HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2);
+
 	// timer3 - rotary encoder handling
 	htim3.Instance = TIM3;	// rotary encoder handling
 	htim3.Init.Prescaler = 0;
 	htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim3.Init.Period = 0xFF;  // TODO - use this: TIMER3_PERIOD;
+	htim3.Init.Period = TIMER3_PERIOD;
 	htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
 
@@ -85,22 +124,27 @@ static inline void _TimerInit(void)
 	htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim16.Init.RepetitionCounter = 0;
 	htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	HAL_TIM_Base_Init(&htim16);
 
-	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-	HAL_TIM_ConfigClockSource(&htim16, &sClockSourceConfig);
-	HAL_TIM_OC_Init(&htim16);
-
-	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	HAL_TIMEx_MasterConfigSynchronization(&htim16, &sMasterConfig);
-
-	// FIXME - define device timers
+	// timer17 - ADC time base - 10ms
+	htim17.Instance = TIM17;
+	htim17.Init.Prescaler = TIMER_PRESCALER;
+	htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim17.Init.Period = TIMER17_PERIOD;
+	htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim17.Init.RepetitionCounter = 0;
+	htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	HAL_TIM_Base_Init(&htim17);
 }
 
 // stops timer identified by argument
 static void _StopTimer(TIM_HandleTypeDef *timer)
 {
 	HAL_TIM_Base_Stop_IT(timer);  // stop the timer
+
+	if(timer->Instance == TIM2)  // motor control PWM signal generation
+		// FIXME - timer2 - validate correct operation
+		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
 
 	if(timer->Instance == TIM3)  // rotary encoder handling
 		{
@@ -109,14 +153,33 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 		}
 
 	if(timer->Instance == TIM16)  // rotary encoder time base - 10ms
-		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
+		__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
 
-	// FIXME - define timer stop
+	if(timer->Instance == TIM17)  // ADC time base - 10ms
+		__HAL_RCC_TIM17_CLK_DISABLE();  // stop the clock
 }
 
 // starts timer identified by argument
 static void _StartTimer(TIM_HandleTypeDef *timer)
 {
+	if(timer->Instance == TIM2)  // motor control PWM signal generation
+		{
+			// FIXME - timer2 - validate correct operation
+			static TIM_OC_InitTypeDef sConfigOC =
+				{0};
+
+			sConfigOC.OCMode = TIM_OCMODE_PWM1;
+			sConfigOC.Pulse = MOTOR_OFF;
+			sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+			sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+
+			__HAL_RCC_TIM2_CLK_ENABLE();  // start the clock
+			HAL_TIM_PWM_Init(timer);  //
+			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_1);  //
+			HAL_TIM_PWM_ConfigChannel(timer, &sConfigOC, TIM_CHANNEL_2);  //
+			return;
+		}
+
 	if(timer->Instance == TIM3)  // rotary encoder handling
 		{
 			TIM_Encoder_InitTypeDef sConfig =
@@ -147,8 +210,12 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 			timer->Instance->ARR = TIMER16_PERIOD;
 		}
 
-	// FIXME - define timer start
-	;
+	if(timer->Instance == TIM17)  // ADC time base - 10ms
+		{
+			__HAL_RCC_TIM17_CLK_ENABLE();  // start the clock
+			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
+			timer->Instance->ARR = TIMER17_PERIOD;
+		}
 
 	HAL_TIM_Base_Start_IT(timer);  // start the timer
 }
@@ -189,19 +256,26 @@ void mj514_ctor(void)
 //	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
 
 // interrupt init
+	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);	// rotary encoder handling
+	HAL_NVIC_EnableIRQ(TIM3_IRQn);
+
 	HAL_NVIC_SetPriority(TIM16_IRQn, 0, 0);  // rotary encoder time base - 10ms
 	HAL_NVIC_EnableIRQ(TIM16_IRQn);
 
-	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);	// rotary encoder handling
-	HAL_NVIC_EnableIRQ(TIM3_IRQn);
+	HAL_NVIC_SetPriority(TIM17_IRQn, 0, 0);  // ADC time base - 10ms
+	HAL_NVIC_EnableIRQ(TIM17_IRQn);
 
 	HAL_NVIC_SetPriority(I2C1_IRQn, 0, 0);	// I2C interrupts
 	HAL_NVIC_EnableIRQ(I2C1_IRQn);
 
-	HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 0, 0);  // DMA interrupts
+	HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);  // DMA interrupt - ADC
+	HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+
+	HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 0, 0);  // DMA interrupt - rotary encoder
 	HAL_NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
 
-// FIXME - define // interrupt init
+	HAL_NVIC_SetPriority(EXTI2_3_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(EXTI2_3_IRQn);
 }
 
 // device-specific interrupt handlers
