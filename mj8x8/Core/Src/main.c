@@ -1,5 +1,5 @@
 #include "main.h"	// device core config
-#include "try\try.h"	// top-level object for bus-wide device handling
+#include "try/try.h"	// top-level object for bus-wide device handling
 
 int main(void)
 {
@@ -10,7 +10,7 @@ int main(void)
 #endif
 
 #if USE_I2C
-	i2c_ctor(I2C_SDA_Pin, I2C_SCL_Pin, I2C_SDA_GPIO_Port);	// call I2C constructor
+	i2c_ctor(I2C_SDA_Pin, I2C_SCL_Pin, I2C_GPIO_Port);	// call I2C constructor
 #endif
 
 #if defined(MJ808_)	// MJ808 - call derived class constructor and tie in base class

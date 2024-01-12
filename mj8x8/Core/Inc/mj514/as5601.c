@@ -53,6 +53,7 @@ static const uint8_t _RegisterSize[REG_CNT] =  // size of each register address
 	1,  // BURN
 	};
 
+//
 static uint16_t _Read(const as5601_reg_t Register)
 {
 	uint16_t retval;
@@ -60,23 +61,19 @@ static uint16_t _Read(const as5601_reg_t Register)
 	return retval;
 }
 
+//
 static void _Write(const as5601_reg_t Register, const uint16_t *data)
 {
 	I2C->Write(AS5601_I2C_ADDR, _RegisterAddress[Register], data, _RegisterSize[Register]);
 }
 
+//
 static float _CountRotation(void)
 {
 	return (__AS5601.counter / FULL_REVOLUTION);
 }
 
-// DMA init - device specific
-static inline void __DMAInit(void)  // TODO - call function from somewhere
-{
-	;
-}
-
-static __as5601_t __AS5601 =  // instantiate as5601c_t actual and set function pointers
+static __as5601_t  __AS5601 =  // instantiate as5601c_t actual and set function pointers
 	{  //
 	.public.CountRotation = &_CountRotation,  // set function pointer
 	.public.Read = &_Read,	//
@@ -86,8 +83,6 @@ static __as5601_t __AS5601 =  // instantiate as5601c_t actual and set function p
 as5601_t* as5601_ctor(void)  //
 {
 	_OVFcnt = 0;
-
-	__DMAInit();	//
 
 	// FIXME - start timer as reaction to command once functionality is implemented
 	Device->StartTimer(&htim3);  // timer3 encoder handling and timer2 time base
@@ -101,6 +96,7 @@ void TIM3_IRQHandler(void)
 	HAL_TIM_IRQHandler(&htim3);  // service the interrupt
 }
 
+//
 void TIM16_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&htim16);  // service the interrupt
@@ -110,6 +106,7 @@ void TIM16_IRQHandler(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim == &htim3)
+		// FIXME - implement overflow
 		++_OVFcnt;
 
 	if(htim == &htim16)
