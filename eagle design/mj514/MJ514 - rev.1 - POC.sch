@@ -22617,15 +22617,15 @@ V = R * I
 </segment>
 <segment>
 <pinref part="IC1" gate="G$1" pin="VM"/>
-<wire x1="99.06" y1="111.76" x2="99.06" y2="106.68" width="0.1524" layer="91"/>
-<label x="99.06" y="111.76" size="1.778" layer="95" rot="R180" xref="yes"/>
+<label x="147.32" y="106.68" size="1.778" layer="95" xref="yes"/>
 <pinref part="C3" gate="G$1" pin="2"/>
 <wire x1="99.06" y1="106.68" x2="99.06" y2="96.52" width="0.1524" layer="91"/>
 <wire x1="106.68" y1="106.68" x2="99.06" y2="106.68" width="0.1524" layer="91"/>
-<junction x="99.06" y="106.68"/>
 <wire x1="106.68" y1="106.68" x2="127" y2="106.68" width="0.1524" layer="91"/>
 <junction x="106.68" y="106.68"/>
 <pinref part="C5" gate="G$1" pin="+"/>
+<wire x1="127" y1="106.68" x2="147.32" y2="106.68" width="0.1524" layer="91"/>
+<junction x="127" y="106.68"/>
 </segment>
 <segment>
 <pinref part="C2" gate="G$1" pin="2"/>
