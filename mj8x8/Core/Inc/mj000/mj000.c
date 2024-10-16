@@ -2,8 +2,9 @@
 
 #if defined(MJ000_)	// if this particular device is active
 
-#include "try\try.h"	// top-level mj8x8 object for consolidated behaviour code
-#include "mj000\mj000.h"
+#include "try/try.h"	// top-level mj8x8 object for consolidated behaviour code
+#include "mj000/mj000.h"
+#include "automotion.h"	// automatic motion detection
 
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms - FIXME - should not be here
 
@@ -12,7 +13,7 @@ typedef struct	// mj000_t actual
 	mj000_t public;  // public struct
 } __mj000_t;
 
-static __mj000_t __Device __attribute__ ((section (".data")));	// preallocate __Device object in .data
+static __mj000_t                __Device                __attribute__ ((section (".data")));	// preallocate __Device object in .data
 
 // GPIO init - device specific
 static inline void _GPIOInit(void)
@@ -20,16 +21,54 @@ static inline void _GPIOInit(void)
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
 
-//	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
-
 	GPIO_InitStruct.Pin = TCAN334_Standby_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(TCAN334_Standby_GPIO_Port, &GPIO_InitStruct);
 
-	// TODO - mj000 - gpio init
+	GPIO_InitStruct.Pin = SD_CS_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	HAL_GPIO_Init(SD_CS_GPIO_Port, &GPIO_InitStruct);
 
+	GPIO_InitStruct.Pin = ADXL367_CS_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	HAL_GPIO_Init(ADXL367_CS_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = ADXL367_INT1_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(ADXL367_INT1_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = SD_DET_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+	HAL_GPIO_Init(SD_DET_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = SPI_MISO_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Alternate = GPIO_AF0_SPI1;
+	HAL_GPIO_Init(SPI_MISO_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = SPI_MOSI_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Alternate = GPIO_AF0_SPI1;
+	HAL_GPIO_Init(SPI_MOSI_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = SPI_SCK_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Alternate = GPIO_AF0_SPI1;
+	HAL_GPIO_Init(SPI_SCK_GPIO_Port, &GPIO_InitStruct);
 }
 
 // Timer init - device specific
@@ -67,9 +106,11 @@ void mj000_ctor(void)
 	__Device.public.mj8x8 = mj8x8_ctor(mj000);  // call base class constructor & initialize own SID
 
 	__Device.public.activity = (mj000_activity_t*) *__Device.public.mj8x8->activity;  // tie in activity from the depths of mj8x8_t and redefine type
-
+	Device->activity->CANActive = 1;
 	_GPIOInit();	// initialize device-specific GPIOs
 	_TimerInit();  // initialize timers
+
+	__Device.public.automotion = automotion_ctor();  // call AutoMotion constructor
 
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
@@ -79,6 +120,15 @@ void mj000_ctor(void)
 //	__Device.public.mj8x8->DerivedSleep = &_DerivedSleep;  // implements the derived object sleep
 
 	// interrupt init
+//	HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 0, 0);  // SPI DMA interrupts
+//	HAL_NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
+
+	HAL_NVIC_SetPriority(SPI1_IRQn, 0, 0);	// SPI interrupts
+	HAL_NVIC_EnableIRQ(SPI1_IRQn);
+
+	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // ADXL367 activity interrupts
+
+	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 	// TODO - mj000 - interrupt init
 }
 
