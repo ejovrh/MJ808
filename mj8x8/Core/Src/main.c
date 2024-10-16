@@ -1,5 +1,5 @@
 #include "main.h"	// device core config
-#include "try\try.h"	// top-level object for bus-wide device handling
+#include "try/try.h"	// top-level object for bus-wide device handling
 
 int main(void)
 {
@@ -7,6 +7,10 @@ int main(void)
 
 #if USE_EVENTHANDLER
 	event_handler_ctor();  // call event handler constructor; the Device constructor further down has the chance to override EventHandler.fpointer and implement its own handler
+#endif
+
+#if USE_SPI
+	spi_ctor();  // call SPI constructor
 #endif
 
 #if defined(MJ000_)	// MJ000 - call derived class constructor and tie in base class

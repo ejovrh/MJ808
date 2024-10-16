@@ -28,6 +28,9 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 
 #include "main.h"
 #if defined(MJ000_)	// if this particular device is active
+#define USE_SPI 1	// use SPI
+#define USE_AUTOMOTION 1
+#define USE_ADXL367 1
 #define CANID_SELF CANID_MJ000
 
 // activity bit pos
@@ -35,18 +38,36 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 
-#include "mj8x8\mj8x8.h"
+#include "mj8x8/mj8x8.h"
+
+#include "event/event.h"
+#include "spi/spi.h"
+#include "mj000/automotion.h"
 
 // definitions of device/PCB layout-specific hardware pins
 #define TCAN334_Standby_Pin GPIO_PIN_15
 #define TCAN334_Standby_GPIO_Port GPIOA
-// TODO - mj000 - gpio defines
-
+#define ADXL367_INT1_Pin GPIO_PIN_1	// ADXL367 interrupt ping, active high
+#define ADXL367_INT1_GPIO_Port GPIOA
+#define ADXL367_INT1_EXTI_IRQn EXTI0_1_IRQn
+#define SD_CS_Pin GPIO_PIN_3	// SD card chip select
+#define SD_CS_GPIO_Port GPIOA
+#define SD_DET_Pin GPIO_PIN_4	// SD card detect
+#define SD_DET_GPIO_Port GPIOA
+#define SPI_SCK_Pin GPIO_PIN_5	// SPI clock
+#define SPI_SCK_GPIO_Port GPIOA
+#define SPI_MISO_Pin GPIO_PIN_6	// SPI MISO
+#define SPI_MISO_GPIO_Port GPIOA
+#define SPI_MOSI_Pin GPIO_PIN_7	// SPI MOSI
+#define SPI_MOSI_GPIO_Port GPIOA
+#define ADXL367_CS_Pin GPIO_PIN_10	// ADXL367 chip select
+#define ADXL367_CS_GPIO_Port GPIOA
 // definitions of device/PCB layout-specific hardware pins
 
 typedef struct	// struct describing devices on MJ000
 {
 	mj8x8_t *mj8x8;  // pointer to the base class
+	automotion_t *automotion;  //
 	mj000_activity_t *activity;  // pointer to struct(union) indicating device activity status
 
 	void (*StopTimer)(TIM_HandleTypeDef *timer);	// stops timer identified by argument

@@ -14544,7 +14544,7 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <wire x1="-1.5" y1="-0.9" x2="-1.3" y2="-0.9" width="0.127" layer="21"/>
 <text x="-2" y="0" size="0.5" layer="25" font="vector" rot="R90" align="center">&gt;NAME</text>
 <text x="2" y="0" size="0.5" layer="27" font="vector" rot="R90" align="center">&gt;VALUE</text>
-<circle x="-1.5" y="-1.25" radius="0.1" width="0.25" layer="27"/>
+<circle x="-1.5" y="-1.25" radius="0.1" width="0.25" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -15512,13 +15512,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <label x="35.56" y="142.24" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="PA10" class="0">
-<segment>
-<pinref part="JP1" gate="A" pin="2"/>
-<wire x1="45.72" y1="139.7" x2="35.56" y2="139.7" width="0.1524" layer="91"/>
-<label x="35.56" y="139.7" size="1.778" layer="95" rot="R180"/>
-</segment>
-</net>
 <net name="PB0" class="0">
 <segment>
 <pinref part="JP1" gate="A" pin="6"/>
@@ -15599,13 +15592,6 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <pinref part="JP1" gate="A" pin="3"/>
 <wire x1="45.72" y1="137.16" x2="35.56" y2="137.16" width="0.1524" layer="91"/>
 <label x="35.56" y="137.16" size="1.778" layer="95" rot="R180"/>
-</segment>
-</net>
-<net name="PA8" class="3">
-<segment>
-<pinref part="JP1" gate="A" pin="12"/>
-<wire x1="45.72" y1="114.3" x2="35.56" y2="114.3" width="0.1524" layer="91"/>
-<label x="35.56" y="114.3" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="CANH" class="0">
@@ -15706,9 +15692,9 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <label x="165.1" y="144.78" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="JP2" gate="A" pin="5"/>
-<wire x1="76.2" y1="132.08" x2="86.36" y2="132.08" width="0.1524" layer="91"/>
-<label x="86.36" y="132.08" size="1.778" layer="95"/>
+<pinref part="JP1" gate="A" pin="2"/>
+<wire x1="45.72" y1="139.7" x2="35.56" y2="139.7" width="0.1524" layer="91"/>
+<label x="35.56" y="139.7" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="SD_CS" class="0">
@@ -15721,6 +15707,20 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <pinref part="JP2" gate="A" pin="10"/>
 <wire x1="76.2" y1="119.38" x2="86.36" y2="119.38" width="0.1524" layer="91"/>
 <label x="86.36" y="119.38" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="PA2" class="0">
+<segment>
+<pinref part="JP2" gate="A" pin="5"/>
+<wire x1="76.2" y1="132.08" x2="86.36" y2="132.08" width="0.1524" layer="91"/>
+<label x="86.36" y="132.08" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="PA8" class="0">
+<segment>
+<pinref part="JP1" gate="A" pin="12"/>
+<wire x1="45.72" y1="114.3" x2="35.56" y2="114.3" width="0.1524" layer="91"/>
+<label x="35.56" y="114.3" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 </nets>
@@ -15743,9 +15743,9 @@ Source: http://ecommas.tycoelectronics.com .. ENG_CD_640456_W.pdf</description>
 <approved hash="106,1,76.2,111.76,AREF,,,,,"/>
 <approved hash="206,1,180.34,109.22,MISO,,,,,"/>
 <approved hash="206,1,180.34,152.4,MISO,,,,,"/>
+<approved hash="106,1,76.2,132.08,PA2,,,,,"/>
 <approved hash="106,1,45.72,114.3,PA8,,,,,"/>
 <approved hash="106,1,45.72,142.24,PA9,,,,,"/>
-<approved hash="106,1,45.72,139.7,PA10,,,,,"/>
 <approved hash="106,1,45.72,129.54,PB0,,,,,"/>
 <approved hash="106,1,45.72,121.92,PB1,,,,,"/>
 <approved hash="106,1,45.72,106.68,PB4,,,,,"/>
