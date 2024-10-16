@@ -75,20 +75,20 @@ def parse_mj8x8_header_for_devices(directory): # parses device header file for m
 
             # Capture lines inside the struct device_t
             if inside_struct_device and 'uint16_t' in line and ':1' in line:
-                # Use regular expressions to find the device name and hex ID
+                # Use regular expressions to find the device name and its decimal ID
                 device_name_match = re.search(r'uint16_t\s+(\w+)\s*:', line)
-                hex_id_match = re.search(r'\/\/\s*([0-9A-Fa-f]+)\s*\/\/', line)
+                dec_id_match = re.search(r'\/\/\s*([0-9]{1,2})\s*\/\/', line)
                 
-                if device_name_match and hex_id_match:
+                if device_name_match and dec_id_match:
                     device_name = device_name_match.group(1)    # e.g. mj828
-                    hex_id = hex_id_match.group(1)  # e.g. hex 3
+                    id = int(dec_id_match.group(1))  # e.g. decimal 3
 
                     # Insert the device into the dictionary
-                    MJ8x8_boards[hex_id] = device_name
+                    MJ8x8_boards[id] = device_name
 
 def extract_data0_value(output) -> str:
     match = re.search(r'Data0\s+:\s+0x([0-9A-Fa-f]+)\s+', output)
-    return match.group(1).lower()
+    return int(match.group(1).lower(),16)
 
 def copy_main_h_if_not_exists():
     if not os.path.isfile(HEADER_PATH):
@@ -115,7 +115,7 @@ def write_to_main_h(device) -> None:
 if __name__ == "__main__":
     if len(sys.argv) != 2 or sys.argv[1] not in ['0', '1']:
         print("Usage: python script.py <0 or 1>")
-        print("set it in project properties -> C/C++ Build -> Settings -> Build STeps")
+        print("set it in project properties -> C/C++ Build -> Settings -> Build Steps")
         exit()
 
     if sys.argv[1] == '0':
@@ -127,8 +127,8 @@ if __name__ == "__main__":
     copy_main_h_if_not_exists()  # Check if main.h exists and copy main.h_tracked if not
     output = execute_stm32_programmer_cli() # try to connect to the programmer and read out option bytes
     parse_mj8x8_header_for_devices(MJ8X8_HEADER_PATH) # parse mj8x8_commands.h for devices
-    hexID = extract_data0_value(output) # parse readout output: device CAN ID in hex
-    mj_board = MJ8x8_boards[hexID] # determine board
+    id = extract_data0_value(output) # parse readout output: device CAN ID in hex
+    mj_board = MJ8x8_boards[id] # determine board
 
     print("board: ", mj_board) # print it
     write_to_main_h(mj_board) # modify main.h
