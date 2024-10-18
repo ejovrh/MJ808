@@ -55,7 +55,7 @@
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
 <layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
-<layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
 <layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
@@ -261,6 +261,7 @@ ejovrh rev. 5</text>
 <text x="3.5" y="-3.5" size="0.75" layer="25" font="vector" rot="R180" align="center">CTD</text>
 <text x="7.5" y="-2.25" size="0.75" layer="25" font="vector" align="center">AND</text>
 <text x="5.5" y="-3.5" size="0.75" layer="21" font="vector" rot="R90" align="center">LED</text>
+<text x="-13" y="-25.25" size="1.778" layer="48">SuperNova E3 housing</text>
 </plain>
 <libraries>
 <library name="rcl" urn="urn:adsk.eagle:library:334">

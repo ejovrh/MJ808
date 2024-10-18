@@ -13207,6 +13207,7 @@ Cree XMLBWT-00-0000-0000U20E2</text>
 <wire x1="10.16" y1="43.18" x2="248.92" y2="43.18" width="0.1524" layer="98" style="dashdot"/>
 <text x="15.24" y="205.74" size="6.4516" layer="98" rot="R180" align="bottom-right">MJ8x8 - generic</text>
 <text x="180.34" y="165.1" size="6.4516" layer="94">???</text>
+<text x="175.26" y="15.24" size="6.4516" layer="97">SuperNova E3 housing</text>
 </plain>
 <moduleinsts>
 <moduleinst name="POWER_3V3" module="POWER_3V3" x="93.98" y="116.84" offset="200">
