@@ -8014,7 +8014,7 @@ Source: AVX .. aphvc.pdf</description>
 </library>
 <library name="signal testpoint">
 <packages>
-<package name="TH">
+<package name="TH-0.6">
 <pad name="TP$1" x="0" y="0" drill="0.6" diameter="1.016"/>
 <circle x="0" y="0" radius="0.7" width="0.3" layer="21"/>
 <text x="0" y="3" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
@@ -8033,7 +8033,7 @@ Source: AVX .. aphvc.pdf</description>
 <gate name="G$1" symbol="TP" x="0" y="-7.62"/>
 </gates>
 <devices>
-<device name="" package="TH">
+<device name="" package="TH-0.6">
 <connects>
 <connect gate="G$1" pin="TP$1" pad="TP$1"/>
 </connects>
@@ -8175,6 +8175,12 @@ DIN A3, landscape with location and doc. field</description>
 <text x="0" y="-1.905" size="1.778" layer="96" align="center">&gt;VALUE</text>
 <pin name="GND" x="0" y="2.54" visible="off" length="short" direction="sup" rot="R270"/>
 </symbol>
+<symbol name="3V3-CIRCLE" urn="urn:adsk.eagle:symbol:18498229/2" library_version="9">
+<description>3.3 Volt (3V3) Circle</description>
+<circle x="0" y="1.27" radius="1.27" width="0.254" layer="94"/>
+<text x="-0.127" y="3.175" size="1.778" layer="96" align="bottom-center">&gt;VALUE</text>
+<pin name="3V3" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="GND-BAR" urn="urn:adsk.eagle:component:16502419/4" prefix="SUPPLY" library_version="9">
@@ -8188,6 +8194,22 @@ DIN A3, landscape with location and doc. field</description>
 <technology name="">
 <attribute name="CATEGORY" value="Supply" constant="no"/>
 <attribute name="VALUE" value="GND" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="3V3-CIRCLE" urn="urn:adsk.eagle:component:16502438/6" prefix="SUPPLY" library_version="9">
+<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;  3.3 Volt (3V3) Circle</description>
+<gates>
+<gate name="G$1" symbol="3V3-CIRCLE" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name="">
+<attribute name="CATEGORY" value="Supply" constant="no"/>
+<attribute name="VALUE" value="3V3" constant="no"/>
 </technology>
 </technologies>
 </device>
@@ -8223,7 +8245,6 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <smd name="5_GND" x="3.81" y="-0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
 <smd name="3_T_NRST" x="2.54" y="-0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
 <smd name="1_TVCC" x="1.27" y="-0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
-<text x="-1" y="0" size="0.5" layer="25" rot="R90" align="center">&gt;NAME</text>
 <hole x="0" y="0" drill="0.9906"/>
 <hole x="5.08" y="-1.016" drill="0.9906"/>
 <hole x="5.08" y="1.016" drill="0.9906"/>
@@ -8249,13 +8270,7 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <vertex x="1.6637" y="0.2413"/>
 <vertex x="1.27" y="0.2413"/>
 </polygon>
-<text x="6" y="0" size="0.5" layer="27" font="vector" rot="R90" align="center">&gt;VALUE</text>
-<text x="1.27" y="-1.27" size="0.5" layer="25" font="vector" rot="R180" align="center">1</text>
-<text x="1.27" y="1.27" size="0.5" layer="25" font="vector" rot="R180" align="center">2</text>
-<text x="2.54" y="-1.27" size="0.5" layer="25" font="vector" rot="R180" align="center">3</text>
-<text x="2.54" y="1.27" size="0.5" layer="25" font="vector" rot="R180" align="center">4</text>
-<text x="3.81" y="-1.27" size="0.5" layer="25" font="vector" rot="R180" align="center">5</text>
-<text x="3.81" y="1.27" size="0.5" layer="25" font="vector" rot="R180" align="center">6</text>
+<text x="5.1" y="0" size="0.5" layer="21" font="vector" align="center">SWD</text>
 </package>
 <package name="TC2030">
 <smd name="2" x="1.27" y="0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
@@ -12013,6 +12028,60 @@ by R. Vogg  15.March.2002</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="XLampXPE-221789">
+<packages>
+<package name="SMD">
+<wire x1="-1.65" y1="1.65" x2="1.65" y2="1.65" width="0.127" layer="21"/>
+<wire x1="1.65" y1="1.65" x2="1.65" y2="-1.65" width="0.127" layer="21"/>
+<wire x1="1.65" y1="-1.65" x2="-1.65" y2="-1.65" width="0.127" layer="21"/>
+<wire x1="-1.65" y1="-1.65" x2="-1.65" y2="1.65" width="0.127" layer="21"/>
+<smd name="AND" x="-1.4" y="0" dx="3.3" dy="0.5" layer="1" rot="R90"/>
+<smd name="CAT" x="1.4" y="0" dx="3.3" dy="0.5" layer="1" rot="R90"/>
+<smd name="DIE" x="0" y="0" dx="3.3" dy="1.3" layer="1" rot="R90"/>
+<text x="0" y="2.25" size="0.5" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-2.25" size="0.5" layer="27" font="vector" align="center">&gt;VALUE</text>
+<text x="-1.75" y="2" size="0.5" layer="21" font="vector" align="center">A</text>
+<text x="1.75" y="2" size="0.5" layer="21" font="vector" align="center">C</text>
+</package>
+</packages>
+<symbols>
+<symbol name="LED">
+<pin name="AND" x="-7.62" y="0" visible="pad" length="middle"/>
+<pin name="CAT" x="7.62" y="0" visible="pad" length="middle" rot="R180"/>
+<wire x1="2.54" y1="2.54" x2="2.54" y2="0" width="0.254" layer="94"/>
+<wire x1="2.54" y1="0" x2="2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="2.54" x2="-2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-2.54" x2="2.54" y2="0" width="0.254" layer="94"/>
+<wire x1="2.54" y1="0" x2="-2.54" y2="2.54" width="0.254" layer="94"/>
+<text x="2.54" y="-5.08" size="1.27" layer="95">&gt;NAME</text>
+<text x="2.54" y="-7.62" size="1.27" layer="96">&gt;VALUE</text>
+<wire x1="0" y1="2.54" x2="2.54" y2="5.08" width="0.254" layer="94" curve="90"/>
+<wire x1="2.54" y1="5.08" x2="5.08" y2="7.62" width="0.254" layer="94" curve="-90"/>
+<wire x1="-1.27" y1="3.81" x2="1.27" y2="6.35" width="0.254" layer="94" curve="90"/>
+<wire x1="1.27" y1="6.35" x2="3.81" y2="8.89" width="0.254" layer="94" curve="-90"/>
+<pin name="DIE" x="-7.62" y="-5.08" visible="pad" length="short" direction="hiz"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="XLAMPXPE-221789" prefix="D" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="LED" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SMD">
+<connects>
+<connect gate="G$1" pin="AND" pad="AND"/>
+<connect gate="G$1" pin="CAT" pad="CAT"/>
+<connect gate="G$1" pin="DIE" pad="DIE"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -12022,7 +12091,7 @@ by R. Vogg  15.March.2002</description>
 <class number="0" name="GND" width="0.25" drill="0.35">
 <clearance class="0" value="0.19"/>
 </class>
-<class number="1" name="BAT+" width="0.4" drill="0.35">
+<class number="1" name="BAT+" width="0.5" drill="0.35">
 <clearance class="1" value="0.19"/>
 </class>
 <class number="3" name="signal" width="0.25" drill="0.35">
@@ -12044,7 +12113,7 @@ by R. Vogg  15.March.2002</description>
 <parts>
 <part name="IC2" library="LDK320 5V LDO" deviceset="LDK320" device="SOT-23-5L" value="LDK320AM33R"/>
 <part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1μF / 10V"/>
-<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1μF"/>
+<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1uF / 10V"/>
 <part name="POWER_3V3" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="DINA5_L" device="" value="POWER_3V3"/>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
@@ -12149,20 +12218,19 @@ by R. Vogg  15.March.2002</description>
 <port name="!STBY!" side="bottom" coord="-12.7" direction="out"/>
 <port name="DIM_REAR" side="top" coord="17.78" direction="out"/>
 <port name="DIM_BRAKE" side="top" coord="12.7" direction="out"/>
-<port name="!SHDN!" side="bottom" coord="-15.24" direction="out"/>
 </ports>
 <variantdefs>
 </variantdefs>
 <parts>
 <part name="IC2" library="STM32F042G6" deviceset="STM32F042G6" device="" value="STM32F042G6U6"/>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1u"/>
+<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1uF / 10V"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1u"/>
+<part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1uF / 10V"/>
 <part name="SUPPLY6" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1u"/>
+<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1uF / 10V"/>
 <part name="SUPPLY7" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1u"/>
+<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1uF / 10V"/>
 <part name="SUPPLY9" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="STM32_MICROCONTROLLER" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device="" value="STM32_MICROCONTROLLER"/>
 </parts>
@@ -12172,24 +12240,11 @@ by R. Vogg  15.March.2002</description>
 <text x="45.72" y="27.94" size="1.778" layer="91">Vdd</text>
 <text x="25.4" y="27.94" size="1.778" layer="91">Vdda</text>
 <text x="63.5" y="27.94" size="1.778" layer="91">VddIO2</text>
-<text x="162.56" y="109.22" size="1.778" layer="98" align="center-left">fixed</text>
-<text x="162.56" y="106.68" size="1.778" layer="98" align="center-left">fixed</text>
-<text x="167.64" y="93.98" size="1.778" layer="98" align="center-left">timer2 channel1</text>
-<text x="137.16" y="149.86" size="1.778" layer="98" align="center-left">external interrupt 1</text>
-<text x="137.16" y="165.1" size="1.778" layer="98">I2C1 SCL</text>
-<text x="137.16" y="162.56" size="1.778" layer="98">I2C1 SDA</text>
-<text x="137.16" y="152.4" size="1.778" layer="98">external interrupt 0</text>
-<text x="137.16" y="132.08" size="1.778" layer="98">SPI1 MISO</text>
-<text x="137.16" y="129.54" size="1.778" layer="98">SPI1 MOSI</text>
-<text x="137.16" y="142.24" size="1.778" layer="98">GPIO</text>
-<text x="137.16" y="139.7" size="1.778" layer="98">GPIO</text>
-<text x="137.16" y="137.16" size="1.778" layer="98">GPIO</text>
-<text x="137.16" y="83.82" size="1.778" layer="98">USART1 tx</text>
-<text x="137.16" y="81.28" size="1.778" layer="98">USART1 rx</text>
-<text x="137.16" y="86.36" size="1.778" layer="98">timer3 channel 2</text>
-<text x="167.64" y="119.38" size="1.778" layer="98" align="center-left">timer3 channel4</text>
-<text x="160.02" y="134.62" size="1.778" layer="98">GPIO</text>
-<text x="160.02" y="88.9" size="1.778" layer="98">GPIO</text>
+<text x="167.64" y="109.22" size="1.778" layer="98" align="center-left">fixed</text>
+<text x="167.64" y="106.68" size="1.778" layer="98" align="center-left">fixed</text>
+<text x="167.64" y="93.98" size="1.778" layer="98" align="center-left">timer2 channel1 PWM</text>
+<text x="167.64" y="132.08" size="1.778" layer="98" align="center-left">timer3 channel1 PWM</text>
+<text x="167.64" y="134.62" size="1.778" layer="98">GPIO</text>
 </plain>
 <instances>
 <instance part="IC2" gate="G$1" x="12.7" y="165.1" smashed="yes">
@@ -12236,8 +12291,8 @@ by R. Vogg  15.March.2002</description>
 <busses>
 <bus name="SWD:SYS_NRST,SYS_SWCLK,SYS_SWDIO">
 <segment>
-<wire x1="185.42" y1="96.52" x2="185.42" y2="170.18" width="0.762" layer="92"/>
-<label x="185.42" y="154.94" size="1.778" layer="95"/>
+<wire x1="198.12" y1="96.52" x2="198.12" y2="170.18" width="0.762" layer="92"/>
+<label x="198.12" y="154.94" size="1.778" layer="95"/>
 </segment>
 </bus>
 </busses>
@@ -12309,31 +12364,31 @@ by R. Vogg  15.March.2002</description>
 <net name="SYS_SWCLK" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="USART2_TX,SWCLK-PA14_22"/>
-<wire x1="185.42" y1="96.52" x2="129.54" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="198.12" y1="96.52" x2="129.54" y2="96.52" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="185.42" y1="165.1" x2="195.58" y2="165.1" width="0.1524" layer="91"/>
-<label x="195.58" y="165.1" size="1.778" layer="95" xref="yes"/>
+<wire x1="198.12" y1="165.1" x2="208.28" y2="165.1" width="0.1524" layer="91"/>
+<label x="208.28" y="165.1" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="SYS_SWDIO" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="USB_NOE,IR_OUT,SWDIO-PA13_21"/>
-<wire x1="185.42" y1="104.14" x2="129.54" y2="104.14" width="0.1524" layer="91"/>
+<wire x1="198.12" y1="104.14" x2="129.54" y2="104.14" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="185.42" y1="160.02" x2="195.58" y2="160.02" width="0.1524" layer="91"/>
-<label x="195.58" y="160.02" size="1.778" layer="95" xref="yes"/>
+<wire x1="198.12" y1="160.02" x2="208.28" y2="160.02" width="0.1524" layer="91"/>
+<label x="208.28" y="160.02" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="SYS_NRST" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="NRST_4"/>
-<wire x1="185.42" y1="157.48" x2="129.54" y2="157.48" width="0.1524" layer="91"/>
+<wire x1="198.12" y1="157.48" x2="129.54" y2="157.48" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="185.42" y1="170.18" x2="195.58" y2="170.18" width="0.1524" layer="91"/>
-<label x="195.58" y="170.18" size="1.778" layer="95" xref="yes"/>
+<wire x1="198.12" y1="170.18" x2="208.28" y2="170.18" width="0.1524" layer="91"/>
+<label x="208.28" y="170.18" size="1.778" layer="95" xref="yes"/>
 </segment>
 <segment>
 <pinref part="C7" gate="G$1" pin="2"/>
@@ -12371,16 +12426,9 @@ by R. Vogg  15.March.2002</description>
 </net>
 <net name="DIM_BRAKE" class="0">
 <segment>
-<label x="149.86" y="119.38" size="1.778" layer="95" xref="yes"/>
-<wire x1="129.54" y1="119.38" x2="149.86" y2="119.38" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="G$1" pin="ADC_IN9,TSC_G3_IO3,TIM1_CH3N,TIM3_CH4,TIM14_CH1-PB1_15"/>
-</segment>
-</net>
-<net name="!SHDN!" class="0">
-<segment>
-<wire x1="129.54" y1="88.9" x2="149.86" y2="88.9" width="0.1524" layer="91"/>
-<label x="149.86" y="88.9" size="1.778" layer="95" xref="yes"/>
-<pinref part="IC2" gate="G$1" pin="EVENTOUT,TSC_G5_IO2,TIM3_CH1,TIM17_BKIN,SPI1_MISO,I2S1_MCK-PB4_25"/>
+<label x="149.86" y="132.08" size="1.778" layer="95" xref="yes"/>
+<wire x1="129.54" y1="132.08" x2="149.86" y2="132.08" width="0.1524" layer="91"/>
+<pinref part="IC2" gate="G$1" pin="ADC_IN6,EVENTOUT,TSC_G2_IO3,TIM16_CH1,TIM3_CH1,TIM1_BKIN,SPI1_MISO,I2S1_MCK-PA6_12"/>
 </segment>
 </net>
 </nets>
@@ -12396,13 +12444,12 @@ by R. Vogg  15.March.2002</description>
 <port name="TXCAN" side="left" coord="5.08" direction="in"/>
 <port name="RXCAN" side="left" coord="2.54" direction="out"/>
 <port name="!STBY!" side="left" coord="0" direction="in"/>
-<port name="!SHDN!" side="left" coord="-2.54" direction="in"/>
 </ports>
 <variantdefs>
 </variantdefs>
 <parts>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1μF"/>
+<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1uF / 10V"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="CAN_INFRA" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="DINA5_L" device="" value="CAN_INFRA"/>
@@ -12417,7 +12464,7 @@ by R. Vogg  15.March.2002</description>
 <sheets>
 <sheet>
 <plain>
-<text x="40.64" y="71.12" size="1.778" layer="97" rot="R180">internal pulldown</text>
+<text x="66.04" y="71.12" size="1.778" layer="97" align="bottom-right">internal pulldown</text>
 <text x="40.64" y="68.58" size="1.778" layer="97" rot="R180">internal pulldown</text>
 </plain>
 <instances>
@@ -12562,13 +12609,6 @@ by R. Vogg  15.March.2002</description>
 <pinref part="IC1" gate="G$1" pin="8_STB"/>
 </segment>
 </net>
-<net name="!SHDN!" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="5_SHDN"/>
-<wire x1="68.58" y1="71.12" x2="50.8" y2="71.12" width="0.1524" layer="91"/>
-<label x="50.8" y="71.12" size="1.778" layer="95" rot="R180" xref="yes"/>
-</segment>
-</net>
 <net name="SPLIT" class="3">
 <segment>
 <pinref part="R1" gate="G$1" pin="2"/>
@@ -12603,8 +12643,6 @@ by R. Vogg  15.March.2002</description>
 <module name="LED_DRIVER_BRAKE-LIGHT" prefix="" dx="30.48" dy="20.32">
 <ports>
 <port name="GND" side="bottom" coord="0" direction="pwr"/>
-<port name="LED_AN" side="right" coord="2.54" direction="pwr"/>
-<port name="LED_CA" side="right" coord="-2.54" direction="pwr"/>
 <port name="DIM_BRAKE" side="left" coord="-2.54" direction="in"/>
 <port name="BAT+" side="left" coord="2.54" direction="pwr"/>
 </ports>
@@ -12622,6 +12660,7 @@ by R. Vogg  15.March.2002</description>
 <part name="L1" library="DE0604A-778075 - Inductor" deviceset="DE0604A-778075" device="" value="SDE0604A-270M - 27uH"/>
 <part name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R2010" package3d_urn="urn:adsk.eagle:package:23551/2" value="WSLT2010R2200FEB18 / 0.22Ohm 1W"/>
 <part name="LED-DRIVER-BRAKE" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device="" value="LED-DRIVER-BRAKE"/>
+<part name="D2" library="XLampXPE-221789" deviceset="XLAMPXPE-221789" device="" value="Cree XPERED-L1-R250-00401"/>
 </parts>
 <sheets>
 <sheet>
@@ -12668,6 +12707,10 @@ by R. Vogg  15.March.2002</description>
 <attribute name="DRAWING_NAME" x="217.17" y="15.24" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="217.17" y="10.16" size="2.286" layer="94"/>
 <attribute name="SHEET" x="230.505" y="5.08" size="2.54" layer="94"/>
+</instance>
+<instance part="D2" gate="G$1" x="210.82" y="73.66" smashed="yes">
+<attribute name="NAME" x="213.36" y="68.58" size="1.27" layer="95"/>
+<attribute name="VALUE" x="213.36" y="66.04" size="1.27" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -12745,18 +12788,35 @@ by R. Vogg  15.March.2002</description>
 <net name="LED_CA" class="1">
 <segment>
 <wire x1="147.32" y1="114.3" x2="154.94" y2="114.3" width="0.1524" layer="91"/>
-<label x="147.32" y="114.3" size="1.778" layer="95" rot="R180" xref="yes"/>
+<label x="147.32" y="114.3" size="1.778" layer="95" rot="R180"/>
 <pinref part="L1" gate="G$1" pin="P$1"/>
+</segment>
+<segment>
+<pinref part="D2" gate="G$1" pin="CAT"/>
+<wire x1="218.44" y1="73.66" x2="231.14" y2="73.66" width="0.1524" layer="91"/>
+<label x="231.14" y="73.66" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="LED_AN" class="1">
 <segment>
 <pinref part="IC6" gate="G$1" pin="CS"/>
-<label x="134.62" y="93.98" size="1.778" layer="95" xref="yes"/>
+<label x="134.62" y="93.98" size="1.778" layer="95"/>
 <wire x1="119.38" y1="93.98" x2="124.46" y2="93.98" width="0.1524" layer="91"/>
 <pinref part="R8" gate="G$1" pin="1"/>
 <wire x1="124.46" y1="93.98" x2="134.62" y2="93.98" width="0.1524" layer="91"/>
 <junction x="124.46" y="93.98"/>
+</segment>
+<segment>
+<pinref part="D2" gate="G$1" pin="AND"/>
+<wire x1="203.2" y1="73.66" x2="190.5" y2="73.66" width="0.1524" layer="91"/>
+<label x="190.5" y="73.66" size="1.778" layer="95" rot="R180"/>
+</segment>
+</net>
+<net name="DIE" class="0">
+<segment>
+<pinref part="D2" gate="G$1" pin="DIE"/>
+<wire x1="203.2" y1="68.58" x2="195.58" y2="68.58" width="0.1524" layer="91"/>
+<label x="195.58" y="68.58" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 </nets>
@@ -13018,24 +13078,23 @@ by R. Vogg  15.March.2002</description>
 <part name="TP105" library="signal testpoint" deviceset="TP" device="" value="CAN high"/>
 <part name="TP106" library="signal testpoint" deviceset="TP" device="" value="CAN low"/>
 <part name="TP101" library="signal testpoint" deviceset="TP" device="" value="LiIon + Terminal"/>
-<part name="TP103" library="signal testpoint" deviceset="TP" device="" value="LED anode"/>
-<part name="TP104" library="signal testpoint" deviceset="TP" device="" value="LED cathode"/>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="SWD101" library="tag-connect" deviceset="TC2030" device="" value="TC2030-NL"/>
+<part name="SWD1" library="tag-connect" deviceset="TC2030" device="" value="TC2030-NL"/>
 <part name="SUPPLY5" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY6" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY7" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="FRAME101" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A3L-LOC" device="" value="MJ818"/>
+<part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A3L-LOC" device="" value="MJ818"/>
 <part name="SUPPLY9" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY10" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY8" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 </parts>
 <sheets>
 <sheet>
 <description>MJ808 main</description>
 <plain>
-<text x="261.62" y="187.96" size="1.778" layer="98">red LED
-Cree XPERED-L1-R250-00401</text>
 <text x="50.8" y="116.84" size="1.778" layer="90" align="center-left">Liion battery - 2S</text>
 <wire x1="187.96" y1="215.9" x2="187.96" y2="101.6" width="0.1524" layer="98" style="dashdot"/>
 <wire x1="187.96" y1="101.6" x2="271.78" y2="101.6" width="0.1524" layer="98" style="dashdot"/>
@@ -13043,34 +13102,28 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="342.9" y1="101.6" x2="342.9" y2="215.9" width="0.1524" layer="98" style="dashdot"/>
 <wire x1="342.9" y1="215.9" x2="187.96" y2="215.9" width="0.1524" layer="98" style="dashdot"/>
 <text x="193.04" y="210.82" size="6.4516" layer="98" align="top-left">MJ818 - rear light</text>
-<wire x1="252.73" y1="189.23" x2="254.635" y2="191.77" width="0.1524" layer="98"/>
-<wire x1="254.635" y1="191.77" x2="252.73" y2="191.77" width="0.1524" layer="98"/>
-<wire x1="252.73" y1="191.77" x2="250.825" y2="191.77" width="0.1524" layer="98"/>
-<wire x1="250.825" y1="191.77" x2="252.73" y2="189.23" width="0.1524" layer="98"/>
-<wire x1="252.73" y1="189.23" x2="252.73" y2="187.96" width="0.1524" layer="98"/>
-<wire x1="252.73" y1="191.77" x2="252.73" y2="193.04" width="0.1524" layer="98"/>
-<wire x1="250.825" y1="189.23" x2="254.635" y2="189.23" width="0.1524" layer="98"/>
 <wire x1="187.96" y1="215.9" x2="33.02" y2="215.9" width="0.1524" layer="98" style="dashdot"/>
 <wire x1="271.78" y1="101.6" x2="271.78" y2="48.26" width="0.1524" layer="98" style="dashdot"/>
 <wire x1="33.02" y1="215.9" x2="33.02" y2="48.26" width="0.1524" layer="98" style="dashdot"/>
 <wire x1="33.02" y1="48.26" x2="271.78" y2="48.26" width="0.1524" layer="98" style="dashdot"/>
 <text x="38.1" y="210.82" size="6.4516" layer="98" rot="R180" align="bottom-right">MJ8x8 - generic</text>
-<text x="172.72" y="17.78" size="6.4516" layer="97">SuperNova Mini2 housing</text>
+<text x="172.72" y="17.78" size="6.4516" layer="97">SuperNova Mini2 housing
+HW rev.5a</text>
 </plain>
 <moduleinsts>
 <moduleinst name="POWER_3V3" module="POWER_3V3" x="116.84" y="121.92" offset="200">
 <attribute name="NAME" value="POWER_3V3" x="116.84" y="127" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
-<moduleinst name="STM32F04" module="STM32" x="180.34" y="121.92" offset="400">
+<moduleinst name="STM32F04" module="STM32" x="180.34" y="121.92" offset="300">
 <attribute name="NAME" value="STM32F04" x="180.34" y="127" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
-<moduleinst name="CAN_INFRA" module="CAN_INFRA" x="195.58" y="86.36" offset="500">
+<moduleinst name="CAN_INFRA" module="CAN_INFRA" x="195.58" y="86.36" offset="400">
 <attribute name="NAME" value="CAN_INFRA" x="195.58" y="91.44" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
-<moduleinst name="BRAKE_LED_DRIVER" module="LED_DRIVER_BRAKE-LIGHT" x="223.52" y="190.5" offset="600">
+<moduleinst name="BRAKE_LED_DRIVER" module="LED_DRIVER_BRAKE-LIGHT" x="223.52" y="190.5" offset="500">
 <attribute name="NAME" value="BRAKE_LED_DRIVER" x="223.52" y="195.58" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
-<moduleinst name="REAR_LED_DRIVER" module="LED_DRIVER_REAR-LIGHT" x="223.52" y="152.4" offset="700">
+<moduleinst name="REAR_LED_DRIVER" module="LED_DRIVER_REAR-LIGHT" x="223.52" y="152.4" offset="600">
 <attribute name="NAME" value="REAR_LED_DRIVER" x="223.52" y="157.48" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
 </moduleinsts>
@@ -13087,12 +13140,6 @@ Cree XPERED-L1-R250-00401</text>
 <instance part="TP101" gate="G$1" x="63.5" y="121.92" smashed="yes" rot="R90">
 <attribute name="NAME" x="53.34" y="121.92" size="1.27" layer="95" rot="R180" align="center"/>
 </instance>
-<instance part="TP103" gate="G$1" x="246.38" y="193.04" smashed="yes" rot="R270">
-<attribute name="NAME" x="256.54" y="193.04" size="1.27" layer="95" rot="R180" align="center"/>
-</instance>
-<instance part="TP104" gate="G$1" x="246.38" y="187.96" smashed="yes" rot="R270">
-<attribute name="NAME" x="256.54" y="187.96" size="1.27" layer="95" align="center"/>
-</instance>
 <instance part="SUPPLY1" gate="G$1" x="180.34" y="101.6" smashed="yes">
 <attribute name="VALUE" x="180.34" y="99.695" size="1.778" layer="96" align="center"/>
 </instance>
@@ -13102,7 +13149,7 @@ Cree XPERED-L1-R250-00401</text>
 <instance part="SUPPLY4" gate="G$1" x="195.58" y="66.04" smashed="yes">
 <attribute name="VALUE" x="195.58" y="64.135" size="1.778" layer="96" align="center"/>
 </instance>
-<instance part="SWD101" gate="G$1" x="104.14" y="175.26" smashed="yes" rot="MR0">
+<instance part="SWD1" gate="G$1" x="104.14" y="175.26" smashed="yes" rot="MR0">
 <attribute name="NAME" x="134.62" y="180.34" size="1.27" layer="97" font="vector" rot="MR0" align="center-left"/>
 <attribute name="VALUE" x="114.3" y="180.34" size="1.27" layer="97" font="vector" rot="MR0" align="center-left"/>
 </instance>
@@ -13115,13 +13162,22 @@ Cree XPERED-L1-R250-00401</text>
 <instance part="SUPPLY7" gate="G$1" x="149.86" y="165.1" smashed="yes" rot="R90">
 <attribute name="VALUE" x="151.765" y="165.1" size="1.778" layer="96" rot="R90" align="center"/>
 </instance>
-<instance part="FRAME101" gate="G$1" x="0" y="0" smashed="yes">
+<instance part="FRAME1" gate="G$1" x="0" y="0" smashed="yes">
 <attribute name="DRAWING_NAME" x="344.17" y="15.24" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="344.17" y="10.16" size="2.286" layer="94"/>
 <attribute name="SHEET" x="357.505" y="5.08" size="2.54" layer="94"/>
 </instance>
 <instance part="SUPPLY9" gate="G$1" x="223.52" y="132.08" smashed="yes">
 <attribute name="VALUE" x="223.52" y="130.175" size="1.778" layer="96" align="center"/>
+</instance>
+<instance part="SUPPLY3" gate="G$1" x="144.78" y="124.46" smashed="yes">
+<attribute name="VALUE" x="144.653" y="127.635" size="1.778" layer="96" align="bottom-center"/>
+</instance>
+<instance part="SUPPLY10" gate="G$1" x="167.64" y="81.28" smashed="yes" rot="R90">
+<attribute name="VALUE" x="162.56" y="81.28" size="1.778" layer="96" align="center-right"/>
+</instance>
+<instance part="SUPPLY8" gate="G$1" x="157.48" y="175.26" smashed="yes" rot="R270">
+<attribute name="VALUE" x="162.56" y="175.26" size="1.778" layer="96" rot="R180" align="center-right"/>
 </instance>
 </instances>
 <busses>
@@ -13167,7 +13223,7 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="223.52" y1="172.72" x2="223.52" y2="175.26" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="SWD101" gate="G$1" pin="5_GND"/>
+<pinref part="SWD1" gate="G$1" pin="5_GND"/>
 <pinref part="SUPPLY7" gate="G$1" pin="GND"/>
 <wire x1="147.32" y1="165.1" x2="137.16" y2="165.1" width="0.1524" layer="91"/>
 </segment>
@@ -13195,14 +13251,6 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="203.2" y1="149.86" x2="198.12" y2="149.86" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="LED_CA" class="1">
-<segment>
-<wire x1="246.38" y1="187.96" x2="243.84" y2="187.96" width="0.1524" layer="91"/>
-<label x="243.84" y="187.96" size="1.778" layer="95" rot="R270"/>
-<pinref part="TP104" gate="G$1" pin="TP$1"/>
-<portref moduleinst="BRAKE_LED_DRIVER" port="LED_CA"/>
-</segment>
-</net>
 <net name="BAT+" class="1">
 <segment>
 <wire x1="63.5" y1="121.92" x2="73.66" y2="121.92" width="0.1524" layer="91"/>
@@ -13220,14 +13268,6 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="203.2" y1="154.94" x2="175.26" y2="154.94" width="0.1524" layer="91"/>
 <wire x1="175.26" y1="154.94" x2="175.26" y2="193.04" width="0.1524" layer="91"/>
 <junction x="175.26" y="193.04"/>
-</segment>
-</net>
-<net name="LED_AN" class="1">
-<segment>
-<wire x1="246.38" y1="193.04" x2="243.84" y2="193.04" width="0.1524" layer="91"/>
-<label x="246.38" y="193.04" size="1.778" layer="95" rot="R90"/>
-<pinref part="TP103" gate="G$1" pin="TP$1"/>
-<portref moduleinst="BRAKE_LED_DRIVER" port="LED_AN"/>
 </segment>
 </net>
 <net name="CAN_H" class="3">
@@ -13256,25 +13296,27 @@ Cree XPERED-L1-R250-00401</text>
 </net>
 <net name="3V3" class="4">
 <segment>
-<portref moduleinst="POWER_3V3" port="3V3"/>
 <portref moduleinst="STM32F04" port="3V3"/>
+<junction x="144.78" y="121.92"/>
+<pinref part="SUPPLY3" gate="G$1" pin="3V3"/>
+<portref moduleinst="POWER_3V3" port="3V3"/>
 <wire x1="137.16" y1="121.92" x2="144.78" y2="121.92" width="0.1524" layer="91"/>
 <label x="139.7" y="121.92" size="1.778" layer="95"/>
-<portref moduleinst="CAN_INFRA" port="3V3"/>
-<wire x1="172.72" y1="81.28" x2="144.78" y2="81.28" width="0.1524" layer="91"/>
-<label x="157.48" y="81.28" size="1.778" layer="95"/>
-<wire x1="144.78" y1="121.92" x2="144.78" y2="81.28" width="0.1524" layer="91"/>
-<junction x="144.78" y="121.92"/>
 </segment>
 <segment>
-<pinref part="SWD101" gate="G$1" pin="1_T_VCC"/>
-<wire x1="137.16" y1="175.26" x2="147.32" y2="175.26" width="0.1524" layer="91"/>
-<label x="147.32" y="175.26" size="1.778" layer="95"/>
+<pinref part="SWD1" gate="G$1" pin="1_T_VCC"/>
+<wire x1="137.16" y1="175.26" x2="154.94" y2="175.26" width="0.1524" layer="91"/>
+<pinref part="SUPPLY8" gate="G$1" pin="3V3"/>
+</segment>
+<segment>
+<portref moduleinst="CAN_INFRA" port="3V3"/>
+<pinref part="SUPPLY10" gate="G$1" pin="3V3"/>
+<wire x1="170.18" y1="81.28" x2="172.72" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SYS_SWDIO" class="3">
 <segment>
-<pinref part="SWD101" gate="G$1" pin="2_T-SWDIO"/>
+<pinref part="SWD1" gate="G$1" pin="2_T-SWDIO"/>
 <wire x1="137.16" y1="172.72" x2="157.48" y2="172.72" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -13284,7 +13326,7 @@ Cree XPERED-L1-R250-00401</text>
 </net>
 <net name="SYS_NRST" class="3">
 <segment>
-<pinref part="SWD101" gate="G$1" pin="3_T-NRST"/>
+<pinref part="SWD1" gate="G$1" pin="3_T-NRST"/>
 <wire x1="137.16" y1="170.18" x2="157.48" y2="170.18" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -13294,7 +13336,7 @@ Cree XPERED-L1-R250-00401</text>
 </net>
 <net name="SYS_SWCLK" class="3">
 <segment>
-<pinref part="SWD101" gate="G$1" pin="4_T-SWCLK"/>
+<pinref part="SWD1" gate="G$1" pin="4_T-SWCLK"/>
 <wire x1="137.16" y1="167.64" x2="157.48" y2="167.64" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -13325,32 +13367,26 @@ Cree XPERED-L1-R250-00401</text>
 <wire x1="167.64" y1="106.68" x2="167.64" y2="86.36" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="!SHDN!" class="0">
-<segment>
-<portref moduleinst="CAN_INFRA" port="!SHDN!"/>
-<wire x1="172.72" y1="83.82" x2="165.1" y2="83.82" width="0.1524" layer="91"/>
-<wire x1="165.1" y1="83.82" x2="165.1" y2="106.68" width="0.1524" layer="91"/>
-<portref moduleinst="STM32F04" port="!SHDN!"/>
-</segment>
-</net>
 </nets>
 </sheet>
 </sheets>
 <errors>
-<approved hash="104,1,137.16,175.26,SWD101,1_T_VCC,3V3,,,"/>
-<approved hash="104,1,137.16,165.1,SWD101,5_GND,GND,,,"/>
-<approved hash="202,1,137.16,162.56,SWD101,6_T-SWO,,,,"/>
+<approved hash="104,1,137.16,175.26,SWD1,1_T_VCC,3V3,,,"/>
+<approved hash="104,1,137.16,165.1,SWD1,5_GND,GND,,,"/>
+<approved hash="202,1,137.16,162.56,SWD1,6_T-SWO,,,,"/>
 <approved hash="104,1@STM32,129.54,154.94,IC2,VCCA_5,3V3,,,"/>
 <approved hash="104,1@STM32,129.54,116.84,IC2,GND_16,GND,,,"/>
 <approved hash="104,1@STM32,129.54,114.3,IC2,VCC_17,3V3,,,"/>
 <approved hash="104,1@STM32,129.54,111.76,IC2,VCCD_18,3V3,,,"/>
 <approved hash="104,1@CAN_INFRA,68.58,60.96,IC1,2_GND,GND,,,"/>
 <approved hash="104,1@CAN_INFRA,68.58,63.5,IC1,3_VCC,3V3,,,"/>
+<approved hash="202,1@CAN_INFRA,68.58,71.12,IC1,5_SHDN,,,,"/>
 <approved hash="104,1@LED_DRIVER_BRAKE-LIGHT,93.98,96.52,IC6,IN,BAT+,,,"/>
 <approved hash="204,1@LED_DRIVER_BRAKE-LIGHT,93.98,104.14,IC6,VCC,,,,"/>
 <approved hash="104,1@LED_DRIVER_BRAKE-LIGHT,119.38,93.98,IC6,CS,LED_AN,,,"/>
 <approved hash="104,1@LED_DRIVER_REAR-LIGHT,157.48,101.6,IC1,IN,BAT+,,,"/>
 <approved hash="213,1,170.18,106.68,CAN_RX,in,,,,"/>
+<approved hash="106,1@LED_DRIVER_BRAKE-LIGHT,203.2,68.58,DIE,,,,,"/>
 <approved hash="213,1,223.52,137.16,GND,pwr,,,,"/>
 <approved hash="208,1@LED_DRIVER_REAR-LIGHT,152.4,91.44,GND,sup,,,,"/>
 <approved hash="208,1@LED_DRIVER_REAR-LIGHT,157.48,96.52,GND,sup,,,,"/>
@@ -13358,6 +13394,7 @@ Cree XPERED-L1-R250-00401</text>
 <approved hash="208,1@LED_DRIVER_REAR-LIGHT,144.78,15.24,GND,sup,,,,"/>
 <approved hash="208,1@LED_DRIVER_REAR-LIGHT,182.88,106.68,GND,out,,,,"/>
 <approved hash="208,1@LED_DRIVER_REAR-LIGHT,185.42,106.68,GND,sup,,,,"/>
+<approved hash="208,1@LED_DRIVER_REAR-LIGHT,205.74,96.52,GND,sup,,,,"/>
 </errors>
 </schematic>
 </drawing>
