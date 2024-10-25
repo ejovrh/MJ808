@@ -8,34 +8,34 @@
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="no"/>
-<layer number="2" name="Route2" color="1" fill="3" visible="yes" active="no"/>
-<layer number="3" name="Route3" color="17" fill="1" visible="yes" active="no"/>
-<layer number="4" name="Route4" color="18" fill="1" visible="yes" active="no"/>
-<layer number="5" name="Route5" color="19" fill="1" visible="yes" active="no"/>
-<layer number="6" name="Route6" color="25" fill="1" visible="yes" active="no"/>
-<layer number="7" name="Route7" color="26" fill="1" visible="yes" active="no"/>
-<layer number="8" name="Route8" color="27" fill="1" visible="yes" active="no"/>
-<layer number="9" name="Route9" color="28" fill="1" visible="yes" active="no"/>
-<layer number="10" name="Route10" color="29" fill="1" visible="yes" active="no"/>
-<layer number="11" name="Route11" color="30" fill="1" visible="yes" active="no"/>
-<layer number="12" name="Route12" color="20" fill="1" visible="yes" active="no"/>
-<layer number="13" name="Route13" color="21" fill="1" visible="yes" active="no"/>
-<layer number="14" name="Route14" color="22" fill="1" visible="yes" active="no"/>
-<layer number="15" name="Route15" color="4" fill="6" visible="yes" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="no"/>
-<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="no"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="no"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="no"/>
-<layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="no"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="no"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="no"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="no"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="no"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="no"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="no"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="no"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="no"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
+<layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
+<layer number="3" name="Route3" color="17" fill="1" visible="no" active="no"/>
+<layer number="4" name="Route4" color="18" fill="1" visible="no" active="no"/>
+<layer number="5" name="Route5" color="19" fill="1" visible="no" active="no"/>
+<layer number="6" name="Route6" color="25" fill="1" visible="no" active="no"/>
+<layer number="7" name="Route7" color="26" fill="1" visible="no" active="no"/>
+<layer number="8" name="Route8" color="27" fill="1" visible="no" active="no"/>
+<layer number="9" name="Route9" color="28" fill="1" visible="no" active="no"/>
+<layer number="10" name="Route10" color="29" fill="1" visible="no" active="no"/>
+<layer number="11" name="Route11" color="30" fill="1" visible="no" active="no"/>
+<layer number="12" name="Route12" color="20" fill="1" visible="no" active="no"/>
+<layer number="13" name="Route13" color="21" fill="1" visible="no" active="no"/>
+<layer number="14" name="Route14" color="22" fill="1" visible="no" active="no"/>
+<layer number="15" name="Route15" color="4" fill="6" visible="no" active="no"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="no" active="no"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="no" active="no"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="no"/>
+<layer number="20" name="Dimension" color="24" fill="1" visible="no" active="no"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="no"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="no"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="no"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="no"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="no" active="no"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="no" active="no"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="no"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="no"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="no"/>
@@ -44,8 +44,8 @@
 <layer number="34" name="bFinish" color="6" fill="6" visible="no" active="no"/>
 <layer number="35" name="tGlue" color="7" fill="4" visible="no" active="no"/>
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="no"/>
-<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="no"/>
-<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="no"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="no"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="no"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="no"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="no"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="no"/>
@@ -53,19 +53,19 @@
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="no"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="no"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="no"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="no"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="no"/>
-<layer number="48" name="Document" color="7" fill="1" visible="yes" active="no"/>
-<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="no"/>
-<layer number="50" name="dxf" color="7" fill="1" visible="yes" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="no"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="no"/>
-<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="yes" active="no"/>
-<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="yes" active="no"/>
-<layer number="56" name="wert" color="7" fill="1" visible="yes" active="no"/>
-<layer number="57" name="tCAD" color="7" fill="1" visible="yes" active="no"/>
-<layer number="59" name="tCarbon" color="7" fill="1" visible="yes" active="no"/>
-<layer number="60" name="bCarbon" color="7" fill="1" visible="yes" active="no"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="no"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="no"/>
+<layer number="48" name="Document" color="7" fill="1" visible="no" active="no"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="no" active="no"/>
+<layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
+<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
+<layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
+<layer number="57" name="tCAD" color="7" fill="1" visible="no" active="no"/>
+<layer number="59" name="tCarbon" color="7" fill="1" visible="no" active="no"/>
+<layer number="60" name="bCarbon" color="7" fill="1" visible="no" active="no"/>
 <layer number="88" name="SimResults" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="89" name="SimProbes" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
@@ -12080,6 +12080,59 @@ by R. Vogg  15.March.2002</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="HR30-6R-6P - PushPull Receptacle">
+<packages>
+</packages>
+<symbols>
+<symbol name="CONN">
+<pin name="1" x="17.78" y="2.54" length="middle" rot="R180"/>
+<pin name="2" x="17.78" y="0" length="middle" rot="R180"/>
+<pin name="3" x="17.78" y="-2.54" length="middle" rot="R180"/>
+<pin name="4" x="17.78" y="-5.08" length="middle" rot="R180"/>
+<pin name="5" x="17.78" y="-7.62" length="middle" rot="R180"/>
+<pin name="6" x="17.78" y="-10.16" length="middle" rot="R180"/>
+<text x="-1.27" y="-2.54" size="1.778" layer="94" align="center">1</text>
+<text x="-3.81" y="-5.08" size="1.778" layer="94" align="center">2</text>
+<text x="-1.27" y="-7.62" size="1.778" layer="94" align="center">3</text>
+<text x="5.08" y="-5.08" size="1.778" layer="94" align="center">5</text>
+<text x="2.54" y="-7.62" size="1.778" layer="94" align="center">4</text>
+<text x="2.54" y="-2.54" size="1.778" layer="94" align="center">6</text>
+<wire x1="0.635" y1="5.08" x2="-0.635" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-0.635" y1="2.54" x2="1.905" y2="2.54" width="0.254" layer="94"/>
+<wire x1="1.905" y1="2.54" x2="0.635" y2="5.08" width="0.254" layer="94"/>
+<circle x="-1.27" y="-7.62" radius="1.27" width="0.254" layer="94"/>
+<circle x="2.54" y="-7.62" radius="1.27" width="0.254" layer="94"/>
+<circle x="2.54" y="-2.54" radius="1.27" width="0.254" layer="94"/>
+<circle x="5.08" y="-5.08" radius="1.27" width="0.254" layer="94"/>
+<circle x="-1.27" y="-2.54" radius="1.27" width="0.254" layer="94"/>
+<circle x="-3.81" y="-5.08" radius="1.27" width="0.254" layer="94"/>
+<text x="0.635" y="-5.08" size="1.778" layer="94" align="center">HRS</text>
+<circle x="0.635" y="-5.08" radius="6.83915625" width="0.254" layer="94"/>
+<wire x1="12.7" y1="7.62" x2="-10.16" y2="7.62" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="7.62" x2="-10.16" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-15.24" x2="12.7" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="12.7" y1="-15.24" x2="12.7" y2="7.62" width="0.254" layer="94"/>
+<text x="-5.08" y="10.16" size="1.778" layer="95" align="center">&gt;NAME</text>
+<text x="-5.08" y="-17.78" size="1.778" layer="95" align="center">&gt;VALUE</text>
+<text x="-7.62" y="-12.7" size="0.4064" layer="94" align="center-left">male contacts
+mates with HR30-6P-6S(31)</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="HR-30-6R-6X" prefix="CONN" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="CONN" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -13088,6 +13141,7 @@ by R. Vogg  15.March.2002</description>
 <part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY10" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY8" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="CONN1" library="HR30-6R-6P - PushPull Receptacle" deviceset="HR-30-6R-6X" device="" value="HR30-6R-6P(71)"/>
 </parts>
 <sheets>
 <sheet>
@@ -13112,6 +13166,7 @@ HW rev.5a</text>
 <text x="190.5" y="86.36" size="1.778" layer="90">4</text>
 <text x="218.44" y="190.5" size="1.778" layer="90">5</text>
 <text x="218.44" y="152.4" size="1.778" layer="90">6</text>
+<text x="78.74" y="68.58" size="1.778" layer="90" align="center-left">Liion battery - 2S</text>
 </plain>
 <moduleinsts>
 <moduleinst name="POWER_3V3" module="POWER_3V3" x="116.84" y="121.92" offset="200">
@@ -13149,8 +13204,8 @@ HW rev.5a</text>
 <instance part="SUPPLY2" gate="G$1" x="116.84" y="101.6" smashed="yes">
 <attribute name="VALUE" x="116.84" y="99.695" size="1.778" layer="96" align="center"/>
 </instance>
-<instance part="SUPPLY4" gate="G$1" x="195.58" y="66.04" smashed="yes">
-<attribute name="VALUE" x="195.58" y="64.135" size="1.778" layer="96" align="center"/>
+<instance part="SUPPLY4" gate="G$1" x="195.58" y="68.58" smashed="yes">
+<attribute name="VALUE" x="195.58" y="66.675" size="1.778" layer="96" align="center"/>
 </instance>
 <instance part="SWD1" gate="G$1" x="104.14" y="175.26" smashed="yes" rot="MR0">
 <attribute name="NAME" x="134.62" y="180.34" size="1.27" layer="97" font="vector" rot="MR0" align="center-left"/>
@@ -13176,11 +13231,15 @@ HW rev.5a</text>
 <instance part="SUPPLY3" gate="G$1" x="144.78" y="124.46" smashed="yes">
 <attribute name="VALUE" x="144.653" y="127.635" size="1.778" layer="96" align="bottom-center"/>
 </instance>
-<instance part="SUPPLY10" gate="G$1" x="167.64" y="81.28" smashed="yes" rot="R90">
-<attribute name="VALUE" x="162.56" y="81.28" size="1.778" layer="96" align="center-right"/>
+<instance part="SUPPLY10" gate="G$1" x="167.64" y="83.82" smashed="yes" rot="R90">
+<attribute name="VALUE" x="162.56" y="83.82" size="1.778" layer="96" align="center-right"/>
 </instance>
 <instance part="SUPPLY8" gate="G$1" x="157.48" y="175.26" smashed="yes" rot="R270">
 <attribute name="VALUE" x="162.56" y="175.26" size="1.778" layer="96" rot="R180" align="center-right"/>
+</instance>
+<instance part="CONN1" gate="G$1" x="48.26" y="68.58" smashed="yes">
+<attribute name="NAME" x="48.26" y="78.74" size="1.778" layer="95" align="center"/>
+<attribute name="VALUE" x="48.26" y="50.8" size="1.778" layer="95" align="center"/>
 </instance>
 </instances>
 <busses>
@@ -13195,6 +13254,12 @@ HW rev.5a</text>
 <wire x1="157.48" y1="172.72" x2="157.48" y2="142.24" width="0.762" layer="92"/>
 <wire x1="157.48" y1="142.24" x2="162.56" y2="142.24" width="0.762" layer="92"/>
 <label x="162.56" y="142.24" size="1.778" layer="95"/>
+</segment>
+</bus>
+<bus name="MJ8X8-BUS:BAT+,CAN_H,CAN_L,GND">
+<segment>
+<wire x1="76.2" y1="71.12" x2="76.2" y2="58.42" width="0.762" layer="92"/>
+<wire x1="76.2" y1="58.42" x2="269.24" y2="58.42" width="0.762" layer="92"/>
 </segment>
 </bus>
 </busses>
@@ -13218,7 +13283,6 @@ HW rev.5a</text>
 <segment>
 <portref moduleinst="CAN_INFRA" port="GND"/>
 <pinref part="SUPPLY4" gate="G$1" pin="GND"/>
-<wire x1="195.58" y1="68.58" x2="195.58" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <portref moduleinst="BRAKE_LED_DRIVER" port="GND"/>
@@ -13234,6 +13298,11 @@ HW rev.5a</text>
 <portref moduleinst="REAR_LED_DRIVER" port="GND"/>
 <pinref part="SUPPLY9" gate="G$1" pin="GND"/>
 <wire x1="223.52" y1="134.62" x2="223.52" y2="137.16" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="5"/>
+<wire x1="66.04" y1="60.96" x2="76.2" y2="60.96" width="0.1524" layer="91"/>
+<label x="68.58" y="60.96" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="DIM_BRAKE" class="3">
@@ -13272,6 +13341,11 @@ HW rev.5a</text>
 <wire x1="175.26" y1="154.94" x2="175.26" y2="193.04" width="0.1524" layer="91"/>
 <junction x="175.26" y="193.04"/>
 </segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="2"/>
+<wire x1="66.04" y1="68.58" x2="76.2" y2="68.58" width="0.1524" layer="91"/>
+<label x="68.58" y="68.58" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="CAN_H" class="3">
 <segment>
@@ -13284,6 +13358,15 @@ HW rev.5a</text>
 <wire x1="246.38" y1="91.44" x2="251.46" y2="91.44" width="0.1524" layer="91"/>
 <label x="246.38" y="91.44" size="1.778" layer="95" rot="R180"/>
 </segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="1"/>
+<wire x1="66.04" y1="71.12" x2="76.2" y2="71.12" width="0.1524" layer="91"/>
+<label x="68.58" y="71.12" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="269.24" y1="58.42" x2="269.24" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="269.24" y1="91.44" x2="261.62" y2="91.44" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="CAN_L" class="3">
 <segment>
@@ -13295,6 +13378,15 @@ HW rev.5a</text>
 <pinref part="TP106" gate="G$1" pin="TP$1"/>
 <wire x1="246.38" y1="88.9" x2="246.38" y2="86.36" width="0.1524" layer="91"/>
 <wire x1="246.38" y1="86.36" x2="251.46" y2="86.36" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="6"/>
+<wire x1="66.04" y1="58.42" x2="76.2" y2="58.42" width="0.1524" layer="91"/>
+<label x="68.58" y="58.42" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="264.16" y1="58.42" x2="264.16" y2="86.36" width="0.1524" layer="91"/>
+<wire x1="264.16" y1="86.36" x2="261.62" y2="86.36" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="3V3" class="4">
@@ -13314,7 +13406,7 @@ HW rev.5a</text>
 <segment>
 <portref moduleinst="CAN_INFRA" port="3V3"/>
 <pinref part="SUPPLY10" gate="G$1" pin="3V3"/>
-<wire x1="170.18" y1="81.28" x2="172.72" y2="81.28" width="0.1524" layer="91"/>
+<wire x1="170.18" y1="83.82" x2="172.72" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SYS_SWDIO" class="3">
