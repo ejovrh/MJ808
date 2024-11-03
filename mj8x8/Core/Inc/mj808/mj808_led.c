@@ -64,7 +64,6 @@ static void _HighBeam(const uint8_t value)
 	if(value == ARG_HIGHBEAM_OFF)	// high beam off command
 		{
 			Device->mj8x8->UpdateActivity(HIGHBEAM, OFF);	// mark inactivity
-			//			__LED._ShineFlags &= ~_BV(HighBeam);	// unset high beam flag
 
 			if(Device->mj8x8->GetActivity(FRONTLIGHT))	// if front light is on
 				{
@@ -142,7 +141,7 @@ static inline void __physicalRedLED(const uint8_t state)  // red LED on/off
 	HAL_GPIO_WritePin(RedLED_GPIO_Port, RedLED_Pin, (! state));
 
 	if (! __LED._BlinkFlags)	// if we aren't blinking...
-		Device->mj8x8->UpdateActivity(UTILLED, state);	// ...mark activity
+		Device->mj8x8->UpdateActivity(UTILLED, (__LED._ShineFlags & 0x03 ) > 0);	// ...mark activity
 
 	return;
 }
@@ -155,7 +154,7 @@ static inline void __physicalGreenLED(const uint8_t state)  // green LED on/off
 	HAL_GPIO_WritePin(GreenLED_GPIO_Port, GreenLED_Pin, (! state));
 
 	if (! __LED._BlinkFlags)	// if we aren't blinking...
-		Device->mj8x8->UpdateActivity(UTILLED, state);	// ...mark activity
+		Device->mj8x8->UpdateActivity(UTILLED, (__LED._ShineFlags & 0x03 ) > 0);	// ...mark activity
 
 	return;
 }
