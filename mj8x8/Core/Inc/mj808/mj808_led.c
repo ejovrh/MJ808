@@ -46,10 +46,13 @@ static void _MacNamaraFader(void)
 		{
 			FRONT_LIGHT_CCR = _fade_fransfer[--i];
 
-			if(FRONT_LIGHT_CCR == 0 && __LED._BlinkFlags == 0)
+			if(FRONT_LIGHT_CCR == 0)
 				{
-					Device->StopTimer(&htim14);  // stop the timer
 					Device->StopTimer(&htim3);  // stop the timer
+
+					if (__LED._BlinkFlags == 0)
+							Device->StopTimer(&htim14);  // stop the timer
+
 					Device->mj8x8->UpdateActivity(FRONTLIGHT, OFF);	// mark inactivity
 					__LED._ShineFlags &= ~_BV(Front);	// unset front light flag
 				}
@@ -185,6 +188,9 @@ static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
 		}
 		else	// transition to BLINK (or true OFF) state
 			__LED._BlinkFlags ^= ((-((state>>1) & 0x01) ^ __LED._BlinkFlags) & (1 << led));	// sets "led" bit to "state" value
+
+	if(__LED._BlinkFlags == 0)
+		Device->StopTimer(&htim14);  // stop the timer
 
 	__LED._ShineFlags ^= ((-(state & 0x01) ^ __LED._ShineFlags) & (1 << led));	// sets "led" bit to "state" value
 
