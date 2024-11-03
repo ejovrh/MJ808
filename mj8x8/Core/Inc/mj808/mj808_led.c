@@ -169,7 +169,7 @@ static uint32_t (*__physicalLEDBranchTable[])(const uint8_t state) =
 
 // concrete utility LED handling function
 static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
-{
+{// FIXME - when mj808 is in blinking mode, shine flags are not updated correctly
 	if (state == ON)	// transition from BLINK to ON state
 		__LED._OldBlinkFlags = __LED._BlinkFlags;	// store previous blink state
 
