@@ -94,7 +94,7 @@ typedef struct	// struct describing devices on MJ838
 	mj838_activity_t *activity;  // pointer to struct(union) indicating device activity status
 	zerocross_t *ZeroCross;  // zero-cross object
 	autodrive_t *AutoDrive;  // automatic drive handling feature
-	motion_t *Motion;  // motion detection
+	motion_t *Motion;  // motion detection/indication
 	autocharge_t *AutoCharge;  // automatic charger
 
 	void (*StopTimer)(TIM_HandleTypeDef *timer);	// stops timer identified by argument

@@ -269,11 +269,10 @@ void mj838_ctor(void)
 
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
-	__Device.public.ZeroCross = zerocross_ctor();  // call zero-crossconstructor
+	__Device.public.ZeroCross = zerocross_ctor();  // call zero-cross constructor
 	__Device.public.AutoDrive = autodrive_ctor();  // call AutoDrive constructor
-	__Device.public.AutoCharge = autocharge_ctor();  // call AutoDrive constructor
-	__Device.public.Motion = motion_ctor();  // call Motion constructor
 	__Device.public.AutoCharge = autocharge_ctor();  // call AutoCharge constructor
+	__Device.public.Motion = motion_ctor();  // call Motion constructor
 
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
