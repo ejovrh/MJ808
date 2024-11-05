@@ -116,6 +116,7 @@ static inline void _SSR_SW_D(const uint8_t state)
 // AutoCharge functionality
 static void _Do(void)
 {
+	// FIXME - verify last remaining SSR operation (IIRC one SSR was friend and would not connect when activated)
 	if(Device->AutoDrive->GetSpeed_mps() < LOAD_CONNECT_THRESHOLD_SPEED_LOW)  // low speed - load is disconnected
 		{
 			_StopCharger();  // stop, but with a caveat
@@ -158,7 +159,7 @@ static void _Do(void)
 
 }
 
-static __autocharge_t                         __AutoCharge =  // instantiate autobatt_t actual and set function pointers
+static __autocharge_t __AutoCharge =  // instantiate autobatt_t actual and set function pointers
 	{  //
 	.public.IsLoadConnected = &_IsLoadConnected,	// set function pointer
 	.public.Do = &_Do  // ditto
