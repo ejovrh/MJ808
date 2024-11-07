@@ -6,10 +6,22 @@
 
 extern TIM_HandleTypeDef htim3;  // Timer3 object - measurement/calculation interval of timer2 data - default 250ms
 
-typedef struct	// autobatt_t actual
+typedef enum   // enum of lights on this device
+{
+	  LightOff,  // bit pos. 0,
+	  LightDim,  //
+	  LightLow,  // bit pos. 1
+	  LightNormal,  // bit pos. 2
+	  LightHigh,  // bit pos. 3
+} autodrive_lightlevels;
+
+typedef struct	// autodrive_t actual
 {
 	autodrive_t public;  // public struct
 
+	volatile uint8_t _FlagLightlevelChange;  // flag indicating light level should change according to changed speed
+	volatile autodrive_lightlevels _LightLevel;
+	volatile autodrive_lightlevels _previousLightLevel;
 	volatile float _WheelFrequency;  // wheel rotation frequency
 	union mps  // meters per second
 	{
@@ -50,6 +62,12 @@ static inline float _GetDistance_m(void)
 	return __AutoDrive.m.Float;
 }
 
+// we are at standstill
+static inline void _LightOff(void)
+{
+	EventHandler->Notify(EVENT07);	// generate event
+}
+
 // AutoDrive functionality based on detected zero cross frequency
 static void _Do(void)
 {
@@ -70,15 +88,98 @@ static void _Do(void)
 	MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_SPEED, __AutoDrive.mps.Bytes, 1 + sizeof(float));  // send speed over the wire
 	MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_ACCEL, __AutoDrive.mps.Bytes, 1 + sizeof(float));  // send speed over the wire
 #endif
+
+	// TODO - implement light intensity based on speed
+
+	if(__AutoDrive._FlagLightlevelChange)
+		{
+			if(__AutoDrive._LightLevel == LightDim)
+				EventHandler->Notify(EVENT02);	// generate event
+
+			if(__AutoDrive._LightLevel == LightLow)
+				EventHandler->Notify(EVENT04);	// generate event
+
+			if(__AutoDrive._LightLevel == LightNormal)
+				EventHandler->Notify(EVENT05);	// generate event
+
+			if(__AutoDrive._LightLevel == LightHigh)
+				EventHandler->Notify(EVENT06);	// generate event
+
+			__AutoDrive._FlagLightlevelChange = 0;
+			return;
+		}
+	else
+		{
+			if(__AutoDrive.kph.Float < 1)  // fZC of below approx. 1.87 Hz - considered standstill
+				{  // lights off with delay
+				   // front 0%, rear 0%
+					__AutoDrive._previousLightLevel = __AutoDrive._LightLevel;
+					__AutoDrive._LightLevel = LightOff;
+
+					if(__AutoDrive._previousLightLevel != __AutoDrive._LightLevel)
+						__AutoDrive._FlagLightlevelChange = 1;
+
+					return;
+				}
+
+			if(__AutoDrive.kph.Float < 3)  // fZC of approx. 5.58 Hz - walking speed
+				{  // dim light
+				   // front 10%, rear 25%
+					__AutoDrive._previousLightLevel = __AutoDrive._LightLevel;
+					__AutoDrive._LightLevel = LightDim;
+
+					if(__AutoDrive._previousLightLevel != __AutoDrive._LightLevel)
+						__AutoDrive._FlagLightlevelChange = 1;
+
+					return;
+				}
+
+			if(__AutoDrive.kph.Float <= 10)  // fZC of approx. 18.57 Hz - slow ride
+				{  // low light
+				   // front 35%, rear 50%
+					__AutoDrive._previousLightLevel = __AutoDrive._LightLevel;
+					__AutoDrive._LightLevel = LightLow;
+
+					if(__AutoDrive._previousLightLevel != __AutoDrive._LightLevel)
+						__AutoDrive._FlagLightlevelChange = 1;
+
+					return;
+				}
+
+			if(__AutoDrive.kph.Float > 40)  // fZC of approx. 74.29 Hz - faster than light travel
+				{
+					// front 100%, rear 100%
+					__AutoDrive._previousLightLevel = __AutoDrive._LightLevel;
+					__AutoDrive._LightLevel = LightHigh;
+
+					if(__AutoDrive._previousLightLevel != __AutoDrive._LightLevel)
+						__AutoDrive._FlagLightlevelChange = 1;
+
+					return;
+				}
+
+			if(__AutoDrive.kph.Float > 10)  // fZC of approx. 18.57 Hz - normal ride
+				{
+					// front 50%, rear 100%
+					__AutoDrive._previousLightLevel = __AutoDrive._LightLevel;
+					__AutoDrive._LightLevel = LightNormal;
+
+					if(__AutoDrive._previousLightLevel != __AutoDrive._LightLevel)
+						__AutoDrive._FlagLightlevelChange = 1;
+
+					return;
+				}
+		}
 }
 
 static __autodrive_t __AutoDrive =  // instantiate autobatt_t actual and set function pointers
 	{  //
-	.public.FlagLightisOn = 0,	// flag if AutoDrive turned Light on
+//	.public.FlagLightisOn = 0,	// flag if AutoDrive turned Light on
 	.public.GetSpeed_mps = &_GetSpeed_mps,  // get speed in meters per second
 	.public.GetSpeed_kph = &_GetSpeed_kph,  // get speed in kilometres per hour
 	.public.GetDistance_m = &_GetDistance_m,  // get distance in meters
-	.public.Do = &_Do  // set function pointer
+	.public.Do = &_Do,  // set function pointer
+	.public.LightOff = &_LightOff  // set function pointer
 	};
 
 autodrive_t* autodrive_ctor(void)  //

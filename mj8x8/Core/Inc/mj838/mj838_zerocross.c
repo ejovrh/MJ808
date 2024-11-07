@@ -6,7 +6,7 @@
 #include "zerocross/zerocross_actual.c"
 
 extern TIM_HandleTypeDef htim2;  // Timer2 object - input capture of zero-cross signal on rising edge
-extern TIM_HandleTypeDef htim3;  // Timer3 object - measurement/calculation interval of timer2 data - default 250ms
+extern TIM_HandleTypeDef htim3;  // Timer3 object - frequency measurement timer for timer2 data - default 250ms
 static DMA_HandleTypeDef hdma_tim2_ch1;	// zero-cross frequency measurement
 
 static __zerocross_t __ZeroCross;  // forward declaration of object
@@ -16,7 +16,7 @@ uint32_t _zc_counter_buffer[2] =
 
 volatile uint32_t _zc_counter_delta = 0;	// container for average frequency calculation
 volatile uint16_t _zcValues = 0;	// iterator for average frequency calculation
-volatile uint8_t _sleep = 0;	// timer3-based count for sleep since last zero-cross detection
+volatile uint16_t _sleep = 0;	// timer3-based count for sleep since last zero-cross detection
 volatile uint32_t _tim2ICcounterOVF = 0;	// timer2 IC counter overflow counter
 volatile float _previousFrequency = 0;	//
 
@@ -25,6 +25,8 @@ static void  _Do(void)
 {
   if (_zc_counter_delta)	// if there is data...
   {
+  		_sleep = 0;	// reset the sleep counter
+
   		// below is the 250ms-speed-average calculation for normal speeds (i.e. ZC period << 250ms)
 #if SIGNAL_GENERATOR_INPUT
   	__ZeroCross._ZeroCrossFrequency = (800000000 / (_zc_counter_delta / _zcValues) ) / 100.0;	// "round" and average dynamo AC frequency
@@ -37,24 +39,32 @@ static void  _Do(void)
   	// special handling for lower speeds (below normal walking speed)
   	if (__ZeroCross._ZeroCrossFrequency >= 5)	// 5Hz - speeds >= 0.75 mps / 2.69 kph
   	{
+  			// adapt based on detected speed
     		__HAL_TIM_SET_AUTORELOAD(&htim3, 2499);	// 250ms
   	}
   	else
  		{
   			__HAL_TIM_SET_AUTORELOAD(&htim3, 4999);	// 500ms
 
+  			// adapt based on detected speed
   	  	if (__ZeroCross._ZeroCrossFrequency < 2)	// 2 Hz - speeds < 0.3 mps / 1.07 kph
   	  		__HAL_TIM_SET_AUTORELOAD(&htim3, 9999);	// 1s
 
+  			// adapt based on detected speed
   	  	if (__ZeroCross._ZeroCrossFrequency < 1) // 1 Hz - speeds < 0.15 mps / 0.53 kph
   	  		__HAL_TIM_SET_AUTORELOAD(&htim3, 19999);	// 2s
 
+
+
+  	  	// adapt based on calculated acceleration
   	  	if (__ZeroCross._ZeroCrossFrequencyRate > 1 ) // 1Hz/s²
   	  		__HAL_TIM_SET_AUTORELOAD(&htim3, 9999);	// 1s
 
+  	  	// adapt based on calculated acceleration
   	  	if (__ZeroCross._ZeroCrossFrequencyRate > 2 ) // 2Hz/s²
   	  		__HAL_TIM_SET_AUTORELOAD(&htim3, 4999);	// 500ms
 
+  	  	// adapt based on calculated acceleration
   	  	if (__ZeroCross._ZeroCrossFrequencyRate > 4 )	// 4Hz/s²
   	  		__HAL_TIM_SET_AUTORELOAD(&htim3, 2499);	// 250ms
  		}
@@ -77,6 +87,7 @@ static void  _Do(void)
       __ZeroCross._ZeroCrossFrequencyRate = 0;	// zero & start over
       _sleep = 0;
       Device->ZeroCross->Stop();	// stop zero-cross detection; timer1 will put the device into stop mode
+      Device->AutoDrive->LightOff(); // tell AutoDrive that we are stopped
   }
 
   _zc_counter_delta = 0;	// zero & start over
@@ -142,8 +153,8 @@ static inline void _StopZeroCross(void)
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
 
+//FIXME - something is not stopping the timer: upon entering this function on standstill, the timers 2 and 3 gets stopped but turned on again somehow
 	__disable_irq();	// disable interrupts until end of initialisation
-
 	Device->StopTimer(&htim3);	// stop measurement interval timer
 	HAL_TIM_IC_Stop_DMA(&htim2, TIM_CHANNEL_1);	// stop timer2 DMA
 	__HAL_RCC_DMA1_CLK_DISABLE();	// turn off peripheral
@@ -174,13 +185,13 @@ zerocross_t* zerocross_ctor(void)
 	HAL_NVIC_SetPriority(TIM2_IRQn, 2, 0);  // Set the timer interrupt priority
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);           // Enable the timer interrupt
 
-	HAL_NVIC_SetPriority(TIM3_IRQn, 3, 0);  // event handler timer (on demand)
+	HAL_NVIC_SetPriority(TIM3_IRQn, 3, 0);  // frequency measurement timer for timer2 data (on demand)
 	HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
 	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // EXTI0 - zero-cross detection of first dynamo impulse after standstill
 	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 
-	HAL_NVIC_SetPriority(DMA1_Channel4_5_IRQn, 0, 0);  // timer2 zero-cross signal frequency measurement via DMA
+	HAL_NVIC_SetPriority(DMA1_Channel4_5_IRQn, 1, 0);  // timer2 zero-cross signal frequency measurement via DMA
 	HAL_NVIC_EnableIRQ(DMA1_Channel4_5_IRQn);
 
 	return &__ZeroCross.public;  // return public parts

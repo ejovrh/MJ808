@@ -12,7 +12,7 @@
 
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 2.5ms
 TIM_HandleTypeDef htim2;  // Timer2 object - input capture of zero-cross signal on rising edge
-TIM_HandleTypeDef htim3;  // Timer3 object - measurement/calculation interval of timer2 data - default 250ms
+TIM_HandleTypeDef htim3;  // Timer3 object - frequency measurement timer for timer2 data - default 250ms
 
 typedef struct	// mj838_t actual
 {

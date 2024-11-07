@@ -13,10 +13,10 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		uint8_t CANActive :1;  // CAN // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
 
 		// 0x3C - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus off
-		uint8_t ZeroCross :1;  // ZC // zero-cross detection is active/inactive
+		uint8_t ZeroCross :1;  // ZC // zero-cross signal present or not
 		uint8_t Motion :1;  // M // Motion detected
 		uint8_t AutoCharge :1;	// AC // AutoCharge is operating
-		uint8_t _5 :1;  // _5 //
+		uint8_t AutoDrive :1;  // AD // AutoDrive is active
 
 		// 0xC0 - don't care - the device will execute HAL_PWR_EnterSTOPMode()
 		uint8_t _6 :1;  // _6 //
@@ -33,6 +33,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define ZEROCROSS 2
 #define	MOTION 3
 #define AUTOCHARGE 4
+#define AUTODRIVE 5
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER2_PERIOD	0xFFFFFFFF // ZeroCross frequency measurement (rollover every 119 hours of constant use...)
@@ -40,9 +41,14 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TIMER17_PERIOD 24	// event handling - 2.5ms
 #define TIMER2_IC_FILTER 0xF	// with TIM_ICPSC_DIV8 and 0xF the pulse needs to be at least 35us wide
 
-#define WHEEL_CIRCUMFERENCE 1.945	// red training wheel circumference in meters
+#define WHEEL_CIRCUMFERENCE 1.945	// red 26" training wheel circumference in meters
+// TODO - measure wheel circumferences
+//#define WHEEL_CIRCUMFERENCE 1.945	// Schwalbe Marathon Mondial 29x2.25"
+//#define WHEEL_CIRCUMFERENCE 1.945	// Schwalbe Jumbo Jim 26x4"
+
 #define POLE_COUNT 13	// number of dynamo pole pairs
-#define SLEEPTIMEOUT_COUNTER 4 // N * 0.25s = foo seconds - time to stay idle, then stop zero-cross
+// 5 minutes #define SLEEPTIMEOUT_COUNTER 1200 // N * 0.25s = foo seconds - time to stay idle, then stop zero-cross
+#define SLEEPTIMEOUT_COUNTER 20 // N * 0.25s = foo seconds - time to stay idle, then stop zero-cross
 
 #include "mj8x8\mj8x8.h"
 #include "button\button.h"

@@ -82,7 +82,15 @@ static inline void _EventHandlerEvent02(void)
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_03, &_payload, 2);  // send it
 #endif
 #ifdef MJ838_
-	;
+	// dim light - front 10%, rear 25%
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
+
+	_payload = 10;
+	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
+	_payload = 25;
+	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
+
+	// FIXME - add can filtering so that 808 doesnt get 818 messages
 #endif
 	;
 }
@@ -104,7 +112,7 @@ static inline void _EventHandlerEvent03(void)
 			_payload = (RED | OFF);
 			Device->led->led[Red].Shine(OFF);
 		}
-	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_01, &_payload, 2);// send it
+	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_01, &_payload, 2);  // send it
 #endif
 #ifdef MJ828_
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
@@ -120,7 +128,8 @@ static inline void _EventHandlerEvent03(void)
 			Device->led->led[Blue].Shine(OFF);
 		}
 
-	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_02, &_payload, 2);  // send it
+	// FIXME - add can filtering so that 808 doesnt get 818 messages
+	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_02, &_payload, 2);  // send it
 #endif
 #ifdef MJ838_
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
@@ -137,6 +146,17 @@ static inline void _EventHandlerEvent04(void)
 {
 #ifdef MJ828_
 	Device->autobatt->DisplayBatteryVoltage();  // light up BatteryX LEDs according to voltage read at Vbat
+#endif
+#ifdef MJ838_
+	// low light - front 35%, rear 50%
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
+
+	_payload = 35;
+	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
+	_payload = 50;
+	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
+
+	// FIXME - add can filtering so that 808 doesnt get 818 messages
 #endif
 	;
 }
@@ -159,7 +179,20 @@ static inline void _EventHandlerEvent05(void)
 			Device->led->led[Green].Shine(OFF);
 		}
 
+	// FIXME - add can filtering so that 808 doesnt get 818 messages
+	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
+#endif
+#ifdef MJ838_
+	// max. light - front 100%, rear 100%
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
+
+	_payload = 50;
+	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
+	_payload = 100;
+	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
+
+	// FIXME - add can filtering so that 808 doesnt get 818 messages
 #endif
 	;
 }
@@ -183,7 +216,19 @@ static inline void _EventHandlerEvent06(void)
 			Device->mj8x8->UpdateActivity(AUTOLIGHT, OFF);	// mark inactivity
 			Device->led->led[Yellow].Shine(OFF);
 		}
+
+	// FIXME - add can filtering so that 808 doesnt get 818 messages
+	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_01, &_payload, 2);  // send it
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_01, &_payload, 2);  // send it
+#endif
+#ifdef MJ838_
+	// normal light - front 50%, rear 100%
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
+
+	_payload = 100;
+	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
+	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
+// FIXME - add can filtering so that 808 doesnt get 818 messages
 #endif
 	;
 }
@@ -206,6 +251,17 @@ static inline void _EventHandlerEvent07(void)
 			Device->led->led[Green].Shine(OFF);  //	turn green indicator off
 		}
 
+	// FIXME - add can filtering so that 808 doesnt get 818 messages
+	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
+	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
+#endif
+#ifdef MJ838_
+	// light off - front 0%, rear 0%
+	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
+
+	_payload = 0;
+	// FIXME - add can filtering so that 808 doesnt get 818 messages
+	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 #endif
 	;
@@ -333,7 +389,8 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 	Device->adc->Start();
 #endif
 #ifdef MJ838_
-	;
+	if(msg->sid)
+		;
 #endif
 
 	return 0;
@@ -469,7 +526,7 @@ static uint32_t (*_BranchtableMsgBtnEvent[])(can_msg_t *msg) =  // branch table
 		(void *)(can_msg_t *)&_MsgBtnEvent01,// center button toggle on mj808 or mj828 - light up red utility led
 		(void *)(can_msg_t *)&_MsgBtnEvent02,// mj828 high beam button momentary
 		(void *)(can_msg_t *)&_MsgBtnEvent03,// mj828 brake light button momentary
-		(void *)(can_msg_t *)&_MsgBtnEvent04,// mj838 AutoBat status
+		(void *)(can_msg_t *)&_MsgBtnEvent04,// mj828 AutoBat status
 		(void *)(can_msg_t *)&_MsgBtnEvent05,// mj838 AutoCharge on/off
 		(void *)(can_msg_t *)&_DoNothing,//
 		(void *)(can_msg_t *)&_DoNothing,//
