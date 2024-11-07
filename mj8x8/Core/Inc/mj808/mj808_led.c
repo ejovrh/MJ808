@@ -15,7 +15,7 @@ static primitive_led_t __primitive_led[4] __attribute__ ((section (".data")));	/
 static uint32_t (*_fptr)(const uint8_t state);	// function pointer for branch table
 static uint8_t _BlinkExclusionMask;	// exclusion mask used for blinking
 
-static const uint8_t _fade_fransfer[] =	// fade transfer curve according to MacNamara
+static const uint8_t _fade_transfer[] =	// fade transfer curve according to MacNamara
 	{  // see https://tigoe.github.io/LightProjects/fading.html
 	0, 0, 0, 0, 0, 0, 0, 1, 1, 1,	// 10 by 10
 	1, 1, 1, 1, 1, 1, 1, 1, 2, 2,	// ...
@@ -36,15 +36,15 @@ static void _MacNamaraFader(void)
 {
 	if(FRONT_LIGHT_CCR < Device->led->led[Front].ocr)  // fade up
 		{
-			FRONT_LIGHT_CCR = _fade_fransfer[i++];
+			FRONT_LIGHT_CCR = _fade_transfer[i++];
 
-			if(FRONT_LIGHT_CCR >= Device->led->led[Front].ocr && __LED._BlinkFlags == 0)
+			if(FRONT_LIGHT_CCR >= Device->led->led[Front].ocr && __LED._BlinkFlags == 0 && __LED._ShineFlags == 0)
 				Device->StopTimer(&htim14);  // stop the timer
 		}
 
 	if(FRONT_LIGHT_CCR > Device->led->led[Front].ocr)  // fade down
 		{
-			FRONT_LIGHT_CCR = _fade_fransfer[--i];
+			FRONT_LIGHT_CCR = _fade_transfer[--i];
 
 			if(FRONT_LIGHT_CCR == 0)
 				{
@@ -132,7 +132,7 @@ static inline void _physicalFrontLED(const uint8_t value)
 			__LED._ShineFlags |= _BV(Front);	// set the front light flag
 		}
 
-	Device->led->led[Front].ocr = value;	// set OCR value, the handler will do the rest
+	Device->led->led[Front].ocr = value;	// set OCR value, the _LEDHandler() will do the rest
 	__HAL_TIM_ENABLE_IT(&htim14, TIM_IT_UPDATE);	// start timer
 }
 

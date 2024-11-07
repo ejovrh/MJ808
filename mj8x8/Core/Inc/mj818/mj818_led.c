@@ -13,7 +13,7 @@ extern TIM_HandleTypeDef htim14;  // Timer14 object - LED handling - 20ms
 
 static primitive_led_t __primitive_led[2] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
-static const uint8_t _fade_fransfer[] =	// fade transfer curve according to MacNamara
+static const uint8_t _fade_transfer[] =	// fade transfer curve according to MacNamara
 	{  // see https://tigoe.github.io/LightProjects/fading.html
 	0, 0, 0, 0, 0, 0, 0, 1, 1, 1,	// 10 by 10
 	1, 1, 1, 1, 1, 1, 1, 1, 2, 2,	// ...
@@ -34,14 +34,14 @@ volatile static uint8_t j = 0;	// brake
 static void _MacNamaraFadeHandler(void)
 {
 	if(REAR_LIGHT_CCR < Device->led->led[Rear].ocr)  // fade up
-		REAR_LIGHT_CCR = _fade_fransfer[i++];
+		REAR_LIGHT_CCR = _fade_transfer[i++];
 
 	if(BRAKE_LIGHT_CCR < Device->led->led[Brake].ocr)  // fade up
-		BRAKE_LIGHT_CCR = _fade_fransfer[j++];
+		BRAKE_LIGHT_CCR = _fade_transfer[j++];
 
 	if(REAR_LIGHT_CCR > Device->led->led[Rear].ocr)  // fade down
 		{
-			REAR_LIGHT_CCR = _fade_fransfer[--i];
+			REAR_LIGHT_CCR = _fade_transfer[--i];
 
 			if(REAR_LIGHT_CCR == 0)
 				Device->mj8x8->UpdateActivity(REARLIGHT, OFF);	// mark inactivity
@@ -49,7 +49,7 @@ static void _MacNamaraFadeHandler(void)
 
 	if(BRAKE_LIGHT_CCR > Device->led->led[Brake].ocr)  // fade down
 		{
-			BRAKE_LIGHT_CCR = _fade_fransfer[--j];
+			BRAKE_LIGHT_CCR = _fade_transfer[--j];
 
 			if(BRAKE_LIGHT_CCR == 0)
 				Device->mj8x8->UpdateActivity(BRAKELIGHT, OFF);	// mark inactivity
