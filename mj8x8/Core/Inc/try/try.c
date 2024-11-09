@@ -89,8 +89,6 @@ static inline void _EventHandlerEvent02(void)
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 	_payload = 25;
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
-
-	// FIXME - add can filtering so that 808 doesnt get 818 messages
 #endif
 	;
 }
@@ -128,12 +126,11 @@ static inline void _EventHandlerEvent03(void)
 			Device->led->led[Blue].Shine(OFF);
 		}
 
-	// FIXME - add can filtering so that 808 doesnt get 818 messages
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_02, &_payload, 2);  // send it
 #endif
 #ifdef MJ838_
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
-
+	// FIXME - on wheel stop and once poweroff should occur, mj828 red led remains lit
 	_payload = !Device->AutoCharge->IsLoadConnected();  // 0 - LED on (load disconnected), 1 - LED off (load connected)
 
 	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_05, &_payload, 2);  // send it
@@ -155,8 +152,6 @@ static inline void _EventHandlerEvent04(void)
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 	_payload = 50;
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
-
-	// FIXME - add can filtering so that 808 doesnt get 818 messages
 #endif
 	;
 }
@@ -179,7 +174,6 @@ static inline void _EventHandlerEvent05(void)
 			Device->led->led[Green].Shine(OFF);
 		}
 
-	// FIXME - add can filtering so that 808 doesnt get 818 messages
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 #endif
@@ -191,8 +185,6 @@ static inline void _EventHandlerEvent05(void)
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 	_payload = 100;
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
-
-	// FIXME - add can filtering so that 808 doesnt get 818 messages
 #endif
 	;
 }
@@ -217,7 +209,6 @@ static inline void _EventHandlerEvent06(void)
 			Device->led->led[Yellow].Shine(OFF);
 		}
 
-	// FIXME - add can filtering so that 808 doesnt get 818 messages
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_01, &_payload, 2);  // send it
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_01, &_payload, 2);  // send it
 #endif
@@ -228,7 +219,6 @@ static inline void _EventHandlerEvent06(void)
 	_payload = 100;
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
-// FIXME - add can filtering so that 808 doesnt get 818 messages
 #endif
 	;
 }
@@ -251,7 +241,6 @@ static inline void _EventHandlerEvent07(void)
 			Device->led->led[Green].Shine(OFF);  //	turn green indicator off
 		}
 
-	// FIXME - add can filtering so that 808 doesnt get 818 messages
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 #endif
@@ -260,9 +249,9 @@ static inline void _EventHandlerEvent07(void)
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
 	_payload = 0;
-	// FIXME - add can filtering so that 808 doesnt get 818 messages
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
+	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_02, &_payload, 2);  // send it
 #endif
 	;
 }
@@ -281,6 +270,7 @@ static inline void _EventHandlerEvent08(void)
 	else
 		_payload = 100;  // argument is remaining charge in percent
 
+	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_04, &_payload, 2);  // send it
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_04, &_payload, 2);  // send it
 #endif
 	;
@@ -390,7 +380,7 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 #endif
 #ifdef MJ838_
 	if(msg->sid)
-		;
+	;
 #endif
 
 	return 0;
@@ -418,8 +408,10 @@ static inline void _MsgBtnEvent02(can_msg_t *msg)
 #ifdef MJ808_
 	Device->led->led[Front].Shine(msg->ARGUMENT);
 #endif
-
 	return;
+#ifdef MJ828_
+	Device->led->led[Red].Shine(msg->ARGUMENT);  // argument is OFF, ON, BLINK
+#endif
 }
 
 // mj828 brake light button momentary
@@ -462,7 +454,7 @@ static inline void _MsgBtnEvent04(can_msg_t *msg)
 static inline void _MsgBtnEvent05(can_msg_t *msg)
 {
 #ifdef MJ828_
-	Device->led->led[Red].Shine(msg->ARGUMENT);	// argument is OFF, ON, BLINK
+	Device->led->led[Red].Shine(msg->ARGUMENT);  // argument is OFF, ON, BLINK
 	Device->adc->Start();
 #endif
 

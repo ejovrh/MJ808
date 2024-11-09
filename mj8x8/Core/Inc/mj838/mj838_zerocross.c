@@ -6,7 +6,7 @@
 #include "zerocross/zerocross_actual.c"
 
 extern TIM_HandleTypeDef htim2;  // Timer2 object - input capture of zero-cross signal on rising edge
-extern TIM_HandleTypeDef htim3;  // Timer3 object - frequency measurement timer for timer2 data - default 250ms
+extern TIM_HandleTypeDef htim3;  // Timer3 object - periodic frequency measurement of timer2 data - default 250ms
 static DMA_HandleTypeDef hdma_tim2_ch1;	// zero-cross frequency measurement
 
 static __zerocross_t __ZeroCross;  // forward declaration of object
@@ -21,7 +21,7 @@ volatile uint32_t _tim2ICcounterOVF = 0;	// timer2 IC counter overflow counter
 volatile float _previousFrequency = 0;	//
 
 // timer3-triggered - computes Zero-Cross signal frequency, normally at 250ms intervals
-static void  _Do(void)
+static void _Do(void)
 {
   if (_zc_counter_delta)	// if there is data...
   {

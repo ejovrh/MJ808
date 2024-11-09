@@ -247,35 +247,76 @@ __can_t __CAN =  // instantiate can_t actual and set function pointers
 	.public.RequestToSend = &_tcan334_can_msg_send,  // ditto
 	};
 
-static inline void _ConfigFilters(void)
+static inline void _ConfigFilters(const uint8_t in_MJ8x8_ID)
 {
-	static CAN_FilterTypeDef _FilterCondfig = {0}; // CAN filter configuration object
+	static CAN_FilterTypeDef _FilterCondfig =
+		{0};  // CAN filter configuration object
 
-	// TODO - CAN filters - configure filters
-	_FilterCondfig.FilterBank = 0;	// allow all for FIFOo
+	_FilterCondfig.FilterBank = 0;	// mj8x8 bus traffic - heartbeat and high prio.
 	_FilterCondfig.FilterMode = CAN_FILTERMODE_IDMASK;
-	_FilterCondfig.FilterScale = CAN_FILTERSCALE_32BIT;
-	_FilterCondfig.FilterIdHigh = 0x0000;
-	_FilterCondfig.FilterIdLow = 0x0000;
-	_FilterCondfig.FilterMaskIdHigh = 0x0000;
-	_FilterCondfig.FilterMaskIdLow = 0x0000;
-//	_FilterCondfig.FilterMaskIdHigh = 0xFFFF;
-//	_FilterCondfig.FilterMaskIdLow = 0xFFFF;
+	_FilterCondfig.FilterScale = CAN_FILTERSCALE_16BIT;
+	// mj8x8 heartbeat - low prio and broadcast without recipient
+	_FilterCondfig.FilterMaskIdLow = 0x61E0;  // FxR1 high - 0x30f << 5
+	_FilterCondfig.FilterIdLow = 0x6000;  // RxR1 low - 0x300 << 5
+	// high priority
+	_FilterCondfig.FilterMaskIdHigh = 0x4000;  // FxR2 high - 0x200 << 5
+	_FilterCondfig.FilterIdHigh = 0x0000;  // FxR2 low
 	_FilterCondfig.FilterFIFOAssignment = CAN_RX_FIFO0;
 	_FilterCondfig.FilterActivation = ENABLE;
 	HAL_CAN_ConfigFilter(&_hcan, &_FilterCondfig);
 
-	_FilterCondfig.FilterBank = 1;	// allow all for FIFO1
+	_FilterCondfig.FilterBank = 1;	// mj8x8 bus traffic - braodcasts
 	_FilterCondfig.FilterMode = CAN_FILTERMODE_IDMASK;
-	_FilterCondfig.FilterScale = CAN_FILTERSCALE_32BIT;
-	_FilterCondfig.FilterIdHigh = 0x0000;
-	_FilterCondfig.FilterIdLow = 0x0000;
+	_FilterCondfig.FilterScale = CAN_FILTERSCALE_16BIT;
+	// all broadcast
+	_FilterCondfig.FilterMaskIdLow = 0x2000;  // FxR1 high - 0x100 << 5
+	_FilterCondfig.FilterIdLow = 0x2000;  // RxR1 low - 0x100 << 5
+	// catchall - drop everything else
+	_FilterCondfig.FilterMaskIdHigh = 0xFFFF;  // FxR2 high
+	_FilterCondfig.FilterIdHigh = 0xFFFF;  // FxR2 low
+	_FilterCondfig.FilterFIFOAssignment = CAN_RX_FIFO0;
+	_FilterCondfig.FilterActivation = ENABLE;
+	HAL_CAN_ConfigFilter(&_hcan, &_FilterCondfig);
 
-//	_FilterCondfig.FilterMaskIdHigh = 0xFFFF;
-//	_FilterCondfig.FilterMaskIdLow = 0xFFFF;
+	uint8_t id = in_MJ8x8_ID;
+	_FilterCondfig.FilterBank = 2;	// traffic intended for this particular node
+	_FilterCondfig.FilterMode = CAN_FILTERMODE_IDMASK;
+	_FilterCondfig.FilterScale = CAN_FILTERSCALE_16BIT;
+	// accept only traffic addressed to this particular node
+	_FilterCondfig.FilterMaskIdLow = 0x21E0;  // FxR1 high - 0x10F << 5 -- all rcpt. bits and unicast, regardless of prio.
+	_FilterCondfig.FilterIdLow = (id << 5);  // FxR1 low
+	// catchall - drop everything else
+	_FilterCondfig.FilterMaskIdHigh = 0xFFFF;  // FxR2 high
+	_FilterCondfig.FilterIdHigh = 0xFFFF;  // FxR2 low
 	_FilterCondfig.FilterFIFOAssignment = CAN_RX_FIFO1;
 	_FilterCondfig.FilterActivation = ENABLE;
 	HAL_CAN_ConfigFilter(&_hcan, &_FilterCondfig);
+
+#if CAN_FILTER_ALLOW_ALL
+	_FilterCondfig.FilterBank = 3;	// allow all
+	_FilterCondfig.FilterMode = CAN_FILTERMODE_IDMASK;
+	_FilterCondfig.FilterScale = CAN_FILTERSCALE_16BIT;
+	_FilterCondfig.FilterMaskIdLow = 0x0000;  // FxR1 high
+	_FilterCondfig.FilterIdLow = 0x0000;  // RxR1 low
+	_FilterCondfig.FilterMaskIdHigh = 0x0000;  // FxR2 high
+	_FilterCondfig.FilterIdHigh = 0x0000;  // FxR2 low
+	_FilterCondfig.FilterFIFOAssignment = CAN_RX_FIFO1;
+	_FilterCondfig.FilterActivation = ENABLE;
+	HAL_CAN_ConfigFilter(&_hcan, &_FilterCondfig);
+#endif
+
+//	_FilterCondfig.FilterBank = 4;	// used to show which registers are populated with what
+//	_FilterCondfig.FilterMode = CAN_FILTERMODE_IDMASK;
+//	_FilterCondfig.FilterScale = CAN_FILTERSCALE_16BIT;
+//	// FxR1
+//	_FilterCondfig.FilterMaskIdLow = 0x22bb;	// FxR1 high
+//	_FilterCondfig.FilterIdLow = 0x44dd;	// RxR1 low
+//	// FxR2
+//	_FilterCondfig.FilterMaskIdHigh = 0x11aa;  // FxR2 high
+//	_FilterCondfig.FilterIdHigh = 0x33cc;  // FxR2 low
+//	_FilterCondfig.FilterFIFOAssignment = CAN_RX_FIFO0;
+//	_FilterCondfig.FilterActivation = ENABLE;
+//	HAL_CAN_ConfigFilter(&_hcan, &_FilterCondfig);
 }
 
 // CAN init
@@ -308,8 +349,6 @@ inline static void _CANInit(void)
 	__HAL_RCC_CAN1_CLK_ENABLE();
 	HAL_CAN_Init(&_hcan);  // Initialize CAN Bus
 
-	_ConfigFilters();  // set up filters
-
 	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 3, 0);
 	HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
 
@@ -318,11 +357,12 @@ inline static void _CANInit(void)
 }
 
 // object constructor
-can_t* can_ctor(void)
+can_t* can_ctor(const uint8_t in_MJ8x8_ID)
 {
 // at this point STM32's TCAN334 Stby and Shdn pins are initialised and pulled up
 // TCAN334 is in shutdown/standby mode
 	_CANInit();  // initialize & configure STM32's CAN peripheral
+	_ConfigFilters(in_MJ8x8_ID);  // set up filters
 
 	__CAN.public.GoBusActive(1);	// start with CAN active by default
 	return &__CAN.public;  // return address of public part; calling code accesses it via pointer

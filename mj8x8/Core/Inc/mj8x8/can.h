@@ -6,6 +6,7 @@
 
 #define POWERSAVE_CANBUS_ACTIVE_MASK 0x03
 #define	POWERSAVE_DEVICE_SLEEPONEXIT_ACTIVE_MASK 0x3F
+#define CAN_FILTER_ALLOW_ALL 0
 
 typedef union  // union for core activity indication and CAN standby control (is exposed to end device via mj8x8_t)
 {
@@ -58,6 +59,6 @@ typedef struct can_t	// can_t struct describing the CAN device as a whole
 	void (*const RequestToSend)(can_msg_t *const msg);  // requests message to be sent to the CAN bus
 } can_t __attribute__((aligned(8)));
 
-can_t* can_ctor();	// CAN object constructor - does function pointer & hardware initialisation
+can_t* can_ctor(const uint8_t in_MJ8x8_ID);  // CAN object constructor - does function pointer & hardware initialisation
 
 #endif /* CORE_INC_MJ8X8_CAN_H_ */

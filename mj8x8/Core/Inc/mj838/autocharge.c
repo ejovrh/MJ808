@@ -21,7 +21,8 @@ typedef struct	// autocharge_t actual
 } __autocharge_t;
 
 static uint8_t _FlagStopChargerCalled = 0;	// flag indicating if _StopCharger() was called already
-
+static volatile uint8_t _StartChargercntr = 0;
+static volatile uint8_t _StopChargercntr = 0;
 static __autocharge_t __AutoCharge __attribute__ ((section (".data")));  // preallocate __AutoCharge object in .data
 
 // returns High-Side load switch state: 0 - disconnected, 1 - connected
@@ -43,7 +44,7 @@ static inline void _StartCharger(void)
 {
 	if(_IsLoadConnected() == ON)  // if already on
 		return;  // get out, nothing to do here
-
+	++_StartChargercntr;
 	_ConnectLoad(ON);  // connect the load
 
 	EventHandler->Notify(EVENT03);	// notify event
@@ -56,10 +57,10 @@ static inline void _StopCharger(void)
 {
 	if(_IsLoadConnected() == OFF && _FlagStopChargerCalled == 1)  // if already off and not called before
 		return;
+	++_StopChargercntr;
+	_ConnectLoad(OFF);  // disconnect the load
 
 	EventHandler->Notify(EVENT03);	// notify event
-
-	_ConnectLoad(OFF);  // disconnect the load
 
 	_FlagStopChargerCalled = 1;  // mark as called
 }
@@ -116,7 +117,10 @@ static inline void _SSR_SW_D(const uint8_t state)
 // AutoCharge functionality
 static void _Do(void)
 {
-	// FIXME - verify last remaining SSR operation (IIRC one SSR was friend and would not connect when activated)
+	if(Device->AutoDrive->GetSpeed_mps() == 0)
+		_FlagStopChargerCalled = 0;  // mark as not called
+
+	// FIXME - verify last remaining SSR operation (IIRC one SSR was fried and would not connect when activated)
 	if(Device->AutoDrive->GetSpeed_mps() < LOAD_CONNECT_THRESHOLD_SPEED_LOW)  // low speed - load is disconnected
 		{
 			_StopCharger();  // stop, but with a caveat
@@ -169,6 +173,7 @@ autocharge_t* autocharge_ctor(void)  //
 {
 //	HAL_GPIO_WritePin(LoadFet_GPIO_Port, LoadFet_Pin, GPIO_PIN_RESET);	// explicitly again for clarity - start with load disconnected !!!
 
+	_FlagStopChargerCalled = 0;
 	__AutoCharge.__LoadSwitch = HAL_GPIO_ReadPin(LoadFet_GPIO_Port, LoadFet_Pin);  // read out initial switch states
 	__AutoCharge.__SW1 = HAL_GPIO_ReadPin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin);	// ditto
 	__AutoCharge.__SW2 = HAL_GPIO_ReadPin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin);
