@@ -267,7 +267,7 @@ mj8x8_t* mj8x8_ctor(const mj8x8_Devices_t in_MJ8x8_ID)
 
 	__MJ8x8.__NumericalCAN_ID = in_MJ8x8_ID;	// set the numerical CAN ID - 0 through 15.
 
-	__MJ8x8.public.can = can_ctor();	// pass on CAN public part
+	__MJ8x8.public.can = can_ctor(in_MJ8x8_ID);  // tie in CAN public part & pass down devise's own CAN ID for filter config
 	__MJ8x8.public.activity = (uint8_t**) &__MJ8x8.public.can->activity;  // tie in can_t activity into mj8x8_t activity  (is tied in again one level up)
 	__MJ8x8.public.can->own_sid = (in_MJ8x8_ID << 4);  // translate MJ8x8 device ID to sender format for a mj8x8-CAN standard ID frame
 	__MJ8x8.public.can->activity->DoHeartbeat = 1;	// start up with heartbeat enabled

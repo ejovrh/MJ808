@@ -58,6 +58,6 @@ typedef struct can_t	// can_t struct describing the CAN device as a whole
 	void (*const RequestToSend)(can_msg_t *const msg);  // requests message to be sent to the CAN bus
 } can_t __attribute__((aligned(8)));
 
-can_t* can_ctor();	// CAN object constructor - does function pointer & hardware initialisation
+can_t* can_ctor(const uint8_t in_MJ8x8_ID);  // CAN object constructor - does function pointer & hardware initialisation
 
 #endif /* CORE_INC_MJ8X8_CAN_H_ */
