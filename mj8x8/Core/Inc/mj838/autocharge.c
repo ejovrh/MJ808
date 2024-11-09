@@ -4,9 +4,26 @@
 
 #include "autocharge.h"
 
+typedef enum   // enum of lights on this device
+{
+	  SpeedStopped,  //
+	  SpeedbelowChargerThres,  //
+	  SpeedaboveChargerThres,  //
+	  Speed0,  // standstill
+	  Speed2,  // 2
+	  Speed4,  // 4
+	  Speed6,  // 6
+	  Speed8,  // 8
+	  Speed10,  // 10
+	  Speed12  // 12
+} autocharge_speedlevels_t;
+
 typedef struct	// autocharge_t actual
 {
 	autocharge_t public;  // public struct
+
+	volatile autocharge_speedlevels_t _SpeedLevel;	//
+	volatile autocharge_speedlevels_t _previousSpeedLevel;	//
 
 	// 0 - switch open, 1 - switch closed -- regardless of NC or NO
 	uint8_t __SW1 :1;  // SSR SW1 state (NC) - 0 open, 1 closed
@@ -23,6 +40,8 @@ typedef struct	// autocharge_t actual
 static uint8_t _FlagStopChargerCalled = 0;	// flag indicating if _StopCharger() was called already
 static volatile uint8_t _StartChargercntr = 0;
 static volatile uint8_t _StopChargercntr = 0;
+static volatile uint8_t _foocntr = 0;
+
 static __autocharge_t __AutoCharge __attribute__ ((section (".data")));  // preallocate __AutoCharge object in .data
 
 // returns High-Side load switch state: 0 - disconnected, 1 - connected
@@ -57,6 +76,10 @@ static inline void _StopCharger(void)
 {
 	if(_IsLoadConnected() == OFF && _FlagStopChargerCalled == 1)  // if already off and not called before
 		return;
+
+//	if(Device->ZeroCross->GetZCFrequency() <= 0)
+//		return;
+
 	++_StopChargercntr;
 	_ConnectLoad(OFF);  // disconnect the load
 
@@ -114,53 +137,80 @@ static inline void _SSR_SW_D(const uint8_t state)
 //	__AutoCharge.__SW_X = state;
 //}
 
-// AutoCharge functionality
-static void _Do(void)
+// AutoCharge functionality - called by timer 3 ISR - usually every 250ms
+// FIXME - verify last remaining SSR operation (IIRC one SSR was fried and would not connect when activated)
+
+static void _Do(void)  // this actually runs the AutoCharge application
 {
-	if(Device->AutoDrive->GetSpeed_mps() == 0)
-		_FlagStopChargerCalled = 0;  // mark as not called
-
-	// FIXME - verify last remaining SSR operation (IIRC one SSR was fried and would not connect when activated)
-	if(Device->AutoDrive->GetSpeed_mps() < LOAD_CONNECT_THRESHOLD_SPEED_LOW)  // low speed - load is disconnected
-		{
-			_StopCharger();  // stop, but with a caveat
-		}
-
-	if(Device->AutoDrive->GetSpeed_mps() > LOAD_CONNECT_THRESHOLD_SPEED_HIGH)  // high enough speed - load is connected
-		{
-			_StartCharger();	// start, if not already started
-		}
-
-	if(Device->AutoDrive->GetSpeed_mps() > 2)  // high enough speed - load is connected
-		_SSR_SW1(ON);
-	else
-		_SSR_SW1(OFF);
-
-	if(Device->AutoDrive->GetSpeed_mps() > 4)  // high enough speed - load is connected
-		_SSR_SW2(ON);
-	else
-		_SSR_SW2(OFF);
-
-	if(Device->AutoDrive->GetSpeed_mps() > 6)  // high enough speed - load is connected
-		_SSR_SW_CA(ON);
-	else
-		_SSR_SW_CA(OFF);
-
-	if(Device->AutoDrive->GetSpeed_mps() > 8)  // high enough speed - load is connected
-		_SSR_SW_CB(ON);
-	else
-		_SSR_SW_CB(OFF);
-
-	if(Device->AutoDrive->GetSpeed_mps() > 10)  // high enough speed - load is connected
-		_SSR_SW_CC(ON);
-	else
-		_SSR_SW_CC(OFF);
-
+	// set speed flags on each measurement
 	if(Device->AutoDrive->GetSpeed_mps() > 12)  // high enough speed - load is connected
-		_SSR_SW_D(ON);
-	else
-		_SSR_SW_D(OFF);
+		__AutoCharge._SpeedLevel = Speed12;
+	else if(Device->AutoDrive->GetSpeed_mps() > 10)  // high enough speed - load is connected
+		__AutoCharge._SpeedLevel = Speed10;
+	else if(Device->AutoDrive->GetSpeed_mps() > 8)  // high enough speed - load is connected
+		__AutoCharge._SpeedLevel = Speed8;
+	else if(Device->AutoDrive->GetSpeed_mps() > 6)  // high enough speed - load is connected
+		__AutoCharge._SpeedLevel = Speed6;
+	else if(Device->AutoDrive->GetSpeed_mps() > 4)  // high enough speed - load is connected
+		__AutoCharge._SpeedLevel = Speed4;
+	else if(Device->AutoDrive->GetSpeed_mps() > LOAD_CONNECT_THRESHOLD_SPEED_HIGH)  // high enough speed - load is connected
+		__AutoCharge._SpeedLevel = SpeedaboveChargerThres;
+	else if(Device->AutoDrive->GetSpeed_mps() > 2)  // low speed - load is disconnected
+		__AutoCharge._SpeedLevel = Speed2;
+	else if(Device->AutoDrive->GetSpeed_mps() < LOAD_CONNECT_THRESHOLD_SPEED_LOW)  // low speed - load is disconnected
+		__AutoCharge._SpeedLevel = SpeedbelowChargerThres;
+	else if(Device->AutoDrive->GetSpeed_mps() <= 0.1)  // stopped
+		__AutoCharge._SpeedLevel = SpeedStopped;
 
+	if(__AutoCharge._SpeedLevel != __AutoCharge._previousSpeedLevel)	// if the speed flags have changed
+		{
+			++_foocntr;
+			__AutoCharge._previousSpeedLevel = __AutoCharge._SpeedLevel;	// save current state
+
+			if(__AutoCharge._SpeedLevel <= SpeedbelowChargerThres)  // low speed - load is disconnected
+				{
+					_StopCharger();  // stop, but with a caveat
+
+					if(__AutoCharge._SpeedLevel == SpeedStopped)
+						_FlagStopChargerCalled = 0;  // mark as not called
+
+					return;
+				}
+
+			// SSR control based on speed flags - logic will change
+			if(__AutoCharge._SpeedLevel >= SpeedaboveChargerThres)  // high enough speed - load is connected
+				_StartCharger();  // start, if not already started
+
+			if(__AutoCharge._SpeedLevel == Speed12)
+				_SSR_SW_D(ON);
+			else
+				_SSR_SW_D(OFF);
+
+			if(__AutoCharge._SpeedLevel == Speed10)
+				_SSR_SW_CC(ON);
+			else
+				_SSR_SW_CC(OFF);
+
+			if(__AutoCharge._SpeedLevel == Speed8)
+				_SSR_SW_CB(ON);
+			else
+				_SSR_SW_CB(OFF);
+
+			if(__AutoCharge._SpeedLevel == Speed6)
+				_SSR_SW_CA(ON);
+			else
+				_SSR_SW_CA(OFF);
+
+			if(__AutoCharge._SpeedLevel == Speed4)
+				_SSR_SW2(ON);
+			else
+				_SSR_SW2(OFF);
+
+			if(__AutoCharge._SpeedLevel == Speed2)
+				_SSR_SW1(ON);
+			else
+				_SSR_SW1(OFF);
+		}
 }
 
 static __autocharge_t __AutoCharge =  // instantiate autobatt_t actual and set function pointers
