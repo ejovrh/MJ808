@@ -140,6 +140,17 @@ static inline void _SSR_SW_D(const uint8_t state)
 // AutoCharge functionality - called by timer 3 ISR - usually every 250ms
 // FIXME - verify last remaining SSR operation (IIRC one SSR was fried and would not connect when activated)
 
+// compares current and previous speed levels and sets speed level change flag
+static inline uint8_t _CompareSpeedLevelsandFlag(const autocharge_speedlevels_t in_level)
+{
+	if(__AutoCharge._previousSpeedLevel == in_level)  // if speed level was not changed
+		return 0;  // do not enable notification flag (see very first if-clause in Do())
+
+	__AutoCharge._previousSpeedLevel = __AutoCharge._SpeedLevel;	// save current speed level
+	__AutoCharge._SpeedLevel = in_level;  // set new light level
+	return 1;  // enable notification flag (see calling if-clause in Do())
+}
+
 static void _Do(void)  // this actually runs the AutoCharge application
 {
 	// set speed flags on each measurement
@@ -162,10 +173,9 @@ static void _Do(void)  // this actually runs the AutoCharge application
 	else if(Device->AutoDrive->GetSpeed_mps() <= 0.1)  // stopped
 		__AutoCharge._SpeedLevel = SpeedStopped;
 
-	if(__AutoCharge._SpeedLevel != __AutoCharge._previousSpeedLevel)	// if the speed flags have changed
+	if(_CompareSpeedLevelsandFlag(__AutoCharge._SpeedLevel))	// if the speed flags have changed
 		{
 			++_foocntr;
-			__AutoCharge._previousSpeedLevel = __AutoCharge._SpeedLevel;	// save current state
 
 			if(__AutoCharge._SpeedLevel <= SpeedbelowChargerThres)  // low speed - load is disconnected
 				{

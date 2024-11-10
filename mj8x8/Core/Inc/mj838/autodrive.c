@@ -40,7 +40,7 @@ typedef struct	// autodrive_t actual
 	} m;
 } __autodrive_t;
 
-static __autodrive_t   __AutoDrive   __attribute__ ((section (".data")));  // preallocate __AutoDrive object in .data
+static __autodrive_t __AutoDrive __attribute__ ((section (".data")));  // preallocate __AutoDrive object in .data
 
 static float _last_mps = 0;  // used to check if speed has changed
 static volatile uint8_t _FlagSendLightlevelChangeEvent;  // flag indicating light level change event should be sent to the bus
@@ -81,7 +81,7 @@ static inline uint8_t _CompareLightLevelsandFlag(const autodrive_lightlevels_t i
 
 	__AutoDrive._previousLightLevel = __AutoDrive._LightLevel;	// save current light level
 	__AutoDrive._LightLevel = in_level;  // set new light level
-	return 1;  // enable notification flag (see very first if-clause in Do())
+	return 1;  // enable notification flag (see calling if-clause in Do())
 }
 
 // AutoDrive functionality based on detected zero cross frequency - called by timer 3 ISR - usually every 250ms
@@ -153,7 +153,7 @@ static void _Do(void)  // this actually runs the AutoDrive application
 		}
 }
 
-static __autodrive_t   __AutoDrive =  // instantiate autobatt_t actual and set function pointers
+static __autodrive_t __AutoDrive =  // instantiate autobatt_t actual and set function pointers
 	{  //
 //	.public.FlagLightisOn = 0,	// flag if AutoDrive turned Light on
 	.public.GetSpeed_mps = &_GetSpeed_mps,  // get speed in meters per second
