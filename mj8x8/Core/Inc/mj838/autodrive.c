@@ -6,13 +6,13 @@
 
 extern TIM_HandleTypeDef htim3;  // Timer3 object - measurement/calculation interval of timer2 data - default 250ms
 
-typedef enum   // enum of lights on this device
+typedef enum   // enum of light levels on this device
 {
-	  LightOff,  //
-	  LightDim,  //
-	  LightLow,  //
-	  LightNormal,  //
-	  LightHigh,  //
+	  LightOff, 	 	// lights off with delay - front 0%, rear 0%
+	  LightDim,	  	// dim light - front 10%, rear 25%
+	  LightLow,			// low light - front 35%, rear 50%
+	  LightNormal,  // normal light - front 50%, rear 100%
+	  LightHigh,  	// high light - front 100%, rear 100%
 } autodrive_lightlevels_t;
 
 typedef struct	// autodrive_t actual
@@ -40,7 +40,7 @@ typedef struct	// autodrive_t actual
 	} m;
 } __autodrive_t;
 
-static __autodrive_t __AutoDrive __attribute__ ((section (".data")));  // preallocate __AutoDrive object in .data
+static __autodrive_t   __AutoDrive   __attribute__ ((section (".data")));  // preallocate __AutoDrive object in .data
 
 static float _last_mps = 0;  // used to check if speed has changed
 static volatile uint8_t _FlagSendLightlevelChangeEvent;  // flag indicating light level change event should be sent to the bus
@@ -66,17 +66,22 @@ static inline float _GetDistance_m(void)
 // we are at standstill
 static inline void _LightOff(void)
 {
-	EventHandler->Notify(EVENT07);	// generate event
+	if(Device->activity->AutoDrive == ON)  // run only if AD is on
+		{
+			Device->mj8x8->UpdateActivity(AUTODRIVE, OFF);  // mark device as off
+			EventHandler->Notify(EVENT07);	// generate event
+		}
 }
 
-// compares current and previous light levels and sets flags
-static inline void _CompareLightLevelsandFlag(const autodrive_lightlevels_t in_level)
+// compares current and previous light levels and sets light level change flag
+static inline uint8_t _CompareLightLevelsandFlag(const autodrive_lightlevels_t in_level)
 {
+	if(__AutoDrive._previousLightLevel == in_level)  // if light level was not changed
+		return 0;  // do not enable notification flag (see very first if-clause in Do())
+
 	__AutoDrive._previousLightLevel = __AutoDrive._LightLevel;	// save current light level
 	__AutoDrive._LightLevel = in_level;  // set new light level
-
-	if(__AutoDrive._previousLightLevel != __AutoDrive._LightLevel)	// if the light levels did change
-		_FlagSendLightlevelChangeEvent = 1;  // enable notification flag (see very first if-clause)
+	return 1;  // enable notification flag (see very first if-clause in Do())
 }
 
 // AutoDrive functionality based on detected zero cross frequency - called by timer 3 ISR - usually every 250ms
@@ -110,8 +115,27 @@ static void _Do(void)  // this actually runs the AutoDrive application
 	 *
 	 */
 
-	if(_FlagSendLightlevelChangeEvent)	// notifications should be sent only once on state change
-		{
+	if(__AutoDrive.kph.Float < 1)  // fZC of below approx. 1.87 Hz - considered standstill
+		__AutoDrive._LightLevel = LightOff;
+
+	if(__AutoDrive.kph.Float > 2)  // fZC of approx. 5.58 Hz - walking speed
+		__AutoDrive._LightLevel = LightDim;
+
+	if(__AutoDrive.kph.Float > 3)  // fZC of approx. 18.57 Hz - slow ride
+		__AutoDrive._LightLevel = LightLow;
+
+	if(__AutoDrive.kph.Float > 10)  // fZC of approx. 18.57 Hz - normal ride
+		__AutoDrive._LightLevel = LightNormal;
+
+	if(__AutoDrive.kph.Float > 40)  // fZC of approx. 74.29 Hz - faster than light travel
+		__AutoDrive._LightLevel = LightHigh;
+
+	if(_CompareLightLevelsandFlag(__AutoDrive._LightLevel))  // compares current and previous light levels and sets light level change flag
+		{  // notifications should be sent only once on state change
+			if(__AutoDrive._LightLevel > LightOff)  // any speed greater than standstill
+				if(Device->activity->AutoDrive == OFF)	// run only if AD is off
+					Device->mj8x8->UpdateActivity(AUTODRIVE, ON);  // update the bus
+
 			if(__AutoDrive._LightLevel == LightDim)
 				EventHandler->Notify(EVENT02);	// generate event
 
@@ -127,71 +151,9 @@ static void _Do(void)  // this actually runs the AutoDrive application
 			_FlagSendLightlevelChangeEvent = 0;  // unset notification flag
 			return;
 		}
-	else
-		{
-			if(__AutoDrive.kph.Float < 1)  // fZC of below approx. 1.87 Hz - considered standstill
-				{  // lights off with delay
-				   // front 0%, rear 0%
-
-					if(__AutoDrive._LightLevel == LightOff)  // if we are already in this state
-						return;
-
-					_CompareLightLevelsandFlag(LightOff);  // compare new and old light levels and if needed flag the change
-
-					return;
-				}
-
-			if(__AutoDrive.kph.Float < 3)  // fZC of approx. 5.58 Hz - walking speed
-				{  // dim light
-				   // front 10%, rear 25%
-
-					if(__AutoDrive._LightLevel == LightDim)
-						return;
-
-					_CompareLightLevelsandFlag(LightDim);  // compare new and old light levels and if needed flag the change
-
-					return;
-				}
-
-			if(__AutoDrive.kph.Float <= 10)  // fZC of approx. 18.57 Hz - slow ride
-				{  // low light
-				   // front 35%, rear 50%
-
-					if(__AutoDrive._LightLevel == LightLow)
-						return;
-
-					_CompareLightLevelsandFlag(LightLow);  // compare new and old light levels and if needed flag the change
-
-					return;
-				}
-
-			if(__AutoDrive.kph.Float > 40)  // fZC of approx. 74.29 Hz - faster than light travel
-				{
-					// front 100%, rear 100%
-
-					if(__AutoDrive._LightLevel == LightHigh)
-						return;
-
-					_CompareLightLevelsandFlag(LightHigh);  // compare new and old light levels and if needed flag the change
-
-					return;
-				}
-
-			if(__AutoDrive.kph.Float > 10)  // fZC of approx. 18.57 Hz - normal ride
-				{
-					// front 50%, rear 100%
-
-					if(__AutoDrive._LightLevel == LightNormal)
-						return;
-
-					_CompareLightLevelsandFlag(LightNormal);  // compare new and old light levels and if needed flag the change
-
-					return;
-				}
-		}
 }
 
-static __autodrive_t __AutoDrive =  // instantiate autobatt_t actual and set function pointers
+static __autodrive_t   __AutoDrive =  // instantiate autobatt_t actual and set function pointers
 	{  //
 //	.public.FlagLightisOn = 0,	// flag if AutoDrive turned Light on
 	.public.GetSpeed_mps = &_GetSpeed_mps,  // get speed in meters per second
