@@ -252,7 +252,7 @@ static inline void _EventHandlerEvent07(void)
 	_payload = 0;
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
-	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_02, &_payload, 2);  // send it
+	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_05, &_payload, 2);  // send it
 #endif
 	;
 }
@@ -410,9 +410,6 @@ static inline void _MsgBtnEvent02(can_msg_t *msg)
 	Device->led->led[Front].Shine(msg->ARGUMENT);
 #endif
 	return;
-#ifdef MJ828_
-	Device->led->led[Red].Shine(msg->ARGUMENT);  // argument is OFF, ON, BLINK
-#endif
 }
 
 // mj828 brake light button momentary

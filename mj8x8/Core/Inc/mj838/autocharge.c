@@ -168,10 +168,10 @@ static void _Do(void)  // this actually runs the AutoCharge application
 		__AutoCharge._SpeedLevel = SpeedaboveChargerThres;
 	else if(Device->AutoDrive->GetSpeed_mps() > 2)  // low speed - load is disconnected
 		__AutoCharge._SpeedLevel = Speed2;
-	else if(Device->AutoDrive->GetSpeed_mps() < LOAD_CONNECT_THRESHOLD_SPEED_LOW)  // low speed - load is disconnected
-		__AutoCharge._SpeedLevel = SpeedbelowChargerThres;
 	else if(Device->AutoDrive->GetSpeed_mps() <= 0.1)  // stopped
 		__AutoCharge._SpeedLevel = SpeedStopped;
+	else if(Device->AutoDrive->GetSpeed_mps() < LOAD_CONNECT_THRESHOLD_SPEED_LOW)  // low speed - load is disconnected
+		__AutoCharge._SpeedLevel = SpeedbelowChargerThres;
 
 	if(_CompareSpeedLevelsandFlag(__AutoCharge._SpeedLevel))	// if the speed flags have changed
 		{
@@ -179,10 +179,12 @@ static void _Do(void)  // this actually runs the AutoCharge application
 
 			if(__AutoCharge._SpeedLevel <= SpeedbelowChargerThres)  // low speed - load is disconnected
 				{
-					_StopCharger();  // stop, but with a caveat
-
 					if(__AutoCharge._SpeedLevel == SpeedStopped)
 						_FlagStopChargerCalled = 0;  // mark as not called
+
+					_StopCharger();  // stop, but with a caveat
+
+					_FlagStopChargerCalled = 0;  // mark as not called
 
 					return;
 				}
