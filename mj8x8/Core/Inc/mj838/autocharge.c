@@ -55,7 +55,7 @@ static inline void _ConnectLoad(const uint8_t state)
 {
 	HAL_GPIO_WritePin(LoadFet_GPIO_Port, LoadFet_Pin, state);  // connect or disconnect  the load
 	__AutoCharge.__LoadSwitch = state;
-	Device->mj8x8->UpdateActivity(AUTOCHARGE, state);  // mark device as on
+	Device->mj8x8->UpdateActivity(AUTOCHARGE, state);  // update the bus
 }
 
 // starts the peripheral

@@ -29,32 +29,41 @@ static const uint8_t _fade_transfer[] =	// fade transfer curve according to MacN
 	65, 68, 71, 75, 78, 82, 86, 90, 94, 100	//
 	};
 
-volatile static uint8_t i = 0;	// front
+volatile static uint8_t front_iterator = 0;	// front
 
 // fades front light pleasingly for the human eye
 static void _MacNamaraFader(void)
 {
+	/* the primitive LED functions do start timers, yet this function turns them off when needed
+	 * the iterators are stateful (static), so their value in a way reflects the CCR state.
+	 */
+
+	// front light
 	if(FRONT_LIGHT_CCR < Device->led->led[Front].ocr)  // fade up
 		{
-			FRONT_LIGHT_CCR = _fade_transfer[i++];
+			FRONT_LIGHT_CCR = _fade_transfer[front_iterator++];	// from lookup table into timer's CCR
 
-			if(FRONT_LIGHT_CCR >= Device->led->led[Front].ocr && __LED._BlinkFlags == 0 && __LED._ShineFlags == 0)
-				Device->StopTimer(&htim14);  // stop the timer
+			if (FRONT_LIGHT_CCR >= Device->led->led[Front].ocr  && __LED._BlinkFlags == 0)	// if we did fade up for long enough
+					Device->StopTimer(&htim14);  // stop the LED handling timer since fading ought to end; the iterator will keep its value
 		}
 
 	if(FRONT_LIGHT_CCR > Device->led->led[Front].ocr)  // fade down
 		{
-			FRONT_LIGHT_CCR = _fade_transfer[--i];
+			FRONT_LIGHT_CCR = _fade_transfer[--front_iterator];	// from lookup table into timer's CCR
 
-			if(FRONT_LIGHT_CCR == 0)
+			if (FRONT_LIGHT_CCR <= Device->led->led[Front].ocr)	// if we did fade down for long enough
 				{
-					Device->StopTimer(&htim3);  // stop the timer
-
 					if (__LED._BlinkFlags == 0)
-							Device->StopTimer(&htim14);  // stop the timer
+						Device->StopTimer(&htim14);  // stop the LED handling timer since fading ought to end; the iterator will keep its value
 
-					Device->mj8x8->UpdateActivity(FRONTLIGHT, OFF);	// mark inactivity
-					__LED._ShineFlags &= ~_BV(Front);	// unset front light flag
+					if(FRONT_LIGHT_CCR == 0)	// if the light is off
+						{
+							Device->StopTimer(&htim3);  // stop the PWM timer - rear light PWM
+							if (__LED._BlinkFlags == 0)
+								Device->StopTimer(&htim14);  // stop the LED handling timer since fading ought to end; the iterator will keep its value
+
+							Device->mj8x8->UpdateActivity(FRONTLIGHT, OFF);	// update the bus
+						}
 				}
 		}
 }
@@ -66,7 +75,7 @@ static void _HighBeam(const uint8_t value)
 
 	if(value == ARG_HIGHBEAM_OFF)	// high beam off command
 		{
-			Device->mj8x8->UpdateActivity(HIGHBEAM, OFF);	// mark inactivity
+			Device->mj8x8->UpdateActivity(HIGHBEAM, OFF);	// update the bus
 
 			if(Device->mj8x8->GetActivity(FRONTLIGHT))	// if front light is on
 				{
@@ -85,7 +94,7 @@ static void _HighBeam(const uint8_t value)
 
 	if(value == ARG_HIGHBEAM_ON)	// high beam on command
 		{
-			Device->mj8x8->UpdateActivity(HIGHBEAM, ON);	// mark activity
+			Device->mj8x8->UpdateActivity(HIGHBEAM, ON);	// update the bus
 //			__LED._ShineFlags |= _BV(HighBeam);	// set the high beam flag
 
 			if(Device->mj8x8->GetActivity(FRONTLIGHT))	// if front light is on
@@ -122,13 +131,13 @@ static inline void _physicalFrontLED(const uint8_t value)
 			return;
 		}
 
-	Device->StartTimer(&htim14);  // start the timer - LED handling
 	__HAL_TIM_DISABLE_IT(&htim14, TIM_IT_UPDATE);	// disable interrupts until ocr is set (timer14's ISR will otherwise kill it very soon)
+	Device->StartTimer(&htim14);  // start the timer - LED handling
 
-	if(value)
+	if(value && (Device->mj8x8->GetActivity(FRONTLIGHT) == OFF))
 		{
 			Device->StartTimer(&htim3);  // start the timer - front light PWM
-			Device->mj8x8->UpdateActivity(FRONTLIGHT, ON);	// mark activity
+			Device->mj8x8->UpdateActivity(FRONTLIGHT, ON);	// update the bus
 			__LED._ShineFlags |= _BV(Front);	// set the front light flag
 		}
 
@@ -144,7 +153,7 @@ static inline void __physicalRedLED(const uint8_t state)  // red LED on/off
 	HAL_GPIO_WritePin(RedLED_GPIO_Port, RedLED_Pin, (! state));
 
 	if (! __LED._BlinkFlags)	// if we aren't blinking...
-		Device->mj8x8->UpdateActivity(UTILLED, (__LED._ShineFlags & 0x03 ) > 0);	// ...mark activity
+		Device->mj8x8->UpdateActivity(UTILLED, (__LED._ShineFlags & 0x03 ) > 0);	// update the bus
 
 	return;
 }
@@ -157,7 +166,7 @@ static inline void __physicalGreenLED(const uint8_t state)  // green LED on/off
 	HAL_GPIO_WritePin(GreenLED_GPIO_Port, GreenLED_Pin, (! state));
 
 	if (! __LED._BlinkFlags)	// if we aren't blinking...
-		Device->mj8x8->UpdateActivity(UTILLED, (__LED._ShineFlags & 0x03 ) > 0);	// ...mark activity
+		Device->mj8x8->UpdateActivity(UTILLED, (__LED._ShineFlags & 0x03 ) > 0);	// update the bus
 
 	return;
 }
@@ -194,7 +203,7 @@ static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
 
 	__LED._ShineFlags ^= ((-(state & 0x01) ^ __LED._ShineFlags) & (1 << led));	// sets "led" bit to "state" value
 
-	Device->mj8x8->UpdateActivity(UTILLED, (__LED._BlinkFlags | 0x03) > 0);	// mark in/activity, but only for blinking (timer is needed); shining doesnt need the timer and wont set this bit
+	Device->mj8x8->UpdateActivity(UTILLED, (__LED._BlinkFlags | 0x03) > 0);	// update the bus, but only for blinking (timer is needed); shining doesnt need the timer and wont set this bit
 
 	if(state == BLINK)	// state blink
 		{
@@ -232,7 +241,7 @@ static void _Blinker(void)
 	if((__LED._ShineFlags | __LED._BlinkFlags) == 0)	// if there is any LED to glow at all
 		{
 			Device->StopTimer(&htim14);  // stop the timer
-			Device->mj8x8->UpdateActivity(UTILLED, OFF);	// mark inactivity
+			Device->mj8x8->UpdateActivity(UTILLED, OFF);	// update the bus
 			return;
 		}
 

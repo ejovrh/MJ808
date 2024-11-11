@@ -27,56 +27,79 @@ static const uint8_t _fade_transfer[] =	// fade transfer curve according to MacN
 	65, 68, 71, 75, 78, 82, 86, 90, 94, 100	//
 	};
 
-volatile static uint8_t i = 0;	// rear
-volatile static uint8_t j = 0;	// brake
+volatile static uint8_t rear_iterator = 0;	// rear
+volatile static uint8_t brake_iterator = 0;	// brake
 
-// called indirectly by timer1 (_SystemInterrupt()), handles the fading
+// called by timer14's ISR via __LED.public.Handler, handles the fading
 static void _MacNamaraFadeHandler(void)
 {
-	if(REAR_LIGHT_CCR < Device->led->led[Rear].ocr)  // fade up
-		REAR_LIGHT_CCR = _fade_transfer[i++];
+	/* the primitive LED functions do start timers, yet this function turns them off when needed
+	 * the iterators are stateful (static), so their value in a way reflects the CCR state.
+	 */
 
-	if(BRAKE_LIGHT_CCR < Device->led->led[Brake].ocr)  // fade up
-		BRAKE_LIGHT_CCR = _fade_transfer[j++];
+	// rear light
+	if(REAR_LIGHT_CCR < Device->led->led[Rear].ocr)  // fade up
+		{
+			REAR_LIGHT_CCR = _fade_transfer[rear_iterator++];	// from lookup table into timer's CCR
+
+			if (REAR_LIGHT_CCR >= Device->led->led[Rear].ocr)	// if we did fade up for long enough
+					Device->StopTimer(&htim14);  // stop the LED handling timer since fading ought to end; the iterator will keep its value
+		}
 
 	if(REAR_LIGHT_CCR > Device->led->led[Rear].ocr)  // fade down
 		{
-			REAR_LIGHT_CCR = _fade_transfer[--i];
+			REAR_LIGHT_CCR = _fade_transfer[--rear_iterator];	// from lookup table into timer's CCR
 
-			if(REAR_LIGHT_CCR == 0)
-				Device->mj8x8->UpdateActivity(REARLIGHT, OFF);	// mark inactivity
+			if (REAR_LIGHT_CCR <= Device->led->led[Rear].ocr)	// if we did fade down for long enough
+				{
+					Device->StopTimer(&htim14);  // stop the LED handling timer since fading ought to end; the iterator will keep its value
+
+					if(REAR_LIGHT_CCR == 0)	// if the light is off
+						{
+							Device->StopTimer(&htim2);  // stop the PWM timer - rear light PWM
+							Device->StopTimer(&htim14);  // stop the LED handling timer since fading ought to end; the iterator will keep its value
+							Device->mj8x8->UpdateActivity(REARLIGHT, OFF);	// update the bus
+						}
+				}
+		}
+
+	// brake light
+	if(BRAKE_LIGHT_CCR < Device->led->led[Brake].ocr)  // fade up
+		{
+			BRAKE_LIGHT_CCR = _fade_transfer[brake_iterator++];	// from lookup table into timer's CCR
+
+			if (BRAKE_LIGHT_CCR >= Device->led->led[Brake].ocr)	// if we did fade up for long enough
+					Device->StopTimer(&htim14);  // stop the LED handling timer since fading ought to end; the iterator will keep its value
 		}
 
 	if(BRAKE_LIGHT_CCR > Device->led->led[Brake].ocr)  // fade down
 		{
-			BRAKE_LIGHT_CCR = _fade_transfer[--j];
+			BRAKE_LIGHT_CCR = _fade_transfer[--brake_iterator];	// from lookup table into timer's CCR
 
-			if(BRAKE_LIGHT_CCR == 0)
-				Device->mj8x8->UpdateActivity(BRAKELIGHT, OFF);	// mark inactivity
+			if (BRAKE_LIGHT_CCR <= Device->led->led[Brake].ocr)	// if we did fade down for long enough
+				{
+					Device->StopTimer(&htim14);  // stop the LED handling timer since fading ought to end; the iterator will keep its value
+
+					if(BRAKE_LIGHT_CCR == 0)	// if the light is off
+						{
+							Device->StopTimer(&htim3);  // stop the PWM timer - brake light PWM
+							Device->StopTimer(&htim14);  // stop the LED handling timer since fading ought to end; the iterator will keep its value
+							Device->mj8x8->UpdateActivity(BRAKELIGHT, OFF);	// update the bus
+						}
+				}
 		}
-
-	if(Device->mj8x8->GetActivity(REARLIGHT) && Device->mj8x8->GetActivity(BRAKELIGHT))
-		{
-			Device->StopTimer(&htim14);  // stop the timer - LED handling
-			Device->StopTimer(&htim2);  // stop the timer - rear light PWM
-			Device->StopTimer(&htim3);	// stop the timer - brake light PWM
-		}
-
-	if(BRAKE_LIGHT_CCR == Device->led->led[Brake].ocr && REAR_LIGHT_CCR == Device->led->led[Rear].ocr)
-		Device->StopTimer(&htim14);  // stop the timer
 }
 
 // set OCR value to fade to
 static void _primitiveRearLED(uint8_t value)
 {
-
 	Device->StartTimer(&htim14);  // start the timer - LED handling
 	__HAL_TIM_DISABLE_IT(&htim14, TIM_IT_UPDATE);	// disable interrupts until ocr is set (timer14's ISR will otherwise kill it very soon)
 
-	if(value)
+	if(value && (Device->mj8x8->GetActivity(REARLIGHT) == OFF))
 		{
 			Device->StartTimer(&htim2);  // start the timer - rear light PWM
-			Device->mj8x8->UpdateActivity(REARLIGHT, ON);	// mark activity
+			Device->mj8x8->UpdateActivity(REARLIGHT, ON);	// update the bus
 		}
 
 	Device->led->led[Rear].ocr = value;  // set OCR value, the handler will do the rest
@@ -99,13 +122,13 @@ static void _BrakeLight(const uint8_t argument)
 					Device->StopTimer(&htim3);  // stop the timer - brake light PWM
 				}
 
-			Device->mj8x8->UpdateActivity(BRAKELIGHT, OFF);	// mark inactivity
+			Device->mj8x8->UpdateActivity(BRAKELIGHT, OFF);	// update the bus
 			return;
 		}
 
 	if(argument == ARG_BRAKELIGHT_ON)	// brake light on command
 		{
-			Device->mj8x8->UpdateActivity(BRAKELIGHT, ON);	// mark activity
+			Device->mj8x8->UpdateActivity(BRAKELIGHT, ON);	// update the bus
 			OldOCR = BRAKE_LIGHT_CCR;	// store original OCR value
 
 			if(BRAKE_LIGHT_CCR == 0)	// light was previously off

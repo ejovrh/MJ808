@@ -66,9 +66,9 @@ static inline float _GetDistance_m(void)
 // we are at standstill
 static inline void _LightOff(void)
 {
-	if(Device->activity->AutoDrive == ON)  // run only if AD is on
+	if(Device->mj8x8->GetActivity(AUTODRIVE))  // run only if AD is on
 		{
-			Device->mj8x8->UpdateActivity(AUTODRIVE, OFF);  // mark device as off
+			Device->mj8x8->UpdateActivity(AUTODRIVE, OFF);  // update the bus
 			EventHandler->Notify(EVENT07);	// generate event
 		}
 }
@@ -133,7 +133,7 @@ static void _Do(void)  // this actually runs the AutoDrive application
 	if(_CompareLightLevelsandFlag(__AutoDrive._LightLevel))  // compares current and previous light levels and sets light level change flag
 		{  // notifications should be sent only once on state change
 			if(__AutoDrive._LightLevel > LightOff)  // any speed greater than standstill
-				if(Device->activity->AutoDrive == OFF)	// run only if AD is off
+				if(Device->mj8x8->GetActivity(AUTODRIVE) == OFF)	// run only if AD is off
 					Device->mj8x8->UpdateActivity(AUTODRIVE, ON);  // update the bus
 
 			if(__AutoDrive._LightLevel == LightDim)

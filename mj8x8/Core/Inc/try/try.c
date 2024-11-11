@@ -1,7 +1,8 @@
 #include "main.h"
 #include "try/try.h"
 
-static activity_t _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15;  // device activity containers for all 16 devices
+static activity_t _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13,
+    _14, _15;  // device activity containers for all 16 devices
 
 activity_t *_BusActivityArray[16] =  // array for addresses of activity containers
 	{&_0, &_1, &_2, &_3, &_4, &_5, &_6, &_7, &_8, &_9, &_10, &_11, &_12, &_13, &_14, &_15};
@@ -14,7 +15,7 @@ typedef struct	// try_t actual
 	uint32_t (*_Eventfptr)(void);  // dynamically generated function pointer
 } __try_t;
 
-static __try_t __Try __attribute__ ((section (".data")));  // preallocate __Try object in .data
+static __try_t   __Try   __attribute__ ((section (".data")));  // preallocate __Try object in .data
 
 // a function that does nothing
 static inline void _DoNothing(void *foo)  // a function that does nothing
@@ -198,14 +199,14 @@ static inline void _EventHandlerEvent06(void)
 	if(Device->button->button[PushButton]->Toggle)
 		{
 			_payload = ON;  // turn on
-			Device->mj8x8->UpdateActivity(AUTOLIGHT, ON);  // mark activity
+			Device->mj8x8->UpdateActivity(AUTOLIGHT, ON);  // update the bus
 			Device->led->led[Yellow].Shine(ON);
 			Device->adc->Start();
 		}
 	else
 		{
 			_payload = OFF;  // turn off
-			Device->mj8x8->UpdateActivity(AUTOLIGHT, OFF);	// mark inactivity
+			Device->mj8x8->UpdateActivity(AUTOLIGHT, OFF);	// update the bus
 			Device->led->led[Yellow].Shine(OFF);
 		}
 
@@ -352,7 +353,7 @@ void _EventHandler(const uint8_t val)
 	Device->mj8x8->UpdateActivity(BUTTONPRESSED, (Device->button->button[PushButton]->Momentary) > 0);  // translate button press into true or false
 #endif
 #ifdef MJ828_
-	Device->mj8x8->UpdateActivity(BUTTONPRESSED,  //	set device to state according to button press
+	Device->mj8x8->UpdateActivity(BUTTONPRESSED,  //	update the bus - set device to state according to button press
 	(  //
 	Device->button->button[PushButton]->Momentary ||  // ORed byte values indicate _some_ button press is active
 	Device->button->button[LeverFront]->Momentary ||  //
@@ -431,19 +432,19 @@ static inline void _MsgBtnEvent04(can_msg_t *msg)
 	uint8_t arg = msg->ARGUMENT;
 
 	if (arg <= 10)	// 10% warning
-		Device->led->led[Front].Shine(msg->ARGUMENT);
+	Device->led->led[Front].Shine(msg->ARGUMENT);
 
 	if (arg > 10)// 10% warning
-		Device->led->led[Front].Shine(75);
+	Device->led->led[Front].Shine(75);
 #endif
 #ifdef MJ818_
 	uint8_t arg = msg->ARGUMENT;
 
 	if (arg <= 10)	// 10% warning
-		Device->led->led[Rear].Shine(msg->ARGUMENT);
+	Device->led->led[Rear].Shine(msg->ARGUMENT);
 
 	if (arg > 10)// 10% warning
-		Device->led->led[Rear].Shine(100);
+	Device->led->led[Rear].Shine(100);
 
 #endif
 
@@ -583,7 +584,7 @@ void _EmptyBusOperation(void)
 #endif
 }
 
-static __try_t __Try =  // instantiate can_t actual and set function pointers
+static __try_t   __Try =  // instantiate can_t actual and set function pointers
 	{  //
 	.public.BusActivity = (status_t*) &_BusActivityArray,  // bus-wide device status of all devices
 	.public.PopulatedBusOperation = &_PopulatedBusOperation,  // tie in function pointer

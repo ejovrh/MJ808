@@ -126,7 +126,7 @@ static inline void _StartZeroCross(void)
 
 	__disable_irq();	// disable interrupts until end of initialisation
 
-	Device->mj8x8->UpdateActivity(ZEROCROSS, ON);	// mark device as on
+	Device->mj8x8->UpdateActivity(ZEROCROSS, ON);	// update the bus
 	HAL_NVIC_DisableIRQ(EXTI0_1_IRQn);	// disable EXTI0 - we will use a timer2 IC  mode from now on...
 
 	// configure from EXTI0 to timer2 input-capture mode (so that the device can measure ZC frequency)
@@ -168,7 +168,7 @@ static inline void _StopZeroCross(void)
 
 	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);	// enable EXTI0 for wakeup from stop mode
 
-	Device->mj8x8->UpdateActivity(ZEROCROSS, OFF);	// mark device as off
+	Device->mj8x8->UpdateActivity(ZEROCROSS, OFF);	// update the bus
 
 	__enable_irq();  // enable interrupts
 }
