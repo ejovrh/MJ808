@@ -11,14 +11,13 @@ static DMA_HandleTypeDef hdma_tim2_ch1;	// zero-cross frequency measurement
 
 static __zerocross_t __ZeroCross;  // forward declaration of object
 
-uint32_t _zc_counter_buffer[2] =
-	{0};	// stores timer2 counter readout
+uint32_t _zc_counter_buffer[2] = {0};	// stores timer2 counter readout
 
-volatile uint32_t _zc_counter_delta = 0;	// container for average frequency calculation
-volatile uint16_t _zcValues = 0;	// iterator for average frequency calculation
-volatile uint16_t _sleep = 0;	// timer3-based count for sleep since last zero-cross detection
-volatile uint32_t _tim2ICcounterOVF = 0;	// timer2 IC counter overflow counter
-volatile float _previousFrequency = 0;	//
+static volatile uint32_t _zc_counter_delta = 0;	// container for average frequency calculation
+static volatile uint16_t _zcValues = 0;	// iterator for average frequency calculation
+static volatile uint16_t _sleep = 0;	// timer3-based count for sleep since last zero-cross detection
+static volatile float _previousFrequency = 0;	//
+volatile uint32_t zc_counter_delta_abs = 0;
 
 // timer3-triggered - computes Zero-Cross signal frequency, normally at 250ms intervals
 static void _Do(void)
@@ -202,25 +201,24 @@ void DMA1_Channel4_5_IRQHandler(void)
 {
 	HAL_DMA_IRQHandler(&hdma_tim2_ch1);  // service the interrupt
 
-  uint32_t zc_counter_delta_abs = (_zc_counter_buffer[1] > _zc_counter_buffer[0]) ?	// expression
-                                     (_zc_counter_buffer[1] - _zc_counter_buffer[0]) :	// if expression true
-                                     (_zc_counter_buffer[0] - _zc_counter_buffer[1]);	//	if expression false
+	int32_t delta = _zc_counter_buffer[1] - _zc_counter_buffer[0];	// calculate the difference
 
-  zc_counter_delta_abs += _tim2ICcounterOVF * TIMER2_PERIOD; // account for overflow condition
-  _tim2ICcounterOVF = 0;
-
-  _zc_counter_delta += zc_counter_delta_abs;	// accumulate the absolute difference
-	++_zcValues;	// how many times did we add?
+  if (delta)	// it can be zero...
+  	{
+  		zc_counter_delta_abs = ((delta > 0) ? delta : -delta); // negative turn delta into positive
+  		_zc_counter_delta += zc_counter_delta_abs;	// accumulate the difference
+  		++_zcValues;	// count additions for average calculation
+  	}
 }
 
-// counter overflow
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-  if (htim->Instance == TIM2)
-  {
-  		++_tim2ICcounterOVF;	// Timer overflow occurred
-  }
-}
+//// counter overflow
+//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+//{
+//  if (htim->Instance == TIM2)
+//  {
+//  		;
+//  }
+//}
 
 // timer 2 ISR - update general interrupt (interrupt itself not needed, but must be serviced anyway)
 void TIM2_IRQHandler(void)

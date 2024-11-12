@@ -36,7 +36,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define AUTODRIVE 5
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
-#define TIMER2_PERIOD	0xFFFFFFFF // ZeroCross frequency measurement (rollover every 119 hours of constant use...)
+#define TIMER2_PERIOD	0xFFFFFFFF // ZeroCross frequency measurement
 #define TIMER3_PERIOD 2499 // by default 250ms
 #define TIMER17_PERIOD 24	// event handling - 2.5ms
 #define TIMER2_IC_FILTER 0xF	// with TIM_ICPSC_DIV8 and 0xF the pulse needs to be at least 35us wide

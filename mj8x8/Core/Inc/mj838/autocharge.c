@@ -38,9 +38,6 @@ typedef struct	// autocharge_t actual
 } __autocharge_t;
 
 static uint8_t _FlagStopChargerCalled = 0;	// flag indicating if _StopCharger() was called already
-static volatile uint8_t _StartChargercntr = 0;
-static volatile uint8_t _StopChargercntr = 0;
-static volatile uint8_t _foocntr = 0;
 
 static __autocharge_t __AutoCharge __attribute__ ((section (".data")));  // preallocate __AutoCharge object in .data
 
@@ -63,7 +60,7 @@ static inline void _StartCharger(void)
 {
 	if(_IsLoadConnected() == ON)  // if already on
 		return;  // get out, nothing to do here
-	++_StartChargercntr;
+
 	_ConnectLoad(ON);  // connect the load
 
 	EventHandler->Notify(EVENT03);	// notify event
@@ -80,7 +77,6 @@ static inline void _StopCharger(void)
 //	if(Device->ZeroCross->GetZCFrequency() <= 0)
 //		return;
 
-	++_StopChargercntr;
 	_ConnectLoad(OFF);  // disconnect the load
 
 	EventHandler->Notify(EVENT03);	// notify event
@@ -175,8 +171,6 @@ static void _Do(void)  // this actually runs the AutoCharge application
 
 	if(_CompareSpeedLevelsandFlag(__AutoCharge._SpeedLevel))	// if the speed flags have changed
 		{
-			++_foocntr;
-
 			if(__AutoCharge._SpeedLevel <= SpeedbelowChargerThres)  // low speed - load is disconnected
 				{
 					if(__AutoCharge._SpeedLevel == SpeedStopped)
