@@ -192,7 +192,7 @@ typedef enum  // enum describing devices on a mj8x8 bus
 	  mj818 = 0x9,	// sender: 0x90
 	  mj_10 = 0xA,	// sender: 0xA0
 	  mj_11 = 0xB,	// sender: 0xB0
-	  mj_12 = 0xC,	// sender: 0xC0
+	  mj514 = 0xC,	// sender: 0xC0
 	  mj_13 = 0xD,	// sender: 0xD0
 	  mj_14 = 0xE,	// sender: 0xE0
 	  mj_15 = 0xF,	// sender: 0xF0

@@ -227,11 +227,11 @@ static inline void __primitiveGreenLEDFrontEnd(const uint8_t state)
 	__LEDBackEnd(Green, state);	// execute according to state
 }
 
-// frontend for the primitive front light handler
-static inline void __primitiveFrontLightHandler(const uint8_t state)
-{
-	__LEDBackEnd(Front, state);	// execute according to state
-}
+//// frontend for the primitive front light handler
+//static inline void __primitiveFrontLightHandler(const uint8_t state)
+//{
+//	__LEDBackEnd(Front, state);	// execute according to state
+//}
 
 // handles blinking
 static void _Blinker(void)
