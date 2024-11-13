@@ -667,7 +667,7 @@ void try_ctor(void)
 	Try->BusActivity->mj818 = (mj818_activity_t*) _BusActivityArray[9];
 	Try->BusActivity->_10 = _BusActivityArray[10];
 	Try->BusActivity->_11 = _BusActivityArray[11];
-	Try->BusActivity->_12 = _BusActivityArray[12];
+	Try->BusActivity->mj514 = (mj514_activity_t*) _BusActivityArray[12];
 	Try->BusActivity->_13 = _BusActivityArray[13];
 	Try->BusActivity->_14 = _BusActivityArray[14];
 	Try->BusActivity->_15 = _BusActivityArray[15];
