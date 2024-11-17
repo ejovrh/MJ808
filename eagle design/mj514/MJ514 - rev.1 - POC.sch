@@ -8,34 +8,34 @@
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="no"/>
-<layer number="2" name="Route2" color="16" fill="1" visible="yes" active="no"/>
-<layer number="3" name="Route3" color="17" fill="1" visible="yes" active="no"/>
-<layer number="4" name="Route4" color="18" fill="1" visible="yes" active="no"/>
-<layer number="5" name="Route5" color="19" fill="1" visible="yes" active="no"/>
-<layer number="6" name="Route6" color="25" fill="1" visible="yes" active="no"/>
-<layer number="7" name="Route7" color="26" fill="1" visible="yes" active="no"/>
-<layer number="8" name="Route8" color="27" fill="1" visible="yes" active="no"/>
-<layer number="9" name="Route9" color="28" fill="1" visible="yes" active="no"/>
-<layer number="10" name="Route10" color="29" fill="1" visible="yes" active="no"/>
-<layer number="11" name="Route11" color="30" fill="1" visible="yes" active="no"/>
-<layer number="12" name="Route12" color="20" fill="1" visible="yes" active="no"/>
-<layer number="13" name="Route13" color="21" fill="1" visible="yes" active="no"/>
-<layer number="14" name="Route14" color="22" fill="1" visible="yes" active="no"/>
-<layer number="15" name="Route15" color="23" fill="1" visible="yes" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="no"/>
-<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="no"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="no"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="no"/>
-<layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="no"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="no"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="no"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="no"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="no"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="no"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="no"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="no"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="no"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
+<layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
+<layer number="3" name="Route3" color="17" fill="1" visible="no" active="no"/>
+<layer number="4" name="Route4" color="18" fill="1" visible="no" active="no"/>
+<layer number="5" name="Route5" color="19" fill="1" visible="no" active="no"/>
+<layer number="6" name="Route6" color="25" fill="1" visible="no" active="no"/>
+<layer number="7" name="Route7" color="26" fill="1" visible="no" active="no"/>
+<layer number="8" name="Route8" color="27" fill="1" visible="no" active="no"/>
+<layer number="9" name="Route9" color="28" fill="1" visible="no" active="no"/>
+<layer number="10" name="Route10" color="29" fill="1" visible="no" active="no"/>
+<layer number="11" name="Route11" color="30" fill="1" visible="no" active="no"/>
+<layer number="12" name="Route12" color="20" fill="1" visible="no" active="no"/>
+<layer number="13" name="Route13" color="21" fill="1" visible="no" active="no"/>
+<layer number="14" name="Route14" color="22" fill="1" visible="no" active="no"/>
+<layer number="15" name="Route15" color="23" fill="1" visible="no" active="no"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="no" active="no"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="no" active="no"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="no"/>
+<layer number="20" name="Dimension" color="24" fill="1" visible="no" active="no"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="no"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="no"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="no"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="no"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="no" active="no"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="no" active="no"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="no"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="no"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="no"/>
@@ -44,8 +44,8 @@
 <layer number="34" name="bFinish" color="6" fill="6" visible="no" active="no"/>
 <layer number="35" name="tGlue" color="7" fill="4" visible="no" active="no"/>
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="no"/>
-<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="no"/>
-<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="no"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="no"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="no"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="no"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="no"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="no"/>
@@ -53,19 +53,19 @@
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="no"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="no"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="no"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="no"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="no"/>
-<layer number="48" name="Document" color="7" fill="1" visible="yes" active="no"/>
-<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="no"/>
-<layer number="50" name="dxf" color="7" fill="1" visible="yes" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="no"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="no"/>
-<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="yes" active="no"/>
-<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="yes" active="no"/>
-<layer number="56" name="wert" color="7" fill="1" visible="yes" active="no"/>
-<layer number="57" name="tCAD" color="7" fill="1" visible="yes" active="no"/>
-<layer number="59" name="tCarbon" color="7" fill="1" visible="yes" active="no"/>
-<layer number="60" name="bCarbon" color="7" fill="1" visible="yes" active="no"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="no"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="no"/>
+<layer number="48" name="Document" color="7" fill="1" visible="no" active="no"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="no" active="no"/>
+<layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
+<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
+<layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
+<layer number="57" name="tCAD" color="7" fill="1" visible="no" active="no"/>
+<layer number="59" name="tCarbon" color="7" fill="1" visible="no" active="no"/>
+<layer number="60" name="bCarbon" color="7" fill="1" visible="no" active="no"/>
 <layer number="88" name="SimResults" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="89" name="SimProbes" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
@@ -22885,32 +22885,32 @@ V = R * I
 <sheet>
 <description>MJ514 POC</description>
 <plain>
-<text x="58.42" y="297.18" size="1.778" layer="95" rot="R90">PA11</text>
-<text x="60.96" y="297.18" size="1.778" layer="95" rot="R90">PA10</text>
-<text x="63.5" y="297.18" size="1.778" layer="95" rot="R90">PA6</text>
-<text x="66.04" y="297.18" size="1.778" layer="95" rot="R90">PA7</text>
-<text x="68.58" y="297.18" size="1.778" layer="95" rot="R90">PA0</text>
-<text x="71.12" y="297.18" size="1.778" layer="95" rot="R90">PA1</text>
-<text x="73.66" y="297.18" size="1.778" layer="95" rot="R90">PA2</text>
-<text x="76.2" y="297.18" size="1.778" layer="95" rot="R90">PA3</text>
-<text x="78.74" y="297.18" size="1.778" layer="95" rot="R90">PA4</text>
-<text x="55.88" y="332.74" size="1.778" layer="97">trace endpoints are 1mm vias</text>
+<text x="106.68" y="208.28" size="1.778" layer="95" rot="R90">PB6</text>
+<text x="109.22" y="208.28" size="1.778" layer="95" rot="R90">PB7</text>
+<text x="111.76" y="208.28" size="1.778" layer="95" rot="R90">PA6</text>
+<text x="114.3" y="208.28" size="1.778" layer="95" rot="R90">PA7</text>
+<text x="116.84" y="208.28" size="1.778" layer="95" rot="R90">PA0</text>
+<text x="119.38" y="208.28" size="1.778" layer="95" rot="R90">PA1</text>
+<text x="121.92" y="208.28" size="1.778" layer="95" rot="R90">PA2</text>
+<text x="124.46" y="208.28" size="1.778" layer="95" rot="R90">PA3</text>
+<text x="127" y="208.28" size="1.778" layer="95" rot="R90">PA4</text>
+<text x="104.14" y="243.84" size="1.778" layer="97">trace endpoints are 1mm vias</text>
 </plain>
 <moduleinsts>
-<moduleinst name="ROTARYENCODER" module="ROTARYENCODER" x="83.82" y="137.16" offset="900">
-<attribute name="NAME" value="ROTARYENCODER" x="83.82" y="147.32" size="2.032" layer="95" align="bottom-center"/>
+<moduleinst name="ROTARYENCODER" module="ROTARYENCODER" x="129.54" y="127" offset="900">
+<attribute name="NAME" value="ROTARYENCODER" x="129.54" y="137.16" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
-<moduleinst name="FE-RAM" module="FE-RAM" x="83.82" y="91.44" offset="700">
-<attribute name="NAME" value="FE-RAM" x="83.82" y="96.52" size="2.032" layer="95" align="bottom-center"/>
+<moduleinst name="FE-RAM" module="FE-RAM" x="129.54" y="81.28" offset="700">
+<attribute name="NAME" value="FE-RAM" x="129.54" y="86.36" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
-<moduleinst name="12V0" module="12V0" x="170.18" y="165.1" offset="800">
-<attribute name="NAME" value="12V0" x="170.18" y="167.64" size="2.032" layer="95" align="bottom-center"/>
+<moduleinst name="12V0" module="12V0" x="269.24" y="124.46" offset="800">
+<attribute name="NAME" value="12V0" x="269.24" y="127" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
-<moduleinst name="MC" module="MOTOR_CONTROLLER" x="203.2" y="121.92" offset="1000">
-<attribute name="NAME" value="MC" x="203.2" y="127" size="2.032" layer="95" align="bottom-center"/>
+<moduleinst name="MC" module="MOTOR_CONTROLLER" x="302.26" y="81.28" offset="1000">
+<attribute name="NAME" value="MC" x="302.26" y="86.36" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
-<moduleinst name="3V3" module="3V3" x="170.18" y="200.66" offset="200">
-<attribute name="NAME" value="3V3" x="170.18" y="203.2" size="2.032" layer="95" align="bottom-center"/>
+<moduleinst name="3V3" module="3V3" x="269.24" y="160.02" offset="200">
+<attribute name="NAME" value="3V3" x="269.24" y="162.56" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
 </moduleinsts>
 <instances>
@@ -22919,9 +22919,9 @@ V = R * I
 <attribute name="LAST_DATE_TIME" x="344.17" y="10.16" size="2.286" layer="94"/>
 <attribute name="SHEET" x="357.505" y="5.08" size="2.54" layer="94"/>
 </instance>
-<instance part="JP3" gate="G$1" x="238.76" y="119.38" smashed="yes">
-<attribute name="NAME" x="232.41" y="125.095" size="1.778" layer="95"/>
-<attribute name="VALUE" x="232.41" y="114.3" size="1.778" layer="96"/>
+<instance part="JP3" gate="G$1" x="337.82" y="78.74" smashed="yes">
+<attribute name="NAME" x="331.47" y="84.455" size="1.778" layer="95"/>
+<attribute name="VALUE" x="331.47" y="73.66" size="1.778" layer="96"/>
 </instance>
 <instance part="SUPPLY1" gate="G$1" x="238.76" y="20.32" smashed="yes">
 <attribute name="VALUE" x="238.633" y="23.495" size="1.778" layer="96" align="bottom-center"/>
@@ -22932,63 +22932,63 @@ V = R * I
 <instance part="SUPPLY4" gate="G$1" x="279.4" y="10.16" smashed="yes">
 <attribute name="VALUE" x="279.4" y="8.255" size="1.778" layer="96" align="center"/>
 </instance>
-<instance part="SUPPLY3" gate="G$1" x="83.82" y="71.12" smashed="yes">
-<attribute name="VALUE" x="83.82" y="69.215" size="1.778" layer="96" align="center"/>
+<instance part="SUPPLY3" gate="G$1" x="129.54" y="60.96" smashed="yes">
+<attribute name="VALUE" x="129.54" y="59.055" size="1.778" layer="96" align="center"/>
 </instance>
-<instance part="SUPPLY5" gate="G$1" x="83.82" y="111.76" smashed="yes">
-<attribute name="VALUE" x="83.82" y="109.855" size="1.778" layer="96" align="center"/>
+<instance part="SUPPLY5" gate="G$1" x="129.54" y="101.6" smashed="yes">
+<attribute name="VALUE" x="129.54" y="99.695" size="1.778" layer="96" align="center"/>
 </instance>
-<instance part="R1" gate="G$1" x="45.72" y="172.72" smashed="yes" rot="R90">
-<attribute name="NAME" x="48.26" y="175.26" size="1.778" layer="95"/>
-<attribute name="VALUE" x="48.26" y="172.72" size="1.778" layer="96"/>
+<instance part="R1" gate="G$1" x="91.44" y="162.56" smashed="yes" rot="R90">
+<attribute name="NAME" x="93.98" y="165.1" size="1.778" layer="95"/>
+<attribute name="VALUE" x="93.98" y="162.56" size="1.778" layer="96"/>
 </instance>
-<instance part="R2" gate="G$1" x="55.88" y="172.72" smashed="yes" rot="R90">
-<attribute name="NAME" x="58.42" y="175.26" size="1.778" layer="95"/>
-<attribute name="VALUE" x="58.42" y="172.72" size="1.778" layer="96"/>
+<instance part="R2" gate="G$1" x="101.6" y="162.56" smashed="yes" rot="R90">
+<attribute name="NAME" x="104.14" y="165.1" size="1.778" layer="95"/>
+<attribute name="VALUE" x="104.14" y="162.56" size="1.778" layer="96"/>
 </instance>
-<instance part="SUPPLY6" gate="G$1" x="45.72" y="180.34" smashed="yes">
-<attribute name="VALUE" x="45.72" y="182.88" size="1.778" layer="96" align="bottom-center"/>
+<instance part="SUPPLY6" gate="G$1" x="91.44" y="170.18" smashed="yes">
+<attribute name="VALUE" x="91.44" y="172.72" size="1.778" layer="96" align="bottom-center"/>
 </instance>
-<instance part="SUPPLY7" gate="G$1" x="55.88" y="180.34" smashed="yes">
-<attribute name="VALUE" x="55.88" y="182.88" size="1.778" layer="96" align="bottom-center"/>
+<instance part="SUPPLY7" gate="G$1" x="101.6" y="170.18" smashed="yes">
+<attribute name="VALUE" x="101.6" y="172.72" size="1.778" layer="96" align="bottom-center"/>
 </instance>
-<instance part="SUPPLY8" gate="G$1" x="60.96" y="129.54" smashed="yes" rot="R90">
-<attribute name="VALUE" x="55.88" y="129.54" size="1.778" layer="96" align="bottom-center"/>
+<instance part="SUPPLY8" gate="G$1" x="106.68" y="119.38" smashed="yes" rot="R90">
+<attribute name="VALUE" x="101.6" y="119.38" size="1.778" layer="96" align="bottom-center"/>
 </instance>
-<instance part="SUPPLY9" gate="G$1" x="60.96" y="83.82" smashed="yes" rot="R90">
-<attribute name="VALUE" x="55.88" y="83.82" size="1.778" layer="96" align="bottom-center"/>
+<instance part="SUPPLY9" gate="G$1" x="106.68" y="73.66" smashed="yes" rot="R90">
+<attribute name="VALUE" x="101.6" y="73.66" size="1.778" layer="96" align="bottom-center"/>
 </instance>
 <instance part="SUPPLY10" gate="G$1" x="251.46" y="20.32" smashed="yes">
 <attribute name="VALUE" x="251.333" y="23.495" size="1.778" layer="96" align="bottom-center"/>
 </instance>
-<instance part="SUPPLY11" gate="G$1" x="170.18" y="147.32" smashed="yes">
-<attribute name="VALUE" x="170.18" y="145.415" size="1.778" layer="96" align="center"/>
+<instance part="SUPPLY11" gate="G$1" x="269.24" y="106.68" smashed="yes">
+<attribute name="VALUE" x="269.24" y="104.775" size="1.778" layer="96" align="center"/>
 </instance>
-<instance part="SUPPLY12" gate="G$1" x="137.16" y="167.64" smashed="yes">
-<attribute name="VALUE" x="137.16" y="170.18" size="1.778" layer="96" align="bottom-center"/>
+<instance part="SUPPLY12" gate="G$1" x="236.22" y="127" smashed="yes">
+<attribute name="VALUE" x="236.22" y="129.54" size="1.778" layer="96" align="bottom-center"/>
 </instance>
-<instance part="SUPPLY15" gate="G$1" x="203.2" y="101.6" smashed="yes">
-<attribute name="VALUE" x="203.2" y="99.695" size="1.778" layer="96" align="center"/>
+<instance part="SUPPLY15" gate="G$1" x="302.26" y="60.96" smashed="yes">
+<attribute name="VALUE" x="302.26" y="59.055" size="1.778" layer="96" align="center"/>
 </instance>
-<instance part="SUPPLY13" gate="G$1" x="198.12" y="139.7" smashed="yes">
-<attribute name="VALUE" x="198.12" y="142.24" size="1.778" layer="96" align="bottom-center"/>
+<instance part="SUPPLY13" gate="G$1" x="297.18" y="99.06" smashed="yes">
+<attribute name="VALUE" x="297.18" y="101.6" size="1.778" layer="96" align="bottom-center"/>
 </instance>
-<instance part="SUPPLY14" gate="G$1" x="170.18" y="182.88" smashed="yes">
-<attribute name="VALUE" x="170.18" y="180.975" size="1.778" layer="96" align="center"/>
+<instance part="SUPPLY14" gate="G$1" x="269.24" y="142.24" smashed="yes">
+<attribute name="VALUE" x="269.24" y="140.335" size="1.778" layer="96" align="center"/>
 </instance>
-<instance part="SUPPLY16" gate="G$1" x="195.58" y="203.2" smashed="yes">
-<attribute name="VALUE" x="195.58" y="205.74" size="1.778" layer="96" align="bottom-center"/>
+<instance part="SUPPLY16" gate="G$1" x="294.64" y="162.56" smashed="yes">
+<attribute name="VALUE" x="294.64" y="165.1" size="1.778" layer="96" align="bottom-center"/>
 </instance>
 </instances>
 <busses>
 <bus name="I2C:I2C_SCL,I2C_SDA">
 <segment>
-<wire x1="30.48" y1="182.88" x2="30.48" y2="88.9" width="0.762" layer="92"/>
-<label x="30.48" y="182.88" size="1.778" layer="95"/>
+<wire x1="76.2" y1="172.72" x2="76.2" y2="78.74" width="0.762" layer="92"/>
+<label x="76.2" y="172.72" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="35.56" y1="307.34" x2="60.96" y2="307.34" width="0.762" layer="92"/>
-<label x="35.56" y="307.34" size="1.778" layer="95" rot="R180"/>
+<wire x1="83.82" y1="218.44" x2="109.22" y2="218.44" width="0.762" layer="92"/>
+<label x="83.82" y="218.44" size="1.778" layer="95" rot="R180"/>
 </segment>
 </bus>
 </busses>
@@ -22996,16 +22996,16 @@ V = R * I
 <net name="MOTOR+" class="3">
 <segment>
 <pinref part="JP3" gate="G$1" pin="1"/>
-<wire x1="236.22" y1="121.92" x2="226.06" y2="121.92" width="0.1524" layer="91"/>
-<label x="228.6" y="121.92" size="1.778" layer="95" rot="R90"/>
+<wire x1="335.28" y1="81.28" x2="325.12" y2="81.28" width="0.1524" layer="91"/>
+<label x="327.66" y="81.28" size="1.778" layer="95" rot="R90"/>
 <portref moduleinst="MC" port="MOTOR+"/>
 </segment>
 </net>
 <net name="MOTOR-" class="3">
 <segment>
 <pinref part="JP3" gate="G$1" pin="2"/>
-<wire x1="236.22" y1="119.38" x2="226.06" y2="119.38" width="0.1524" layer="91"/>
-<label x="228.6" y="119.38" size="1.778" layer="95" rot="R270"/>
+<wire x1="335.28" y1="78.74" x2="325.12" y2="78.74" width="0.1524" layer="91"/>
+<label x="327.66" y="78.74" size="1.778" layer="95" rot="R270"/>
 <portref moduleinst="MC" port="MOTOR-"/>
 </segment>
 </net>
@@ -23018,31 +23018,31 @@ V = R * I
 <segment>
 <portref moduleinst="FE-RAM" port="GND"/>
 <pinref part="SUPPLY3" gate="G$1" pin="GND"/>
-<wire x1="83.82" y1="73.66" x2="83.82" y2="76.2" width="0.1524" layer="91"/>
+<wire x1="129.54" y1="63.5" x2="129.54" y2="66.04" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <portref moduleinst="ROTARYENCODER" port="GND"/>
 <pinref part="SUPPLY5" gate="G$1" pin="GND"/>
-<wire x1="83.82" y1="114.3" x2="83.82" y2="116.84" width="0.1524" layer="91"/>
+<wire x1="129.54" y1="104.14" x2="129.54" y2="106.68" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="SUPPLY11" gate="G$1" pin="GND"/>
-<wire x1="170.18" y1="149.86" x2="170.18" y2="152.4" width="0.1524" layer="91"/>
+<wire x1="269.24" y1="109.22" x2="269.24" y2="111.76" width="0.1524" layer="91"/>
 <portref moduleinst="12V0" port="GND"/>
 </segment>
 <segment>
 <portref moduleinst="MC" port="GND"/>
 <pinref part="SUPPLY15" gate="G$1" pin="GND"/>
-<wire x1="203.2" y1="104.14" x2="203.2" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="302.26" y1="63.5" x2="302.26" y2="66.04" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="83.82" y1="327.66" x2="83.82" y2="307.34" width="0.1524" layer="91"/>
-<label x="83.82" y="312.42" size="1.778" layer="95" rot="R90"/>
+<wire x1="132.08" y1="238.76" x2="132.08" y2="218.44" width="0.1524" layer="91"/>
+<label x="132.08" y="223.52" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
 <portref moduleinst="3V3" port="GND"/>
 <pinref part="SUPPLY14" gate="G$1" pin="GND"/>
-<wire x1="170.18" y1="185.42" x2="170.18" y2="187.96" width="0.1524" layer="91"/>
+<wire x1="269.24" y1="144.78" x2="269.24" y2="147.32" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="3V3" class="4">
@@ -23074,103 +23074,103 @@ V = R * I
 <segment>
 <portref moduleinst="3V3" port="3V3"/>
 <pinref part="SUPPLY16" gate="G$1" pin="3V3"/>
-<wire x1="195.58" y1="200.66" x2="185.42" y2="200.66" width="0.1524" layer="91"/>
+<wire x1="294.64" y1="160.02" x2="284.48" y2="160.02" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="I2C_SCL" class="3">
 <segment>
 <portref moduleinst="FE-RAM" port="I2C_SCL"/>
-<wire x1="30.48" y1="88.9" x2="63.5" y2="88.9" width="0.1524" layer="91"/>
-<label x="33.02" y="88.9" size="1.778" layer="95"/>
+<wire x1="76.2" y1="78.74" x2="109.22" y2="78.74" width="0.1524" layer="91"/>
+<label x="78.74" y="78.74" size="1.778" layer="95"/>
 </segment>
 <segment>
 <portref moduleinst="ROTARYENCODER" port="I2C_SCL"/>
-<wire x1="63.5" y1="134.62" x2="30.48" y2="134.62" width="0.1524" layer="91"/>
-<label x="33.02" y="134.62" size="1.778" layer="95"/>
+<wire x1="109.22" y1="124.46" x2="76.2" y2="124.46" width="0.1524" layer="91"/>
+<label x="78.74" y="124.46" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="R1" gate="G$1" pin="1"/>
-<wire x1="45.72" y1="167.64" x2="30.48" y2="167.64" width="0.1524" layer="91"/>
-<label x="33.02" y="167.64" size="1.778" layer="95"/>
+<wire x1="91.44" y1="157.48" x2="76.2" y2="157.48" width="0.1524" layer="91"/>
+<label x="78.74" y="157.48" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="58.42" y1="327.66" x2="58.42" y2="307.34" width="0.1524" layer="91"/>
-<label x="58.42" y="312.42" size="1.778" layer="95" rot="R90"/>
+<wire x1="106.68" y1="238.76" x2="106.68" y2="218.44" width="0.1524" layer="91"/>
+<label x="106.68" y="223.52" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="I2C_SDA" class="3">
 <segment>
 <portref moduleinst="FE-RAM" port="I2C_SDA"/>
-<wire x1="63.5" y1="91.44" x2="30.48" y2="91.44" width="0.1524" layer="91"/>
-<label x="33.02" y="91.44" size="1.778" layer="95"/>
+<wire x1="109.22" y1="81.28" x2="76.2" y2="81.28" width="0.1524" layer="91"/>
+<label x="78.74" y="81.28" size="1.778" layer="95"/>
 </segment>
 <segment>
 <portref moduleinst="ROTARYENCODER" port="I2C_SDA"/>
-<wire x1="63.5" y1="137.16" x2="30.48" y2="137.16" width="0.1524" layer="91"/>
-<label x="33.02" y="137.16" size="1.778" layer="95"/>
+<wire x1="109.22" y1="127" x2="76.2" y2="127" width="0.1524" layer="91"/>
+<label x="78.74" y="127" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="R2" gate="G$1" pin="1"/>
-<wire x1="55.88" y1="167.64" x2="55.88" y2="165.1" width="0.1524" layer="91"/>
-<wire x1="55.88" y1="165.1" x2="30.48" y2="165.1" width="0.1524" layer="91"/>
-<label x="33.02" y="165.1" size="1.778" layer="95"/>
+<wire x1="101.6" y1="157.48" x2="101.6" y2="154.94" width="0.1524" layer="91"/>
+<wire x1="101.6" y1="154.94" x2="76.2" y2="154.94" width="0.1524" layer="91"/>
+<label x="78.74" y="154.94" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="60.96" y1="327.66" x2="60.96" y2="307.34" width="0.1524" layer="91"/>
-<label x="60.96" y="312.42" size="1.778" layer="95" rot="R90"/>
+<wire x1="109.22" y1="238.76" x2="109.22" y2="218.44" width="0.1524" layer="91"/>
+<label x="109.22" y="223.52" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="ROTARY_A" class="3">
 <segment>
-<wire x1="63.5" y1="327.66" x2="63.5" y2="307.34" width="0.1524" layer="91"/>
-<label x="63.5" y="312.42" size="1.778" layer="95" rot="R90"/>
+<wire x1="111.76" y1="238.76" x2="111.76" y2="218.44" width="0.1524" layer="91"/>
+<label x="111.76" y="223.52" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
 <portref moduleinst="ROTARYENCODER" port="ROTARY_A"/>
-<wire x1="63.5" y1="142.24" x2="55.88" y2="142.24" width="0.1524" layer="91"/>
-<label x="55.88" y="142.24" size="1.778" layer="95" rot="R180"/>
+<wire x1="109.22" y1="132.08" x2="101.6" y2="132.08" width="0.1524" layer="91"/>
+<label x="101.6" y="132.08" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="ROTARY_B" class="3">
 <segment>
-<wire x1="66.04" y1="327.66" x2="66.04" y2="307.34" width="0.1524" layer="91"/>
-<label x="66.04" y="312.42" size="1.778" layer="95" rot="R90"/>
+<wire x1="114.3" y1="238.76" x2="114.3" y2="218.44" width="0.1524" layer="91"/>
+<label x="114.3" y="223.52" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
 <portref moduleinst="ROTARYENCODER" port="ROTARY_B"/>
-<wire x1="63.5" y1="139.7" x2="55.88" y2="139.7" width="0.1524" layer="91"/>
-<label x="55.88" y="139.7" size="1.778" layer="95" rot="R180"/>
+<wire x1="109.22" y1="129.54" x2="101.6" y2="129.54" width="0.1524" layer="91"/>
+<label x="101.6" y="129.54" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="MOTOR_IN1" class="3">
 <segment>
-<wire x1="68.58" y1="307.34" x2="68.58" y2="327.66" width="0.1524" layer="91"/>
-<label x="68.58" y="312.42" size="1.778" layer="95" rot="R90"/>
+<wire x1="116.84" y1="218.44" x2="116.84" y2="238.76" width="0.1524" layer="91"/>
+<label x="116.84" y="223.52" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<wire x1="180.34" y1="124.46" x2="167.64" y2="124.46" width="0.1524" layer="91"/>
-<label x="167.64" y="124.46" size="1.778" layer="95" rot="R180"/>
+<wire x1="279.4" y1="83.82" x2="266.7" y2="83.82" width="0.1524" layer="91"/>
+<label x="266.7" y="83.82" size="1.778" layer="95" rot="R180"/>
 <portref moduleinst="MC" port="MOTOR_IN1"/>
 </segment>
 </net>
 <net name="MOTOR_IN2" class="3">
 <segment>
-<wire x1="71.12" y1="307.34" x2="71.12" y2="327.66" width="0.1524" layer="91"/>
-<label x="71.12" y="312.42" size="1.778" layer="95" rot="R90"/>
+<wire x1="119.38" y1="218.44" x2="119.38" y2="238.76" width="0.1524" layer="91"/>
+<label x="119.38" y="223.52" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<wire x1="180.34" y1="121.92" x2="167.64" y2="121.92" width="0.1524" layer="91"/>
-<label x="167.64" y="121.92" size="1.778" layer="95" rot="R180"/>
+<wire x1="279.4" y1="81.28" x2="266.7" y2="81.28" width="0.1524" layer="91"/>
+<label x="266.7" y="81.28" size="1.778" layer="95" rot="R180"/>
 <portref moduleinst="MC" port="MOTOR_IN2"/>
 </segment>
 </net>
 <net name="12V0" class="2">
 <segment>
 <portref moduleinst="12V0" port="12V"/>
-<wire x1="185.42" y1="165.1" x2="193.04" y2="165.1" width="0.1524" layer="91"/>
+<wire x1="284.48" y1="124.46" x2="292.1" y2="124.46" width="0.1524" layer="91"/>
 <portref moduleinst="MC" port="12V0"/>
-<wire x1="193.04" y1="165.1" x2="193.04" y2="137.16" width="0.1524" layer="91"/>
-<label x="193.04" y="162.56" size="1.778" layer="95"/>
+<wire x1="292.1" y1="124.46" x2="292.1" y2="96.52" width="0.1524" layer="91"/>
+<label x="292.1" y="121.92" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="SUPPLY1" gate="G$1" pin="12V"/>
@@ -23185,53 +23185,51 @@ V = R * I
 <label x="251.46" y="10.16" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<wire x1="137.16" y1="165.1" x2="147.32" y2="165.1" width="0.1524" layer="91"/>
+<wire x1="236.22" y1="124.46" x2="246.38" y2="124.46" width="0.1524" layer="91"/>
 <portref moduleinst="12V0" port="BAT+"/>
 <pinref part="SUPPLY12" gate="G$1" pin="9V0"/>
 <portref moduleinst="3V3" port="BAT+"/>
-<wire x1="147.32" y1="165.1" x2="154.94" y2="165.1" width="0.1524" layer="91"/>
-<wire x1="154.94" y1="200.66" x2="147.32" y2="200.66" width="0.1524" layer="91"/>
-<wire x1="147.32" y1="200.66" x2="147.32" y2="165.1" width="0.1524" layer="91"/>
-<junction x="147.32" y="165.1"/>
+<wire x1="246.38" y1="124.46" x2="254" y2="124.46" width="0.1524" layer="91"/>
+<wire x1="254" y1="160.02" x2="246.38" y2="160.02" width="0.1524" layer="91"/>
+<wire x1="246.38" y1="160.02" x2="246.38" y2="124.46" width="0.1524" layer="91"/>
+<junction x="246.38" y="124.46"/>
 </segment>
 <segment>
-<wire x1="81.28" y1="322.58" x2="81.28" y2="312.42" width="0.1524" layer="91"/>
-<wire x1="81.28" y1="312.42" x2="81.28" y2="307.34" width="0.1524" layer="91"/>
-<wire x1="81.28" y1="327.66" x2="81.28" y2="312.42" width="0.1524" layer="91"/>
-<label x="81.28" y="312.42" size="1.778" layer="95" rot="R90"/>
+<wire x1="129.54" y1="238.76" x2="129.54" y2="218.44" width="0.1524" layer="91"/>
+<label x="129.54" y="223.52" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="MOTOR_FLT" class="3">
 <segment>
-<wire x1="180.34" y1="119.38" x2="167.64" y2="119.38" width="0.1524" layer="91"/>
-<label x="167.64" y="119.38" size="1.778" layer="95" rot="R180"/>
+<wire x1="279.4" y1="78.74" x2="266.7" y2="78.74" width="0.1524" layer="91"/>
+<label x="266.7" y="78.74" size="1.778" layer="95" rot="R180"/>
 <portref moduleinst="MC" port="MOTOR_FLT"/>
 </segment>
 <segment>
-<wire x1="73.66" y1="327.66" x2="73.66" y2="307.34" width="0.1524" layer="91"/>
-<label x="73.66" y="312.42" size="1.778" layer="95" rot="R90"/>
+<wire x1="121.92" y1="238.76" x2="121.92" y2="218.44" width="0.1524" layer="91"/>
+<label x="121.92" y="223.52" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="MOTOR_SLP" class="3">
 <segment>
-<wire x1="180.34" y1="116.84" x2="167.64" y2="116.84" width="0.1524" layer="91"/>
-<label x="167.64" y="116.84" size="1.778" layer="95" rot="R180"/>
+<wire x1="279.4" y1="76.2" x2="266.7" y2="76.2" width="0.1524" layer="91"/>
+<label x="266.7" y="76.2" size="1.778" layer="95" rot="R180"/>
 <portref moduleinst="MC" port="MOTOR_SLP"/>
 </segment>
 <segment>
-<wire x1="76.2" y1="327.66" x2="76.2" y2="307.34" width="0.1524" layer="91"/>
-<label x="76.2" y="312.42" size="1.778" layer="95" rot="R90"/>
+<wire x1="124.46" y1="238.76" x2="124.46" y2="218.44" width="0.1524" layer="91"/>
+<label x="124.46" y="223.52" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="MOTOR_IPROP" class="3">
 <segment>
-<wire x1="78.74" y1="327.66" x2="78.74" y2="307.34" width="0.1524" layer="91"/>
-<label x="78.74" y="312.42" size="1.778" layer="95" rot="R90"/>
+<wire x1="127" y1="238.76" x2="127" y2="218.44" width="0.1524" layer="91"/>
+<label x="127" y="223.52" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
 <portref moduleinst="MC" port="MOTOR_IPROP"/>
-<wire x1="180.34" y1="114.3" x2="167.64" y2="114.3" width="0.1524" layer="91"/>
-<label x="167.64" y="114.3" size="1.778" layer="95" rot="R180"/>
+<wire x1="279.4" y1="73.66" x2="266.7" y2="73.66" width="0.1524" layer="91"/>
+<label x="266.7" y="73.66" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 </nets>
@@ -23240,7 +23238,6 @@ V = R * I
 <errors>
 <approved hash="102,1,238.76,17.78,12V,12V0,,,,"/>
 <approved hash="102,1,251.46,17.78,9V0,BAT+,,,,"/>
-<approved hash="102,1,137.16,165.1,9V0,BAT+,,,,"/>
 <approved hash="102,1@12V0,55.88,17.78,9V0,BAT+,,,,"/>
 <approved hash="102,1@MOTOR_CONTROLLER,55.88,15.24,12V,12V0,,,,"/>
 <approved hash="102,1@MOTOR_CONTROLLER,132.08,78.74,12V,12V0,,,,"/>
@@ -23249,11 +23246,6 @@ V = R * I
 <approved hash="104,1@FE-RAM,81.28,78.74,IC1,VCC,3V3,,,"/>
 <approved hash="104,1@12V0,86.36,88.9,IC1,VIN,BAT+,,,"/>
 <approved hash="104,1@MOTOR_CONTROLLER,99.06,96.52,IC1,VM,12V0,,,"/>
-<approved hash="119,1,63.5,93.98,net,WP,,,,"/>
-<approved hash="106,1,63.5,93.98,FERAM_WP,,,,,"/>
-<approved hash="113,1,236.457,122.146,JP3,,,,,"/>
-<approved hash="113,1,129.777,322.806,JP2,,,,,"/>
-<approved hash="113,1,71.12,343.137,JP1,,,,,"/>
 </errors>
 </schematic>
 </drawing>
