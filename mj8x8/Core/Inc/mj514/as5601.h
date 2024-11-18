@@ -24,11 +24,16 @@ typedef enum as5601_reg_t  // register to array index translation
 
 typedef struct	// struct describing the Rotary Encoder functionality
 {
-	volatile rotation_t Rotation :1;  //
+	volatile enum as5601_rotation_t
+	{
+		  none = -1,	// no rotation
+		  CW = 0,  // clockwise
+		  CCW = 1,	// counter clockwise
+	} Rotation;
 
 	float (*CountRotation)(void);  //
-	uint16_t (*Read)(const as5601_reg_t Register);  //
-	void (*Write)(const as5601_reg_t Register, const uint16_t *data);  //
+	uint16_t (*Read)(const as5601_reg_t Register);  // returns 2 bytes of register values from device register
+	void (*Write)(const as5601_reg_t Register, const uint16_t in_val);  // writes 2 bytes of data into device register
 } as5601_t;
 
 as5601_t* as5601_ctor(void);	// the AS5601 constructor

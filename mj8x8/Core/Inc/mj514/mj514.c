@@ -59,11 +59,12 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(Motor_IPROP_GPIO_Port, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = FeRAM_WP_Pin;
+	__HAL_RCC_GPIOF_CLK_ENABLE();  // TODO - remove debug pin when done
+	GPIO_InitStruct.Pin = Debug_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(FeRAM_WP_GPIO_Port, &GPIO_InitStruct);
+	HAL_GPIO_Init(Debug_GPIO_Port, &GPIO_InitStruct);
 }
 
 // Timer init - device specific
@@ -78,8 +79,14 @@ static inline void _TimerInit(void)
 	TIM_OC_InitTypeDef sConfigOC =
 		{0};
 
+	TIM_Encoder_InitTypeDef sConfig =
+		{0};
+
+	TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig =
+		{0};
+
 	// timer2 - motor control PWM signal generation
-	// FIXME - timer2 - validate correct operation
+	// FIXME - timer2 - validate correct init & operation
 	htim2.Instance = TIM2;
 	htim2.Init.Prescaler = 0;
 	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -102,31 +109,65 @@ static inline void _TimerInit(void)
 	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 	HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1);
+
+	sConfigOC.OCMode = TIM_OCMODE_PWM1;
+	sConfigOC.Pulse = MOTOR_OFF;
+	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 	HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2);
 
 	// timer3 - rotary encoder handling
-	htim3.Instance = TIM3;	// rotary encoder handling
+	htim3.Instance = TIM3;
 	htim3.Init.Prescaler = 0;
 	htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim3.Init.Period = TIMER3_PERIOD;
+	htim3.Init.Period = 65535;
 	htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+	htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+	sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+	sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
+	sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
+	sConfig.IC1Filter = TIMER3_IC1_FILTER;
+	sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+	sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
+	sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
+	sConfig.IC2Filter = TIMER3_IC2_FILTER;
+	HAL_TIM_Encoder_Init(&htim3, &sConfig);
 
 	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
 	HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig);
 
-	// timer16 - rotary encoder time base - 10ms
+	// timer16 - rotary encoder time base - 50ms
 	htim16.Instance = TIM16;
 	htim16.Init.Prescaler = TIMER_PRESCALER;
 	htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim16.Init.Period = TIMER16_PERIOD;  // with above pre-scaler and a period of 99, we have an 10ms interrupt frequency
+	htim16.Init.Period = TIMER16_PERIOD;  // with above pre-scaler and a period of 499, we have an 50ms interrupt frequency
 	htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim16.Init.RepetitionCounter = 0;
 	htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 	HAL_TIM_Base_Init(&htim16);
 
+	sConfigOC.OCMode = TIM_OCMODE_TIMING;
+	sConfigOC.Pulse = 0;
+	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+	sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+	sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+	sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+	HAL_TIM_OC_ConfigChannel(&htim16, &sConfigOC, TIM_CHANNEL_1);
+
+	sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
+	sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+	sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+	sBreakDeadTimeConfig.DeadTime = 0;
+	sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+	sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+	sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+	HAL_TIMEx_ConfigBreakDeadTime(&htim16, &sBreakDeadTimeConfig);
+
 	// timer17 - ADC time base - 10ms
+	// FIXME - timer17 - validate correct init & operation
 	htim17.Instance = TIM17;
 	htim17.Init.Prescaler = TIMER_PRESCALER;
 	htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -144,18 +185,23 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 
 	if(timer->Instance == TIM2)  // motor control PWM signal generation
 		// FIXME - timer2 - validate correct operation
+		// FIXME - verify correct stop
 		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
 
 	if(timer->Instance == TIM3)  // rotary encoder handling
 		{
+			// FIXME - verify correct stop
 			__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
 			__HAL_RCC_TIM3_CLK_DISABLE();  // stop the clock
 		}
 
-	if(timer->Instance == TIM16)  // rotary encoder time base - 10ms
+	if(timer->Instance == TIM16)  // rotary encoder time base - 50ms
+		// FIXME - verify correct stop
 		__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
 
 	if(timer->Instance == TIM17)  // ADC time base - 10ms
+		// FIXME - timer17 - validate correct operation
+		// FIXME - verify correct stop
 		__HAL_RCC_TIM17_CLK_DISABLE();  // stop the clock
 }
 
@@ -165,6 +211,7 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 	if(timer->Instance == TIM2)  // motor control PWM signal generation
 		{
 			// FIXME - timer2 - validate correct operation
+			// FIXME - verify correct start
 			static TIM_OC_InitTypeDef sConfigOC =
 				{0};
 
@@ -182,10 +229,12 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 
 	if(timer->Instance == TIM3)  // rotary encoder handling
 		{
+			// FIXME - verify correct start
 			TIM_Encoder_InitTypeDef sConfig =
 				{0};
 
-			sConfig.EncoderMode = TIM_ENCODERMODE_TI12;  // TODO: test TIM_ENCODERMODE_TI1, TIM_ENCODERMODE_TI2, TIM_ENCODERMODE_TI12
+			sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+
 			sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
 			sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
 			sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
@@ -198,13 +247,16 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 
 			__HAL_RCC_TIM3_CLK_ENABLE();
 			HAL_TIM_Encoder_Init(&htim3, &sConfig);
-			HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
 
-			_StartTimer(&htim16);  // start encoder time base
+			HAL_TIM_Base_Start_IT(&htim3);  // start the timer in interrupt mode for overflow interrupts
+			HAL_TIM_Encoder_Start_IT(&htim3, TIM_CHANNEL_ALL);  // start the timer in encoder mode
+
+			_StartTimer(&htim16);  // FIXME - verify dependency - start encoder time base
 		}
 
-	if(timer->Instance == TIM16)  // rotary encoder time base - 10ms
+	if(timer->Instance == TIM16)  // rotary encoder time base - 50ms
 		{
+			// FIXME - verify correct start
 			__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
 			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
 			timer->Instance->ARR = TIMER16_PERIOD;
@@ -212,6 +264,7 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 
 	if(timer->Instance == TIM17)  // ADC time base - 10ms
 		{
+			// FIXME - verify correct start
 			__HAL_RCC_TIM17_CLK_ENABLE();  // start the clock
 			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
 			timer->Instance->ARR = TIMER17_PERIOD;
@@ -256,10 +309,10 @@ void mj514_ctor(void)
 //	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
 
 // interrupt init
-	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);	// rotary encoder handling
+	HAL_NVIC_SetPriority(TIM3_IRQn, 2, 0);	// rotary encoder handling
 	HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
-	HAL_NVIC_SetPriority(TIM16_IRQn, 0, 0);  // rotary encoder time base - 10ms
+	HAL_NVIC_SetPriority(TIM16_IRQn, 1, 0);  // rotary encoder time base - 10ms
 	HAL_NVIC_EnableIRQ(TIM16_IRQn);
 
 	HAL_NVIC_SetPriority(TIM17_IRQn, 0, 0);  // ADC time base - 10ms
@@ -274,7 +327,7 @@ void mj514_ctor(void)
 	HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 0, 0);  // DMA interrupt - rotary encoder
 	HAL_NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
 
-	HAL_NVIC_SetPriority(EXTI2_3_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(EXTI2_3_IRQn, 0, 0);  // motor fault pin
 	HAL_NVIC_EnableIRQ(EXTI2_3_IRQn);
 }
 

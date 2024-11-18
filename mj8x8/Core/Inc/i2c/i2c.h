@@ -7,6 +7,8 @@
 
 typedef struct
 {
+	I2C_HandleTypeDef *I2C;  // I2C handle
+
 	void (*Read)(const uint16_t DevAddr, uint16_t RegAddr, uint16_t *data, uint16_t size);
 	void (*Write)(const uint16_t DevAddr, const uint16_t MemAddr, uint16_t const *data, uint16_t MemAddrSize);
 } i2c_t;

@@ -36,17 +36,18 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER2_PERIOD 0xFFFF	//
 #define MOTOR_OFF 0x00	//
-#define TIMER3_PERIOD  0xFF	// TODO - use 0xFFFF
-#define TIMER3_IC1_FILTER	0x0	//
-#define TIMER3_IC2_FILTER 0x0	//
-#define TIMER16_PERIOD 99	// rotary encoder time base - 10ms
+#define TIMER3_PERIOD  0xFFFF	// use max. range for rotary encoder pulse count
+#define TIMER3_IC1_FILTER	0x0	// TODO - figure out filter
+#define TIMER3_IC2_FILTER 0x0	// TODO - figure out filter
+#define TIMER16_PERIOD 499	// TODO - verify proper timing: 10ms or 100ms may be better - rotary encoder time base - 50ms
 #define TIMER17_PERIOD 99	// ADC time base - 10ms
 
 typedef enum
-{
-	  CW = 0,  // __HAL_TIM_IS_TIM_COUNTING_DOWN() == 0
-	  CCW = 1  // __HAL_TIM_IS_TIM_COUNTING_DOWN() == 1
-} rotation_t;
+{  // FIXME - derive proper direction of final shifting cog (the one that engages the Speedhub's own cog) based on motor direction (which in t urn is derived from AS5601's rotation definition)
+	  NoShift = -1,  // no shifting - standstill
+	  GearUp = 0,  // shifting up (numerical from Rohloff gear 1 to 2, 3,...)
+	  GearDown = 1	// shifting down (numerical from Rohloff gear 5 to 4, 3,...)
+} shifting_t;
 
 #if USE_I2C
 #include "i2c/i2c.h"
@@ -58,7 +59,7 @@ typedef enum
 
 #define VREFINT_CAL *((uint16_t*) ((uint32_t) 0x1FFFF7BA)) // value is 1525 - internal reference voltage calibration data: acquired by measuring Vdda = 3V3 (+-10%) at 30 DegC (+-5 DegC), see RM0091l paragraph 13.8, p 260 for conversion formula
 
-#define ADC_CHANNELS 2	// how many ADC channels are we using
+#define ADC_CHANNELS 3	// how many ADC channels are we using
 #define ADC_CHANNEL_MOTOR_IPROP ADC_CHANNEL_4 // PA4
 
 // definitions of device/PCB layout-dependent hardware pins
@@ -76,21 +77,22 @@ typedef enum
 #define Motor_SLP_GPIO_Port GPIOA
 #define Motor_IPROP_Pin GPIO_PIN_4	// motor current monitoring ADC channel 4
 #define Motor_IPROP_GPIO_Port GPIOA
-#define FeRAM_WP_Pin GPIO_PIN_5	// FeRAM write-protect
-#define FeRAM_WP_GPIO_Port GPIOA
 #define Rotary_A_Pin GPIO_PIN_6	// rotary encoder A/B input for detection/measurement of gear rotation
 #define Rotary_A_GPIO_Port GPIOA
 #define Rotary_B_Pin GPIO_PIN_7	// rotary encoder A/B input for detection/measurement of gear rotation
 #define Rotary_B_GPIO_Port GPIOA
-#define I2C_SDA_Pin GPIO_PIN_10	// see i2c_ctor()
-#define I2C_SDA_GPIO_Port GPIOA	// see i2c_ctor()
-#define I2C_SCL_Pin GPIO_PIN_11
-#define I2C_GPIO_Port GPIOA
+#define I2C_SDA_Pin GPIO_PIN_7 // see i2c_ctor()
+#define I2C_SCL_Pin GPIO_PIN_6 // see i2c_ctor()
+#define I2C_GPIO_Port GPIOB
+
+#define Debug_Pin GPIO_PIN_1	// TODO - remove debug pin when done
+#define Debug_GPIO_Port GPIOF
 // definitions of device/PCB layout-dependent hardware pins
 
 enum mj514_adcchannels
 {  // order is important! - this MCU has no ranking and the order of channels is by channel number
 	  Iprop,  // Motor Iprop - PA4 - proportional motor current
+	  Temperature,  // internal temperature sensor
 	  Vrefint  // internal reference voltage
 };
 
