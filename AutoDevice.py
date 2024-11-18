@@ -90,9 +90,8 @@ def extract_data0_value(output) -> str:
     match = re.search(r'Data0\s+:\s+0x([0-9A-Fa-f]+)\s+', output)
     return int(match.group(1).lower(),16)
 
-def copy_main_h_if_not_exists():
-    if not os.path.isfile(HEADER_PATH):
-        shutil.copy(TRACKED_HEADER_PATH, HEADER_PATH)
+def copy_main_h():
+    shutil.copy(TRACKED_HEADER_PATH, HEADER_PATH)
 
 def write_to_main_h(device) -> None:
     # Read the existing content of the file
@@ -124,7 +123,7 @@ if __name__ == "__main__":
     if not check_stlink_connected():
         exit()
 
-    copy_main_h_if_not_exists()  # Check if main.h exists and copy main.h_tracked if not
+    copy_main_h()  # Check if main.h exists and copy main.h_tracked if not
     output = execute_stm32_programmer_cli() # try to connect to the programmer and read out option bytes
     parse_mj8x8_header_for_devices(MJ8X8_HEADER_PATH) # parse mj8x8_commands.h for devices
     id = extract_data0_value(output) # parse readout output: device CAN ID in hex

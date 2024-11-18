@@ -5,6 +5,7 @@
 #include "mj8x8\mj8x8_commands.h"
 #include "message\message.h"
 #include "stm32f0xx_hal.h"	// include HAL layer
+#include "i2c\i2c.h"
 
 #define HEARTBEAT 0
 #define CANACTIVE 1
@@ -25,7 +26,9 @@ typedef struct	// "base class" struct for mj8x8 devices
 {
 	uint8_t **activity;  // device activity indicator from one level down (can_t)
 	can_t *can;  // pointer to the CAN structure
-
+#if USE_I2C
+	i2c_t *i2c;  // representation of I2C infrastructure
+#endif
 	void (*const StartCoreTimer)(void);  // starts timer1
 	void (*const StopCoreTimer)(void);  // stops timer1
 	void (*const HeartBeat)(message_handler_t *const msg);	// default periodic heartbeat for all devices

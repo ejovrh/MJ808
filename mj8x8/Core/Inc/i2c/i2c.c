@@ -4,13 +4,13 @@
 
 static DMA_HandleTypeDef _hdma_i2c1_rx;  // I2C RX DMA handle
 static DMA_HandleTypeDef _hdma_i2c1_tx;  // I2C TX DMA handle
-
 static I2C_HandleTypeDef _hi2c;  //I2C handle
 
 typedef struct	// i2c_t actual
 {
 	i2c_t public;  // public struct
 
+	uint8_t _FlagPoweredOn :1;	// flag if I2C is already powered on
 	uint8_t _CriticalSection :1;
 } __i2c_t;
 
@@ -46,28 +46,42 @@ void _Write(const uint16_t DevAddr, const uint16_t MemAddr, uint16_t const *data
 	;
 }
 
+// power off the I2C infrastructure
 void _I2C_Stop(void)
 {
+	__I2C._FlagPoweredOn = 0;  // flag for off state
+
+	// TODO - account for ADC DMA running
+	__HAL_RCC_GPIOB_CLK_DISABLE();// enable peripheral clock
 	__HAL_RCC_DMA1_CLK_DISABLE();
 	__HAL_RCC_I2C1_CLK_DISABLE();
 }
 
-//
-void _I2C_Start(const uint32_t _SDA_Pin, const uint32_t _SCL_Pin, GPIO_TypeDef *_I2C_Port)
+void _I2C_Start(void)
+// power on the I2C infrastructure
 {
+	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
+	__HAL_RCC_DMA1_CLK_ENABLE();
+	__HAL_RCC_I2C1_CLK_ENABLE();
+
+	__I2C._FlagPoweredOn = 1;  // flag for on state
+}
+
+//
+void _I2C_Init(const uint32_t _SDA_Pin, const uint32_t _SCL_Pin, GPIO_TypeDef *_I2C_Port)
+{
+	RCC_PeriphCLKInitTypeDef PeriphClkInit =
+		{0};
+
+	PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_I2C1;
+	PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_HSI;
+	HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit);
+
 	GPIO_InitTypeDef GPIO_InitStruct =
 		{0};
 
-	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
+	__HAL_RCC_DMA1_CLK_ENABLE();
 
-	GPIO_InitStruct.Pin = _SDA_Pin | _SCL_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
-	HAL_GPIO_Init(_I2C_Port, &GPIO_InitStruct);
-
-	__HAL_RCC_I2C1_CLK_ENABLE();  // FIXME - correct position in startup sequence?
 	_hi2c.Instance = I2C1;
 	_hi2c.Init.Timing = 0x00201D2B;
 	_hi2c.Init.OwnAddress1 = 0;
@@ -79,10 +93,16 @@ void _I2C_Start(const uint32_t _SDA_Pin, const uint32_t _SCL_Pin, GPIO_TypeDef *
 	_hi2c.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
 	HAL_I2C_Init(&_hi2c);
 
-	HAL_I2CEx_ConfigAnalogFilter(&_hi2c, I2C_ANALOGFILTER_ENABLE);
-	HAL_I2CEx_ConfigDigitalFilter(&_hi2c, 0);
+	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
+	GPIO_InitStruct.Pin = _SDA_Pin | _SCL_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Alternate = GPIO_AF1_I2C1;
+	HAL_GPIO_Init(_I2C_Port, &GPIO_InitStruct);
 
-	__HAL_RCC_DMA1_CLK_ENABLE();	// FIXME - correct position in startup sequence?
+	__HAL_RCC_I2C1_CLK_ENABLE();
+
 	// I2C TX Init
 	_hdma_i2c1_tx.Instance = DMA1_Channel2;
 	_hdma_i2c1_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
@@ -107,6 +127,8 @@ void _I2C_Start(const uint32_t _SDA_Pin, const uint32_t _SCL_Pin, GPIO_TypeDef *
 	HAL_DMA_Init(&_hdma_i2c1_rx);
 	__HAL_LINKDMA(&_hi2c, hdmarx, _hdma_i2c1_rx);
 
+	HAL_I2CEx_ConfigAnalogFilter(&_hi2c, I2C_ANALOGFILTER_ENABLE);
+	HAL_I2CEx_ConfigDigitalFilter(&_hi2c, 0);
 }
 
 __i2c_t __I2C =  // instantiate event_handler_t actual and set function pointers
@@ -117,12 +139,20 @@ __i2c_t __I2C =  // instantiate event_handler_t actual and set function pointers
 	._CriticalSection = 0,  //
 	};
 
-void i2c_ctor(const uint32_t SDA_Pin, const uint32_t SCL_Pin, GPIO_TypeDef *I2C_Port)
+i2c_t* i2c_ctor(const uint32_t SDA_Pin, const uint32_t SCL_Pin, GPIO_TypeDef *I2C_Port)
 {
-	_I2C_Start(SDA_Pin, SCL_Pin, I2C_Port);
-}
+	_I2C_Init(SDA_Pin, SCL_Pin, I2C_Port);	// initialize I2C infrastructure
+	_I2C_Stop();	// power it off; reads/writes will power I2C on by themselves
+	_I2C_Start();  // TODO - implement power on on read/write operations
 
-i2c_t *const I2C = &__I2C.public;
+	HAL_NVIC_SetPriority(I2C1_IRQn, 0, 0);	// I2C interrupts
+	HAL_NVIC_EnableIRQ(I2C1_IRQn);
+
+	HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 0, 0);  // I2C DMA interrupts
+	HAL_NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
+
+	return &__I2C.public;
+}
 
 //
 void DMA1_Channel2_3_IRQHandler(void)
@@ -135,12 +165,8 @@ void DMA1_Channel2_3_IRQHandler(void)
 void I2C1_IRQHandler(void)
 {
 	if(_hi2c.Instance->ISR & (I2C_FLAG_BERR | I2C_FLAG_ARLO | I2C_FLAG_OVR))
-		{
-			HAL_I2C_ER_IRQHandler(&_hi2c);
-		}
+		HAL_I2C_ER_IRQHandler(&_hi2c);
 	else
-		{
-			HAL_I2C_EV_IRQHandler(&_hi2c);
-		}
+		HAL_I2C_EV_IRQHandler(&_hi2c);
 }
 #endif

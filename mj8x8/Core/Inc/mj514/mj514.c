@@ -196,7 +196,6 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 		}
 
 	if(timer->Instance == TIM16)  // rotary encoder time base - 50ms
-		// FIXME - verify correct stop
 		__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
 
 	if(timer->Instance == TIM17)  // ADC time base - 10ms
@@ -256,7 +255,6 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 
 	if(timer->Instance == TIM16)  // rotary encoder time base - 50ms
 		{
-			// FIXME - verify correct start
 			__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
 			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
 			timer->Instance->ARR = TIMER16_PERIOD;
@@ -299,6 +297,8 @@ void mj514_ctor(void)
 
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
+
+	__Device.public.mj8x8->i2c = i2c_ctor(I2C_SDA_Pin, I2C_SCL_Pin, I2C_GPIO_Port);  // call I2C constructor
 	__Device.public.gear = gear_ctor();		// electronic gear shifting unit
 
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
@@ -318,21 +318,22 @@ void mj514_ctor(void)
 	HAL_NVIC_SetPriority(TIM17_IRQn, 0, 0);  // ADC time base - 10ms
 	HAL_NVIC_EnableIRQ(TIM17_IRQn);
 
-	HAL_NVIC_SetPriority(I2C1_IRQn, 0, 0);	// I2C interrupts
-	HAL_NVIC_EnableIRQ(I2C1_IRQn);
-
 	HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);  // DMA interrupt - ADC
 	HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 
-	HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 0, 0);  // DMA interrupt - rotary encoder
-	HAL_NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
-
 	HAL_NVIC_SetPriority(EXTI2_3_IRQn, 0, 0);  // motor fault pin
 	HAL_NVIC_EnableIRQ(EXTI2_3_IRQn);
-}
 
+	// normally activated in can.c _CANInit() - #define USE_I2C 1 controls it there
+	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 3, 0);
+	HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
+
+	// normally defined in mj8x8.c mj8x8_ctor() - #define USE_I2C 1 controls it there
+	HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 1, 0);
+	HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
+}
 // device-specific interrupt handlers
-// FIXME - define device-specific interrupt handlers
+
 // device-specific interrupt handlers
 
 // all devices have the object name "Device", hence the preprocessor macro

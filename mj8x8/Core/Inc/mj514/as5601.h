@@ -5,7 +5,7 @@
 
 #if defined(MJ514_)	// if this particular device is active
 
-#define FULL_REVOLUTION 12345.0	// ticks for a full 360 deg. revolution
+#define FULL_REVOLUTION (float) 12345.0	// ticks for a full 360 deg. revolution
 
 typedef enum as5601_reg_t  // register to array index translation
 {
@@ -34,6 +34,8 @@ typedef struct	// struct describing the Rotary Encoder functionality
 	float (*CountRotation)(void);  //
 	uint16_t (*Read)(const as5601_reg_t Register);  // returns 2 bytes of register values from device register
 	void (*Write)(const as5601_reg_t Register, const uint16_t in_val);  // writes 2 bytes of data into device register
+	void (*Start)(void);	// starts the encoder timebase
+	void (*Stop)(void);  // stops the encoder timebase
 } as5601_t;
 
 as5601_t* as5601_ctor(void);	// the AS5601 constructor

@@ -64,18 +64,19 @@ static const uint8_t _RegisterSize[REG_CNT] =  // size of each register address
 static uint16_t _Read(const as5601_reg_t Register)
 {
 	uint16_t retval = 0;  // container for read out value
-	uint8_t data[2] = {0};  // received data buffer
+	uint8_t data[2] =
+		{0};  // received data buffer
 
 	//	check if the device is ready
-	while(HAL_I2C_IsDeviceReady(I2C->I2C, AS5601_I2C_ADDR, 300, 300) != HAL_OK)
+	while(HAL_I2C_IsDeviceReady(Device->mj8x8->i2c->I2C, AS5601_I2C_ADDR, 300, 300) != HAL_OK)
 		;
 
 	// send device address w. read command, address we want to read from, along with how many bytes to read
-	if(HAL_I2C_Mem_Read_DMA(I2C->I2C, (AS5601_I2C_ADDR | READ), _RegisterAddress[Register], I2C_MEMADD_SIZE_8BIT, data, _RegisterSize[Register]) != HAL_OK)
+	if(HAL_I2C_Mem_Read_DMA(Device->mj8x8->i2c->I2C, (AS5601_I2C_ADDR | READ), _RegisterAddress[Register], I2C_MEMADD_SIZE_8BIT, data, _RegisterSize[Register]) != HAL_OK)
 		Error_Handler();
 
 	// give the bus time to settle
-	while(HAL_I2C_GetState(I2C->I2C) != HAL_I2C_STATE_READY)
+	while(HAL_I2C_GetState(Device->mj8x8->i2c->I2C) != HAL_I2C_STATE_READY)
 		;
 
 	// do bit shifting of two uint8_t into one uint16_t
@@ -90,7 +91,8 @@ static uint16_t _Read(const as5601_reg_t Register)
 // writes 2 bytes of data into device register
 static void _Write(const as5601_reg_t Register, const uint16_t in_val)
 {
-	uint8_t data[2] = {0};  // transmit data buffer
+	uint8_t data[2] =
+		{0};  // transmit data buffer
 
 	// do bit shifting of one uint16_t into two uint8_t
 	if(_RegisterSize[Register] == 1)
@@ -103,10 +105,10 @@ static void _Write(const as5601_reg_t Register, const uint16_t in_val)
 		}
 
 	//	check if the device is ready
-	while(HAL_I2C_IsDeviceReady(I2C->I2C, AS5601_I2C_ADDR, 300, 300) != HAL_OK)
+	while(HAL_I2C_IsDeviceReady(Device->mj8x8->i2c->I2C, AS5601_I2C_ADDR, 300, 300) != HAL_OK)
 		;
 
-	if(HAL_I2C_Mem_Write_DMA(I2C->I2C, AS5601_I2C_ADDR, _RegisterAddress[Register], I2C_MEMADD_SIZE_8BIT, data, _RegisterSize[Register]) != HAL_OK)
+	if(HAL_I2C_Mem_Write_DMA(Device->mj8x8->i2c->I2C, AS5601_I2C_ADDR, _RegisterAddress[Register], I2C_MEMADD_SIZE_8BIT, data, _RegisterSize[Register]) != HAL_OK)
 		{
 			__disable_irq();
 			while(1)
@@ -114,21 +116,37 @@ static void _Write(const as5601_reg_t Register, const uint16_t in_val)
 		}
 
 	// give the bus time to settle
-	while(HAL_I2C_GetState(I2C->I2C) != HAL_I2C_STATE_READY)
+	while(HAL_I2C_GetState(Device->mj8x8->i2c->I2C) != HAL_I2C_STATE_READY)
 		;
 }
 
-//
-static float _CountRotation(void)
+// starts the encoder timebase
+void _Start(void)
 {
-	return (__AS5601.counter / FULL_REVOLUTION);
+	Device->StartTimer(&htim3);
+	Device->StartTimer(&htim16);
 }
 
-static __as5601_t  __AS5601 =  // instantiate as5601c_t actual and set function pointers
+// stops the encoder timebase
+void _Stop(void)
+{
+	Device->StopTimer(&htim3);
+	Device->StopTimer(&htim16);
+}
+
+// TODO - implement rotation counting or whatever
+static float _CountRotation(void)
+{
+	return (__AS5601.counter / FULL_REVOLUTION );
+}
+
+static __as5601_t __AS5601 =  // instantiate as5601c_t actual and set function pointers
 	{  //
 	.public.CountRotation = &_CountRotation,  // set function pointer
-	.public.Read = &_Read,	//
-	.public.Write = &_Write  //
+	.public.Read = &_Read,	// ditto
+	.public.Write = &_Write,  //
+	.public.Start = &_Start,	//
+	.public.Stop = &_Stop  //
 	};
 
 as5601_t* as5601_ctor(void)  //
@@ -137,9 +155,9 @@ as5601_t* as5601_ctor(void)  //
 	__AS5601.public.Rotation = none;
 
 	__AS5601.public.Write(ABN, 0x07);  // DS p. 21 - 1024 w. 7.8kHz
-	HAL_Delay(5);
+//	HAL_Delay(5);	// mj8x8.c mj8x8_ctor() - HAL_SuspendTick() disables HAL_Delay()
 	__AS5601.public.Write(CONF, 0x200F);	// DS p. 21 - LPM3, 3 LSB hysteresis, Watchdog on
-	HAL_Delay(5);
+//	HAL_Delay(5);	// mj8x8.c mj8x8_ctor() - HAL_SuspendTick() disables HAL_Delay()
 
 	__AS5601._status = __AS5601.public.Read(STATUS);	// read out device status
 
@@ -183,9 +201,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			 * 	FIXME - derive motor CR/CCW rotation based on this definition
 			 * 	FIXME - derive gear up/down (CW/CCW rotation) based on this definition
 			 */
-
-			HAL_GPIO_TogglePin(Debug_GPIO_Port, Debug_Pin);  // toggling of debug pin
-
 			_PreviousRawAngle = _CurrentRawAngle;  // save previous angle
 			_CurrentRawAngle = __AS5601.public.Read(ANGLE);  // read out current angle
 

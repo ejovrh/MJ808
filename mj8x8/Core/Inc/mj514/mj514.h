@@ -49,15 +49,12 @@ typedef enum
 	  GearDown = 1	// shifting down (numerical from Rohloff gear 5 to 4, 3,...)
 } shifting_t;
 
-#if USE_I2C
-#include "i2c/i2c.h"
-#endif
-
 #include "mj8x8/mj8x8.h"
 #include "gear.h" // Rohloff electronic shifting unit
-#include "adc/adc.h"
 
 #define VREFINT_CAL *((uint16_t*) ((uint32_t) 0x1FFFF7BA)) // value is 1525 - internal reference voltage calibration data: acquired by measuring Vdda = 3V3 (+-10%) at 30 DegC (+-5 DegC), see RM0091l paragraph 13.8, p 260 for conversion formula
+#define TS_CAL1	*((uint16_t*) ((uint32_t) 0x1FFFF7B8)) // calibration value at 30 degrees C, value is 1777
+#define TS_CAL2	*((uint16_t*) ((uint32_t) 0x1FFFF7C2)) // calibration at 110 degrees C, value is 1319
 
 #define ADC_CHANNELS 3	// how many ADC channels are we using
 #define ADC_CHANNEL_MOTOR_IPROP ADC_CHANNEL_4 // PA4

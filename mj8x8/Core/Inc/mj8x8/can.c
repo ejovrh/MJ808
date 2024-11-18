@@ -349,8 +349,12 @@ inline static void _CANInit(void)
 	__HAL_RCC_CAN1_CLK_ENABLE();
 	HAL_CAN_Init(&_hcan);  // Initialize CAN Bus
 
+	// control for interrupt operation prior to init finished
+	// e.g. mj514's I2C init and this interrupt cause hardfaults
+#if USE_I2C == 0
 	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 3, 0);
 	HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
+#endif
 
 	HAL_CAN_ActivateNotification(&_hcan, (CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO1_MSG_PENDING | CAN_IT_RX_FIFO0_FULL | CAN_IT_RX_FIFO1_FULL));  // enable interrupts
 	HAL_CAN_Start(&_hcan);	// start CAN

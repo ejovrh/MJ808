@@ -60,9 +60,11 @@ gear_t* gear_ctor(void)  //
 {
 	_ShiftinginProgress = 0;
 
-	__Gear.FeRAM = mb85rc_ctor();
-	__Gear.Motor = motor_ctor();
+	__enable_irq();  // PARTLY!!! enable interrupts -- essential for I2C
+	__Gear.FeRAM = mb85rc_ctor();  // tie in FeRAM object
+	__Gear.Motor = motor_ctor();	// tie in motor controller object
 
+	__disable_irq();	// disable interrupts for the remainder of initialization - mj514.c mostly
 	return &__Gear.public;  // set pointer to Gear public part
 }
 

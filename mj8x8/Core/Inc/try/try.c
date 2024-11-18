@@ -41,6 +41,9 @@ static inline void _EventHandlerEventError(void)
 #ifdef MJ838_
 	;
 #endif
+#ifdef MJ514_
+	;
+#endif
 	;
 }
 

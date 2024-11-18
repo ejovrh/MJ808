@@ -116,11 +116,13 @@ static inline void _SystemClockConfig(void)
 	RCC_ClkInitTypeDef RCC_ClkInitStruct =
 		{0};  // instantiate and initialize
 
-	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;	// no external crystal
+	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_HSI14;  // no external crystal
 	RCC_OscInitStruct.HSIState = RCC_HSI_ON;	// turn it on
+	RCC_OscInitStruct.HSI14State = RCC_HSI14_ON;
 	RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;  //
-	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;	// no PLL
-	HAL_RCC_OscConfig(&RCC_OscInitStruct);  //
+	RCC_OscInitStruct.HSI14CalibrationValue = 16;
+	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;  // no PLL
+	HAL_RCC_OscConfig(&RCC_OscInitStruct);
 
 	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1;  //
 	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;	//
@@ -280,8 +282,12 @@ mj8x8_t* mj8x8_ctor(const mj8x8_Devices_t in_MJ8x8_ID)
 	HAL_SuspendTick();
 
 	// interrupt init
+	// control for interrupt operation prior to init finished
+	// e.g. mj514's I2C init and this interrupt cause hardfaults
+#if USE_I2C == 0
 	HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 1, 0);
 	HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
+#endif
 
 //	HAL_DBGMCU_EnableDBGStopMode();
 

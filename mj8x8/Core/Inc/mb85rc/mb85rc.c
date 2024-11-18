@@ -29,23 +29,23 @@ static uint8_t _Read(const uint8_t RegAddr)
 	uint8_t ptr = RegAddr;	// container for register address to read from
 
 	// check if the device is ready
-	while(HAL_I2C_IsDeviceReady(I2C->I2C, MB85RC_I2C_ADDR, 300, 300) != HAL_OK)
+	while(HAL_I2C_IsDeviceReady(Device->mj8x8->i2c->I2C, MB85RC_I2C_ADDR, 300, 300) != HAL_OK)
 		;
 
 	// send the address we want to read from
-	if(HAL_I2C_Master_Transmit_DMA(I2C->I2C, MB85RC_I2C_ADDR, &ptr, 1) != HAL_OK)
+	if(HAL_I2C_Master_Transmit_DMA(Device->mj8x8->i2c->I2C, MB85RC_I2C_ADDR, &ptr, 1) != HAL_OK)
 		Error_Handler();
 
 	// give the bus time to settle
-	while(HAL_I2C_GetState(I2C->I2C) != HAL_I2C_STATE_READY)
+	while(HAL_I2C_GetState(Device->mj8x8->i2c->I2C) != HAL_I2C_STATE_READY)
 		;
 
 	// tell the I2C device that we want to read from it
-	if(HAL_I2C_Master_Receive_DMA(I2C->I2C, (MB85RC_I2C_ADDR | READ), &retval, 1) != HAL_OK)
+	if(HAL_I2C_Master_Receive_DMA(Device->mj8x8->i2c->I2C, (MB85RC_I2C_ADDR | READ), &retval, 1) != HAL_OK)
 		Error_Handler();
 
 	// give the bus time to settle
-	while(HAL_I2C_GetState(I2C->I2C) != HAL_I2C_STATE_READY)
+	while(HAL_I2C_GetState(Device->mj8x8->i2c->I2C) != HAL_I2C_STATE_READY)
 		;
 
 	return retval;
@@ -68,15 +68,15 @@ static void _Write(const uint8_t RegAddr, uint8_t const *data)
 	buffer[1] = *data;  // 2nd position is the data we want to write
 
 	// check if the device is ready
-	while(HAL_I2C_IsDeviceReady(I2C->I2C, MB85RC_I2C_ADDR, 300, 300) != HAL_OK)
+	while(HAL_I2C_IsDeviceReady(Device->mj8x8->i2c->I2C, MB85RC_I2C_ADDR, 300, 300) != HAL_OK)
 		;
 
 	// transfer the buffer contents & check for return status
-	if(HAL_I2C_Master_Transmit_DMA(I2C->I2C, MB85RC_I2C_ADDR, buffer, 2) != HAL_OK)
+	if(HAL_I2C_Master_Transmit_DMA(Device->mj8x8->i2c->I2C, MB85RC_I2C_ADDR, buffer, 2) != HAL_OK)
 		Error_Handler();
 
 	// give the bus time to settle
-	while(HAL_I2C_GetState(I2C->I2C) != HAL_I2C_STATE_READY)
+	while(HAL_I2C_GetState(Device->mj8x8->i2c->I2C) != HAL_I2C_STATE_READY)
 		;
 }
 

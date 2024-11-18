@@ -17,10 +17,11 @@ static __adc_t __ADC;  // forward declaration of object
 static volatile uint32_t __adc_dma_buffer[ADC_CHANNELS] = {0};	// store for ADC readout
 volatile uint32_t __adc_results[ADC_CHANNELS] = {0}; // store ADC average data
 
-static double _VddaConversionConstant;	// constant value pre-computed in constructor
+static float _VddaConversionConstant;	// constant value pre-computed in constructor
 static uint8_t i;  // iterator for average calculation
 static uint32_t tempiprop;  // temporary variable for average calculation
 static uint32_t tempvrefint;	// ditto
+static uint32_t temptemp;  // ditto
 
 // returns value stored at index i
 static inline uint16_t _GetChannel(const uint8_t i)
@@ -75,6 +76,9 @@ static void _ADCInit(void)
 	sConfig.Channel = ADC_CHANNEL_MOTOR_IPROP;	// channel 4 - motor proportional current - PA4
 	HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
+	sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;  // channel 16 -	built-in temperature sensor
+	HAL_ADC_ConfigChannel(&hadc, &sConfig);
+
 	sConfig.Channel = ADC_CHANNEL_VREFINT;	// channel 17 - Vrefint - see RM0091, 13.8, p. 260
 	HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
@@ -101,11 +105,13 @@ static inline void _Stop(void)
 static void _Do(void)
 {
 	tempiprop += __adc_dma_buffer[Iprop];	// ditto
+	temptemp += __adc_dma_buffer[Temperature];  // ...
 	tempvrefint += __adc_dma_buffer[Vrefint];	// ...
 
 	if(++i == ADC_MEASURE_ITERATIONS)
 		{
 			tempiprop /= ADC_MEASURE_ITERATIONS;  // ditto
+			temptemp /= ADC_MEASURE_ITERATIONS;  // ...
 			tempvrefint /= ADC_MEASURE_ITERATIONS;	// ...
 
 			/* ADC channel voltage calculation - see RM 0091, chapter 13.8, p. 260
@@ -123,11 +129,17 @@ static void _Do(void)
 			 * 	Vchannel becomes (ADC_data/Vrefint_data) * VddaConversionConstant, true voltage in mV
 			 * 	this is then typecast into uint16_t to have a nice round number
 			 */
-			__adc_results[Iprop] = (uint16_t) ((double) tempiprop / tempvrefint * _VddaConversionConstant); // store computed average in result buffer
+			__adc_results[Iprop] = (uint16_t) ((float) tempiprop / tempvrefint * _VddaConversionConstant); // store computed average in result buffer
 
+			/* ADC temperature calculation - see RM0091, chapter 13.8, p. 259
+			 *
+			 *	https://techoverflow.net/2015/01/13/reading-stm32f0-internal-temperature-and-voltage-using-chibios/
+			 */
+			__adc_results[Temperature] = (((((float) (temptemp * VREFINT_CAL) / tempvrefint) - TS_CAL1) * 800) / (int16_t) (TS_CAL2 - TS_CAL1)) + 300;
 			__adc_results[Vrefint] = tempvrefint; // store computed average in result buffer
 
 			tempiprop = 0;
+			temptemp = 0;
 			tempvrefint = 0;
 			i = 0;
 		}
@@ -146,7 +158,7 @@ adc_t* adc_ctor(void)
 
 	HAL_ADC_Start_DMA(&hadc, (uint32_t *) __adc_dma_buffer, ADC_CHANNELS);	// start DMA
 
-	_VddaConversionConstant = (double) (3300 * VREFINT_CAL) / 4095;  // 3300 - 3.3V for mV, 4 for resistor divider
+	_VddaConversionConstant = (float) (3300 * VREFINT_CAL) / 4095;  // 3300 - 3.3V for mV, 4 for resistor divider
 
 	return &__ADC.public;  // return public parts
 }
