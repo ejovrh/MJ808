@@ -33,9 +33,9 @@ typedef struct	// struct describing the Rotary Encoder functionality
 
 	float (*CountRotation)(void);  //
 	uint16_t (*Read)(const as5601_reg_t Register);  // returns 2 bytes of register values from device register
-	void (*Write)(const as5601_reg_t Register, const uint16_t in_val);  // writes 2 bytes of data into device register
-	void (*Start)(void);	// starts the encoder timebase
-	void (*Stop)(void);  // stops the encoder timebase
+	void (*Write)(const as5601_reg_t Register, const uint16_t data);  // writes 2 bytes of data into device register
+	void (*Start)(void);	// starts timers needed for encoder operation
+	void (*Stop)(void);  // stops timers needed for encoder operation
 } as5601_t;
 
 as5601_t* as5601_ctor(void);	// the AS5601 constructor

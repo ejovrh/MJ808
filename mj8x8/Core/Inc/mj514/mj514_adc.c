@@ -47,6 +47,21 @@ static inline void _DMAInit(void)
   __HAL_LINKDMA(&hadc,DMA_Handle,hdma_adc);
 }
 
+// starts the ADC & DMA peripherals
+static inline void _Start(void)
+{
+//	__HAL_RCC_DMA1_CLK_ENABLE();
+	__HAL_RCC_ADC1_CLK_ENABLE();
+	Device->StartTimer(&htim17);	// ADC time base - 10ms
+}
+
+// stops the ADC & DMA peripherals
+static inline void _Stop(void)
+{
+	Device->StopTimer(&htim17);	// ADC time base - 10ms
+	__HAL_RCC_ADC1_CLK_DISABLE();
+//	__HAL_RCC_DMA1_CLK_DISABLE();
+}
 // ADC init - device specific
 static void _ADCInit(void)
 {
@@ -83,22 +98,10 @@ static void _ADCInit(void)
 	HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
 	HAL_ADCEx_Calibration_Start(&hadc);
-}
 
-// starts the ADC & DMA peripherals
-static inline void _Start(void)
-{
-	__HAL_RCC_DMA1_CLK_ENABLE();
-	__HAL_RCC_ADC1_CLK_ENABLE();
-	Device->StartTimer(&htim17);	// ADC time base - 10ms
-}
+	HAL_ADC_Start_DMA(&hadc, (uint32_t *) __adc_dma_buffer, ADC_CHANNELS);	// start DMA
 
-// stops the ADC & DMA peripherals
-static inline void _Stop(void)
-{
-	Device->StopTimer(&htim17);	// ADC time base - 10ms
-	__HAL_RCC_ADC1_CLK_DISABLE();
-	__HAL_RCC_DMA1_CLK_DISABLE();
+	_Stop();	// init finished, power off peripheral
 }
 
 // DMA ISR executed function for ADC computation tasks
@@ -155,8 +158,6 @@ adc_t* adc_ctor(void)
 	__ADC.public.GetChannel = &_GetChannel;  // set function pointer
 	__ADC.public.Start = &_Start;  // ditto
 	__ADC.public.Stop = &_Stop;  // ditto
-
-	HAL_ADC_Start_DMA(&hadc, (uint32_t *) __adc_dma_buffer, ADC_CHANNELS);	// start DMA
 
 	_VddaConversionConstant = (float) (3300 * VREFINT_CAL) / 4095;  // 3300 - 3.3V for mV, 4 for resistor divider
 

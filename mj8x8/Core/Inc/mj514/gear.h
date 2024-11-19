@@ -7,8 +7,8 @@
 
 typedef struct	// struct describing the Gear Shifter functionality
 {
-	uint8_t (*GetGear)(void);  // returns current Rohloff gear
-	void (*ShiftGear)(const int8_t n);  // shifts Rohloff to gear n
+	uint8_t (*GetGear)(void);  // return current Rohloff gear
+	void (*ShiftGear)(const int8_t n);  // shifts Rohloff by n (up or down)
 } gear_t;
 
 gear_t* gear_ctor(void);	// the Gear constructor

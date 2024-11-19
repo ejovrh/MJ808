@@ -26,6 +26,9 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 
 __i2c_t __I2C __attribute__ ((section (".data")));
 
+#define WRITE 0x00
+#define READ 0x01
+
 inline void Error_Handler(void)
 {
 	__disable_irq();
@@ -34,37 +37,95 @@ inline void Error_Handler(void)
 }
 
 //
-// I2C read function
-void _Read(const uint16_t DevAddr, uint16_t RegAddr, uint16_t *data, uint16_t size)
+static void _Stop(void)
 {
-	;
+	if(__I2C._FlagPoweredOn == 0)
+		return;
+
+	// give the bus time to settle
+	while(HAL_I2C_GetState(Device->mj8x8->i2c->I2C) != HAL_I2C_STATE_READY)
+		;
+
+	// TODO - account for ADC DMA running
+	__HAL_RCC_I2C1_CLK_DISABLE();
+	__HAL_RCC_GPIOB_CLK_DISABLE();  // enable peripheral clock
+//	__HAL_RCC_DMA1_CLK_DISABLE();
+
+	__I2C._FlagPoweredOn = 0;  // flag for on state
+}
+
+//
+static void _Start(void)
+// power on the I2C infrastructure
+{
+	if(__I2C._FlagPoweredOn == 1)
+		return;
+
+	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
+	__HAL_RCC_I2C1_CLK_ENABLE();
+//	__HAL_RCC_DMA1_CLK_ENABLE();
+
+	__I2C._FlagPoweredOn = 1;  // flag for on state
+}
+
+// I2C read function
+uint32_t _Read(const uint16_t DevAddr, const uint16_t RegAddr, const uint8_t size)
+{
+	if(size > 4)
+		return 0xBEEF;
+
+	if(size == 0)
+		return 0xFEEB;
+
+	uint32_t retval = 0;
+
+	uint8_t buffer[4] =
+		{0};
+
+	_Start();  // I2C power on
+
+	//	check if the device is ready
+	while(HAL_I2C_IsDeviceReady(__I2C.public.I2C, DevAddr, 2, 10) != HAL_OK)
+		;
+
+	// send device address w. read command, address we want to read from, along with how many bytes to read
+	if(HAL_I2C_Mem_Read_DMA(Device->mj8x8->i2c->I2C, (DevAddr | READ), RegAddr, I2C_MEMADD_SIZE_8BIT, buffer, size) != HAL_OK)
+		Error_Handler();
+
+	_Stop();  // I2C power off
+
+	for(uint8_t i = 0; i < size; i++)
+		retval = (retval << 8) | buffer[i];
+
+	return retval;
 }
 
 // I2C write function
-void _Write(const uint16_t DevAddr, const uint16_t MemAddr, uint16_t const *data, uint16_t MemAddrSize)
+void _Write(const uint16_t DevAddr, const uint16_t RegAddr, const uint32_t data, const uint8_t size)
 {
-	;
-}
+	if(size > 4)
+		return;
 
-// power off the I2C infrastructure
-void _I2C_Stop(void)
-{
-	__I2C._FlagPoweredOn = 0;  // flag for off state
+	static uint8_t buffer[5];
+	volatile uint32_t tmp = data;
 
-	// TODO - account for ADC DMA running
-	__HAL_RCC_GPIOB_CLK_DISABLE();// enable peripheral clock
-	__HAL_RCC_DMA1_CLK_DISABLE();
-	__HAL_RCC_I2C1_CLK_DISABLE();
-}
+	buffer[0] = RegAddr;
 
-void _I2C_Start(void)
-// power on the I2C infrastructure
-{
-	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
-	__HAL_RCC_DMA1_CLK_ENABLE();
-	__HAL_RCC_I2C1_CLK_ENABLE();
+	// Fill the buffer based on the size
+	for(uint8_t i = 0; i < size; i++)
+		buffer[i + 1] = (uint8_t) (tmp >> (8 * (size - 1 - i)));  // Extract each byte in the correct order
 
-	__I2C._FlagPoweredOn = 1;  // flag for on state
+	_Start();  // I2C power on
+
+	//	check if the device is ready
+	while(HAL_I2C_IsDeviceReady(__I2C.public.I2C, DevAddr, 2, 10) != HAL_OK)
+		;
+
+	//
+	if(HAL_I2C_Master_Transmit_DMA(Device->mj8x8->i2c->I2C, DevAddr, buffer, size + 1) != HAL_OK)
+		Error_Handler();
+
+	_Stop();  // I2C power off
 }
 
 //
@@ -129,6 +190,11 @@ void _I2C_Init(const uint32_t _SDA_Pin, const uint32_t _SCL_Pin, GPIO_TypeDef *_
 
 	HAL_I2CEx_ConfigAnalogFilter(&_hi2c, I2C_ANALOGFILTER_ENABLE);
 	HAL_I2CEx_ConfigDigitalFilter(&_hi2c, 0);
+
+	__HAL_RCC_GPIOB_CLK_DISABLE();
+	__HAL_RCC_I2C1_CLK_DISABLE();
+
+	__I2C._FlagPoweredOn = 0;
 }
 
 __i2c_t __I2C =  // instantiate event_handler_t actual and set function pointers
@@ -136,14 +202,13 @@ __i2c_t __I2C =  // instantiate event_handler_t actual and set function pointers
 	.public.I2C = &_hi2c,  //
 	.public.Read = &_Read,  //
 	.public.Write = &_Write,  //
-	._CriticalSection = 0,  //
+	._CriticalSection = 0,  // FIXME - implement
+	._FlagPoweredOn = 0,	//
 	};
 
 i2c_t* i2c_ctor(const uint32_t SDA_Pin, const uint32_t SCL_Pin, GPIO_TypeDef *I2C_Port)
 {
 	_I2C_Init(SDA_Pin, SCL_Pin, I2C_Port);	// initialize I2C infrastructure
-	_I2C_Stop();	// power it off; reads/writes will power I2C on by themselves
-	_I2C_Start();  // TODO - implement power on on read/write operations
 
 	HAL_NVIC_SetPriority(I2C1_IRQn, 0, 0);	// I2C interrupts
 	HAL_NVIC_EnableIRQ(I2C1_IRQn);

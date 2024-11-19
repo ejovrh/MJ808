@@ -7,8 +7,8 @@ typedef struct
 {
 	I2C_HandleTypeDef *I2C;  // I2C handle
 
-	void (*Read)(const uint16_t DevAddr, uint16_t RegAddr, uint16_t *data, uint16_t size);
-	void (*Write)(const uint16_t DevAddr, const uint16_t MemAddr, uint16_t const *data, uint16_t MemAddrSize);
+	uint32_t (*Read)(const uint16_t DevAddr, const uint16_t RegAddr, const uint8_t size);
+	void (*Write)(const uint16_t DevAddr, const uint16_t RegAddr, const uint32_t data, const uint8_t size);
 } i2c_t;
 
 i2c_t* i2c_ctor(const uint32_t SDA_Pin, const uint32_t SCL_Pin, GPIO_TypeDef *I2C_Port);

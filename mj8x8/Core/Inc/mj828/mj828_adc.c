@@ -16,7 +16,7 @@ static __adc_t __ADC;  // forward declaration of object
 static volatile uint32_t __adc_dma_buffer[ADC_CHANNELS] = {0};	// store for ADC readout
 volatile uint32_t __adc_results[ADC_CHANNELS] = {0}; // store ADC average data
 
-static double _VddaConversionConstant;	// constant values pre-computed in constructor
+static float _VddaConversionConstant;	// constant values pre-computed in constructor
 static uint8_t i;  // iterator for average calculation
 static uint32_t tempvbat;  // temporary variable for average calculation
 static uint32_t tempvrefint;	// ditto
@@ -45,6 +45,22 @@ static inline void _DMAInit(void)
   HAL_DMA_Init(&hdma_adc) ;
 
   __HAL_LINKDMA(&hadc,DMA_Handle,hdma_adc);
+}
+
+// starts the ADC & DMA peripherals
+static inline void _Start(void)
+{
+	__HAL_RCC_DMA1_CLK_ENABLE();
+	__HAL_RCC_ADC1_CLK_ENABLE();
+	Device->StartTimer(&htim2);	// Timer2 object - ADC conversion - 250ms
+}
+
+// stops the ADC & DMA peripherals
+static inline void _Stop(void)
+{
+	Device->StopTimer(&htim2);	// Timer2 object - ADC conversion - 250ms
+	__HAL_RCC_ADC1_CLK_DISABLE();
+	__HAL_RCC_DMA1_CLK_DISABLE();
 }
 
 // ADC init - device specific
@@ -87,22 +103,10 @@ static void _ADCInit(void)
 	HAL_ADC_ConfigChannel(&hadc, &sConfig);
 
 	HAL_ADCEx_Calibration_Start(&hadc);
-}
 
-// starts the ADC & DMA peripherals
-static inline void _Start(void)
-{
-	__HAL_RCC_DMA1_CLK_ENABLE();
-	__HAL_RCC_ADC1_CLK_ENABLE();
-	Device->StartTimer(&htim2);	// Timer2 object - ADC conversion - 250ms
-}
+	HAL_ADC_Start_DMA(&hadc, (uint32_t *) __adc_dma_buffer, ADC_CHANNELS);	// start DMA
 
-// stops the ADC & DMA peripherals
-static inline void _Stop(void)
-{
-	Device->StopTimer(&htim2);	// Timer2 object - ADC conversion - 250ms
-	__HAL_RCC_ADC1_CLK_DISABLE();
-	__HAL_RCC_DMA1_CLK_DISABLE();
+	_Stop();	// init finished, power off peripheral
 }
 
 // DMA ISR executed function for ADC computation tasks
@@ -140,13 +144,13 @@ static void _Do(void)
 			 * 	Vchannel becomes (ADC_data/Vrefint_data) * VddaConversionConstant, true battery voltage in mV
 			 * 	this is then typecast into uint16_t to have a nice round number
 			 */
-			__adc_results[Vbat] = (uint16_t) ((double) tempvbat / tempvrefint * _VddaConversionConstant); // store computed average in result buffer
+			__adc_results[Vbat] = (uint16_t) ((float) tempvbat / tempvrefint * _VddaConversionConstant); // store computed average in result buffer
 
 			/* ADC temperature calculation - see RM0091, chapter 13.8, p. 259
 			 *
 			 *	https://techoverflow.net/2015/01/13/reading-stm32f0-internal-temperature-and-voltage-using-chibios/
 			 */
-			__adc_results[Temperature] = (((((double) (temptemp * VREFINT_CAL) / tempvrefint) - TS_CAL1) * 800) / (int16_t) (TS_CAL2 - TS_CAL1)) + 300;
+			__adc_results[Temperature] = (((((float) (temptemp * VREFINT_CAL) / tempvrefint) - TS_CAL1) * 800) / (int16_t) (TS_CAL2 - TS_CAL1)) + 300;
 			__adc_results[Vrefint] = tempvrefint; // store computed average in result buffer
 
 			tempdarkness = 0;	// reset
@@ -171,9 +175,7 @@ adc_t* adc_ctor(void)
 	HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);  // DMA interrupt handling
 	HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 
-	HAL_ADC_Start_DMA(&hadc, (uint32_t *) __adc_dma_buffer, ADC_CHANNELS);	// start DMA
-
-	_VddaConversionConstant = (double) (3300 * VREFINT_CAL * 4) / 4095;  // 3300 - 3.3V for mV, 4 for resistor divider
+	_VddaConversionConstant = (float) (3300 * VREFINT_CAL * 4) / 4095;  // 3300 - 3.3V for mV, 4 for resistor divider
 
 	return &__ADC.public;  // return public parts
 }

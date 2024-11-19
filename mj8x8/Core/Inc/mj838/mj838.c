@@ -267,19 +267,20 @@ void mj838_ctor(void)
 	_GPIOInit();	// initialize device-specific GPIOs
 	_TimerInit();  // initialize Timers
 
-	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
-	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
-	__Device.public.ZeroCross = zerocross_ctor();  // call zero-cross constructor
-	__Device.public.AutoDrive = autodrive_ctor();  // call AutoDrive constructor
-	__Device.public.AutoCharge = autocharge_ctor();  // call AutoCharge constructor
-	__Device.public.Motion = motion_ctor();  // call Motion constructor
-
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
 	__Device.public.mj8x8->PreSleep = &_PreSleep;  // implements the derived object prepare to sleep
 	__Device.public.mj8x8->PreStop = &_PreStop;  // implements the derived object prepare to stop
 
 	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
+
+	// application part
+	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
+	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
+	__Device.public.ZeroCross = zerocross_ctor();  // call zero-cross constructor
+	__Device.public.AutoDrive = autodrive_ctor();  // call AutoDrive constructor
+	__Device.public.AutoCharge = autocharge_ctor();  // call AutoCharge constructor
+	__Device.public.Motion = motion_ctor();  // call Motion constructor
 
 // interrupt init
 	HAL_NVIC_SetPriority(TIM17_IRQn, 3, 0);  // event handler timer (on demand)

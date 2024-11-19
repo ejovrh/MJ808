@@ -16,8 +16,8 @@ typedef struct	// as5601c_t actual
 	volatile uint16_t counter;  // TODO - implement rotation counting or whatever
 } __as5601_t;
 
-extern TIM_HandleTypeDef htim3;  // rotary encoder handling
-extern TIM_HandleTypeDef htim16;  // rotary encoder time-base
+extern TIM_HandleTypeDef htim3;  // timer in encoder mode for rotation detection
+extern TIM_HandleTypeDef htim16;  // rotary encoder time base - 10ms
 
 static volatile uint8_t _OVFcnt;	// TODO - implement overflow handling
 volatile uint16_t _CurrentRawAngle;
@@ -61,77 +61,27 @@ static const uint8_t _RegisterSize[REG_CNT] =  // size of each register address
 	};
 
 // returns 2 bytes of register values from device register
-static uint16_t _Read(const as5601_reg_t Register)
+static inline uint16_t _Read(const as5601_reg_t Register)
 {
-	uint16_t retval = 0;  // container for read out value
-	uint8_t data[2] =
-		{0};  // received data buffer
-
-	//	check if the device is ready
-	while(HAL_I2C_IsDeviceReady(Device->mj8x8->i2c->I2C, AS5601_I2C_ADDR, 300, 300) != HAL_OK)
-		;
-
-	// send device address w. read command, address we want to read from, along with how many bytes to read
-	if(HAL_I2C_Mem_Read_DMA(Device->mj8x8->i2c->I2C, (AS5601_I2C_ADDR | READ), _RegisterAddress[Register], I2C_MEMADD_SIZE_8BIT, data, _RegisterSize[Register]) != HAL_OK)
-		Error_Handler();
-
-	// give the bus time to settle
-	while(HAL_I2C_GetState(Device->mj8x8->i2c->I2C) != HAL_I2C_STATE_READY)
-		;
-
-	// do bit shifting of two uint8_t into one uint16_t
-	if(_RegisterSize[Register] == 1)
-		retval = data[0];
-	else if(_RegisterSize[Register] == 2)
-		retval = ((data[0] << 8) | data[1]);
-
-	return retval;
+	return (uint16_t) Device->mj8x8->i2c->Read(AS5601_I2C_ADDR, _RegisterAddress[Register], _RegisterSize[Register]);
 }
 
 // writes 2 bytes of data into device register
-static void _Write(const as5601_reg_t Register, const uint16_t in_val)
+static inline void _Write(const as5601_reg_t Register, const uint16_t data)
 {
-	uint8_t data[2] =
-		{0};  // transmit data buffer
-
-	// do bit shifting of one uint16_t into two uint8_t
-	if(_RegisterSize[Register] == 1)
-		data[0] = in_val;
-
-	else if(_RegisterSize[Register] == 2)
-		{
-			data[1] = (uint8_t) in_val;
-			data[0] = (uint8_t) (in_val >> 8);
-		}
-
-	//	check if the device is ready
-	while(HAL_I2C_IsDeviceReady(Device->mj8x8->i2c->I2C, AS5601_I2C_ADDR, 300, 300) != HAL_OK)
-		;
-
-	if(HAL_I2C_Mem_Write_DMA(Device->mj8x8->i2c->I2C, AS5601_I2C_ADDR, _RegisterAddress[Register], I2C_MEMADD_SIZE_8BIT, data, _RegisterSize[Register]) != HAL_OK)
-		{
-			__disable_irq();
-			while(1)
-				;
-		}
-
-	// give the bus time to settle
-	while(HAL_I2C_GetState(Device->mj8x8->i2c->I2C) != HAL_I2C_STATE_READY)
-		;
+	Device->mj8x8->i2c->Write(AS5601_I2C_ADDR, _RegisterAddress[Register], data, _RegisterSize[Register]);
 }
 
-// starts the encoder timebase
+// starts timers needed for encoder operation
 void _Start(void)
 {
-	Device->StartTimer(&htim3);
-	Device->StartTimer(&htim16);
+	Device->StartTimer(&htim16);	// start timebase and encoder timer
 }
 
-// stops the encoder timebase
+// stops timers needed for encoder operation
 void _Stop(void)
 {
-	Device->StopTimer(&htim3);
-	Device->StopTimer(&htim16);
+	Device->StopTimer(&htim16);  // stop timebase and encoder timer
 }
 
 // TODO - implement rotation counting or whatever
@@ -167,19 +117,16 @@ as5601_t* as5601_ctor(void)  //
 	__AS5601._abn = __AS5601.public.Read(ABN);	// read out ABN register
 	__AS5601._conf = __AS5601.public.Read(CONF);	// read out conf register
 
-	// FIXME - start timer as reaction to command once functionality is implemented
-//	Device->StartTimer(&htim3);  // timer3 encoder handling and timer2 time base
-
 	return &__AS5601.public;  // set pointer to AS5601 public part
 }
 
-//
+// motor control PWM signal generation
 void TIM3_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&htim3);  // service the interrupt
 }
 
-//
+// rotary encoder time base - 10ms
 void TIM16_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&htim16);  // service the interrupt
@@ -194,13 +141,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if(htim == &htim16)
 		{
 			/* definition of CW and CCW rotation
-			 * AS5601 is mounted on e.g. board top, the sensing magnet is above the IC
+			 * AS5601 is mounted on e.g. board top, the sensing magnet is above the IC (mounted on the so-called "magnetic cog")
 			 * 	- clockwise rotation will increase all counters (angle and timer3's CCR1/2)
 			 * 	- counterclockwise rotation will do the opposite
-			 *
-			 * 	FIXME - derive motor CR/CCW rotation based on this definition
-			 * 	FIXME - derive gear up/down (CW/CCW rotation) based on this definition
 			 */
+
 			_PreviousRawAngle = _CurrentRawAngle;  // save previous angle
 			_CurrentRawAngle = __AS5601.public.Read(ANGLE);  // read out current angle
 
@@ -209,9 +154,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			else	// rotation
 				{
 					if(__HAL_TIM_IS_TIM_COUNTING_DOWN(&htim3))	// CCW rotation
-						__AS5601.public.Rotation = CCW;
+						__AS5601.public.Rotation = CCW;  // e14 magnetic cog CCW rotation
 					else
-						__AS5601.public.Rotation = CW;	// CW rotation
+						__AS5601.public.Rotation = CW;	// e14 magnetic cog CW rotation
 				}
 
 			//			__AS5601.counter = __HAL_TIM_GET_COUNTER(&htim3);

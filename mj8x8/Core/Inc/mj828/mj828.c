@@ -230,12 +230,6 @@ void mj828_ctor(void)
 	_GPIOInit();	// initialize device-specific GPIOs
 	_TimerInit();  // initialize timers
 
-	__Device.public.led = _virtual_led_ctor();  // call virtual constructor & tie in object addresses
-	__Device.public.button = _virtual_button_ctor();  // call virtual constructor & tie in object addresses
-	__Device.public.adc = adc_ctor();  // call ADC constructor
-	__Device.public.autolight = autolight_ctor();  // call AutoLight constructor
-	__Device.public.autobatt = autobatt_ctor();  // call AutoBatt constructor
-
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
@@ -245,6 +239,13 @@ void mj828_ctor(void)
 	__Device.public.mj8x8->PreStop = &_PreStop;  // implements the derived object prepare to stop
 
 	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
+
+	// application part
+	__Device.public.led = _virtual_led_ctor();  // call virtual constructor & tie in object addresses
+	__Device.public.button = _virtual_button_ctor();  // call virtual constructor & tie in object addresses
+	__Device.public.adc = adc_ctor();  // call ADC constructor
+	__Device.public.autolight = autolight_ctor();  // call AutoLight constructor
+	__Device.public.autobatt = autobatt_ctor();  // call AutoBatt constructor
 
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM14_IRQn, 4, 0);  // charlieplexed LED handler timer (on demand)

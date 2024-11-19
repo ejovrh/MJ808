@@ -211,6 +211,7 @@ static inline void _EventHandlerEvent06(void)
 			_payload = OFF;  // turn off
 			Device->mj8x8->UpdateActivity(AUTOLIGHT, OFF);	// update the bus
 			Device->led->led[Yellow].Shine(OFF);
+//			Device->adc->Stop();	// FIXME - breaks it somwehow
 		}
 
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_01, &_payload, 2);  // send it

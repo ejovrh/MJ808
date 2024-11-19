@@ -26,56 +26,67 @@ static void _StartMotorController(void)
 	__Motor.encoder->Start();  // start the encoder timebase
 	__Motor.adc->Start();  // start ADC and its timebase
 	Device->StartTimer(&htim2);  // start PWM timer
+
 	// FIXME - motor fault interrupt is triggered constantly
-//	HAL_GPIO_WritePin(Motor_SLP_GPIO_Port, Motor_SLP_Pin, GPIO_PIN_SET);	// put controller into wake state
+	HAL_GPIO_WritePin(Motor_SLP_GPIO_Port, Motor_SLP_Pin, GPIO_PIN_SET);	// put controller into wake state
 }
 
 // stops the motor controller IC and ADC
 static void _StopMotorController(void)
 {
-//	HAL_GPIO_WritePin(Motor_SLP_GPIO_Port, Motor_SLP_Pin, GPIO_PIN_RESET);	// put controller into sleep state
+	HAL_GPIO_WritePin(Motor_SLP_GPIO_Port, Motor_SLP_Pin, GPIO_PIN_RESET);	// put controller into sleep state
 	Device->StopTimer(&htim2);	// stop PWM timer
 	__Motor.adc->Stop();  // start ADC and its timebase
 	__Motor.encoder->Stop();	// stop the encoder timebase
 }
 
-//
-static void _RotateUp(void)
+// rotate the e14 magnetic cog clockwise
+static void _RotateE14MagneticCogCW(void)
 {
-	// FIXME - define up and down in relation to rotary encoder direction
+	/* definition of rotation direction
+	 * e14 shifting unit backpanel disassembled, viewed from e14 unit right side:
+	 * 	(viewing the e14 unit from the back)
+	 * 	rotation of the magnetic cog: rotation is counter-clockwise when this function is called
+	 * 	the as5601 encoder sees this as the same rotation direction:
+	 * 		magnetic cog CW is as5601 CW
+	 */
+
 	_StartMotorController();	// wake up
 
-//	while(__Motor.encoder->Read(ANGLE) != 360)  // bogus command
-//		{
 	HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
-	CH2_CCR = 0x0050;
-//		}
-
+	CH2_CCR = 0x0090;
 	_StopMotorController();  // sleep
 }
 
-//
-static void _RotateDown(void)
+// rotate the e14 magnetic cog counter-clockwise
+static void _RotateE14MagneticCogCCW(void)
 {
-	// FIXME - define up and down in relation to rotary encoder direction
+	/* definition of rotation direction
+	 * e14 shifting unit backpanel disassembled, viewed from e14 unit right side:
+	 * 	(viewing the e14 unit from the back)
+	 * 	rotation of the magnetic cog: rotation is counter-clockwise when this function is called
+	 * 	the as5601 encoder sees this as the same rotation direction:
+	 * 		magnetic cog CCW is as5601 CCW
+	 */
+
 	_StartMotorController();	// wake up
 
 	HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-	CH1_CCR = 0x0050;
-	_StopMotorController();  // sleep
-
+	CH1_CCR = 0x0090;
+// TODO - remove after testing
+//	_StopMotorController();  // sleep
 }
 
-//
+// rotate a cog to shift up/down
 static uint8_t _Rotate(const direction_t dir, const uint8_t n)
 {
-	if(dir == Up)  // shift up
-		_RotateUp();
+	if(dir == ShiftUp)  // shift up: gear 1 towards 14
+		_RotateE14MagneticCogCW();
 
-	if(dir == Down)  // shift down
-		_RotateDown();
+	if(dir == ShiftDown)  // shift down: gear 14 towards 1
+		_RotateE14MagneticCogCCW();
 
 	return __Motor.encoder->CountRotation();
 }
@@ -92,6 +103,9 @@ motor_t* motor_ctor(void)  //
 	__Motor.adc = adc_ctor();  // call ADC constructor
 	__Motor.encoder = as5601_ctor();  // tie in rotary encoder object
 
+// TODO - remove after testing
+//	_RotateE14MagneticCogCW();	// test rotation
+//	_RotateE14MagneticCogCCW();  // test rotation
 
 	return &__Motor.public;  // set pointer to Motor public part
 }
@@ -101,6 +115,7 @@ void EXTI2_3_IRQHandler(void)
 {
 	if(__HAL_GPIO_EXTI_GET_IT(Motor_FLT_Pin))  // interrupt source detection
 		{
+// FIXME - motor fault is being triggered constantly
 			HAL_GPIO_TogglePin(Debug_GPIO_Port, Debug_Pin);  // toggling of debug pin
 		}
 }
