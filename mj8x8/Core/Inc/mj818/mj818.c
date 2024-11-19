@@ -226,8 +226,6 @@ void mj818_ctor(void)
 	_TimerInit();  // initialize Timers
 	_GPIOInit();	// initialize device-specific GPIOs
 
-	__Device.public.led = _virtual_led_ctorMJ818();  // call virtual constructor & tie in object addresses
-
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
@@ -235,6 +233,11 @@ void mj818_ctor(void)
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
 	__Device.public.mj8x8->PreSleep = &_PreSleep;  // implements the derived object prepare to sleep
 	__Device.public.mj8x8->PreStop = &_PreStop;  // implements the derived object prepare to stop
+
+	//	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
+
+	// application part
+	__Device.public.led = _virtual_led_ctorMJ818();  // call virtual constructor & tie in object addresses
 
 	// interrupt init
 	HAL_NVIC_SetPriority(TIM14_IRQn, 0, 0);  // charlieplexed LED handler timer (on demand)

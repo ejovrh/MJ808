@@ -13,7 +13,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		uint8_t CANActive :1;  // CAN // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
 
 		// 0x3C - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus off
-		uint8_t _2 :1;  // act2 // FIXME - describe activity
+		uint8_t Shifting :1;  // act2 // Shifting in progress or not // TODO - test it
 		uint8_t _3 :1;  // act3 //
 		uint8_t _4 :1;  // act4 //
 		uint8_t _5 :1;  // act5 //
@@ -31,23 +31,17 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define USE_I2C 1	// use I2C
 #define USE_EVENTHANDLER 0	// shall EventHandler code be included -- timer17 is used up for ADC timebase !!!
 
-// FIXME - define activity bit positions
+// activity bit positions
+#define SHIFTING 2
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
-#define TIMER2_PERIOD 0x100	//
+#define TIMER2_PERIOD 0x100	// FIXME - find proper value
 #define MOTOR_OFF 0x00	//
 #define TIMER3_PERIOD  0xFFFF	// use max. range for rotary encoder pulse count
 #define TIMER3_IC1_FILTER	0x0	// TODO - figure out filter
 #define TIMER3_IC2_FILTER 0x0	// TODO - figure out filter
 #define TIMER16_PERIOD 499	// TODO - verify proper timing: 10ms or 100ms may be better - rotary encoder time base - 50ms
 #define TIMER17_PERIOD 99	// ADC time base - 10ms
-
-typedef enum
-{  // FIXME - derive proper direction of final shifting cog (the one that engages the Speedhub's own cog) based on motor direction (which in t urn is derived from AS5601's rotation definition)
-	  NoShift = -1,  // no shifting - standstill
-	  GearUp = 0,  // shifting up (numerical from Rohloff gear 1 to 2, 3,...)
-	  GearDown = 1	// shifting down (numerical from Rohloff gear 5 to 4, 3,...)
-} shifting_t;
 
 #include "mj8x8/mj8x8.h"
 #include "gear.h" // Rohloff electronic shifting unit

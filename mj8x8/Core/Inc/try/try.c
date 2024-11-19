@@ -102,7 +102,7 @@ static inline void _EventHandlerEvent02(void)
 static inline void _EventHandlerEvent03(void)
 {
 #ifdef MJ808_
-	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
+	int8_t _payload;  // payload for a single byte message, in addition to the command byte
 
 	if(Device->button->button[PushButton]->Toggle)
 		{
@@ -115,6 +115,9 @@ static inline void _EventHandlerEvent03(void)
 			Device->led->led[Red].Shine(OFF);
 		}
 	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_01, &_payload, 2);  // send it
+
+	_payload = -1;
+	MsgHandler->SendMessage(mj514, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 #endif
 #ifdef MJ828_
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
@@ -137,7 +140,7 @@ static inline void _EventHandlerEvent03(void)
 	// FIXME - on wheel stop and once poweroff should occur, mj828 red led remains lit
 	_payload = !Device->AutoCharge->IsLoadConnected();  // 0 - LED on (load disconnected), 1 - LED off (load connected)
 
-	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_05, &_payload, 2);  // send it
+	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 #endif
 	;
 }
@@ -211,10 +214,13 @@ static inline void _EventHandlerEvent06(void)
 			_payload = OFF;  // turn off
 			Device->mj8x8->UpdateActivity(AUTOLIGHT, OFF);	// update the bus
 			Device->led->led[Yellow].Shine(OFF);
+//			Device->adc->Stop();	// FIXME - breaks it somwehow
 		}
 
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_01, &_payload, 2);  // send it
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_01, &_payload, 2);  // send it
+	_payload = 1;
+	MsgHandler->SendMessage(mj514, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 #endif
 #ifdef MJ838_
 	// normal light - front 50%, rear 100%
@@ -386,6 +392,9 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 	if(msg->sid)
 		;
 #endif
+#ifdef MJ514_
+	Device->gear->ShiftByN(msg->ARGUMENT);
+#endif
 
 	return 0;
 }
@@ -401,6 +410,9 @@ static inline void _MsgBtnEvent01(can_msg_t *msg)
 #endif
 #ifdef MJ838_
 	;
+#endif
+#ifdef MJ514_
+	Device->gear->ShiftToN(msg->ARGUMENT);
 #endif
 
 	return;

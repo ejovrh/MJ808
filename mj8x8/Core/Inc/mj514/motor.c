@@ -26,63 +26,91 @@ static void _StartMotorController(void)
 	__Motor.encoder->Start();  // start the encoder timebase
 	__Motor.adc->Start();  // start ADC and its timebase
 	Device->StartTimer(&htim2);  // start PWM timer
-	// FIXME - motor fault interrupt is triggered constantly
-//	HAL_GPIO_WritePin(Motor_SLP_GPIO_Port, Motor_SLP_Pin, GPIO_PIN_SET);	// put controller into wake state
+
+	HAL_GPIO_WritePin(Motor_SLP_GPIO_Port, Motor_SLP_Pin, GPIO_PIN_SET);	// put controller into wake state
 }
 
 // stops the motor controller IC and ADC
 static void _StopMotorController(void)
 {
-//	HAL_GPIO_WritePin(Motor_SLP_GPIO_Port, Motor_SLP_Pin, GPIO_PIN_RESET);	// put controller into sleep state
 	Device->StopTimer(&htim2);	// stop PWM timer
 	__Motor.adc->Stop();  // start ADC and its timebase
 	__Motor.encoder->Stop();	// stop the encoder timebase
+
+	HAL_GPIO_WritePin(Motor_SLP_GPIO_Port, Motor_SLP_Pin, GPIO_PIN_RESET);	// put controller into sleep state
 }
 
-//
-static void _RotateUp(void)
+// shift up - rotate the "23-tooth magnetic gear" clockwise
+static void _RotateE14MagneticCogCW(const uint8_t n)
 {
-	// FIXME - define up and down in relation to rotary encoder direction
+	/* definition of rotation direction
+	 * e14 shifting unit backpanel disassembled, viewed from e14 unit right side:
+	 * 	(viewing the e14 unit from the back)
+	 * 	rotation of the "23-tooth magnetic gear": rotation is counter-clockwise when this function is called
+	 * 	the as5601 encoder sees this as the same rotation direction:
+	 * 		"23-tooth magnetic gear" CW is as5601 CW
+	 */
+
+	uint32_t curr = __Motor.encoder->PulseCounter;
+
 	_StartMotorController();	// wake up
 
-//	while(__Motor.encoder->Read(ANGLE) != 360)  // bogus command
-//		{
-	HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
-	CH2_CCR = 0x0050;
-//		}
+	CH2_CCR = 0x0090;
 
-	_StopMotorController();  // sleep
-}
-
-//
-static void _RotateDown(void)
-{
-	// FIXME - define up and down in relation to rotary encoder direction
-	_StartMotorController();	// wake up
+	while(__Motor.encoder->PulseCounter - curr < (108 * n))
+		;
 
 	HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_2);
-	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-	CH1_CCR = 0x0050;
-	_StopMotorController();  // sleep
 
+	_StopMotorController();  // sleep
 }
 
-//
-static uint8_t _Rotate(const direction_t dir, const uint8_t n)
+// shift down - rotate the "23-tooth magnetic gear" counter-clockwise
+static void _RotateE14MagneticCogCCW(const uint8_t n)
 {
-	if(dir == Up)  // shift up
-		_RotateUp();
+	/* definition of rotation direction
+	 * e14 shifting unit backpanel disassembled, viewed from e14 unit right side:
+	 * 	(viewing the e14 unit from the back)
+	 * 	rotation of the "23-tooth magnetic gear": rotation is counter-clockwise when this function is called
+	 * 	the as5601 encoder sees this as the same rotation direction:
+	 * 		"23-tooth magnetic gear" CCW is as5601 CCW
+	 */
 
-	if(dir == Down)  // shift down
-		_RotateDown();
+	uint32_t curr = __Motor.encoder->PulseCounter;
 
-	return __Motor.encoder->CountRotation();
+	_StartMotorController();	// wake up
+
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+	CH1_CCR = 0x0090;
+
+	while(__Motor.encoder->PulseCounter - curr < (108 * n))
+		;
+
+	HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1);
+
+	_StopMotorController();  // sleep
+}
+
+// rotate a gear to shift up/down
+static void _Shift(const direction_t dir, const uint8_t n)
+{
+	if(dir == ShiftUp)  // shift up: from gear 1 towards 14
+		{
+			_RotateE14MagneticCogCW(n);
+			return;
+		}
+
+	if(dir == ShiftDown)  // shift down: from gear 14 towards 1
+		{
+			_RotateE14MagneticCogCCW(n);
+			return;
+		}
 }
 
 static __motor_t __Motor =  // instantiate motorc_t actual and set function pointers
 	{  //
-	.public.Rotate = &_Rotate,  // set function pointer
+	.public.Shift = &_Shift,  // set function pointer
 	};
 
 motor_t* motor_ctor(void)  //
@@ -92,7 +120,6 @@ motor_t* motor_ctor(void)  //
 	__Motor.adc = adc_ctor();  // call ADC constructor
 	__Motor.encoder = as5601_ctor();  // tie in rotary encoder object
 
-
 	return &__Motor.public;  // set pointer to Motor public part
 }
 
@@ -101,6 +128,7 @@ void EXTI2_3_IRQHandler(void)
 {
 	if(__HAL_GPIO_EXTI_GET_IT(Motor_FLT_Pin))  // interrupt source detection
 		{
+// FIXME - motor fault is being triggered constantly
 			HAL_GPIO_TogglePin(Debug_GPIO_Port, Debug_Pin);  // toggling of debug pin
 		}
 }

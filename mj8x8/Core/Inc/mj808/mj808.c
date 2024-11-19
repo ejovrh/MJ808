@@ -227,9 +227,6 @@ void mj808_ctor(void)
 	_GPIOInit();	// initialize device-specific GPIOs
 	_TimerInit();  // initialize Timers
 
-	__Device.public.led = _virtual_led_ctor();  // call virtual constructor & tie in object addresses
-	__Device.public.button = _virtual_button_ctorMJ808();  // call virtual constructor & tie in object addresses
-
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
@@ -239,6 +236,10 @@ void mj808_ctor(void)
 	__Device.public.mj8x8->PreStop = &_PreStop;  // implements the derived object prepare to stop
 
 	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
+
+	// application part
+	__Device.public.led = _virtual_led_ctor();  // call virtual constructor & tie in object addresses
+	__Device.public.button = _virtual_button_ctorMJ808();  // call virtual constructor & tie in object addresses
 
 // interrupt init
 	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);  // EXTI0 - Pushbutton handling
