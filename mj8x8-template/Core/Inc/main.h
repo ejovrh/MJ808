@@ -57,6 +57,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define TCAN334_Standby_Pin GPIO_PIN_5
+#define TCAN334_Standby_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 
