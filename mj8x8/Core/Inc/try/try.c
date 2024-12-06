@@ -44,6 +44,9 @@ static inline void _EventHandlerEventError(void)
 #ifdef MJ514_
 	;
 #endif
+#ifdef MJ515_
+	;
+#endif
 	;
 }
 
@@ -393,7 +396,7 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 		;
 #endif
 #ifdef MJ514_
-	Device->gear->ShiftByN(msg->ARGUMENT);
+	Device->gear->ShiftByN(msg->ARGUMENT);	// shifts the Rohloff hub n gears (-13 to + 13, except 0) up or down
 #endif
 
 	return 0;
@@ -412,7 +415,7 @@ static inline void _MsgBtnEvent01(can_msg_t *msg)
 	;
 #endif
 #ifdef MJ514_
-	Device->gear->ShiftToN(msg->ARGUMENT);
+	Device->gear->ShiftToN(msg->ARGUMENT);  // shifts Rohloff into gear n (1 to 14)
 #endif
 
 	return;
@@ -658,7 +661,7 @@ void try_ctor(void)
 	_BusActivityArray[12] = (activity_t*) Device->activity;
 #endif
 
-#if defined futureMJ_13
+#if defined MJ515_
 	_BusActivityArray[13] = (activity_t*) Device->activity;
 #endif
 
@@ -683,7 +686,7 @@ void try_ctor(void)
 	Try->BusActivity->_10 = _BusActivityArray[10];
 	Try->BusActivity->_11 = _BusActivityArray[11];
 	Try->BusActivity->mj514 = (mj514_activity_t*) _BusActivityArray[12];
-	Try->BusActivity->_13 = _BusActivityArray[13];
+	Try->BusActivity->mj515 = (mj515_activity_t*) _BusActivityArray[13];
 	Try->BusActivity->_14 = _BusActivityArray[14];
 	Try->BusActivity->_15 = _BusActivityArray[15];
 }

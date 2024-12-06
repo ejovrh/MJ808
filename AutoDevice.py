@@ -24,11 +24,11 @@ def check_stlink_connected() -> bool:
     # Check if the output contains an error string
     if "Error: Serial number not found" in result.stdout:
         print("STLink-V3 not connected ?? Aborting main.h editing.")
-        exit() # Abort further execution if ST-Link is not detected
+        raise SystemExit # Abort further execution if ST-Link is not detected
     
     if "ST-LINK error (DEV_CONNECT_ERR)" in result.stdout:
         print("STLink-V3 busy ??")
-        exit() # Abort further execution if ST-Link is not detected
+        raise SystemExit # Abort further execution if ST-Link is not detected
 
     return True
 
@@ -45,7 +45,7 @@ def execute_stm32_programmer_cli() -> str:
         # If the second attempt also fails, print an error message and return an empty string
         if "UPLOADING OPTION BYTES DATA" not in result.stdout:
             print("MJ8x8 device not powered on ??. Aborting main.h editing.")
-            exit() # Abort further execution if ST-Link cant connect
+            raise SystemExit # Abort further execution if ST-Link cant connect
 
     return result.stdout
 
@@ -123,8 +123,8 @@ if __name__ == "__main__":
     if not check_stlink_connected():
         exit()
 
-    copy_main_h()  # Check if main.h exists and copy main.h_tracked if not
     output = execute_stm32_programmer_cli() # try to connect to the programmer and read out option bytes
+    copy_main_h()  # Check if main.h exists and copy main.h_tracked if not
     parse_mj8x8_header_for_devices(MJ8X8_HEADER_PATH) # parse mj8x8_commands.h for devices
     id = extract_data0_value(output) # parse readout output: device CAN ID in hex
     mj_board = MJ8x8_boards[id] # determine board

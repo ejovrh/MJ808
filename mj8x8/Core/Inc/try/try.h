@@ -6,6 +6,7 @@
 #include "mj828\mj828.h"
 #include "mj838\mj838.h"
 #include "mj514\mj514.h"
+#include "mj515\mj515.h"
 
 typedef struct	// struct describing bus-wide device activity
 {
@@ -21,8 +22,8 @@ typedef struct	// struct describing bus-wide device activity
 	mj818_activity_t *mj818;  // 2B - rear light
 	activity_t *_10;  // 2C - ?
 	activity_t *_11;  // 2D - ?
-	mj514_activity_t *mj514;  // 3A - electronic shifter
-	activity_t *_13;  // 3B - ?
+	mj514_activity_t *mj514;  // 3A - Rohloff e14 shifter unit
+	mj515_activity_t *mj515;  // 3B - Rohloff grip shifter electrical unit
 	activity_t *_14;  // 3C - ?
 	activity_t *_15;  // 3D - ?
 } status_t;

@@ -24,8 +24,11 @@ int main(void)
 #if defined(MJ848_)	// LU - call derived class constructor and tie in base class
 	mj848_ctor();
 #endif
-#if defined(MJ514_)	// electronic shifter - call derived class constructor and tie in base class
+#if defined(MJ514_)	// Rohloff e14 shifter unit - call derived class constructor and tie in base class
 	mj514_ctor();
+#endif
+#if defined(MJ515_)	// Rohloff grip shifter electrical unit - call derived class constructor and tie in base class
+	mj515_ctor();
 #endif
 
 	message_handler_ctor(Device->mj8x8->can);  // call message handler constructor

@@ -94,7 +94,7 @@ typedef union  // union of mj8x8 devices: 16 bits or one word
 		uint16_t mj_10 :1;	// 10 // 2 Charlie - ?
 		uint16_t mj_11 :1;	// 11 // 2 Delta - ?
 		uint16_t mj514 :1;	// 12 // 3 Alpha - Rohloff e14 shifter unit
-		uint16_t mj_13 :1;	// 13 // 3 Bravo - ?
+		uint16_t mj515 :1;	// 13 // 3 Bravo - Rohloff grip shifter electrical unit
 		uint16_t mj_14 :1;	// 14 // 3 Charlie - ?
 		uint16_t mj_15 :1;	// 15 // 3 Delta - ?
 	};
@@ -193,7 +193,7 @@ typedef enum  // enum describing devices on a mj8x8 bus
 	  mj_10 = 0xA,	// sender: 0xA0
 	  mj_11 = 0xB,	// sender: 0xB0
 	  mj514 = 0xC,	// sender: 0xC0
-	  mj_13 = 0xD,	// sender: 0xD0
+	  mj515 = 0xD,	// sender: 0xD0
 	  mj_14 = 0xE,	// sender: 0xE0
 	  mj_15 = 0xF,	// sender: 0xF0
 } mj8x8_Devices_t;
