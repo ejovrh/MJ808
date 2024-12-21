@@ -8,8 +8,8 @@
 </settings>
 <grid distance="0.25" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.125" altunitdist="mm" altunit="mm"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
-<layer number="2" name="Route2" color="1" fill="3" visible="yes" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="2" name="Route2" color="1" fill="3" visible="no" active="yes"/>
 <layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
 <layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
 <layer number="5" name="Route5" color="4" fill="4" visible="no" active="no"/>
@@ -28,15 +28,15 @@
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
-<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
 <layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
@@ -46,9 +46,9 @@
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
-<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
-<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
 <layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
@@ -58,7 +58,7 @@
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
@@ -2511,8 +2511,8 @@ ejovrh rev. 5a</text>
 and</text>
 <text x="4" y="-4.5" size="1" layer="22" font="vector" rot="MR180" align="center">LED
 cat</text>
-<text x="-8" y="-1.5" size="1" layer="22" font="vector" rot="MR0" align="center">H</text>
-<text x="-14" y="-1.5" size="1" layer="22" font="vector" rot="MR0" align="center">L</text>
+<text x="-7.75" y="-1.75" size="1" layer="22" font="vector" rot="MR0" align="center">H</text>
+<text x="-14.25" y="-1.75" size="1" layer="22" font="vector" rot="MR0" align="center">L</text>
 <text x="-11" y="-3" size="0.5" layer="22" font="vector" rot="MR0" align="center">CAN term.</text>
 <wire x1="0.82" y1="-7.14" x2="0.82" y2="-7.39" width="0.5" layer="41"/>
 <wire x1="0" y1="0" x2="0" y2="-17" width="0.25" layer="48"/>
@@ -2523,7 +2523,7 @@ cat</text>
 <wire x1="-17" y1="0" x2="0" y2="0" width="0.25" layer="48"/>
 <wire x1="-11.99264375" y1="11.99264375" x2="12.028171875" y2="-12.028171875" width="0.25" layer="48"/>
 <wire x1="-11.99264375" y1="-11.99264375" x2="12.028171875" y2="12.028171875" width="0.25" layer="48"/>
-<text x="4.75" y="3.75" size="1" layer="22" font="vector" rot="MR0" align="center">SW</text>
+<text x="5" y="3.75" size="1" layer="22" font="vector" rot="MR0" align="center">SW</text>
 <wire x1="7" y1="4.5" x2="3.5" y2="4.5" width="0.25" layer="22"/>
 <wire x1="3.5" y1="4.5" x2="3.5" y2="3" width="0.25" layer="22"/>
 <wire x1="3.5" y1="3" x2="7" y2="3" width="0.25" layer="22"/>
@@ -2532,15 +2532,15 @@ cat</text>
 <wire x1="-1" y1="-10.5" x2="-1" y2="-13.5" width="0.25" layer="22"/>
 <wire x1="-1" y1="-13.5" x2="-4" y2="-13.5" width="0.25" layer="22"/>
 <wire x1="-4" y1="-13.5" x2="-5" y2="-12.5" width="0.25" layer="22"/>
-<wire x1="3.5" y1="-2" x2="2.5" y2="-3" width="0.25" layer="22"/>
+<wire x1="3.25" y1="-2.25" x2="2.5" y2="-3" width="0.25" layer="22"/>
 <wire x1="2.5" y1="-3" x2="2.5" y2="-6.25" width="0.25" layer="22"/>
 <wire x1="2.5" y1="-6.25" x2="5.5" y2="-6.25" width="0.25" layer="22"/>
 <wire x1="5.5" y1="-6.25" x2="5.5" y2="-3" width="0.25" layer="22"/>
-<wire x1="5.5" y1="-3" x2="4.5" y2="-2" width="0.25" layer="22"/>
-<wire x1="11" y1="5" x2="14.5" y2="5" width="0.25" layer="22"/>
+<wire x1="5.5" y1="-3" x2="4.75" y2="-2.25" width="0.25" layer="22"/>
+<wire x1="10.75" y1="5" x2="14.5" y2="5" width="0.25" layer="22"/>
 <wire x1="14.5" y1="5" x2="14.5" y2="3.5" width="0.25" layer="22"/>
 <wire x1="14.5" y1="3.5" x2="13.5" y2="3.5" width="0.25" layer="22"/>
-<wire x1="12" y1="2" x2="11" y2="2" width="0.25" layer="22"/>
+<wire x1="12" y1="2" x2="10.75" y2="2" width="0.25" layer="22"/>
 <wire x1="8.25" y1="-4.75" x2="12.25" y2="-4.75" width="0.25" layer="22"/>
 <wire x1="12.25" y1="-4.75" x2="12.25" y2="-3" width="0.25" layer="22"/>
 <wire x1="12.25" y1="-3" x2="11.5" y2="-2" width="0.25" layer="22"/>
@@ -2548,7 +2548,6 @@ cat</text>
 <wire x1="8.25" y1="-4.75" x2="8.25" y2="-3" width="0.25" layer="22"/>
 <wire x1="8.25" y1="-3" x2="9" y2="-2" width="0.25" layer="22"/>
 <wire x1="9" y1="-2" x2="9.5" y2="-2" width="0.25" layer="22"/>
-<wire x1="10.25" y1="4.25" x2="11" y2="5" width="0.25" layer="22"/>
 <wire x1="12" y1="2" x2="13.5" y2="3.5" width="0.25" layer="22"/>
 </plain>
 <libraries>
@@ -3698,10 +3697,9 @@ for trimmer refence see : &lt;u&gt;www.electrospec-inc.com/cross_references/trim
 </library>
 <library name="signal testpoint">
 <packages>
-<package name="TH-0.6">
-<pad name="TP$1" x="0" y="0" drill="0.6" diameter="1.016"/>
-<circle x="0" y="0" radius="0.7" width="0.3" layer="21"/>
-<text x="0" y="3" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
+<package name="TH-0.9">
+<pad name="P$1" x="0" y="0" drill="0.9"/>
+<circle x="0" y="0" radius="0.87" width="0.3" layer="21"/>
 </package>
 </packages>
 </library>
@@ -4249,12 +4247,12 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 </pass>
 </autorouter>
 <elements>
-<element name="TP2" library="signal testpoint" package="TH-0.6" value="LiIon - Terminal" x="10.25" y="2" smashed="yes" rot="MR90"/>
-<element name="TP5" library="signal testpoint" package="TH-0.6" value="CAN high" x="-8" y="0" smashed="yes" rot="MR0"/>
-<element name="TP6" library="signal testpoint" package="TH-0.6" value="CAN low" x="-14" y="0" smashed="yes" rot="MR0"/>
-<element name="TP1" library="signal testpoint" package="TH-0.6" value="LiIon + Terminal" x="10.25" y="-2" smashed="yes" rot="MR90"/>
-<element name="TP3" library="signal testpoint" package="TH-0.6" value="LED anode" x="-5" y="-11.95" smashed="yes" rot="MR0"/>
-<element name="TP4" library="signal testpoint" package="TH-0.6" value="LED cathode" x="3.875" y="-2.125" smashed="yes" rot="MR0"/>
+<element name="TP2" library="signal testpoint" package="TH-0.9" value="LiIon - Terminal" x="10" y="2.6" smashed="yes" rot="MR180"/>
+<element name="TP5" library="signal testpoint" package="TH-0.9" value="CAN high" x="-7.75" y="0" smashed="yes" rot="MR0"/>
+<element name="TP6" library="signal testpoint" package="TH-0.9" value="CAN low" x="-14.25" y="0" smashed="yes" rot="MR0"/>
+<element name="TP1" library="signal testpoint" package="TH-0.9" value="LiIon + Terminal" x="10.25" y="-2" smashed="yes" rot="MR90"/>
+<element name="TP3" library="signal testpoint" package="TH-0.9" value="LED anode" x="-5" y="-11.95" smashed="yes" rot="MR0"/>
+<element name="TP4" library="signal testpoint" package="TH-0.9" value="LED cathode" x="4" y="-2" smashed="yes" rot="MR0"/>
 <element name="SWD1" library="tag-connect" package="TC2030-NL" value="TC2030-NL" x="3" y="6.5" smashed="yes" rot="MR90">
 <attribute name="VALUE" x="3" y="12.5" size="0.5" layer="28" font="vector" rot="MR180" align="center"/>
 </element>
@@ -4380,8 +4378,8 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <attribute name="NAME" x="7.75" y="5.75" size="0.5" layer="25" font="vector" rot="R180" align="center"/>
 <attribute name="VALUE" x="7.75" y="8.5" size="0.5" layer="27" font="vector" rot="R180" align="center"/>
 </element>
-<element name="TP601" library="signal testpoint" package="TH-0.6" value="LED anode" x="7" y="3.75" smashed="yes" rot="MR0"/>
-<element name="TP602" library="signal testpoint" package="TH-0.6" value="LED anode" x="10.25" y="3.625" smashed="yes" rot="MR0"/>
+<element name="TP601" library="signal testpoint" package="TH-0.9" value="LED anode" x="7.5" y="3.75" smashed="yes" rot="MR0"/>
+<element name="TP602" library="signal testpoint" package="TH-0.9" value="LED anode" x="10" y="4.45" smashed="yes" rot="MR0"/>
 <element name="R702" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0402" package3d_urn="urn:adsk.eagle:package:23547/3" value="0R, &gt;120mW" x="11" y="9" smashed="yes" rot="R180">
 <attribute name="NAME" x="11" y="10" size="0.5" layer="25" font="vector" rot="R180" align="center"/>
 <attribute name="POPULARITY" value="0" x="11" y="9" size="1.778" layer="27" rot="R180" display="off"/>
@@ -4397,7 +4395,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 </elements>
 <signals>
 <signal name="GND">
-<contactref element="TP2" pad="TP$1"/>
+<contactref element="TP2" pad="P$1"/>
 <polygon width="0.1524" layer="1" rank="3" locked="yes">
 <vertex x="-18" y="0" curve="-90"/>
 <vertex x="0" y="18" curve="-90"/>
@@ -4483,7 +4481,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <vertex x="15.25" y="0.5"/>
 <vertex x="13.5" y="0.5"/>
 </polygon>
-<contactref element="TP602" pad="TP$1"/>
+<contactref element="TP602" pad="P$1"/>
 <via x="2" y="-8.25" extent="1-16" drill="0.35"/>
 <via x="4" y="0.375" extent="1-16" drill="0.35"/>
 <via x="4" y="-0.375" extent="1-16" drill="0.35"/>
@@ -4507,19 +4505,19 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="-4" y1="6.52" x2="-4.25" y2="6.77" width="0.25" layer="1"/>
 </signal>
 <signal name="LED_CA" class="1">
-<contactref element="TP4" pad="TP$1"/>
+<contactref element="TP4" pad="P$1"/>
 <contactref element="L501" pad="2"/>
 <polygon width="0.01" layer="1" thermals="no">
 <vertex x="2.75" y="-0.875"/>
-<vertex x="3.875" y="-0.875"/>
-<vertex x="4.75" y="-1.75"/>
+<vertex x="4" y="-0.875"/>
+<vertex x="4.75" y="-1.625"/>
 <vertex x="4.75" y="-2.5"/>
 <vertex x="3.875" y="-3.375"/>
 <vertex x="2.75" y="-3.375"/>
 </polygon>
 </signal>
 <signal name="BAT+" class="1">
-<contactref element="TP1" pad="TP$1"/>
+<contactref element="TP1" pad="P$1"/>
 <contactref element="IC202" pad="EN"/>
 <contactref element="IC202" pad="IN"/>
 <contactref element="C202" pad="1"/>
@@ -4567,14 +4565,14 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <vertex x="-4.25" y="-1.25"/>
 </polygon>
 <polygon width="0.01" layer="1" thermals="no">
-<vertex x="9.75" y="-0.625"/>
-<vertex x="9.75" y="-3"/>
+<vertex x="9.5" y="-0.625"/>
+<vertex x="9.5" y="-3"/>
 <vertex x="12.5" y="-3"/>
 <vertex x="12.5" y="-0.625"/>
 </polygon>
 </signal>
 <signal name="LED_AN" class="1">
-<contactref element="TP3" pad="TP$1"/>
+<contactref element="TP3" pad="P$1"/>
 <contactref element="IC506" pad="CSN"/>
 <contactref element="R504" pad="1"/>
 <wire x1="-5.004" y1="-9.95" x2="-5.004" y2="-8.504" width="0.5" layer="1"/>
@@ -4590,23 +4588,23 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 </polygon>
 </signal>
 <signal name="CAN_H" class="3">
-<contactref element="TP5" pad="TP$1"/>
+<contactref element="TP5" pad="P$1"/>
 <contactref element="IC401" pad="P$7"/>
 <contactref element="SJ401" pad="1"/>
 <wire x1="-9.762" y1="0" x2="-9.75" y2="0.012" width="0.25" layer="16"/>
 <wire x1="-10.675" y1="2.225" x2="-10.675" y2="0.913" width="0.25" layer="1"/>
 <wire x1="-10.675" y1="0.913" x2="-9.762" y2="0" width="0.25" layer="1"/>
 <via x="-9.762" y="0" extent="1-16" drill="0.35"/>
-<wire x1="-8" y1="0" x2="-9.762" y2="0" width="0.25" layer="1"/>
+<wire x1="-7.75" y1="0" x2="-9.762" y2="0" width="0.25" layer="1"/>
 </signal>
 <signal name="CAN_L" class="3">
-<contactref element="TP6" pad="TP$1"/>
+<contactref element="TP6" pad="P$1"/>
 <contactref element="IC401" pad="P$6"/>
 <contactref element="SJ402" pad="1"/>
 <wire x1="-11.325" y1="2.225" x2="-11.325" y2="0.937" width="0.25" layer="1"/>
 <wire x1="-11.325" y1="0.937" x2="-12.25" y2="0.012" width="0.25" layer="1"/>
 <via x="-12.25" y="0.012" extent="1-16" drill="0.35"/>
-<wire x1="-14" y1="0" x2="-12.262" y2="0" width="0.25" layer="1"/>
+<wire x1="-14.25" y1="0" x2="-12.262" y2="0" width="0.25" layer="1"/>
 <wire x1="-12.262" y1="0" x2="-12.25" y2="0.012" width="0.25" layer="1"/>
 </signal>
 <signal name="3V3" class="4">
@@ -4819,9 +4817,11 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 </signal>
 <signal name="PUSHBUTTON:SWITCH_IN" class="4">
 <contactref element="IC602" pad="2_IN"/>
-<wire x1="8.31" y1="2.44" x2="8.31" y2="0.96" width="0.25" layer="1"/>
-<contactref element="TP601" pad="TP$1"/>
-<wire x1="7" y1="3.75" x2="8.31" y2="2.44" width="0.25" layer="1"/>
+<wire x1="8.31" y1="1.19" x2="8.31" y2="0.96" width="0.25" layer="1"/>
+<contactref element="TP601" pad="P$1"/>
+<via x="8.31" y="1.19" extent="1-16" drill="0.35"/>
+<wire x1="7.5" y1="3.75" x2="8.31" y2="2.94" width="0.25" layer="1"/>
+<wire x1="8.31" y1="2.94" x2="8.31" y2="1.19" width="0.25" layer="1"/>
 </signal>
 <signal name="SWITCH">
 <contactref element="IC602" pad="3_OUT"/>
@@ -5000,6 +5000,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <approved hash="19,1,1b124339f515c115"/>
 <approved hash="19,1,10f2f3c173d81c01"/>
 <approved hash="19,1,75143a8bcd2968a9"/>
+<approved hash="19,1,1427ef3d9fa3da58"/>
 </errors>
 </board>
 </drawing>
