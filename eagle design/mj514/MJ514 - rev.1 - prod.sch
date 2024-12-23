@@ -4686,6 +4686,12 @@ DIN A4, landscape with location and doc. field</description>
 <text x="0" y="-1.905" size="1.778" layer="96" align="center">&gt;VALUE</text>
 <pin name="GND" x="0" y="2.54" visible="off" length="short" direction="sup" rot="R270"/>
 </symbol>
+<symbol name="3V3-CIRCLE" urn="urn:adsk.eagle:symbol:18498229/2" library_version="9">
+<description>3.3 Volt (3V3) Circle</description>
+<circle x="0" y="1.27" radius="1.27" width="0.254" layer="94"/>
+<text x="-0.127" y="3.175" size="1.778" layer="96" align="bottom-center">&gt;VALUE</text>
+<pin name="3V3" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="GND-BAR" urn="urn:adsk.eagle:component:16502419/4" prefix="SUPPLY" library_version="9">
@@ -4699,6 +4705,22 @@ DIN A4, landscape with location and doc. field</description>
 <technology name="">
 <attribute name="CATEGORY" value="Supply" constant="no"/>
 <attribute name="VALUE" value="GND" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="3V3-CIRCLE" urn="urn:adsk.eagle:component:16502438/6" prefix="SUPPLY" library_version="9">
+<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;  3.3 Volt (3V3) Circle</description>
+<gates>
+<gate name="G$1" symbol="3V3-CIRCLE" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name="">
+<attribute name="CATEGORY" value="Supply" constant="no"/>
+<attribute name="VALUE" value="3V3" constant="no"/>
 </technology>
 </technologies>
 </device>
@@ -8611,50 +8633,6 @@ by R. Vogg  15.March.2002</description>
 <rectangle x1="5.969" y1="-2.921" x2="6.731" y2="-1.905" layer="21"/>
 <rectangle x1="8.509" y1="-2.921" x2="9.271" y2="-1.905" layer="21"/>
 </package>
-<package name="1X02" urn="urn:adsk.eagle:footprint:22309/1" library_version="4">
-<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
-<wire x1="-1.905" y1="1.27" x2="-0.635" y2="1.27" width="0.1524" layer="21"/>
-<wire x1="-0.635" y1="1.27" x2="0" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="0" y1="0.635" x2="0" y2="-0.635" width="0.1524" layer="21"/>
-<wire x1="0" y1="-0.635" x2="-0.635" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="-2.54" y1="0.635" x2="-2.54" y2="-0.635" width="0.1524" layer="21"/>
-<wire x1="-1.905" y1="1.27" x2="-2.54" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="-2.54" y1="-0.635" x2="-1.905" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="-0.635" y1="-1.27" x2="-1.905" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="0" y1="0.635" x2="0.635" y2="1.27" width="0.1524" layer="21"/>
-<wire x1="0.635" y1="1.27" x2="1.905" y2="1.27" width="0.1524" layer="21"/>
-<wire x1="1.905" y1="1.27" x2="2.54" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="2.54" y1="0.635" x2="2.54" y2="-0.635" width="0.1524" layer="21"/>
-<wire x1="2.54" y1="-0.635" x2="1.905" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="1.905" y1="-1.27" x2="0.635" y2="-1.27" width="0.1524" layer="21"/>
-<wire x1="0.635" y1="-1.27" x2="0" y2="-0.635" width="0.1524" layer="21"/>
-<pad name="1" x="-1.27" y="0" drill="1.016" shape="long" rot="R90"/>
-<pad name="2" x="1.27" y="0" drill="1.016" shape="long" rot="R90"/>
-<text x="-2.6162" y="1.8288" size="1.27" layer="25" ratio="10">&gt;NAME</text>
-<text x="-2.54" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
-<rectangle x1="-1.524" y1="-0.254" x2="-1.016" y2="0.254" layer="51"/>
-<rectangle x1="1.016" y1="-0.254" x2="1.524" y2="0.254" layer="51"/>
-</package>
-<package name="1X02/90" urn="urn:adsk.eagle:footprint:22310/1" library_version="4">
-<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
-<wire x1="-2.54" y1="-1.905" x2="0" y2="-1.905" width="0.1524" layer="21"/>
-<wire x1="0" y1="-1.905" x2="0" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="0" y1="0.635" x2="-2.54" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="-2.54" y1="0.635" x2="-2.54" y2="-1.905" width="0.1524" layer="21"/>
-<wire x1="-1.27" y1="6.985" x2="-1.27" y2="1.27" width="0.762" layer="21"/>
-<wire x1="0" y1="-1.905" x2="2.54" y2="-1.905" width="0.1524" layer="21"/>
-<wire x1="2.54" y1="-1.905" x2="2.54" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="2.54" y1="0.635" x2="0" y2="0.635" width="0.1524" layer="21"/>
-<wire x1="1.27" y1="6.985" x2="1.27" y2="1.27" width="0.762" layer="21"/>
-<pad name="1" x="-1.27" y="-3.81" drill="1.016" shape="long" rot="R90"/>
-<pad name="2" x="1.27" y="-3.81" drill="1.016" shape="long" rot="R90"/>
-<text x="-3.175" y="-3.81" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
-<text x="4.445" y="-3.81" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
-<rectangle x1="-1.651" y1="0.635" x2="-0.889" y2="1.143" layer="21"/>
-<rectangle x1="0.889" y1="0.635" x2="1.651" y2="1.143" layer="21"/>
-<rectangle x1="-1.651" y1="-2.921" x2="-0.889" y2="-1.905" layer="21"/>
-<rectangle x1="0.889" y1="-2.921" x2="1.651" y2="-1.905" layer="21"/>
-</package>
 </packages>
 <packages3d>
 <package3d name="1X08" urn="urn:adsk.eagle:package:22409/2" type="model" library_version="4">
@@ -8667,18 +8645,6 @@ by R. Vogg  15.March.2002</description>
 <description>PIN HEADER</description>
 <packageinstances>
 <packageinstance name="1X08/90"/>
-</packageinstances>
-</package3d>
-<package3d name="1X02" urn="urn:adsk.eagle:package:22435/2" type="model" library_version="4">
-<description>PIN HEADER</description>
-<packageinstances>
-<packageinstance name="1X02"/>
-</packageinstances>
-</package3d>
-<package3d name="1X02/90" urn="urn:adsk.eagle:package:22437/2" type="model" library_version="4">
-<description>PIN HEADER</description>
-<packageinstances>
-<packageinstance name="1X02/90"/>
 </packageinstances>
 </package3d>
 </packages3d>
@@ -8698,16 +8664,6 @@ by R. Vogg  15.March.2002</description>
 <pin name="6" x="-2.54" y="-2.54" visible="pad" length="short" direction="pas" function="dot"/>
 <pin name="7" x="-2.54" y="-5.08" visible="pad" length="short" direction="pas" function="dot"/>
 <pin name="8" x="-2.54" y="-7.62" visible="pad" length="short" direction="pas" function="dot"/>
-</symbol>
-<symbol name="PINHD2" urn="urn:adsk.eagle:symbol:22308/1" library_version="4">
-<wire x1="-6.35" y1="-2.54" x2="1.27" y2="-2.54" width="0.4064" layer="94"/>
-<wire x1="1.27" y1="-2.54" x2="1.27" y2="5.08" width="0.4064" layer="94"/>
-<wire x1="1.27" y1="5.08" x2="-6.35" y2="5.08" width="0.4064" layer="94"/>
-<wire x1="-6.35" y1="5.08" x2="-6.35" y2="-2.54" width="0.4064" layer="94"/>
-<text x="-6.35" y="5.715" size="1.778" layer="95">&gt;NAME</text>
-<text x="-6.35" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="1" x="-2.54" y="2.54" visible="pad" length="short" direction="pas" function="dot"/>
-<pin name="2" x="-2.54" y="0" visible="pad" length="short" direction="pas" function="dot"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -8754,42 +8710,6 @@ by R. Vogg  15.March.2002</description>
 <technologies>
 <technology name="">
 <attribute name="POPULARITY" value="7" constant="no"/>
-</technology>
-</technologies>
-</device>
-</devices>
-</deviceset>
-<deviceset name="PINHD-1X2" urn="urn:adsk.eagle:component:22516/4" prefix="JP" uservalue="yes" library_version="4">
-<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
-<gates>
-<gate name="G$1" symbol="PINHD2" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="1X02">
-<connects>
-<connect gate="G$1" pin="1" pad="1"/>
-<connect gate="G$1" pin="2" pad="2"/>
-</connects>
-<package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:22435/2"/>
-</package3dinstances>
-<technologies>
-<technology name="">
-<attribute name="POPULARITY" value="98" constant="no"/>
-</technology>
-</technologies>
-</device>
-<device name="/90" package="1X02/90">
-<connects>
-<connect gate="G$1" pin="1" pad="1"/>
-<connect gate="G$1" pin="2" pad="2"/>
-</connects>
-<package3dinstances>
-<package3dinstance package3d_urn="urn:adsk.eagle:package:22437/2"/>
-</package3dinstances>
-<technologies>
-<technology name="">
-<attribute name="POPULARITY" value="24" constant="no"/>
 </technology>
 </technologies>
 </device>
@@ -9104,13 +9024,112 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 </deviceset>
 </devicesets>
 </library>
+<library name="HR30-6R-6P - PushPull Receptacle">
+<packages>
+</packages>
+<symbols>
+<symbol name="CONN">
+<pin name="1" x="17.78" y="2.54" length="middle" rot="R180"/>
+<pin name="2" x="17.78" y="0" length="middle" rot="R180"/>
+<pin name="3" x="17.78" y="-2.54" length="middle" rot="R180"/>
+<pin name="4" x="17.78" y="-5.08" length="middle" rot="R180"/>
+<pin name="5" x="17.78" y="-7.62" length="middle" rot="R180"/>
+<pin name="6" x="17.78" y="-10.16" length="middle" rot="R180"/>
+<text x="-1.27" y="-2.54" size="1.778" layer="94" align="center">1</text>
+<text x="-3.81" y="-5.08" size="1.778" layer="94" align="center">2</text>
+<text x="-1.27" y="-7.62" size="1.778" layer="94" align="center">3</text>
+<text x="5.08" y="-5.08" size="1.778" layer="94" align="center">5</text>
+<text x="2.54" y="-7.62" size="1.778" layer="94" align="center">4</text>
+<text x="2.54" y="-2.54" size="1.778" layer="94" align="center">6</text>
+<wire x1="0.635" y1="5.08" x2="-0.635" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-0.635" y1="2.54" x2="1.905" y2="2.54" width="0.254" layer="94"/>
+<wire x1="1.905" y1="2.54" x2="0.635" y2="5.08" width="0.254" layer="94"/>
+<circle x="-1.27" y="-7.62" radius="1.27" width="0.254" layer="94"/>
+<circle x="2.54" y="-7.62" radius="1.27" width="0.254" layer="94"/>
+<circle x="2.54" y="-2.54" radius="1.27" width="0.254" layer="94"/>
+<circle x="5.08" y="-5.08" radius="1.27" width="0.254" layer="94"/>
+<circle x="-1.27" y="-2.54" radius="1.27" width="0.254" layer="94"/>
+<circle x="-3.81" y="-5.08" radius="1.27" width="0.254" layer="94"/>
+<text x="0.635" y="-5.08" size="1.778" layer="94" align="center">HRS</text>
+<circle x="0.635" y="-5.08" radius="6.83915625" width="0.254" layer="94"/>
+<wire x1="12.7" y1="7.62" x2="-10.16" y2="7.62" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="7.62" x2="-10.16" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-15.24" x2="12.7" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="12.7" y1="-15.24" x2="12.7" y2="7.62" width="0.254" layer="94"/>
+<text x="-5.08" y="10.16" size="1.778" layer="95" align="center">&gt;NAME</text>
+<text x="-5.08" y="-17.78" size="1.778" layer="95" align="center">&gt;VALUE</text>
+<text x="-7.62" y="-12.7" size="0.4064" layer="94" align="center-left">male contacts
+mates with HR30-6P-6S(31)</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="HR-30-6R-6X" prefix="CONN" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="CONN" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+<library name="signal testpoint">
+<packages>
+<package name="TH-0.6">
+<pad name="TP$1" x="0" y="0" drill="0.6" diameter="1.016"/>
+<circle x="0" y="0" radius="0.7" width="0.3" layer="21"/>
+<text x="0" y="3" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
+</package>
+<package name="TH-0.9">
+<pad name="P$1" x="0" y="0" drill="0.9"/>
+<circle x="0" y="0" radius="0.87" width="0.3" layer="21"/>
+</package>
+</packages>
+<symbols>
+<symbol name="TP">
+<pin name="TP$1" x="0" y="0" visible="off" length="middle" rot="R90"/>
+<circle x="0" y="6.35" radius="1.27" width="0.254" layer="94"/>
+<text x="0" y="12.7" size="1.27" layer="95" align="center">&gt;NAME</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="TP" prefix="TP" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="TP" x="0" y="-7.62"/>
+</gates>
+<devices>
+<device name="" package="TH-0.6">
+<connects>
+<connect gate="G$1" pin="TP$1" pad="TP$1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="TH-0.9" package="TH-0.9">
+<connects>
+<connect gate="G$1" pin="TP$1" pad="P$1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
 <variantdefs>
 </variantdefs>
 <classes>
-<class number="0" name="GND" width="0" drill="0">
+<class number="0" name="GND" width="0.25" drill="0.35">
+<clearance class="0" value="0.19"/>
 </class>
 <class number="1" name="BAT+" width="0.5" drill="0.35">
 <clearance class="1" value="0.19"/>
@@ -9578,21 +9597,27 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="SUPPLY6" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="SUPPLY7" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A3L-LOC" device="" value="MJ808"/>
-<part name="SUPPLY5" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY8" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="JP1" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
-<part name="JP2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
-<part name="JP3" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
 <part name="SWD1" library="tag-connect" deviceset="TC2030" device=""/>
+<part name="CONN1" library="HR30-6R-6P - PushPull Receptacle" deviceset="HR-30-6R-6X" device="" value="HR30-6R-6P(71)"/>
+<part name="TP5" library="signal testpoint" deviceset="TP" device="TH-0.9" value="CAN high"/>
+<part name="TP6" library="signal testpoint" deviceset="TP" device="TH-0.9" value="CAN low"/>
+<part name="TP7" library="signal testpoint" deviceset="TP" device="TH-0.9" value="CAN high"/>
+<part name="TP8" library="signal testpoint" deviceset="TP" device="TH-0.9" value="CAN low"/>
+<part name="SUPPLY10" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY9" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="TP2" library="signal testpoint" deviceset="TP" device="TH-0.9" value="LiIon - Terminal"/>
+<part name="TP1" library="signal testpoint" deviceset="TP" device="TH-0.9" value="LiIon + Terminal"/>
+<part name="SUPPLY11" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="SUPPLY6" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="TP3" library="signal testpoint" deviceset="TP" device="TH-0.9" value="motor +"/>
+<part name="TP4" library="signal testpoint" deviceset="TP" device="TH-0.9" value="motor -"/>
 </parts>
 <sheets>
 <sheet>
-<description>MJ808 main</description>
+<description>MJ514 main</description>
 <plain>
-<text x="38.1" y="106.68" size="1.778" layer="90" align="center-left">Liion battery - 2S</text>
 <wire x1="165.1" y1="210.82" x2="165.1" y2="88.9" width="0.1524" layer="98" style="dashdot"/>
 <wire x1="165.1" y1="88.9" x2="248.92" y2="88.9" width="0.1524" layer="98" style="dashdot"/>
 <wire x1="248.92" y1="88.9" x2="320.04" y2="88.9" width="0.1524" layer="98" style="dashdot"/>
@@ -9600,10 +9625,20 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <wire x1="320.04" y1="210.82" x2="165.1" y2="210.82" width="0.1524" layer="98" style="dashdot"/>
 <text x="170.18" y="205.74" size="6.4516" layer="98" align="top-left">MJ514 device</text>
 <wire x1="165.1" y1="210.82" x2="10.16" y2="210.82" width="0.1524" layer="98" style="dashdot"/>
-<wire x1="248.92" y1="88.9" x2="248.92" y2="43.18" width="0.1524" layer="98" style="dashdot"/>
-<wire x1="10.16" y1="210.82" x2="10.16" y2="43.18" width="0.1524" layer="98" style="dashdot"/>
-<wire x1="10.16" y1="43.18" x2="248.92" y2="43.18" width="0.1524" layer="98" style="dashdot"/>
+<wire x1="248.92" y1="88.9" x2="248.92" y2="38.1" width="0.1524" layer="98" style="dashdot"/>
+<wire x1="10.16" y1="210.82" x2="10.16" y2="38.1" width="0.1524" layer="98" style="dashdot"/>
+<wire x1="10.16" y1="38.1" x2="248.92" y2="38.1" width="0.1524" layer="98" style="dashdot"/>
 <text x="15.24" y="205.74" size="6.4516" layer="98" rot="R180" align="bottom-right">MJ8x8 - generic</text>
+<text x="149.86" y="17.78" size="6.4516" layer="97">Rohloff E14 servo controller
+HW rev.1</text>
+<text x="43.18" y="45.72" size="1.778" layer="90" align="center-left">Liion battery - 2S</text>
+<text x="53.34" y="58.42" size="1.778" layer="91">inbound, white</text>
+<text x="53.34" y="53.34" size="1.778" layer="91">inbound, brown</text>
+<text x="53.34" y="55.88" size="1.778" layer="91">outbound, white</text>
+<text x="53.34" y="50.8" size="1.778" layer="91">outbound, brown</text>
+<text x="88.9" y="116.84" size="1.778" layer="90">2</text>
+<text x="152.4" y="116.84" size="1.778" layer="90">3</text>
+<text x="167.64" y="71.12" size="1.778" layer="90">4</text>
 </plain>
 <moduleinsts>
 <moduleinst name="POWER_3V3" module="POWER_3V3" x="93.98" y="116.84" offset="200">
@@ -9623,41 +9658,60 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <instance part="SUPPLY2" gate="G$1" x="93.98" y="96.52" smashed="yes">
 <attribute name="VALUE" x="93.98" y="94.615" size="1.778" layer="96" align="center"/>
 </instance>
-<instance part="SUPPLY4" gate="G$1" x="172.72" y="50.8" smashed="yes">
-<attribute name="VALUE" x="172.72" y="48.895" size="1.778" layer="96" align="center"/>
-</instance>
-<instance part="SUPPLY6" gate="G$1" x="43.18" y="111.76" smashed="yes">
-<attribute name="VALUE" x="43.18" y="109.855" size="1.778" layer="96" align="center"/>
-</instance>
-<instance part="SUPPLY7" gate="G$1" x="119.38" y="195.58" smashed="yes" rot="R90">
-<attribute name="VALUE" x="121.285" y="195.58" size="1.778" layer="96" rot="R90" align="center"/>
+<instance part="SUPPLY4" gate="G$1" x="172.72" y="53.34" smashed="yes">
+<attribute name="VALUE" x="172.72" y="51.435" size="1.778" layer="96" align="center"/>
 </instance>
 <instance part="FRAME1" gate="G$1" x="0" y="0" smashed="yes">
 <attribute name="DRAWING_NAME" x="344.17" y="15.24" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="344.17" y="10.16" size="2.286" layer="94"/>
 <attribute name="SHEET" x="357.505" y="5.08" size="2.54" layer="94"/>
 </instance>
-<instance part="SUPPLY5" gate="G$1" x="119.38" y="190.5" smashed="yes" rot="R90">
-<attribute name="VALUE" x="121.285" y="190.5" size="1.778" layer="96" rot="R90" align="center"/>
-</instance>
 <instance part="SUPPLY8" gate="G$1" x="127" y="160.02" smashed="yes" rot="R90">
 <attribute name="VALUE" x="128.905" y="160.02" size="1.778" layer="96" rot="R90" align="center"/>
-</instance>
-<instance part="JP1" gate="G$1" x="302.26" y="152.4" smashed="yes">
-<attribute name="NAME" x="295.91" y="158.115" size="1.778" layer="95"/>
-<attribute name="VALUE" x="295.91" y="147.32" size="1.778" layer="96"/>
-</instance>
-<instance part="JP2" gate="G$1" x="38.1" y="116.84" smashed="yes" rot="R180">
-<attribute name="NAME" x="44.45" y="111.125" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="44.45" y="121.92" size="1.778" layer="96" rot="R180"/>
-</instance>
-<instance part="JP3" gate="G$1" x="231.14" y="73.66" smashed="yes">
-<attribute name="NAME" x="224.79" y="79.375" size="1.778" layer="95"/>
-<attribute name="VALUE" x="224.79" y="68.58" size="1.778" layer="96"/>
 </instance>
 <instance part="SWD1" gate="G$1" x="81.28" y="149.86" smashed="yes" rot="R180">
 <attribute name="NAME" x="111.76" y="144.78" size="1.27" layer="97" font="vector" rot="R180" align="center-left"/>
 <attribute name="VALUE" x="91.44" y="144.78" size="1.27" layer="97" font="vector" rot="R180" align="center-left"/>
+</instance>
+<instance part="CONN1" gate="G$1" x="22.86" y="58.42" smashed="yes">
+<attribute name="NAME" x="22.86" y="68.58" size="1.778" layer="95" align="center"/>
+<attribute name="VALUE" x="22.86" y="40.64" size="1.778" layer="95" align="center"/>
+</instance>
+<instance part="TP5" gate="G$1" x="228.6" y="76.2" smashed="yes" rot="MR90">
+<attribute name="NAME" x="234.95" y="76.2" size="1.27" layer="95" rot="MR0" align="center"/>
+</instance>
+<instance part="TP6" gate="G$1" x="228.6" y="71.12" smashed="yes" rot="MR90">
+<attribute name="NAME" x="234.95" y="71.12" size="1.27" layer="95" rot="MR0" align="center"/>
+</instance>
+<instance part="TP7" gate="G$1" x="228.6" y="78.74" smashed="yes" rot="MR90">
+<attribute name="NAME" x="234.95" y="78.74" size="1.27" layer="95" rot="MR0" align="center"/>
+</instance>
+<instance part="TP8" gate="G$1" x="228.6" y="68.58" smashed="yes" rot="MR90">
+<attribute name="NAME" x="234.95" y="68.58" size="1.27" layer="95" rot="MR0" align="center"/>
+</instance>
+<instance part="SUPPLY10" gate="G$1" x="144.78" y="66.04" smashed="yes" rot="R90">
+<attribute name="VALUE" x="139.7" y="66.04" size="1.778" layer="96" align="center-right"/>
+</instance>
+<instance part="SUPPLY9" gate="G$1" x="119.38" y="119.38" smashed="yes">
+<attribute name="VALUE" x="119.38" y="124.46" size="1.778" layer="96" rot="R270" align="center-right"/>
+</instance>
+<instance part="TP2" gate="G$1" x="40.64" y="101.6" smashed="yes">
+<attribute name="NAME" x="40.64" y="111.76" size="1.27" layer="95" rot="R90" align="center"/>
+</instance>
+<instance part="TP1" gate="G$1" x="40.64" y="116.84" smashed="yes">
+<attribute name="NAME" x="40.64" y="127" size="1.27" layer="95" rot="R90" align="center"/>
+</instance>
+<instance part="SUPPLY11" gate="G$1" x="45.72" y="99.06" smashed="yes">
+<attribute name="VALUE" x="45.72" y="97.155" size="1.778" layer="96" align="center"/>
+</instance>
+<instance part="SUPPLY6" gate="G$1" x="127" y="149.86" smashed="yes" rot="R270">
+<attribute name="VALUE" x="129.54" y="149.86" size="1.778" layer="96" rot="R180" align="center-right"/>
+</instance>
+<instance part="TP3" gate="G$1" x="299.72" y="154.94" smashed="yes">
+<attribute name="NAME" x="299.72" y="165.1" size="1.27" layer="95" rot="R90" align="center"/>
+</instance>
+<instance part="TP4" gate="G$1" x="299.72" y="152.4" smashed="yes" rot="R180">
+<attribute name="NAME" x="299.72" y="142.24" size="1.27" layer="95" rot="R270" align="center"/>
 </instance>
 </instances>
 <busses>
@@ -9674,14 +9728,16 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <label x="139.7" y="137.16" size="1.778" layer="95"/>
 </segment>
 </bus>
+<bus name="MJ8X8-BUS:BAT+,CAN_H,CAN_L,GND">
+<segment>
+<wire x1="50.8" y1="60.96" x2="50.8" y2="48.26" width="0.762" layer="92"/>
+<wire x1="50.8" y1="48.26" x2="243.84" y2="48.26" width="0.762" layer="92"/>
+<label x="76.2" y="48.26" size="1.778" layer="95"/>
+</segment>
+</bus>
 </busses>
 <nets>
 <net name="GND" class="0">
-<segment>
-<pinref part="SUPPLY6" gate="G$1" pin="GND"/>
-<wire x1="43.18" y1="114.3" x2="40.64" y2="114.3" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="G$1" pin="1"/>
-</segment>
 <segment>
 <portref moduleinst="STM32F04" port="GND"/>
 <pinref part="SUPPLY1" gate="G$1" pin="GND"/>
@@ -9695,19 +9751,34 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <segment>
 <portref moduleinst="CAN_INFRA" port="GND"/>
 <pinref part="SUPPLY4" gate="G$1" pin="GND"/>
-<wire x1="172.72" y1="53.34" x2="172.72" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="SWD1" gate="G$1" pin="5_GND"/>
 <pinref part="SUPPLY8" gate="G$1" pin="GND"/>
 <wire x1="124.46" y1="160.02" x2="114.3" y2="160.02" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="1"/>
+<wire x1="40.64" y1="60.96" x2="50.8" y2="60.96" width="0.1524" layer="91"/>
+<label x="43.18" y="60.96" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="TP2" gate="G$1" pin="TP$1"/>
+<pinref part="SUPPLY11" gate="G$1" pin="GND"/>
+<wire x1="45.72" y1="101.6" x2="40.64" y2="101.6" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="BAT+" class="1">
 <segment>
 <portref moduleinst="POWER_3V3" port="BAT+"/>
 <wire x1="73.66" y1="116.84" x2="40.64" y2="116.84" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="G$1" pin="2"/>
+<pinref part="TP1" gate="G$1" pin="TP$1"/>
+<label x="43.18" y="116.84" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="6"/>
+<wire x1="40.64" y1="48.26" x2="50.8" y2="48.26" width="0.1524" layer="91"/>
+<label x="43.18" y="48.26" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="CAN_H" class="3">
@@ -9716,10 +9787,30 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <wire x1="195.58" y1="73.66" x2="195.58" y2="76.2" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="223.52" y1="73.66" x2="223.52" y2="76.2" width="0.1524" layer="91"/>
+<pinref part="CONN1" gate="G$1" pin="4"/>
+<wire x1="40.64" y1="53.34" x2="50.8" y2="53.34" width="0.1524" layer="91"/>
+<label x="43.18" y="53.34" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="5"/>
+<wire x1="40.64" y1="50.8" x2="50.8" y2="50.8" width="0.1524" layer="91"/>
+<label x="43.18" y="50.8" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="TP5" gate="G$1" pin="TP$1"/>
 <wire x1="223.52" y1="76.2" x2="228.6" y2="76.2" width="0.1524" layer="91"/>
+<pinref part="TP7" gate="G$1" pin="TP$1"/>
+<wire x1="228.6" y1="78.74" x2="228.6" y2="76.2" width="0.1524" layer="91"/>
+<junction x="228.6" y="76.2"/>
+<wire x1="223.52" y1="73.66" x2="223.52" y2="76.2" width="0.1524" layer="91"/>
 <label x="223.52" y="76.2" size="1.778" layer="95" rot="R180"/>
-<pinref part="JP3" gate="G$1" pin="1"/>
+</segment>
+<segment>
+<wire x1="243.84" y1="48.26" x2="243.84" y2="76.2" width="0.1524" layer="91"/>
+<wire x1="243.84" y1="76.2" x2="238.76" y2="76.2" width="0.1524" layer="91"/>
+<wire x1="243.84" y1="76.2" x2="243.84" y2="78.74" width="0.1524" layer="91"/>
+<wire x1="243.84" y1="78.74" x2="238.76" y2="78.74" width="0.1524" layer="91"/>
+<junction x="243.84" y="76.2"/>
 </segment>
 </net>
 <net name="CAN_L" class="3">
@@ -9728,26 +9819,50 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <wire x1="195.58" y1="73.66" x2="195.58" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<label x="223.52" y="71.12" size="1.778" layer="95" rot="MR0"/>
-<wire x1="223.52" y1="73.66" x2="228.6" y2="73.66" width="0.1524" layer="91"/>
-<pinref part="JP3" gate="G$1" pin="2"/>
+<pinref part="CONN1" gate="G$1" pin="2"/>
+<wire x1="40.64" y1="58.42" x2="50.8" y2="58.42" width="0.1524" layer="91"/>
+<label x="43.18" y="58.42" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="3"/>
+<wire x1="40.64" y1="55.88" x2="50.8" y2="55.88" width="0.1524" layer="91"/>
+<label x="43.18" y="55.88" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="TP6" gate="G$1" pin="TP$1"/>
+<wire x1="223.52" y1="71.12" x2="228.6" y2="71.12" width="0.1524" layer="91"/>
+<pinref part="TP8" gate="G$1" pin="TP$1"/>
+<wire x1="228.6" y1="68.58" x2="228.6" y2="71.12" width="0.1524" layer="91"/>
+<junction x="228.6" y="71.12"/>
+<wire x1="223.52" y1="73.66" x2="223.52" y2="71.12" width="0.1524" layer="91"/>
+<label x="223.52" y="71.12" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<wire x1="241.3" y1="48.26" x2="241.3" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="241.3" y1="68.58" x2="241.3" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="241.3" y1="71.12" x2="238.76" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="241.3" y1="68.58" x2="238.76" y2="68.58" width="0.1524" layer="91"/>
+<junction x="241.3" y="68.58"/>
 </segment>
 </net>
 <net name="3V3" class="4">
 <segment>
-<portref moduleinst="POWER_3V3" port="3V3"/>
-<portref moduleinst="STM32F04" port="3V3"/>
-<wire x1="114.3" y1="116.84" x2="121.92" y2="116.84" width="0.1524" layer="91"/>
-<label x="116.84" y="116.84" size="1.778" layer="95"/>
 <portref moduleinst="CAN_INFRA" port="3V3"/>
-<wire x1="121.92" y1="116.84" x2="121.92" y2="66.04" width="0.1524" layer="91"/>
-<wire x1="121.92" y1="66.04" x2="149.86" y2="66.04" width="0.1524" layer="91"/>
-<junction x="121.92" y="116.84"/>
+<pinref part="SUPPLY10" gate="G$1" pin="3V3"/>
+<wire x1="147.32" y1="66.04" x2="149.86" y2="66.04" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="114.3" y1="149.86" x2="127" y2="149.86" width="0.1524" layer="91"/>
-<label x="127" y="149.86" size="1.778" layer="95"/>
+<portref moduleinst="POWER_3V3" port="3V3"/>
+<portref moduleinst="STM32F04" port="3V3"/>
+<pinref part="SUPPLY9" gate="G$1" pin="3V3"/>
+<wire x1="114.3" y1="116.84" x2="119.38" y2="116.84" width="0.1524" layer="91"/>
+<junction x="119.38" y="116.84"/>
+<wire x1="119.38" y1="116.84" x2="121.92" y2="116.84" width="0.1524" layer="91"/>
+</segment>
+<segment>
 <pinref part="SWD1" gate="G$1" pin="1_T_VCC"/>
+<pinref part="SUPPLY6" gate="G$1" pin="3V3"/>
+<wire x1="124.46" y1="149.86" x2="114.3" y2="149.86" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SYS_SWDIO" class="3">
@@ -9803,27 +9918,24 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <wire x1="144.78" y1="101.6" x2="144.78" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="MOTOR+" class="0">
+<net name="MOTOR+" class="5">
 <segment>
-<pinref part="JP1" gate="G$1" pin="1"/>
 <wire x1="299.72" y1="154.94" x2="289.56" y2="154.94" width="0.1524" layer="91"/>
 <label x="292.1" y="154.94" size="1.778" layer="95" rot="R90"/>
+<pinref part="TP3" gate="G$1" pin="TP$1"/>
 </segment>
 </net>
-<net name="MOTOR-" class="0">
+<net name="MOTOR-" class="5">
 <segment>
-<pinref part="JP1" gate="G$1" pin="2"/>
 <wire x1="299.72" y1="152.4" x2="289.56" y2="152.4" width="0.1524" layer="91"/>
 <label x="292.1" y="152.4" size="1.778" layer="95" rot="R270"/>
+<pinref part="TP4" gate="G$1" pin="TP$1"/>
 </segment>
 </net>
 </nets>
 </sheet>
 </sheets>
 <errors>
-<approved hash="104,1,114.3,170.18,SWD101,1_T_VCC,3V3,,,"/>
-<approved hash="104,1,114.3,160.02,SWD101,5_GND,GND,,,"/>
-<approved hash="202,1,114.3,157.48,SWD101,6_T-SWO,,,,"/>
 <approved hash="104,1@STM32,129.54,154.94,IC2,VCCA_5,3V3,,,"/>
 <approved hash="104,1@STM32,129.54,116.84,IC2,GND_16,GND,,,"/>
 <approved hash="104,1@STM32,129.54,114.3,IC2,VCC_17,3V3,,,"/>
@@ -9836,6 +9948,10 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 </schematic>
 </drawing>
 <compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
 <note version="8.2" severity="warning">
 Since Version 8.2, EAGLE supports online libraries. The ids
 of those online libraries will not be understood (or retained)

@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="yes" active="no"/>
@@ -8019,6 +8019,10 @@ Source: AVX .. aphvc.pdf</description>
 <circle x="0" y="0" radius="0.7" width="0.3" layer="21"/>
 <text x="0" y="3" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
 </package>
+<package name="TH-0.9">
+<pad name="P$1" x="0" y="0" drill="0.9"/>
+<circle x="0" y="0" radius="0.87" width="0.3" layer="21"/>
+</package>
 </packages>
 <symbols>
 <symbol name="TP">
@@ -8036,6 +8040,14 @@ Source: AVX .. aphvc.pdf</description>
 <device name="" package="TH-0.6">
 <connects>
 <connect gate="G$1" pin="TP$1" pad="TP$1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="TH-0.9" package="TH-0.9">
+<connects>
+<connect gate="G$1" pin="TP$1" pad="P$1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -8284,6 +8296,12 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <vertex x="1.27" y="0.2413"/>
 </polygon>
 <text x="5.1" y="0" size="0.5" layer="21" font="vector" align="center">SWD</text>
+<polygon width="0.0254" layer="1" pour="cutout">
+<vertex x="-0.9525" y="1.905"/>
+<vertex x="6.0325" y="1.905"/>
+<vertex x="6.0325" y="-1.905"/>
+<vertex x="-0.9525" y="-1.905"/>
+</polygon>
 </package>
 <package name="TC2030">
 <smd name="2" x="1.27" y="0.635" dx="0.7874" dy="0.7874" layer="1" roundness="100" cream="no"/>
@@ -8709,7 +8727,7 @@ Two variants - one "with legs" (for hands-free fit on PCB) and another "without 
 <smd name="OUT" x="0.95" y="-1.15" dx="1.2" dy="0.6" layer="1" rot="R90"/>
 <wire x1="-1.6" y1="0.8" x2="-1.6" y2="-0.8" width="0.127" layer="21"/>
 <wire x1="1.6" y1="0.8" x2="1.6" y2="-0.8" width="0.127" layer="21"/>
-<text x="0" y="2.5" size="1" layer="21" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="2.5" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
 <text x="0" y="-2.5" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
 </package>
 </packages>
@@ -19153,10 +19171,10 @@ Source: www.kingbright.com</description>
 </module>
 </modules>
 <parts>
-<part name="TP2" library="signal testpoint" deviceset="TP" device="" value="LiIon - Terminal"/>
-<part name="TP5" library="signal testpoint" deviceset="TP" device="" value="CAN high"/>
-<part name="TP6" library="signal testpoint" deviceset="TP" device="" value="CAN low"/>
-<part name="TP1" library="signal testpoint" deviceset="TP" device="" value="LiIon + Terminal"/>
+<part name="TP2" library="signal testpoint" deviceset="TP" device="TH-0.9" value="LiIon - Terminal"/>
+<part name="TP5" library="signal testpoint" deviceset="TP" device="TH-0.9" value="CAN high"/>
+<part name="TP6" library="signal testpoint" deviceset="TP" device="TH-0.9" value="CAN low"/>
+<part name="TP1" library="signal testpoint" deviceset="TP" device="TH-0.9" value="LiIon + Terminal"/>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
@@ -19172,6 +19190,8 @@ Source: www.kingbright.com</description>
 <part name="SUPPLY8" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY5" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY11" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="TP3" library="signal testpoint" deviceset="TP" device="TH-0.9" value="CAN high"/>
+<part name="TP4" library="signal testpoint" deviceset="TP" device="TH-0.9" value="CAN low"/>
 </parts>
 <sheets>
 <sheet>
@@ -19189,11 +19209,13 @@ Source: www.kingbright.com</description>
 <wire x1="10.16" y1="210.82" x2="10.16" y2="43.18" width="0.1524" layer="98" style="dashdot"/>
 <wire x1="10.16" y1="43.18" x2="248.92" y2="43.18" width="0.1524" layer="98" style="dashdot"/>
 <text x="15.24" y="205.74" size="6.4516" layer="98" rot="R180" align="bottom-right">MJ8x8 - generic</text>
-<text x="175.26" y="15.24" size="6.4516" layer="97">Rohloff Drehgriff absolute encoder
+<text x="119.38" y="15.24" size="6.4516" layer="97">Rohloff Drehgriff absolute encoder
 HW rev.1</text>
 <text x="88.9" y="116.84" size="1.778" layer="90">2</text>
 <text x="152.4" y="116.84" size="1.778" layer="90">3</text>
 <text x="167.64" y="81.28" size="1.778" layer="90">4</text>
+<text x="264.16" y="144.78" size="1.778" layer="90">6</text>
+<text x="208.28" y="185.42" size="1.778" layer="90">5</text>
 </plain>
 <moduleinsts>
 <moduleinst name="POWER_3V3" module="POWER_3V3" x="93.98" y="116.84" offset="200">
@@ -19273,6 +19295,12 @@ HW rev.1</text>
 </instance>
 <instance part="SUPPLY11" gate="G$1" x="182.88" y="187.96" smashed="yes" rot="R90">
 <attribute name="VALUE" x="177.8" y="187.96" size="1.778" layer="96" align="center-right"/>
+</instance>
+<instance part="TP3" gate="G$1" x="228.6" y="88.9" smashed="yes" rot="MR90">
+<attribute name="NAME" x="234.95" y="88.9" size="1.27" layer="95" rot="MR0" align="center"/>
+</instance>
+<instance part="TP4" gate="G$1" x="228.6" y="78.74" smashed="yes" rot="MR90">
+<attribute name="NAME" x="234.95" y="78.74" size="1.27" layer="95" rot="MR0" align="center"/>
 </instance>
 </instances>
 <busses>
@@ -19378,6 +19406,10 @@ HW rev.1</text>
 <wire x1="223.52" y1="83.82" x2="223.52" y2="86.36" width="0.1524" layer="91"/>
 <wire x1="223.52" y1="86.36" x2="228.6" y2="86.36" width="0.1524" layer="91"/>
 <label x="223.52" y="86.36" size="1.778" layer="95" rot="R180"/>
+<pinref part="TP3" gate="G$1" pin="TP$1"/>
+<wire x1="228.6" y1="88.9" x2="223.52" y2="88.9" width="0.1524" layer="91"/>
+<wire x1="223.52" y1="88.9" x2="223.52" y2="86.36" width="0.1524" layer="91"/>
+<junction x="223.52" y="86.36"/>
 </segment>
 <segment>
 <pinref part="CONN1" gate="G$1" pin="1"/>
@@ -19385,12 +19417,18 @@ HW rev.1</text>
 <label x="45.72" y="68.58" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="241.3" y1="55.88" x2="241.3" y2="81.28" width="0.1524" layer="91"/>
+<wire x1="241.3" y1="55.88" x2="241.3" y2="78.74" width="0.1524" layer="91"/>
+<wire x1="241.3" y1="78.74" x2="241.3" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="241.3" y1="81.28" x2="238.76" y2="81.28" width="0.1524" layer="91"/>
+<wire x1="241.3" y1="78.74" x2="238.76" y2="78.74" width="0.1524" layer="91"/>
+<junction x="241.3" y="78.74"/>
 </segment>
 <segment>
 <wire x1="246.38" y1="55.88" x2="246.38" y2="86.36" width="0.1524" layer="91"/>
 <wire x1="246.38" y1="86.36" x2="238.76" y2="86.36" width="0.1524" layer="91"/>
+<wire x1="246.38" y1="86.36" x2="246.38" y2="88.9" width="0.1524" layer="91"/>
+<wire x1="246.38" y1="88.9" x2="238.76" y2="88.9" width="0.1524" layer="91"/>
+<junction x="246.38" y="86.36"/>
 </segment>
 </net>
 <net name="CAN_L" class="3">
@@ -19403,6 +19441,10 @@ HW rev.1</text>
 <pinref part="TP6" gate="G$1" pin="TP$1"/>
 <wire x1="223.52" y1="83.82" x2="223.52" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="223.52" y1="81.28" x2="228.6" y2="81.28" width="0.1524" layer="91"/>
+<pinref part="TP4" gate="G$1" pin="TP$1"/>
+<wire x1="228.6" y1="78.74" x2="223.52" y2="78.74" width="0.1524" layer="91"/>
+<wire x1="223.52" y1="78.74" x2="223.52" y2="81.28" width="0.1524" layer="91"/>
+<junction x="223.52" y="81.28"/>
 </segment>
 <segment>
 <pinref part="CONN1" gate="G$1" pin="6"/>
@@ -19494,7 +19536,7 @@ HW rev.1</text>
 <wire x1="144.78" y1="101.6" x2="144.78" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="MISO" class="4">
+<net name="MISO" class="3">
 <segment>
 <portref moduleinst="ACCELEROMETER" port="SPI1_MISO"/>
 <wire x1="167.64" y1="182.88" x2="187.96" y2="182.88" width="0.1524" layer="91"/>
@@ -19505,7 +19547,7 @@ HW rev.1</text>
 <wire x1="167.64" y1="142.24" x2="167.64" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="MOSI" class="4">
+<net name="MOSI" class="3">
 <segment>
 <portref moduleinst="ACCELEROMETER" port="SPI1_MOSI"/>
 <wire x1="167.64" y1="180.34" x2="187.96" y2="180.34" width="0.1524" layer="91"/>
@@ -19516,7 +19558,7 @@ HW rev.1</text>
 <wire x1="170.18" y1="142.24" x2="170.18" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="CLK" class="4">
+<net name="CLK" class="3">
 <segment>
 <portref moduleinst="ACCELEROMETER" port="SPI1_SCK"/>
 <wire x1="167.64" y1="177.8" x2="187.96" y2="177.8" width="0.1524" layer="91"/>
@@ -19527,7 +19569,7 @@ HW rev.1</text>
 <wire x1="172.72" y1="142.24" x2="172.72" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="CS" class="4">
+<net name="CS" class="3">
 <segment>
 <portref moduleinst="ACCELEROMETER" port="ADXL345_CS"/>
 <wire x1="167.64" y1="175.26" x2="187.96" y2="175.26" width="0.1524" layer="91"/>
@@ -19538,7 +19580,7 @@ HW rev.1</text>
 <wire x1="175.26" y1="142.24" x2="175.26" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="ADXL345_INT1" class="4">
+<net name="ADXL345_INT1" class="3">
 <segment>
 <portref moduleinst="ACCELEROMETER" port="ADXL345_INT1"/>
 <wire x1="177.8" y1="132.08" x2="177.8" y2="170.18" width="0.1524" layer="91"/>
@@ -19547,7 +19589,7 @@ HW rev.1</text>
 <portref moduleinst="STM32F04" port="INT0"/>
 </segment>
 </net>
-<net name="BIT4" class="4">
+<net name="BIT4" class="3">
 <segment>
 <portref moduleinst="STM32F04" port="BIT4"/>
 <wire x1="193.04" y1="114.3" x2="200.66" y2="114.3" width="0.1524" layer="91"/>
@@ -19558,7 +19600,7 @@ HW rev.1</text>
 <wire x1="243.84" y1="139.7" x2="233.68" y2="139.7" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="BIT1" class="4">
+<net name="BIT1" class="3">
 <segment>
 <portref moduleinst="STM32F04" port="BIT1"/>
 <wire x1="193.04" y1="121.92" x2="200.66" y2="121.92" width="0.1524" layer="91"/>
@@ -19569,7 +19611,7 @@ HW rev.1</text>
 <wire x1="243.84" y1="147.32" x2="233.68" y2="147.32" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="BIT2" class="4">
+<net name="BIT2" class="3">
 <segment>
 <portref moduleinst="STM32F04" port="BIT2"/>
 <wire x1="193.04" y1="119.38" x2="200.66" y2="119.38" width="0.1524" layer="91"/>
@@ -19580,7 +19622,7 @@ HW rev.1</text>
 <wire x1="243.84" y1="144.78" x2="233.68" y2="144.78" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="BIT3" class="4">
+<net name="BIT3" class="3">
 <segment>
 <portref moduleinst="STM32F04" port="BIT3"/>
 <wire x1="193.04" y1="116.84" x2="200.66" y2="116.84" width="0.1524" layer="91"/>
@@ -19591,7 +19633,7 @@ HW rev.1</text>
 <wire x1="243.84" y1="142.24" x2="233.68" y2="142.24" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="IDX" class="4">
+<net name="IDX" class="3">
 <segment>
 <portref moduleinst="STM32F04" port="INT1"/>
 <wire x1="193.04" y1="111.76" x2="200.66" y2="111.76" width="0.1524" layer="91"/>

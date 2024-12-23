@@ -8,8 +8,8 @@
 </settings>
 <grid distance="0.25" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.125" altunitdist="mm" altunit="mm"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
-<layer number="2" name="Route2" color="1" fill="3" visible="yes" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="2" name="Route2" color="1" fill="3" visible="no" active="yes"/>
 <layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
 <layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
 <layer number="5" name="Route5" color="4" fill="4" visible="no" active="no"/>
@@ -28,15 +28,15 @@
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
-<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
 <layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
@@ -46,9 +46,9 @@
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
-<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
-<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
 <layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
@@ -58,7 +58,7 @@
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
@@ -4276,7 +4276,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <attribute name="SPICEPREFIX" value="C" x="3.5" y="9.492" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="12.115" y="0.587" size="1.27" layer="27"/>
 </element>
-<element name="R504" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R2010" package3d_urn="urn:adsk.eagle:package:23551/2" value="WSLT2010R2200FEB18 / 0.22Ohm 1W" x="-5.004" y="-7.75" smashed="yes" rot="R90">
+<element name="R504" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R2010" package3d_urn="urn:adsk.eagle:package:23551/2" value="0.18R" x="-5.004" y="-7.75" smashed="yes" rot="R90">
 <attribute name="NAME" x="-7" y="-7.75" size="0.5" layer="25" font="vector" rot="R270" align="center"/>
 <attribute name="POPULARITY" value="3" x="-5.004" y="-7.75" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="SPICEPREFIX" value="R" x="-33.504" y="-15.5" size="1.778" layer="27" rot="R90" display="off"/>
@@ -4831,7 +4831,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="7.5" y1="3.75" x2="8.31" y2="2.94" width="0.25" layer="1"/>
 <wire x1="8.31" y1="2.94" x2="8.31" y2="1.19" width="0.25" layer="1"/>
 </signal>
-<signal name="SWITCH">
+<signal name="SWITCH" class="3">
 <contactref element="IC602" pad="3_OUT"/>
 <contactref element="IC302" pad="6_PA0"/>
 <wire x1="-6.73" y1="8.5" x2="-5.75" y2="8.5" width="0.25" layer="1"/>
@@ -4873,7 +4873,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="-12.25" y1="-3.55" x2="-12.25" y2="-1.512" width="0.25" layer="1"/>
 <via x="-12.25" y="-1.512" extent="1-16" drill="0.35"/>
 </signal>
-<signal name="GREEN">
+<signal name="GREEN" class="4">
 <contactref element="IC302" pad="10_PA4"/>
 <contactref element="LED703" pad="CAT"/>
 <via x="-6" y="6.25" extent="1-16" drill="0.35"/>
@@ -4887,7 +4887,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <wire x1="6.48" y1="7" x2="3.98" y2="4.5" width="0.25" layer="15"/>
 <wire x1="3.98" y1="4.5" x2="-1" y2="4.5" width="0.25" layer="15"/>
 </signal>
-<signal name="RED">
+<signal name="RED" class="4">
 <contactref element="IC302" pad="8_PA2"/>
 <contactref element="LED702" pad="CAT"/>
 <wire x1="-6.25" y1="7.42" x2="-6.42" y2="7.25" width="0.25" layer="1"/>

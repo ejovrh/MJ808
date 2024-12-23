@@ -12846,14 +12846,14 @@ mates with HR30-6P-6S(31)</text>
 <label x="149.86" y="152.4" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="RED_LED" class="0">
+<net name="RED_LED" class="4">
 <segment>
 <label x="149.86" y="142.24" size="1.778" layer="95" xref="yes"/>
 <wire x1="129.54" y1="142.24" x2="149.86" y2="142.24" width="0.1524" layer="91"/>
 <pinref part="IC2" gate="G$1" pin="WKUP4,ADC_IN2,TSC_G1_IO3,TIM2_CH3,USART2_TX-PA2_8"/>
 </segment>
 </net>
-<net name="GREEN_LED" class="0">
+<net name="GREEN_LED" class="4">
 <segment>
 <label x="149.86" y="137.16" size="1.778" layer="95" xref="yes"/>
 <wire x1="129.54" y1="137.16" x2="149.86" y2="137.16" width="0.1524" layer="91"/>
@@ -13087,7 +13087,7 @@ mates with HR30-6P-6S(31)</text>
 <variantdefs>
 </variantdefs>
 <parts>
-<part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R2010" package3d_urn="urn:adsk.eagle:package:23551/2" value="WSLT2010R2200FEB18 / 0.22Ohm 1W"/>
+<part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R2010" package3d_urn="urn:adsk.eagle:package:23551/2" value="0.18R"/>
 <part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="1uF / 10V"/>
 <part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD123" package3d_urn="urn:adsk.eagle:package:43420/1" value="PMEG2010ER,115"/>
 <part name="L1" library="SparkFun-Coils" library_urn="urn:adsk.eagle:library:512" deviceset="INDUCTOR" device="-SRN6045-33UH" package3d_urn="urn:adsk.eagle:package:37576/1" value="VLS6045EX-150M-CA - 15uH"/>
@@ -13102,6 +13102,7 @@ mates with HR30-6P-6S(31)</text>
 <sheets>
 <sheet>
 <plain>
+<text x="134.62" y="83.82" size="1.778" layer="96">RCWE1210R180FKEA - 0.18 Ohm, 1W</text>
 </plain>
 <instances>
 <instance part="R4" gate="G$1" x="124.46" y="88.9" smashed="yes" rot="R270">
@@ -13380,14 +13381,14 @@ mates with HR30-6P-6S(31)</text>
 <busses>
 </busses>
 <nets>
-<net name="RED" class="3">
+<net name="RED" class="4">
 <segment>
 <wire x1="73.66" y1="76.2" x2="86.36" y2="76.2" width="0.1524" layer="91"/>
 <label x="73.66" y="76.2" size="1.778" layer="95" rot="R180" xref="yes"/>
 <pinref part="LED2" gate="G$1" pin="CAT"/>
 </segment>
 </net>
-<net name="GREEN" class="3">
+<net name="GREEN" class="4">
 <segment>
 <wire x1="73.66" y1="71.12" x2="86.36" y2="71.12" width="0.1524" layer="91"/>
 <label x="73.66" y="71.12" size="1.778" layer="95" rot="R180" xref="yes"/>
@@ -13844,29 +13845,30 @@ HW rev.5a</text>
 <wire x1="144.78" y1="101.6" x2="144.78" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="SWITCH" class="0">
+<net name="SWITCH" class="3">
 <segment>
 <portref moduleinst="STM32F04" port="SWITCH"/>
 <portref moduleinst="PUSHBUTTON" port="SWITCH"/>
 <wire x1="193.04" y1="121.92" x2="208.28" y2="121.92" width="0.1524" layer="91"/>
 <wire x1="208.28" y1="121.92" x2="208.28" y2="160.02" width="0.1524" layer="91"/>
 <wire x1="208.28" y1="160.02" x2="231.14" y2="160.02" width="0.1524" layer="91"/>
+<label x="198.12" y="121.92" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GREEN" class="0">
+<net name="GREEN" class="4">
 <segment>
 <portref moduleinst="STM32F04" port="GREEN_LED"/>
 <portref moduleinst="USER_LED" port="GREEN"/>
 <wire x1="193.04" y1="109.22" x2="231.14" y2="109.22" width="0.1524" layer="91"/>
-<label x="205.74" y="109.22" size="1.778" layer="95"/>
+<label x="198.12" y="109.22" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="RED" class="0">
+<net name="RED" class="4">
 <segment>
 <portref moduleinst="STM32F04" port="RED_LED"/>
 <wire x1="193.04" y1="114.3" x2="231.14" y2="114.3" width="0.1524" layer="91"/>
 <portref moduleinst="USER_LED" port="RED"/>
-<label x="205.74" y="114.3" size="1.778" layer="95"/>
+<label x="198.12" y="114.3" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
