@@ -2,15 +2,16 @@
 
 #if defined(MJ514_)	// if this particular device is active
 
-#include "gear.h"	//
+#include "gear.h"	// abstraction of the Rohloff E14 servo motor
 #include "mb85rc\mb85rc.h"	// 16kB FeRAM
 #include "mj514\motor.h"	// Motor controller
-
-static uint8_t _ShiftinginProgress;
 
 typedef struct	// gear_t actual
 {
 	gear_t public;  // public struct
+
+	volatile uint8_t _CurrentGear;	// holds the current gear we think we are in...
+	volatile uint8_t _FlagShiftinginProgress :1;  // low-key semaphore for shifting in progress
 	mb85rc_t *FeRAM;	// 16kb FeRAM module
 	motor_t *Motor;  // motor controller
 } __gear_t;
@@ -21,9 +22,7 @@ static __gear_t __Gear __attribute__ ((section (".data")));  // preallocate __Au
 #define MEM_FOO 0x02, 4	// address 0x01, size 4 bytes
 #define MEM_BAR 0x06, 2	// address 0x06, size 2 bytes
 
-volatile uint8_t _curr;
-
-// return current Rohloff gear
+// return current Rohloff gear (1 to 14)
 static inline uint8_t _GetGear(void)
 {
 	/* rohloff gears are numbered from 1 to 14,
@@ -36,12 +35,13 @@ static inline uint8_t _GetGear(void)
 	return __Gear.FeRAM->Read(MEM_GEAR);  // return saved gear from FeRAM
 }
 
+// writes gear n into the FeRAM
 static inline void _SetGear(const int8_t n)
 {
-	__Gear.FeRAM->Write(n, MEM_GEAR);  // write gear into FeRAM
+	__Gear.FeRAM->Write(n, MEM_GEAR);  // write gear into FeRAM, at the proper location
 }
 
-// shifts Rohloff by n (up or down)
+// shifts the Rohloff hub n gears (-13 to + 13, except 0) up or down
 static void _ShiftByN(const int8_t n)
 {
 	/* rohloff gears are numbered from 1 to 14,
@@ -63,43 +63,48 @@ static void _ShiftByN(const int8_t n)
 	if(n > 13)  // shift up by more than 13 gears makes no sense
 		return;
 
-	while(_ShiftinginProgress)
-		;
+	while(__Gear._FlagShiftinginProgress)
+		;  // if some shifting is in progress, wait here...
 
-	_ShiftinginProgress = 1;	// critical section start
-	Device->mj8x8->UpdateActivity(SHIFTING, _ShiftinginProgress);  // update the bus
+	__Gear._FlagShiftinginProgress = 1;  // critical section start
 
-	_curr = _GetGear();
+	Device->mj8x8->UpdateActivity(SHIFTING, __Gear._FlagShiftinginProgress);  // update the bus
 
+	__Gear._CurrentGear = _GetGear();  // get the current gear (we think we are in...)
+
+	// if we need to shift up
 	if(n > 0)
 		{
-			if(_curr + n > 14)
+			// guard against shifting past gear 14
+			if(__Gear._CurrentGear + n > 14)
 				{
-					_ShiftinginProgress = 0;
+					__Gear._FlagShiftinginProgress = 0;
 					return;
 				}
 
 			__Gear.Motor->Shift(ShiftUp, n);  // shift up n gears
 		}
 
+	// if we need to shift down
 	if(n < 0)
 		{
-			if((int8_t) (_curr + n < 1))
+			// guard against shifting past gear 1
+			if((int8_t) (__Gear._CurrentGear + n < 1))
 				{
-					_ShiftinginProgress = 0;
+					__Gear._FlagShiftinginProgress = 0;
 					return;
 				}
 
 			__Gear.Motor->Shift(ShiftDown, -n);  // shift down n gears
 		}
 
-	_SetGear(_curr + n);  // write gear into FeRAM
+	_SetGear(__Gear._CurrentGear + n);  // write shifted gear into FeRAM
 
-	_ShiftinginProgress = 0;  // critical section stop
-	Device->mj8x8->UpdateActivity(SHIFTING, _ShiftinginProgress);  // update the bus
+	__Gear._FlagShiftinginProgress = 0;  // critical section stop
+	Device->mj8x8->UpdateActivity(SHIFTING, __Gear._FlagShiftinginProgress);  // update the bus
 }
 
-// shift Rohloff into gear n
+// shift Rohloff into gear n (1 to 14)
 static void _ShiftToN(const uint8_t n)
 {
 	/* rohloff gears are numbered from 1 to 14,
@@ -114,19 +119,18 @@ static void _ShiftToN(const uint8_t n)
 		return;
 
 	if(n > 14)  // shift to a greater gear than 14 makes no sense
-		return;  // additionally, e.g. -2 with uint8_t n becomes 0xfe - so negative numbers are also caught
+		return;  // additionally, e.g. -2 with uint8_t n becomes 0xfe - so negative numbers (i.e. very large positives) are also caught
 
-	while(_ShiftinginProgress)
-		;
+	while(__Gear._FlagShiftinginProgress)
+		;  // if some shifting is in progress, wait here...
 
-	uint8_t current = _GetGear();
+	uint8_t _curr = _GetGear();  // get the current gear (we think we are in...)
 
-	if(n == current)
+	// if we are already in the gear n
+	if(n == _curr)
 		return;
 
-	_ShiftByN(n - current);
-
-	_SetGear(n);	// write gear into FeRAM
+	_ShiftByN(n - _curr);  // shift the difference
 }
 
 static __gear_t __Gear =  // instantiate gear_t actual and set function pointers
@@ -138,14 +142,11 @@ static __gear_t __Gear =  // instantiate gear_t actual and set function pointers
 
 gear_t* gear_ctor(void)  //
 {
-	_ShiftinginProgress = 0;
+	__Gear._FlagShiftinginProgress = 0;
 
 	__enable_irq();  // PARTLY!!! enable interrupts -- essential for I2C
 	__Gear.FeRAM = mb85rc_ctor();  // tie in FeRAM object
 	__Gear.Motor = motor_ctor();	// tie in motor controller object
-
-//	_ShiftByN(-4);
-//	_ShiftToN(2);
 
 	__disable_irq();	// disable interrupts for the remainder of initialization - mj514.c mostly
 

@@ -7,8 +7,8 @@
 #include "mj514_adc.c"	// concrete device-specific ADC functions
 
 extern TIM_HandleTypeDef htim2;  // motor control PWM signal generation
-#define CH1_CCR htim2.Instance->CCR1	// Output Compare Register for motor PWM  channel 1
-#define CH2_CCR htim2.Instance->CCR2	// Output Compare Register for motor PWM  channel 2
+#define MOTOR_IN1_CCR htim2.Instance->CCR1	// Output Compare Register for motor PWM  channel 1
+#define MOTOR_IN2_CCR htim2.Instance->CCR2	// Output Compare Register for motor PWM  channel 2
 
 typedef struct	// motor_t actual
 {
@@ -56,7 +56,7 @@ static void _RotateE14MagneticCogCW(const uint8_t n)
 	_StartMotorController();	// wake up
 
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
-	CH2_CCR = 0x0090;
+	MOTOR_IN2_CCR = 0x0090;
 
 	while(__Motor.encoder->PulseCounter - curr < (108 * n))
 		;
@@ -82,7 +82,7 @@ static void _RotateE14MagneticCogCCW(const uint8_t n)
 	_StartMotorController();	// wake up
 
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-	CH1_CCR = 0x0090;
+	MOTOR_IN1_CCR = 0x0090;
 
 	while(__Motor.encoder->PulseCounter - curr < (108 * n))
 		;
@@ -97,13 +97,13 @@ static void _Shift(const direction_t dir, const uint8_t n)
 {
 	if(dir == ShiftUp)  // shift up: from gear 1 towards 14
 		{
-			_RotateE14MagneticCogCW(n);
+			_RotateE14MagneticCogCW(n);  // rotate accordingly
 			return;
 		}
 
 	if(dir == ShiftDown)  // shift down: from gear 14 towards 1
 		{
-			_RotateE14MagneticCogCCW(n);
+			_RotateE14MagneticCogCCW(n);  // rotate accordingly
 			return;
 		}
 }

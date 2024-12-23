@@ -49,9 +49,20 @@
  *			count the notches.
  *		this means that "17 tooth rohloff gear" needs to rotate 360/7 = 51.4285... degrees per shifted gear.
  *
+ *	the e14 unit (i.e. the mj514) is a kind of rotational servo-motor.
+ *	it has positional control (as5600), speed control (PWM on Motor_IN1/2).
+ *	it doesn't have force feedback, speed/acceleration control and most likely any form of PID is not needed.
  *
+ *	if you can call a "while(some positional check) ;" a closed loop, then it even has a closed loop feedback thing going.
  *
+ *	the e14 unit as a component is abstracted by gear_t.
+ *		one can tell it to e.g. shift to gear 7 or shift up/down by 2 gears.
+ *		it by itself doesn't know how to exactly do that physically.
  *
+ *	the servo part is motor_t. it knows revolution and direction.
+ *		if one tells it to shift(3), it knows the direction and "distance", but it doesn't know the meaning.
+ *
+ *	time to shift one gear: Rohloff's original hardware: 180ms (their claim)
  */
 
 typedef enum direction_t  // enum of direction of motor rotation
@@ -62,9 +73,9 @@ typedef enum direction_t  // enum of direction of motor rotation
 
 typedef struct	// struct describing the Gear Shifter functionality
 {
-	uint8_t (*GetGear)(void);  // return current Rohloff gear
+	uint8_t (*GetGear)(void);  // return current Rohloff gear (1 to 14)
 	void (*ShiftToN)(const uint8_t n);  // shifts Rohloff into gear n (1 to 14)
-	void (*ShiftByN)(const int8_t n);  // shifts Rohloff by n (-13 to + 13, except 0)
+	void (*ShiftByN)(const int8_t n);  // shifts the Rohloff hub n gears (-13 to + 13, except 0) up or down
 } gear_t;
 
 gear_t* gear_ctor(void);	// the Gear constructor

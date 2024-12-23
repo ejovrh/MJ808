@@ -57,7 +57,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TCAN334_Standby_Pin GPIO_PIN_5	//	defined here but initialised in mj8x8.c
 #define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
 
-#define Motor_IN1_Pin GPIO_PIN_0	// motor direction control PWM output signal
+#define Motor_IN1_Pin GPIO_PIN_0	// motor direction control PWM output signal channel1
 #define Motor_IN1_GPIO_Port GPIOA
 #define Motor_IN2_Pin GPIO_PIN_1	// motor direction control PWM output signal
 #define Motor_IN2_GPIO_Port GPIOA
