@@ -13159,7 +13159,7 @@ mates with HR30-6P-6S(31)</text>
 </parts>
 <sheets>
 <sheet>
-<description>MJ808 main</description>
+<description>MJ818 main</description>
 <plain>
 <text x="50.8" y="116.84" size="1.778" layer="90" align="center-left">Liion battery - 2S</text>
 <wire x1="187.96" y1="215.9" x2="187.96" y2="101.6" width="0.1524" layer="98" style="dashdot"/>
