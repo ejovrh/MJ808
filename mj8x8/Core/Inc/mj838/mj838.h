@@ -28,6 +28,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 
 #include "main.h"
 #if defined(MJ838_)	// if this particular device is active
+#define USE_I2C 1	// use I2C
 #define USE_EVENTHANDLER 1	// shall EventHandler code be included
 
 #define ZEROCROSS 2
@@ -41,7 +42,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TIMER17_PERIOD 24	// event handling - 2.5ms
 #define TIMER2_IC_FILTER 0xF	// with TIM_ICPSC_DIV8 and 0xF the pulse needs to be at least 35us wide
 
-#define WHEEL_CIRCUMFERENCE 1.945	// red 26" training wheel circumference in meters
+#define WHEEL_CIRCUMFERENCE (float) 1.945	// red 26" training wheel circumference in meters
 // TODO - measure wheel circumferences
 //#define WHEEL_CIRCUMFERENCE 1.945	// Schwalbe Marathon Mondial 29x2.25"
 //#define WHEEL_CIRCUMFERENCE 1.945	// Schwalbe Jumbo Jim 26x4"
@@ -61,36 +62,54 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 // definitions of device/PCB layout-dependent hardware pins
 #define TCAN334_Standby_Pin GPIO_PIN_15	//	defined here but initialised in mj8x8.c
 #define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
-#define ZeroCross_Pin GPIO_PIN_0	// ZeroCross signal in -- GnZC pin 1
-#define ZeroCross_GPIO_Port GPIOA
-#define AutoMotion_Pin GPIO_PIN_0	// TODO - mj838 - implement AutoMotion via accelerometer
-#define AutoMotion_GPIO_Port GPIOF	// TODO - mj838 - give motion detection a proper pin & port
-#define SW1_CTRL_Pin	GPIO_PIN_1	// solid-state relay NC -- GnZC pin 2
-#define SW1_CTRL_GPIO_Port GPIOA
-#define SW2_CTRL_Pin	GPIO_PIN_2	// solid-state relay NC -- GnZC pin 3
-#define SW2_CTRL_GPIO_Port GPIOA
-#define SW_CA_CTRL_Pin	GPIO_PIN_3	// solid-state relay NO -- GnZC pin 4
-#define SW_CA_CTRL_GPIO_Port GPIOA
-#define SW_CB_CTRL_Pin	GPIO_PIN_4	// solid-state relay NO -- GnZC pin 5
-#define SW_CB_CTRL_GPIO_Port GPIOA
-#define SW_CC_CTRL_Pin	GPIO_PIN_5	// solid-state relay NO -- GnZC pin 6
-#define SW_CC_CTRL_GPIO_Port GPIOA
-#define SW_D_CTRL_Pin	GPIO_PIN_6	// solid-state relay NO -- GnZC pin 7
-#define SW_D_CTRL_GPIO_Port GPIOA
-//#define SW_X_CTRL_Pin	GPIO_PIN_6	// solid-state relay NO -- GnZC pin 8
-//#define SW_X_CTRL_GPIO_Port GPIOA
-#define LoadFet_Pin GPIO_PIN_7	// Load N-Fet Gate -- GnZC pin 11
-#define LoadFet_GPIO_Port GPIOA
+
+// FIXME - validate pins
+#define AutoMotion_Pin GPIO_PIN_6	// TODO - mj838 - implement AutoMotion via accelerometer
+#define AutoMotion_GPIO_Port GPIOA	// TODO - mj838 - give motion detection a proper pin & port
+
+#define PowerMonitorPower_Pin GPIO_PIN_0
+#define PowerMonitorPower_GPIO_Port GPIOA
+
+#define DEBUG0_Pin GPIO_PIN_1// debug pin 0
+#define DEBUG0_GPIO_Port GPIOA
+#define PA2_Pin GPIO_PIN_2	// general GPIO
+#define PA2_GPIO_Port GPIOA
+#define PA3_Pin GPIO_PIN_3	// general GPIO
+#define PA3_GPIO_Port GPIOA
+#define PA4_Pin GPIO_PIN_4	// general GPIO
+#define PA4_GPIO_Port GPIOA
+#define PA5_Pin GPIO_PIN_5	// general GPIO
+#define PA5_GPIO_Port GPIOA
+#define PA6_Pin GPIO_PIN_6	// general GPIO
+#define PA6_GPIO_Port GPIOA
+#define LED_Reset_Pin GPIO_PIN_7	// general GPIO
+#define LED_Reset_GPIO_Port GPIOA
+
+#define ZeroCross_Pin GPIO_PIN_0	// ZeroCross signal in
+#define ZeroCross_GPIO_Port GPIOB
+#define LoadFet_Pin GPIO_PIN_1	// Load Switch
+#define LoadFet_GPIO_Port GPIOB
+
+#define PB3_Pin GPIO_PIN_3	// general GPIO
+#define PB3_GPIO_Port GPIOB
+#define PB4_Pin GPIO_PIN_4	// general GPIO
+#define PB4_GPIO_Port GPIOB
+#define PB5_Pin GPIO_PIN_5	// general GPIO
+#define PB5_GPIO_Port GPIOB
+#define PB6_Pin GPIO_PIN_6	// general GPIO
+#define PB6_GPIO_Port GPIOB
+#define PB7_Pin GPIO_PIN_7	// general GPIO
+#define PB7_GPIO_Port GPIOB
+#define DEBUG1_Pin GPIO_PIN_7 // debug pin 1
+#define DEBUG1_GPIO_Port GPIOB
+
+#define I2C_SDA_Pin GPIO_PIN_0 // see i2c_ctor()
+#define I2C_SCL_Pin GPIO_PIN_1// see i2c_ctor()
+#define I2C_GPIO_Port GPIOF
 
 // TODO - mj838 debug GPIO - remove once debugging is complete
 #define SIGNAL_GENERATOR_INPUT 1	// ZeroCross signal input is signal generator output
 #define GPIO_DEBUG_OUT 1
-# if GPIO_DEBUG_OUT
-#define DEBUG0_Pin GPIO_PIN_0	// HAL_GPIO_TogglePin(DEBUG0_Port, DEBUG0_Pin);
-#define DEBUG0_Port GPIOB
-#define DEBUG1_Pin GPIO_PIN_1	// HAL_GPIO_TogglePin(DEBUG1_Port, DEBUG1_Pin);
-#define DEBUG1_Port GPIOB
-#endif
 
 // definitions of device/PCB layout-dependent hardware pins
 

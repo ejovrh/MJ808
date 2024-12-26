@@ -51,7 +51,7 @@ static inline uint8_t _IsLoadConnected(void)
 static inline void _ConnectLoad(const uint8_t state)
 {
 	HAL_GPIO_WritePin(LoadFet_GPIO_Port, LoadFet_Pin, state);  // connect or disconnect  the load
-	__AutoCharge.__LoadSwitch = state;
+	__AutoCharge.__LoadSwitch = (unsigned char) (state & 0x01);
 	Device->mj8x8->UpdateActivity(AUTOCHARGE, state);  // update the bus
 }
 
@@ -87,43 +87,49 @@ static inline void _StopCharger(void)
 // SW1 control, NC
 static inline void _SSR_SW1(const uint8_t state)
 {
-	HAL_GPIO_WritePin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin, !state);  // NC switch: 0 closed, 1 open
-	__AutoCharge.__SW1 = state;
+	// TODO - implement SSR ctrl via I2C
+//	HAL_GPIO_WritePin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin, !state);  // NC switch: 0 closed, 1 open
+	__AutoCharge.__SW1 = (unsigned char) (state & 0x01);
 }
 
 // SW2 control, NC
 static inline void _SSR_SW2(const uint8_t state)
 {
-	HAL_GPIO_WritePin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin, !state);	// NC switch: 0 closed, 1 open
-	__AutoCharge.__SW2 = state;
+	// TODO - implement SSR ctrl via I2C
+//	HAL_GPIO_WritePin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin, !state);	// NC switch: 0 closed, 1 open
+	__AutoCharge.__SW2 = (unsigned char) (state & 0x01);
 }
 
 // SW-CA control, NO
 static inline void _SSR_SW_CA(const uint8_t state)
 {
-	HAL_GPIO_WritePin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
-	__AutoCharge.__SW_CA = state;
+	// TODO - implement SSR ctrl via I2C
+//	HAL_GPIO_WritePin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
+	__AutoCharge.__SW_CA = (unsigned char) (state & 0x01);
 }
 
 // SW-CB control, NO
 static inline void _SSR_SW_CB(const uint8_t state)
 {
-	HAL_GPIO_WritePin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
-	__AutoCharge.__SW_CB = state;
+	// TODO - implement SSR ctrl via I2C
+//	HAL_GPIO_WritePin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
+	__AutoCharge.__SW_CB = (unsigned char) (state & 0x01);
 }
 
 // SW-CC control, NO
 static inline void _SSR_SW_CC(const uint8_t state)
 {
-	HAL_GPIO_WritePin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
-	__AutoCharge.__SW_CC = state;
+	// TODO - implement SSR ctrl via I2C
+//	HAL_GPIO_WritePin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
+	__AutoCharge.__SW_CC = (unsigned char) (state & 0x01);
 }
 
 // SW-D control, NO
 static inline void _SSR_SW_D(const uint8_t state)
 {
-	HAL_GPIO_WritePin(SW_D_CTRL_GPIO_Port, SW_D_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
-	__AutoCharge.__SW_D = state;
+	// TODO - implement SSR ctrl via I2C
+//	HAL_GPIO_WritePin(SW_D_CTRL_GPIO_Port, SW_D_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
+	__AutoCharge.__SW_D = (unsigned char) (state & 0x01);
 }
 
 //// SW-X control, NO
@@ -231,12 +237,13 @@ autocharge_t* autocharge_ctor(void)  //
 
 	_FlagStopChargerCalled = 0;
 	__AutoCharge.__LoadSwitch = HAL_GPIO_ReadPin(LoadFet_GPIO_Port, LoadFet_Pin);  // read out initial switch states
-	__AutoCharge.__SW1 = HAL_GPIO_ReadPin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin);	// ditto
-	__AutoCharge.__SW2 = HAL_GPIO_ReadPin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin);
-	__AutoCharge.__SW_CA = HAL_GPIO_ReadPin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin);
-	__AutoCharge.__SW_CB = HAL_GPIO_ReadPin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin);
-	__AutoCharge.__SW_CC = HAL_GPIO_ReadPin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin);
-	__AutoCharge.__SW_D = HAL_GPIO_ReadPin(SW_D_CTRL_GPIO_Port, SW_D_CTRL_Pin);
+	// TODO - implement SSR ctrl via I2C
+//	__AutoCharge.__SW1 = HAL_GPIO_ReadPin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin);	// ditto
+//	__AutoCharge.__SW2 = HAL_GPIO_ReadPin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin);
+//	__AutoCharge.__SW_CA = HAL_GPIO_ReadPin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin);
+//	__AutoCharge.__SW_CB = HAL_GPIO_ReadPin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin);
+//	__AutoCharge.__SW_CC = HAL_GPIO_ReadPin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin);
+//	__AutoCharge.__SW_D = HAL_GPIO_ReadPin(SW_D_CTRL_GPIO_Port, SW_D_CTRL_Pin);
 //	__AutoCharge.__SW_X = HAL_GPIO_ReadPin(SW_X_CTRL_GPIO_Port, SW_X_CTRL_Pin);
 
 	return &__AutoCharge.public;  // set pointer to AutoCharge public part

@@ -89,7 +89,7 @@ static void _Do(void)  // this actually runs the AutoDrive application
 {
 	__AutoDrive._WheelFrequency = Device->ZeroCross->GetZCFrequency() / POLE_COUNT;  // ZeroCross signal frequency to wheel RPS
 	__AutoDrive.mps.Float = __AutoDrive._WheelFrequency * WHEEL_CIRCUMFERENCE;	// wheel frequency to m/s
-	__AutoDrive.kph.Float = __AutoDrive.mps.Float * 3.6;  // m/s to km/h
+	__AutoDrive.kph.Float = (float) (__AutoDrive.mps.Float * 3.6);  // m/s to km/h
 	__AutoDrive.m.Float += __AutoDrive.mps.Float * (float) ((__HAL_TIM_GET_AUTORELOAD(&htim3) + 1) / 10000.0);  // distance, mps * measurement interval
 
 #if SIGNAL_GENERATOR_INPUT

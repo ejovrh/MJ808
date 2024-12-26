@@ -28,7 +28,7 @@ static void _Do(void)
 
   		// below is the 250ms-speed-average calculation for normal speeds (i.e. ZC period << 250ms)
 #if SIGNAL_GENERATOR_INPUT
-  	__ZeroCross._ZeroCrossFrequency = (800000000 / (_zc_counter_delta / _zcValues) ) / 100.0;	// "round" and average dynamo AC frequency
+  	__ZeroCross._ZeroCrossFrequency = (float)((800000000 / (_zc_counter_delta / _zcValues) ) / 100);	// "round" and average dynamo AC frequency
 #else
   	__ZeroCross._ZeroCrossFrequency = 8000000.0 / (_zc_counter_delta / _zcValues);	// average dynamo AC frequency
 #endif
@@ -76,7 +76,7 @@ static void _Do(void)
       ++_sleep;
   }
 
-  __ZeroCross._ZeroCrossFrequencyRate = (__ZeroCross._ZeroCrossFrequency - _previousFrequency) / ((__HAL_TIM_GET_AUTORELOAD(&htim3) / 10000) + 1 );
+  __ZeroCross._ZeroCrossFrequencyRate = (float)((__ZeroCross._ZeroCrossFrequency - _previousFrequency) / (((float)__HAL_TIM_GET_AUTORELOAD(&htim3) / 10000) + 1 ));
 
   _previousFrequency = __ZeroCross._ZeroCrossFrequency;	// save current frequency for next iteration
 
@@ -201,11 +201,11 @@ void DMA1_Channel4_5_IRQHandler(void)
 {
 	HAL_DMA_IRQHandler(&hdma_tim2_ch1);  // service the interrupt
 
-	int32_t delta = _zc_counter_buffer[1] - _zc_counter_buffer[0];	// calculate the difference
+	int32_t delta = (int32_t)(_zc_counter_buffer[1] - _zc_counter_buffer[0]);	// calculate the difference
 
   if (delta)	// it can be zero...
   	{
-  		zc_counter_delta_abs = ((delta > 0) ? delta : -delta); // negative turn delta into positive
+  		zc_counter_delta_abs = (uint32_t)(((delta > 0) ? delta : -delta)); // negative turn delta into positive
   		_zc_counter_delta += zc_counter_delta_abs;	// accumulate the difference
   		++_zcValues;	// count additions for average calculation
   	}

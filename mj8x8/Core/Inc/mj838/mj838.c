@@ -39,48 +39,6 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(ZeroCross_GPIO_Port, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = SW1_CTRL_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(SW1_CTRL_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = SW2_CTRL_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(SW2_CTRL_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = SW_CA_CTRL_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(SW_CA_CTRL_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = SW_CB_CTRL_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(SW_CB_CTRL_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = SW_CC_CTRL_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(SW_CC_CTRL_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = SW_D_CTRL_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(SW_D_CTRL_GPIO_Port, &GPIO_InitStruct);
-
-//	GPIO_InitStruct.Pin = SW_X_CTRL_Pin;
-//	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-//	GPIO_InitStruct.Pull = GPIO_NOPULL;
-//	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-//	HAL_GPIO_Init(SW_X_CTRL_GPIO_Port, &GPIO_InitStruct);
-
 	GPIO_InitStruct.Pin = LoadFet_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -88,13 +46,6 @@ static inline void _GPIOInit(void)
 	HAL_GPIO_Init(LoadFet_GPIO_Port, &GPIO_InitStruct);
 
 	// explicitly set pin states
-	HAL_GPIO_WritePin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin, GPIO_PIN_RESET);	// NC - 1 open, (0 closed)
-	HAL_GPIO_WritePin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin, GPIO_PIN_RESET);	// NC - 1 open, (0 closed)
-	HAL_GPIO_WritePin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin, GPIO_PIN_RESET);	// NO - (0 open), 1 closed
-	HAL_GPIO_WritePin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin, GPIO_PIN_RESET);	// NO - (0 open), 1 closed
-	HAL_GPIO_WritePin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin, GPIO_PIN_RESET);	// NO - (0 open), 1 closed
-	HAL_GPIO_WritePin(SW_D_CTRL_GPIO_Port, SW_D_CTRL_Pin, GPIO_PIN_RESET);	// NO - 0 open, 1 closed
-//	HAL_GPIO_WritePin(SW_X_CTRL_GPIO_Port, SW_X_CTRL_Pin, GPIO_PIN_RESET);	// NO - 0 open, 1 closed
 	HAL_GPIO_WritePin(LoadFet_GPIO_Port, LoadFet_Pin, GPIO_PIN_RESET);	// load disconnected
 
 #if defined GPIO_DEBUG_OUT
@@ -104,16 +55,16 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(DEBUG0_Port, &GPIO_InitStruct);
+	HAL_GPIO_Init(DEBUG0_GPIO_Port, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = DEBUG0_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(DEBUG0_Port, &GPIO_InitStruct);
+	HAL_GPIO_Init(DEBUG0_GPIO_Port, &GPIO_InitStruct);
 
-	HAL_GPIO_WritePin(DEBUG0_Port, DEBUG0_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(DEBUG1_Port, DEBUG1_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, GPIO_PIN_RESET);
 
 #endif
 }
@@ -267,20 +218,22 @@ void mj838_ctor(void)
 	_GPIOInit();	// initialize device-specific GPIOs
 	_TimerInit();  // initialize Timers
 
+	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
+	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
+
+	__Device.public.mj8x8->i2c = i2c_ctor(I2C_SDA_Pin, I2C_SCL_Pin, I2C_GPIO_Port);  // call I2C constructor
+
+	__Device.public.ZeroCross = zerocross_ctor();  // call zero-cross constructor
+	__Device.public.AutoDrive = autodrive_ctor();  // call AutoDrive constructor
+	__Device.public.AutoCharge = autocharge_ctor();  // call AutoCharge constructor
+	__Device.public.Motion = motion_ctor();  // call Motion constructor
+
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
 	__Device.public.mj8x8->PreSleep = &_PreSleep;  // implements the derived object prepare to sleep
 	__Device.public.mj8x8->PreStop = &_PreStop;  // implements the derived object prepare to stop
 
 	EventHandler->fpointer = Try->EventHandler;  // implements event hander for this device
-
-	// application part
-	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
-	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
-	__Device.public.ZeroCross = zerocross_ctor();  // call zero-cross constructor
-	__Device.public.AutoDrive = autodrive_ctor();  // call AutoDrive constructor
-	__Device.public.AutoCharge = autocharge_ctor();  // call AutoCharge constructor
-	__Device.public.Motion = motion_ctor();  // call Motion constructor
 
 // interrupt init
 	HAL_NVIC_SetPriority(TIM17_IRQn, 3, 0);  // event handler timer (on demand)
