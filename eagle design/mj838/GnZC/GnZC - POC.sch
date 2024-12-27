@@ -13893,6 +13893,12 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <text x="0" y="-1.905" size="1.778" layer="96" align="center">&gt;VALUE</text>
 <pin name="GND" x="0" y="2.54" visible="off" length="short" direction="sup" rot="R270"/>
 </symbol>
+<symbol name="3V3-CIRCLE" urn="urn:adsk.eagle:symbol:18498229/2" library_version="9">
+<description>3.3 Volt (3V3) Circle</description>
+<circle x="0" y="1.27" radius="1.27" width="0.254" layer="94"/>
+<text x="-0.127" y="3.175" size="1.778" layer="96" align="bottom-center">&gt;VALUE</text>
+<pin name="3V3" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="GND-BAR" urn="urn:adsk.eagle:component:16502419/4" prefix="SUPPLY" library_version="9">
@@ -13906,6 +13912,22 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <technology name="">
 <attribute name="CATEGORY" value="Supply" constant="no"/>
 <attribute name="VALUE" value="GND" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="3V3-CIRCLE" urn="urn:adsk.eagle:component:16502438/6" prefix="SUPPLY" library_version="9">
+<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;  3.3 Volt (3V3) Circle</description>
+<gates>
+<gate name="G$1" symbol="3V3-CIRCLE" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name="">
+<attribute name="CATEGORY" value="Supply" constant="no"/>
+<attribute name="VALUE" value="3V3" constant="no"/>
 </technology>
 </technologies>
 </device>
@@ -14002,12 +14024,6 @@ DIN A4, landscape with location and doc. field</description>
 <packages>
 </packages>
 <symbols>
-<symbol name="+3V3" urn="urn:adsk.eagle:symbol:26950/1" library_version="1">
-<wire x1="1.27" y1="-1.905" x2="0" y2="0" width="0.254" layer="94"/>
-<wire x1="0" y1="0" x2="-1.27" y2="-1.905" width="0.254" layer="94"/>
-<text x="-2.54" y="-5.08" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
-<pin name="+3V3" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
-</symbol>
 <symbol name="GND" urn="urn:adsk.eagle:symbol:26925/1" library_version="1">
 <wire x1="-1.905" y1="0" x2="1.905" y2="0" width="0.254" layer="94"/>
 <text x="-2.54" y="-2.54" size="1.778" layer="96">&gt;VALUE</text>
@@ -14015,19 +14031,6 @@ DIN A4, landscape with location and doc. field</description>
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="+3V3" urn="urn:adsk.eagle:component:26981/1" prefix="+3V3" library_version="1">
-<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
-<gates>
-<gate name="G$1" symbol="+3V3" x="0" y="0"/>
-</gates>
-<devices>
-<device name="">
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
 <deviceset name="GND" urn="urn:adsk.eagle:component:26954/1" prefix="GND" library_version="1">
 <description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
 <gates>
@@ -14706,9 +14709,9 @@ DIN A4, landscape with location and doc. field</description>
 <module name="ZERO-CROSS_DETECTOR" prefix="" dx="35.56" dy="20.32">
 <ports>
 <port name="GND" side="bottom" coord="0" direction="pwr"/>
-<port name="+3V3" side="top" coord="0" direction="pwr"/>
 <port name="AC-IN" side="left" coord="-2.54" direction="in"/>
 <port name="OUT" side="right" coord="-2.54" direction="out"/>
+<port name="3V3" side="top" coord="0" direction="pwr"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -14719,16 +14722,16 @@ DIN A4, landscape with location and doc. field</description>
 <part name="D10" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="ZENER-DIODE" device="DO214AA" package3d_urn="urn:adsk.eagle:package:43433/2" value="6V/3W"/>
 <part name="IC1" library="LT1638 - Rail to Rail OpAmp" deviceset="LT1638" device="" value="LT1638IDD#PBF"/>
 <part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="0.1uF / 10V"/>
-<part name="+3V1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
 <part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
-<part name="+3V2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
+<part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 </parts>
 <sheets>
 <sheet>
@@ -14780,7 +14783,6 @@ other valid combos for same freq.:
 <attribute name="NAME" x="152.4" y="73.66" size="1.778" layer="95"/>
 <attribute name="VALUE" x="152.4" y="71.12" size="1.778" layer="96"/>
 </instance>
-<instance part="+3V1" gate="G$1" x="149.86" y="88.9" smashed="yes"/>
 <instance part="R2" gate="G$1" x="76.2" y="66.04" smashed="yes" rot="R90">
 <attribute name="NAME" x="78.74" y="66.04" size="1.778" layer="95"/>
 <attribute name="VALUE" x="78.74" y="63.5" size="1.778" layer="96"/>
@@ -14789,7 +14791,6 @@ other valid combos for same freq.:
 <attribute name="NAME" x="76.2" y="78.74" size="1.778" layer="95"/>
 <attribute name="VALUE" x="81.28" y="78.74" size="1.778" layer="96"/>
 </instance>
-<instance part="+3V2" gate="G$1" x="55.88" y="27.94" smashed="yes"/>
 <instance part="GND1" gate="1" x="40.64" y="15.24" smashed="yes">
 <attribute name="VALUE" x="38.1" y="12.7" size="1.778" layer="96"/>
 </instance>
@@ -14807,6 +14808,12 @@ other valid combos for same freq.:
 </instance>
 <instance part="GND6" gate="1" x="88.9" y="55.88" smashed="yes">
 <attribute name="VALUE" x="86.36" y="53.34" size="1.778" layer="96"/>
+</instance>
+<instance part="SUPPLY1" gate="G$1" x="55.88" y="25.4" smashed="yes">
+<attribute name="VALUE" x="55.753" y="28.575" size="1.778" layer="96" align="bottom-center"/>
+</instance>
+<instance part="SUPPLY2" gate="G$1" x="149.86" y="86.36" smashed="yes">
+<attribute name="VALUE" x="149.733" y="89.535" size="1.778" layer="96" align="bottom-center"/>
 </instance>
 </instances>
 <busses>
@@ -14874,22 +14881,6 @@ other valid combos for same freq.:
 <pinref part="IC1" gate="G$1" pin="2_A_IN-"/>
 </segment>
 </net>
-<net name="+3V3" class="4">
-<segment>
-<pinref part="C3" gate="G$1" pin="2"/>
-<pinref part="IC1" gate="G$1" pin="8_V+"/>
-<wire x1="139.7" y1="76.2" x2="149.86" y2="76.2" width="0.1524" layer="91"/>
-<wire x1="149.86" y1="76.2" x2="149.86" y2="86.36" width="0.1524" layer="91"/>
-<junction x="149.86" y="76.2"/>
-<pinref part="+3V1" gate="G$1" pin="+3V3"/>
-<label x="149.86" y="88.9" size="1.778" layer="95" xref="yes"/>
-</segment>
-<segment>
-<wire x1="55.88" y1="15.24" x2="55.88" y2="25.4" width="0.1524" layer="91"/>
-<pinref part="+3V2" gate="G$1" pin="+3V3"/>
-<label x="55.88" y="15.24" size="1.778" layer="95" xref="yes"/>
-</segment>
-</net>
 <net name="N$12" class="0">
 <segment>
 <pinref part="R2" gate="G$1" pin="2"/>
@@ -14900,6 +14891,21 @@ other valid combos for same freq.:
 <junction x="76.2" y="71.12"/>
 </segment>
 </net>
+<net name="3V3" class="4">
+<segment>
+<wire x1="55.88" y1="15.24" x2="55.88" y2="22.86" width="0.1524" layer="91"/>
+<label x="55.88" y="15.24" size="1.778" layer="95" xref="yes"/>
+<pinref part="SUPPLY1" gate="G$1" pin="3V3"/>
+</segment>
+<segment>
+<pinref part="C3" gate="G$1" pin="2"/>
+<pinref part="IC1" gate="G$1" pin="8_V+"/>
+<wire x1="139.7" y1="76.2" x2="149.86" y2="76.2" width="0.1524" layer="91"/>
+<wire x1="149.86" y1="76.2" x2="149.86" y2="83.82" width="0.1524" layer="91"/>
+<junction x="149.86" y="76.2"/>
+<pinref part="SUPPLY2" gate="G$1" pin="3V3"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
@@ -14907,14 +14913,13 @@ other valid combos for same freq.:
 <module name="3V3" prefix="" dx="30.48" dy="20.32">
 <ports>
 <port name="GND" side="bottom" coord="0" direction="pwr"/>
-<port name="+3V3" side="right" coord="0" direction="pwr"/>
 <port name="VIN" side="left" coord="0" direction="pwr"/>
+<port name="3V3" side="right" coord="0" direction="pwr"/>
 </ports>
 <variantdefs>
 </variantdefs>
 <parts>
 <part name="3V3_LDO" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A5L-LOC" device="" value="3V3 LDO"/>
-<part name="+3V1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="IC2" library="LDK320 5V LDO" deviceset="LDK320" device="SOT-23-5L" value="LDK320AM33R"/>
 <part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="1uF / 10V"/>
@@ -14922,6 +14927,8 @@ other valid combos for same freq.:
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="D6" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD323-W" package3d_urn="urn:adsk.eagle:package:43418/1" value="BAT 60A E6327"/>
 </parts>
 <sheets>
 <sheet>
@@ -14932,9 +14939,6 @@ other valid combos for same freq.:
 <attribute name="DRAWING_NAME" x="140.97" y="15.24" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="140.97" y="10.16" size="2.286" layer="94"/>
 <attribute name="SHEET" x="154.305" y="5.08" size="2.54" layer="94"/>
-</instance>
-<instance part="+3V1" gate="G$1" x="71.12" y="22.86" smashed="yes">
-<attribute name="VALUE" x="68.58" y="17.78" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="GND1" gate="1" x="53.34" y="10.16" smashed="yes">
 <attribute name="VALUE" x="50.8" y="7.62" size="1.778" layer="96"/>
@@ -14959,6 +14963,13 @@ other valid combos for same freq.:
 </instance>
 <instance part="SUPPLY4" gate="G$1" x="104.14" y="68.58" smashed="yes">
 <attribute name="VALUE" x="104.14" y="66.675" size="1.778" layer="96" align="center"/>
+</instance>
+<instance part="SUPPLY1" gate="G$1" x="71.12" y="20.32" smashed="yes">
+<attribute name="VALUE" x="70.993" y="23.495" size="1.778" layer="96" align="bottom-center"/>
+</instance>
+<instance part="D6" gate="G$1" x="48.26" y="81.28" smashed="yes">
+<attribute name="NAME" x="48.26" y="83.82" size="1.778" layer="95"/>
+<attribute name="VALUE" x="48.26" y="78.74" size="1.778" layer="96" rot="R270"/>
 </instance>
 </instances>
 <busses>
@@ -14986,11 +14997,18 @@ other valid combos for same freq.:
 <wire x1="104.14" y1="71.12" x2="104.14" y2="73.66" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="+3V3" class="4">
+<net name="VIN" class="1">
 <segment>
-<pinref part="+3V1" gate="G$1" pin="+3V3"/>
-<wire x1="71.12" y1="20.32" x2="71.12" y2="10.16" width="0.1524" layer="91"/>
+<wire x1="45.72" y1="81.28" x2="38.1" y2="81.28" width="0.1524" layer="91"/>
+<pinref part="D6" gate="G$1" pin="A"/>
+<label x="38.1" y="81.28" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="3V3" class="4">
+<segment>
 <label x="71.12" y="10.16" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="SUPPLY1" gate="G$1" pin="3V3"/>
+<wire x1="71.12" y1="17.78" x2="71.12" y2="10.16" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="IC2" gate="G$1" pin="VOUT"/>
@@ -15000,17 +15018,18 @@ other valid combos for same freq.:
 <label x="109.22" y="81.28" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="VIN" class="1">
+<net name="LDK_IN" class="1">
 <segment>
 <pinref part="IC2" gate="G$1" pin="EN"/>
 <pinref part="IC2" gate="G$1" pin="VIN"/>
 <wire x1="73.66" y1="76.2" x2="73.66" y2="81.28" width="0.1524" layer="91"/>
-<wire x1="73.66" y1="81.28" x2="68.58" y2="81.28" width="0.1524" layer="91"/>
+<pinref part="D6" gate="G$1" pin="C"/>
+<wire x1="50.8" y1="81.28" x2="68.58" y2="81.28" width="0.1524" layer="91"/>
 <junction x="73.66" y="81.28"/>
 <pinref part="C2" gate="G$1" pin="1"/>
-<wire x1="68.58" y1="81.28" x2="60.96" y2="81.28" width="0.1524" layer="91"/>
+<wire x1="68.58" y1="81.28" x2="73.66" y2="81.28" width="0.1524" layer="91"/>
 <junction x="68.58" y="81.28"/>
-<label x="60.96" y="81.28" size="1.778" layer="95" rot="R180" xref="yes"/>
+<label x="55.88" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
@@ -15564,10 +15583,7 @@ R=(3.3V-1.20V)/5mA=2.1V/0.005A=420R</text>
 <part name="SUPPLY26" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="" value="GND"/>
 <part name="C3" library="C-Pol" deviceset="C-POL-2S-BACK-TO-BACK" device="" value="1500μF / 35V / ultralow ESR"/>
 <part name="C4" library="C-Pol" deviceset="C-POL-2S-BACK-TO-BACK" device="" value="1500μF / 35V / ultralow ESR"/>
-<part name="+3V1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="430R/0.5W"/>
-<part name="+3V4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
-<part name="+3V3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="SUPPLY3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="" value="GND"/>
 <part name="SUPPLY4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="" value="GND"/>
 <part name="SUPPLY2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="" value="GND"/>
@@ -15579,7 +15595,6 @@ R=(3.3V-1.20V)/5mA=2.1V/0.005A=420R</text>
 <part name="SUPPLY16" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="" value="GND"/>
 <part name="SUPPLY17" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="" value="GND"/>
 <part name="SUPPLY1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="" value="GND"/>
-<part name="+3V2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="TP2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="dynamo 1"/>
 <part name="TP3" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-13" package3d_urn="urn:adsk.eagle:package:27946/1" value="dynamo 2"/>
 <part name="JP2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2" value="2.54-pinhead"/>
@@ -15588,7 +15603,10 @@ R=(3.3V-1.20V)/5mA=2.1V/0.005A=420R</text>
 <part name="IC1" library="MIC2514 - High-Side load switch" deviceset="MIC2514" device="" value="MIC2514YM5"/>
 <part name="SUPPLY14" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="" value="GND"/>
 <part name="SUPPLY15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device="" value="GND"/>
-<part name="D5" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD323-W" package3d_urn="urn:adsk.eagle:package:43418/1" value="BAT 60A E6327"/>
+<part name="SUPPLY18" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY19" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY20" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY21" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 </parts>
 <sheets>
 <sheet>
@@ -15639,7 +15657,7 @@ R=(3.3V-1.20V)/5mA=2.1V/0.005A=420R</text>
 <wire x1="266.7" y1="-91.44" x2="276.86" y2="-91.44" width="0.1524" layer="94"/>
 <wire x1="266.7" y1="-93.98" x2="276.86" y2="-93.98" width="0.1524" layer="94"/>
 <text x="271.78" y="-193.04" size="1.778" layer="90" rot="R90">smoothing cap</text>
-<text x="307.34" y="-132.08" size="1.778" layer="97" rot="R90" align="center">LOAD</text>
+<text x="378.46" y="-132.08" size="1.778" layer="97" rot="R90" align="center">LOAD</text>
 <wire x1="238.76" y1="-83.82" x2="248.92" y2="-83.82" width="0.1524" layer="94"/>
 <wire x1="238.76" y1="-86.36" x2="248.92" y2="-86.36" width="0.1524" layer="94"/>
 <wire x1="238.76" y1="-109.22" x2="248.92" y2="-109.22" width="0.1524" layer="94"/>
@@ -15681,10 +15699,10 @@ R=(3.3V-1.20V)/5mA=2.1V/0.005A=420R</text>
 <wire x1="137.16" y1="-88.9" x2="137.16" y2="-86.36" width="0.1524" layer="94"/>
 <wire x1="137.16" y1="-88.9" x2="139.7" y2="-88.9" width="0.1524" layer="94"/>
 <text x="125.222" y="-83.058" size="1.27" layer="97">Vzener = 19V</text>
-<wire x1="304.8" y1="-127" x2="309.88" y2="-127" width="0.1524" layer="94" style="shortdash"/>
-<wire x1="309.88" y1="-127" x2="309.88" y2="-137.16" width="0.1524" layer="94" style="shortdash"/>
-<wire x1="309.88" y1="-137.16" x2="304.8" y2="-137.16" width="0.1524" layer="94" style="shortdash"/>
-<wire x1="304.8" y1="-137.16" x2="304.8" y2="-127" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="375.92" y1="-127" x2="381" y2="-127" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="381" y1="-127" x2="381" y2="-137.16" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="381" y1="-137.16" x2="375.92" y2="-137.16" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="375.92" y1="-137.16" x2="375.92" y2="-127" width="0.1524" layer="94" style="shortdash"/>
 <wire x1="276.86" y1="-73.66" x2="281.94" y2="-73.66" width="0.1524" layer="97"/>
 <text x="259.08" y="-68.58" size="1.778" layer="97" rot="R90" align="center-left">smoothing diode</text>
 <text x="754.38" y="-294.64" size="6.4516" layer="97">technical schematic: rectifier w. zero cross detector</text>
@@ -15718,9 +15736,9 @@ R=(3.3V-1.20V)/5mA=2.1V/0.005A=420R</text>
 <text x="187.96" y="-101.6" size="2.54" layer="97" align="center">C-Ab</text>
 <text x="274.32" y="-96.52" size="2.54" layer="97" rot="R270" align="center-left">smoothing caps.</text>
 <text x="86.36" y="-45.72" size="6.4516" layer="97">Grätz/Delon conceptual overview</text>
-<wire x1="81.28" y1="-35.56" x2="347.98" y2="-35.56" width="0.1524" layer="97"/>
-<wire x1="347.98" y1="-35.56" x2="347.98" y2="-210.82" width="0.1524" layer="97"/>
-<wire x1="347.98" y1="-210.82" x2="81.28" y2="-210.82" width="0.1524" layer="97"/>
+<wire x1="81.28" y1="-35.56" x2="419.1" y2="-35.56" width="0.1524" layer="97"/>
+<wire x1="419.1" y1="-35.56" x2="419.1" y2="-210.82" width="0.1524" layer="97"/>
+<wire x1="419.1" y1="-210.82" x2="81.28" y2="-210.82" width="0.1524" layer="97"/>
 <wire x1="81.28" y1="-210.82" x2="81.28" y2="-35.56" width="0.1524" layer="97"/>
 <wire x1="251.46" y1="96.52" x2="203.2" y2="96.52" width="0.1524" layer="97" style="shortdash"/>
 <wire x1="203.2" y1="96.52" x2="203.2" y2="81.28" width="0.1524" layer="97" style="shortdash"/>
@@ -15826,22 +15844,27 @@ Type A - NO</text>
 <text x="187.96" y="88.9" size="1.778" layer="94" align="center">Vac</text>
 <wire x1="187.96" y1="91.44" x2="187.96" y2="93.98" width="0.1524" layer="94"/>
 <wire x1="187.96" y1="86.36" x2="187.96" y2="83.82" width="0.1524" layer="94"/>
-<text x="307.34" y="-106.68" size="1.778" layer="91" align="center">High-Side
+<text x="378.46" y="-106.68" size="1.778" layer="91" align="center">High-Side
 load switch</text>
 <text x="299.72" y="-355.6" size="1.778" layer="94" align="center">swX - no</text>
-<wire x1="299.72" y1="-104.14" x2="314.96" y2="-104.14" width="0.1524" layer="90"/>
-<wire x1="314.96" y1="-104.14" x2="314.96" y2="-109.22" width="0.1524" layer="90"/>
-<wire x1="314.96" y1="-109.22" x2="299.72" y2="-109.22" width="0.1524" layer="90"/>
-<wire x1="299.72" y1="-109.22" x2="299.72" y2="-104.14" width="0.1524" layer="90"/>
-<text x="259.08" y="78.74" size="1.778" layer="97" rot="R90" align="center">LOAD</text>
-<wire x1="256.54" y1="83.82" x2="261.62" y2="83.82" width="0.1524" layer="94" style="shortdash"/>
-<wire x1="261.62" y1="83.82" x2="261.62" y2="73.66" width="0.1524" layer="94" style="shortdash"/>
-<wire x1="261.62" y1="73.66" x2="256.54" y2="73.66" width="0.1524" layer="94" style="shortdash"/>
-<wire x1="256.54" y1="73.66" x2="256.54" y2="83.82" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="370.84" y1="-104.14" x2="386.08" y2="-104.14" width="0.1524" layer="90"/>
+<wire x1="386.08" y1="-104.14" x2="386.08" y2="-109.22" width="0.1524" layer="90"/>
+<wire x1="386.08" y1="-109.22" x2="370.84" y2="-109.22" width="0.1524" layer="90"/>
+<wire x1="370.84" y1="-109.22" x2="370.84" y2="-104.14" width="0.1524" layer="90"/>
+<text x="299.72" y="40.64" size="1.778" layer="97" rot="R90" align="center">LOAD</text>
+<wire x1="297.18" y1="45.72" x2="302.26" y2="45.72" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="302.26" y1="45.72" x2="302.26" y2="35.56" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="302.26" y1="35.56" x2="297.18" y2="35.56" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="297.18" y1="35.56" x2="297.18" y2="45.72" width="0.1524" layer="94" style="shortdash"/>
+<text x="304.8" y="-106.68" size="1.778" layer="91" align="center">3V3 LDO</text>
+<wire x1="297.18" y1="-104.14" x2="312.42" y2="-104.14" width="0.1524" layer="90"/>
+<wire x1="312.42" y1="-104.14" x2="312.42" y2="-109.22" width="0.1524" layer="90"/>
+<wire x1="312.42" y1="-109.22" x2="297.18" y2="-109.22" width="0.1524" layer="90"/>
+<wire x1="297.18" y1="-109.22" x2="297.18" y2="-104.14" width="0.1524" layer="90"/>
 </plain>
 <moduleinsts>
-<moduleinst name="ZERO-CROSS_DETECTOR" module="ZERO-CROSS_DETECTOR" x="807.72" y="-414.02" offset="700">
-<attribute name="NAME" value="ZERO-CROSS_DETECTOR" x="807.72" y="-412.496" size="2.032" layer="95" align="bottom-center"/>
+<moduleinst name="ZERO-CROSS_DETECTOR" module="ZERO-CROSS_DETECTOR" x="838.2" y="-416.56" offset="700">
+<attribute name="NAME" value="ZERO-CROSS_DETECTOR" x="838.2" y="-415.036" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
 <moduleinst name="3V3" module="3V3" x="299.72" y="88.9" offset="900">
 <attribute name="NAME" value="3V3" x="299.72" y="91.44" size="2.032" layer="95" align="bottom-center"/>
@@ -15925,33 +15948,21 @@ load switch</text>
 <attribute name="NAME" x="1049.02" y="-370.84" size="1.778" layer="95" rot="R180" align="center"/>
 <attribute name="VALUE" x="1069.34" y="-370.84" size="1.778" layer="96" rot="R180" align="center"/>
 </instance>
-<instance part="+3V1" gate="G$1" x="807.72" y="-393.7" smashed="yes">
-<attribute name="VALUE" x="807.72" y="-391.16" size="1.778" layer="96" rot="R180"/>
-</instance>
 <instance part="R1" gate="G$1" x="45.72" y="-266.7" smashed="yes" rot="R90">
 <attribute name="NAME" x="48.26" y="-266.7" size="1.778" layer="95"/>
 <attribute name="VALUE" x="48.26" y="-269.24" size="1.778" layer="96"/>
 </instance>
-<instance part="+3V4" gate="G$1" x="45.72" y="-254" smashed="yes">
-<attribute name="VALUE" x="45.72" y="-251.46" size="1.778" layer="96" rot="R180"/>
-</instance>
-<instance part="+3V3" gate="G$1" x="330.2" y="91.44" smashed="yes">
-<attribute name="VALUE" x="330.2" y="93.98" size="1.778" layer="96" rot="R180"/>
-</instance>
-<instance part="SUPPLY3" gate="1" x="444.5" y="-63.5" smashed="yes"/>
+<instance part="SUPPLY3" gate="1" x="563.88" y="-66.04" smashed="yes"/>
 <instance part="SUPPLY4" gate="1" x="228.6" y="66.04" smashed="yes"/>
 <instance part="SUPPLY2" gate="1" x="299.72" y="66.04" smashed="yes"/>
 <instance part="SUPPLY9" gate="1" x="1018.54" y="-538.48" smashed="yes"/>
-<instance part="SUPPLY10" gate="1" x="807.72" y="-436.88" smashed="yes"/>
+<instance part="SUPPLY10" gate="1" x="838.2" y="-439.42" smashed="yes"/>
 <instance part="SUPPLY5" gate="1" x="149.86" y="-266.7" smashed="yes"/>
 <instance part="SUPPLY11" gate="1" x="309.88" y="-266.7" smashed="yes"/>
 <instance part="SUPPLY12" gate="1" x="149.86" y="-325.12" smashed="yes"/>
 <instance part="SUPPLY16" gate="1" x="309.88" y="-325.12" smashed="yes"/>
 <instance part="SUPPLY17" gate="1" x="312.42" y="-386.08" smashed="yes"/>
 <instance part="SUPPLY1" gate="1" x="243.84" y="152.4" smashed="yes"/>
-<instance part="+3V2" gate="G$1" x="241.3" y="152.4" smashed="yes" rot="R180">
-<attribute name="VALUE" x="241.3" y="149.86" size="1.778" layer="96" rot="R90" align="center-right"/>
-</instance>
 <instance part="TP2" gate="G$1" x="774.7" y="-325.12" smashed="yes" rot="R180">
 <attribute name="NAME" x="774.7" y="-322.58" size="1.778" layer="95" rot="R90"/>
 <attribute name="TP_SIGNAL_NAME" x="772.16" y="-323.85" size="1.778" layer="97" rot="R180"/>
@@ -15974,10 +15985,18 @@ load switch</text>
 <attribute name="VALUE" x="1059.18" y="-558.8" size="1.27" layer="96" align="center"/>
 </instance>
 <instance part="SUPPLY14" gate="1" x="1046.48" y="-563.88" smashed="yes"/>
-<instance part="SUPPLY15" gate="1" x="259.08" y="66.04" smashed="yes"/>
-<instance part="D5" gate="G$1" x="271.78" y="88.9" smashed="yes">
-<attribute name="NAME" x="271.78" y="91.44" size="1.778" layer="95"/>
-<attribute name="VALUE" x="271.78" y="86.36" size="1.778" layer="96" rot="R270"/>
+<instance part="SUPPLY15" gate="1" x="299.72" y="27.94" smashed="yes"/>
+<instance part="SUPPLY18" gate="G$1" x="330.2" y="91.44" smashed="yes">
+<attribute name="VALUE" x="330.073" y="94.615" size="1.778" layer="96" align="bottom-center"/>
+</instance>
+<instance part="SUPPLY19" gate="G$1" x="241.3" y="152.4" smashed="yes" rot="R180">
+<attribute name="VALUE" x="241.3" y="149.86" size="1.778" layer="96" rot="R270" align="center-left"/>
+</instance>
+<instance part="SUPPLY20" gate="G$1" x="838.2" y="-393.7" smashed="yes">
+<attribute name="VALUE" x="838.073" y="-390.525" size="1.778" layer="96" align="bottom-center"/>
+</instance>
+<instance part="SUPPLY21" gate="G$1" x="45.72" y="-251.46" smashed="yes">
+<attribute name="VALUE" x="45.593" y="-248.285" size="1.778" layer="96" align="bottom-center"/>
 </instance>
 </instances>
 <busses>
@@ -16026,15 +16045,18 @@ load switch</text>
 <junction x="243.84" y="-165.1"/>
 <wire x1="271.78" y1="-165.1" x2="281.94" y2="-165.1" width="0.1524" layer="91"/>
 <junction x="271.78" y="-165.1"/>
-<wire x1="281.94" y1="-165.1" x2="307.34" y2="-165.1" width="0.1524" layer="91" style="shortdash"/>
+<wire x1="281.94" y1="-165.1" x2="304.8" y2="-165.1" width="0.1524" layer="91" style="shortdash"/>
 <pinref part="SUPPLY7" gate="1" pin="GND"/>
 <junction x="106.68" y="-165.1"/>
 <pinref part="SUPPLY6" gate="1" pin="GND"/>
+<wire x1="304.8" y1="-165.1" x2="378.46" y2="-165.1" width="0.1524" layer="91" style="shortdash"/>
 <wire x1="243.84" y1="-165.1" x2="243.84" y2="-109.22" width="0.1524" layer="91"/>
 <wire x1="271.78" y1="-165.1" x2="271.78" y2="-93.98" width="0.1524" layer="91"/>
 <label x="271.78" y="-170.18" size="1.778" layer="95" rot="R180"/>
 <label x="106.68" y="-170.18" size="1.778" layer="95" rot="R180"/>
-<wire x1="307.34" y1="-165.1" x2="307.34" y2="-137.16" width="0.1524" layer="91" style="shortdash"/>
+<wire x1="378.46" y1="-165.1" x2="378.46" y2="-137.16" width="0.1524" layer="91" style="shortdash"/>
+<wire x1="304.8" y1="-165.1" x2="304.8" y2="-109.22" width="0.1524" layer="91" style="shortdash"/>
+<junction x="304.8" y="-165.1"/>
 </segment>
 <segment>
 <pinref part="D2" gate="G$1" pin="C"/>
@@ -16051,8 +16073,8 @@ load switch</text>
 </segment>
 <segment>
 <pinref part="SUPPLY3" gate="1" pin="GND"/>
-<wire x1="444.5" y1="-60.96" x2="444.5" y2="-50.8" width="0.1524" layer="91"/>
-<label x="444.5" y="-50.8" size="1.778" layer="95"/>
+<wire x1="563.88" y1="-63.5" x2="563.88" y2="-53.34" width="0.1524" layer="91"/>
+<label x="563.88" y="-53.34" size="1.778" layer="95"/>
 </segment>
 <segment>
 <wire x1="228.6" y1="81.28" x2="228.6" y2="68.58" width="0.1524" layer="91"/>
@@ -16071,7 +16093,7 @@ load switch</text>
 </segment>
 <segment>
 <portref moduleinst="ZERO-CROSS_DETECTOR" port="GND"/>
-<wire x1="807.72" y1="-434.34" x2="807.72" y2="-429.26" width="0.1524" layer="91"/>
+<wire x1="838.2" y1="-436.88" x2="838.2" y2="-431.8" width="0.1524" layer="91"/>
 <pinref part="SUPPLY10" gate="1" pin="GND"/>
 </segment>
 <segment>
@@ -16118,7 +16140,7 @@ load switch</text>
 <wire x1="1046.48" y1="-561.34" x2="1046.48" y2="-553.72" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="259.08" y1="68.58" x2="259.08" y2="73.66" width="0.1524" layer="91" style="shortdash"/>
+<wire x1="299.72" y1="30.48" x2="299.72" y2="35.56" width="0.1524" layer="91" style="shortdash"/>
 <pinref part="SUPPLY15" gate="1" pin="GND"/>
 </segment>
 </net>
@@ -16207,8 +16229,8 @@ load switch</text>
 <wire x1="805.18" y1="-327.66" x2="805.18" y2="-353.06" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="784.86" y1="-416.56" x2="777.24" y2="-416.56" width="0.1524" layer="91"/>
-<label x="777.24" y="-416.56" size="1.778" layer="95" rot="R180"/>
+<wire x1="815.34" y1="-419.1" x2="807.72" y2="-419.1" width="0.1524" layer="91"/>
+<label x="807.72" y="-419.1" size="1.778" layer="95" rot="R180"/>
 <portref moduleinst="ZERO-CROSS_DETECTOR" port="AC-IN"/>
 </segment>
 </net>
@@ -16331,18 +16353,23 @@ load switch</text>
 <segment>
 <label x="281.94" y="-68.58" size="1.778" layer="95" rot="R90"/>
 <wire x1="281.94" y1="-68.58" x2="281.94" y2="-73.66" width="0.1524" layer="91" style="longdash"/>
-<wire x1="281.94" y1="-73.66" x2="307.34" y2="-73.66" width="0.1524" layer="91" style="shortdash"/>
-<label x="307.34" y="-73.66" size="1.778" layer="95"/>
-<wire x1="307.34" y1="-104.14" x2="307.34" y2="-73.66" width="0.1524" layer="91" style="shortdash"/>
+<wire x1="281.94" y1="-73.66" x2="304.8" y2="-73.66" width="0.1524" layer="91" style="shortdash"/>
+<label x="378.46" y="-73.66" size="1.778" layer="95"/>
+<wire x1="304.8" y1="-73.66" x2="378.46" y2="-73.66" width="0.1524" layer="91" style="shortdash"/>
+<wire x1="378.46" y1="-104.14" x2="378.46" y2="-73.66" width="0.1524" layer="91" style="shortdash"/>
 <junction x="281.94" y="-73.66"/>
+<wire x1="304.8" y1="-104.14" x2="304.8" y2="-73.66" width="0.1524" layer="91" style="shortdash"/>
+<junction x="304.8" y="-73.66"/>
 </segment>
 <segment>
 <label x="264.16" y="88.9" size="1.778" layer="95" rot="R270"/>
-<wire x1="269.24" y1="88.9" x2="259.08" y2="88.9" width="0.1524" layer="91"/>
-<wire x1="259.08" y1="88.9" x2="251.46" y2="88.9" width="0.1524" layer="91"/>
-<wire x1="259.08" y1="83.82" x2="259.08" y2="88.9" width="0.1524" layer="91" style="shortdash"/>
-<junction x="259.08" y="88.9"/>
-<pinref part="D5" gate="G$1" pin="A"/>
+<wire x1="299.72" y1="50.8" x2="271.78" y2="50.8" width="0.1524" layer="91" style="shortdash"/>
+<wire x1="279.4" y1="88.9" x2="271.78" y2="88.9" width="0.1524" layer="91"/>
+<wire x1="271.78" y1="88.9" x2="251.46" y2="88.9" width="0.1524" layer="91"/>
+<wire x1="299.72" y1="45.72" x2="299.72" y2="50.8" width="0.1524" layer="91" style="shortdash"/>
+<portref moduleinst="3V3" port="VIN"/>
+<wire x1="271.78" y1="88.9" x2="271.78" y2="50.8" width="0.1524" layer="91" style="shortdash"/>
+<junction x="271.78" y="88.9"/>
 </segment>
 </net>
 <net name="V_RECT_TP1-OUT" class="3">
@@ -16403,8 +16430,8 @@ load switch</text>
 </net>
 <net name="ZEROCROSS" class="5">
 <segment>
-<wire x1="830.58" y1="-416.56" x2="838.2" y2="-416.56" width="0.1524" layer="91"/>
-<label x="838.2" y="-416.56" size="1.778" layer="95"/>
+<wire x1="861.06" y1="-419.1" x2="868.68" y2="-419.1" width="0.1524" layer="91"/>
+<label x="868.68" y="-419.1" size="1.778" layer="95"/>
 <portref moduleinst="ZERO-CROSS_DETECTOR" port="OUT"/>
 </segment>
 <segment>
@@ -16461,33 +16488,6 @@ load switch</text>
 <wire x1="317.5" y1="-294.64" x2="330.2" y2="-294.64" width="0.1524" layer="91"/>
 <label x="330.2" y="-294.64" size="1.778" layer="95"/>
 <portref moduleinst="SSR_NO/NO2" port="SW2_OUT"/>
-</segment>
-</net>
-<net name="+3V3" class="4">
-<segment>
-<wire x1="807.72" y1="-398.78" x2="807.72" y2="-396.24" width="0.1524" layer="91"/>
-<pinref part="+3V1" gate="G$1" pin="+3V3"/>
-<portref moduleinst="ZERO-CROSS_DETECTOR" port="+3V3"/>
-</segment>
-<segment>
-<pinref part="+3V4" gate="G$1" pin="+3V3"/>
-<pinref part="R1" gate="G$1" pin="2"/>
-<wire x1="45.72" y1="-261.62" x2="45.72" y2="-256.54" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<portref moduleinst="3V3" port="+3V3"/>
-<pinref part="+3V3" gate="G$1" pin="+3V3"/>
-<wire x1="330.2" y1="88.9" x2="320.04" y2="88.9" width="0.1524" layer="91"/>
-<label x="228.6" y="99.06" size="1.778" layer="95"/>
-<wire x1="228.6" y1="96.52" x2="228.6" y2="109.22" width="0.1524" layer="91"/>
-<wire x1="228.6" y1="109.22" x2="320.04" y2="109.22" width="0.1524" layer="91"/>
-<wire x1="320.04" y1="109.22" x2="320.04" y2="88.9" width="0.1524" layer="91"/>
-<junction x="320.04" y="88.9"/>
-</segment>
-<segment>
-<pinref part="+3V2" gate="G$1" pin="+3V3"/>
-<wire x1="241.3" y1="154.94" x2="241.3" y2="162.56" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="9"/>
 </segment>
 </net>
 <net name="SW2_CTRL" class="5">
@@ -16695,8 +16695,8 @@ load switch</text>
 <pinref part="JP1" gate="A" pin="11"/>
 </segment>
 <segment>
-<wire x1="314.96" y1="-106.68" x2="327.66" y2="-106.68" width="0.1524" layer="91"/>
-<label x="327.66" y="-106.68" size="1.778" layer="95"/>
+<wire x1="386.08" y1="-106.68" x2="398.78" y2="-106.68" width="0.1524" layer="91"/>
+<label x="398.78" y="-106.68" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC1" gate="G$1" pin="!CTL!"/>
@@ -16712,16 +16712,39 @@ load switch</text>
 <label x="1071.88" y="-558.8" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="307.34" y1="-127" x2="307.34" y2="-109.22" width="0.1524" layer="91" style="shortdash"/>
-<label x="307.34" y="-119.38" size="1.778" layer="95"/>
+<wire x1="378.46" y1="-127" x2="378.46" y2="-109.22" width="0.1524" layer="91" style="shortdash"/>
+<label x="378.46" y="-119.38" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="LDO_IN" class="0">
+<net name="3V3" class="4">
 <segment>
-<portref moduleinst="3V3" port="VIN"/>
-<pinref part="D5" gate="G$1" pin="C"/>
-<wire x1="274.32" y1="88.9" x2="279.4" y2="88.9" width="0.1524" layer="91"/>
-<label x="276.86" y="88.9" size="1.778" layer="95" rot="R270"/>
+<label x="228.6" y="99.06" size="1.778" layer="95"/>
+<wire x1="330.2" y1="88.9" x2="320.04" y2="88.9" width="0.1524" layer="91"/>
+<wire x1="228.6" y1="96.52" x2="228.6" y2="109.22" width="0.1524" layer="91"/>
+<wire x1="228.6" y1="109.22" x2="320.04" y2="109.22" width="0.1524" layer="91"/>
+<wire x1="320.04" y1="109.22" x2="320.04" y2="88.9" width="0.1524" layer="91"/>
+<pinref part="SUPPLY18" gate="G$1" pin="3V3"/>
+<portref moduleinst="3V3" port="3V3"/>
+<junction x="320.04" y="88.9"/>
+</segment>
+<segment>
+<pinref part="JP1" gate="A" pin="9"/>
+<pinref part="SUPPLY19" gate="G$1" pin="3V3"/>
+<wire x1="241.3" y1="154.94" x2="241.3" y2="162.56" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="SUPPLY20" gate="G$1" pin="3V3"/>
+<portref moduleinst="ZERO-CROSS_DETECTOR" port="3V3"/>
+<wire x1="838.2" y1="-396.24" x2="838.2" y2="-401.32" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="R1" gate="G$1" pin="2"/>
+<wire x1="45.72" y1="-261.62" x2="45.72" y2="-254" width="0.1524" layer="91"/>
+<pinref part="SUPPLY21" gate="G$1" pin="3V3"/>
+</segment>
+<segment>
+<wire x1="312.42" y1="-106.68" x2="325.12" y2="-106.68" width="0.1524" layer="91"/>
+<label x="325.12" y="-106.68" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
@@ -16730,7 +16753,8 @@ load switch</text>
 <errors>
 <approved hash="104,1,1071.88,-553.72,IC1,OUT,LOAD_HIGHSIDE,,,"/>
 <approved hash="104,1,1071.88,-551.18,IC1,IN,V_REGULATED_TP2-OUT,,,"/>
-<approved hash="104,1@3V3,104.14,81.28,IC2,VOUT,+3V3,,,"/>
+<approved hash="104,1@3V3,73.66,81.28,IC2,VIN,LDK_IN,,,"/>
+<approved hash="104,1@3V3,104.14,81.28,IC2,VOUT,3V3,,,"/>
 <approved hash="105,1,130.81,-86.36,ZENER_COMMON,,,,,"/>
 <approved hash="213,1,124.46,-254,SW1_CTRL,in,,,,"/>
 <approved hash="213,1,127,-254,SW2_CTRL,in,,,,"/>
