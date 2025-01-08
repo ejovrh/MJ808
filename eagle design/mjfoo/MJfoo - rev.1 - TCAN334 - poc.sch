@@ -8155,6 +8155,12 @@ DIN A4, landscape with location and doc. field</description>
 <text x="0" y="-1.905" size="1.778" layer="96" align="center">&gt;VALUE</text>
 <pin name="GND" x="0" y="2.54" visible="off" length="short" direction="sup" rot="R270"/>
 </symbol>
+<symbol name="3V3-CIRCLE" urn="urn:adsk.eagle:symbol:18498229/2" library_version="9">
+<description>3.3 Volt (3V3) Circle</description>
+<circle x="0" y="1.27" radius="1.27" width="0.254" layer="94"/>
+<text x="-0.127" y="3.175" size="1.778" layer="96" align="bottom-center">&gt;VALUE</text>
+<pin name="3V3" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="GND-BAR" urn="urn:adsk.eagle:component:16502419/4" prefix="SUPPLY" library_version="9">
@@ -8168,6 +8174,22 @@ DIN A4, landscape with location and doc. field</description>
 <technology name="">
 <attribute name="CATEGORY" value="Supply" constant="no"/>
 <attribute name="VALUE" value="GND" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="3V3-CIRCLE" urn="urn:adsk.eagle:component:16502438/6" prefix="SUPPLY" library_version="9">
+<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;  3.3 Volt (3V3) Circle</description>
+<gates>
+<gate name="G$1" symbol="3V3-CIRCLE" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name="">
+<attribute name="CATEGORY" value="Supply" constant="no"/>
+<attribute name="VALUE" value="3V3" constant="no"/>
 </technology>
 </technologies>
 </device>
@@ -12669,6 +12691,59 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 </deviceset>
 </devicesets>
 </library>
+<library name="HR30-6R-6P - PushPull Receptacle">
+<packages>
+</packages>
+<symbols>
+<symbol name="CONN">
+<pin name="1" x="17.78" y="2.54" length="middle" rot="R180"/>
+<pin name="2" x="17.78" y="0" length="middle" rot="R180"/>
+<pin name="3" x="17.78" y="-2.54" length="middle" rot="R180"/>
+<pin name="4" x="17.78" y="-5.08" length="middle" rot="R180"/>
+<pin name="5" x="17.78" y="-7.62" length="middle" rot="R180"/>
+<pin name="6" x="17.78" y="-10.16" length="middle" rot="R180"/>
+<text x="-1.27" y="-2.54" size="1.778" layer="94" align="center">1</text>
+<text x="-3.81" y="-5.08" size="1.778" layer="94" align="center">2</text>
+<text x="-1.27" y="-7.62" size="1.778" layer="94" align="center">3</text>
+<text x="5.08" y="-5.08" size="1.778" layer="94" align="center">5</text>
+<text x="2.54" y="-7.62" size="1.778" layer="94" align="center">4</text>
+<text x="2.54" y="-2.54" size="1.778" layer="94" align="center">6</text>
+<wire x1="0.635" y1="5.08" x2="-0.635" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-0.635" y1="2.54" x2="1.905" y2="2.54" width="0.254" layer="94"/>
+<wire x1="1.905" y1="2.54" x2="0.635" y2="5.08" width="0.254" layer="94"/>
+<circle x="-1.27" y="-7.62" radius="1.27" width="0.254" layer="94"/>
+<circle x="2.54" y="-7.62" radius="1.27" width="0.254" layer="94"/>
+<circle x="2.54" y="-2.54" radius="1.27" width="0.254" layer="94"/>
+<circle x="5.08" y="-5.08" radius="1.27" width="0.254" layer="94"/>
+<circle x="-1.27" y="-2.54" radius="1.27" width="0.254" layer="94"/>
+<circle x="-3.81" y="-5.08" radius="1.27" width="0.254" layer="94"/>
+<text x="0.635" y="-5.08" size="1.778" layer="94" align="center">HRS</text>
+<circle x="0.635" y="-5.08" radius="6.83915625" width="0.254" layer="94"/>
+<wire x1="12.7" y1="7.62" x2="-10.16" y2="7.62" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="7.62" x2="-10.16" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-15.24" x2="12.7" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="12.7" y1="-15.24" x2="12.7" y2="7.62" width="0.254" layer="94"/>
+<text x="-5.08" y="10.16" size="1.778" layer="95" align="center">&gt;NAME</text>
+<text x="-5.08" y="-17.78" size="1.778" layer="95" align="center">&gt;VALUE</text>
+<text x="-7.62" y="-12.7" size="0.4064" layer="94" align="center-left">male contacts
+mates with HR30-6P-6S(31)</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="HR-30-6R-6X" prefix="CONN" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="CONN" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -13654,6 +13729,10 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <part name="TP4" library="signal testpoint" deviceset="TP" device="TH-0.9" value="LiIon - Terminal"/>
 <part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="TP3" library="signal testpoint" deviceset="TP" device="TH-0.9" value="LiIon - Terminal"/>
+<part name="CONN1" library="HR30-6R-6P - PushPull Receptacle" deviceset="HR-30-6R-6X" device="" value="HR30-6R-6P(71)"/>
+<part name="SUPPLY10" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY6" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY11" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 </parts>
 <sheets>
 <sheet>
@@ -13666,15 +13745,20 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <wire x1="320.04" y1="210.82" x2="165.1" y2="210.82" width="0.1524" layer="98" style="dashdot"/>
 <text x="170.18" y="205.74" size="6.4516" layer="98" align="top-left">MJfoo device</text>
 <wire x1="165.1" y1="210.82" x2="10.16" y2="210.82" width="0.1524" layer="98" style="dashdot"/>
-<wire x1="248.92" y1="88.9" x2="248.92" y2="43.18" width="0.1524" layer="98" style="dashdot"/>
-<wire x1="10.16" y1="210.82" x2="10.16" y2="43.18" width="0.1524" layer="98" style="dashdot"/>
-<wire x1="10.16" y1="43.18" x2="248.92" y2="43.18" width="0.1524" layer="98" style="dashdot"/>
+<wire x1="248.92" y1="88.9" x2="248.92" y2="30.48" width="0.1524" layer="98" style="dashdot"/>
+<wire x1="10.16" y1="210.82" x2="10.16" y2="30.48" width="0.1524" layer="98" style="dashdot"/>
+<wire x1="10.16" y1="30.48" x2="248.92" y2="30.48" width="0.1524" layer="98" style="dashdot"/>
 <text x="15.24" y="205.74" size="6.4516" layer="98" rot="R180" align="bottom-right">MJ8x8 - generic</text>
 <text x="292.1" y="12.7" size="5.08" layer="97">MJfoo POC rev.1b</text>
 <text x="88.9" y="116.84" size="1.778" layer="90">2</text>
 <text x="152.4" y="116.84" size="1.778" layer="90">3</text>
 <text x="167.64" y="71.12" size="1.778" layer="90">4</text>
 <text x="243.84" y="172.72" size="1.778" layer="90">5</text>
+<text x="43.18" y="38.1" size="1.778" layer="90" align="center-left">Liion battery - 2S</text>
+<text x="53.34" y="50.8" size="1.778" layer="91">inbound, white</text>
+<text x="53.34" y="45.72" size="1.778" layer="91">inbound, brown</text>
+<text x="53.34" y="48.26" size="1.778" layer="91">outbound, white</text>
+<text x="53.34" y="43.18" size="1.778" layer="91">outbound, brown</text>
 </plain>
 <moduleinsts>
 <moduleinst name="POWER_3V3" module="POWER_3V3" x="93.98" y="116.84" offset="200">
@@ -13748,6 +13832,19 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <instance part="TP3" gate="G$1" x="193.04" y="175.26" smashed="yes" rot="R270">
 <attribute name="NAME" x="203.2" y="175.26" size="1.27" layer="95" align="center"/>
 </instance>
+<instance part="CONN1" gate="G$1" x="22.86" y="50.8" smashed="yes">
+<attribute name="NAME" x="22.86" y="60.96" size="1.778" layer="95" align="center"/>
+<attribute name="VALUE" x="22.86" y="33.02" size="1.778" layer="95" align="center"/>
+</instance>
+<instance part="SUPPLY10" gate="G$1" x="147.32" y="66.04" smashed="yes" rot="R90">
+<attribute name="VALUE" x="142.24" y="66.04" size="1.778" layer="96" align="center-right"/>
+</instance>
+<instance part="SUPPLY6" gate="G$1" x="185.42" y="175.26" smashed="yes" rot="R90">
+<attribute name="VALUE" x="180.34" y="175.26" size="1.778" layer="96" align="center-right"/>
+</instance>
+<instance part="SUPPLY11" gate="G$1" x="119.38" y="119.38" smashed="yes">
+<attribute name="VALUE" x="119.38" y="124.46" size="1.778" layer="96" rot="R270" align="center-right"/>
+</instance>
 </instances>
 <busses>
 <bus name="CAN:CAN_H,CAN_L">
@@ -13763,9 +13860,17 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <label x="139.7" y="137.16" size="1.778" layer="95"/>
 </segment>
 </bus>
+<bus name="MJ8X8-BUS:BAT+,CAN_H,CAN_L,GND">
+<segment>
+<wire x1="50.8" y1="53.34" x2="50.8" y2="40.64" width="0.762" layer="92"/>
+<wire x1="50.8" y1="40.64" x2="246.38" y2="40.64" width="0.762" layer="92"/>
+<wire x1="246.38" y1="40.64" x2="246.38" y2="78.74" width="0.762" layer="92"/>
+<label x="76.2" y="40.64" size="1.778" layer="95"/>
+</segment>
+</bus>
 </busses>
 <nets>
-<net name="GND" class="4">
+<net name="GND" class="0">
 <segment>
 <portref moduleinst="STM32F04" port="GND"/>
 <pinref part="SUPPLY1" gate="G$1" pin="GND"/>
@@ -13807,6 +13912,11 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <wire x1="187.96" y1="162.56" x2="187.96" y2="170.18" width="0.1524" layer="91"/>
 <wire x1="187.96" y1="170.18" x2="193.04" y2="170.18" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="1"/>
+<wire x1="40.64" y1="53.34" x2="50.8" y2="53.34" width="0.1524" layer="91"/>
+<label x="43.18" y="53.34" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="BAT+" class="1">
 <segment>
@@ -13814,6 +13924,11 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <wire x1="73.66" y1="116.84" x2="40.64" y2="116.84" width="0.1524" layer="91"/>
 <pinref part="TP1" gate="G$1" pin="TP$1"/>
 <label x="43.18" y="116.84" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="6"/>
+<wire x1="40.64" y1="40.64" x2="50.8" y2="40.64" width="0.1524" layer="91"/>
+<label x="43.18" y="40.64" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="CAN_H" class="3">
@@ -13828,6 +13943,29 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <wire x1="231.14" y1="78.74" x2="231.14" y2="76.2" width="0.1524" layer="91"/>
 <junction x="231.14" y="76.2"/>
 <wire x1="223.52" y1="73.66" x2="223.52" y2="76.2" width="0.1524" layer="91"/>
+<label x="223.52" y="76.2" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="4"/>
+<wire x1="40.64" y1="45.72" x2="50.8" y2="45.72" width="0.1524" layer="91"/>
+<label x="43.18" y="45.72" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="5"/>
+<wire x1="40.64" y1="43.18" x2="50.8" y2="43.18" width="0.1524" layer="91"/>
+<label x="43.18" y="43.18" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="246.38" y1="78.74" x2="241.3" y2="78.74" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<wire x1="246.38" y1="76.2" x2="241.3" y2="76.2" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<wire x1="246.38" y1="71.12" x2="241.3" y2="71.12" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<wire x1="246.38" y1="68.58" x2="241.3" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="CAN_L" class="3">
@@ -13842,31 +13980,42 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 <junction x="231.14" y="71.12"/>
 <wire x1="223.52" y1="73.66" x2="223.52" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="223.52" y1="71.12" x2="231.14" y2="71.12" width="0.1524" layer="91"/>
+<label x="223.52" y="71.12" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="2"/>
+<wire x1="40.64" y1="50.8" x2="50.8" y2="50.8" width="0.1524" layer="91"/>
+<label x="43.18" y="50.8" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="CONN1" gate="G$1" pin="3"/>
+<wire x1="40.64" y1="48.26" x2="50.8" y2="48.26" width="0.1524" layer="91"/>
+<label x="43.18" y="48.26" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="3V3" class="4">
 <segment>
-<portref moduleinst="POWER_3V3" port="3V3"/>
-<portref moduleinst="STM32F04" port="3V3"/>
-<wire x1="114.3" y1="116.84" x2="121.92" y2="116.84" width="0.1524" layer="91"/>
-<label x="116.84" y="116.84" size="1.778" layer="95"/>
 <portref moduleinst="CAN_INFRA" port="3V3"/>
-<wire x1="121.92" y1="116.84" x2="121.92" y2="66.04" width="0.1524" layer="91"/>
-<wire x1="121.92" y1="66.04" x2="149.86" y2="66.04" width="0.1524" layer="91"/>
-<junction x="121.92" y="116.84"/>
-<wire x1="193.04" y1="175.26" x2="149.86" y2="175.26" width="0.1524" layer="91"/>
-<wire x1="149.86" y1="175.26" x2="149.86" y2="144.78" width="0.1524" layer="91"/>
-<wire x1="149.86" y1="144.78" x2="132.08" y2="144.78" width="0.1524" layer="91"/>
-<label x="180.34" y="175.26" size="1.778" layer="95"/>
-<wire x1="121.92" y1="137.16" x2="121.92" y2="116.84" width="0.1524" layer="91"/>
-<wire x1="121.92" y1="137.16" x2="132.08" y2="137.16" width="0.1524" layer="91"/>
-<wire x1="132.08" y1="137.16" x2="132.08" y2="144.78" width="0.1524" layer="91"/>
-<pinref part="TP3" gate="G$1" pin="TP$1"/>
+<pinref part="SUPPLY10" gate="G$1" pin="3V3"/>
 </segment>
 <segment>
 <pinref part="J1" gate="G$1" pin="T_VCC_P3"/>
 <wire x1="111.76" y1="165.1" x2="124.46" y2="165.1" width="0.1524" layer="91"/>
 <label x="124.46" y="165.1" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="TP3" gate="G$1" pin="TP$1"/>
+<pinref part="SUPPLY6" gate="G$1" pin="3V3"/>
+<wire x1="193.04" y1="175.26" x2="187.96" y2="175.26" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<portref moduleinst="POWER_3V3" port="3V3"/>
+<portref moduleinst="STM32F04" port="3V3"/>
+<wire x1="114.3" y1="116.84" x2="119.38" y2="116.84" width="0.1524" layer="91"/>
+<label x="116.84" y="116.84" size="1.778" layer="95"/>
+<wire x1="119.38" y1="116.84" x2="121.92" y2="116.84" width="0.1524" layer="91"/>
+<pinref part="SUPPLY11" gate="G$1" pin="3V3"/>
+<junction x="119.38" y="116.84"/>
 </segment>
 </net>
 <net name="SYS_SWDIO" class="3">
@@ -14117,6 +14266,10 @@ Source: &lt;a href="https://componentsearchengine.com/Datasheets/1/FTSH-107-01-L
 </schematic>
 </drawing>
 <compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
 <note version="8.2" severity="warning">
 Since Version 8.2, EAGLE supports online libraries. The ids
 of those online libraries will not be understood (or retained)
