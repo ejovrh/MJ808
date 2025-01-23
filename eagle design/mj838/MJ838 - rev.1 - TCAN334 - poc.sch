@@ -16853,7 +16853,7 @@ in a no-load scenario</text>
 </variantdefs>
 <parts>
 <part name="POWER_MONITOR" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device="" value="Power  Monitor"/>
-<part name="IC1" library="PAC1954 - Power Monitor" deviceset="PAC1952-2" device="" value="PAC1952T-2E/4MX"/>
+<part name="IC1" library="PAC1954 - Power Monitor" deviceset="PAC1952-2" device="" value="PAC1952T-1E/4MX"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>

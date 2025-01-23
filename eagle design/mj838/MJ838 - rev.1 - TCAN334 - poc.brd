@@ -2561,7 +2561,7 @@ Note, that not all DRC settings must be set by the manufacturer. Several can be 
 <element name="TP13" library="signal testpoint" package="TH-0.9" value="CAN high" x="54" y="14" smashed="yes" rot="R90"/>
 <element name="TP14" library="signal testpoint" package="TH-0.9" value="CAN high" x="57" y="14" smashed="yes" rot="R90"/>
 <element name="TP15" library="signal testpoint" package="TH-0.9" value="CAN high" x="60" y="14" smashed="yes" rot="R90"/>
-<element name="IC601" library="PAC1954 - Power Monitor" package="VQFN16" value="PAC1952T-2E/4MX" x="63" y="31" smashed="yes">
+<element name="IC601" library="PAC1954 - Power Monitor" package="VQFN16" value="PAC1952T-1E/4MX" x="63" y="31" smashed="yes">
 <attribute name="NAME" x="32" y="-8.25" size="0.5" layer="25" font="vector" align="center"/>
 <attribute name="VALUE" x="63" y="28.75" size="0.5" layer="27" font="vector" align="center"/>
 </element>
