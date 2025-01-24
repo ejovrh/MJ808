@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
@@ -16749,7 +16749,26 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <packages>
 </packages>
 <symbols>
-<symbol name="A5L-LOC" urn="urn:adsk.eagle:symbol:13879/1" library_version="1">
+<symbol name="A5L-LOC" library_version="1">
+<wire x1="85.09" y1="3.81" x2="85.09" y2="24.13" width="0.1016" layer="94"/>
+<wire x1="85.09" y1="24.13" x2="139.065" y2="24.13" width="0.1016" layer="94"/>
+<wire x1="139.065" y1="24.13" x2="180.34" y2="24.13" width="0.1016" layer="94"/>
+<wire x1="170.18" y1="3.81" x2="170.18" y2="8.89" width="0.1016" layer="94"/>
+<wire x1="170.18" y1="8.89" x2="180.34" y2="8.89" width="0.1016" layer="94"/>
+<wire x1="170.18" y1="8.89" x2="139.065" y2="8.89" width="0.1016" layer="94"/>
+<wire x1="139.065" y1="8.89" x2="139.065" y2="3.81" width="0.1016" layer="94"/>
+<wire x1="139.065" y1="8.89" x2="139.065" y2="13.97" width="0.1016" layer="94"/>
+<wire x1="139.065" y1="13.97" x2="180.34" y2="13.97" width="0.1016" layer="94"/>
+<wire x1="139.065" y1="13.97" x2="139.065" y2="19.05" width="0.1016" layer="94"/>
+<wire x1="139.065" y1="19.05" x2="180.34" y2="19.05" width="0.1016" layer="94"/>
+<wire x1="139.065" y1="19.05" x2="139.065" y2="24.13" width="0.1016" layer="94"/>
+<text x="140.97" y="15.24" size="2.54" layer="94">&gt;DRAWING_NAME</text>
+<text x="140.97" y="10.16" size="2.286" layer="94">&gt;LAST_DATE_TIME</text>
+<text x="154.305" y="5.08" size="2.54" layer="94">&gt;SHEET</text>
+<text x="140.716" y="4.953" size="2.54" layer="94">Sheet:</text>
+<frame x1="0" y1="0" x2="184.15" y2="133.35" columns="4" rows="4" layer="94"/>
+</symbol>
+<symbol name="A5L-LOC@1" urn="urn:adsk.eagle:symbol:13879/1" library_version="1">
 <wire x1="85.09" y1="3.81" x2="85.09" y2="24.13" width="0.1016" layer="94"/>
 <wire x1="85.09" y1="24.13" x2="139.065" y2="24.13" width="0.1016" layer="94"/>
 <wire x1="139.065" y1="24.13" x2="180.34" y2="24.13" width="0.1016" layer="94"/>
@@ -16823,7 +16842,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <description>&lt;b&gt;FRAME&lt;/b&gt;&lt;p&gt;
 DIN A5, landscape with doc field</description>
 <gates>
-<gate name="G$1" symbol="A5L-LOC" x="0" y="0"/>
+<gate name="G$1" symbol="A5L-LOC@1" x="0" y="0"/>
 </gates>
 <devices>
 <device name="">
@@ -16861,7 +16880,7 @@ DIN A4, landscape with location and doc. field</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="A5L-LOC" urn="urn:adsk.eagle:component:13933/1" prefix="FRAME" uservalue="yes" library_version="1">
+<deviceset name="A5L-LOC" prefix="FRAME" uservalue="yes" library_version="1">
 <description>A5L LOC</description>
 <gates>
 <gate name="G$1" symbol="A5L-LOC" x="0" y="0"/>
@@ -21934,6 +21953,61 @@ by R. Vogg  15.March.2002</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="SHT40-AD1F - Humidity Sensor">
+<packages>
+<package name="SMD">
+<wire x1="-0.75" y1="-0.75" x2="0.75" y2="-0.75" width="0.127" layer="21"/>
+<wire x1="0.75" y1="0.75" x2="-0.75" y2="0.75" width="0.127" layer="21"/>
+<text x="0" y="1.5" size="0.5" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-1.5" size="0.5" layer="27" font="vector" align="center">&gt;VALUE</text>
+<smd name="SDA" x="-0.7" y="0.4" dx="0.5" dy="0.3" layer="1"/>
+<smd name="SCL" x="-0.7" y="-0.4" dx="0.5" dy="0.3" layer="1"/>
+<smd name="VDD" x="0.7" y="-0.4" dx="0.5" dy="0.3" layer="1"/>
+<smd name="VSS" x="0.7" y="0.4" dx="0.5" dy="0.3" layer="1"/>
+<wire x1="-0.75" y1="0.75" x2="-0.75" y2="0.65" width="0.127" layer="21"/>
+<wire x1="-0.75" y1="0.15" x2="-0.75" y2="-0.15" width="0.127" layer="21"/>
+<wire x1="-0.75" y1="-0.65" x2="-0.75" y2="-0.75" width="0.127" layer="21"/>
+<wire x1="0.75" y1="-0.75" x2="0.75" y2="-0.65" width="0.127" layer="21"/>
+<wire x1="0.75" y1="-0.15" x2="0.75" y2="0.15" width="0.127" layer="21"/>
+<wire x1="0.75" y1="0.75" x2="0.75" y2="0.65" width="0.127" layer="21"/>
+<circle x="-1" y="1" radius="0.1" width="0.3" layer="21"/>
+</package>
+</packages>
+<symbols>
+<symbol name="SHT40">
+<pin name="VDD" x="-12.7" y="2.54" length="middle" direction="pwr"/>
+<pin name="VSS" x="-12.7" y="-2.54" length="middle" direction="pwr"/>
+<pin name="SCL" x="12.7" y="-2.54" length="middle" direction="in" rot="R180"/>
+<pin name="SDA" x="12.7" y="2.54" length="middle" rot="R180"/>
+<text x="-7.62" y="7.62" size="1.778" layer="95">&gt;NAME</text>
+<text x="-7.62" y="-7.62" size="1.778" layer="96">&gt;VALUE</text>
+<wire x1="-7.62" y1="5.08" x2="7.62" y2="5.08" width="0.254" layer="94"/>
+<wire x1="7.62" y1="5.08" x2="7.62" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="7.62" y1="-5.08" x2="-7.62" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="-5.08" x2="-7.62" y2="5.08" width="0.254" layer="94"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="SHT40" prefix="IC" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="SHT40" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SMD">
+<connects>
+<connect gate="G$1" pin="SCL" pad="SCL"/>
+<connect gate="G$1" pin="SDA" pad="SDA"/>
+<connect gate="G$1" pin="VDD" pad="VDD"/>
+<connect gate="G$1" pin="VSS" pad="VSS"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -22858,6 +22932,109 @@ V = R * I
 </sheet>
 </sheets>
 </module>
+<module name="HUMIDITY" prefix="" dx="30.48" dy="20.32">
+<ports>
+<port name="GND" side="bottom" coord="0" direction="pwr"/>
+<port name="3V3" side="left" coord="-7.62" direction="pwr"/>
+<port name="SCL" side="left" coord="-2.54" direction="in"/>
+<port name="SDA" side="left" coord="0" direction="io"/>
+</ports>
+<variantdefs>
+</variantdefs>
+<parts>
+<part name="HUMIDITY_SENSOR" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A5L-LOC" device="" value="Humidity Sensor"/>
+<part name="IC1" library="SHT40-AD1F - Humidity Sensor" deviceset="SHT40" device="" value="SHT40-AD1F-R2"/>
+<part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:23626/2" value="0.1uF / 10V"/>
+<part name="SUPPLY5" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+</parts>
+<sheets>
+<sheet>
+<plain>
+</plain>
+<instances>
+<instance part="HUMIDITY_SENSOR" gate="G$1" x="0" y="0" smashed="yes">
+<attribute name="DRAWING_NAME" x="140.97" y="15.24" size="2.54" layer="94"/>
+<attribute name="LAST_DATE_TIME" x="140.97" y="10.16" size="2.286" layer="94"/>
+<attribute name="SHEET" x="154.305" y="5.08" size="2.54" layer="94"/>
+</instance>
+<instance part="IC1" gate="G$1" x="96.52" y="76.2" smashed="yes">
+<attribute name="NAME" x="88.9" y="83.82" size="1.778" layer="95"/>
+<attribute name="VALUE" x="88.9" y="68.58" size="1.778" layer="96"/>
+</instance>
+<instance part="SUPPLY1" gate="G$1" x="60.96" y="20.32" smashed="yes">
+<attribute name="VALUE" x="60.833" y="23.495" size="1.778" layer="96" align="bottom-center"/>
+</instance>
+<instance part="SUPPLY2" gate="G$1" x="76.2" y="10.16" smashed="yes">
+<attribute name="VALUE" x="76.2" y="8.255" size="1.778" layer="96" align="center"/>
+</instance>
+<instance part="SUPPLY3" gate="G$1" x="83.82" y="71.12" smashed="yes">
+<attribute name="VALUE" x="83.82" y="69.215" size="1.778" layer="96" align="center"/>
+</instance>
+<instance part="SUPPLY4" gate="G$1" x="73.66" y="81.28" smashed="yes">
+<attribute name="VALUE" x="73.533" y="84.455" size="1.778" layer="96" align="bottom-center"/>
+</instance>
+<instance part="C1" gate="G$1" x="73.66" y="76.2" smashed="yes">
+<attribute name="NAME" x="71.12" y="76.2" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="71.12" y="73.66" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="SUPPLY5" gate="G$1" x="73.66" y="68.58" smashed="yes">
+<attribute name="VALUE" x="73.66" y="66.675" size="1.778" layer="96" align="center"/>
+</instance>
+</instances>
+<busses>
+</busses>
+<nets>
+<net name="GND" class="0">
+<segment>
+<pinref part="SUPPLY2" gate="G$1" pin="GND"/>
+<wire x1="76.2" y1="12.7" x2="76.2" y2="22.86" width="0.1524" layer="91"/>
+<label x="76.2" y="22.86" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="IC1" gate="G$1" pin="VSS"/>
+<pinref part="SUPPLY3" gate="G$1" pin="GND"/>
+</segment>
+<segment>
+<pinref part="C1" gate="G$1" pin="2"/>
+<pinref part="SUPPLY5" gate="G$1" pin="GND"/>
+</segment>
+</net>
+<net name="3V3" class="4">
+<segment>
+<pinref part="SUPPLY1" gate="G$1" pin="3V3"/>
+<wire x1="60.96" y1="17.78" x2="60.96" y2="10.16" width="0.1524" layer="91"/>
+<label x="60.96" y="10.16" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<pinref part="IC1" gate="G$1" pin="VDD"/>
+<pinref part="SUPPLY4" gate="G$1" pin="3V3"/>
+<wire x1="73.66" y1="78.74" x2="83.82" y2="78.74" width="0.1524" layer="91"/>
+<pinref part="C1" gate="G$1" pin="1"/>
+<junction x="73.66" y="78.74"/>
+</segment>
+</net>
+<net name="SDA" class="3">
+<segment>
+<pinref part="IC1" gate="G$1" pin="SDA"/>
+<wire x1="109.22" y1="78.74" x2="116.84" y2="78.74" width="0.1524" layer="91"/>
+<label x="116.84" y="78.74" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="SCL" class="3">
+<segment>
+<pinref part="IC1" gate="G$1" pin="SCL"/>
+<wire x1="109.22" y1="73.66" x2="116.84" y2="73.66" width="0.1524" layer="91"/>
+<label x="116.84" y="73.66" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+</nets>
+</sheet>
+</sheets>
+</module>
 </modules>
 <parts>
 <part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A3L-LOC" device="" value="MJ808"/>
@@ -22880,6 +23057,8 @@ V = R * I
 <part name="SUPPLY13" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY14" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY16" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY17" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="SUPPLY18" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 </parts>
 <sheets>
 <sheet>
@@ -22911,6 +23090,9 @@ V = R * I
 </moduleinst>
 <moduleinst name="3V3" module="3V3" x="269.24" y="160.02" offset="200">
 <attribute name="NAME" value="3V3" x="269.24" y="162.56" size="2.032" layer="95" align="bottom-center"/>
+</moduleinst>
+<moduleinst name="HUMIDITY" module="HUMIDITY" x="129.54" y="38.1">
+<attribute name="NAME" value="HUMIDITY" x="129.54" y="43.18" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
 </moduleinsts>
 <instances>
@@ -22979,11 +23161,17 @@ V = R * I
 <instance part="SUPPLY16" gate="G$1" x="294.64" y="162.56" smashed="yes">
 <attribute name="VALUE" x="294.64" y="165.1" size="1.778" layer="96" align="bottom-center"/>
 </instance>
+<instance part="SUPPLY17" gate="G$1" x="129.54" y="20.32" smashed="yes">
+<attribute name="VALUE" x="129.54" y="18.415" size="1.778" layer="96" align="center"/>
+</instance>
+<instance part="SUPPLY18" gate="G$1" x="106.68" y="30.48" smashed="yes" rot="R90">
+<attribute name="VALUE" x="101.6" y="30.48" size="1.778" layer="96" align="bottom-center"/>
+</instance>
 </instances>
 <busses>
 <bus name="I2C:I2C_SCL,I2C_SDA">
 <segment>
-<wire x1="76.2" y1="172.72" x2="76.2" y2="78.74" width="0.762" layer="92"/>
+<wire x1="76.2" y1="172.72" x2="76.2" y2="35.56" width="0.762" layer="92"/>
 <label x="76.2" y="172.72" size="1.778" layer="95"/>
 </segment>
 <segment>
@@ -23044,6 +23232,10 @@ V = R * I
 <pinref part="SUPPLY14" gate="G$1" pin="GND"/>
 <wire x1="269.24" y1="144.78" x2="269.24" y2="147.32" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<portref moduleinst="HUMIDITY" port="GND"/>
+<pinref part="SUPPLY17" gate="G$1" pin="GND"/>
+</segment>
 </net>
 <net name="3V3" class="4">
 <segment>
@@ -23076,6 +23268,10 @@ V = R * I
 <pinref part="SUPPLY16" gate="G$1" pin="3V3"/>
 <wire x1="294.64" y1="160.02" x2="284.48" y2="160.02" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<portref moduleinst="HUMIDITY" port="3V3"/>
+<pinref part="SUPPLY18" gate="G$1" pin="3V3"/>
+</segment>
 </net>
 <net name="I2C_SCL" class="3">
 <segment>
@@ -23096,6 +23292,11 @@ V = R * I
 <segment>
 <wire x1="106.68" y1="238.76" x2="106.68" y2="218.44" width="0.1524" layer="91"/>
 <label x="106.68" y="223.52" size="1.778" layer="95" rot="R90"/>
+</segment>
+<segment>
+<portref moduleinst="HUMIDITY" port="SCL"/>
+<wire x1="109.22" y1="35.56" x2="76.2" y2="35.56" width="0.1524" layer="91"/>
+<label x="81.28" y="35.56" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="I2C_SDA" class="3">
@@ -23118,6 +23319,11 @@ V = R * I
 <segment>
 <wire x1="109.22" y1="238.76" x2="109.22" y2="218.44" width="0.1524" layer="91"/>
 <label x="109.22" y="223.52" size="1.778" layer="95" rot="R90"/>
+</segment>
+<segment>
+<portref moduleinst="HUMIDITY" port="SDA"/>
+<wire x1="109.22" y1="38.1" x2="76.2" y2="38.1" width="0.1524" layer="91"/>
+<label x="81.28" y="38.1" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="ROTARY_A" class="3">
