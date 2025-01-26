@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
@@ -23057,8 +23057,6 @@ V = R * I
 <part name="SUPPLY13" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY14" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY16" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
-<part name="SUPPLY17" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="SUPPLY18" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 </parts>
 <sheets>
 <sheet>
@@ -23090,9 +23088,6 @@ V = R * I
 </moduleinst>
 <moduleinst name="3V3" module="3V3" x="269.24" y="160.02" offset="200">
 <attribute name="NAME" value="3V3" x="269.24" y="162.56" size="2.032" layer="95" align="bottom-center"/>
-</moduleinst>
-<moduleinst name="HUMIDITY" module="HUMIDITY" x="129.54" y="38.1">
-<attribute name="NAME" value="HUMIDITY" x="129.54" y="43.18" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
 </moduleinsts>
 <instances>
@@ -23161,17 +23156,11 @@ V = R * I
 <instance part="SUPPLY16" gate="G$1" x="294.64" y="162.56" smashed="yes">
 <attribute name="VALUE" x="294.64" y="165.1" size="1.778" layer="96" align="bottom-center"/>
 </instance>
-<instance part="SUPPLY17" gate="G$1" x="129.54" y="20.32" smashed="yes">
-<attribute name="VALUE" x="129.54" y="18.415" size="1.778" layer="96" align="center"/>
-</instance>
-<instance part="SUPPLY18" gate="G$1" x="106.68" y="30.48" smashed="yes" rot="R90">
-<attribute name="VALUE" x="101.6" y="30.48" size="1.778" layer="96" align="bottom-center"/>
-</instance>
 </instances>
 <busses>
 <bus name="I2C:I2C_SCL,I2C_SDA">
 <segment>
-<wire x1="76.2" y1="172.72" x2="76.2" y2="35.56" width="0.762" layer="92"/>
+<wire x1="76.2" y1="172.72" x2="76.2" y2="78.74" width="0.762" layer="92"/>
 <label x="76.2" y="172.72" size="1.778" layer="95"/>
 </segment>
 <segment>
@@ -23232,10 +23221,6 @@ V = R * I
 <pinref part="SUPPLY14" gate="G$1" pin="GND"/>
 <wire x1="269.24" y1="144.78" x2="269.24" y2="147.32" width="0.1524" layer="91"/>
 </segment>
-<segment>
-<portref moduleinst="HUMIDITY" port="GND"/>
-<pinref part="SUPPLY17" gate="G$1" pin="GND"/>
-</segment>
 </net>
 <net name="3V3" class="4">
 <segment>
@@ -23268,10 +23253,6 @@ V = R * I
 <pinref part="SUPPLY16" gate="G$1" pin="3V3"/>
 <wire x1="294.64" y1="160.02" x2="284.48" y2="160.02" width="0.1524" layer="91"/>
 </segment>
-<segment>
-<portref moduleinst="HUMIDITY" port="3V3"/>
-<pinref part="SUPPLY18" gate="G$1" pin="3V3"/>
-</segment>
 </net>
 <net name="I2C_SCL" class="3">
 <segment>
@@ -23292,11 +23273,6 @@ V = R * I
 <segment>
 <wire x1="106.68" y1="238.76" x2="106.68" y2="218.44" width="0.1524" layer="91"/>
 <label x="106.68" y="223.52" size="1.778" layer="95" rot="R90"/>
-</segment>
-<segment>
-<portref moduleinst="HUMIDITY" port="SCL"/>
-<wire x1="109.22" y1="35.56" x2="76.2" y2="35.56" width="0.1524" layer="91"/>
-<label x="81.28" y="35.56" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="I2C_SDA" class="3">
@@ -23319,11 +23295,6 @@ V = R * I
 <segment>
 <wire x1="109.22" y1="238.76" x2="109.22" y2="218.44" width="0.1524" layer="91"/>
 <label x="109.22" y="223.52" size="1.778" layer="95" rot="R90"/>
-</segment>
-<segment>
-<portref moduleinst="HUMIDITY" port="SDA"/>
-<wire x1="109.22" y1="38.1" x2="76.2" y2="38.1" width="0.1524" layer="91"/>
-<label x="81.28" y="38.1" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="ROTARY_A" class="3">
