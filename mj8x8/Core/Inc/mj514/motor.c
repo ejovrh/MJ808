@@ -120,6 +120,8 @@ motor_t* motor_ctor(void)  //
 	__Motor.adc = adc_ctor();  // call ADC constructor
 	__Motor.encoder = as5601_ctor();  // tie in rotary encoder object
 
+	__Motor.public.PulseCount = &__Motor.encoder->PulseCounter;  // tie in rotary encoder pulse count
+
 	return &__Motor.public;  // set pointer to Motor public part
 }
 

@@ -5,8 +5,6 @@
 
 #if defined(MJ514_)	// if this particular device is active
 
-#define FULL_REVOLUTION (float) 12345.0	// ticks for a full 360 deg. revolution
-
 typedef enum as5601_reg_t  // register to array index translation
 {
 	  ZMCO = 0,  // count of ZPOS burn commands, DS. p. 22
@@ -24,7 +22,7 @@ typedef enum as5601_reg_t  // register to array index translation
 
 typedef struct	// struct describing the Rotary Encoder functionality
 {
-	volatile uint32_t PulseCounter;  // counts rotary encoder pulses via timer3 IRQ
+	volatile uint32_t PulseCounter;  // counts rotary encoder pulses via timer3 capture compare IRQ
 
 	uint16_t (*Read)(const as5601_reg_t Register);  // returns 2 bytes of register values from device register
 	void (*Write)(const as5601_reg_t Register, const uint16_t data);  // writes 2 bytes of data into device register

@@ -17,9 +17,9 @@
  * 		CW shifts from gear 14 towards 1 = into lighter gear
  * 			this is shifting down - direction_t ShiftDown
  *
- * 	the "17 tooth rohloff gear" is actuated by a the "40-tooth e14 gear", which is barely visible on the e14 unit.
+ * 	the "17 tooth rohloff gear" is actuated by the "40-tooth e14 gear", which is barely visible on the e14 unit.
  *
- * 	shifting directions (ShiftUp and ShiftDown) are relevant only when pedalling the bike, otherwise it is not discernible.
+ * 	shifting directions (ShiftUp and ShiftDown) in the hub are relevant only when pedalling the bike, otherwise it is not discernible.
  *
  * 	while debugging, the "40-tooth e14 gear" rotation is the only visible indicator of shifting direction.
  * 		therefore it is central to the shifting definition in terms of rotation:
@@ -38,29 +38,39 @@
  *
  * 			CW or CCW translates to motor controller IN1 or IN2 being high or low
  * 			"amount" of rotation translates to counting as5601_t rotary encoder signal impulses and readout of degrees
+ * 			"23-tooth magnetic gear" rotation pulses (IRQ3 capture compare) are accumulated and saved.
  *
- *	in the end -for a shift of one gear in any direction- the question becomes:
- *		how may degrees does the "17 tooth rohloff gear" need to rotate?
+ *	in the end - for a shift of one gear in any direction - the question becomes:
+ *		how may degrees does the "17 tooth rohloff gear" need to rotate in order to shift one gear?
  *	in other terms:
  *		how many degrees (or impulses) does the "23-tooth magnetic gear" need to rotate?
  *
  *	"17 tooth rohloff gear" per gear rotation can be discerned by referencing the hub-related PDF in the datasheets folder.
- *		- part number49 is what defines increments - 7 per 360 degree revolution
+ *		- part number49 is what defines increments - 7 per 360 degree revolution.
  *			count the notches.
  *		this means that "17 tooth rohloff gear" needs to rotate 360/7 = 51.4285... degrees per shifted gear.
  *
  *	the e14 unit (i.e. the mj514) is a kind of rotational servo-motor.
- *	it has positional control (as5600), speed control (PWM on Motor_IN1/2).
+ *	it has positional control (as5600), speed/direction control (PWM on Motor_IN1/2).
  *	it doesn't have force feedback, speed/acceleration control and most likely any form of PID is not needed.
  *
  *	if you can call a "while(some positional check) ;" a closed loop, then it even has a closed loop feedback thing going.
  *
  *	the e14 unit as a component is abstracted by gear_t.
- *		one can tell it to e.g. shift to gear 7 or shift up/down by 2 gears.
- *		it by itself doesn't know how to exactly do that physically.
+ *		one can tell it to e.g. shift to gear 7 or shift up/down by 2 gears, with some sanity checks in place.
+ *		it by itself doesn't know how to physically shift a gear other than running a motor.
  *
- *	the servo part is motor_t. it knows revolution and direction.
+ *		gear_t is stateful in the sense that it utilises a non-volatile FeRAM to save data across power cycles.
+ *		saved are:
+ *			- the current gear,
+ *			- accumulated as5601 rotation pulses (1024 pulses per rotation)
+ *			- accumulated gear shift count.
+ *
+ *
+ *	the servo part is motor_t. it does know revolution and direction.
  *		if one tells it to shift(3), it knows the direction and "distance", but it doesn't know the meaning.
+ *
+ *	motor_t utilises as5601_t to determine when to stop turning.
  *
  *	time to shift one gear: Rohloff's original hardware: 180ms (their claim)
  */

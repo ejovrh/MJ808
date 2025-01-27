@@ -18,11 +18,13 @@ typedef struct	// gear_t actual
 
 static __gear_t __Gear __attribute__ ((section (".data")));  // preallocate __AutoDrive object in .data
 
-#define MEM_GEAR 0x00, 1	// address 0x00, size 1 byte
-#define MEM_FOO 0x02, 4	// address 0x01, size 4 bytes
-#define MEM_BAR 0x06, 2	// address 0x06, size 2 bytes
+#define MEM_GEAR 0x00, 1	// address 0x00, size 1 byte: current gear, 1 through 14
+#define MEM_ACC_PULSES 0x02, 4	// address 0x01, size 4 bytes: accumulated pulses (1024 pulses per one per rotation of the "23-tooth magnetic gear")
+#define MEM_ACC_SHIFTS 0x06, 4	// address 0x06, size 4 bytes: cumulative count of how many gears were shifted
 
-// return current Rohloff gear (1 to 14)
+#define ABS(x) ((x) < 0 ? -(x) : (x))
+
+// read stored current Rohloff gear (1 to 14) from FeRAM
 static inline uint8_t _GetGear(void)
 {
 	/* rohloff gears are numbered from 1 to 14,
@@ -32,13 +34,37 @@ static inline uint8_t _GetGear(void)
 	 * 	a return value of "3" means that the e14 unit thinks the hub is in gear 3
 	 */
 
-	return __Gear.FeRAM->Read(MEM_GEAR);  // return saved gear from FeRAM
+	return __Gear.FeRAM->Read(MEM_GEAR);  // return saved data from FeRAM
+}
+
+// reads stored pulse count from FeRAM
+static inline uint32_t _GetCumulativePulses(void)
+{
+	return __Gear.FeRAM->Read(MEM_ACC_PULSES);  // return saved data from FeRAM
+}
+
+// reads stored shift count from FeRAM
+static inline uint32_t _GetCumulativeShifts(void)
+{
+	return __Gear.FeRAM->Read(MEM_ACC_SHIFTS);  // return saved data from FeRAM
 }
 
 // writes gear n into the FeRAM
 static inline void _SetGear(const int8_t n)
 {
 	__Gear.FeRAM->Write(n, MEM_GEAR);  // write gear into FeRAM, at the proper location
+}
+
+// writes pulse count into FeRAM
+static inline void _SetCumulativePulses(const uint32_t n)
+{
+	__Gear.FeRAM->Write(n, MEM_ACC_PULSES);  // return saved data from FeRAM
+}
+
+// writes gear shift count into FeRAM
+static inline void _SetCumulativeShifts(const uint32_t n)
+{
+	__Gear.FeRAM->Write(n, MEM_ACC_SHIFTS);  // return saved data from FeRAM
 }
 
 // shifts the Rohloff hub n gears (-13 to + 13, except 0) up or down
@@ -99,6 +125,9 @@ static void _ShiftByN(const int8_t n)
 		}
 
 	_SetGear(__Gear._CurrentGear + n);  // write shifted gear into FeRAM
+
+	_SetCumulativeShifts(_GetCumulativeShifts() + ABS(n));	// add n to the cumulative gears shifted count
+	_SetCumulativePulses(_GetCumulativePulses() + *__Gear.Motor->PulseCount);  //
 
 	__Gear._FlagShiftinginProgress = 0;  // critical section stop
 	Device->mj8x8->UpdateActivity(SHIFTING, __Gear._FlagShiftinginProgress);  // update the bus
