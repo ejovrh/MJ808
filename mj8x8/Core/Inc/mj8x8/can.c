@@ -35,7 +35,7 @@ static void _tcan334_can_msg_receive(message_handler_t *in_handler, const uint8_
 #endif
 
 	_msg.sid = (uint16_t) _nRXH.StdId;  // transfer CAN ID high byte
-	_msg.dlc = _nRXH.DLC;
+	_msg.dlc = (uint8_t) _nRXH.DLC;
 
 	in_handler->SetMessage(&_msg);  // upload into the message handler
 
@@ -65,7 +65,7 @@ static void _tcan334_can_msg_send(can_msg_t *const msg)
 
 	do  // do at least once:
 		{
-			mboxFreeCount = HAL_CAN_GetTxMailboxesFreeLevel(&_hcan);	// get count of free mailboxes
+			mboxFreeCount = (uint8_t) HAL_CAN_GetTxMailboxesFreeLevel(&_hcan);  // get count of free mailboxes
 
 			if(i > CAN_TIMEOUT_VALUE)  // safeguard
 				{

@@ -15,12 +15,6 @@ typedef struct	// as5601c_t actual
 	uint8_t _abn;  // ABN register
 } __as5601_t;
 
-extern TIM_HandleTypeDef htim3;  // timer in encoder mode for rotation detection
-extern TIM_HandleTypeDef htim16;  // rotary encoder time base - 10ms
-
-volatile uint16_t _CurrentRawAngle;
-volatile uint16_t _PreviousRawAngle;
-
 static __as5601_t __AS5601 __attribute__ ((section (".data")));  // preallocate __AS5601 object in .data
 
 #define REG_CNT 11	// 11 registers
@@ -70,86 +64,26 @@ static inline void _Write(const as5601_reg_t Register, const uint16_t data)
 	Device->mj8x8->i2c->Write(AS5601_I2C_ADDR, _RegisterAddress[Register], data, _RegisterSize[Register]);
 }
 
-// starts timers needed for encoder operation
-void _Start(void)
-{
-	Device->StartTimer(&htim16);	// start timebase and encoder timer
-}
-
-// stops timers needed for encoder operation
-void _Stop(void)
-{
-	Device->StopTimer(&htim16);  // stop timebase and encoder timer
-}
-
 static __as5601_t __AS5601 =  // instantiate as5601c_t actual and set function pointers
 	{  //
 	.public.Read = &_Read,	// ditto
 	.public.Write = &_Write,  //
-	.public.Start = &_Start,	//
-	.public.Stop = &_Stop  //
 	};
 
 as5601_t* as5601_ctor(void)  //
 {
 	__AS5601.public.Write(ABN, 0x08);  // DS p. 21 - 2048 w. 15.6 kHz
-	__AS5601.public.Write(CONF, 0x200F);	// DS p. 21 - LPM3, 3 LSB hysteresis, Watchdog on
+	__AS5601.public.Write(CONF, 0x200C);	// DS p. 21 - 3 LSB hysteresis, Watchdog on
 
-	__AS5601._status = __AS5601.public.Read(STATUS);	// read out device status
+	__AS5601._status = (uint8_t) __AS5601.public.Read(STATUS);	// read out device status
 
 	if((__AS5601._status & _BV(MD)) == 0)  // if no magnet detected
 		Error_Handler();
 
-	__AS5601._abn = __AS5601.public.Read(ABN);	// read out ABN register
+	__AS5601._abn = (uint8_t) __AS5601.public.Read(ABN);	// read out ABN register
 	__AS5601._conf = __AS5601.public.Read(CONF);	// read out conf register
 
 	return &__AS5601.public;  // set pointer to AS5601 public part
-}
-
-// motor control PWM signal generation
-void TIM3_IRQHandler(void)
-{
-	HAL_TIM_IRQHandler(&htim3);  // service the interrupt
-}
-
-// rotary encoder time base - 10ms
-void TIM16_IRQHandler(void)
-{
-	HAL_TIM_IRQHandler(&htim16);  // service the interrupt
-}
-
-//
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
-{
-	if(htim == &htim3)
-		{
-			// with ABN = 0x08, this will update 1024 times per 360 degree rotation;
-			// TODO - implement eventual overflow after 4096 revolutions...
-			++__AS5601.public.PulseCounter;  // one degree of rotation equals 1024 / 360 = 2.84... impulses
-		}
-}
-
-//
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-	if(htim == &htim16)
-		{
-			/* definition of CW and CCW rotation
-			 * AS5601 is mounted on e.g. board top, the sensing magnet is above the IC (mounted on the so-called "magnetic gear")
-			 * 	- clockwise rotation will increase counters angle and timer3's CCR1/2
-			 * 	- counterclockwise rotation will do the opposite
-			 *
-			 * 	- any rotation, regardless of direction, will increase PulseCounter
-			 */
-
-			_PreviousRawAngle = _CurrentRawAngle;  // save previous angle
-			_CurrentRawAngle = __AS5601.public.Read(ANGLE);  // read out current angle
-
-			if(_CurrentRawAngle == _PreviousRawAngle)  // if the old and new angles are the same
-				{
-					;  // TODO - detect no increment while motor ought to be turning the gear
-				}
-		}
 }
 
 #endif

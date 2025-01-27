@@ -36,10 +36,11 @@
  *
  */
 
+#define RAWANGLE_PER_GEAR 432	// 432.4968 raw degrees, as read from as5601 ANGLE register
+#define PULSE_PER_GEAR 108 // 108.1242 impulses, with an ABM setting of 0x08
+
 typedef struct	// struct describing the Motor functionality
 {
-	volatile uint32_t *PulseCount;
-
 	void (*Shift)(const direction_t dir, const uint8_t n);  // rotate a gear to shift up/down
 } motor_t;
 

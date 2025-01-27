@@ -84,10 +84,10 @@ static void _UpdateActivity(const uint8_t act, const uint8_t val)
 	uint8_t *_payload = &Device->activity->byte;  // set the HeartBeat (aka. CMND_ANNOUNCE) argument
 
 	if(val == OFF)
-		Device->activity->byte &= ~_BV(act);  // clear the bit
+		Device->activity->byte &= (uint8_t) ~_BV(act);  // clear the bit
 
 	if(val == ON)
-		Device->activity->byte |= _BV(act);  // set it
+		Device->activity->byte |= (uint8_t) _BV(act);  // set it
 
 	MsgHandler->SendMessage(ALL, CMND_ANNOUNCE, _payload, 2);  // notify the bus of the change
 }

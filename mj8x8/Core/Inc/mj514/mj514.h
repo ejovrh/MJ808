@@ -40,8 +40,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TIMER3_PERIOD  0xFFFF	// use max. range for rotary encoder pulse count
 #define TIMER3_IC1_FILTER	0x0	// TODO - figure out filter
 #define TIMER3_IC2_FILTER 0x0	// TODO - figure out filter
-#define TIMER16_PERIOD 499	// TODO - verify proper timing: 10ms or 100ms may be better - rotary encoder time base - 50ms
-#define TIMER17_PERIOD 99	// ADC time base - 10ms
+#define TIMER16_PERIOD 4	// motor time base - 0.5ms
+//#define TIMER17_PERIOD 99	// ADC time base - 10ms
 
 #include "mj8x8/mj8x8.h"
 #include "gear.h" // Rohloff electronic shifting unit

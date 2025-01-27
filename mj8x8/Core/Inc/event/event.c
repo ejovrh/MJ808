@@ -83,7 +83,7 @@ typedef struct	// event_handler_t actual
 } __event_handler_t;
 
 extern TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 10ms
-extern __event_handler_t  __EventHandler;  // declare event_handler_t actual
+extern __event_handler_t __EventHandler;  // declare event_handler_t actual
 /* theory of operation
  *	components: subject, event handler, object
  *		the subject uses Notify() to notify the event handler about an event - e.g. a button press
@@ -114,7 +114,7 @@ void _DoNothing(const uint8_t foo)
 // sets bit at bit_position ( 1 to 16) in word __index
 static void _UnSetEvent(const uint16_t bit_position)
 {
-	__EventHandler.__index &= ~_BV(bit_position - 1);  // simply clears the bit at position bit_position
+	__EventHandler.__index &= (uint16_t) ~_BV(bit_position - 1);  // simply clears the bit at position bit_position
 
 	if(__EventHandler.__index == 0)
 		Device->StopTimer(&htim17);  // stop the timer
@@ -123,7 +123,7 @@ static void _UnSetEvent(const uint16_t bit_position)
 // sets bit at bit_position ( 1 to 16) in byte __index - _index will have values 0, 1, 2, 4, 8, 16...32768
 static void _Notify(const uint16_t bit_position)
 {
-	__EventHandler.__index |= _BV(bit_position);  // simply sets the bit at position bit_position
+	__EventHandler.__index |= (uint16_t) _BV(bit_position);  // simply sets the bit at position bit_position
 	Device->StartTimer(&htim17);  // start the timer
 }
 
@@ -146,7 +146,7 @@ static void _HandleEvent(void)
 		}
 }
 
-__event_handler_t  __EventHandler =  // instantiate event_handler_t actual and set function pointers
+__event_handler_t __EventHandler =  // instantiate event_handler_t actual and set function pointers
 	{  //
 	.public.fpointer = &_DoNothing,  // default -- if not initialize: do nothing
 	.public.Notify = &_Notify,	// notifies about an event by setting the index to a predetermined value (uint8_t array-based lookup table)

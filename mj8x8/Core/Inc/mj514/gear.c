@@ -6,6 +6,8 @@
 #include "mb85rc\mb85rc.h"	// 16kB FeRAM
 #include "mj514\motor.h"	// Motor controller
 
+#include <stdlib.h>
+
 typedef struct	// gear_t actual
 {
 	gear_t public;  // public struct
@@ -19,10 +21,8 @@ typedef struct	// gear_t actual
 static __gear_t __Gear __attribute__ ((section (".data")));  // preallocate __AutoDrive object in .data
 
 #define MEM_GEAR 0x00, 1	// address 0x00, size 1 byte: current gear, 1 through 14
-#define MEM_ACC_PULSES 0x02, 4	// address 0x01, size 4 bytes: accumulated pulses (1024 pulses per one per rotation of the "23-tooth magnetic gear")
+#define MEM_ACC_RAWANGLE 0x02, 4	// address 0x01, size 4 bytes: accumulated raw angle rotations of the "23-tooth magnetic gear"
 #define MEM_ACC_SHIFTS 0x06, 4	// address 0x06, size 4 bytes: cumulative count of how many gears were shifted
-
-#define ABS(x) ((x) < 0 ? -(x) : (x))
 
 // read stored current Rohloff gear (1 to 14) from FeRAM
 static inline uint8_t _GetGear(void)
@@ -34,13 +34,13 @@ static inline uint8_t _GetGear(void)
 	 * 	a return value of "3" means that the e14 unit thinks the hub is in gear 3
 	 */
 
-	return __Gear.FeRAM->Read(MEM_GEAR);  // return saved data from FeRAM
+	return (uint8_t) __Gear.FeRAM->Read(MEM_GEAR);  // return saved data from FeRAM
 }
 
 // reads stored pulse count from FeRAM
-static inline uint32_t _GetCumulativePulses(void)
+static inline uint32_t _GetCumulativeRawAngle(void)
 {
-	return __Gear.FeRAM->Read(MEM_ACC_PULSES);  // return saved data from FeRAM
+	return __Gear.FeRAM->Read(MEM_ACC_RAWANGLE);  // return saved data from FeRAM
 }
 
 // reads stored shift count from FeRAM
@@ -50,15 +50,16 @@ static inline uint32_t _GetCumulativeShifts(void)
 }
 
 // writes gear n into the FeRAM
-static inline void _SetGear(const int8_t n)
+static inline void _SetGear(const uint8_t n)
 {
 	__Gear.FeRAM->Write(n, MEM_GEAR);  // write gear into FeRAM, at the proper location
+	__Gear._CurrentGear = n;
 }
 
 // writes pulse count into FeRAM
-static inline void _SetCumulativePulses(const uint32_t n)
+static inline void _SetCumulativeRawAngle(const uint32_t n)
 {
-	__Gear.FeRAM->Write(n, MEM_ACC_PULSES);  // return saved data from FeRAM
+	__Gear.FeRAM->Write(n, MEM_ACC_RAWANGLE);  // return saved data from FeRAM
 }
 
 // writes gear shift count into FeRAM
@@ -68,7 +69,7 @@ static inline void _SetCumulativeShifts(const uint32_t n)
 }
 
 // shifts the Rohloff hub n gears (-13 to + 13, except 0) up or down
-static void _ShiftByN(const int8_t n)
+static void __ShiftByN(const int8_t n)
 {
 	/* rohloff gears are numbered from 1 to 14,
 	 * 	1 is the lowest, lightest - slower speed
@@ -89,6 +90,8 @@ static void _ShiftByN(const int8_t n)
 	if(n > 13)  // shift up by more than 13 gears makes no sense
 		return;
 
+	uint8_t n_abs = abs(n);  // absolute n
+
 	while(__Gear._FlagShiftinginProgress)
 		;  // if some shifting is in progress, wait here...
 
@@ -96,6 +99,7 @@ static void _ShiftByN(const int8_t n)
 
 	Device->mj8x8->UpdateActivity(SHIFTING, __Gear._FlagShiftinginProgress);  // update the bus
 
+	// needs approx. 160us to get the gear
 	__Gear._CurrentGear = _GetGear();  // get the current gear (we think we are in...)
 
 	// if we need to shift up
@@ -108,7 +112,7 @@ static void _ShiftByN(const int8_t n)
 					return;
 				}
 
-			__Gear.Motor->Shift(ShiftUp, n);  // shift up n gears
+			__Gear.Motor->Shift(ShiftUp, (uint8_t) n);  // shift up n gears
 		}
 
 	// if we need to shift down
@@ -121,13 +125,15 @@ static void _ShiftByN(const int8_t n)
 					return;
 				}
 
-			__Gear.Motor->Shift(ShiftDown, -n);  // shift down n gears
+			__Gear.Motor->Shift(ShiftDown, n_abs);  // shift down n gears
 		}
 
-	_SetGear(__Gear._CurrentGear + n);  // write shifted gear into FeRAM
+	// needs approx. 160us to set the gear
+	_SetGear((uint8_t) (__Gear._CurrentGear + n));  // write shifted gear into FeRAM
 
-	_SetCumulativeShifts(_GetCumulativeShifts() + ABS(n));	// add n to the cumulative gears shifted count
-	_SetCumulativePulses(_GetCumulativePulses() + *__Gear.Motor->PulseCount);  //
+	// needs approx. 450 us for each update
+	_SetCumulativeShifts(_GetCumulativeShifts() + (uint32_t) n_abs);  // cumulative gears shifted
+	_SetCumulativeRawAngle(_GetCumulativeRawAngle() + (n_abs * RAWANGLE_PER_GEAR));  // cumulative rotation: n * the amount of raw angle
 
 	__Gear._FlagShiftinginProgress = 0;  // critical section stop
 	Device->mj8x8->UpdateActivity(SHIFTING, __Gear._FlagShiftinginProgress);  // update the bus
@@ -159,12 +165,12 @@ static void _ShiftToN(const uint8_t n)
 	if(n == _curr)
 		return;
 
-	_ShiftByN(n - _curr);  // shift the difference
+	__ShiftByN((int8_t) (n - _curr));  // shift the difference
 }
 
 static __gear_t __Gear =  // instantiate gear_t actual and set function pointers
 	{  //
-	.public.ShiftByN = &_ShiftByN, 	// set function pointer
+	.public.ShiftByN = &__ShiftByN, 	// set function pointer
 	.public.ShiftToN = &_ShiftToN,  // set function pointer
 	.public.GetGear = &_GetGear  // set function pointer
 	};
@@ -177,8 +183,15 @@ gear_t* gear_ctor(void)  //
 	__Gear.FeRAM = mb85rc_ctor();  // tie in FeRAM object
 	__Gear.Motor = motor_ctor();	// tie in motor controller object
 
-	__disable_irq();	// disable interrupts for the remainder of initialization - mj514.c mostly
+#if WIPE_FRAM
+	_SetGear(1);
+	__Gear.FeRAM->Write(0, MEM_ACC_SHIFTS);
+	__Gear.FeRAM->Write(0, MEM_ACC_RAWANGLE);
+#endif
 
+	__Gear._CurrentGear = _GetGear();  // get the current gear (we think we are in...)
+
+	__disable_irq();	// disable interrupts for the remainder of initialization - mj514.c mostly
 	return &__Gear.public;  // set pointer to Gear public part
 }
 

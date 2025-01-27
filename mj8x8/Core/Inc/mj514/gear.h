@@ -5,6 +5,8 @@
 
 #if defined(MJ514_)	// if this particular device is active
 
+#define WIPE_FRAM 0	// if activated, statistics will be zeroed out in gear_ctor()
+
 /*  Begriffserklärung:
  *
  * rohloff gears are numbered from 1 to 14,
@@ -17,6 +19,10 @@
  * 		CW shifts from gear 14 towards 1 = into lighter gear
  * 			this is shifting down - direction_t ShiftDown
  *
+ * 	CW and CCW are defined as as rotational directions when one looks onto the e14 unit as if it were mounted on the hub.
+ * 	i.e. from the bike's left side, viewing axially onto the hub.
+ * 		when riding forward, the rear wheel would rotate CCW...
+ *
  * 	the "17 tooth rohloff gear" is actuated by the "40-tooth e14 gear", which is barely visible on the e14 unit.
  *
  * 	shifting directions (ShiftUp and ShiftDown) in the hub are relevant only when pedalling the bike, otherwise it is not discernible.
@@ -24,7 +30,9 @@
  * 	while debugging, the "40-tooth e14 gear" rotation is the only visible indicator of shifting direction.
  * 		therefore it is central to the shifting definition in terms of rotation:
  * 			"40-tooth e14 gear" CW rotation is "17 tooth rohloff gear" CCW rotation, therefore shifting up
+ * 				the "23-tooth magnetic gear" rotates CCW; dir = 0
  * 			"40-tooth e14 gear" CCW rotation is "17 tooth rohloff gear" CW rotation, therefore shifting down
+ * 				the "23-tooth magnetic gear" rotates CW; dir == 1
  *
  * 	in terms of data types, it is like this:
  * 		direction_t is defined on the gear_t level.
@@ -33,10 +41,11 @@
  *
  * 		on the motor_t level and below, relevant becomes:
  * 			"23-tooth magnetic gear" rotation in terms of CW or CCW
- * 			this gear is an idle gear and it is driven by the "40-tooth e14 gear".
+ * 			this gear is an idle gear and it is driven by the "40-tooth e14 gear"; the rotations of these two gears are reversed.
  * 			the sole purpose of "23-tooth magnetic gear" is to be able to measure how far something has rotated.
  *
- * 			CW or CCW translates to motor controller IN1 or IN2 being high or low
+ * 			"40-tooth e14 gear" CW is "23-tooth magnetic gear" CCW and vice versa.
+ *
  * 			"amount" of rotation translates to counting as5601_t rotary encoder signal impulses and readout of degrees
  * 			"23-tooth magnetic gear" rotation pulses (IRQ3 capture compare) are accumulated and saved.
  *
@@ -77,8 +86,8 @@
 
 typedef enum direction_t  // enum of direction of motor rotation
 {  // note: the enum value (0 or 1) doesn't correlate to shifting direction
-	  ShiftDown,	// shift rohloff from gear 14 towards 1
-	  ShiftUp  // shift rohloff from gear 1 towards 14
+	  ShiftUp = 0,  // shift rohloff from gear 1 towards 14 - "40-tooth e14 gear" CW;
+	  ShiftDown = 1  // shift rohloff from gear 14 towards 1 - "40-tooth e14 gear" CCW;
 } direction_t;
 
 typedef struct	// struct describing the Gear Shifter functionality

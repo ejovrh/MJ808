@@ -396,7 +396,7 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 		;
 #endif
 #ifdef MJ514_
-	Device->gear->ShiftByN(msg->ARGUMENT);	// shifts the Rohloff hub n gears (-13 to + 13, except 0) up or down
+	Device->gear->ShiftByN((int8_t) msg->ARGUMENT);  // shifts the Rohloff hub n gears (-13 to + 13, except 0) up or down
 #endif
 
 	return 0;
