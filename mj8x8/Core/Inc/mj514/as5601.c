@@ -72,7 +72,7 @@ static __as5601_t __AS5601 =  // instantiate as5601c_t actual and set function p
 
 as5601_t* as5601_ctor(void)  //
 {
-	__AS5601.public.Write(ABN, 0x08);  // DS p. 21 - 2048 w. 15.6 kHz
+	__AS5601.public.Write(ABN, 0x08);  // DS p. 21 - 2048 pulses per 360 degree rotation w. 15.6 kHz update rate
 	__AS5601.public.Write(CONF, 0x200C);	// DS p. 21 - 3 LSB hysteresis, Watchdog on
 
 	__AS5601._status = (uint8_t) __AS5601.public.Read(STATUS);	// read out device status

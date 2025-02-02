@@ -20,9 +20,12 @@ typedef struct	// gear_t actual
 
 static __gear_t __Gear __attribute__ ((section (".data")));  // preallocate __AutoDrive object in .data
 
-#define MEM_GEAR 0x00, 1	// address 0x00, size 1 byte: current gear, 1 through 14
-#define MEM_ACC_RAWANGLE 0x02, 4	// address 0x01, size 4 bytes: accumulated raw angle rotations of the "23-tooth magnetic gear"
-#define MEM_ACC_SHIFTS 0x06, 4	// address 0x06, size 4 bytes: cumulative count of how many gears were shifted
+// FIXME - implement uint16_t RegAddr space down into the I2C code
+#define MEM_GEAR 0x0000, 1	// address 0x00, size 1 byte: current gear, 1 through 14
+#define MEM_ACC_RAWANGLE 0x0002, 4	// address 0x01, size 4 bytes: accumulated raw angle rotations of the "23-tooth magnetic gear"
+#define MEM_ACC_PULSE 0x0006, 4	// address 0x01, size 4 bytes: accumulated raw angle rotations of the "23-tooth magnetic gear"
+#define MEM_ACC_SHIFTS 0x00A0, 4	// address 0x06, size 4 bytes: cumulative count of how many gears were shifted
+#define MEM_next_free_address 0x00A4, 4 // use this as the next free FeRAM slot
 
 // read stored current Rohloff gear (1 to 14) from FeRAM
 static inline uint8_t _GetGear(void)
@@ -37,11 +40,31 @@ static inline uint8_t _GetGear(void)
 	return (uint8_t) __Gear.FeRAM->Read(MEM_GEAR);  // return saved data from FeRAM
 }
 
+#if USE_AS5601_PULSE
 // reads stored pulse count from FeRAM
+static inline uint32_t _GetCumulativePulse(void)
+{
+	return __Gear.FeRAM->Read(MEM_ACC_PULSE);  // return saved data from FeRAM
+}
+
+// writes pulse count into FeRAM
+static inline void _SetCumulativePulse(const uint32_t n)
+{
+	__Gear.FeRAM->Write(n, MEM_ACC_PULSE);  // return saved data from FeRAM
+}
+#else
+// reads stored raw angle from FeRAM
 static inline uint32_t _GetCumulativeRawAngle(void)
 {
 	return __Gear.FeRAM->Read(MEM_ACC_RAWANGLE);  // return saved data from FeRAM
 }
+
+// writes raw angle count into FeRAM
+static inline void _SetCumulativeRawAngle(const uint32_t n)
+{
+	__Gear.FeRAM->Write(n, MEM_ACC_RAWANGLE);  // return saved data from FeRAM
+}
+#endif
 
 // reads stored shift count from FeRAM
 static inline uint32_t _GetCumulativeShifts(void)
@@ -54,12 +77,6 @@ static inline void _SetGear(const uint8_t n)
 {
 	__Gear.FeRAM->Write(n, MEM_GEAR);  // write gear into FeRAM, at the proper location
 	__Gear._CurrentGear = n;
-}
-
-// writes pulse count into FeRAM
-static inline void _SetCumulativeRawAngle(const uint32_t n)
-{
-	__Gear.FeRAM->Write(n, MEM_ACC_RAWANGLE);  // return saved data from FeRAM
 }
 
 // writes gear shift count into FeRAM
@@ -92,8 +109,9 @@ static void __ShiftByN(const int8_t n)
 
 	uint8_t n_abs = abs(n);  // absolute n
 
+	// if some shifting is in progress, wait here...
 	while(__Gear._FlagShiftinginProgress)
-		;  // if some shifting is in progress, wait here...
+		;
 
 	__Gear._FlagShiftinginProgress = 1;  // critical section start
 
@@ -128,12 +146,29 @@ static void __ShiftByN(const int8_t n)
 			__Gear.Motor->Shift(ShiftDown, n_abs);  // shift down n gears
 		}
 
-	// needs approx. 160us to set the gear
-	_SetGear((uint8_t) (__Gear._CurrentGear + n));  // write shifted gear into FeRAM
+	// very ugly and very dangerous atomic shifting
+	while(__Gear._FlagShiftinginProgress)
+		{
+			// TODO - add some form of timeout
 
-	// needs approx. 450 us for each update
-	_SetCumulativeShifts(_GetCumulativeShifts() + (uint32_t) n_abs);  // cumulative gears shifted
-	_SetCumulativeRawAngle(_GetCumulativeRawAngle() + (n_abs * RAWANGLE_PER_GEAR));  // cumulative rotation: n * the amount of raw angle
+			// write into FeRAM if successful shifting indeed did occur
+			if(__Gear.Motor->FlagShiftingDone)
+				{
+					// needs approx. 160us to set the gear
+					_SetGear((uint8_t) (__Gear._CurrentGear + n));  // write shifted gear into FeRAM
+
+					// needs approx. 450 us for each update
+					_SetCumulativeShifts(_GetCumulativeShifts() + (uint32_t) n_abs);  // cumulative gears shifted
+
+#if USE_AS5601_PULSE
+					_SetCumulativePulse(_GetCumulativePulse() + (n_abs * PULSE_PER_GEAR));  // cumulative rotation: value / PULSE_PER_GEAR
+		#else
+					_SetCumulativeRawAngle(_GetCumulativeRawAngle() + (n_abs * RAWANGLE_PER_GEAR));  // cumulative rotation: value / RAWANGLE_PER_GEAR
+#endif
+
+					break;	// exit the loop
+				}
+		}
 
 	__Gear._FlagShiftinginProgress = 0;  // critical section stop
 	Device->mj8x8->UpdateActivity(SHIFTING, __Gear._FlagShiftinginProgress);  // update the bus
@@ -186,6 +221,7 @@ gear_t* gear_ctor(void)  //
 #if WIPE_FRAM
 	_SetGear(1);
 	__Gear.FeRAM->Write(0, MEM_ACC_SHIFTS);
+	__Gear.FeRAM->Write(0, MEM_ACC_PULSE);
 	__Gear.FeRAM->Write(0, MEM_ACC_RAWANGLE);
 #endif
 

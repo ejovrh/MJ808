@@ -9,19 +9,22 @@
 
 /*  Begriffserklärung:
  *
- * rohloff gears are numbered from 1 to 14,
+ * 1. rohloff gears are numbered from 1 to 14,
  * 	1 is the lowest, lightest - slower speed
  * 	14 is the highest, hardest - faster speed
  *
- * 	shifting is achieved by rotating the "17 tooth rohloff gear" (which sits on the hub on some 8mm hex) in either CW or CCW direction:
+ * 	2. shifting is achieved by rotating the "17 tooth rohloff gear".
+ * 	 it is located on the hub on some 8mm hex and can rotate in either CW or CCW direction:
  * 		CCW shifts from gear 1 towards 14 - into heavier gear
  * 			this is shifting up - direction_t ShiftUp
  * 		CW shifts from gear 14 towards 1 = into lighter gear
  * 			this is shifting down - direction_t ShiftDown
  *
- * 	CW and CCW are defined as as rotational directions when one looks onto the e14 unit as if it were mounted on the hub.
- * 	i.e. from the bike's left side, viewing axially onto the hub.
- * 		when riding forward, the rear wheel would rotate CCW...
+ * 	3. CW and CCW are defined as as rotational directions when one looks onto the e14 unit as if it were mounted on the hub.
+ * 		i.e. from the bike's left side, viewing axially onto the hub. when riding forward, the rear wheel would rotate CCW...
+ * 		this definition applies to the gear_t object (gear.c and gear.h)
+ *
+ *
  *
  * 	the "17 tooth rohloff gear" is actuated by the "40-tooth e14 gear", which is barely visible on the e14 unit.
  *
@@ -71,15 +74,16 @@
  *
  *		gear_t is stateful in the sense that it utilises a non-volatile FeRAM to save data across power cycles.
  *		saved are:
- *			- the current gear,
+ *			- the current gear, TODO the previous gear and TODO the future gear, if shifting is in operation
  *			- accumulated as5601 rotation pulses (1024 pulses per rotation)
  *			- accumulated gear shift count.
  *
  *
- *	the servo part is motor_t. it does know revolution and direction.
+ *	the servo part is motor_t. it only does know revolution and direction.
  *		if one tells it to shift(3), it knows the direction and "distance", but it doesn't know the meaning.
+ *		it doesn't know gears and doesn't keep track across power cycles.
  *
- *	motor_t utilises as5601_t to determine when to stop turning.
+ *	motor_t utilises the as5601_t contactless rotary encoder to determine position.
  *
  *	time to shift one gear: Rohloff's original hardware: 180ms (their claim)
  */

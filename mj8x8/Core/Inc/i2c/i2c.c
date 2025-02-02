@@ -3,8 +3,10 @@
 #if USE_I2C
 #include "i2c.h"
 
+#if USE_DMA
 static DMA_HandleTypeDef _hdma_i2c1_rx;  // I2C RX DMA handle
 static DMA_HandleTypeDef _hdma_i2c1_tx;  // I2C TX DMA handle
+#endif
 static I2C_HandleTypeDef _hi2c;  //I2C handle
 
 typedef struct	// i2c_t actual
@@ -37,9 +39,11 @@ static void _Stop(void)
 		;
 
 	// TODO - account for ADC DMA running
-	__HAL_RCC_I2C1_CLK_DISABLE();// enable peripheral clocks
+	__HAL_RCC_I2C1_CLK_DISABLE();// disable peripheral clocks
 	__HAL_RCC_GPIOB_CLK_DISABLE();
+#if USE_DMA
 //	__HAL_RCC_DMA1_CLK_DISABLE();
+#endif
 
 	__I2C._FlagPoweredOn = 0;  // flag for on state
 }
@@ -52,7 +56,9 @@ static void _Start(void)
 
 	__HAL_RCC_GPIOB_CLK_ENABLE();  // enable peripheral clock
 	__HAL_RCC_I2C1_CLK_ENABLE();
+#if USE_DMA
 //	__HAL_RCC_DMA1_CLK_ENABLE();
+#endif
 
 	__I2C._FlagPoweredOn = 1;  // flag for on state
 }
@@ -72,12 +78,19 @@ uint32_t _Read(const uint16_t DevAddr, const uint16_t RegAddr, const uint8_t siz
 
 	_Start();  // I2C power on
 
+#if USE_WAIT_FOR_DEVICE_READY
 	//	check if the device is ready
 	while(HAL_I2C_IsDeviceReady(__I2C.public.I2C, DevAddr, 2, 10) != HAL_OK)
 		;
+	#endif
 
 	// send device address w. read command, address we want to read from, along with how many bytes to read
+#if USE_DMA
 	if(HAL_I2C_Mem_Read_DMA(Device->mj8x8->i2c->I2C, (DevAddr | READ), RegAddr, I2C_MEMADD_SIZE_8BIT, buffer, size) != HAL_OK)
+#endif
+#if USE_IT
+	if(HAL_I2C_Mem_Read_IT(Device->mj8x8->i2c->I2C, (DevAddr | READ), RegAddr, I2C_MEMADD_SIZE_8BIT, buffer, size) != HAL_OK)
+#endif
 		Error_Handler();
 
 	_Stop();  // I2C power off
@@ -100,7 +113,7 @@ void _Write(const uint16_t DevAddr, const uint16_t RegAddr, const uint32_t data,
 	uint8_t buffer[5];
 	uint32_t tmp = data;
 
-	buffer[0] = RegAddr;
+	buffer[0] = (uint8_t) RegAddr;
 
 	// Fill the buffer based on the size
 	for(uint8_t i = 0; i < size; i++)
@@ -108,12 +121,19 @@ void _Write(const uint16_t DevAddr, const uint16_t RegAddr, const uint32_t data,
 
 	_Start();  // I2C power on
 
+#if USE_WAIT_FOR_DEVICE_READY
 	//	check if the device is ready
 	while(HAL_I2C_IsDeviceReady(__I2C.public.I2C, DevAddr, 2, 10) != HAL_OK)
 		;
+	#endif
 
 	//
+#if USE_DMA
 	if(HAL_I2C_Master_Transmit_DMA(Device->mj8x8->i2c->I2C, DevAddr, buffer, size + 1) != HAL_OK)
+#endif
+#if USE_IT
+	if(HAL_I2C_Master_Transmit_IT(Device->mj8x8->i2c->I2C, DevAddr, buffer, size + 1) != HAL_OK)
+#endif
 		Error_Handler();
 
 	_Stop();  // I2C power off
@@ -122,20 +142,20 @@ void _Write(const uint16_t DevAddr, const uint16_t RegAddr, const uint32_t data,
 //
 void _I2C_Init(const uint32_t _SDA_Pin, const uint32_t _SCL_Pin, GPIO_TypeDef *_I2C_Port)
 {
-	RCC_PeriphCLKInitTypeDef PeriphClkInit =
-		{0};
+	RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
 	PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_I2C1;
 	PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_HSI;
 	HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit);
 
-	GPIO_InitTypeDef GPIO_InitStruct =
-		{0};
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
+#if USE_DMA
 	__HAL_RCC_DMA1_CLK_ENABLE();
+#endif
 
 	_hi2c.Instance = I2C1;
-	_hi2c.Init.Timing = 0x00201D2B;
+	_hi2c.Init.Timing = 0x00100001;
 	_hi2c.Init.OwnAddress1 = 0;
 	_hi2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
 	_hi2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -155,6 +175,7 @@ void _I2C_Init(const uint32_t _SDA_Pin, const uint32_t _SCL_Pin, GPIO_TypeDef *_
 
 	__HAL_RCC_I2C1_CLK_ENABLE();
 
+#if USE_DMA
 	// I2C TX Init
 	_hdma_i2c1_tx.Instance = DMA1_Channel2;
 	_hdma_i2c1_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
@@ -178,9 +199,12 @@ void _I2C_Init(const uint32_t _SDA_Pin, const uint32_t _SCL_Pin, GPIO_TypeDef *_
 	_hdma_i2c1_rx.Init.Priority = DMA_PRIORITY_LOW;
 	HAL_DMA_Init(&_hdma_i2c1_rx);
 	__HAL_LINKDMA(&_hi2c, hdmarx, _hdma_i2c1_rx);
+#endif
 
 	HAL_I2CEx_ConfigAnalogFilter(&_hi2c, I2C_ANALOGFILTER_ENABLE);
 	HAL_I2CEx_ConfigDigitalFilter(&_hi2c, 0);
+
+	__HAL_SYSCFG_FASTMODEPLUS_ENABLE(I2C_FASTMODEPLUS_I2C1);
 
 	__HAL_RCC_GPIOB_CLK_DISABLE();
 	__HAL_RCC_I2C1_CLK_DISABLE();
@@ -203,18 +227,22 @@ i2c_t* i2c_ctor(const uint32_t SDA_Pin, const uint32_t SCL_Pin, GPIO_TypeDef *I2
 	HAL_NVIC_SetPriority(I2C1_IRQn, 0, 0);	// I2C interrupts
 	HAL_NVIC_EnableIRQ(I2C1_IRQn);
 
+#if USE_DMA
 	HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 0, 0);  // I2C DMA interrupts
 	HAL_NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
+#endif
 
 	return &__I2C.public;
 }
 
+#if USE_DMA
 //
 void DMA1_Channel2_3_IRQHandler(void)
 {
 	HAL_DMA_IRQHandler(&_hdma_i2c1_tx);
 	HAL_DMA_IRQHandler(&_hdma_i2c1_rx);
 }
+#endif
 
 //
 void I2C1_IRQHandler(void)

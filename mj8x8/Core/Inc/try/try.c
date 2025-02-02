@@ -20,31 +20,27 @@ static __try_t __Try __attribute__ ((section (".data")));  // preallocate __Try 
 // a function that does nothing
 static inline void _DoNothing(void *foo)  // a function that does nothing
 {
+	(void) foo;
 	return;
 }
 
 // error event
 static inline void _EventHandlerEventError(void)
 {  // TODO - implement _EventHandlerEventError()
-#ifdef MJ808_
+#if defined(MJ808_)
 	;
 //	Device->led->Reset();
-#endif
-#ifdef MJ818_
+#elif defined(MJ818_)
 	;
 //	Device->led->Reset();
-#endif
-#ifdef MJ828_
+#elif defined(MJ828_)
 	;
 //	Device->led->Reset();
-#endif
-#ifdef MJ838_
+#elif defined(MJ838_)
 	;
-#endif
-#ifdef MJ514_
+#elif defined(MJ514_)
 	;
-#endif
-#ifdef MJ515_
+#elif defined(MJ515_)
 	;
 #endif
 	;
@@ -54,7 +50,7 @@ static inline void _EventHandlerEventError(void)
 // mj828 lever back - braking action
 static inline void _EventHandlerEvent02(void)
 {
-#ifdef MJ808_
+#if defined(MJ808_)
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
 	if(Try->BusActivity->mj828->AutoLight)
@@ -72,8 +68,7 @@ static inline void _EventHandlerEvent02(void)
 		}
 
 	MsgHandler->SendMessage(ALL, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
-#endif
-#ifdef MJ828_
+#elif defined(MJ828_)
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
 	if(Device->button->button[LeverBrake]->Momentary)
@@ -87,8 +82,7 @@ static inline void _EventHandlerEvent02(void)
 		}
 
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_03, &_payload, 2);  // send it
-#endif
-#ifdef MJ838_
+#elif defined(MJ838_)
 	// dim light - front 10%, rear 25%
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
@@ -104,7 +98,7 @@ static inline void _EventHandlerEvent02(void)
 // mj828 lever front - high beam
 static inline void _EventHandlerEvent03(void)
 {
-#ifdef MJ808_
+#if defined(MJ808_)
 	int8_t _payload;  // payload for a single byte message, in addition to the command byte
 
 	if(Device->button->button[PushButton]->Toggle)
@@ -121,8 +115,7 @@ static inline void _EventHandlerEvent03(void)
 
 	_payload = -1;
 	MsgHandler->SendMessage(mj514, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
-#endif
-#ifdef MJ828_
+#elif defined(MJ828_)
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
 	if(Device->button->button[LeverFront]->Momentary)
@@ -137,8 +130,7 @@ static inline void _EventHandlerEvent03(void)
 		}
 
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_02, &_payload, 2);  // send it
-#endif
-#ifdef MJ838_
+#elif defined(MJ838_)
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 	// FIXME - on wheel stop and once poweroff should occur, mj828 red led remains lit
 	_payload = !Device->AutoCharge->IsLoadConnected();  // 0 - LED on (load disconnected), 1 - LED off (load connected)
@@ -151,10 +143,9 @@ static inline void _EventHandlerEvent03(void)
 // mj828 center pushbutton momentary
 static inline void _EventHandlerEvent04(void)
 {
-#ifdef MJ828_
+#if defined(MJ828_)
 	Device->autobatt->DisplayBatteryVoltage();  // light up BatteryX LEDs according to voltage read at Vbat
-#endif
-#ifdef MJ838_
+#elif defined(MJ838_)
 	// low light - front 35%, rear 50%
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
@@ -169,7 +160,7 @@ static inline void _EventHandlerEvent04(void)
 // mj828 pushbutton hold
 static inline void _EventHandlerEvent05(void)
 {
-#ifdef MJ828_
+#if defined(MJ828_)
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
 	if(Device->button->button[PushButton]->Hold)	//
@@ -186,8 +177,7 @@ static inline void _EventHandlerEvent05(void)
 
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
-#endif
-#ifdef MJ838_
+#elif defined(MJ838_)
 	// max. light - front 100%, rear 100%
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
@@ -202,7 +192,7 @@ static inline void _EventHandlerEvent05(void)
 // mj828 pushbutton toggle
 static inline void _EventHandlerEvent06(void)
 {
-#ifdef MJ828_
+#if defined(MJ828_)
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
 	if(Device->button->button[PushButton]->Toggle)
@@ -224,8 +214,7 @@ static inline void _EventHandlerEvent06(void)
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_01, &_payload, 2);  // send it
 	_payload = 1;
 	MsgHandler->SendMessage(mj514, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
-#endif
-#ifdef MJ838_
+#elif defined(MJ838_)
 	// normal light - front 50%, rear 100%
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
@@ -239,7 +228,7 @@ static inline void _EventHandlerEvent06(void)
 // AutoLight detects darkness/light
 static inline void _EventHandlerEvent07(void)
 {
-#ifdef MJ828_
+#if defined(MJ828_)
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
 	if(Device->autolight->FlagLightisOn)  //	AutoLight feature is on
@@ -256,8 +245,7 @@ static inline void _EventHandlerEvent07(void)
 
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 	MsgHandler->SendMessage(mj818, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
-#endif
-#ifdef MJ838_
+#elif defined(MJ838_)
 	// light off - front 0%, rear 0%
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
@@ -272,10 +260,9 @@ static inline void _EventHandlerEvent07(void)
 //	AutoBattLight detects battery status
 static inline void _EventHandlerEvent08(void)
 {
-#ifdef MJ808_
+#if defined(MJ808_)
 	;
-#endif
-#ifdef MJ828_
+#elif defined(MJ828_)
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 
 	if(Device->autobatt->FlagBatteryisCritical)
@@ -361,10 +348,9 @@ static uint32_t (*_BranchtableEventHandler[])(void) =  // branch table
 // executes code depending on argument (which is looked up in lookup tables such as FooButtonCaseTable[]
 void _EventHandler(const uint8_t val)
 {
-#ifdef MJ808_
+#if defined(MJ808_)
 	Device->mj8x8->UpdateActivity(BUTTONPRESSED, (Device->button->button[PushButton]->Momentary) > 0);  // translate button press into true or false
-#endif
-#ifdef MJ828_
+#elif defined(MJ828_)
 	Device->mj8x8->UpdateActivity(BUTTONPRESSED,  //	update the bus - set device to state according to button press
 	(  //
 	Device->button->button[PushButton]->Momentary ||  // ORed byte values indicate _some_ button press is active
@@ -381,21 +367,17 @@ void _EventHandler(const uint8_t val)
 // mj828 center button hold
 uint16_t _MsgBtnEvent00(can_msg_t *msg)
 {
-#ifdef MJ808_
+#if defined(MJ808_)
 	Device->led->led[Front].Shine(msg->ARGUMENT);
-#endif
-#ifdef MJ818_
+#elif defined(MJ818_)
 	Device->led->Shine(msg->ARGUMENT);
-#endif
-#ifdef MJ828_
+#elif defined(MJ828_)
 	Device->led->led[Green].Shine((msg->ARGUMENT>0) );
 	Device->adc->Start();
-#endif
-#ifdef MJ838_
+#elif defined(MJ838_)
 	if(msg->sid)
 		;
-#endif
-#ifdef MJ514_
+#elif defined(MJ514_)
 	Device->gear->ShiftByN((int8_t) msg->ARGUMENT);  // shifts the Rohloff hub n gears (-13 to + 13, except 0) up or down
 #endif
 
@@ -406,16 +388,17 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 // mj828 center button toggle
 static inline void _MsgBtnEvent01(can_msg_t *msg)
 {
-#ifdef MJ828_
+#if defined(MJ828_)
 	Device->led->led[Blue].Shine(msg->ARGUMENT);	// argument is OFF, ON, BLINK
 	Device->led->Shine(msg->ARGUMENT);// argument is (LED | (OFF, ON, BLINK)) - e.g. (YELLOW | BLINK)
 	Device->adc->Start();
-#endif
-#ifdef MJ838_
+#elif defined(MJ838_)
 	;
-#endif
-#ifdef MJ514_
+#elif defined(MJ514_)
 	Device->gear->ShiftToN(msg->ARGUMENT);  // shifts Rohloff into gear n (1 to 14)
+#else
+	(void)msg;
+
 #endif
 
 	return;
@@ -424,17 +407,22 @@ static inline void _MsgBtnEvent01(can_msg_t *msg)
 // mj828 high beam button momentary
 static inline void _MsgBtnEvent02(can_msg_t *msg)
 {
-#ifdef MJ808_
+#if defined(MJ808_)
 	Device->led->led[Front].Shine(msg->ARGUMENT);
+#else
+	(void) msg;
 #endif
+
 	return;
 }
 
 // mj828 brake light button momentary
 static inline void _MsgBtnEvent03(can_msg_t *msg)
 {
-#ifdef MJ818_
+#if defined(MJ818_)
 	Device->led->led[Brake].Shine(msg->ARGUMENT);
+#else
+	(void) msg;
 #endif
 
 	return;
@@ -443,7 +431,7 @@ static inline void _MsgBtnEvent03(can_msg_t *msg)
 // AutoBat status
 static inline void _MsgBtnEvent04(can_msg_t *msg)
 {
-#ifdef MJ808_
+#if defined(MJ808_)
 	uint8_t arg = msg->ARGUMENT;
 
 	if (arg <= 10)	// 10% warning
@@ -451,8 +439,7 @@ static inline void _MsgBtnEvent04(can_msg_t *msg)
 
 	if (arg > 10)// 10% warning
 	Device->led->led[Front].Shine(75);
-#endif
-#ifdef MJ818_
+#elif defined(MJ818_)
 	uint8_t arg = msg->ARGUMENT;
 
 	if (arg <= 10)	// 10% warning
@@ -461,6 +448,8 @@ static inline void _MsgBtnEvent04(can_msg_t *msg)
 	if (arg > 10)// 10% warning
 	Device->led->led[Rear].Shine(100);
 
+#else
+	(void) msg;
 #endif
 
 	return;
@@ -469,9 +458,11 @@ static inline void _MsgBtnEvent04(can_msg_t *msg)
 // mj838 autocharger on/off
 static inline void _MsgBtnEvent05(can_msg_t *msg)
 {
-#ifdef MJ828_
+#if defined(MJ828_)
 	Device->led->led[Red].Shine(msg->ARGUMENT);  // argument is OFF, ON, BLINK
 	Device->adc->Start();
+#else
+	(void) msg;
 #endif
 
 	return;
@@ -584,17 +575,14 @@ void _PopulatedBusOperation(message_handler_t *const in_handler)
 // defines device operation on empty bus
 void _EmptyBusOperation(void)
 {
-#ifdef MJ808_
+#if defined(MJ808_)
 	;
-#endif
-#ifdef MJ818_
+#elif defined(MJ818_)
 	if(Device->mj8x8->GetActivity(REARLIGHT) == 0)  // run once: check that e.g. rear light is off (which it is on a lonely power on)
 		Device->led->Shine(10);  // operate on component part
-#endif
-#ifdef MJ828_
+#elif defined(MJ828_)
 	;
-#endif
-#ifdef MJ838_
+#elif defined(MJ838_)
 	;
 #endif
 }
@@ -611,65 +599,50 @@ void try_ctor(void)
 {
 #if defined futureMJ_0
 	_BusActivityArray[0] = (activity_t*) Device->activity;
-#endif
 
-#if defined futureMJ_1
+#elif defined futureMJ_1
 	_BusActivityArray[1] = (activity_t*) Device->activity;
-#endif
 
-#if defined futureMJ_2
+#elif defined futureMJ_2
 	_BusActivityArray[2] = (activity_t*) Device->activity;
-#endif
 
-#if defined MJ828_
+#elif defined MJ828_
 	_BusActivityArray[3] = (activity_t*) Device->activity;
-#endif
 
-#if defined MJ838_
+#elif defined MJ838_
 	_BusActivityArray[4] = (activity_t*) Device->activity;
-#endif
 
-#if defined futureMJ_5
+#elif defined futureMJ_5
 	_BusActivityArray[5] = (activity_t*) Device->activity;
-#endif
 
-#if defined futureMJ_6
+#elif defined futureMJ_6
 	_BusActivityArray[6] = (activity_t*) Device->activity;
-#endif
 
-#if defined futureMJ_7
+#elif defined futureMJ_7
 	_BusActivityArray[8] = (activity_t*) Device->activity;
-#endif
 
-#if defined MJ808_
+#elif defined MJ808_
 	_BusActivityArray[8] = (activity_t*) Device->activity;
-#endif
 
-#if defined MJ818_
+#elif defined MJ818_
 	_BusActivityArray[9] = (activity_t*) Device->activity;
-#endif
 
-#if defined futureMJ_10
+#elif defined futureMJ_10
 	_BusActivityArray[10] = (activity_t*) Device->activity;
-#endif
 
-#if defined futureMJ_11
+#elif defined futureMJ_11
 	_BusActivityArray[11] = (activity_t*) Device->activity;
-#endif
 
-#if defined MJ514_
+#elif defined MJ514_
 	_BusActivityArray[12] = (activity_t*) Device->activity;
-#endif
 
-#if defined MJ515_
+#elif defined MJ515_
 	_BusActivityArray[13] = (activity_t*) Device->activity;
-#endif
 
-#if defined futureMJ_14
+#elif defined futureMJ_14
 	_BusActivityArray[14] = (activity_t*) Device->activity;
-#endif
 
-#if defined futureMJ_15
+#elif defined futureMJ_15
 	_BusActivityArray[15] = (activity_t*) Device->activity;
 #endif
 

@@ -5,10 +5,14 @@
 #include "try/try.h"	// top-level mj8x8 object for consolidated behaviour code
 #include "mj514/mj514.h"
 
+#include "motor.h"	// TODO - remove once development is complete
+
 TIM_HandleTypeDef htim2;	// motor control PWM signal generation
+#if USE_AS5601_PULSE
 TIM_HandleTypeDef htim3;  // timer in encoder mode for rotation detection
-TIM_HandleTypeDef htim16;  // motor time base - 0.5ms
-//TIM_HandleTypeDef htim17;  // ADC time base - 10ms
+#endif
+TIM_HandleTypeDef htim16;  // motor time base - 1ms
+//TIM_HandleTypeDef htim17;  //
 
 typedef struct	// mj514_t actual
 {
@@ -29,12 +33,14 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(TCAN334_Standby_GPIO_Port, &GPIO_InitStruct);
 
+#if USE_AS5601_PULSE
 	GPIO_InitStruct.Pin = Rotary_A_Pin | Rotary_B_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	GPIO_InitStruct.Alternate = GPIO_AF1_TIM3;
 	HAL_GPIO_Init(Rotary_A_GPIO_Port, &GPIO_InitStruct);
+#endif
 
 	GPIO_InitStruct.Pin = Motor_IN1_Pin | Motor_IN2_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -54,17 +60,29 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(Motor_SLP_GPIO_Port, &GPIO_InitStruct);
 
+	GPIO_InitStruct.Pin = Motor_12V0_SHDN_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(Motor_12V0_SHDN_GPIO_Port, &GPIO_InitStruct);
+
 	GPIO_InitStruct.Pin = Motor_IPROP_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(Motor_IPROP_GPIO_Port, &GPIO_InitStruct);
 
 	__HAL_RCC_GPIOF_CLK_ENABLE();  // TODO - remove debug pin when done
-	GPIO_InitStruct.Pin = Debug_Pin;
+	GPIO_InitStruct.Pin = Debug0_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(Debug_GPIO_Port, &GPIO_InitStruct);
+	HAL_GPIO_Init(Debug0_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = Debug1_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(Debug1_GPIO_Port, &GPIO_InitStruct);
 }
 
 // Timer init - device specific
@@ -79,8 +97,10 @@ static inline void _TimerInit(void)
 	TIM_OC_InitTypeDef sConfigOC =
 		{0};
 
+#if USE_AS5601_PULSE
 	TIM_Encoder_InitTypeDef sConfig =
 		{0};
+#endif
 
 	TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig =
 		{0};
@@ -115,6 +135,7 @@ static inline void _TimerInit(void)
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 	HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2);
 
+#if USE_AS5601_PULSE
 	// timer3 - rotary encoder handling
 	htim3.Instance = TIM3;
 	htim3.Init.Prescaler = 0;
@@ -136,6 +157,7 @@ static inline void _TimerInit(void)
 	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
 	HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig);
+#endif
 
 	// timer16 - rotary encoder time base - 50ms
 	htim16.Instance = TIM16;
@@ -187,7 +209,9 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 	if(timer->Instance == TIM16)  // motor time base - 1ms
 		{
 			__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
+#if USE_AS5601_PULSE
 			__HAL_RCC_TIM3_CLK_DISABLE();  // stop the clock - is co-dependant on timer16
+#endif
 		}
 
 //	if(timer->Instance == TIM17)  // ADC time base - 10ms
@@ -214,8 +238,9 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 			return;
 		}
 
-	if(timer->Instance == TIM16)  // motor time base - 0.5ms
+	if(timer->Instance == TIM16)  // motor time base - 1ms
 		{
+#if USE_AS5601_PULSE
 			// timer 3 is co-dependant on timer16 - see motor.c
 
 			// timer3 in encoder mode for rotation detection
@@ -236,10 +261,12 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 
 			__HAL_RCC_TIM3_CLK_ENABLE();
 			HAL_TIM_Encoder_Init(&htim3, &sConfig);
+			HAL_TIM_Encoder_Start_IT(&htim3, TIM_CHANNEL_ALL);  // start the timer in encoder mode
 			_StartTimer(&htim3);  // dependency - start timer3 in encoder mode so that rotation direction can be detected
+#endif
 
-			// timer16 as a normal 0.5ms periodic timer
-			__HAL_RCC_TIM16_CLK_ENABLE();// start the clock
+			// timer16 as a normal 1ms periodic timer
+			__HAL_RCC_TIM16_CLK_ENABLE();  // start the clock
 			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
 			timer->Instance->ARR = TIMER16_PERIOD;
 		}
@@ -294,29 +321,27 @@ void mj514_ctor(void)
 	__Device.public.gear = gear_ctor();		// electronic gear shifting unit
 
 	// interrupt init
-	HAL_NVIC_SetPriority(TIM16_IRQn, 3, 0);  // motor time base - 0.5ms
-	HAL_NVIC_EnableIRQ(TIM16_IRQn);
+	// application interrupts
+#if USE_AS5601_PULSE
+	HAL_NVIC_SetPriority(TIM3_IRQn, 1, 0);	// rotary encoder handling
+	HAL_NVIC_EnableIRQ(TIM3_IRQn);
+#endif
 
-//	HAL_NVIC_SetPriority(TIM17_IRQn, 0, 0);  // ADC time base - 10ms
-//	HAL_NVIC_EnableIRQ(TIM17_IRQn);
-
-	HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 3, 0);  // DMA interrupt - ADC
+	HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 1, 0);  // DMA interrupt - ADC
 	HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 
-// FIXME - is being triggered constantly
-//	HAL_NVIC_SetPriority(EXTI2_3_IRQn, 3, 0);  // motor fault pin
-//	HAL_NVIC_EnableIRQ(EXTI2_3_IRQn);
+	HAL_NVIC_SetPriority(TIM16_IRQn, 2, 0);  // motor time base - 1ms
+	HAL_NVIC_EnableIRQ(TIM16_IRQn);
+
+	// system interrupts
+	// normally defined in mj8x8.c mj8x8_ctor() - #define USE_I2C 1 controls it there
+	HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 2, 0);  // heartbeat timer
+	HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
 
 	// normally activated in can.c _CANInit() - #define USE_I2C 1 controls it there
 	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 3, 0);
 	HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
-
-	// normally defined in mj8x8.c mj8x8_ctor() - #define USE_I2C 1 controls it there
-	HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 1, 0);
-	HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
 }
-// device-specific interrupt handlers
-
 // device-specific interrupt handlers
 
 // all devices have the object name "Device", hence the preprocessor macro

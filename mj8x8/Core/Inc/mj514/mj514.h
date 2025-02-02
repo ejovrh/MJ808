@@ -13,7 +13,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 		uint8_t CANActive :1;  // CAN // CAN is actively being used *is used as a flag to avoid re-entering e.g. __can_go_into_active_mode()
 
 		// 0x3C - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus off
-		uint8_t Shifting :1;  // act2 // Shifting in progress or not // TODO - test it
+		uint8_t Shifting :1;  // act2 // Shifting in progress or not // TODO - verify traffic on bus
 		uint8_t _3 :1;  // act3 //
 		uint8_t _4 :1;  // act4 //
 		uint8_t _5 :1;  // act5 //
@@ -32,15 +32,15 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define USE_EVENTHANDLER 0	// shall EventHandler code be included -- timer17 is used up for ADC timebase !!!
 
 // activity bit positions
-#define SHIFTING 2
+#define SHIFTING 2 // TODO - define bit positions
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER2_PERIOD 0x100	// FIXME - find proper value
 #define MOTOR_OFF 0x00	//
 #define TIMER3_PERIOD  0xFFFF	// use max. range for rotary encoder pulse count
-#define TIMER3_IC1_FILTER	0x0	// TODO - figure out filter
-#define TIMER3_IC2_FILTER 0x0	// TODO - figure out filter
-#define TIMER16_PERIOD 4	// motor time base - 0.5ms
+#define TIMER3_IC1_FILTER	0x10	// fSAMPLING = fDTS / 16, N = 5
+#define TIMER3_IC2_FILTER 0x10	//
+#define TIMER16_PERIOD 9	// motor time base - 1ms
 //#define TIMER17_PERIOD 99	// ADC time base - 10ms
 
 #include "mj8x8/mj8x8.h"
@@ -68,16 +68,24 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define Motor_SLP_GPIO_Port GPIOA
 #define Motor_IPROP_Pin GPIO_PIN_4	// motor current monitoring ADC channel 4
 #define Motor_IPROP_GPIO_Port GPIOA
+#define Motor_12V0_SHDN_Pin GPIO_PIN_5	// 12V0 regulator shutdown pin
+#define Motor_12V0_SHDN_GPIO_Port GPIOA
+#if USE_AS5601_PULSE
 #define Rotary_A_Pin GPIO_PIN_6	// rotary encoder A/B input for detection/measurement of gear rotation
 #define Rotary_A_GPIO_Port GPIOA
 #define Rotary_B_Pin GPIO_PIN_7	// rotary encoder A/B input for detection/measurement of gear rotation
 #define Rotary_B_GPIO_Port GPIOA
+#endif
 #define I2C_SDA_Pin GPIO_PIN_7 // see i2c_ctor()
 #define I2C_SCL_Pin GPIO_PIN_6 // see i2c_ctor()
 #define I2C_GPIO_Port GPIOB
 
-#define Debug_Pin GPIO_PIN_1	// TODO - remove debug pin when done
-#define Debug_GPIO_Port GPIOF
+// TODO - remove debug pin when done
+#define Debug0_Pin GPIO_PIN_1
+#define Debug0_GPIO_Port GPIOF
+#define Debug1_Pin GPIO_PIN_0
+#define Debug1_GPIO_Port GPIOF
+
 // definitions of device/PCB layout-dependent hardware pins
 
 enum mj514_adcchannels

@@ -32,7 +32,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define USE_EVENTHANDLER 0	// shall EventHandler code be included -- timer17 is used up for ADC timebase !!!
 
 // activity bit positions
-#define SHIFTING 2	// TODO
+#define SHIFTING 2	// TODO - define bit positions
 
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 //#define TIMER2_PERIOD 0x100	// FIXME - find proper value

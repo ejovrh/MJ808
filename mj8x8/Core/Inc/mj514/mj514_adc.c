@@ -8,25 +8,23 @@
 #define ADC_MEASURE_ITERATIONS 10	// iterations for measurement data value average
 
 static ADC_HandleTypeDef hadc;  // ADC object
-//extern TIM_HandleTypeDef htim17;  // ADC time base - 10ms
-
 static DMA_HandleTypeDef hdma_adc;	// DMA object
 
 static __adc_t __ADC;  // forward declaration of object
 
-static volatile uint32_t __adc_dma_buffer[ADC_CHANNELS] = {0};	// store for ADC readout
-volatile uint32_t __adc_results[ADC_CHANNELS] = {0}; // store ADC average data
+static volatile int32_t __adc_dma_buffer[ADC_CHANNELS] = {0};	// store for ADC readout
+volatile int32_t __adc_results[ADC_CHANNELS] = {0}; // store ADC average data
 
 static float _VddaConversionConstant;	// constant value pre-computed in constructor
 static uint8_t i;  // iterator for average calculation
-static uint32_t tempiprop;  // temporary variable for average calculation
-static uint32_t tempvrefint;	// ditto
-static uint32_t temptemp;  // ditto
+static int32_t tempiprop;  // temporary variable for average calculation
+static int32_t tempvrefint;	// ditto
+static int32_t temptemp;  // ditto
 
 // returns value stored at index i
-static inline uint16_t _GetChannel(const uint8_t i)
+static inline int16_t _GetChannel(const uint8_t i)
 {
-	return (uint16_t) __adc_results[i];
+	return (int16_t) __adc_results[i];
 }
 
 // DMA init - device specific
@@ -52,13 +50,11 @@ static inline void _Start(void)
 {
 //	__HAL_RCC_DMA1_CLK_ENABLE();
 	__HAL_RCC_ADC1_CLK_ENABLE();
-//	Device->StartTimer(&htim17);	// ADC time base - 10ms
 }
 
 // stops the ADC & DMA peripherals
 static inline void _Stop(void)
 {
-//	Device->StopTimer(&htim17);	// ADC time base - 10ms
 	__HAL_RCC_ADC1_CLK_DISABLE();
 //	__HAL_RCC_DMA1_CLK_DISABLE();
 }
@@ -132,15 +128,13 @@ static void _Do(void)
 			 * 	Vchannel becomes (ADC_data/Vrefint_data) * VddaConversionConstant, true voltage in mV
 			 * 	this is then typecast into uint16_t to have a nice round number
 			 */
-			__adc_results[Iprop] = (uint16_t)((float)tempiprop / ((float)tempvrefint * (float)_VddaConversionConstant)); // store computed average in result buffer
-
+			__adc_results[Iprop] = (int16_t) ((float) tempiprop /  (float) tempvrefint * _VddaConversionConstant); // store computed average in result buffer
 
 			/* ADC temperature calculation - see RM0091, chapter 13.8, p. 259
 			 *
 			 *	https://techoverflow.net/2015/01/13/reading-stm32f0-internal-temperature-and-voltage-using-chibios/
 			 */
-			__adc_results[Temperature] = (uint32_t)(((((float)temptemp * (float)VREFINT_CAL) / (float)tempvrefint - (float)TS_CAL1) * 800.0f / (float)((int16_t)(TS_CAL2 - TS_CAL1))) + 300.0f);
-
+			__adc_results[Temperature] = (int32_t)(((((float) (temptemp * VREFINT_CAL) /  (float) tempvrefint) - TS_CAL1) * 800) / (int16_t) (TS_CAL2 - TS_CAL1)) + 300;
 			__adc_results[Vrefint] = tempvrefint; // store computed average in result buffer
 
 			tempiprop = 0;
@@ -173,12 +167,6 @@ void DMA1_Channel1_IRQHandler(void)
 
   __ADC._Do();	// ADC computation tasks on every conversion
 }
-
-//void TIM17_IRQHandler(void)
-//{
-//	HAL_ADC_Start_IT(&hadc);  // Trigger ADC conversion
-//	HAL_TIM_IRQHandler(&htim17);  // service the interrupt
-//}
 
 #endif // MJ514_
 

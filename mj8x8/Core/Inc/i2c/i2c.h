@@ -3,6 +3,10 @@
 
 #if USE_I2C
 
+#define USE_WAIT_FOR_DEVICE_READY 0 // approx. 60us
+#define USE_DMA 0 // approx. 40us slower than IT
+#define USE_IT 1 // approx. 40us faster than DMA
+
 typedef struct
 {
 	I2C_HandleTypeDef *I2C;  // I2C handle

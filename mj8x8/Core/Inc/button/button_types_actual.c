@@ -1,6 +1,7 @@
 #ifndef CORE_INC_BUTTON_BUTTON_TYPES_ACTUAL_C_
 #define CORE_INC_BUTTON_BUTTON_TYPES_ACTUAL_C_
 
+#if defined(USE_BUTTON)
 #include "button.h"
 
 typedef struct	// individual_button_t actual
@@ -22,4 +23,5 @@ typedef struct	// button_t actual
 // preallocate __Button object in .data
 static __button_t __Button __attribute__ ((section (".data")));  // @suppress("Unused variable declaration in file scope")
 
+#endif
 #endif /* CORE_INC_BUTTON_BUTTON_TYPES_ACTUAL_C_ */

@@ -1,6 +1,7 @@
 #ifndef MJ808_COMPOSITE_LED_ACTUAL_C_
 #define MJ808_COMPOSITE_LED_ACTUAL_C_
 
+#if defined(USE_LED)
 #include <inttypes.h>
 
 #include "led.h"
@@ -16,4 +17,6 @@ typedef struct	// composite_led_t actual
 } __composite_led_t;
 
 static __composite_led_t __LED;	// instantiate object
+
+#endif
 #endif /* MJ808_COMPOSITE_LED_ACTUAL_C_ */

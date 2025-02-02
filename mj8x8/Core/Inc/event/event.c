@@ -5,17 +5,14 @@
 
 #if defined(MJ808_)	// if this particular device is active
 extern mj808_t *const Device;
-#endif
 
-#if defined(MJ828_)	// if this particular device is active
+#elif defined(MJ828_)	// if this particular device is active
 extern mj828_t *const Device;
-#endif
 
-#if defined(MJ838_)	// if this particular device is active
+#elif defined(MJ838_)	// if this particular device is active
 extern mj838_t *const Device;
-#endif
 
-#if defined(MJ514_)	// if this particular device is active
+#elif defined(MJ514_)	// if this particular device is active
 extern mj514_t *const Device;
 #endif
 
@@ -108,6 +105,7 @@ extern __event_handler_t __EventHandler;  // declare event_handler_t actual
 static inline
 void _DoNothing(const uint8_t foo)
 {
+	(void) foo;
 	return;
 }
 
