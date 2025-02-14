@@ -1,9 +1,9 @@
-#ifndef CORE_INC_MJ514_MB85RC_H_
-#define CORE_INC_MJ514_MB85RC_H_
+#ifndef CORE_INC_MB85RC_H_
+#define CORE_INC_MB85RC_H_
 
 #include "main.h"
 
-#if defined(MJ514_)	// if this particular device is active
+#if USE_FERAM	// if this particular device is active
 
 typedef struct	// struct describing the FeRAM functionality
 {
@@ -15,4 +15,4 @@ mb85rc_t* mb85rc_ctor(void);	// the MB85RC constructor
 
 #endif
 
-#endif /* CORE_INC_MJ514_MB85RC_H_ */
+#endif /* CORE_INC_MB85RC_H_ */

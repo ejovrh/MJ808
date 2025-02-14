@@ -5,6 +5,8 @@
 
 #if defined(MJ838_)	// if this particular device is active
 
+#define ODOMETER_REFRESH_PERIOD 60 // odometer refresh period in seconds
+
 typedef struct	// struct describing the AutoDrive functionality
 {
 //	uint8_t FlagLightisOn;  // flag if AutoDrive turned Light on
@@ -15,6 +17,7 @@ typedef struct	// struct describing the AutoDrive functionality
 	void (*Do)(void);  // AutoDrive functionality
 
 	void (*LightOff)(void);  // turns off lights on standstill situation
+	void (*UpdateOdometer)(void);  // updates odometer value in FeRAM
 } autodrive_t;
 
 autodrive_t* autodrive_ctor(void);	// the AutoDrive constructor

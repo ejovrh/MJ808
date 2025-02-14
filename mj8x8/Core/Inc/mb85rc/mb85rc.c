@@ -1,6 +1,6 @@
 #include "main.h"
 
-#if defined(MJ514_)	// if this particular device is active
+#if USE_FERAM	// if this particular device is active
 
 #include "mb85rc.h"
 
@@ -28,16 +28,43 @@ static inline uint16_t _DevAddress(const uint16_t Addr)
 	return foo;
 }
 
-// reads one byte of data out of the FeRAM module from given address
+// read up to 4 bytes from FeRAM at address
 static inline uint32_t _Read(const uint16_t RegAddr, const uint8_t size)
 {
-	return Device->mj8x8->i2c->Read(_DevAddress(RegAddr) | READ, (uint8_t) RegAddr, size);
+	if(size > 4)
+		return 0xBEEF;
+
+	if(size == 0)
+		return 0xFEEB;
+
+	uint8_t buffer[4] =
+		{0};
+
+	Device->mj8x8->i2c->Read((_DevAddress(RegAddr) | READ), RegAddr, buffer, size);  // read the data
+
+	return ((uint32_t) buffer[0] << 24) | ((uint32_t) buffer[1] << 16) | ((uint32_t) buffer[2] << 8) | ((uint32_t) buffer[3]);
 }
 
 // writes one byte of data into the FeRAM module at given address
 static void _Write(const uint32_t data, const uint16_t RegAddr, const uint8_t size)
 {
-	Device->mj8x8->i2c->Write(_DevAddress(RegAddr), (uint8_t) RegAddr, data, size);
+	if(size > 4)
+		return;
+
+	if(size == 0)
+		return;
+
+	uint8_t buffer[5];
+	uint32_t tmp = data;
+
+	// Extract each byte in the correct order - e.g. 0x139E8C61
+	buffer[4] = (uint8_t) (tmp);  // MSB - 13
+	buffer[3] = (uint8_t) (tmp >> 8);
+	buffer[2] = (uint8_t) (tmp >> 16);
+	buffer[1] = (uint8_t) (tmp >> 24);  // LSB - 61
+	buffer[0] = (uint8_t) RegAddr;
+
+	Device->mj8x8->i2c->Transmit(_DevAddress(RegAddr), buffer, size + 1);  // write the data
 }
 
 static __mb85rc_t __MB85RC =  // instantiate mb85rc_t actual and set function pointers

@@ -4,11 +4,24 @@
 
 #include "autocharge.h"
 
+#include "tlc59208/tlc59208.h"
+
+#define SET_BIT_VAL(word, n, val) \
+    ((word) = ((word) & (uint16_t)(~((uint16_t)1 << (n)))) | \
+              ((uint16_t)(((val) & 0x01U) << (n))))
+
+#define SW_CA 14 	// LED 3	-	ledout0	-	0xC - 0x40 -- MSB
+#define SW_CB 12 // LED 2	-	ledout0	-	0xC - 0x10
+#define SW_CC 10	// LED 1	-	ledout0	-	0xC - 0x04
+#define SW_CD 8	// LED 0	-	ledout0	-	0xC - 0x01
+#define SW1 2	// LED 5	- ledout1 - 0xD - 0x04
+#define SW2 0	// LED 4	-	ledout1	-	0xD - 0x01 -- LSB
+
 typedef enum   // enum of lights on this device
 {
-	  SpeedStopped,  //
-	  SpeedbelowChargerThres,  //
-	  SpeedaboveChargerThres,  //
+	  SpeedStopped,  // stopped
+	  SpeedbelowChargerThres,  // below charger threshold
+	  SpeedaboveChargerThres,  // above charger threshold
 	  Speed0,  // standstill
 	  Speed2,  // 2
 	  Speed4,  // 4
@@ -22,8 +35,8 @@ typedef struct	// autocharge_t actual
 {
 	autocharge_t public;  // public struct
 
-	volatile autocharge_speedlevels_t _SpeedLevel;	//
-	volatile autocharge_speedlevels_t _previousSpeedLevel;	//
+	autocharge_speedlevels_t _SpeedLevel;  // current speed level
+	autocharge_speedlevels_t _previousSpeedLevel;  // previous speed level
 
 	// 0 - switch open, 1 - switch closed -- regardless of NC or NO
 	uint8_t __SW1 :1;  // SSR SW1 state (NC) - 0 open, 1 closed
@@ -31,15 +44,17 @@ typedef struct	// autocharge_t actual
 	uint8_t __SW_CA :1;  // SSR SW-CA state (NO) - 0 open, 1 closed
 	uint8_t __SW_CB :1;  // SSR SW-CB state (NO) - 0 open, 1 closed
 	uint8_t __SW_CC :1;  // SSR SW-CC state (NO) - 0 open, 1 closed
-	uint8_t __SW_D :1;  // SSR SW-D state (NO) - 0 open, 1 closed
+	uint8_t __SW_CD :1;  // SSR SW-D state (NO) - 0 open, 1 closed
 //	uint8_t __SW_X :1;  // SSR SW-CD state (NO) - 0 open, 1 closed
 
 	uint8_t __LoadSwitch :1;  // High-Side Load Switch state - 0 open, 1 closed
+
+	tlc59208_t *_LEDDriver;  // pointer to TLC59208 object
 } __autocharge_t;
 
-static uint8_t _FlagStopChargerCalled = 0;	// flag indicating if _StopCharger() was called already
-
 static __autocharge_t __AutoCharge __attribute__ ((section (".data")));  // preallocate __AutoCharge object in .data
+
+static uint16_t _LEDword = 0;
 
 // returns High-Side load switch state: 0 - disconnected, 1 - connected
 static inline uint8_t _IsLoadConnected(void)
@@ -50,97 +65,63 @@ static inline uint8_t _IsLoadConnected(void)
 // connect the load via a high-side load switch
 static inline void _ConnectLoad(const uint8_t state)
 {
-	HAL_GPIO_WritePin(LoadFet_GPIO_Port, LoadFet_Pin, state);  // connect or disconnect  the load
+	HAL_GPIO_WritePin(LoadFet_GPIO_Port, LoadFet_Pin, state);  // drive the n-fet gate
 	__AutoCharge.__LoadSwitch = (unsigned char) (state & 0x01);
 	Device->mj8x8->UpdateActivity(AUTOCHARGE, state);  // update the bus
 }
 
-// starts the peripheral
-static inline void _StartCharger(void)
+// starts/stops the peripheral
+static inline void _SetChargerState(uint8_t state)
 {
-	if(_IsLoadConnected() == ON)  // if already on
+	if(_IsLoadConnected() == state)  // if already in the desired state
 		return;  // get out, nothing to do here
 
-	_ConnectLoad(ON);  // connect the load
+	_ConnectLoad(state);  // set the load state
 
-	EventHandler->Notify(EVENT03);	// notify event
-
-	_FlagStopChargerCalled = 0;  // reset flag
-}
-
-// stops the peripheral
-static inline void _StopCharger(void)
-{
-	if(_IsLoadConnected() == OFF && _FlagStopChargerCalled == 1)  // if already off and not called before
-		return;
-
-//	if(Device->ZeroCross->GetZCFrequency() <= 0)
-//		return;
-
-	_ConnectLoad(OFF);  // disconnect the load
-
-	EventHandler->Notify(EVENT03);	// notify event
-
-	_FlagStopChargerCalled = 1;  // mark as called
+	EventHandler->Notify(EVENT03);  // notify event
 }
 
 // SW1 control, NC
 static inline void _SSR_SW1(const uint8_t state)
 {
-	// TODO - implement SSR ctrl via I2C
-//	HAL_GPIO_WritePin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin, !state);  // NC switch: 0 closed, 1 open
+	SET_BIT_VAL(_LEDword, SW1, state);  // set the bit in valD
 	__AutoCharge.__SW1 = (unsigned char) (state & 0x01);
 }
 
 // SW2 control, NC
 static inline void _SSR_SW2(const uint8_t state)
 {
-	// TODO - implement SSR ctrl via I2C
-//	HAL_GPIO_WritePin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin, !state);	// NC switch: 0 closed, 1 open
+	SET_BIT_VAL(_LEDword, SW2, state);  // set the bit in valD
 	__AutoCharge.__SW2 = (unsigned char) (state & 0x01);
 }
 
 // SW-CA control, NO
 static inline void _SSR_SW_CA(const uint8_t state)
 {
-	// TODO - implement SSR ctrl via I2C
-//	HAL_GPIO_WritePin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
+	SET_BIT_VAL(_LEDword, SW_CA, state);  // set the bit in valC
 	__AutoCharge.__SW_CA = (unsigned char) (state & 0x01);
 }
 
 // SW-CB control, NO
 static inline void _SSR_SW_CB(const uint8_t state)
 {
-	// TODO - implement SSR ctrl via I2C
-//	HAL_GPIO_WritePin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
+	SET_BIT_VAL(_LEDword, SW_CB, state);  // set the bit in valC
 	__AutoCharge.__SW_CB = (unsigned char) (state & 0x01);
 }
 
 // SW-CC control, NO
 static inline void _SSR_SW_CC(const uint8_t state)
 {
-	// TODO - implement SSR ctrl via I2C
-//	HAL_GPIO_WritePin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
+	SET_BIT_VAL(_LEDword, SW_CC, state);  // set the bit in valC
 	__AutoCharge.__SW_CC = (unsigned char) (state & 0x01);
 }
 
-// SW-D control, NO
-static inline void _SSR_SW_D(const uint8_t state)
+// SW-CD control, NO
+static inline void _SSR_SW_CD(const uint8_t state)
 {
-	// TODO - implement SSR ctrl via I2C
-//	HAL_GPIO_WritePin(SW_D_CTRL_GPIO_Port, SW_D_CTRL_Pin, state);  // NO switch: 0 - open, 1 - closed
-	__AutoCharge.__SW_D = (unsigned char) (state & 0x01);
+	SET_BIT_VAL(_LEDword, SW_CD, state);  // set the bit in valC
+	__AutoCharge.__SW_CD = (unsigned char) (state & 0x01);
 }
-
-//// SW-X control, NO
-//static inline void _SSR_SW_CD(const uint8_t state)
-//{
-//		HAL_GPIO_WritePin(SW_X_CTRL_GPIO_Port, SW_X_CTRL_Pin, state);	// NO switch: 0 - open, 1 - closed
-//	__AutoCharge.__SW_X = state;
-//}
-
-// AutoCharge functionality - called by timer 3 ISR - usually every 250ms
-// FIXME - verify last remaining SSR operation (IIRC one SSR was fried and would not connect when activated)
 
 // compares current and previous speed levels and sets speed level change flag
 static inline uint8_t _CompareSpeedLevelsandFlag(const autocharge_speedlevels_t in_level)
@@ -153,75 +134,48 @@ static inline uint8_t _CompareSpeedLevelsandFlag(const autocharge_speedlevels_t 
 	return 1;  // enable notification flag (see calling if-clause in Do())
 }
 
+// AutoCharge functionality - called by timer 3 ISR - usually every 250ms
 static void _Do(void)  // this actually runs the AutoCharge application
 {
 	// set speed flags on each measurement
-	if(Device->AutoDrive->GetSpeed_mps() > 12)  // high enough speed - load is connected
+	float speed = Device->AutoDrive->GetSpeed_mps();
+	if(speed > 12)
 		__AutoCharge._SpeedLevel = Speed12;
-	else if(Device->AutoDrive->GetSpeed_mps() > 10)  // high enough speed - load is connected
+	else if(speed > 10)
 		__AutoCharge._SpeedLevel = Speed10;
-	else if(Device->AutoDrive->GetSpeed_mps() > 8)  // high enough speed - load is connected
+	else if(speed > 8)
 		__AutoCharge._SpeedLevel = Speed8;
-	else if(Device->AutoDrive->GetSpeed_mps() > 6)  // high enough speed - load is connected
+	else if(speed > 6)
 		__AutoCharge._SpeedLevel = Speed6;
-	else if(Device->AutoDrive->GetSpeed_mps() > 4)  // high enough speed - load is connected
+	else if(speed > 4)
 		__AutoCharge._SpeedLevel = Speed4;
-	else if(Device->AutoDrive->GetSpeed_mps() > LOAD_CONNECT_THRESHOLD_SPEED_HIGH)  // high enough speed - load is connected
-		__AutoCharge._SpeedLevel = SpeedaboveChargerThres;
-	else if(Device->AutoDrive->GetSpeed_mps() > 2)  // low speed - load is disconnected
+	else if(speed > 2)
 		__AutoCharge._SpeedLevel = Speed2;
-	else if(Device->AutoDrive->GetSpeed_mps() <= 0.1)  // stopped
-		__AutoCharge._SpeedLevel = SpeedStopped;
-	else if(Device->AutoDrive->GetSpeed_mps() < LOAD_CONNECT_THRESHOLD_SPEED_LOW)  // low speed - load is disconnected
+	else if(speed > 0.1)
 		__AutoCharge._SpeedLevel = SpeedbelowChargerThres;
+	else
+		__AutoCharge._SpeedLevel = SpeedStopped;
 
 	if(_CompareSpeedLevelsandFlag(__AutoCharge._SpeedLevel))	// if the speed flags have changed
 		{
+			__AutoCharge._LEDDriver->Power(__AutoCharge._SpeedLevel);  // if movement, then turn on LED Driver
+
 			if(__AutoCharge._SpeedLevel <= SpeedbelowChargerThres)  // low speed - load is disconnected
-				{
-					if(__AutoCharge._SpeedLevel == SpeedStopped)
-						_FlagStopChargerCalled = 0;  // mark as not called
-
-					_StopCharger();  // stop, but with a caveat
-
-					_FlagStopChargerCalled = 0;  // mark as not called
-
-					return;
-				}
+				_SetChargerState(OFF);  // stop the charger
+			else
+				// high speed - load is connected
+				_SetChargerState(ON);  // start the charger
 
 			// SSR control based on speed flags - logic will change
-			if(__AutoCharge._SpeedLevel >= SpeedaboveChargerThres)  // high enough speed - load is connected
-				_StartCharger();  // start, if not already started
+			_SSR_SW_CD(__AutoCharge._SpeedLevel == Speed12 ? ON : OFF);  // NO to NC
+			_SSR_SW_CC(__AutoCharge._SpeedLevel == Speed10 ? ON : OFF);  // NO to NC
+			_SSR_SW_CB(__AutoCharge._SpeedLevel == Speed8 ? ON : OFF);  // NO to NC
+			_SSR_SW_CA(__AutoCharge._SpeedLevel == Speed6 ? ON : OFF);	// NO to NC
+			// FIXME - on rev.1 board SW2 is broken: replace IC
+			_SSR_SW2(__AutoCharge._SpeedLevel == Speed4 ? ON : OFF);  // NC to NO
+			_SSR_SW1(__AutoCharge._SpeedLevel == Speed2 ? ON : OFF);  // NC to NO
 
-			if(__AutoCharge._SpeedLevel == Speed12)
-				_SSR_SW_D(ON);
-			else
-				_SSR_SW_D(OFF);
-
-			if(__AutoCharge._SpeedLevel == Speed10)
-				_SSR_SW_CC(ON);
-			else
-				_SSR_SW_CC(OFF);
-
-			if(__AutoCharge._SpeedLevel == Speed8)
-				_SSR_SW_CB(ON);
-			else
-				_SSR_SW_CB(OFF);
-
-			if(__AutoCharge._SpeedLevel == Speed6)
-				_SSR_SW_CA(ON);
-			else
-				_SSR_SW_CA(OFF);
-
-			if(__AutoCharge._SpeedLevel == Speed4)
-				_SSR_SW2(ON);
-			else
-				_SSR_SW2(OFF);
-
-			if(__AutoCharge._SpeedLevel == Speed2)
-				_SSR_SW1(ON);
-			else
-				_SSR_SW1(OFF);
+			__AutoCharge._LEDDriver->Write(0x0C, &_LEDword);  // write LED state to driver
 		}
 }
 
@@ -233,18 +187,10 @@ static __autocharge_t __AutoCharge =  // instantiate autobatt_t actual and set f
 
 autocharge_t* autocharge_ctor(void)  //
 {
-//	HAL_GPIO_WritePin(LoadFet_GPIO_Port, LoadFet_Pin, GPIO_PIN_RESET);	// explicitly again for clarity - start with load disconnected !!!
+	__AutoCharge._LEDDriver = tlc59208_ctor();  // tie in TLC59208 object
 
-	_FlagStopChargerCalled = 0;
+	HAL_GPIO_WritePin(LoadFet_GPIO_Port, LoadFet_Pin, GPIO_PIN_RESET);	// load n-fet disconnected
 	__AutoCharge.__LoadSwitch = HAL_GPIO_ReadPin(LoadFet_GPIO_Port, LoadFet_Pin);  // read out initial switch states
-	// TODO - implement SSR ctrl via I2C
-//	__AutoCharge.__SW1 = HAL_GPIO_ReadPin(SW1_CTRL_GPIO_Port, SW1_CTRL_Pin);	// ditto
-//	__AutoCharge.__SW2 = HAL_GPIO_ReadPin(SW2_CTRL_GPIO_Port, SW2_CTRL_Pin);
-//	__AutoCharge.__SW_CA = HAL_GPIO_ReadPin(SW_CA_CTRL_GPIO_Port, SW_CA_CTRL_Pin);
-//	__AutoCharge.__SW_CB = HAL_GPIO_ReadPin(SW_CB_CTRL_GPIO_Port, SW_CB_CTRL_Pin);
-//	__AutoCharge.__SW_CC = HAL_GPIO_ReadPin(SW_CC_CTRL_GPIO_Port, SW_CC_CTRL_Pin);
-//	__AutoCharge.__SW_D = HAL_GPIO_ReadPin(SW_D_CTRL_GPIO_Port, SW_D_CTRL_Pin);
-//	__AutoCharge.__SW_X = HAL_GPIO_ReadPin(SW_X_CTRL_GPIO_Port, SW_X_CTRL_Pin);
 
 	return &__AutoCharge.public;  // set pointer to AutoCharge public part
 }

@@ -278,8 +278,12 @@ mj8x8_t* mj8x8_ctor(const mj8x8_Devices_t in_MJ8x8_ID)
 	__MJ8x8.public.Sleep = &_Sleep;  // puts device to sleep
 	__MJ8x8.public.PreSleep = &_DoNothing;  // the derived object implements its own special sleep method
 
-	//HAL_NVIC_SetPriority(SysTick_IRQn, 2, 0);
+#if USE_I2C
+	HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(SysTick_IRQn);
+#else
 	HAL_SuspendTick();
+#endif
 
 	// interrupt init
 	// control for interrupt operation prior to init finished

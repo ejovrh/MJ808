@@ -29,6 +29,9 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #include "main.h"
 #if defined(MJ808_)	// if this particular device is active
 #define USE_EVENTHANDLER 1	// shall EventHandler code be included
+#define USE_LED 1
+#define USE_UTIL_LED 0
+#define USE_BUTTON 1
 
 #define UTILLED	2
 #define BUTTONPRESSED 3

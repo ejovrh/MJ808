@@ -4,7 +4,10 @@
 
 #include "autodrive.h"
 
-extern TIM_HandleTypeDef htim3;  // Timer3 object - measurement/calculation interval of timer2 data - default 250ms
+#include <string.h>
+
+extern TIM_HandleTypeDef htim2;  // Timer3 object - measurement/calculation interval of timer2 data - default 250ms
+extern TIM_HandleTypeDef htim16;  // Timer16 object - odometer & co. 1s
 
 typedef enum   // enum of light levels on this device
 {
@@ -19,9 +22,9 @@ typedef struct	// autodrive_t actual
 {
 	autodrive_t public;  // public struct
 
-	volatile autodrive_lightlevels_t _LightLevel;
-	volatile autodrive_lightlevels_t _previousLightLevel;
-	volatile float _WheelFrequency;  // wheel rotation frequency
+	autodrive_lightlevels_t _LightLevel;
+	autodrive_lightlevels_t _previousLightLevel;
+	float _WheelFrequency;  // wheel rotation frequency
 
 	union mps  // meters per second
 	{
@@ -38,12 +41,20 @@ typedef struct	// autodrive_t actual
 		float Float;
 		uint8_t Bytes[sizeof(float)];
 	} m;
+	union Odometer  // distance in meters
+	{
+		float Float;
+		uint8_t Bytes[sizeof(float)];
+	} Odometer;
 } __autodrive_t;
 
 static __autodrive_t __AutoDrive __attribute__ ((section (".data")));  // preallocate __AutoDrive object in .data
 
+#if SIGNAL_GENERATOR_INPUT
 static float _last_mps = 0;  // used to check if speed has changed
-static volatile uint8_t _FlagSendLightlevelChangeEvent;  // flag indicating light level change event should be sent to the bus
+#endif
+
+uint8_t _Timer16Cntr = 0;  // timer2 counter
 
 // get speed in meters per second
 static inline float _GetSpeed_mps(void)
@@ -87,20 +98,25 @@ static inline uint8_t _CompareLightLevelsandFlag(const autodrive_lightlevels_t i
 // AutoDrive functionality based on detected zero cross frequency - called by timer 3 ISR - usually every 250ms
 static void _Do(void)  // this actually runs the AutoDrive application
 {
-	__AutoDrive._WheelFrequency = Device->ZeroCross->GetZCFrequency() / POLE_COUNT;  // ZeroCross signal frequency to wheel RPS
-	__AutoDrive.mps.Float = __AutoDrive._WheelFrequency * WHEEL_CIRCUMFERENCE;	// wheel frequency to m/s
-	__AutoDrive.kph.Float = (float) (__AutoDrive.mps.Float * 3.6);  // m/s to km/h
-	__AutoDrive.m.Float += __AutoDrive.mps.Float * (float) ((__HAL_TIM_GET_AUTORELOAD(&htim3) + 1) / 10000.0);  // distance, mps * measurement interval
+	const float KPH_CONVERSION = 3.6f;
+	const float TIME_CONVERSION = 10000.0f;
 
-#if SIGNAL_GENERATOR_INPUT
+	__AutoDrive._WheelFrequency = (float) (Device->ZeroCross->GetZCFrequency() / POLE_COUNT);  // ZeroCross signal frequency to wheel RPS
+	__AutoDrive.mps.Float = (float) (__AutoDrive._WheelFrequency * WHEEL_CIRCUMFERENCE);  // wheel frequency to m/s
+	__AutoDrive.kph.Float = (float) (__AutoDrive.mps.Float * KPH_CONVERSION);  // m/s to km/h
+	__AutoDrive.m.Float += __AutoDrive.mps.Float * (float) ((float) (__HAL_TIM_GET_AUTORELOAD(&htim2) + 1) / TIME_CONVERSION);  // distance, mps * measurement interval
+
+#if SIGNAL_GENERATOR_INPUT	// ZeroCross signal is generator input
 	if((uint8_t) _last_mps != (uint8_t) __AutoDrive.mps.Float)  // only if data has changed
 		{
+			// send speed over the wire - only when it changes
 			MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_SPEED, __AutoDrive.mps.Bytes, 1 + sizeof(float));  // send speed over the wire
 			MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_ACCEL, __AutoDrive.mps.Bytes, 1 + sizeof(float));  // send speed over the wire
 
 			_last_mps = __AutoDrive.mps.Float;  // store current speed for comparison in the next cycle
 		}
-#else
+#else // ZeroCross signal is from the wheel
+	// send speed over the wire - since this is not as constant as the generator input, send it every time
 	MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_SPEED, __AutoDrive.mps.Bytes, 1 + sizeof(float));  // send speed over the wire
 	MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_ACCEL, __AutoDrive.mps.Bytes, 1 + sizeof(float));  // send speed over the wire
 #endif
@@ -115,42 +131,66 @@ static void _Do(void)  // this actually runs the AutoDrive application
 	 *
 	 */
 
-	if(__AutoDrive.kph.Float < 1)  // fZC of below approx. 1.87 Hz - considered standstill
+	// light level determination
+	if(__AutoDrive.kph.Float < 1)
 		__AutoDrive._LightLevel = LightOff;
-
-	if(__AutoDrive.kph.Float > 2)  // fZC of approx. 5.58 Hz - walking speed
-		__AutoDrive._LightLevel = LightDim;
-
-	if(__AutoDrive.kph.Float > 3)  // fZC of approx. 18.57 Hz - slow ride
-		__AutoDrive._LightLevel = LightLow;
-
-	if(__AutoDrive.kph.Float > 10)  // fZC of approx. 18.57 Hz - normal ride
-		__AutoDrive._LightLevel = LightNormal;
-
-	if(__AutoDrive.kph.Float > 40)  // fZC of approx. 74.29 Hz - faster than light travel
+	else if(__AutoDrive.kph.Float > 40)
 		__AutoDrive._LightLevel = LightHigh;
+	else if(__AutoDrive.kph.Float > 10)
+		__AutoDrive._LightLevel = LightNormal;
+	else if(__AutoDrive.kph.Float > 3)
+		__AutoDrive._LightLevel = LightLow;
+	else
+		__AutoDrive._LightLevel = LightDim;
 
 	if(_CompareLightLevelsandFlag(__AutoDrive._LightLevel))  // compares current and previous light levels and sets light level change flag
 		{  // notifications should be sent only once on state change
-			if(__AutoDrive._LightLevel > LightOff)  // any speed greater than standstill
-				if(Device->mj8x8->GetActivity(AUTODRIVE) == OFF)	// run only if AD is off
-					Device->mj8x8->UpdateActivity(AUTODRIVE, ON);  // update the bus
+			if(__AutoDrive._LightLevel > LightOff && Device->mj8x8->GetActivity(AUTODRIVE) == OFF)  // any speed greater than standstill and AD is off
+				Device->mj8x8->UpdateActivity(AUTODRIVE, ON);  // update the bus
 
-			if(__AutoDrive._LightLevel == LightDim)
-				EventHandler->Notify(EVENT02);	// generate event
+			uint8_t event = 0;  // event to be sent
 
-			if(__AutoDrive._LightLevel == LightLow)
-				EventHandler->Notify(EVENT04);	// generate event
+			switch(__AutoDrive._LightLevel)
+				// set event according to light level
+				{
+				case LightDim:  // dim light - front 10%, rear 25%
+					event = EVENT02;
+					break;
+				case LightLow:  // low light - front 35%, rear 50%
+					event = EVENT04;
+					break;
+				case LightNormal:  // normal light - front 50%, rear 100%
+					event = EVENT05;
+					break;
+				case LightHigh:  // high light - front 100%, rear 100%
+					event = EVENT06;
+					break;
+				case LightOff: 	// lights off with delay - front 0%, rear 0%
+					event = EVENT07;
+					break;
 
-			if(__AutoDrive._LightLevel == LightNormal)
-				EventHandler->Notify(EVENT05);	// generate event
+				default:
+					break;
+				}
 
-			if(__AutoDrive._LightLevel == LightHigh)
-				EventHandler->Notify(EVENT06);	// generate event
-
-			_FlagSendLightlevelChangeEvent = 0;  // unset notification flag
-			return;
+			EventHandler->Notify(event);  // generate event
 		}
+}
+
+// update odometer value in FeRAM
+void _UpdateOdometer(void)
+{
+	uint32_t oldval = Device->FeRAM->Read(ODOMETER_ADDR);  // read stored odometer value from FeRAM
+	memcpy(&__AutoDrive.Odometer.Float, &oldval, sizeof(float));  // copy odometer to Odometer
+
+	__AutoDrive.Odometer.Float += __AutoDrive.m.Float;  // add current odometer to old value
+	__AutoDrive.m.Float = 0;  // reset current odometer
+	oldval = 0;  // reset oldval
+
+	memcpy(&oldval, &__AutoDrive.Odometer.Float, sizeof(float));  // copy odometer to oldval
+	Device->FeRAM->Write(oldval, ODOMETER_ADDR);  // write odometer to FeRAM)
+
+	_Timer16Cntr = 0;  // reset counter
 }
 
 static __autodrive_t __AutoDrive =  // instantiate autobatt_t actual and set function pointers
@@ -160,12 +200,26 @@ static __autodrive_t __AutoDrive =  // instantiate autobatt_t actual and set fun
 	.public.GetSpeed_kph = &_GetSpeed_kph,  // get speed in kilometres per hour
 	.public.GetDistance_m = &_GetDistance_m,  // get distance in meters
 	.public.Do = &_Do,  // set function pointer
-	.public.LightOff = &_LightOff  // set function pointer
+	.public.LightOff = &_LightOff,  // set function pointer
+	.public.UpdateOdometer = &_UpdateOdometer,  // set function pointer
 	};
 
 autodrive_t* autodrive_ctor(void)  //
 {
+	_UpdateOdometer();
 	return &__AutoDrive.public;  // set pointer to AutoBatt public part
 }
 
+// timer 16 ISR - odometer & co. timer
+void TIM16_IRQHandler(void)
+{
+	HAL_TIM_IRQHandler(&htim16);  // service the interrupt
+	++_Timer16Cntr;
+
+	if(_Timer16Cntr % ODOMETER_REFRESH_PERIOD == 0)  // once per minute
+		{
+			__AutoDrive.public.UpdateOdometer();  // update odometer value in FeRAM
+			Device->Humidity->Measure();  // measure humidity
+		}
+}
 #endif

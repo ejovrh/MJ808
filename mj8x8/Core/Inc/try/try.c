@@ -104,12 +104,16 @@ static inline void _EventHandlerEvent03(void)
 	if(Device->button->button[PushButton]->Toggle)
 		{
 			_payload = (RED | BLINK);
+#if USE_UTIL_LED
 			Device->led->led[Red].Shine(BLINK);
+#endif
 		}
 	else
 		{
 			_payload = (RED | OFF);
+#if USE_UTIL_LED
 			Device->led->led[Red].Shine(OFF);
+#endif
 		}
 	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_01, &_payload, 2);  // send it
 
@@ -365,7 +369,7 @@ void _EventHandler(const uint8_t val)
 
 // mj808 center button hold
 // mj828 center button hold
-uint16_t _MsgBtnEvent00(can_msg_t *msg)
+static inline void _MsgBtnEvent00(can_msg_t *msg)
 {
 #if defined(MJ808_)
 	Device->led->led[Front].Shine(msg->ARGUMENT);
@@ -375,13 +379,13 @@ uint16_t _MsgBtnEvent00(can_msg_t *msg)
 	Device->led->led[Green].Shine((msg->ARGUMENT>0) );
 	Device->adc->Start();
 #elif defined(MJ838_)
-	if(msg->sid)
-		;
+	(void) msg;
 #elif defined(MJ514_)
 	Device->gear->ShiftByN((int8_t) msg->ARGUMENT);  // shifts the Rohloff hub n gears (-13 to + 13, except 0) up or down
-#endif
-
-	return 0;
+#else
+	(void) msg;
+	#endif
+	return;
 }
 
 // mj808 center button toggle
@@ -393,12 +397,11 @@ static inline void _MsgBtnEvent01(can_msg_t *msg)
 	Device->led->Shine(msg->ARGUMENT);// argument is (LED | (OFF, ON, BLINK)) - e.g. (YELLOW | BLINK)
 	Device->adc->Start();
 #elif defined(MJ838_)
-	;
+	(void) msg;
 #elif defined(MJ514_)
 	Device->gear->ShiftToN(msg->ARGUMENT);  // shifts Rohloff into gear n (1 to 14)
 #else
-	(void)msg;
-
+	(void) msg;
 #endif
 
 	return;
@@ -587,7 +590,7 @@ void _EmptyBusOperation(void)
 #endif
 }
 
-static __try_t __Try =  // instantiate can_t actual and set function pointers
+static __try_t     __Try =  // instantiate can_t actual and set function pointers
 	{  //
 	.public.BusActivity = (status_t*) &_BusActivityArray,  // bus-wide device status of all devices
 	.public.PopulatedBusOperation = &_PopulatedBusOperation,  // tie in function pointer
@@ -619,7 +622,7 @@ void try_ctor(void)
 	_BusActivityArray[6] = (activity_t*) Device->activity;
 
 #elif defined futureMJ_7
-	_BusActivityArray[8] = (activity_t*) Device->activity;
+	_BusActivityArray[7] = (activity_t*) Device->activity;
 
 #elif defined MJ808_
 	_BusActivityArray[8] = (activity_t*) Device->activity;

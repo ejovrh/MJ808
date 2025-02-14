@@ -1,6 +1,8 @@
 #ifndef CORE_INC_BUTTON_BUTTON_TYPES_ACTUAL_C_
 #define CORE_INC_BUTTON_BUTTON_TYPES_ACTUAL_C_
 
+#include "main.h"
+
 #if defined(USE_BUTTON)
 #include "button.h"
 

@@ -10,6 +10,7 @@
 extern TIM_HandleTypeDef htim3;  // front light PWM on channel 1
 extern TIM_HandleTypeDef htim14;  // LED handling - 20ms
 
+// fixme - should be 3
 static primitive_led_t __primitive_led[4] __attribute__ ((section (".data")));	// define array of actual LEDs and put into .data
 
 static uint32_t (*_fptr)(const uint8_t state);	// function pointer for branch table
@@ -29,7 +30,7 @@ static const uint8_t _fade_transfer[] =	// fade transfer curve according to MacN
 	65, 68, 71, 75, 78, 82, 86, 90, 94, 100	//
 	};
 
-volatile static uint8_t front_iterator = 0;	// front
+static volatile uint8_t front_iterator = 0;	// front
 
 // fades front light pleasingly for the human eye
 static void _MacNamaraFader(void)
@@ -148,12 +149,16 @@ static inline void _physicalFrontLED(const uint8_t value)
 // handler for physical LED
 static inline void __physicalRedLED(const uint8_t state)  // red LED on/off
 {
+#if USE_UTIL_LED
 	// state == 1 - off
 	// state == 0 - on
 	HAL_GPIO_WritePin(RedLED_GPIO_Port, RedLED_Pin, (! state));
 
 	if (! __LED._BlinkFlags)	// if we aren't blinking...
 		Device->mj8x8->UpdateActivity(UTILLED, (__LED._ShineFlags & 0x03 ) > 0);	// update the bus
+#else
+	(void) state;
+#endif
 
 	return;
 }
@@ -161,12 +166,16 @@ static inline void __physicalRedLED(const uint8_t state)  // red LED on/off
 // handler for physical LED
 static inline void __physicalGreenLED(const uint8_t state)  // green LED on/off
 {
+#if USE_UTIL_LED
 	// state == 1 - off
 	// state == 0 - on
 	HAL_GPIO_WritePin(GreenLED_GPIO_Port, GreenLED_Pin, (! state));
 
 	if (! __LED._BlinkFlags)	// if we aren't blinking...
 		Device->mj8x8->UpdateActivity(UTILLED, (__LED._ShineFlags & 0x03 ) > 0);	// update the bus
+#else
+	(void) state;
+#endif
 
 	return;
 }
@@ -201,6 +210,7 @@ static inline void __LEDBackEnd(const uint8_t led, const uint8_t state)
 	if(__LED._BlinkFlags == 0)
 		Device->StopTimer(&htim14);  // stop the timer
 
+	// fixme - front led shine flag remains set after led is off
 	__LED._ShineFlags ^= ((-(state & 0x01) ^ __LED._ShineFlags) & (1 << led));	// sets "led" bit to "state" value
 
 	Device->mj8x8->UpdateActivity(UTILLED, (__LED._BlinkFlags | 0x03) > 0);	// update the bus, but only for blinking (timer is needed); shining doesnt need the timer and wont set this bit

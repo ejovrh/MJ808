@@ -1,6 +1,8 @@
 #include "button_types_actual.c"
 #include "button.h"
 
+#include "main.h"
+
 #if defined(USE_BUTTON)
 // button debouncer for devices with buttons
 void __HandleButton(__individual_button_t *const in_button, event_handler_t *const in_event)
