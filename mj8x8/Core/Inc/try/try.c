@@ -137,7 +137,12 @@ static inline void _EventHandlerEvent03(void)
 #elif defined(MJ838_)
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
 	// FIXME - on wheel stop and once poweroff should occur, mj828 red led remains lit
-	_payload = !Device->AutoCharge->IsLoadConnected();  // 0 - LED on (load disconnected), 1 - LED off (load connected)
+#if USE_ADJUSTABLE_LOAD
+	_payload = !Device->AutoCharge->IsAdjustableLoadConnected();  // returns DAC set voltage
+#endif
+#if USE_APPLICATION_LOAD
+	_payload = !Device->AutoCharge->IsAppLoadConnected();  // 0 - LED on (load disconnected), 1 - LED off (load connected)
+#endif
 
 	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
 #endif
@@ -590,7 +595,7 @@ void _EmptyBusOperation(void)
 #endif
 }
 
-static __try_t     __Try =  // instantiate can_t actual and set function pointers
+static __try_t __Try =  // instantiate can_t actual and set function pointers
 	{  //
 	.public.BusActivity = (status_t*) &_BusActivityArray,  // bus-wide device status of all devices
 	.public.PopulatedBusOperation = &_PopulatedBusOperation,  // tie in function pointer

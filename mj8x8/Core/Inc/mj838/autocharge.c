@@ -4,7 +4,11 @@
 
 #include "autocharge.h"
 
-#include "tlc59208/tlc59208.h"
+#include "tlc59208/tlc59208.h"	// LED driver IC
+#include "dac121c081/dac121c081.h"	// ADC IC
+#include "pac1952/pac1952.h"	// power monitor IC
+
+extern TIM_HandleTypeDef htim14;  // Timer14 object - power measurement time base - 10ms
 
 #define SET_BIT_VAL(word, n, val) \
     ((word) = ((word) & (uint16_t)(~((uint16_t)1 << (n)))) | \
@@ -47,36 +51,70 @@ typedef struct	// autocharge_t actual
 	uint8_t __SW_CD :1;  // SSR SW-D state (NO) - 0 open, 1 closed
 //	uint8_t __SW_X :1;  // SSR SW-CD state (NO) - 0 open, 1 closed
 
-	uint8_t __LoadSwitch :1;  // High-Side Load Switch state - 0 open, 1 closed
+	uint8_t __AdjustableLoadDAC;  // adjustable load DAC output voltage: 0 off, non-zero: variable
+	uint8_t __FlagAppLoadSwitch :1;  // application load switch state - 0 off, 1 on
 
 	tlc59208_t *_LEDDriver;  // pointer to TLC59208 object
+	dac121c081_t *_AdjustableLoad;	// pointer  to DAC121C081 object
+	pac1952_t *_PowerMonitor;  // pointer to PAC1952 object
 } __autocharge_t;
 
 static __autocharge_t __AutoCharge __attribute__ ((section (".data")));  // preallocate __AutoCharge object in .data
 
 static uint16_t _LEDword = 0;
 
-// returns High-Side load switch state: 0 - disconnected, 1 - connected
-static inline uint8_t _IsLoadConnected(void)
+#if USE_ADJUSTABLE_LOAD
+// returns DAC set voltage
+static inline uint8_t _IsAdjustableLoadConnected(void)
 {
-	return HAL_GPIO_ReadPin(LoadFet_GPIO_Port, LoadFet_Pin);	// explicitly return load switch hardware state
+	return __AutoCharge.__AdjustableLoadDAC;  // return the load switch hardware state
+}
+
+// set DAC output voltage
+static void _AdjustLoad(const uint8_t voltage)
+{
+	__AutoCharge.__AdjustableLoadDAC = voltage;  // save the DAC set voltage
+	__AutoCharge._AdjustableLoad->Write((uint16_t*) &__AutoCharge.__AdjustableLoadDAC);  // write DAC set voltage to DAC
+}
+#endif
+
+#if USE_APPLICATION_LOAD
+// returns application load switch state: 0 - disconnected, 1 - connected
+static inline uint8_t _IsAppLoadConnected(void)
+{
+	// TODO - implement 12R adjustable load via I2C ADC
+	return HAL_GPIO_ReadPin(AppLoadFet_GPIO_Port, AppLoadFet_Pin);	// explicitly return load switch hardware state
 }
 
 // connect the load via a high-side load switch
-static inline void _ConnectLoad(const uint8_t state)
+static inline void _ConnectAppLoad(const uint8_t state)
 {
-	HAL_GPIO_WritePin(LoadFet_GPIO_Port, LoadFet_Pin, state);  // drive the n-fet gate
-	__AutoCharge.__LoadSwitch = (unsigned char) (state & 0x01);
+	// TODO - implement 12R adjustable load via I2C ADC
+	HAL_GPIO_WritePin(AppLoadFet_GPIO_Port, AppLoadFet_Pin, state);  // drive the n-fet gate
+	__AutoCharge.__FlagAppLoadSwitch = (unsigned char) (state & 0x01);
 	Device->mj8x8->UpdateActivity(AUTOCHARGE, state);  // update the bus
 }
+#endif
+
+// TODO - write 12R adjustable load functions
 
 // starts/stops the peripheral
 static inline void _SetChargerState(uint8_t state)
 {
-	if(_IsLoadConnected() == state)  // if already in the desired state
+#if USE_APPLICATION_LOAD
+	if(_IsAppLoadConnected() == state)  // if already in the desired state
 		return;  // get out, nothing to do here
+#endif
 
-	_ConnectLoad(state);  // set the load state
+	if(state == ON)
+		Device->StartTimer(&htim14);  // start the timer
+	else
+		Device->StopTimer(&htim14);  // stop the timer
+
+	__AutoCharge._PowerMonitor->Power(state);  // power on the power monitor
+#if USE_APPLICATION_LOAD
+	_ConnectAppLoad(state);  // set the load state
+#endif
 
 	EventHandler->Notify(EVENT03);  // notify event
 }
@@ -181,18 +219,43 @@ static void _Do(void)  // this actually runs the AutoCharge application
 
 static __autocharge_t __AutoCharge =  // instantiate autobatt_t actual and set function pointers
 	{  //
-	.public.IsLoadConnected = &_IsLoadConnected,	// set function pointer
-	.public.Do = &_Do  // ditto
-	};
+#if USE_ADJUSTABLE_LOAD
+	  .public.AdjustLoad = &_AdjustLoad,  // set function pointer
+	  .public.IsAdjustableLoadConnected = &_IsAdjustableLoadConnected,  // ditto
+#endif
+#if USE_APPLICATION_LOAD
+	      .public.IsAppLoadConnected = &_IsAppLoadConnected,  // ditto
+#endif
+	      .public.Do = &_Do  // ditto
+	  };
 
 autocharge_t* autocharge_ctor(void)  //
 {
 	__AutoCharge._LEDDriver = tlc59208_ctor();  // tie in TLC59208 object
+	__AutoCharge._AdjustableLoad = dac121c081_ctor();  // tie in DAC121C081 object
+	__AutoCharge._PowerMonitor = pac1952_ctor();  // tie in Power Monitor object
 
-	HAL_GPIO_WritePin(LoadFet_GPIO_Port, LoadFet_Pin, GPIO_PIN_RESET);	// load n-fet disconnected
-	__AutoCharge.__LoadSwitch = HAL_GPIO_ReadPin(LoadFet_GPIO_Port, LoadFet_Pin);  // read out initial switch states
+// TODO - implement 12R adjustable load via I2C ADC
+#if USE_APPLICATION_LOAD
+	HAL_GPIO_WritePin(AppLoadFet_GPIO_Port, AppLoadFet_Pin, GPIO_PIN_RESET);	// application load n-fet disconnected
+	__AutoCharge.__FlagAppLoadSwitch = HAL_GPIO_ReadPin(AppLoadFet_GPIO_Port, AppLoadFet_Pin);  // read out initial switch states
+#endif
+
+	__AutoCharge._AdjustableLoad->PowerOff();  // power off the DAC & activate 100k pulldown
 
 	return &__AutoCharge.public;  // set pointer to AutoCharge public part
+}
+
+// timer 14 ISR - 10ms - power measurement timer
+void TIM14_IRQHandler(void)
+{
+	HAL_TIM_IRQHandler(&htim14);  // service the interrupt
+
+	HAL_NVIC_DisableIRQ(TIM16_IRQn);  //	tweak so that we don't have a IRQ collision between timer14 and timer16
+
+	__AutoCharge._PowerMonitor->Measure();  // measure Vbus, Vsense, Vpower
+
+	HAL_NVIC_EnableIRQ(TIM16_IRQn);
 }
 
 #endif

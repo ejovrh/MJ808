@@ -33,10 +33,14 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define USE_I2C 1	// use I2C
 #define USE_FERAM 1 // use FERAM
 #define USE_SHT40 1 // use humidity sensor
-#define USE_PAC1952 0 // use Power Monitor
+#define USE_PAC1952 1 // use Power Monitor
 #define USE_TLC59208 1 // use LED driver for SSRs
+#define USE_DAC121C081 1 // use USE_DAC121C081 ADC for adjustable 12R load
 
 #define USE_EVENTHANDLER 1	// shall EventHandler code be included
+
+#define USE_APPLICATION_LOAD 1	// use application load switch (not the 12R adjustable load)
+#define USE_ADJUSTABLE_LOAD 0	// use 12R adjustable load switch (not the application load switch)
 
 #define ZEROCROSS 2
 //#define	MOTION 3
@@ -46,6 +50,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER2_PERIOD 2499 // periodic frequency measurement of timer3 data - default 250ms
 #define TIMER3_PERIOD	0xFFFFFFFF // input capture of zero-cross signal on rising edge
+#define TIMER14_PERIOD 99	// power measurement time base - 10ms
 #define TIMER16_PERIOD 9999	// odometer & co. - 1s
 #define TIMER17_PERIOD 24	// event handling - 2.5ms
 #define TIMER3_IC_FILTER 0xF	// with TIM_ICPSC_DIV8 and 0xF the pulse needs to be at least 35us wide
@@ -70,9 +75,6 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #include "button\button.h"
 #include "mb85rc\mb85rc.h"	// 16kB FeRAM
 #include "sht40\sht40.h" // SHT40 humidity sensor
-#if USE_PAC1952
-#include "pac1952\pac1952.h"
-#endif
 
 #include "zerocross\zerocross.h"
 #include "mj838\autodrive.h"
@@ -86,6 +88,56 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TCAN334_Standby_Pin GPIO_PIN_15	//	defined here but initialised in mj8x8.c
 #define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
 
+// TODO - remove once HW rev.1a is there
+//#define NEW_GPIO_LAYOUT // use HW rev. 1b GPIO layout
+
+#ifdef NEW_GPIO_LAYOUT
+#define PowerMonitorPower_Pin GPIO_PIN_8	// low - off; high - on
+#define PowerMonitorPower_GPIO_Port GPIOB
+
+#define LED1_Pin GPIO_PIN_5	// dual colour LED pin 2
+#define LED1_GPIO_Port GPIOA
+#define LED2_Pin GPIO_PIN_6	// dual colour LED pin 2
+#define LED2_GPIO_Port GPIOA
+
+#define LED_Reset_Pin GPIO_PIN_0	// SSR LED Driver reset: low - in reset/standby; high - active
+#define LED_Reset_GPIO_Port GPIOA
+
+#define ZeroCross_Pin GPIO_PIN_0	// ZeroCross signal in
+#define ZeroCross_GPIO_Port GPIOB
+
+#define AppLoadFet_Pin GPIO_PIN_1	// Application Load Switch
+#define AppLoadFet_GPIO_Port GPIOA
+
+#define I2C_SDA_Pin GPIO_PIN_0 // see i2c_ctor()
+#define I2C_SCL_Pin GPIO_PIN_1// see i2c_ctor()
+#define I2C_GPIO_Port GPIOF
+
+#if GPIO_DEBUG_OUT
+#define YellowTestPad_Pin GPIO_PIN_6// debug pin 0
+#define YellowTestPad_GPIO_Port GPIOB
+#define BlueTestPad_Pin GPIO_PIN_7 // debug pin 1
+#define BlueTestPad_GPIO_Port GPIOB
+#endif
+
+//#define PA5_Pin GPIO_PIN_5	// general GPIO
+//#define PA5_GPIO_Port GPIOA
+//#define PA6_Pin GPIO_PIN_6	// general GPIO
+//#define PA6_GPIO_Port GPIOA
+#define PA7_Pin GPIO_PIN_7	// general GPIO
+#define PA7_GPIO_Port GPIOA
+
+#define PB3_Pin GPIO_PIN_3	// general GPIO
+#define PB3_GPIO_Port GPIOB
+#define PB4_Pin GPIO_PIN_4	// general GPIO
+#define PB4_GPIO_Port GPIOB
+#define PB5_Pin GPIO_PIN_5	// general GPIO
+#define PB5_GPIO_Port GPIOB
+#define PB6_Pin GPIO_PIN_6	// general GPIO
+#define PB6_GPIO_Port GPIOB
+#define PB7_Pin GPIO_PIN_7	// general GPIO
+#define PB7_GPIO_Port GPIOB
+#else
 #define PowerMonitorPower_Pin GPIO_PIN_0	// low - off; high - on
 #define PowerMonitorPower_GPIO_Port GPIOA
 
@@ -99,8 +151,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 
 #define ZeroCross_Pin GPIO_PIN_0	// ZeroCross signal in
 #define ZeroCross_GPIO_Port GPIOB
-#define LoadFet_Pin GPIO_PIN_1	// Load Switch
-#define LoadFet_GPIO_Port GPIOB
+#define AppLoadFet_Pin GPIO_PIN_1	// Load Switch
+#define AppLoadFet_GPIO_Port GPIOB
 
 #define I2C_SDA_Pin GPIO_PIN_0 // see i2c_ctor()
 #define I2C_SCL_Pin GPIO_PIN_1// see i2c_ctor()
@@ -129,6 +181,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define PB6_GPIO_Port GPIOB
 #define PB7_Pin GPIO_PIN_7	// general GPIO
 #define PB7_GPIO_Port GPIOB
+#endif
 
 // definitions of device/PCB layout-dependent hardware pins
 
@@ -141,9 +194,6 @@ typedef struct	// struct describing devices on MJ838
 	autocharge_t *AutoCharge;  // automatic charger
 	mb85rc_t *FeRAM;	// pointer to FeRAM object
 	sht40_t *Humidity;  // pointer to humidity sensor object
-#if USE_PAC1952
-	pac1952_t *PowerMonitor;
-#endif
 
 	void (*StopTimer)(TIM_HandleTypeDef *timer);	// stops timer identified by argument
 	void (*StartTimer)(TIM_HandleTypeDef *timer);  // starts timer identified by argument

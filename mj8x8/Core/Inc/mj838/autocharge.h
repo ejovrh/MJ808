@@ -10,7 +10,13 @@
 
 typedef struct	// struct describing the AutoDrive functionality
 {
-	uint8_t (*IsLoadConnected)(void);  // returns High-Side load switch state: 0 - disconnected, 1 - connected
+#if USE_ADJUSTABLE_LOAD
+	uint8_t (*IsAdjustableLoadConnected)(void);  // adjustable load DAC output voltage: 0 off, non-zero: variable
+	void (*AdjustLoad)(const uint8_t voltage);  // set DAC output voltage
+#endif
+#if USE_APPLICATION_LOAD
+	uint8_t (*IsAppLoadConnected)(void);  // returns High-Side load switch state: 0 - disconnected, 1 - connected
+#endif
 	void (*Do)(void);  // AutoCharge functionality
 } autocharge_t;
 

@@ -7,16 +7,11 @@
 
 typedef struct	// struct describing the PAC1952 functionality
 {
-	uint8_t (*ReadByte)(const uint8_t RegAddr);  // read one byte from register
-	void (*WriteByte)(const uint8_t RegAddr, const uint8_t data);  // write one byte to register
-	uint8_t (*ReceiveByte)(void);  // read byte from register pointer at location
-	void (*SendByte)(const uint8_t byte);  // set internal address register pointer to location
-	void (*BlockWrite)(const uint8_t RegAddr, uint8_t *buffer, const uint8_t len);  // block write
-	void (*BlockRead)(const uint8_t RegAddr, uint8_t *buffer, const uint8_t len);  // block read
-	void (*Refresh)(void);  // refresh
-	void (*RefreshV)(void);  // refresh_v
-	void (*PowerOn)(void);  // power device on & initialize
-	void (*PowerOff)(void);  // power device off
+	float (*GetVbus)(const uint8_t channel);  // get bus voltage for channel x
+	float (*GetVsense)(const uint8_t channel);  // get sense voltage for channel x
+	float (*GetVpower)(const uint8_t channel);  // get Vsense x Vbus for channel x
+	void (*Measure)(void);  // refresh_v
+	void (*Power)(const uint8_t state);  // power device on & initialize
 } pac1952_t;
 
 pac1952_t* pac1952_ctor(void);	// the PAC1952 constructor

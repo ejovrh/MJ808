@@ -8,10 +8,11 @@
 #include "mj838/mj838.h"
 #include "mj838/mj838_zerocross.c"  // concrete device-specific zero-cross functions
 #include "mj838/autodrive.h"  // auto-drive detection functionality
-#include "mj838/autocharge.h"  // automatic charger functionality
+#include "mj838/autocharge.h"  // automatic charger functionality - including load control
 
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 2.5ms
 TIM_HandleTypeDef htim16;  // Timer16 object - odometer & co. 1s
+TIM_HandleTypeDef htim14;  // Timer14 object - power measurement time base - 10ms
 TIM_HandleTypeDef htim2;  // Timer2 object - periodic frequency measurement of timer3 data - default 250ms
 TIM_HandleTypeDef htim3;  // Timer3 object - input capture of zero-cross signal on rising edge
 
@@ -42,11 +43,11 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	HAL_GPIO_Init(ZeroCross_GPIO_Port, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = LoadFet_Pin;
+	GPIO_InitStruct.Pin = AppLoadFet_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;    // keep the load switch off
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(LoadFet_GPIO_Port, &GPIO_InitStruct);
+	HAL_GPIO_Init(AppLoadFet_GPIO_Port, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = PowerMonitorPower_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -141,6 +142,19 @@ static inline void _TimerInit(void)
 	HAL_TIM_OC_Init(&htim2);
 	HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);
 
+	// timer 14 - power measurement time base - 10ms
+	htim14.Instance = TIM14;
+	htim14.Init.Prescaler = TIMER_PRESCALER;
+	htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim14.Init.Period = TIMER14_PERIOD;  // with above pre-scaler and a period of 1, we have a 10ms period
+	htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim14.Init.RepetitionCounter = 0;
+	htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+	HAL_TIM_ConfigClockSource(&htim14, &sClockSourceConfig);
+	HAL_TIM_OC_Init(&htim14);
+	HAL_TIMEx_MasterConfigSynchronization(&htim14, &sMasterConfig);
+
 	// timer 16 - odometer & co. 1s
 	htim16.Instance = TIM16;
 	htim16.Init.Prescaler = TIMER_PRESCALER;
@@ -179,6 +193,9 @@ static void _StopTimer(TIM_HandleTypeDef *timer)
 	if(timer->Instance == TIM2)  // frequency measurement timer
 		__HAL_RCC_TIM2_CLK_DISABLE();  // stop the clock
 
+	if(timer->Instance == TIM14)  // power measurement time base - 10ms
+		__HAL_RCC_TIM14_CLK_DISABLE();  // stop the clock
+
 	if(timer->Instance == TIM16)  // odometer & co. 1s
 		__HAL_RCC_TIM16_CLK_DISABLE();  // stop the clock
 
@@ -215,6 +232,13 @@ static void _StartTimer(TIM_HandleTypeDef *timer)
 			__HAL_RCC_TIM2_CLK_ENABLE();  // start the clock
 			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
 			timer->Instance->ARR = TIMER2_PERIOD;
+		}
+
+	if(timer->Instance == TIM14)  // power measurement time base - 10ms
+		{
+			__HAL_RCC_TIM14_CLK_ENABLE();  // start the clock
+			timer->Instance->PSC = TIMER_PRESCALER;  // reconfigure after peripheral was powered down
+			timer->Instance->ARR = TIMER14_PERIOD;
 		}
 
 	if(timer->Instance == TIM16)  // odometer & co. 1s
@@ -279,10 +303,6 @@ void mj838_ctor(void)
 	__Device.public.FeRAM = mb85rc_ctor();  // tie in FeRAM object
 	__Device.public.Humidity = sht40_ctor();  // tie in humidity sensor object
 
-#if USE_PAC1952
-	__Device.public.PowerMonitor = pac1952_ctor();  // tie in Power Monitor object
-#endif
-
 	__Device.public.ZeroCross = zerocross_ctor();  // call zero-cross constructor
 	__Device.public.AutoDrive = autodrive_ctor();  // call AutoDrive constructor
 	__Device.public.AutoCharge = autocharge_ctor();  // call AutoCharge constructor
@@ -290,6 +310,9 @@ void mj838_ctor(void)
 	__disable_irq();	// disable interrupts for the remainder of initialization
 
 	// interrupt init
+	HAL_NVIC_SetPriority(TIM14_IRQn, 3, 0);  // power measurement timer
+	HAL_NVIC_EnableIRQ(TIM14_IRQn);
+
 	HAL_NVIC_SetPriority(TIM16_IRQn, 3, 0);  // odometer & co. timer
 	HAL_NVIC_EnableIRQ(TIM16_IRQn);
 

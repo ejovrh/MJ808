@@ -13,12 +13,30 @@
 #define REFRESH 0x00	// refresh command
 #define CTRL 0x01 // configures sample modes and alert pins
 #define ACC_COUNT 0x02  // accumulator count for all channels
-#define VACCN 0x03 // accumulator count for channel n
-#define VBUSN 0x07 // bus voltage for channel n
-#define VSENSEN 0x0B // sense voltage for channel n
-#define VBUSN_AVG 0x0F // rolling average of the eight most recent bus voltage measurements
-#define VSENSEN_AVG 0x13 // rolling average of the eight most recent sense voltage measurements
-#define VPOWERN 0x17 // Vsense x Vbus for channel n
+#define VACC1 0x03 // accumulator count for channel 1
+#define VACC2 0x04 // accumulator count for channel 2
+#define VACC3 0x05 // accumulator count for channel 3
+#define VACC4 0x06 // accumulator count for channel 4
+#define VBUS1 0x07 // bus voltage for channel 1
+#define VBUS2 0x08 // bus voltage for channel 2
+#define VBUS3 0x09 // bus voltage for channel 3
+#define VBUS4 0x0A // bus voltage for channel 4
+#define VSENSE1 0x0B // sense voltage for channel 1
+#define VSENSE2 0x0C // sense voltage for channel 2
+#define VSENSE3 0x0D // sense voltage for channel 3
+#define VSENSE4 0x0E // sense voltage for channel 4
+#define VBUS1_AVG 0x0F // rolling average of the eight most recent bus voltage measurements
+#define VBUS2_AVG 0x10 // rolling average of the eight most recent bus voltage measurements
+#define VBUS3_AVG 0x11 // rolling average of the eight most recent bus voltage measurements
+#define VBUS4_AVG 0x12 // rolling average of the eight most recent bus voltage measurements
+#define VSENSE1_AVG 0x13 // rolling average of the eight most recent sense voltage measurements
+#define VSENSE2_AVG 0x14 // rolling average of the eight most recent sense voltage measurements
+#define VSENSE3_AVG 0x15 // rolling average of the eight most recent sense voltage measurements
+#define VSENSE4_AVG 0x16 // rolling average of the eight most recent sense voltage measurements
+#define VPOWER1 0x17 // Vsense x Vbus for channel 1
+#define VPOWER2 0x18 // Vsense x Vbus for channel 2
+#define VPOWER3 0x19 // Vsense x Vbus for channel 3
+#define VPOWER4 0x1A // Vsense x Vbus for channel 4
 #define SMBUS_SETTINGS 0x1C // SMBus settings
 #define NEG_PWR_FSR 0x1D // configuration control for bidirectional current
 #define REFRESG_G 0x1E // REFRESH response for general call address
@@ -33,11 +51,26 @@
 #define SLOW_ALERT1 0x27 // assigns specific alert to alert n/slow pin
 #define GPIO_ALERT2 0x28 // assigns specific alert to alert n/IO pin
 #define ACC_FULLNESS_LIMITS 0x29 // ACC and ACC count fullness limits
-#define OC_LIMITN 0x30 // over-current limit for channel n
-#define UC_LIMITN 0x34 // under-current limit for channel n
-#define	OP_LIMITN 0x38 // overpower limit for channel n
-#define	OV_LIMITN 0x3C // over-voltage limit for channel n
-#define	UV_LIMITN 0x40 // under-voltage limit for channel n
+#define OC_LIMIT1 0x30 // over-current limit for channel 1
+#define OC_LIMIT2 0x31 // over-current limit for channel 2
+#define OC_LIMIT3 0x32 // over-current limit for channel 3
+#define OC_LIMIT4 0x33 // over-current limit for channel 4
+#define UC_LIMIT1 0x34 // under-current limit for channel 1
+#define UC_LIMIT2 0x35 // under-current limit for channel 2
+#define UC_LIMIT3 0x36 // under-current limit for channel 3
+#define UC_LIMIT4 0x37 // under-current limit for channel 4
+#define	OP_LIMIT1 0x38 // overpower limit for channel 1
+#define	OP_LIMIT2 0x39 // overpower limit for channel 2
+#define	OP_LIMIT3 0x3A // overpower limit for channel 3
+#define	OP_LIMIT4 0x3B // overpower limit for channel 4
+#define	OV_LIMIT1 0x3C // over-voltage limit for channel 1
+#define	OV_LIMIT2 0x3D // over-voltage limit for channel 2
+#define	OV_LIMIT3 0x3E // over-voltage limit for channel 3
+#define	OV_LIMIT4 0x3F // over-voltage limit for channel 4
+#define	UV_LIMIT1 0x40 // under-voltage limit for channel 1
+#define	UV_LIMIT2 0x41 // under-voltage limit for channel 2
+#define	UV_LIMIT3 0x42 // under-voltage limit for channel 3
+#define	UV_LIMIT4 0x43 // under-voltage limit for channel 4
 #define OC_LIMIT_NSAMPLES 0x44 // consecutive over-current samples over threshold for alert
 #define UC_LIMIT_NSAMPLES 0x45 // consecutive under-current samples over threshold for alert
 #define OP_LIMIT_NSAMPLES 0x46 // consecutive overpower samples over threshold for alert
@@ -58,6 +91,10 @@ typedef struct	// pac1952_t actual
 } __pac1952_t;
 
 static __pac1952_t __PAC1952 __attribute__ ((section (".data")));  // preallocate __PAC1952 object in .data
+
+static uint8_t _Vbus[8];
+static uint8_t _Vsense[8];
+static uint8_t _Vpower[16];
 
 #if USE_REFRESH_G
 // 6.6.2 - general call
@@ -90,15 +127,15 @@ static inline void _WriteByte(const uint8_t RegAddr, const uint8_t data)
 }
 
 // 6.6.4 - read one byte from register
-static inline uint8_t _ReadByte(const uint8_t RegAddr)
-{
-	uint8_t retval = 0;
-
-	Device->mj8x8->i2c->Transmit(PAC1952_I2C_ADDR, (uint8_t*) &RegAddr, 1);
-	Device->mj8x8->i2c->Receive((PAC1952_I2C_ADDR | READ), &retval, 1);
-
-	return retval;
-}
+//static inline uint8_t _ReadByte(const uint8_t RegAddr)
+//{
+//	uint8_t retval = 0;
+//
+//	Device->mj8x8->i2c->Transmit(PAC1952_I2C_ADDR, (uint8_t*) &RegAddr, 1);
+//	Device->mj8x8->i2c->Receive((PAC1952_I2C_ADDR | READ), &retval, 1);
+//
+//	return retval;
+//}
 
 // 6.6.5 - send byte - set internal address register pointer to location
 static inline void _SendByte(const uint8_t byte)
@@ -107,30 +144,30 @@ static inline void _SendByte(const uint8_t byte)
 }
 
 // 6.6.6 - receive byte - read byte from register pointer at location
-static inline uint8_t _ReceiveByte(void)
-{
-	uint8_t retval = 0;
-
-	Device->mj8x8->i2c->Receive((PAC1952_I2C_ADDR | READ), &retval, 1);
-
-	return retval;
-}
+//static inline uint8_t _ReceiveByte(void)
+//{
+//	uint8_t retval = 0;
+//
+//	Device->mj8x8->i2c->Receive((PAC1952_I2C_ADDR | READ), &retval, 1);
+//
+//	return retval;
+//}
 
 // 6.6.7 - block write
-static inline void _BlockWrite(const uint8_t RegAddr, uint8_t *data, const uint8_t len)
-{
-	if(len > 8)
-		return;
-
-	uint8_t buffer[8] =
-		{0};
-
-	buffer[0] = RegAddr;
-	for(uint8_t i = 0; i < len; ++i)
-		buffer[i + 1] = data[i];
-
-	Device->mj8x8->i2c->Transmit(PAC1952_I2C_ADDR, buffer, len + 1);
-}
+//static inline void _BlockWrite(const uint8_t RegAddr, uint8_t *data, const uint8_t len)
+//{
+//	if(len > 8)
+//		return;
+//
+//	uint8_t buffer[8] =
+//		{0};
+//
+//	buffer[0] = RegAddr;
+//	for(uint8_t i = 0; i < len; ++i)
+//		buffer[i + 1] = data[i];
+//
+//	Device->mj8x8->i2c->Transmit(PAC1952_I2C_ADDR, buffer, len + 1);
+//}
 
 // 6.6.8 - block read
 static inline void _BlockRead(const uint8_t RegAddr, uint8_t *buffer, const uint8_t len)
@@ -158,32 +195,55 @@ static inline void _init(void)
 	_Refresh();  // refresh the device
 }
 
-static inline void _PowerOn(void)
+static inline void _Measure(void)
 {
-	HAL_GPIO_WritePin(PowerMonitorPower_GPIO_Port, PowerMonitorPower_Pin, GPIO_PIN_SET);	// power on the power monitor
+	_RefreshV();
 
-	HAL_Delay(50);	// wait for the power monitor to power up
-
-	_init();	// initialize the PAC1952
+	_BlockRead(0x07, _Vbus, 8);  // read Vbus
+	_BlockRead(0x0B, _Vsense, 8);  // read Vsense
+	_BlockRead(0x17, _Vpower, 16);  // read Vpower
 }
 
-static inline void _PowerOff(void)
+//
+static inline void _Power(const uint8_t state)
 {
-	HAL_GPIO_WritePin(PowerMonitorPower_GPIO_Port, PowerMonitorPower_Pin, GPIO_PIN_RESET);	// power off the power monitor
+	if(state == ON)
+		{
+			HAL_GPIO_WritePin(PowerMonitorPower_GPIO_Port, PowerMonitorPower_Pin, GPIO_PIN_SET);	// power on the power monitor
+
+			HAL_Delay(50);	// wait for the power monitor to power up
+
+			_init();	// initialize the PAC1952
+		}
+	else
+		HAL_GPIO_WritePin(PowerMonitorPower_GPIO_Port, PowerMonitorPower_Pin, GPIO_PIN_RESET);	// power off the power monitor
+}
+
+//
+static inline float _GetVbus(const uint8_t channel)
+{
+	return 0;
+}
+
+//
+static inline float _GetVsense(const uint8_t channel)
+{
+	return 0;
+}
+
+//
+static inline float _GetVpower(const uint8_t channel)
+{
+	return 0;
 }
 
 static __pac1952_t __PAC1952 =  // instantiate sht40_t actual and set function pointers
 	{  //
-	.public.ReadByte = &_ReadByte,  // set function pointer
-	.public.WriteByte = &_WriteByte,  // ditto
-	.public.ReceiveByte = &_ReceiveByte,  //
-	.public.SendByte = &_SendByte,  //
-	.public.BlockWrite = &_BlockWrite,	//
-	.public.BlockRead = &_BlockRead,  //
-	.public.PowerOn = &_PowerOn,  //
-	.public.PowerOff = &_PowerOff,  //
-	.public.Refresh = &_Refresh,  //
-	.public.RefreshV = &_RefreshV  //
+	.public.Power = &_Power,  // set function pointer
+	.public.Measure = &_Measure,  // ditto
+	.public.GetVbus = &_GetVbus,  // ditto
+	.public.GetVsense = &_GetVsense,  // ditto
+	.public.GetVpower = &_GetVpower,  // ditto
 	};
 
 pac1952_t* pac1952_ctor(void)  //

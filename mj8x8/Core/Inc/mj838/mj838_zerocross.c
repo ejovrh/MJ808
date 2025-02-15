@@ -24,12 +24,6 @@ float _previousFrequency = 0;  // previous frequency value for change rate calcu
 
 const uint16_t _ScaledCPUTick = SCALED_CPU_TICK;
 
-#if USE_PAC1952
-uint8_t Vbus[8];
-uint8_t Vsense[8];
-uint8_t Vpower[8];
-#endif
-
 // timer2-triggered - computes Zero-Cross signal frequency, normally at 250ms intervals
 static void _Do(void)
 {
@@ -160,10 +154,6 @@ static inline void _StartZeroCross(void)
 {
 	Device->AutoDrive->UpdateOdometer();  // update odometer
 
-#if USE_PAC1952
-	Device->PowerMonitor->PowerOn();  // power on the power monitor
-#endif
-
 	__disable_irq();	// disable interrupts until end of initialisation
 
 	_ConfigureZeroCrossPinforZC();  // configure GPIO pin for zero-cross detection
@@ -184,10 +174,6 @@ static inline void _StartZeroCross(void)
 // stops the timer & DMA peripherals
 static inline void _StopZeroCross(void)
 {
-#if USE_PAC1952
-	Device->PowerMonitor->PowerOff();  // power off the power monitor
-#endif
-
 	Device->AutoDrive->UpdateOdometer();  // update odometer
 
 	__disable_irq();	// disable interrupts until end of initialisation
@@ -251,7 +237,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim->Instance == TIM3)
 		{
-			if(Device->AutoCharge->IsLoadConnected())
+#if USE_APPLICATION_LOAD
+			if(Device->AutoCharge->IsAppLoadConnected())
 				{  // blink green
 					HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
 					HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
@@ -261,6 +248,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 					HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
 					HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
 				}
+#endif
 		}
 }
 
@@ -272,13 +260,6 @@ void TIM2_IRQHandler(void)
 	Device->ZeroCross->Do();	// calculate ZC signal frequency
 	Device->AutoDrive->Do();	// let AutoDrive do its thing
 	Device->AutoCharge->Do();  // let AutoCharge do its thing
-
-#if USE_PAC1952
-	Device->PowerMonitor->RefreshV(); // send refresh_v command
-	Device->PowerMonitor->BlockRead(0x07, Vbus, 8);	// read Vbus
-	Device->PowerMonitor->BlockRead(0x0B, Vsense, 8);	// read Vsense
-	Device->PowerMonitor->BlockRead(0x17, Vpower, 8);	// read Vpower
-#endif
 }
 
 #endif // MJ838_
