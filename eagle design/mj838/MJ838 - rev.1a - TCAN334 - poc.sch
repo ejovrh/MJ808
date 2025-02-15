@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
@@ -17046,7 +17046,6 @@ U = R*I : 0.1 * 1A = 100mV
 and so on...</text>
 <text x="111.76" y="91.44" size="1.778" layer="97" rot="R180">Vsense range:
 0 to approx. 100mV</text>
-<text x="63.5" y="81.28" size="1.778" layer="97">I2C: 0x1A</text>
 </plain>
 <instances>
 <instance part="12R_OHMIC_LOAD" gate="G$1" x="0" y="0" smashed="yes">
