@@ -53,6 +53,9 @@
 #define CURRENT_STATS 0	// write some current consumption statistics into arrays
 #define ANGLE_STATS 1	// write angle statistics into arrays
 
+#define MOTOR_COAST 1	// see DS. p. 11 for PWM mode - coast
+#define MOTOR_BRAKE 0 // see DS. p. 11 for PWM mode - brake -- doesn't have much effect as coasting does
+
 typedef struct	// struct describing the Motor functionality
 {
 	volatile uint32_t PulseCounter;  //

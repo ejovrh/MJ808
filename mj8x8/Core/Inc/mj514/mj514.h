@@ -31,6 +31,9 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define USE_I2C 1	// use I2C
 #define USE_EVENTHANDLER 0	// shall EventHandler code be included -- timer17 is used up for ADC timebase !!!
 
+#define USE_DEBUG_GPIO 0	// GPIOs for debug signals
+#define USE_12V0_SHUTDOWN_GPIO 0 //	GPIO for powering off the 12V0 regulator
+
 // activity bit positions
 #define SHIFTING 2 // TODO - define bit positions
 
@@ -54,7 +57,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define ADC_CHANNEL_MOTOR_IPROP ADC_CHANNEL_4 // PA4
 
 // definitions of device/PCB layout-dependent hardware pins
-#define TCAN334_Standby_Pin GPIO_PIN_5	//	defined here but initialised in mj8x8.c
+#define TCAN334_Standby_Pin GPIO_PIN_15	//	defined here but initialised in mj8x8.c
 #define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
 
 #define Motor_IN1_Pin GPIO_PIN_0	// motor direction control PWM output signal channel1
@@ -68,8 +71,10 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define Motor_SLP_GPIO_Port GPIOA
 #define Motor_IPROP_Pin GPIO_PIN_4	// motor current monitoring ADC channel 4
 #define Motor_IPROP_GPIO_Port GPIOA
+#if USE_12V0_SHUTDOWN_GPIO
 #define Motor_12V0_SHDN_Pin GPIO_PIN_5	// 12V0 regulator shutdown pin
 #define Motor_12V0_SHDN_GPIO_Port GPIOA
+#endif
 #if USE_AS5601_PULSE
 #define Rotary_A_Pin GPIO_PIN_6	// rotary encoder A/B input for detection/measurement of gear rotation
 #define Rotary_A_GPIO_Port GPIOA
@@ -80,11 +85,14 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define I2C_SCL_Pin GPIO_PIN_6 // see i2c_ctor()
 #define I2C_GPIO_Port GPIOB
 
-// TODO - remove debug pin when done
-#define Debug0_Pin GPIO_PIN_1
-#define Debug0_GPIO_Port GPIOF
-#define Debug1_Pin GPIO_PIN_0
-#define Debug1_GPIO_Port GPIOF
+#if USE_DEBUG_GPIO
+#define Debug0_Pin GPIO_PIN_0
+#define Debug0_GPIO_Port GPIOB
+#define Debug1_Pin GPIO_PIN_1
+#define Debug1_GPIO_Port GPIOB
+#define Debug2_Pin GPIO_PIN_7
+#define Debug2_GPIO_Port GPIOA
+#endif
 
 // definitions of device/PCB layout-dependent hardware pins
 

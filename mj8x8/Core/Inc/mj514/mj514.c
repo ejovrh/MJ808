@@ -60,18 +60,20 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(Motor_SLP_GPIO_Port, &GPIO_InitStruct);
 
+#if USE_12V0_SHUTDOWN_GPIO
 	GPIO_InitStruct.Pin = Motor_12V0_SHDN_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(Motor_12V0_SHDN_GPIO_Port, &GPIO_InitStruct);
+#endif
 
 	GPIO_InitStruct.Pin = Motor_IPROP_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(Motor_IPROP_GPIO_Port, &GPIO_InitStruct);
 
-	__HAL_RCC_GPIOF_CLK_ENABLE();  // TODO - remove debug pin when done
+#if USE_DEBUG_GPIO
 	GPIO_InitStruct.Pin = Debug0_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -83,6 +85,13 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(Debug1_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = Debug2_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(Debug2_GPIO_Port, &GPIO_InitStruct);
+#endif
 }
 
 // Timer init - device specific
