@@ -26,7 +26,6 @@ extern TIM_HandleTypeDef htim2;  // motor control PWM signal generation
 #else
 #define MOTOR_PWM_START (uint32_t) 0x0BF // CCR start value for each channel, below 0x0090 there is hardly enough oomph to rotate anything
 #endif
-
 #if USE_AS5601_PULSE
 extern TIM_HandleTypeDef htim3;  // timer in encoder mode for rotation detection
 #endif
@@ -67,7 +66,8 @@ extern TIM_HandleTypeDef htim16;  // motor time base - 1ms
 #if USE_AS5601_PULSE
 static const uint16_t _PulseCorrection[] = {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2};  // pre-computed correction values
 #else
-static const uint16_t _RawAngleCorrection[] = {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7};  // ditto
+static const uint16_t _RawAngleCorrection[] =
+	{1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7};  // ditto
 #endif
 
 volatile uint16_t _EndTravel = 0;  // stores end of rotation angle or pusle count
@@ -88,8 +88,12 @@ volatile int16_t _previousIprop = 0;
 volatile uint16_t _maxIpropRate = 0;
 #endif
 #if ANGLE_STATS
-static volatile uint16_t _Array_RawAngleOverTime[STAT_BUFFER_LEN] = {0};  // stores as5601 raw angle over time
-static volatile uint16_t _Array_TravelAngleOverTime[STAT_BUFFER_LEN] = {0};  // stores overall raw angle over the gear travel over time
+static volatile uint16_t _Array_RawAngleOverTime[STAT_BUFFER_LEN] =
+	{0};  // stores as5601 raw angle over time
+static volatile uint16_t _Array_TravelAngleOverTime[STAT_BUFFER_LEN] =
+	{0};  // stores overall raw angle over the gear travel over time
+static volatile uint16_t _Array_RawAngleChangeOverTime[STAT_BUFFER_LEN] =
+	{0};	// stores raw angel change over time
 volatile int16_t _50ms_RawAngleDelta = 0;
 volatile uint16_t _RawDegreesPerms = 0;
 #endif
@@ -123,8 +127,10 @@ static uint16_t __ComputeAbsStartToCurrentAngleDelta(const uint16_t CurrentItera
 // starts the motor controller IC and ADC
 static void _StartMotorController(void)
 {
+#if USE_12V0_SHUTDOWN_GPIO
 	HAL_GPIO_WritePin(Motor_12V0_SHDN_GPIO_Port, Motor_12V0_SHDN_Pin, GPIO_PIN_SET);	// power on the 12v0 boost converter
 	// TODO - check if 1ms is enough
+#endif
 
 	// some sort of priority collision is the case of this hack
 	HAL_NVIC_SetPriority(TIM16_IRQn, 2, 0);  // motor time base - 1ms
@@ -173,7 +179,9 @@ static void _StopMotorController(void)
 	for(uint8_t i = 0; i < 10; i++)
 		__NOP();
 
+#if USE_12V0_SHUTDOWN_GPIO
 	HAL_GPIO_WritePin(Motor_12V0_SHDN_GPIO_Port, Motor_12V0_SHDN_Pin, GPIO_PIN_RESET);	// power off the 12v0 boost converter
+#endif
 }
 
 // stop  start interrupts
@@ -220,7 +228,10 @@ static void _RotateE14MagneticCog(const uint32_t channel, volatile uint32_t *ccr
 	 * 			- CW rotation will increase counters angle and timer3's CCR1/2
 	 * 			- CCW rotation will do the opposite
 	 */
+#if USE_DEBUG_GPIO
 	HAL_GPIO_WritePin(Debug0_GPIO_Port, Debug0_Pin, GPIO_PIN_SET);  // used to time gear shift
+	HAL_GPIO_WritePin(Debug1_GPIO_Port, Debug1_Pin, GPIO_PIN_SET);	// used to time breaking action
+#endif
 
 	_StartAngle = __Motor.encoder->Read(RAW_ANGLE);  // read out raw angle so that we know where we are starting
 	abs_DeltaAngle = 0;
@@ -291,7 +302,6 @@ void EXTI2_3_IRQHandler(void)
 	if(__HAL_GPIO_EXTI_GET_IT(Motor_FLT_Pin))  // interrupt source detection
 		{
 			HAL_GPIO_EXTI_IRQHandler(Motor_FLT_Pin);  // service the interrupt
-			HAL_GPIO_TogglePin(Debug1_GPIO_Port, Debug1_Pin);  // toggling of debug pin
 		}
 }
 
@@ -330,6 +340,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			HAL_ADC_Start_IT(&hadc);  // trigger ADC conversion
 
 			_CurrentIterationAngle = __Motor.encoder->Read(RAW_ANGLE);  // read current motor angle for this iteration
+			abs_DeltaAngle = __ComputeAbsStartToCurrentAngleDelta(_CurrentIterationAngle);  // compute absolute value for later
 
 #if USE_RAMPUP
 			// PWM ramp-up
@@ -349,6 +360,28 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				}
 #else
 			*_ccr = MOTOR_PWM_START;
+#endif
+
+#if MOTOR_COAST || MOTOR_BRAKE
+			// start to slow down
+			if(_ISRTicks > 80)	// FIXME - no rampup causes problems due to timing: if the motor is slow enouhg, it will never reach end travel because it got halted by breaking
+				{
+#if USE_DEBUG_GPIO
+					HAL_GPIO_WritePin(Debug1_GPIO_Port, Debug1_Pin, GPIO_PIN_RESET);  // used to time breaking action
+#endif
+
+#if MOTOR_COAST
+					// slow down by coasting
+					MOTOR_IN1_CCR = MOTOR_OFF;
+					MOTOR_IN2_CCR = MOTOR_OFF;
+#endif
+
+#if MOTOR_BRAKE
+					// slow down by breaking
+					MOTOR_IN1_CCR = 0xFFFF;
+					MOTOR_IN2_CCR = 0xFFFF;
+			#endif
+				}
 #endif
 
 #if CURRENT_STATS || ANGLE_STATS
@@ -377,6 +410,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			_Array_TravelAngleOverTime[i] = __ComputeAbsStartToCurrentAngleDelta(_CurrentIterationAngle);
 
 			_50ms_RawAngleDelta = (int16_t) (abs((_Array_RawAngleOverTime[50] - _Array_RawAngleOverTime[1])));
+
+			if(i > 0)
+				// temporary
+				_Array_RawAngleChangeOverTime[i] = (uint16_t) abs((_Array_RawAngleOverTime[i] - _Array_RawAngleOverTime[i - 1]));
 #endif
 #endif
 
@@ -399,17 +436,25 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 					_RawDegreesPerms = (uint16_t) ((abs_DeltaAngle * 1000) / _ISRTicks);  // compute rotational speed (divide by 1000 to get actual value)
 #endif
 
-					__Motor.public.FlagShiftingDone = 1;  // set to true
 					_StopMotorController();  // stop the motor controller
 					_SetInterruptsTo(ON);
 
-					if(_ISRTicks > 1000)  // eventually stop the timer
-						{
-							Device->StopTimer(&htim16);
-						}
+#if !ANGLE_STATS || !CURRENT_STATS
+					Device->StopTimer(&htim16);
+#endif
 
+					__Motor.public.FlagShiftingDone = 1;  // set to true
+#if USE_DEBUG_GPIO
 					HAL_GPIO_WritePin(Debug0_GPIO_Port, Debug0_Pin, GPIO_PIN_RESET);  // used to time gear shift
+#endif
 				}
+
+#if ANGLE_STATS || CURRENT_STATS
+			if(_ISRTicks > STAT_BUFFER_LEN)  // eventually stop the timer
+				{
+					Device->StopTimer(&htim16);
+				}
+#endif
 		}
 }
 #endif
