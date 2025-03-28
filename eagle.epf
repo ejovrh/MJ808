@@ -9,6 +9,7 @@ AutoSaveProject=1
 UsedLibraryUrn="urn:adsk.eagle:library:229"
 UsedLibraryUrn="urn:adsk.eagle:library:385"
 UsedLibraryUrn="urn:adsk.eagle:library:16502351"
+UsedLibrary="C:/Users/hrvoje/Documents/EAGLE/libraries/Layer Markers.lbr"
 UsedLibrary="C:/Users/hrvoje/Documents/EAGLE/libraries/STM32 JTAG 1.27mm 14pin header.lbr"
 
 [Win_1]
