@@ -5,18 +5,36 @@
 
 #if defined(MJ838_)	// if this particular device is active
 
+#define USE_DYNAMIC_LIGHT 1	// use dynamic light adjustment
+
 #define ODOMETER_REFRESH_PERIOD 60 // odometer refresh period in seconds
 
 typedef struct	// struct describing the AutoDrive functionality
 {
-//	uint8_t FlagLightisOn;  // flag if AutoDrive turned Light on
+	union mps  // meters per second
+	{
+		float Float;
+		uint8_t Bytes[sizeof(float)];
+	} mps;
+	union kph  // kilometres per hour
+	{
+		float Float;
+		uint8_t Bytes[sizeof(float)];
+	} kph;
+	union m  // distance in meters
+	{
+		float Float;
+		uint8_t Bytes[sizeof(float)];
+	} m;
+	union Odometer  // distance in meters
+	{
+		float Float;
+		uint8_t Bytes[sizeof(float)];
+	} Odometer;
 
-	float (*GetSpeed_mps)(void);	// get speed in meters per second
-	float (*GetSpeed_kph)(void);	// get speed in kilometres per hour
-	float (*GetDistance_m)(void);  // get distance in meters
 	void (*Do)(void);  // AutoDrive functionality
-
-	void (*LightOff)(void);  // turns off lights on standstill situation
+	void (*AutoDriveOff)(void);  // turns AutoDrive off
+	void (*AutoDriveOn)(void);  // turns AutoDrive on
 	void (*UpdateOdometer)(void);  // updates odometer value in FeRAM
 } autodrive_t;
 

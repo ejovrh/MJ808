@@ -143,8 +143,10 @@ static inline void _EventHandlerEvent03(void)
 #if USE_APPLICATION_LOAD
 	_payload = !Device->AutoCharge->IsAppLoadConnected();  // 0 - LED on (load disconnected), 1 - LED off (load connected)
 #endif
-
+#if !USE_APPLICATION_LOAD && !USE_ADJUSTABLE_LOAD
+	_payload = 0;  // no load
 	MsgHandler->SendMessage(mj828, MSG_BUTTON_EVENT_00, &_payload, 2);  // send it
+#endif
 #endif
 	;
 }

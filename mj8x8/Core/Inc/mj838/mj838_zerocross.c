@@ -11,7 +11,7 @@ extern TIM_HandleTypeDef htim16;  // Timer16 object - odometer & co. 1s
 
 static DMA_HandleTypeDef hdma_tim3_ch3;  // zero-cross frequency measurement
 
-static __zerocross_t  __ZeroCross;  // forward declaration of object
+static __zerocross_t __ZeroCross;  // forward declaration of object
 GPIO_InitTypeDef GPIO_InitStruct =
 	{0};
 
@@ -39,66 +39,62 @@ static void _Do(void)
 	if(_zc_counter_delta)  // if there is data
 		{
 			_sleep = 0;  // reset the sleep counter
+			Device->AutoDrive->AutoDriveOn();  // tell AutoDrive that we are rolling
 
 			// 250ms-speed-average calculation for normal speeds (i.e. ZC period << 250ms)
-			__ZeroCross._ZeroCrossFrequency = ((float) (_ScaledCPUTick * _zcValues) / (float) _zc_counter_delta);  // average dynamo AC frequency
+			__ZeroCross.public.ZeroCrossFrequency = ((float) (_ScaledCPUTick * _zcValues) / (float) _zc_counter_delta);  // average dynamo AC frequency
 
 			// special handling for lower speeds (below normal walking speed)
-			if(__ZeroCross._ZeroCrossFrequency < LOW_SPEED_THRESHOLD)  // 5Hz - speeds < 0.75 mps / 2.69 kph
+			if(__ZeroCross.public.ZeroCrossFrequency < LOW_SPEED_THRESHOLD)  // 5Hz - speeds < 0.75 mps / 2.69 kph
 				{
 					_arr = 4999;  // 500ms
 
 					// adapt based on detected speed
-					if(__ZeroCross._ZeroCrossFrequency < VERY_LOW_SPEED_THRESHOLD)  // 2 Hz - speeds < 0.3 mps / 1.07 kph
+					if(__ZeroCross.public.ZeroCrossFrequency < VERY_LOW_SPEED_THRESHOLD)  // 2 Hz - speeds < 0.3 mps / 1.07 kph
 						_arr = 9999;  // 1s
 
 					// adapt based on detected speed
-					if(__ZeroCross._ZeroCrossFrequency < EXTREMELY_LOW_SPEED_THRESHOLD)  // 1 Hz - speeds < 0.15 mps / 0.53 kph
+					if(__ZeroCross.public.ZeroCrossFrequency < EXTREMELY_LOW_SPEED_THRESHOLD)  // 1 Hz - speeds < 0.15 mps / 0.53 kph
 						_arr = 19999;  // 2s
 
 					// adapt based on calculated acceleration
-					if(__ZeroCross._ZeroCrossFrequencyRate > ACCELERATION_THRESHOLD_1)  // 1Hz/s²
+					if(__ZeroCross.public.ZeroCrossFrequencyRate > ACCELERATION_THRESHOLD_1)  // 1Hz/s²
 						_arr = 9999;  // 1s
 
 					// adapt based on calculated acceleration
-					if(__ZeroCross._ZeroCrossFrequencyRate > ACCELERATION_THRESHOLD_2)  // 2Hz/s²
+					if(__ZeroCross.public.ZeroCrossFrequencyRate > ACCELERATION_THRESHOLD_2)  // 2Hz/s²
 						_arr = 4999;  // 500ms
 
 					// adapt based on calculated acceleration
-					if(__ZeroCross._ZeroCrossFrequencyRate > ACCELERATION_THRESHOLD_3)  // 4Hz/s²
+					if(__ZeroCross.public.ZeroCrossFrequencyRate > ACCELERATION_THRESHOLD_3)  // 4Hz/s²
 						_arr = 2499;  // 250ms
 				}
 		}
 	else  // no data - standstill
 		{
-			__ZeroCross._ZeroCrossFrequency = 0;
-			++_sleep;
+			_arr = 9999;  // 1s
+			__ZeroCross.public.ZeroCrossFrequency = 0; // zero out for next iteration
+			++_sleep;	  // increment sleep counter
 		}
 
 	__HAL_TIM_SET_AUTORELOAD(&htim2, _arr);  // set determined ARR value
 
 	// FIXME - check in what unit of time the change rate is computed
-	__ZeroCross._ZeroCrossFrequencyRate = ((float) (__ZeroCross._ZeroCrossFrequency - _previousFrequency) / (float) (((__HAL_TIM_GET_AUTORELOAD(&htim2)) / 10000) + 1));
+	__ZeroCross.public.ZeroCrossFrequencyRate = ((float) (__ZeroCross.public.ZeroCrossFrequency - _previousFrequency) / (float) (((__HAL_TIM_GET_AUTORELOAD(&htim2)) / 10000) + 1));
 
-	_previousFrequency = __ZeroCross._ZeroCrossFrequency;  // save current frequency for next iteration
+	_previousFrequency = __ZeroCross.public.ZeroCrossFrequency;  // save current frequency for next iteration
 
 	if(_sleep > SLEEPTIMEOUT_COUNTER)  // n iterations of sleep
 		{
-			__ZeroCross._ZeroCrossFrequency = 0;  // zero & start over
-			__ZeroCross._ZeroCrossFrequencyRate = 0;  // zero & start over
+			__ZeroCross.public.ZeroCrossFrequency = 0;  // zero & start over
+			__ZeroCross.public.ZeroCrossFrequencyRate = 0;  // zero & start over
 			_sleep = 0;
 			Device->ZeroCross->Stop();  // stop zero-cross detection; timer1 will put the device into stop mode
-			Device->AutoDrive->LightOff();  // tell AutoDrive that we are stopped
+			Device->AutoDrive->AutoDriveOff();  // tell AutoDrive that we are stopped
 		}
 
 	_zc_counter_delta = 0;  // zero & start over
 	_zcValues = 0;
-}
-
-// returns computed Zero-Cross signal frequency
-static inline float _GetZCFrequency(void)
-{
-	return __ZeroCross._ZeroCrossFrequency;
 }
 
 // DMA init - device specific
@@ -125,7 +121,7 @@ static inline void __DMAInit(void)
 static inline void _ConfigureZeroCrossPinforZC(void)
 {
 	HAL_NVIC_DisableIRQ(EXTI0_1_IRQn);	// disable EXTI0 - we will use a timer2 IC  mode from now on...
-	NVIC_ClearPendingIRQ(EXTI0_1_IRQn);  // clear pending interrupt
+	__HAL_GPIO_EXTI_CLEAR_FLAG(EXTI0_1_IRQn);  // clear pending interrupt
 
 	// configure from EXTI0 to timer2 input-capture mode (so that the device can measure ZC frequency)
 	GPIO_InitStruct.Pin = ZeroCross_Pin;
@@ -145,7 +141,7 @@ static inline void _ConfigureZeroCrossPinforEXTI(void)
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	HAL_GPIO_Init(ZeroCross_GPIO_Port, &GPIO_InitStruct);
 
-	NVIC_ClearPendingIRQ(EXTI0_1_IRQn);  // clear pending interrupt
+	__HAL_GPIO_EXTI_CLEAR_FLAG(EXTI0_1_IRQn);  // clear pending interrupt
 	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);  // enable EXTI0 for wakeup from stop mode
 }
 
@@ -185,13 +181,11 @@ static inline void _StopZeroCross(void)
 	__HAL_RCC_DMA1_CLK_DISABLE();  // turn off peripheral
 	Device->StopTimer(&htim3);	// stop zero-cross input capture timer
 
-	_ConfigureZeroCrossPinforEXTI();  // configure GPIO pin for ZeroCross wakeup on first impulse
-
-	// turn off LEDs - in case they were on
+		// turn off LEDs - in case they were on
 	HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
 
-	// FIXME - with a signal generator input, on signal stop (emulated wheel rotation stop), zerocross stop does get executed correctly, however for some reason EXTI0 gets triggered somehow.
+	_ConfigureZeroCrossPinforEXTI();  // configure GPIO pin for ZeroCross wakeup on first impulse
 	__enable_irq();  // enable interrupts
 
 	Device->mj8x8->UpdateActivity(ZEROCROSS, OFF);	// update the bus
@@ -199,8 +193,7 @@ static inline void _StopZeroCross(void)
 
 zerocross_t* zerocross_ctor(void)
 {
-	__ZeroCross.public.GetZCFrequency = &_GetZCFrequency;  // set function pointer
-	__ZeroCross.public.Do = &_Do;  // ditto
+	__ZeroCross.public.Do = &_Do;  // set function pointer
 	__ZeroCross.public.Start = &_StartZeroCross;  // ditto
 	__ZeroCross.public.Stop = &_StopZeroCross;  // ditto
 

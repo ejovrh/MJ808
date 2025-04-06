@@ -296,7 +296,7 @@ void mj838_ctor(void)
 
 	// application part
 	for(IRQn_Type irq = NonMaskableInt_IRQn; irq <= USB_IRQn; irq++)
-		NVIC_ClearPendingIRQ(irq);
+		__HAL_GPIO_EXTI_CLEAR_FLAG(irq);
 
 	__enable_irq();  // PARTLY!!! enable interrupts -- essential for I2C
 

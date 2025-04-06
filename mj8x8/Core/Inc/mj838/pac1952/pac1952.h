@@ -7,11 +7,11 @@
 
 typedef struct	// struct describing the PAC1952 functionality
 {
-	float (*GetVbus)(const uint8_t channel);  // get bus voltage for channel x
-	float (*GetVsense)(const uint8_t channel);  // get sense voltage for channel x
-	float (*GetVpower)(const uint8_t channel);  // get Vsense x Vbus for channel x
-	void (*Measure)(void);  // refresh_v
-	void (*Power)(const uint8_t state);  // power device on & initialize
+	float *Voltage;	// pointer to voltage array
+	float *Current;  // pointer to current array
+	float *Power;  // pointer to power array
+	void (*Measure)(const uint8_t i);  // refresh_v
+	void (*PowerState)(const uint8_t state);  // power device on & initialize
 } pac1952_t;
 
 pac1952_t* pac1952_ctor(void);	// the PAC1952 constructor

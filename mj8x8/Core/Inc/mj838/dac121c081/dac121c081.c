@@ -33,13 +33,14 @@ static inline uint16_t _Read(void)
 	uint8_t buffer[2];
 	Device->mj8x8->i2c->Receive((DAC121C081_I2C_ADDR | READ), buffer, 2);  // read 2 bytes into buffer
 
-	return ((uint16_t) buffer[1] << 8) & (buffer[0]);  // combine the two bytes into a single 16-bit value
+	return ((uint16_t) buffer[0] << 8) | (buffer[1]);  // combine the two bytes into a single 16-bit value
 }
 
 // power off & activate 100k pulldown
 static inline void _PowerOff(void)
 {
-	_Write((const uint16_t*) 0x2000);  // set DAC to zero & 100k pulldown
+	uint16_t val = 0x2000;  // set DAC to zero & 100k pulldown
+	_Write(&val);
 }
 
 static __dac121c081_t __DAC121C081 =  // instantiate sht40_t actual and set function pointers
@@ -51,6 +52,16 @@ static __dac121c081_t __DAC121C081 =  // instantiate sht40_t actual and set func
 
 dac121c081_t* dac121c081_ctor(void)  //
 {
+	_PowerOff();  // power off the device
+	uint16_t val = 0;
+
+	for(uint8_t i = 0; i < 65; ++i)  // wait for device to power up
+		{
+			_Write(&val);
+			__ASM("NOP");
+			val++;
+		}
+
 	_PowerOff();  // power off the device
 
 	return &__DAC121C081.public;  // set pointer to DAC121C081 public part

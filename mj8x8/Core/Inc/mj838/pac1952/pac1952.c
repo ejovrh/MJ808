@@ -85,6 +85,9 @@
 
 #define REFRESH_TIME 1 // approx. 1ms to refresh all values
 
+#define VSOURCE_FACTOR 0.00048828125f	// DS. p. 25 - 32V / 65536
+#define CURRENT_FACTOR 0.000015258789062f	// DS. p. 25 - 1A / 65536; FSC is 1A (Rsense = 0.1R);
+
 typedef struct	// pac1952_t actual
 {
 	pac1952_t public;  // public struct
@@ -92,9 +95,13 @@ typedef struct	// pac1952_t actual
 
 static __pac1952_t __PAC1952 __attribute__ ((section (".data")));  // preallocate __PAC1952 object in .data
 
-static uint8_t _Vbus[8];
-static uint8_t _Vsense[8];
-static uint8_t _Vpower[16];
+// private variables for voltage, current and power
+float _Voltage[2] =
+	{0};
+float _Current[2] =
+	{0};
+float _Power[2] =
+	{0};
 
 #if USE_REFRESH_G
 // 6.6.2 - general call
@@ -154,20 +161,20 @@ static inline void _SendByte(const uint8_t byte)
 //}
 
 // 6.6.7 - block write
-//static inline void _BlockWrite(const uint8_t RegAddr, uint8_t *data, const uint8_t len)
-//{
-//	if(len > 8)
-//		return;
-//
-//	uint8_t buffer[8] =
-//		{0};
-//
-//	buffer[0] = RegAddr;
-//	for(uint8_t i = 0; i < len; ++i)
-//		buffer[i + 1] = data[i];
-//
-//	Device->mj8x8->i2c->Transmit(PAC1952_I2C_ADDR, buffer, len + 1);
-//}
+static inline void _BlockWrite(const uint8_t RegAddr, uint8_t *data, const uint8_t len)
+{
+	if(len > 8)
+		return;
+
+	uint8_t buffer[8] =
+		{0};
+
+	buffer[0] = RegAddr;
+	for(uint8_t i = 0; i < len; ++i)
+		buffer[i + 1] = data[i];
+
+	Device->mj8x8->i2c->Transmit(PAC1952_I2C_ADDR, buffer, len + 1);
+}
 
 // 6.6.8 - block read
 static inline void _BlockRead(const uint8_t RegAddr, uint8_t *buffer, const uint8_t len)
@@ -176,36 +183,51 @@ static inline void _BlockRead(const uint8_t RegAddr, uint8_t *buffer, const uint
 	Device->mj8x8->i2c->Receive((PAC1952_I2C_ADDR | READ), buffer, len);
 }
 
-// 6.6.1 - refresh & refresh_v
+// 6.6.1 - refresh
 static inline void _Refresh(void)
 {
 	_SendByte(REFRESH);  // reset the refresh command
 	HAL_Delay(REFRESH_TIME);  // wait for the refresh to complete
 }
 
-static inline void _RefreshV(void)
-{
-	_SendByte(REFRESH_V);  // reset the refresh_v command
-	HAL_Delay(REFRESH_TIME);  // wait for the refresh to complete
-}
+// 6.6.1 - refresh_v
+//static inline void _RefreshV(void)
+//{
+//	_SendByte(REFRESH_V);  // reset the refresh_v command
+//	HAL_Delay(REFRESH_TIME);  // wait for the refresh to complete
+//}
 
 static inline void _init(void)
 {
 	_WriteByte(SMBUS_SETTINGS, 0x00);  // reset the POR bit
+	uint8_t tmp[2] =
+		{0x90, 0x00};  // single shot, 8x
+	_BlockWrite(CTRL, tmp, 2);  // set the CTRL register
 	_Refresh();  // refresh the device
 }
 
-static inline void _Measure(void)
+static inline void _Measure(const uint8_t i)
 {
-	_RefreshV();
+	uint8_t _Vbus[4] =
+		{0};
+	uint8_t _Vsense[4] =
+		{0};
+	uint8_t _Vpower[8] =
+		{0};
 
-	_BlockRead(0x07, _Vbus, 8);  // read Vbus
-	_BlockRead(0x0B, _Vsense, 8);  // read Vsense
-	_BlockRead(0x17, _Vpower, 16);  // read Vpower
+	_Refresh();
+
+	_BlockRead(0x0F, _Vbus, 4);  // read Vbus
+	_BlockRead(0x13, _Vsense, 4);  // read Vsense
+	_BlockRead(0x17, _Vpower, 8);  // read Vpower
+
+	_Voltage[i] = (float) (((_Vbus[i * 2] << 8) | _Vbus[i * 2 + 1]) & 0xFFFC) * VSOURCE_FACTOR;  // DS. p. 25 - §5.8
+	_Current[i] = (float) ((_Vsense[i * 2] << 8) | _Vsense[i * 2 + 1]) * CURRENT_FACTOR;  // DS. p. 25 - §5.9
+	_Power[i] = _Current[i] * _Voltage[i];  // calculate power
 }
 
 //
-static inline void _Power(const uint8_t state)
+static inline void _PowerState(const uint8_t state)
 {
 	if(state == ON)
 		{
@@ -219,31 +241,13 @@ static inline void _Power(const uint8_t state)
 		HAL_GPIO_WritePin(PowerMonitorPower_GPIO_Port, PowerMonitorPower_Pin, GPIO_PIN_RESET);	// power off the power monitor
 }
 
-//
-static inline float _GetVbus(const uint8_t channel)
-{
-	return 0;
-}
-
-//
-static inline float _GetVsense(const uint8_t channel)
-{
-	return 0;
-}
-
-//
-static inline float _GetVpower(const uint8_t channel)
-{
-	return 0;
-}
-
 static __pac1952_t __PAC1952 =  // instantiate sht40_t actual and set function pointers
 	{  //
-	.public.Power = &_Power,  // set function pointer
+	.public.PowerState = &_PowerState,  // set function pointer
 	.public.Measure = &_Measure,  // ditto
-	.public.GetVbus = &_GetVbus,  // ditto
-	.public.GetVsense = &_GetVsense,  // ditto
-	.public.GetVpower = &_GetVpower,  // ditto
+	.public.Voltage = _Voltage,  // ditto
+	.public.Current = _Current,  // ditto
+	.public.Power = _Power,  // ditto
 	};
 
 pac1952_t* pac1952_ctor(void)  //

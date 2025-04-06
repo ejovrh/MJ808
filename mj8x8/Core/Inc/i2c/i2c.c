@@ -100,7 +100,7 @@ static inline void _I2C_Init(const uint32_t _SDA_Pin, const uint32_t _SCL_Pin, G
 	_hi2c.Init.Timing = 0x0000020A;  // 400kHz - fast mode
 #endif
 #if FREQ_1MHZ
-	_hi2c.Init.Timing = 0x00100001;	// 1MHz - fast mode plus
+	_hi2c.Init.Timing = 0x00100001;  // 1MHz - fast mode plus
 #endif
 	_hi2c.Init.OwnAddress1 = 0;
 	_hi2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -114,7 +114,7 @@ static inline void _I2C_Init(const uint32_t _SDA_Pin, const uint32_t _SCL_Pin, G
 	__HAL_RCC_GPIOF_CLK_ENABLE();  // enable peripheral clock
 	GPIO_InitStruct.Pin = _SDA_Pin | _SCL_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	GPIO_InitStruct.Alternate = GPIO_AF1_I2C1;
 	HAL_GPIO_Init(_I2C_Port, &GPIO_InitStruct);

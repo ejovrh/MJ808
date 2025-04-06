@@ -91,7 +91,6 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 // TODO - remove once HW rev.1a is there
 //#define NEW_GPIO_LAYOUT // use HW rev. 1b GPIO layout
 
-#ifdef NEW_GPIO_LAYOUT
 #define PowerMonitorPower_Pin GPIO_PIN_8	// low - off; high - on
 #define PowerMonitorPower_GPIO_Port GPIOB
 
@@ -114,16 +113,12 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define I2C_GPIO_Port GPIOF
 
 #if GPIO_DEBUG_OUT
-#define YellowTestPad_Pin GPIO_PIN_6// debug pin 0
-#define YellowTestPad_GPIO_Port GPIOB
+#define YellowTestPad_Pin GPIO_PIN_7// debug pin 0
+#define YellowTestPad_GPIO_Port GPIOA
 #define BlueTestPad_Pin GPIO_PIN_7 // debug pin 1
 #define BlueTestPad_GPIO_Port GPIOB
 #endif
 
-//#define PA5_Pin GPIO_PIN_5	// general GPIO
-//#define PA5_GPIO_Port GPIOA
-//#define PA6_Pin GPIO_PIN_6	// general GPIO
-//#define PA6_GPIO_Port GPIOA
 #define PA7_Pin GPIO_PIN_7	// general GPIO
 #define PA7_GPIO_Port GPIOA
 
@@ -137,51 +132,6 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define PB6_GPIO_Port GPIOB
 #define PB7_Pin GPIO_PIN_7	// general GPIO
 #define PB7_GPIO_Port GPIOB
-#else
-#define PowerMonitorPower_Pin GPIO_PIN_0	// low - off; high - on
-#define PowerMonitorPower_GPIO_Port GPIOA
-
-#define LED1_Pin GPIO_PIN_6	// dual colour LED pin 2
-#define LED1_GPIO_Port GPIOA
-#define LED2_Pin GPIO_PIN_3	// dual colour LED pin 2
-#define LED2_GPIO_Port GPIOB
-
-#define LED_Reset_Pin GPIO_PIN_7	// SSR LED Driver reset: low - in reset/standby; high - active
-#define LED_Reset_GPIO_Port GPIOA
-
-#define ZeroCross_Pin GPIO_PIN_0	// ZeroCross signal in
-#define ZeroCross_GPIO_Port GPIOB
-#define AppLoadFet_Pin GPIO_PIN_1	// Load Switch
-#define AppLoadFet_GPIO_Port GPIOB
-
-#define I2C_SDA_Pin GPIO_PIN_0 // see i2c_ctor()
-#define I2C_SCL_Pin GPIO_PIN_1// see i2c_ctor()
-#define I2C_GPIO_Port GPIOF
-
-#if GPIO_DEBUG_OUT
-#define YellowTestPad_Pin GPIO_PIN_1// debug pin 0
-#define YellowTestPad_GPIO_Port GPIOA
-#define BlueTestPad_Pin GPIO_PIN_8 // debug pin 1
-#define BlueTestPad_GPIO_Port GPIOB
-#endif
-
-#define PA2_Pin GPIO_PIN_2	// general GPIO
-#define PA2_GPIO_Port GPIOA
-#define PA3_Pin GPIO_PIN_3	// general GPIO
-#define PA3_GPIO_Port GPIOA
-#define PA4_Pin GPIO_PIN_4	// general GPIO
-#define PA4_GPIO_Port GPIOA
-#define PA5_Pin GPIO_PIN_5	// general GPIO
-#define PA5_GPIO_Port GPIOA
-#define PB4_Pin GPIO_PIN_4	// general GPIO
-#define PB4_GPIO_Port GPIOB
-#define PB5_Pin GPIO_PIN_5	// general GPIO
-#define PB5_GPIO_Port GPIOB
-#define PB6_Pin GPIO_PIN_6	// general GPIO
-#define PB6_GPIO_Port GPIOB
-#define PB7_Pin GPIO_PIN_7	// general GPIO
-#define PB7_GPIO_Port GPIOB
-#endif
 
 // definitions of device/PCB layout-dependent hardware pins
 

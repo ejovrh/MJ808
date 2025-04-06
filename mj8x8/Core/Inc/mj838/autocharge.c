@@ -54,9 +54,15 @@ typedef struct	// autocharge_t actual
 	uint8_t __AdjustableLoadDAC;  // adjustable load DAC output voltage: 0 off, non-zero: variable
 	uint8_t __FlagAppLoadSwitch :1;  // application load switch state - 0 off, 1 on
 
+#if USE_TLC59208
 	tlc59208_t *_LEDDriver;  // pointer to TLC59208 object
+#endif
+#if USE_ADJUSTABLE_LOAD
 	dac121c081_t *_AdjustableLoad;	// pointer  to DAC121C081 object
+#endif
+#if USE_PAC1952
 	pac1952_t *_PowerMonitor;  // pointer to PAC1952 object
+#endif
 } __autocharge_t;
 
 static __autocharge_t __AutoCharge __attribute__ ((section (".data")));  // preallocate __AutoCharge object in .data
@@ -77,7 +83,6 @@ static void _AdjustLoad(const uint8_t voltage)
 	__AutoCharge._AdjustableLoad->Write((uint16_t*) &__AutoCharge.__AdjustableLoadDAC);  // write DAC set voltage to DAC
 }
 #endif
-
 #if USE_APPLICATION_LOAD
 // returns application load switch state: 0 - disconnected, 1 - connected
 static inline uint8_t _IsAppLoadConnected(void)
@@ -96,7 +101,7 @@ static inline void _ConnectAppLoad(const uint8_t state)
 }
 #endif
 
-// TODO - write 12R adjustable load functions
+// TODO - write 12R adjustable load control functions
 
 // starts/stops the peripheral
 static inline void _SetChargerState(uint8_t state)
@@ -105,13 +110,19 @@ static inline void _SetChargerState(uint8_t state)
 	if(_IsAppLoadConnected() == state)  // if already in the desired state
 		return;  // get out, nothing to do here
 #endif
+#if USE_ADJUSTABLE_LOAD
+	if(_IsAdjustableLoadConnected() == state)  // if already in the desired state
+        return;  // get out, nothing to do here
+#endif
 
 	if(state == ON)
 		Device->StartTimer(&htim14);  // start the timer
 	else
 		Device->StopTimer(&htim14);  // stop the timer
 
-	__AutoCharge._PowerMonitor->Power(state);  // power on the power monitor
+#if USE_PAC1952
+	__AutoCharge._PowerMonitor->PowerState(state);  // power on the power monitor
+#endif
 #if USE_APPLICATION_LOAD
 	_ConnectAppLoad(state);  // set the load state
 #endif
@@ -176,7 +187,7 @@ static inline uint8_t _CompareSpeedLevelsandFlag(const autocharge_speedlevels_t 
 static void _Do(void)  // this actually runs the AutoCharge application
 {
 	// set speed flags on each measurement
-	float speed = Device->AutoDrive->GetSpeed_mps();
+	float speed = Device->AutoDrive->mps.Float;
 	if(speed > 12)
 		__AutoCharge._SpeedLevel = Speed12;
 	else if(speed > 10)
@@ -196,7 +207,9 @@ static void _Do(void)  // this actually runs the AutoCharge application
 
 	if(_CompareSpeedLevelsandFlag(__AutoCharge._SpeedLevel))	// if the speed flags have changed
 		{
+#if USE_TLC59208
 			__AutoCharge._LEDDriver->Power(__AutoCharge._SpeedLevel);  // if movement, then turn on LED Driver
+#endif
 
 			if(__AutoCharge._SpeedLevel <= SpeedbelowChargerThres)  // low speed - load is disconnected
 				_SetChargerState(OFF);  // stop the charger
@@ -213,7 +226,9 @@ static void _Do(void)  // this actually runs the AutoCharge application
 			_SSR_SW2(__AutoCharge._SpeedLevel == Speed4 ? ON : OFF);  // NC to NO
 			_SSR_SW1(__AutoCharge._SpeedLevel == Speed2 ? ON : OFF);  // NC to NO
 
+#if USE_TLC59208
 			__AutoCharge._LEDDriver->Write(0x0C, &_LEDword);  // write LED state to driver
+#endif
 		}
 }
 
@@ -231,17 +246,28 @@ static __autocharge_t __AutoCharge =  // instantiate autobatt_t actual and set f
 
 autocharge_t* autocharge_ctor(void)  //
 {
+#if USE_TLC59208
 	__AutoCharge._LEDDriver = tlc59208_ctor();  // tie in TLC59208 object
+#endif
+#if USE_ADJUSTABLE_LOAD
 	__AutoCharge._AdjustableLoad = dac121c081_ctor();  // tie in DAC121C081 object
+#endif
+#if USE_PAC1952
 	__AutoCharge._PowerMonitor = pac1952_ctor();  // tie in Power Monitor object
+#endif
 
 // TODO - implement 12R adjustable load via I2C ADC
 #if USE_APPLICATION_LOAD
 	HAL_GPIO_WritePin(AppLoadFet_GPIO_Port, AppLoadFet_Pin, GPIO_PIN_RESET);	// application load n-fet disconnected
 	__AutoCharge.__FlagAppLoadSwitch = HAL_GPIO_ReadPin(AppLoadFet_GPIO_Port, AppLoadFet_Pin);  // read out initial switch states
 #endif
+#if USE_ADJUSTABLE_LOAD
+//	__AutoCharge._AdjustableLoad->PowerOff();  // power off the DAC & activate 100k pulldown
+#endif
 
+#if USE_ADJUSTABLE_LOAD
 	__AutoCharge._AdjustableLoad->PowerOff();  // power off the DAC & activate 100k pulldown
+#endif
 
 	return &__AutoCharge.public;  // set pointer to AutoCharge public part
 }
@@ -253,7 +279,9 @@ void TIM14_IRQHandler(void)
 
 	HAL_NVIC_DisableIRQ(TIM16_IRQn);  //	tweak so that we don't have a IRQ collision between timer14 and timer16
 
-	__AutoCharge._PowerMonitor->Measure();  // measure Vbus, Vsense, Vpower
+#if USE_PAC1952
+	__AutoCharge._PowerMonitor->Measure(0);  // channel 1 - measure Vbus, Vsense, Vpower
+#endif
 
 	HAL_NVIC_EnableIRQ(TIM16_IRQn);
 }
