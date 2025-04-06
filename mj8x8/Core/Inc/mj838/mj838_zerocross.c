@@ -11,7 +11,7 @@ extern TIM_HandleTypeDef htim16;  // Timer16 object - odometer & co. 1s
 
 static DMA_HandleTypeDef hdma_tim3_ch3;  // zero-cross frequency measurement
 
-static __zerocross_t  __ZeroCross;  // forward declaration of object
+static __zerocross_t __ZeroCross;  // forward declaration of object
 GPIO_InitTypeDef GPIO_InitStruct =
 	{0};
 
@@ -145,7 +145,7 @@ static inline void _ConfigureZeroCrossPinforEXTI(void)
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	HAL_GPIO_Init(ZeroCross_GPIO_Port, &GPIO_InitStruct);
 
-	NVIC_ClearPendingIRQ(EXTI0_1_IRQn);  // clear pending interrupt
+	__HAL_GPIO_EXTI_CLEAR_FLAG(EXTI0_1_IRQn);  // clear pending interrupt
 	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);  // enable EXTI0 for wakeup from stop mode
 }
 
@@ -185,13 +185,11 @@ static inline void _StopZeroCross(void)
 	__HAL_RCC_DMA1_CLK_DISABLE();  // turn off peripheral
 	Device->StopTimer(&htim3);	// stop zero-cross input capture timer
 
-	_ConfigureZeroCrossPinforEXTI();  // configure GPIO pin for ZeroCross wakeup on first impulse
-
-	// turn off LEDs - in case they were on
+		// turn off LEDs - in case they were on
 	HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
 
-	// FIXME - with a signal generator input, on signal stop (emulated wheel rotation stop), zerocross stop does get executed correctly, however for some reason EXTI0 gets triggered somehow.
+	_ConfigureZeroCrossPinforEXTI();  // configure GPIO pin for ZeroCross wakeup on first impulse
 	__enable_irq();  // enable interrupts
 
 	Device->mj8x8->UpdateActivity(ZEROCROSS, OFF);	// update the bus
