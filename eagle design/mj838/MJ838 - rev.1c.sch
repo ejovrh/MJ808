@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
@@ -18186,7 +18186,7 @@ fcutoff = 1 / ( (R + R) + C + 2pi)</text>
 <description>MJ838 main</description>
 <plain>
 <text x="195.58" y="12.7" size="6.4516" layer="97">mj838 - Čos - dynamo electrnics
-HW rev.1b</text>
+HW rev.1c</text>
 <wire x1="274.32" y1="205.74" x2="274.32" y2="91.44" width="0.1524" layer="98" style="dashdot"/>
 <wire x1="274.32" y1="91.44" x2="358.14" y2="91.44" width="0.1524" layer="98" style="dashdot"/>
 <wire x1="358.14" y1="91.44" x2="523.24" y2="91.44" width="0.1524" layer="98" style="dashdot"/>

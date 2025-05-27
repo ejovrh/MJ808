@@ -247,7 +247,7 @@
 <wire x1="88" y1="50.75" x2="88" y2="1" width="2" layer="30" grouprefs="BOARD"/>
 <wire x1="87.5" y1="1.25" x2="6.5" y2="1" width="2" layer="30" grouprefs="BOARD"/>
 <text x="80.625" y="16.25" size="1.5" layer="29" font="vector" ratio="12" rot="R270" align="center" grouprefs="BOARD">mj838 - Čos
-HW rev.1b</text>
+HW rev.1c</text>
 <text x="-3.75" y="17.75" size="1.778" layer="2" rot="R180" grouprefs="BOARD">3V3</text>
 <text x="-3.75" y="19.75" size="1.778" layer="3" rot="R180" grouprefs="BOARD">GND</text>
 <text x="-3.75" y="21.75" size="1.778" layer="14" rot="R180" grouprefs="BOARD">GND</text>
