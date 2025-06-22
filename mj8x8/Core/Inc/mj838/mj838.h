@@ -14,7 +14,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 
 		// 0x3C - the device will execute HAL_PWR_EnableSleepOnExit() w. CANbus off
 		uint8_t ZeroCross :1;  // ZC // zero-cross signal present or not
-		uint8_t _3 :1;  // _3 //
+		uint8_t Motion :1;  // M // motion detected by accelerometer
 		uint8_t AutoCharge :1;	// AC // AutoCharge is operating
 		uint8_t AutoDrive :1;  // AD // AutoDrive is active
 
@@ -31,19 +31,29 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define WIPE_FRAM 0	// if activated, statistics will be zeroed out in EXTI0 ISR
 
 #define USE_I2C 1	// use I2C
+#define USE_SPI 1	// use SPI
 #define USE_FERAM 1 // use FERAM
 #define USE_SHT40 1 // use humidity sensor
-#define USE_PAC1952 1 // use Power Monitor
+#define USE_INA219 1 // use Power Monitor
 #define USE_TLC59208 1 // use LED driver for SSRs
+#define USE_ADXL367 0 // use ADXL367 accelerometer
 #define USE_DAC121C081 1 // use USE_DAC121C081 ADC for adjustable 12R load
+#define USE_LOGGER 1 //
+#define USE_SDCARD 1 //
 
 #define USE_EVENTHANDLER 1	// shall EventHandler code be included
 
-#define USE_APPLICATION_LOAD 1	// use application load switch (not the 12R adjustable load)
-#define USE_ADJUSTABLE_LOAD 0	// use 12R adjustable load switch (not the application load switch)
+#define USE_RATE_CALC 0	// if zero cross rate of change calculation is to be included
+
+#define USE_APPLICATION_LOAD 0	// use application load switch (not the 12R adjustable load)
+#define USE_ADJUSTABLE_LOAD 1	// use 12R adjustable load switch (not the application load switch)
+
+#if USE_SPI && USE_SDCARD
+#include "sdcard/sdcard.h"
+#endif
 
 #define ZEROCROSS 2
-//#define	MOTION 3
+#define	MOTION 3	// TODO - ADXL345 via I2C
 #define AUTOCHARGE 4
 #define AUTODRIVE 5
 
@@ -58,10 +68,10 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define F_CPU 8000000	// 8MHz
 #define SCALED_CPU_TICK (uint16_t)(F_CPU / (TIMER_PRESCALER + 1)) // re-compute scaled down CPU freq. due to prescaler
 
-//#define WHEEL_CIRCUMFERENCE 1.945f	// red 26" training wheel circumference in meters
-#define WHEEL_CIRCUMFERENCE 2.350f	// Schwalbe Marathon Mondial 29x2.25"
-//#define WHEEL_CIRCUMFERENCE 2.342f	// Schwalbe Jumbo Jim 26x4", in meters
-//#define WHEEL_CIRCUMFERENCE 2.095f	// Marathon Mondial 26x2", in meters
+//#define WHEEL_CIRCUMFERENCE 1945	// red 26" training wheel circumference in millimeters
+#define WHEEL_CIRCUMFERENCE 2350 // Schwalbe Marathon Mondial 29x2.25" in millimeters
+//#define WHEEL_CIRCUMFERENCE 2342	// Schwalbe Jumbo Jim 26x4", in millimeters
+//#define WHEEL_CIRCUMFERENCE 2095	// Marathon Mondial 26x2", in millimeters
 
 // FeRAM memory addresses
 #define ODOMETER_ADDR	0x0000, 4	// 4 bytes for odometer float
@@ -73,7 +83,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 
 #include "mj8x8\mj8x8.h"
 #include "button\button.h"
-#include "mb85rc\mb85rc.h"	// 16kB FeRAM
+#include "fm24cl\fm24cl.h"	// FeRAM
 #include "sht40\sht40.h" // SHT40 humidity sensor
 
 #include "zerocross\zerocross.h"
@@ -88,15 +98,12 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TCAN334_Standby_Pin GPIO_PIN_15	//	defined here but initialised in mj8x8.c
 #define TCAN334_Standby_GPIO_Port GPIOA	//	defined here but initialised in mj8x8.c
 
-// TODO - remove once HW rev.1a is there
-//#define NEW_GPIO_LAYOUT // use HW rev. 1b GPIO layout
+// FIXME - ZC circuit on rev.1c has worse slow speed (low voltage?) response than rev.1a
+// FIXME - for some reason, PB8 has to be tied to GND for the board to work
 
-#define PowerMonitorPower_Pin GPIO_PIN_8	// low - off; high - on
-#define PowerMonitorPower_GPIO_Port GPIOB
-
-#define LED1_Pin GPIO_PIN_5	// dual colour LED pin 2
+#define LED1_Pin GPIO_PIN_2	// dual colour LED pin 1
 #define LED1_GPIO_Port GPIOA
-#define LED2_Pin GPIO_PIN_6	// dual colour LED pin 2
+#define LED2_Pin GPIO_PIN_3	// dual colour LED pin 2
 #define LED2_GPIO_Port GPIOA
 
 #define LED_Reset_Pin GPIO_PIN_0	// SSR LED Driver reset: low - in reset/standby; high - active
@@ -105,6 +112,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define ZeroCross_Pin GPIO_PIN_0	// ZeroCross signal in
 #define ZeroCross_GPIO_Port GPIOB
 
+// TODO - remove since load is controlled differently
 #define AppLoadFet_Pin GPIO_PIN_1	// Application Load Switch
 #define AppLoadFet_GPIO_Port GPIOA
 
@@ -112,15 +120,23 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define I2C_SCL_Pin GPIO_PIN_1// see i2c_ctor()
 #define I2C_GPIO_Port GPIOF
 
+#define SPI_MOSI_Pin GPIO_PIN_7	// SPI1 MOSI
+#define SPI_MOSI_GPIO_Port GPIOA
+#define SPI_MISO_Pin GPIO_PIN_6	// SPI1 MISO
+#define SPI_MISO_GPIO_Port GPIOA
+#define SPI_SCK_Pin GPIO_PIN_5	// SPI1 SCK
+#define SPI_SCK_GPIO_Port GPIOA
+#define SD_Card_CS_Pin GPIO_PIN_4	// SPI1 CS
+#define SD_Card_Detect_Pin GPIO_PIN_1	// SD card detect - pulled to GND when card is present
+#define SD_Card_GPIO_Port GPIOA
+#define SPI_GPIO_Port GPIOA
+
 #if GPIO_DEBUG_OUT
-#define YellowTestPad_Pin GPIO_PIN_7// debug pin 0
-#define YellowTestPad_GPIO_Port GPIOA
-#define BlueTestPad_Pin GPIO_PIN_7 // debug pin 1
+#define YellowTestPad_Pin GPIO_PIN_3// debug pin 0
+#define YellowTestPad_GPIO_Port GPIOB
+#define BlueTestPad_Pin GPIO_PIN_4 // debug pin 1
 #define BlueTestPad_GPIO_Port GPIOB
 #endif
-
-#define PA7_Pin GPIO_PIN_7	// general GPIO
-#define PA7_GPIO_Port GPIOA
 
 #define PB3_Pin GPIO_PIN_3	// general GPIO
 #define PB3_GPIO_Port GPIOB
@@ -132,6 +148,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define PB6_GPIO_Port GPIOB
 #define PB7_Pin GPIO_PIN_7	// general GPIO
 #define PB7_GPIO_Port GPIOB
+#define PB8_Pin GPIO_PIN_8	// general GPIO
+#define PB8_GPIO_Port GPIOB
 
 // definitions of device/PCB layout-dependent hardware pins
 
@@ -142,10 +160,12 @@ typedef struct	// struct describing devices on MJ838
 	zerocross_t *ZeroCross;  // zero-cross object
 	autodrive_t *AutoDrive;  // automatic drive handling feature
 	autocharge_t *AutoCharge;  // automatic charger
-	mb85rc_t *FeRAM;	// pointer to FeRAM object
+	fm24cl_t *FeRAM;  // pointer to FeRAM object
 	sht40_t *Humidity;  // pointer to humidity sensor object
-
-	void (*StopTimer)(TIM_HandleTypeDef *timer);	// stops timer identified by argument
+#if USE_SPI && USE_SDCARD
+	sdcard_t *SDCard;  // pointer to SD card object
+#endif
+	void (*StopTimer)(TIM_HandleTypeDef *timer);  // stops timer identified by argument
 	void (*StartTimer)(TIM_HandleTypeDef *timer);  // starts timer identified by argument
 } mj838_t;
 

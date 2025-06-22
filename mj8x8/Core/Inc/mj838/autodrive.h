@@ -9,27 +9,29 @@
 
 #define ODOMETER_REFRESH_PERIOD 60 // odometer refresh period in seconds
 
+#define FIXED_POINT_SCALE 1000 // Scaling factor for fixed-point math
+
 typedef struct	// struct describing the AutoDrive functionality
 {
 	union mps  // meters per second
 	{
-		float Float;
-		uint8_t Bytes[sizeof(float)];
+		uint32_t uint32;  // e.g. 1.234 m/s is 1234
+		uint8_t Bytes[sizeof(uint32_t)];
 	} mps;
 	union kph  // kilometres per hour
 	{
-		float Float;
-		uint8_t Bytes[sizeof(float)];
+		uint32_t uint32;  // e.g. 1.234 km/s is 1234
+		uint8_t Bytes[sizeof(uint32_t)];
 	} kph;
 	union m  // distance in meters
 	{
-		float Float;
-		uint8_t Bytes[sizeof(float)];
+		uint32_t uint32;  // e.g. 54120 is 54.120 m
+		uint8_t Bytes[sizeof(uint32_t)];
 	} m;
 	union Odometer  // distance in meters
 	{
-		float Float;
-		uint8_t Bytes[sizeof(float)];
+		uint32_t uint32;  // Fixed-point representation (scaled by FIXED_POINT_SCALE)
+		uint8_t Bytes[sizeof(uint32_t)];
 	} Odometer;
 
 	void (*Do)(void);  // AutoDrive functionality

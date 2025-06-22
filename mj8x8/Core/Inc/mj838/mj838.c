@@ -39,8 +39,8 @@ static inline void _GPIOInit(void)
 
 	// GPIO EXTI0 mode - state change from idle to measurement mode
 	GPIO_InitStruct.Pin = ZeroCross_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;  // catch zero cross activity (idle to first impulse and rolling)
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;  // catch zero cross activity (idle to first impulse and rolling)
+	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	HAL_GPIO_Init(ZeroCross_GPIO_Port, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = AppLoadFet_Pin;
@@ -48,12 +48,6 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;    // keep the load switch off
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(AppLoadFet_GPIO_Port, &GPIO_InitStruct);
-
-	GPIO_InitStruct.Pin = PowerMonitorPower_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_PULLDOWN;  // keep the power monitor off
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(PowerMonitorPower_GPIO_Port, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = LED_Reset_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -73,9 +67,21 @@ static inline void _GPIOInit(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(LED2_GPIO_Port, &GPIO_InitStruct);
 
+	GPIO_InitStruct.Pin = SD_Card_Detect_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	HAL_GPIO_Init(SD_Card_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = SD_Card_CS_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(SD_Card_GPIO_Port, &GPIO_InitStruct);
+
 	// explicitly set pin states
 	HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(SD_Card_GPIO_Port, SD_Card_CS_Pin, GPIO_PIN_SET);
 
 #if GPIO_DEBUG_OUT
 	GPIO_InitStruct.Pin = YellowTestPad_Pin;
@@ -285,7 +291,15 @@ void mj838_ctor(void)
 	__Device.public.StopTimer = &_StopTimer;	// stops timer identified by argument
 	__Device.public.StartTimer = &_StartTimer;	// starts timer identified by argument
 
+#if USE_I2C
 	__Device.public.mj8x8->i2c = i2c_ctor(I2C_SDA_Pin, I2C_SCL_Pin, I2C_GPIO_Port);  // call I2C constructor
+#endif
+#if USE_SPI
+	__Device.public.mj8x8->spi = spi_ctor(SPI_MOSI_Pin, SPI_MISO_Pin, SPI_SCK_Pin, SPI_GPIO_Port);  // call SPI constructor
+#endif
+#if USE_SPI && USE_SDCARD
+	__Device.public.SDCard = sdcard_ctor(SD_Card_GPIO_Port, SD_Card_Detect_Pin, SD_Card_CS_Pin);
+#endif
 
 	__Device.public.mj8x8->EmptyBusOperation = Try->EmptyBusOperation;  // override device-agnostic default operation with specifics
 	__Device.public.mj8x8->PopulatedBusOperation = Try->PopulatedBusOperation;  // implements device-specific operation depending on bus activity
@@ -300,7 +314,7 @@ void mj838_ctor(void)
 
 	__enable_irq();  // PARTLY!!! enable interrupts -- essential for I2C
 
-	__Device.public.FeRAM = mb85rc_ctor();  // tie in FeRAM object
+	__Device.public.FeRAM = fm24cl_ctor();  // tie in FeRAM object
 	__Device.public.Humidity = sht40_ctor();  // tie in humidity sensor object
 
 	__Device.public.ZeroCross = zerocross_ctor();  // call zero-cross constructor

@@ -2,7 +2,6 @@
 #define MJ838_ZEROCROSS_C_
 
 #if defined(MJ838_)	// if this particular device is active
-
 #include "zerocross/zerocross_actual.c"
 
 extern TIM_HandleTypeDef htim2;  // Timer2 object - periodic frequency measurement of timer2 data - default 250ms
@@ -11,28 +10,27 @@ extern TIM_HandleTypeDef htim16;  // Timer16 object - odometer & co. 1s
 
 static DMA_HandleTypeDef hdma_tim3_ch3;  // zero-cross frequency measurement
 
-static __zerocross_t __ZeroCross;  // forward declaration of object
-GPIO_InitTypeDef GPIO_InitStruct =
-	{0};
+static __zerocross_t __ZeroCross __attribute__ ((section (".data")));  // forward declaration of object
 
-uint32_t _zc_counter_buffer[2] =
-	{0};  // stores timer3 counter readout
+GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+uint32_t _zc_counter_buffer[2] = {0};  // stores timer3 counter readout
 uint32_t _zc_counter_delta = 0;  // container for average frequency calculation
 uint16_t _zcValues = 0;  // iterator for average frequency calculation
 uint8_t _sleep = 0;  // timer2-based count for sleep since last zero-cross detection
-float _previousFrequency = 0;  // previous frequency value for change rate calculation
-
-const uint16_t _ScaledCPUTick = SCALED_CPU_TICK;
+uint32_t _previousFrequency = 0;  // previous frequency value for change rate calculation
 
 // timer2-triggered - computes Zero-Cross signal frequency, normally at 250ms intervals
 static void _Do(void)
 {
-	const float LOW_SPEED_THRESHOLD = 5.0f;
-	const float VERY_LOW_SPEED_THRESHOLD = 2.0f;
-	const float EXTREMELY_LOW_SPEED_THRESHOLD = 1.0f;
-	const float ACCELERATION_THRESHOLD_1 = 1.0f;
-	const float ACCELERATION_THRESHOLD_2 = 2.0f;
-	const float ACCELERATION_THRESHOLD_3 = 4.0f;
+	const uint16_t LOW_SPEED_THRESHOLD = 5000;  // [mHz]
+	const uint16_t VERY_LOW_SPEED_THRESHOLD = 2000;  // [mHz]
+	const uint16_t EXTREMELY_LOW_SPEED_THRESHOLD = 1000;  // [mHz]
+#if USE_RATE_CALC
+	const uint16_t ACCELERATION_THRESHOLD_1 = 1000;  // [mHz]
+	const uint16_t ACCELERATION_THRESHOLD_2 = 2000;  // [mHz]
+	const uint16_t ACCELERATION_THRESHOLD_3 = 4000;  // [mHz]
+#endif
 
 	uint16_t _arr = 2499;  // default value for ARR - 250ms - good for all speeds faster than crawling (including transition to standstill)
 
@@ -42,21 +40,22 @@ static void _Do(void)
 			Device->AutoDrive->AutoDriveOn();  // tell AutoDrive that we are rolling
 
 			// 250ms-speed-average calculation for normal speeds (i.e. ZC period << 250ms)
-			__ZeroCross.public.ZeroCrossFrequency = ((float) (_ScaledCPUTick * _zcValues) / (float) _zc_counter_delta);  // average dynamo AC frequency
+			__ZeroCross.public.ZeroCrossFrequency = (uint32_t) (SCALED_CPU_TICK * _zcValues * 1000) / _zc_counter_delta;  // average dynamo AC frequency
 
 			// special handling for lower speeds (below normal walking speed)
-			if(__ZeroCross.public.ZeroCrossFrequency < LOW_SPEED_THRESHOLD)  // 5Hz - speeds < 0.75 mps / 2.69 kph
+			if(__ZeroCross.public.ZeroCrossFrequency < LOW_SPEED_THRESHOLD)  // 5000Hz - speeds < 0.75 mps / 2.69 kph
 				{
 					_arr = 4999;  // 500ms
 
 					// adapt based on detected speed
-					if(__ZeroCross.public.ZeroCrossFrequency < VERY_LOW_SPEED_THRESHOLD)  // 2 Hz - speeds < 0.3 mps / 1.07 kph
+					if(__ZeroCross.public.ZeroCrossFrequency < VERY_LOW_SPEED_THRESHOLD)  // 2000 Hz - speeds < 0.3 mps / 1.07 kph
 						_arr = 9999;  // 1s
 
 					// adapt based on detected speed
-					if(__ZeroCross.public.ZeroCrossFrequency < EXTREMELY_LOW_SPEED_THRESHOLD)  // 1 Hz - speeds < 0.15 mps / 0.53 kph
+					if(__ZeroCross.public.ZeroCrossFrequency < EXTREMELY_LOW_SPEED_THRESHOLD)  // 1000 Hz - speeds < 0.15 mps / 0.53 kph
 						_arr = 19999;  // 2s
 
+#if USE_RATE_CALC
 					// adapt based on calculated acceleration
 					if(__ZeroCross.public.ZeroCrossFrequencyRate > ACCELERATION_THRESHOLD_1)  // 1Hz/s²
 						_arr = 9999;  // 1s
@@ -68,26 +67,31 @@ static void _Do(void)
 					// adapt based on calculated acceleration
 					if(__ZeroCross.public.ZeroCrossFrequencyRate > ACCELERATION_THRESHOLD_3)  // 4Hz/s²
 						_arr = 2499;  // 250ms
+#endif
 				}
 		}
 	else  // no data - standstill
 		{
 			_arr = 9999;  // 1s
-			__ZeroCross.public.ZeroCrossFrequency = 0; // zero out for next iteration
+			__ZeroCross.public.ZeroCrossFrequency = 0;  // zero out for next iteration
 			++_sleep;	  // increment sleep counter
 		}
 
 	__HAL_TIM_SET_AUTORELOAD(&htim2, _arr);  // set determined ARR value
 
+#if USE_RATE_CALC
 	// FIXME - check in what unit of time the change rate is computed
-	__ZeroCross.public.ZeroCrossFrequencyRate = ((float) (__ZeroCross.public.ZeroCrossFrequency - _previousFrequency) / (float) (((__HAL_TIM_GET_AUTORELOAD(&htim2)) / 10000) + 1));
+	__ZeroCross.public.ZeroCrossFrequencyRate = (int32_t) ((int64_t) (__ZeroCross.public.ZeroCrossFrequency - _previousFrequency) / (((__HAL_TIM_GET_AUTORELOAD(&htim2)) / 10000) + 1));
+#endif
 
 	_previousFrequency = __ZeroCross.public.ZeroCrossFrequency;  // save current frequency for next iteration
 
 	if(_sleep > SLEEPTIMEOUT_COUNTER)  // n iterations of sleep
 		{
 			__ZeroCross.public.ZeroCrossFrequency = 0;  // zero & start over
+#if USE_RATE_CALC
 			__ZeroCross.public.ZeroCrossFrequencyRate = 0;  // zero & start over
+#endif
 			_sleep = 0;
 			Device->ZeroCross->Stop();  // stop zero-cross detection; timer1 will put the device into stop mode
 			Device->AutoDrive->AutoDriveOff();  // tell AutoDrive that we are stopped
@@ -181,7 +185,7 @@ static inline void _StopZeroCross(void)
 	__HAL_RCC_DMA1_CLK_DISABLE();  // turn off peripheral
 	Device->StopTimer(&htim3);	// stop zero-cross input capture timer
 
-		// turn off LEDs - in case they were on
+	// turn off LEDs - in case they were on
 	HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
 
@@ -232,6 +236,18 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 		{
 #if USE_APPLICATION_LOAD
 			if(Device->AutoCharge->IsAppLoadConnected())
+				{  // blink green
+					HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+					HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+				}
+			else
+				{  // blink red
+					HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
+					HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+				}
+#endif
+#if USE_ADJUSTABLE_LOAD
+			if(Device->AutoCharge->IsAdjustableLoadConnected())
 				{  // blink green
 					HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
 					HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);

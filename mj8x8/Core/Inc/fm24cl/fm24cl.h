@@ -1,5 +1,5 @@
-#ifndef CORE_INC_MB85RC_H_
-#define CORE_INC_MB85RC_H_
+#ifndef CORE_INC_FM24CL_H_
+#define CORE_INC_FM24CL_H_
 
 #include "main.h"
 
@@ -9,10 +9,10 @@ typedef struct	// struct describing the FeRAM functionality
 {
 	uint32_t (*Read)(const uint16_t RegAddr, const uint8_t size);  // reads one byte of data out of the FeRAM module from given address
 	void (*Write)(const uint32_t data, const uint16_t RegAddr, const uint8_t size);  // writes one byte of data into the FeRAM module at given address
-} mb85rc_t;
+} fm24cl_t;
 
-mb85rc_t* mb85rc_ctor(void);	// the MB85RC constructor
+fm24cl_t* fm24cl_ctor(void);	// the FM24CL constructor
 
 #endif
 
-#endif /* CORE_INC_MB85RC_H_ */
+#endif /* CORE_INC_FM24CL_H_ */

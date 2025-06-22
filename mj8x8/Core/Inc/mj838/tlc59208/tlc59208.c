@@ -49,7 +49,7 @@ static inline void _Power(uint8_t val)
 		__TLC59208._PowerState = OFF;  // set power state
 }
 
-static __tlc59208_t __TLC59208 =  // instantiate sht40_t actual and set function pointers
+static __tlc59208_t __TLC59208 =  // instantiate tlc59208_t actual and set function pointers
 	{  //
 	.public.Write = &_Write,  // set function pointer
 	.public.Power = &_Power,	// ditto
@@ -57,7 +57,7 @@ static __tlc59208_t __TLC59208 =  // instantiate sht40_t actual and set function
 
 tlc59208_t* tlc59208_ctor(void)  //
 {
-	return &__TLC59208.public;  // set pointer to PAC1952 public part
+	return &__TLC59208.public;  // set pointer to TLC59208 public part
 }
 
 #endif
