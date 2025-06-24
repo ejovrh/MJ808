@@ -20,15 +20,19 @@ typedef enum   // enum of light levels on this device
 } autodrive_lightlevels_t;
 #endif
 
+#define FIXED_POINT_SCALE 1000 // Scaling factor for fixed-point math
+#define KPH_CONVERSION 3600 // Fixed-point equivalent of 3.6 (scaled by FIXED_POINT_SCALE)
+#define TIME_CONVERSION 10000 // Fixed-point equivalent of 1.0 (scaled by FIXED_POINT_SCALE)
+
 #if USE_DYNAMIC_LIGHT
 #define FRONT_MIN_BRIGHTNESS 10	// 10% brightness
 #define REAR_MIN_BRIGHTNESS 25	// 25% brightness
 #define FRONT_MAX_BRIGHTNESS 75	// 75% brightness
 #define REAR_MAX_BRIGHTNESS 100	// 100% brightness
-#define STOPPED 0.5 // 0.5 km/h - speed below which the light is turned off
-#define WALKING_SPEED 5.0	// 5 km/h
-#define SLOW_RIDING 10.0 // 10 km/h
-#define BURNING_RUBBER 35.0 // 35 km/h
+#define STOPPED 500 // 0.5 km/h - speed below which the light is turned off
+#define WALKING_SPEED 5000	// 5 km/h
+#define SLOW_RIDING 10000 // 10 km/h
+#define BURNING_RUBBER 35000 // 35 km/h
 #endif
 
 typedef struct	// autodrive_t actual
@@ -37,7 +41,7 @@ typedef struct	// autodrive_t actual
 	autodrive_lightlevels_t _LightLevel;	// current light level
 	autodrive_lightlevels_t _previousLightLevel;	// previous light level
 #endif
-	float _WheelFrequency;  // wheel rotation frequency
+	uint32_t _WheelFrequency;  // wheel rotation frequency
 
 	autodrive_t public;  // public struct
 } __autodrive_t;
@@ -45,7 +49,7 @@ typedef struct	// autodrive_t actual
 static __autodrive_t __AutoDrive __attribute__ ((section (".data")));  // preallocate __AutoDrive object in .data
 
 #if SIGNAL_GENERATOR_INPUT
-static float _last_mps = 0;  // used to check if speed has changed
+static uint32_t _last_mps = 0;  // used to check if speed has changed
 #endif
 
 uint8_t _Timer16Cntr = 0;  // timer2 counter
@@ -74,18 +78,25 @@ static inline void AdjustLightBasedOnSpeed(void)
 	uint8_t frontLightLevel = FRONT_MAX_BRIGHTNESS;  //	start with maximal values and work down
 	uint8_t rearLightLevel = REAR_MAX_BRIGHTNESS;
 
-	if(__AutoDrive.public.kph.Float <= BURNING_RUBBER)  // dim below BURNING_RUBBER speed
-		{
-			frontLightLevel = FRONT_MIN_BRIGHTNESS + (uint8_t) ((float) (__AutoDrive.public.kph.Float - WALKING_SPEED) * 2.1667f);	// adjust front light level
-			// 2.1667 = (FRONT_MAX_BRIGHTNESS - FRONT_MIN_BRIGHTNESS) / (BURNING_RUBBER - WALKING_SPEED)
+	if(__AutoDrive.public.kph.uint32 <= BURNING_RUBBER)  // dim below BURNING_RUBBER speed
+		frontLightLevel = FRONT_MIN_BRIGHTNESS + (uint8_t) ((__AutoDrive.public.kph.uint32 - WALKING_SPEED) / 500);  // adjust front light level
+	/* (FRONT_MAX_BRIGHTNESS - FRONT_MIN_BRIGHTNESS) / (BURNING_RUBBER - WALKING_SPEED)
+	 * 	= (75 - 10) / (35km/h - 5km/h)
+	 * 	= 65 / 30 = 2.1667
+	 * 	approximately 1/500 in fixed-point math
+	 */
 
-			// Check if the speed is less than or equal to SLOW_RIDING
-			if(__AutoDrive.public.kph.Float <= SLOW_RIDING)
-				rearLightLevel = REAR_MIN_BRIGHTNESS + (uint8_t) ((float) (__AutoDrive.public.kph.Float - WALKING_SPEED) * 15);  // adjust rear light level
-			// 15 = (REAR_MAX_BRIGHTNESS - REAR_MIN_BRIGHTNESS) / (SLOW_RIDING - WALKING_SPEED)));
-		}
+	// Check if the speed is less than or equal to SLOW_RIDING
+	if(__AutoDrive.public.kph.uint32 <= SLOW_RIDING)
+		rearLightLevel = REAR_MIN_BRIGHTNESS + (uint8_t) ((__AutoDrive.public.kph.uint32 - WALKING_SPEED) / 67);  // adjust rear light level
+	/*
+	 * (REAR_MAX_BRIGHTNESS - REAR_MIN_BRIGHTNESS) / (SLOW_RIDING - WALKING_SPEED)
+	 * 	= (100 - 25) / (10km/h - 5km/h)
+	 * 	= 75 / 5 = 15
+	 * 	approximately 1/67 in fixed-point math
+	 */
 
-	if(__AutoDrive.public.kph.Float < WALKING_SPEED)	// don't go below a certain light level
+	if(__AutoDrive.public.kph.uint32 < WALKING_SPEED)  // don't go below a certain light level
 		{
 			frontLightLevel = FRONT_MIN_BRIGHTNESS;
 			rearLightLevel = REAR_MIN_BRIGHTNESS;
@@ -149,71 +160,57 @@ static inline void _AdjustLightinSteps(void)
 // AutoDrive functionality based on detected zero cross frequency - called by timer 3 ISR - usually every 250ms
 static void _Do(void)  // this actually runs the AutoDrive application
 {
-	const float KPH_CONVERSION = 3.6f;
-	const float TIME_CONVERSION = 10000.0f;
+	__AutoDrive._WheelFrequency = Device->ZeroCross->ZeroCrossFrequency / POLE_COUNT;  // ZeroCross signal frequency to wheel RPS
+	__AutoDrive.public.mps.uint32 = (__AutoDrive._WheelFrequency * WHEEL_CIRCUMFERENCE) / FIXED_POINT_SCALE;  // wheel frequency to m/s
+	__AutoDrive.public.kph.uint32 = (__AutoDrive.public.mps.uint32 * KPH_CONVERSION) / FIXED_POINT_SCALE;  // m/s to km/h
+	__AutoDrive.public.m.uint32 += (__AutoDrive.public.mps.uint32 * (__HAL_TIM_GET_AUTORELOAD(&htim2) + 1)) / TIME_CONVERSION;  // distance, mps * measurement interval
 
-	__AutoDrive._WheelFrequency = (float) (Device->ZeroCross->ZeroCrossFrequency / POLE_COUNT);  // ZeroCross signal frequency to wheel RPS
-	__AutoDrive.public.mps.Float = (float) (__AutoDrive._WheelFrequency * WHEEL_CIRCUMFERENCE);  // wheel frequency to m/s
-	__AutoDrive.public.kph.Float = (float) (__AutoDrive.public.mps.Float * KPH_CONVERSION);  // m/s to km/h
-	__AutoDrive.public.m.Float += __AutoDrive.public.mps.Float * (float) ((float) (__HAL_TIM_GET_AUTORELOAD(&htim2) + 1) / TIME_CONVERSION);  // distance, mps * measurement interval
-
-#if SIGNAL_GENERATOR_INPUT	// ZeroCross signal is generator input
-	if((uint8_t) _last_mps != (uint8_t) __AutoDrive.public.mps.Float)  // only if data has changed
+#if SIGNAL_GENERATOR_INPUT  // ZeroCross signal is generator input
+	if((uint8_t) (_last_mps / FIXED_POINT_SCALE) != (uint8_t) (__AutoDrive.public.mps.uint32 / FIXED_POINT_SCALE))  // only if data has changed
 		{
-			// send speed over the wire - only when it changes
-			MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_SPEED, __AutoDrive.public.mps.Bytes, 1 + sizeof(float));  // send speed over the wire
-			MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_ACCEL, __AutoDrive.public.mps.Bytes, 1 + sizeof(float));  // send speed over the wire
+			MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_SPEED, __AutoDrive.public.mps.Bytes, 1 + sizeof(int32_t));  // send speed over the wire
+			MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_ACCEL, __AutoDrive.public.mps.Bytes, 1 + sizeof(int32_t));  // send speed over the wire
 
-			_last_mps = __AutoDrive.public.mps.Float;  // store current speed for comparison in the next cycle
+			_last_mps = __AutoDrive.public.mps.uint32;  // store current speed for comparison in the next cycle
 		}
 #else // ZeroCross signal is from the wheel
-	// send speed over the wire - since this is not as constant as the generator input, send it every time
-	MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_SPEED, __AutoDrive.mps.Bytes, 1 + sizeof(float));  // send speed over the wire
-	MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_ACCEL, __AutoDrive.mps.Bytes, 1 + sizeof(float));  // send speed over the wire
+    MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_SPEED, __AutoDrive.public.mps.Bytes, 1 + sizeof(int32_t));  // send speed over the wire
+    MsgHandler->SendMessage(mj828, MSG_MEASUREMENT_ACCEL, __AutoDrive.public.mps.Bytes, 1 + sizeof(int32_t));  // send speed over the wire
 #endif
 
-	/* light level determination
-	 *
-	 * speed (i.e. zerocross frequency) is measured constantly as long as there is a signal.
-	 * if there is no signal, measurement (i.e. timers) are stopped and EXTI0_1 should wake the whole device up
-	 *
-	 * speed thresholds (light levels) are examined constantly, yet only on light level state change (e.g. low to high due to increased speed),
-	 * 	 one event will be sent out.
-	 *
-	 */
-
+	// Adjust light levels based on speed
 #if USE_DYNAMIC_LIGHT
-	AdjustLightBasedOnSpeed();  // adjust light level dynamically,  based on speed
+	AdjustLightBasedOnSpeed();
 #endif
 #if !USE_DYNAMIC_LIGHT
-	// light level determination
-	if(__AutoDrive.public.kph.Float < 1)
-		__AutoDrive._LightLevel = LightOff;
-	else if(__AutoDrive.public.kph.Float > 40)
-		__AutoDrive._LightLevel = LightHigh;
-	else if(__AutoDrive.public.kph.Float > 10)
-		__AutoDrive._LightLevel = LightNormal;
-	else if(__AutoDrive.public.kph.Float > 3)
-		__AutoDrive._LightLevel = LightLow;
-	else
-		__AutoDrive._LightLevel = LightDim;
+    // Light level determination
+    if(__AutoDrive.public.kph.Fixed < (1 * FIXED_POINT_SCALE))
+        __AutoDrive._LightLevel = LightOff;
+    else if(__AutoDrive.public.kph.Fixed > (40 * FIXED_POINT_SCALE))
+        __AutoDrive._LightLevel = LightHigh;
+    else if(__AutoDrive.public.kph.Fixed > (10 * FIXED_POINT_SCALE))
+        __AutoDrive._LightLevel = LightNormal;
+    else if(__AutoDrive.public.kph.Fixed > (3 * FIXED_POINT_SCALE))
+        __AutoDrive._LightLevel = LightLow;
+    else
+        __AutoDrive._LightLevel = LightDim;
 
-	_AdjustLightinSteps();  // adjust light level in steps,  based on speed
+    _AdjustLightinSteps();
 #endif
 }
 
-// update odometer value in FeRAM
+// Update odometer value in FeRAM
 void _UpdateOdometer(void)
 {
 	uint32_t oldval = Device->FeRAM->Read(ODOMETER_ADDR);  // read stored odometer value from FeRAM
-	memcpy(&__AutoDrive.public.Odometer.Float, &oldval, sizeof(float));  // copy odometer to Odometer
+	memcpy(&__AutoDrive.public.Odometer.uint32, &oldval, sizeof(int32_t));  // copy odometer to Odometer
 
-	__AutoDrive.public.Odometer.Float += __AutoDrive.public.m.Float;  // add current odometer to old value
-	__AutoDrive.public.m.Float = 0;  // reset current odometer
+	__AutoDrive.public.Odometer.uint32 += __AutoDrive.public.m.uint32;  // add current odometer to old value
+	__AutoDrive.public.m.uint32 = 0;  // reset current odometer
 	oldval = 0;  // reset oldval
 
-	memcpy(&oldval, &__AutoDrive.public.Odometer.Float, sizeof(float));  // copy odometer to oldval
-	Device->FeRAM->Write(oldval, ODOMETER_ADDR);  // write odometer to FeRAM)
+	memcpy(&oldval, &__AutoDrive.public.Odometer.uint32, sizeof(int32_t));  // copy odometer to oldval
+	Device->FeRAM->Write(oldval, ODOMETER_ADDR);  // write odometer to FeRAM
 
 	_Timer16Cntr = 0;  // reset counter
 }
@@ -229,6 +226,7 @@ static __autodrive_t __AutoDrive =  // instantiate autobatt_t actual and set fun
 autodrive_t* autodrive_ctor(void)  //
 {
 	_UpdateOdometer();
+	Device->Humidity->Measure();  // measure humidity
 	return &__AutoDrive.public;  // set pointer to AutoBatt public part
 }
 

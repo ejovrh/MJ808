@@ -13,8 +13,6 @@ typedef struct	// dac121c081_t actual
 	dac121c081_t public;  // public struct
 } __dac121c081_t;
 
-static __dac121c081_t __DAC121C081 __attribute__ ((section (".data")));  // preallocate __PAC1952 object in .data
-
 // writes 2 bytes to DAC register
 static inline void _Write(const uint16_t *data)
 {
@@ -43,7 +41,7 @@ static inline void _PowerOff(void)
 	_Write(&val);
 }
 
-static __dac121c081_t __DAC121C081 =  // instantiate sht40_t actual and set function pointers
+static __dac121c081_t __DAC121C081 __attribute__ ((section (".data"))) =  // instantiate sht40_t actual and set function pointers
 	{  //
 	.public.Read = &_Read,  // set function pointer
 	.public.Write = &_Write,  // ditto
@@ -53,16 +51,18 @@ static __dac121c081_t __DAC121C081 =  // instantiate sht40_t actual and set func
 dac121c081_t* dac121c081_ctor(void)  //
 {
 	_PowerOff();  // power off the device
-	uint16_t val = 0;
 
-	for(uint8_t i = 0; i < 65; ++i)  // wait for device to power up
-		{
-			_Write(&val);
-			__ASM("NOP");
-			val++;
-		}
-
-	_PowerOff();  // power off the device
+// TODO - used for testing and load curve generation
+//	uint16_t val = 0;
+//
+//	for(uint8_t i = 0; i < 255; ++i)  // wait for device to power up
+//		{
+//			_Write(&val);
+//			__ASM("NOP");
+//			val += 10;
+//		}
+//
+//	_PowerOff();  // power off the device
 
 	return &__DAC121C081.public;  // set pointer to DAC121C081 public part
 }

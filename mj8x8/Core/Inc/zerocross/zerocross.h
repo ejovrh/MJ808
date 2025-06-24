@@ -3,8 +3,10 @@
 
 typedef struct zerocross_t	// struct describing the zero cross detector functionality
 {
-	float ZeroCrossFrequency;  // zero-cross frequency
-	float ZeroCrossFrequencyRate;  // dynamo AC frequency change rate - df/dt [Hz/s]
+	uint32_t ZeroCrossFrequency;  // zero-cross frequency [mHz]
+#if USE_RATE_CALC
+	int32_t ZeroCrossFrequencyRate;  // dynamo AC frequency change rate - df/dt [mHz/s]
+#endif
 
 	void (*Do)(void);  // periodic execution
 	void (*Start)(void);	// starts the zero-cross functionality (timer2 & DMA peripherals)

@@ -27,11 +27,13 @@ __i2c_t __I2C __attribute__ ((section (".data")));
 
 #define USE_WAIT_FOR_DEVICE_READY 0 //
 #define USE_DMA 0 // use DMA transfer functions
-#define USE_IT 1 // use interrupt transfer functions
-#define USE_POLLING 0 // use polling transfer functions
+#define USE_IT 0 // use interrupt transfer functions
+#define USE_POLLING 1 // use polling transfer functions
+#define TIMEOUT 10  // timeout in ms for I2C polling operations
 
-#define FREQ_100KHZ 1
-#define FREQ_400KHZ 0
+// FIXME - revert back to IT & 1Mhz after components arrived
+#define FREQ_100KHZ 0
+#define FREQ_400KHZ 1
 #define FREQ_1MHZ 0
 
 #if USE_IT
@@ -114,7 +116,7 @@ static inline void _I2C_Init(const uint32_t _SDA_Pin, const uint32_t _SCL_Pin, G
 	__HAL_RCC_GPIOF_CLK_ENABLE();  // enable peripheral clock
 	GPIO_InitStruct.Pin = _SDA_Pin | _SCL_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;  // FIXME - disable once components arrive
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	GPIO_InitStruct.Alternate = GPIO_AF1_I2C1;
 	HAL_GPIO_Init(_I2C_Port, &GPIO_InitStruct);
@@ -203,7 +205,7 @@ static inline void _Read(const uint16_t DevAddr, const uint16_t RegAddr, uint8_t
 	if(HAL_I2C_Mem_Read_IT(__I2C._I2C, (DevAddr | READ), RegAddr, I2C_MEMADD_SIZE_8BIT, buffer, n) != HAL_OK)
 #endif
 #if USE_POLLING
-	if(HAL_I2C_Mem_Read(__I2C._I2C, (DevAddr | READ), RegAddr, I2C_MEMADD_SIZE_8BIT, buffer, n, 2) != HAL_OK)
+	if(HAL_I2C_Mem_Read(__I2C._I2C, (DevAddr | READ), RegAddr, I2C_MEMADD_SIZE_8BIT, buffer, n, TIMEOUT) != HAL_OK)
 #endif
 		_Error_Handler();
 
@@ -227,7 +229,7 @@ static inline void _Write(const uint16_t DevAddr, const uint16_t RegAddr, uint8_
 	if(HAL_I2C_Mem_Write_IT(__I2C._I2C, DevAddr, RegAddr, I2C_MEMADD_SIZE_8BIT, buffer, n) != HAL_OK)
 #endif
 #if USE_POLLING
-	if(HAL_I2C_Mem_Write(__I2C._I2C, DevAddr, RegAddr, I2C_MEMADD_SIZE_8BIT, buffer, n, 2) != HAL_OK)
+	if(HAL_I2C_Mem_Write(__I2C._I2C, DevAddr, RegAddr, I2C_MEMADD_SIZE_8BIT, buffer, n, TIMEOUT) != HAL_OK)
 #endif
 		_Error_Handler();
 
@@ -251,7 +253,7 @@ static inline void _Transmit(const uint16_t DevAddr, uint8_t *buffer, const uint
 	if(HAL_I2C_Master_Transmit_IT(__I2C._I2C, DevAddr, buffer, n) != HAL_OK)
 #endif
 #if USE_POLLING
-	if(HAL_I2C_Master_Transmit(__I2C._I2C, DevAddr, buffer, n, 2) != HAL_OK)
+	if(HAL_I2C_Master_Transmit(__I2C._I2C, DevAddr, buffer, n, TIMEOUT) != HAL_OK)
 #endif
 		_Error_Handler();
 
@@ -275,7 +277,7 @@ static inline void _Receive(const uint16_t DevAddr, uint8_t *buffer, const uint8
 	if(HAL_I2C_Master_Receive_IT(__I2C._I2C, DevAddr, buffer, n) != HAL_OK)
 #endif
 #if USE_POLLING
-	if(HAL_I2C_Master_Receive(__I2C._I2C, DevAddr, buffer, n, 2) != HAL_OK)
+	if(HAL_I2C_Master_Receive(__I2C._I2C, DevAddr, buffer, n, TIMEOUT) != HAL_OK)
 #endif
 		_Error_Handler();
 
