@@ -2,11 +2,14 @@
 #define MJ838_ZEROCROSS_C_
 
 #if defined(MJ838_)	// if this particular device is active
+#include "logger/logger.h"  // logging functionality
 #include "zerocross/zerocross_actual.c"
 
 extern TIM_HandleTypeDef htim2;  // Timer2 object - periodic frequency measurement of timer2 data - default 250ms
 extern TIM_HandleTypeDef htim3;  // Timer3 object - input capture of zero-cross signal on rising edge
 extern TIM_HandleTypeDef htim16;  // Timer16 object - odometer & co. 1s
+
+extern logger_t *const Logger; // logger object
 
 static DMA_HandleTypeDef hdma_tim3_ch3;  // zero-cross frequency measurement
 
@@ -39,8 +42,8 @@ static void _Do(void)
 			_sleep = 0;  // reset the sleep counter
 			Device->AutoDrive->AutoDriveOn();  // tell AutoDrive that we are rolling
 
-			// 250ms-speed-average calculation for normal speeds (i.e. ZC period << 250ms)
-			__ZeroCross.public.ZeroCrossFrequency = (uint32_t) (SCALED_CPU_TICK * _zcValues * 1000) / _zc_counter_delta;  // average dynamo AC frequency
+			// average dynamo AC frequency - 250ms-speed-average calculation for normal speeds (i.e. ZC period << 250ms)
+			__ZeroCross.public.ZeroCrossFrequency = (uint32_t) (SCALED_CPU_TICK * _zcValues * 1000) / _zc_counter_delta;  // value in mHz: 14981 is 14.981 Hz
 
 			// special handling for lower speeds (below normal walking speed)
 			if(__ZeroCross.public.ZeroCrossFrequency < LOW_SPEED_THRESHOLD)  // 5000Hz - speeds < 0.75 mps / 2.69 kph
@@ -181,7 +184,9 @@ static inline void _StopZeroCross(void)
 	Device->StopTimer(&htim2);	// stop measurement interval timer & odometer & co. timer
 	Device->StopTimer(&htim16);  // stop odometer & co. timer
 
-	HAL_TIM_IC_Stop_DMA(&htim3, TIM_CHANNEL_3);  // stop timer2 DMA
+	Logger->Flush();  // flush the logger
+
+	HAL_TIM_IC_Stop_DMA(&htim3, TIM_CHANNEL_3);  // stop timer3 DMA
 	__HAL_RCC_DMA1_CLK_DISABLE();  // turn off peripheral
 	Device->StopTimer(&htim3);	// stop zero-cross input capture timer
 
@@ -247,7 +252,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 				}
 #endif
 #if USE_ADJUSTABLE_LOAD
-			if(Device->AutoCharge->IsAdjustableLoadConnected())
+			if(Device->AutoCharge->AdjustableLoadState)
 				{  // blink green
 					HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
 					HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);

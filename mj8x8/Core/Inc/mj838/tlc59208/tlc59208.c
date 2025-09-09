@@ -19,7 +19,7 @@ static __tlc59208_t __TLC59208 __attribute__ ((section (".data")));  // prealloc
 // writes 2 bytes of data to address n and n+1 using auto-increment
 static inline void _Write(const uint8_t RegAddr, const uint16_t *data)
 {
-	uint8_t buffer[2];
+	uint8_t buffer[3]; // 
 	buffer[0] = (RegAddr | 0x80);  // set MSB to 1 for auto increment
 
 	uint16_t tmp = *data;  // cast to byte pointer

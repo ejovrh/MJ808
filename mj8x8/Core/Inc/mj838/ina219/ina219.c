@@ -26,9 +26,9 @@ typedef struct	// ina219_t actual
 #if CALCULATE_SHUNT_VOLTAGE
 int16_t _ShuntVoltage;
 #endif
-uint16_t _Voltage;
-int16_t _Current;
-uint16_t _Power;
+uint32_t _Voltage;  // private variable for voltage
+int32_t _Current;  // private variable for current
+uint32_t _Power;	// private variable for power
 
 // DS. p. 16, figure 15 - write word command
 static inline void _WriteWord(const uint8_t RegAddr, uint8_t *data)
@@ -115,17 +115,16 @@ static inline void _Measure(void)
 
 	_RegisterPointerSet(BUS_VOLTAGE_REG);  // set pointer to voltage register
 	_ReadWord(temp);  // read 2 bytes from voltage register
-	_Voltage = (uint16_t) (((temp[0] << 8) | (temp[1])) >> 3) * 4;  // combine the two bytes into a single 16-bit value, shift away 3 LSBs
+	_Voltage = (uint32_t) ((((temp[0] << 8) | (temp[1])) >> 3) * 4);  // combine the two bytes into a single 16-bit value, shift away 3 LSBs
 
 	_RegisterPointerSet(CURRENT_REG);  // set pointer to current register
 	_ReadWord(temp);  // read 2 bytes from current register
-	_Current = (int16_t) ((_2sComplementTo_uint16(temp) * 61) / 1000);  // combine, scale, and convert to mA in one statement
+	_Current = (int32_t) ((_2sComplementTo_uint16(temp) * 61) / 1000);  // combine, scale, and convert to mA in one statement
 
 	_RegisterPointerSet(POWER_REG);  // set pointer to power register
 	_ReadWord(temp);  // read 2 bytes from power register
-//	_Power = (uint16_t) (((temp[0] << 8) | (temp[1])) * 1.220703125f);  // power LSB is 20 times the current LSB
-	// FIXME - validate correct values
-	_Power = (uint16_t) ((((temp[0] << 8) | (temp[1])) * 1250) >> 10);  // 1250/1024 ≈ 1.220703125f
+	// power LSB is 20 times the current LSB
+	_Power = (uint32_t) ((((temp[0] << 8) | (temp[1])) * 1250) >> 10);  // 1250/1024 ≈ 1.220703125f
 }
 
 static __ina219_t __INA219 __attribute__ ((section (".data"))) =  // instantiate ina219_t actual and set function pointers

@@ -10,6 +10,8 @@
 #include "mj838/autodrive.h"  // auto-drive detection functionality
 #include "mj838/autocharge.h"  // automatic charger functionality - including load control
 
+#include "logger/logger.h"  // logging functionality
+
 TIM_HandleTypeDef htim17;  // Timer17 object - event handling - 2.5ms
 TIM_HandleTypeDef htim16;  // Timer16 object - odometer & co. 1s
 TIM_HandleTypeDef htim14;  // Timer14 object - power measurement time base - 10ms
@@ -20,6 +22,12 @@ typedef struct	// mj838_t actual
 {
 	mj838_t public;  // public struct
 } __mj838_t;
+
+const char LogFileName[11] = LOG_FILE_NAME;  // see mj838.h
+
+// Change log_description to be an array of pointers to values to be logged
+void *log_description[LOG_FIELD_COUNT] =
+	{0};
 
 static __mj838_t __Device __attribute__ ((section (".data")));  // preallocate __Device object in .data
 
@@ -327,20 +335,33 @@ void mj838_ctor(void)
 	HAL_NVIC_SetPriority(TIM14_IRQn, 3, 0);  // power measurement timer
 	HAL_NVIC_EnableIRQ(TIM14_IRQn);
 
-	HAL_NVIC_SetPriority(TIM16_IRQn, 3, 0);  // odometer & co. timer
+	HAL_NVIC_SetPriority(TIM16_IRQn, 2, 0);  // odometer & co. timer
 	HAL_NVIC_EnableIRQ(TIM16_IRQn);
 
-	HAL_NVIC_SetPriority(TIM17_IRQn, 3, 0);  // event handler timer (on demand)
+	HAL_NVIC_SetPriority(TIM17_IRQn, 2, 0);  // event handler timer (on demand)
 	HAL_NVIC_EnableIRQ(TIM17_IRQn);
 
 	// system interrupts
 	// normally defined in mj8x8.c mj8x8_ctor() - #define USE_I2C 1 controls it there
-	HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 2, 0);  // heartbeat timer
+	HAL_NVIC_SetPriority(TIM1_BRK_UP_TRG_COM_IRQn, 1, 0);  // heartbeat timer
 	HAL_NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
 
 	// normally activated in can.c _CANInit() - #define USE_I2C 1 controls it there
-	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 3, 0);
+	HAL_NVIC_SetPriority(CEC_CAN_IRQn, 2, 0);
 	HAL_NVIC_EnableIRQ(CEC_CAN_IRQn);
+
+	// TODO - logging functionality
+	// dynamo measurements
+	log_description[LOG_TIME] = &__Device.public.Time;
+	log_description[LOG_ZC_FREQ] = &Device->ZeroCross->ZeroCrossFrequency;
+	log_description[LOG_KPH] = &Device->AutoDrive->kph.Bytes;
+	log_description[LOG_MPS] = &Device->AutoDrive->mps.Bytes;
+	log_description[LOG_VOLTAGE_AL] = Device->AutoCharge->PowerMonitor->Voltage;
+	log_description[LOG_CURRENT_AL] = Device->AutoCharge->PowerMonitor->Current;
+	log_description[LOG_POWER_AL] = Device->AutoCharge->PowerMonitor->Power;
+	log_description[LOG_TEMPERATURE] = Device->Humidity->Temp;
+	log_description[LOG_HUMIDITY] = Device->Humidity->RH;
+	log_description[LOG_ADJUSTABLE_LOAD_STATE] = &Device->AutoCharge->AdjustableLoadState;
 }
 
 // device-specific interrupt handlers

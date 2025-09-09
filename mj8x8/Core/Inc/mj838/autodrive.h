@@ -30,7 +30,7 @@ typedef struct	// struct describing the AutoDrive functionality
 	} m;
 	union Odometer  // distance in meters
 	{
-		uint32_t uint32;  // Fixed-point representation (scaled by FIXED_POINT_SCALE)
+		uint32_t uint32;  // e.g. 123456 is 123456 m
 		uint8_t Bytes[sizeof(uint32_t)];
 	} Odometer;
 

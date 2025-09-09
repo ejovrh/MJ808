@@ -15,6 +15,9 @@ typedef struct	// mb85rc_t actual
 
 static __sht40_t __SHT40 __attribute__ ((section (".data")));  // preallocate __SHT40 object in .data
 
+static int32_t _Temp;  // private variable for temperature
+static uint32_t _RH;  // private variable for humidity
+
 // reads the sensor & computes temperature and humidity
 static void _Measure(void)
 {
@@ -28,14 +31,13 @@ static void _Measure(void)
 
 	Device->mj8x8->i2c->Receive((SHT40_I2C_ADDR | READ), buffer, 6);  // read out measurement into buffer
 
-	__SHT40.public.Temp = (int8_t) ((175 * (uint16_t) (buffer[0] << 8 | buffer[1]) + 32768) / 65535 - 45);  // compute temperature
-	__SHT40.public.RH = (int8_t) ((125 * (uint16_t) (buffer[3] << 8 | buffer[4]) + 32768) / 65535 - 6);  // compute humidity
+	_Temp = (int32_t) ((175 * (uint16_t) (buffer[0] << 8 | buffer[1]) + 32768) / 65535 - 45);  // compute temperature
+	_RH = (uint32_t) ((125 * (uint16_t) (buffer[3] << 8 | buffer[4]) + 32768) / 65535 - 6);  // compute humidity
 }
 
 static __sht40_t __SHT40 =  // instantiate sht40_t actual and set function pointers
 	{  //
-	.public.Measure = &_Measure  // set function pointer
-	};
+	.public.Measure = &_Measure, .public.Temp = &_Temp, .public.RH = &_RH};
 
 sht40_t* sht40_ctor(void)  //
 {

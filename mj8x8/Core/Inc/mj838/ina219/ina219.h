@@ -7,9 +7,9 @@
 
 typedef struct	// struct describing the INA219 functionality
 {
-	uint16_t *Voltage;  // pointer to voltage array
-	int16_t *Current;  // pointer to current array
-	uint16_t *Power;  // pointer to power array
+	uint32_t *Voltage;  // pointer to voltage value
+	int32_t *Current;  // pointer to current value
+	uint32_t *Power;  // pointer to power value
 	void (*Measure)(void);  // measure voltage, current and power
 } ina219_t;
 

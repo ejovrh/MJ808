@@ -4,7 +4,7 @@
 
 #include "autodrive.h"
 
-#include <string.h>
+#include <string.h> // for memcpy in _UpdateOdometer()
 
 extern TIM_HandleTypeDef htim2;  // Timer3 object - measurement/calculation interval of timer2 data - default 250ms
 extern TIM_HandleTypeDef htim16;  // Timer16 object - odometer & co. 1s
@@ -160,10 +160,17 @@ static inline void _AdjustLightinSteps(void)
 // AutoDrive functionality based on detected zero cross frequency - called by timer 3 ISR - usually every 250ms
 static void _Do(void)  // this actually runs the AutoDrive application
 {
-	__AutoDrive._WheelFrequency = Device->ZeroCross->ZeroCrossFrequency / POLE_COUNT;  // ZeroCross signal frequency to wheel RPS
-	__AutoDrive.public.mps.uint32 = (__AutoDrive._WheelFrequency * WHEEL_CIRCUMFERENCE) / FIXED_POINT_SCALE;  // wheel frequency to m/s
-	__AutoDrive.public.kph.uint32 = (__AutoDrive.public.mps.uint32 * KPH_CONVERSION) / FIXED_POINT_SCALE;  // m/s to km/h
-	__AutoDrive.public.m.uint32 += (__AutoDrive.public.mps.uint32 * (__HAL_TIM_GET_AUTORELOAD(&htim2) + 1)) / TIME_CONVERSION;  // distance, mps * measurement interval
+	// ZeroCross signal frequency to wheel RPS
+	__AutoDrive._WheelFrequency = Device->ZeroCross->ZeroCrossFrequency / POLE_COUNT;  // value in mHz: 1152 is 1.152 Hz
+
+	// Wheel RPS to speed in m/s
+	__AutoDrive.public.mps.uint32 = (__AutoDrive._WheelFrequency * WHEEL_CIRCUMFERENCE) / FIXED_POINT_SCALE;  // value is in mm: 2707 is 2.707 m/s
+
+	// Speed in m/s to speed in km/h
+	__AutoDrive.public.kph.uint32 = (__AutoDrive.public.mps.uint32 * KPH_CONVERSION) / FIXED_POINT_SCALE;  // value is in mm: 9732 is 9.732 km/h
+
+	// Accumulate distance in meters
+	__AutoDrive.public.m.uint32 += (__AutoDrive.public.mps.uint32 * (__HAL_TIM_GET_AUTORELOAD(&htim2) + 1)) / TIME_CONVERSION;  // value is in mm: 2707 is 2.707 m
 
 #if SIGNAL_GENERATOR_INPUT  // ZeroCross signal is generator input
 	if((uint8_t) (_last_mps / FIXED_POINT_SCALE) != (uint8_t) (__AutoDrive.public.mps.uint32 / FIXED_POINT_SCALE))  // only if data has changed
@@ -205,8 +212,9 @@ void _UpdateOdometer(void)
 	uint32_t oldval = Device->FeRAM->Read(ODOMETER_ADDR);  // read stored odometer value from FeRAM
 	memcpy(&__AutoDrive.public.Odometer.uint32, &oldval, sizeof(int32_t));  // copy odometer to Odometer
 
-	__AutoDrive.public.Odometer.uint32 += __AutoDrive.public.m.uint32;  // add current odometer to old value
-	__AutoDrive.public.m.uint32 = 0;  // reset current odometer
+	// Store odometer in meters
+	__AutoDrive.public.Odometer.uint32 += __AutoDrive.public.m.uint32 / 1000;  // add current odometer to old value (m)
+	__AutoDrive.public.m.uint32 = 0;  // reset current odometer (mm)
 	oldval = 0;  // reset oldval
 
 	memcpy(&oldval, &__AutoDrive.public.Odometer.uint32, sizeof(int32_t));  // copy odometer to oldval

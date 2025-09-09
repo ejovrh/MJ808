@@ -33,8 +33,8 @@ __i2c_t __I2C __attribute__ ((section (".data")));
 
 // FIXME - revert back to IT & 1Mhz after components arrived
 #define FREQ_100KHZ 0
-#define FREQ_400KHZ 1
-#define FREQ_1MHZ 0
+#define FREQ_400KHZ 0
+#define FREQ_1MHZ 1
 
 #if USE_IT
 //void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
@@ -116,7 +116,7 @@ static inline void _I2C_Init(const uint32_t _SDA_Pin, const uint32_t _SCL_Pin, G
 	__HAL_RCC_GPIOF_CLK_ENABLE();  // enable peripheral clock
 	GPIO_InitStruct.Pin = _SDA_Pin | _SCL_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;  // FIXME - disable once components arrive
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	GPIO_InitStruct.Alternate = GPIO_AF1_I2C1;
 	HAL_GPIO_Init(_I2C_Port, &GPIO_InitStruct);
