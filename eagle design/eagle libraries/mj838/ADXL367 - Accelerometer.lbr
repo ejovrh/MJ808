@@ -102,7 +102,7 @@
 <symbols>
 <symbol name="ADXL367">
 <pin name="SCLK" x="-15.24" y="10.16" length="middle" direction="in"/>
-<pin name="MOSI/SDA" x="-15.24" y="7.62" length="middle"/>
+<pin name="MOSI/SDA" x="-15.24" y="7.62" length="middle" direction="in"/>
 <pin name="MISO/ASEL" x="-15.24" y="5.08" length="middle" direction="out"/>
 <pin name="!CS!/SCL" x="-15.24" y="2.54" length="middle" direction="in"/>
 <pin name="INT1" x="-15.24" y="22.86" length="middle" direction="out"/>
