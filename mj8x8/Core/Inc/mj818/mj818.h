@@ -29,6 +29,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #include "main.h"
 #if defined(MJ818_)	// if this particular device is active
 #define USE_EVENTHANDLER 0	// shall EventHandler code be included
+#define USE_LED 1	// use LED functionality
 
 #define BRAKELIGHT 4
 #define REARLIGHT 5

@@ -391,7 +391,7 @@ static inline void _MsgBtnEvent00(can_msg_t *msg)
 	Device->gear->ShiftByN((int8_t) msg->ARGUMENT);  // shifts the Rohloff hub n gears (-13 to + 13, except 0) up or down
 #else
 	(void) msg;
-	#endif
+#endif
 	return;
 }
 
@@ -589,7 +589,7 @@ void _EmptyBusOperation(void)
 	;
 #elif defined(MJ818_)
 	if(Device->mj8x8->GetActivity(REARLIGHT) == 0)  // run once: check that e.g. rear light is off (which it is on a lonely power on)
-		Device->led->Shine(10);  // operate on component part
+		Device->led->Shine(50);  // operate on component part
 #elif defined(MJ828_)
 	;
 #elif defined(MJ838_)

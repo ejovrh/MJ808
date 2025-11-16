@@ -27,8 +27,8 @@ static const uint8_t _fade_transfer[] =	// fade transfer curve according to MacN
 	65, 68, 71, 75, 78, 82, 86, 90, 94, 100	//
 	};
 
-volatile static uint8_t rear_iterator = 0;	// rear
-volatile static uint8_t brake_iterator = 0;	// brake
+static volatile uint8_t rear_iterator = 0;	// rear
+static volatile uint8_t brake_iterator = 0;	// brake
 
 // called by timer14's ISR via __LED.public.Handler, handles the fading
 static void _MacNamaraFadeHandler(void)
