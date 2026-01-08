@@ -26,6 +26,23 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 	uint8_t byte;  // byte-wise representation of the above bitfield
 } mj838_activity_t;
 
+// CSV header definition
+typedef enum log_field_index_e
+{
+	  LOG_TIME = 0,  // descr=n,div=1,dec=0,sign=false;
+	  LOG_ZC_FREQ = 1,	// descr=fZC [Hz],div=1000,dec=3,sign=false;
+	  LOG_KPH = 2,	// descr=v [km/h],div=1000,dec=3,sign=false;
+	  LOG_MPS = 3,	// descr=v [m/s],div=1000,dec=3,sign=false;
+	  LOG_VOLTAGE_AL = 4,  // descr=U adj. load [mV],div=1,dec=0,sign=false;
+	  LOG_CURRENT_AL = 5,  // descr=I adj. load [mA],div=1,dec=0,sign=true;
+	  LOG_POWER_AL = 6,  // descr=P adj. load [mW],div=1,dec=0,sign=false;
+	  LOG_TEMPERATURE = 7,	// descr=t [deg C],div=1,dec=0,sign=true;
+	  LOG_HUMIDITY = 8,  // descr=rel. humidity [%],div=1,dec=0,sign=false;
+	  LOG_ADJUSTABLE_LOAD_STATE = 9,	// descr=adj. load set [mV],div=1,dec=0,sign=false;
+	  LOG_FIELD_COUNT
+} log_field_index_t;
+// CSV header definition
+
 #include "main.h"
 #if defined(MJ838_)	// if this particular device is active
 #define WIPE_FRAM 0	// if activated, statistics will be zeroed out in EXTI0 ISR
@@ -38,8 +55,8 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define USE_TLC59208 1 // use LED driver for SSRs
 #define USE_ADXL367 0 // use ADXL367 accelerometer
 #define USE_DAC121C081 1 // use USE_DAC121C081 ADC for adjustable 12R load
-#define USE_LOGGER 1 //
-#define USE_SDCARD 1 //
+#define USE_LOGGER 1 // use logging functionality
+#define USE_SDCARD 1 // use SD card
 
 #define USE_EVENTHANDLER 1	// shall EventHandler code be included
 
@@ -50,6 +67,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 
 #if USE_SPI && USE_SDCARD
 #include "sdcard/sdcard.h"
+#define LOG_FILE_NAME "log01.raw"  // log file name for logger
 #endif
 
 #define ZEROCROSS 2
@@ -60,7 +78,7 @@ typedef union  // union for activity indication, see mj8x8_t's _Sleep()
 #define TIMER_PRESCALER 799	// global - 8MHz / 799+1 = 10kHz update rate
 #define TIMER2_PERIOD 2499 // periodic frequency measurement of timer3 data - default 250ms
 #define TIMER3_PERIOD	0xFFFFFFFF // input capture of zero-cross signal on rising edge
-#define TIMER14_PERIOD 99	// power measurement time base - 10ms
+#define TIMER14_PERIOD 9999	// TODO - determine power measurement time base - 1s
 #define TIMER16_PERIOD 9999	// odometer & co. - 1s
 #define TIMER17_PERIOD 24	// event handling - 2.5ms
 #define TIMER3_IC_FILTER 0xF	// with TIM_ICPSC_DIV8 and 0xF the pulse needs to be at least 35us wide
@@ -167,12 +185,16 @@ typedef struct	// struct describing devices on MJ838
 #endif
 	void (*StopTimer)(TIM_HandleTypeDef *timer);  // stops timer identified by argument
 	void (*StartTimer)(TIM_HandleTypeDef *timer);  // starts timer identified by argument
+
+	uint32_t Time;  // global time counter, increments every TIM16 interrupt
 } mj838_t;
 
 void mj838_ctor(void);	// declare constructor for concrete class
 
 // all devices have the object name "Device", hence the preprocessor macro
 extern mj838_t *const Device;  // declare pointer to public struct part
+
+extern void *log_description[LOG_FIELD_COUNT];
 
 #endif // MJ838_
 

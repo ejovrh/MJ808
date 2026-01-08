@@ -1,5 +1,8 @@
 #include "main.h"	// device core config
 #include "try/try.h"	// top-level object for bus-wide device handling
+#if USE_SPI && USE_LOGGER
+#include "logger/logger.h"  // logging functionality
+#endif
 
 int main(void)
 {
@@ -20,6 +23,10 @@ int main(void)
 #endif
 #if defined(MJ838_)	// Čos - call derived class constructor and tie in base class
 	mj838_ctor();
+#if USE_SPI && USE_LOGGER
+	extern const char LogFileName[11];	// log file name for logger
+	logger_ctor(LogFileName, (void*) Device->SDCard);  // pass SD card object as void*
+#endif
 #endif
 #if defined(MJ848_)	// LU - call derived class constructor and tie in base class
 	mj848_ctor();

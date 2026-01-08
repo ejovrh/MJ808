@@ -7,7 +7,7 @@
 static DMA_HandleTypeDef _hdma_i2c1_rx;  // I2C RX DMA handle
 static DMA_HandleTypeDef _hdma_i2c1_tx;  // I2C TX DMA handle
 #endif
-static SPI_HandleTypeDef _hspi1;  // SPI handle
+SPI_HandleTypeDef _hspi1;  // SPI handle
 
 typedef struct	// spi_t actual
 {
@@ -24,31 +24,15 @@ typedef struct	// spi_t actual
 
 __spi_t __SPI __attribute__ ((section (".data")));
 
-#define WRITE 0x00
-#define READ 0x01
-
-#define USE_WAIT_FOR_DEVICE_READY 0 //
+#define USE_BUSCHECK 0 // use bus check function
 #define USE_DMA 0 // use DMA transfer functions
-#define USE_IT 1 // use interrupt transfer functions
-#define USE_POLLING 0 // use polling transfer functions
+#define USE_IT 0 // use interrupt transfer functions
+#define USE_POLLING 1 // use polling transfer functions
+#define TIMEOUT 5  // timeout in ms for I2C polling operations
 
-#define FREQ_100KHZ 0
-#define FREQ_400KHZ 0
-#define FREQ_1MHZ 1
-
-#if USE_IT
-//void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
-//{
-//	(void) hi2c;
-//	__I2C.public.TXDone = 1;
-//}
-//
-//void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
-//{
-//	(void) hi2c;
-//	__I2C.public.RXDone = 1;
-//}
-#endif
+// FIXME - identified a bug/issue when SPI is powered off. a power cycle introduces delays into the whole system (visible in timer16cntr delay)
+// perhaps power on SPI in advance - e.g. when the ringbuffer is about 128 free (atm it starts to write when it is less than 64 free)
+#define USE_SPI_POWER_MANAGEMENT 0 // power off -> on -> off around each transaction
 
 static inline void _Error_Handler(void)
 {
@@ -57,22 +41,12 @@ static inline void _Error_Handler(void)
 		;
 }
 
+#if USE_BUSCHECK
 // check I2C bus and device for readiness
 static inline void _BusCheck(void)
 {
 	// check if I2C is ready
 	while(HAL_SPI_GetState(__SPI._SPI) != HAL_SPI_STATE_READY)
-		;
-}
-
-#if USE_WAIT_FOR_DEVICE_READY
-// check SPI bus and device for readiness
-static inline void _BusDeviceCheck(const uint16_t DevAddr)
-{
-	_BusCheck();  // check if I2C is ready
-
-	//	check if the device is ready
-	while(HAL_I2C_IsDeviceReady(__I2C._I2C, DevAddr, 2, 10) != HAL_OK)
 		;
 }
 #endif
@@ -115,6 +89,10 @@ static void _SPIPowerOff(void)
 	if(__SPI._FlagPowerState == OFF)
 		return;
 
+#if USE_BUSCHECK
+	_BusCheck();  // ensure SPI is ready
+#endif
+
 	__HAL_RCC_SPI1_CLK_DISABLE();  // disable I2C peripheral clock
 #if USE_DMA
 //	__HAL_RCC_DMA1_CLK_DISABLE();
@@ -136,61 +114,99 @@ static void _SPIPowerOn(void)
 
 	_SPI_Init(__SPI._MOSI_Pin, __SPI._MISO_Pin, __SPI._SCL_Pin, __SPI._SPI_Port);  // initialize SPI infrastructure
 
+#if USE_BUSCHECK
+	_BusCheck();  // ensure SPI is ready
+#endif
+
 	__SPI._FlagPowerState = ON;  // flag as on
 }
 
-// SPI TX of up to n bytes of data
-static inline void _Transmit(const uint16_t DevAddr, uint8_t *buffer, const uint8_t n)
+// SPI TX of up to n bytes of data (Polling)
+static inline void _Transmit(uint8_t *txData, const uint16_t n)
 {
-	_SPIPowerOn();  // SPI power on
+	HAL_StatusTypeDef result = HAL_OK;
 
-#if USE_WAIT_FOR_DEVICE_READY
-	_BusDeviceCheck(DevAddr);  // check if the device is ready)
+#if USE_SPI_POWER_MANAGEMENT
+	_SPIPowerOn();  // SPI power on
 #endif
 
 #if USE_DMA
-
+	result = HAL_SPI_Transmit_DMA(__SPI._SPI, txData, n);
 #endif
 #if USE_IT
-
+	result = HAL_SPI_Transmit_IT(__SPI._SPI, txData, n);
 #endif
 #if USE_POLLING
-
+	result = HAL_SPI_Transmit(__SPI._SPI, txData, n, TIMEOUT);
 #endif
-	_Error_Handler();
 
-	_BusCheck();  // wait for the write to complete
-	_SPIPowerOff();  // I2C power off
+	if(result != HAL_OK)
+		_Error_Handler();
+
+#if USE_SPI_POWER_MANAGEMENT
+	_SPIPowerOff();  // SPI power off
+#endif
 }
 
-// SPI RX of up to n bytes of data
-static inline void _Receive(const uint16_t DevAddr, uint8_t *buffer, const uint8_t n)
+// SPI RX of up to n bytes of data (Polling)
+static inline void _Receive(uint8_t *rxData, const uint16_t n)
 {
-	_SPIPowerOn();  // SPI power on
+	HAL_StatusTypeDef result = HAL_OK;
 
-#if USE_WAIT_FOR_DEVICE_READY
-	_BusDeviceCheck(DevAddr);  // check if the device is ready)
+#if USE_SPI_POWER_MANAGEMENT
+	_SPIPowerOn();  // SPI power on
 #endif
 
 #if USE_DMA
-
+	result = HAL_SPI_Receive_DMA(__SPI._SPI, rxData, n);
 #endif
 #if USE_IT
-
+	result = HAL_SPI_Receive_IT(__SPI._SPI, rxData, n);
 #endif
 #if USE_POLLING
-
+	result = HAL_SPI_Receive(__SPI._SPI, rxData, n, TIMEOUT);
 #endif
-	_Error_Handler();
 
-	_BusCheck();  // wait for the write to complete
-	_SPIPowerOff();  // I2C power off
+	if(result != HAL_OK)
+		_Error_Handler();
+
+#if USE_SPI_POWER_MANAGEMENT
+	_SPIPowerOff();  // SPI power off
+#endif
+}
+
+// SPI TX/RX full-duplex (Polling)
+static inline void _TransmitReceive(uint8_t *txData, uint8_t *rxData, const uint16_t n)
+{
+	HAL_StatusTypeDef result = HAL_OK;
+
+#if USE_SPI_POWER_MANAGEMENT
+	_SPIPowerOn();  // SPI power on
+#endif
+
+#if USE_DMA
+	result = HAL_SPI_TransmitReceive_DMA(__SPI._SPI, txData, rxData, n);
+#endif
+#if USE_IT
+	result = HAL_SPI_TransmitReceive_IT(__SPI._SPI, txData, rxData, n);
+#endif
+#if USE_POLLING
+	result = HAL_SPI_TransmitReceive(__SPI._SPI, txData, rxData, n, TIMEOUT);
+#endif
+
+	if(result != HAL_OK)
+		_Error_Handler();
+
+#if USE_SPI_POWER_MANAGEMENT
+	_SPIPowerOff();  // SPI power off
+#endif
 }
 
 __spi_t __SPI =  // instantiate event_handler_t actual and set function pointers
 	{  //
 	.public.Transmit = &_Transmit,  // SPI TX of up to n bytes of data
 	.public.Receive = &_Receive,  // SPI RX of up to n bytes of data
+	.public.TransmitReceive = &_TransmitReceive,  // SPI TX/RX full-duplex
 	};
 
 spi_t* spi_ctor(const uint32_t MOSI_Pin, const uint32_t MISO_Pin, const uint32_t SCL_Pin, GPIO_TypeDef *SPI_Port)
@@ -207,6 +223,10 @@ spi_t* spi_ctor(const uint32_t MOSI_Pin, const uint32_t MISO_Pin, const uint32_t
 #endif
 
 	__SPI._FlagPowerState = OFF;  // flag as off
+
+#if !USE_SPI_POWER_MANAGEMENT
+	_SPIPowerOn();	// TODO - remove
+#endif
 
 #if USE_DMA
 	HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 0, 0);  // SPI DMA interrupts
@@ -226,10 +246,10 @@ void DMA1_Channel2_3_IRQHandler(void)
 #endif
 
 #if USE_IT
-//
 void SPI1_IRQHandler(void)
 {
 	HAL_SPI_IRQHandler(__SPI._SPI);
 }
 #endif
-#endif
+
+#endif // USE_SPI

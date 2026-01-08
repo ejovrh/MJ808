@@ -7,8 +7,8 @@
 
 typedef struct	// struct describing the SHT40 functionality
 {
-	int8_t Temp;	// temperature in integer degrees Celsius
-	int8_t RH;	// relative humidity in integer percent
+	int32_t *Temp;    // pointer to temperature value
+	uint32_t *RH;      // pointer to humidity value
 
 	void (*Measure)(void);  // reads the sensor & computes temperature and humidity
 } sht40_t;

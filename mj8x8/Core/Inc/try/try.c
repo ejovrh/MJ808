@@ -136,9 +136,13 @@ static inline void _EventHandlerEvent03(void)
 	MsgHandler->SendMessage(mj808, MSG_BUTTON_EVENT_02, &_payload, 2);  // send it
 #elif defined(MJ838_)
 	uint8_t _payload;  // payload for a single byte message, in addition to the command byte
+	(void) _payload;
 	// FIXME - on wheel stop and once poweroff should occur, mj828 red led remains lit
 #if USE_ADJUSTABLE_LOAD
-	_payload = !Device->AutoCharge->IsAdjustableLoadConnected();  // returns DAC set voltage
+	// Convert AdjustableLoadState to uint8_t by scaling
+	// Assume AdjustableLoadState is a DAC value, max 4095 (12-bit)
+	// Scale to 0-255: (value * 255) / 4095
+	_payload = (uint8_t) ((Device->AutoCharge->AdjustableLoadState * 255) / 4095);
 #endif
 #if USE_APPLICATION_LOAD
 	_payload = !Device->AutoCharge->IsAppLoadConnected();  // 0 - LED on (load disconnected), 1 - LED off (load connected)

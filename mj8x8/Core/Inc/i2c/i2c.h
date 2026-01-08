@@ -5,9 +5,6 @@
 
 typedef struct
 {
-//	uint8_t TXDone:1; 	//
-//	uint8_t RXDone:1; 	//
-
 	void (*Read)(const uint16_t DevAddr, const uint16_t RegAddr, uint8_t *buffer, const uint8_t size);
 	void (*Write)(const uint16_t DevAddr, const uint16_t RegAddr, uint8_t *buffer, const uint8_t size);
 	void (*Transmit)(const uint16_t DevAddr, uint8_t *buffer, const uint8_t size);

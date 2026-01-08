@@ -8,7 +8,10 @@
 #include "dac121c081/dac121c081.h"	// ADC IC
 #include "ina219/ina219.h"	// power monitor IC
 
+#include "logger/logger.h"
+
 extern TIM_HandleTypeDef htim14;  // Timer14 object - power measurement time base - 10ms
+extern void *log_description[LOG_FIELD_COUNT];  // single log entry container
 
 #define SET_BIT_VAL(word, n, val) \
     ((word) = ((word) & (uint16_t)(~((uint16_t)1 << (n)))) | \
@@ -51,17 +54,11 @@ typedef struct	// autocharge_t actual
 	uint8_t __SW_CD :1;  // SSR SW-D state (NO) - 0 open, 1 closed
 //	uint8_t __SW_X :1;  // SSR SW-CD state (NO) - 0 open, 1 closed
 
-	uint16_t __AdjustableLoadDAC;  // adjustable load DAC output voltage: 0 off, non-zero: variable
-	uint8_t __FlagAppLoadSwitch :1;  // application load switch state - 0 off, 1 on
-
 #if USE_TLC59208
 	tlc59208_t *_LEDDriver;  // pointer to TLC59208 object
 #endif
 #if USE_ADJUSTABLE_LOAD
 	dac121c081_t *_AdjustableLoad;	// pointer  to DAC121C081 object
-#endif
-#if USE_INA219
-	ina219_t *_PowerMonitor;  // pointer to INA219 object
 #endif
 } __autocharge_t;
 
@@ -70,17 +67,11 @@ static __autocharge_t __AutoCharge __attribute__ ((section (".data")));  // prea
 static uint16_t _LEDword = 0;
 
 #if USE_ADJUSTABLE_LOAD
-// returns DAC set voltage
-static inline uint16_t _IsAdjustableLoadConnected(void)
-{
-	return __AutoCharge.__AdjustableLoadDAC;  // return the load switch hardware state
-}
-
 // set DAC output voltage
 static void _AdjustLoad(const uint16_t voltage)
 {
-	__AutoCharge.__AdjustableLoadDAC = voltage;  // save the DAC set voltage
-	__AutoCharge._AdjustableLoad->Write((uint16_t*) &__AutoCharge.__AdjustableLoadDAC);  // write DAC set voltage to DAC
+	__AutoCharge.public.AdjustableLoadState = voltage;  // save the DAC set voltage in public part
+	__AutoCharge._AdjustableLoad->Write((uint16_t*) &__AutoCharge.public.AdjustableLoadState);  // write DAC set voltage to DAC
 }
 #endif
 #if USE_APPLICATION_LOAD
@@ -102,36 +93,35 @@ static inline void _ConnectAppLoad(const uint8_t state)
 #endif
 
 // TODO - write 12R adjustable load control functions
-
 // starts/stops the peripheral
-static inline void _SetChargerState(uint8_t state)
+static inline void _SetChargerState(uint16_t state)
 {
 #if USE_APPLICATION_LOAD
 	if(_IsAppLoadConnected() == state)  // if already in the desired state
 		return;  // get out, nothing to do here
 #endif
 #if USE_ADJUSTABLE_LOAD
-	if(_IsAdjustableLoadConnected() == state)  // if already in the desired state
+	if(__AutoCharge.public.AdjustableLoadState == state)  // if already in the desired state
 		return;  // get out, nothing to do here
 #endif
 
-	if(state == ON)
+	if(state > OFF)
 		Device->StartTimer(&htim14);  // start the timer
 	else
 		Device->StopTimer(&htim14);  // stop the timer
 
 #if USE_INA219
 // TODO - implement ina219 power control
-//	__AutoCharge._PowerMonitor->PowerState(state);  // power on the power monitor
+//  __AutoCharge.public.PowerMonitor->PowerState(state);  // power on the power monitor
 #endif
 #if USE_APPLICATION_LOAD
 	_ConnectAppLoad(state);  // set the load state
 #endif
 #if USE_ADJUSTABLE_LOAD
 	if(state == OFF)
-		_AdjustLoad(0);  // turn off the load
+		_AdjustLoad(OFF);  // turn off the load
 	else
-		_AdjustLoad(650);
+		_AdjustLoad(650);  // max value - TODO - make adjustable
 #endif
 
 	EventHandler->Notify(EVENT03);  // notify event
@@ -190,7 +180,7 @@ static inline uint8_t _CompareSpeedLevelsandFlag(const autocharge_speedlevels_t 
 	return 1;  // enable notification flag (see calling if-clause in Do())
 }
 
-// AutoCharge functionality - called by timer 3 ISR - usually every 250ms
+// AutoCharge functionality - called by timer 2 ISR - usually every 250ms
 static void _Do(void)  // this actually runs the AutoCharge application
 {
 	// set speed flags on each measurement
@@ -245,7 +235,6 @@ static __autocharge_t __AutoCharge =  // instantiate autobatt_t actual and set f
 	{  //
 #if USE_ADJUSTABLE_LOAD
 	  .public.AdjustLoad = &_AdjustLoad,  // set function pointer
-	  .public.IsAdjustableLoadConnected = &_IsAdjustableLoadConnected,  // ditto
 #endif
 #if USE_APPLICATION_LOAD
 	      .public.IsAppLoadConnected = &_IsAppLoadConnected,  // ditto
@@ -262,7 +251,7 @@ autocharge_t* autocharge_ctor(void)  //
 	__AutoCharge._AdjustableLoad = dac121c081_ctor();  // tie in DAC121C081 object
 #endif
 #if USE_INA219
-	__AutoCharge._PowerMonitor = ina219_ctor();  // tie in Power Monitor object
+	__AutoCharge.public.PowerMonitor = ina219_ctor();  // tie in Power Monitor object (public)
 #endif
 
 // TODO - implement 12R adjustable load via I2C ADC
@@ -272,23 +261,29 @@ autocharge_t* autocharge_ctor(void)  //
 #endif
 #if USE_ADJUSTABLE_LOAD
 	__AutoCharge._AdjustableLoad->PowerOff();  // power off the DAC & activate 100k pulldown
+	__AutoCharge.public.AdjustableLoadState = 0;  // initialize public state
 #endif
 
 	return &__AutoCharge.public;  // set pointer to AutoCharge public part
 }
 
-// timer 14 ISR - 10ms - power measurement timer
+// timer 14 ISR - XXXms - power measurement timer
+// TODO - determine measurement frequency
 void TIM14_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&htim14);  // service the interrupt
 
-	HAL_NVIC_DisableIRQ(TIM16_IRQn);  //	tweak so that we don't have a IRQ collision between timer14 and timer16
+//	HAL_NVIC_DisableIRQ(TIM16_IRQn);  //	tweak so that we don't have a IRQ collision between timer14 and timer16
+
+	Device->Time++;  // increment global time counter
+
+	Logger->Log(log_description, LOG_FIELD_COUNT);  // log data
 
 #if USE_INA219
-	__AutoCharge._PowerMonitor->Measure();  // measure voltage, current & power
+	__AutoCharge.public.PowerMonitor->Measure();  // measure voltage, current & power
 #endif
 
-	HAL_NVIC_EnableIRQ(TIM16_IRQn);
+//	HAL_NVIC_EnableIRQ(TIM16_IRQn);
 }
 
 #endif
